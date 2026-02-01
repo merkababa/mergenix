@@ -39,6 +39,29 @@ CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
 TRAIT_DB_PATH = os.path.join(DATA_DIR, "trait_snps.json")
 
 # ---------------------------------------------------------------------------
+# Dynamic counts (avoid hardcoding "50 diseases" / "30 traits")
+# ---------------------------------------------------------------------------
+def _count_panel(path):
+    try:
+        with open(path, "r") as f:
+            return len(json.load(f))
+    except Exception:
+        return "?"
+
+def _count_traits(path):
+    try:
+        with open(path, "r") as f:
+            raw = json.load(f)
+        if isinstance(raw, list):
+            return len(raw)
+        return len(raw.get("snps", []))
+    except Exception:
+        return "?"
+
+NUM_DISEASES = _count_panel(CARRIER_PANEL_PATH)
+NUM_TRAITS = _count_traits(TRAIT_DB_PATH)
+
+# ---------------------------------------------------------------------------
 # Trait category mapping (for grouping in the UI)
 # ---------------------------------------------------------------------------
 TRAIT_CATEGORIES = {
@@ -51,19 +74,39 @@ TRAIT_CATEGORIES = {
     "Skin/Eye Pigmentation": "Appearance",
     "Freckling Tendency": "Appearance",
     "Male Pattern Baldness": "Appearance",
+    "Dimples": "Appearance",
+    "Cleft Chin": "Appearance",
+    "Widow's Peak Hairline": "Appearance",
+    "Unibrow Tendency": "Appearance",
+    "Eyebrow Thickness": "Appearance",
     "Head Circumference": "Physical",
     "Height": "Physical",
+    "Tongue Rolling Ability": "Physical",
+    "Handedness Tendency": "Physical",
     "Obesity Risk": "Health & Metabolism",
     "Caffeine Metabolism": "Health & Metabolism",
     "Lactose Tolerance": "Health & Metabolism",
     "Alcohol Flush Reaction": "Health & Metabolism",
+    "Sun Sensitivity": "Health & Metabolism",
+    "Deep Sleep Quality": "Health & Metabolism",
+    "Chronotype (Morning/Night Person)": "Health & Metabolism",
+    "Snoring Tendency": "Health & Metabolism",
     "Bitter Taste Perception": "Taste & Senses",
     "Pain Sensitivity": "Taste & Senses",
-    "Sun Sensitivity": "Health & Metabolism",
+    "Sweet Taste Preference": "Taste & Senses",
+    "Cilantro Taste Aversion": "Taste & Senses",
+    "Asparagus Smell Detection": "Taste & Senses",
+    "Ice Cream Headache (Brain Freeze)": "Taste & Senses",
+    "Fear of Pain Sensitivity": "Taste & Senses",
     "Earwax Type": "Physical",
     "COMT Activity - Warrior vs Worrier": "Behavior & Cognition",
     "Empathy/Social Behavior": "Behavior & Cognition",
     "Novelty Seeking": "Behavior & Cognition",
+    "Misophonia Tendency": "Behavior & Cognition",
+    "Musical Pitch Perception": "Behavior & Cognition",
+    "Photic Sneeze Reflex (ACHOO Syndrome)": "Quirky & Fun",
+    "Motion Sickness Susceptibility": "Quirky & Fun",
+    "Mosquito Bite Attraction": "Quirky & Fun",
 }
 
 CATEGORY_ICONS = {
@@ -72,6 +115,7 @@ CATEGORY_ICONS = {
     "Health & Metabolism": "\U0001f489",
     "Taste & Senses": "\U0001f445",
     "Behavior & Cognition": "\U0001f9e0",
+    "Quirky & Fun": "\U0001f3b2",
     "Other": "\U0001f52c",
 }
 
@@ -86,17 +130,22 @@ CONFIDENCE_COLORS = {
 # Helper: load trait database with the correct wrapper handling
 # ===================================================================
 def load_traits_corrected(db_path: str):
-    """Load trait_snps.json, unwrap the 'snps' key, and flatten phenotype_map
-    values so that each genotype maps to a *string* (the phenotype name)
-    instead of the nested dict that the JSON file stores.
+    """Load trait_snps.json, unwrap the 'snps' key if present, and flatten
+    phenotype_map values so that each genotype maps to a *string* (the
+    phenotype name) instead of the nested dict that the JSON file stores.
+
+    Handles both formats: plain JSON array or wrapped {"snps": [...]}.
 
     Returns a list of trait entry dicts ready for predict_trait().
     """
     with open(db_path, "r") as f:
         raw = json.load(f)
 
-    # Unwrap: the file has {"snps": [...], "metadata": {...}}
-    traits = raw["snps"]
+    # Handle both formats: plain array or wrapped {"snps": [...]}
+    if isinstance(raw, list):
+        traits = raw
+    else:
+        traits = raw.get("snps", raw)
 
     # Flatten phenotype_map values: {"GG": {"phenotype": "Brown Eyes", ...}} -> {"GG": "Brown Eyes"}
     for trait in traits:
@@ -211,17 +260,127 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Minimal global style tweaks
+# Comprehensive dark-theme CSS
 st.markdown(
     """
     <style>
-    .block-container { padding-top: 2rem; }
+    /* === Global === */
+    .block-container { padding-top: 1rem; max-width: 1200px; }
+
+    /* === Metrics Cards === */
     div[data-testid="stMetric"] {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 16px;
+        background: linear-gradient(135deg, #1E1E3A 0%, #2A2A4A 100%);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
+    }
+    div[data-testid="stMetric"] label {
+        color: #A78BFA !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #F8FAFC !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* === Tabs === */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: #1A1A2E;
+        border-radius: 12px;
+        padding: 4px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: #A78BFA;
+        font-weight: 500;
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #7C3AED, #6D28D9) !important;
+        color: white !important;
+    }
+
+    /* === Expanders === */
+    .streamlit-expanderHeader {
+        background: #1E1E3A;
+        border-radius: 10px;
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        font-weight: 500;
+    }
+    .streamlit-expanderContent {
+        background: #16162A;
+        border: 1px solid rgba(124, 58, 237, 0.1);
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+    }
+
+    /* === Buttons === */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 50%, #5B21B6 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        transition: all 0.3s ease;
+    }
+    .stButton > button[kind="primary"]:hover {
+        box-shadow: 0 6px 25px rgba(124, 58, 237, 0.5);
+        transform: translateY(-1px);
+    }
+
+    /* === File Uploader === */
+    [data-testid="stFileUploader"] {
+        background: #1E1E3A;
+        border: 2px dashed rgba(124, 58, 237, 0.3);
+        border-radius: 16px;
+        padding: 20px;
+        transition: border-color 0.3s ease;
+    }
+    [data-testid="stFileUploader"]:hover {
+        border-color: rgba(124, 58, 237, 0.6);
+    }
+
+    /* === Progress Bar === */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #7C3AED, #A78BFA);
+        border-radius: 10px;
+    }
+
+    /* === Sidebar === */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0F0F1A 0%, #1A1A2E 100%);
+        border-right: 1px solid rgba(124, 58, 237, 0.2);
+    }
+
+    /* === Scrollbar === */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0F0F1A; }
+    ::-webkit-scrollbar-thumb { background: #7C3AED; border-radius: 4px; }
+
+    /* === Success/Warning/Error boxes === */
+    .stAlert {
+        border-radius: 12px;
+    }
+
+    /* === Links === */
+    a { color: #A78BFA !important; }
+    a:hover { color: #C4B5FD !important; }
+
+    /* === Dividers === */
+    hr { border-color: rgba(124, 58, 237, 0.2) !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -231,7 +390,18 @@ st.markdown(
 # Sidebar
 # ===================================================================
 with st.sidebar:
-    st.markdown("## \u2699\ufe0f Settings")
+    st.markdown(
+        """
+        <div style="text-align:center;padding:1rem 0;margin-bottom:1rem;">
+            <span style="font-size:2rem;">\U0001f9ec</span>
+            <h3 style="margin:4px 0 0;background:linear-gradient(135deg, #A78BFA, #60A5FA);
+                -webkit-background-clip:text;-webkit-text-fill-color:transparent;">Tortit</h3>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("### \u2699\ufe0f Settings")
 
     ncbi_api_key = st.text_input(
         "NCBI API Key (optional)",
@@ -241,15 +411,15 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.markdown("### \U0001f512 Privacy Notice")
+    st.markdown("### \U0001f512 Privacy")
     st.markdown(
         "Your genetic data is processed **entirely in your browser session**. "
-        "No files are uploaded to any server. Data is discarded when you close the tab."
+        "No files are uploaded to any server."
     )
     st.markdown("---")
     st.markdown(
-        '<p style="font-size:0.75rem;color:#94a3b8;">Tortit v1.0 &mdash; '
-        "For educational and informational purposes only.</p>",
+        '<p style="font-size:0.75rem;color:#64748B;">Tortit v2.0 &mdash; '
+        "For educational purposes only.</p>",
         unsafe_allow_html=True,
     )
 
@@ -257,28 +427,40 @@ with st.sidebar:
 # Header
 # ===================================================================
 st.markdown(
-    """
-    <div style="text-align:center;padding:1rem 0 0.5rem;">
-        <h1 style="margin-bottom:0;">\U0001f9ec Tortit</h1>
-        <p style="font-size:1.15rem;color:#64748b;margin-top:4px;">
+    f"""
+    <div style="text-align:center;padding:2rem 1rem;
+         background:linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(59,130,246,0.1) 50%, rgba(16,185,129,0.1) 100%);
+         border-radius:20px;margin-bottom:1.5rem;
+         border:1px solid rgba(124,58,237,0.2);">
+        <div style="font-size:3.5rem;margin-bottom:0.5rem;">\U0001f9ec</div>
+        <h1 style="margin:0;font-size:2.5rem;
+            background:linear-gradient(135deg, #A78BFA, #60A5FA, #34D399);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+            font-weight:800;">Tortit</h1>
+        <p style="font-size:1.15rem;color:#94A3B8;margin-top:8px;margin-bottom:12px;">
             Genetic Offspring Analysis Platform
+        </p>
+        <p style="font-size:0.95rem;color:#64748B;max-width:600px;margin:0 auto;">
+            Upload 23andMe raw-data files for both parents to screen for <b style="color:#A78BFA;">carrier risk</b>
+            of {NUM_DISEASES} genetic diseases and predict <b style="color:#60A5FA;">{NUM_TRAITS} offspring traits</b> using Mendelian genetics.
         </p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-st.markdown(
-    "Upload 23andMe raw-data files for both parents to screen for **carrier risk** "
-    "of 50 recessive diseases and predict **30 offspring traits** using Mendelian genetics."
-)
-
-st.markdown("---")
-
 # ===================================================================
 # File upload area
 # ===================================================================
-st.markdown("### \U0001f4c2 Upload Genetic Data")
+st.markdown(
+    """
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+        <span style="font-size:1.5rem;">\U0001f4c2</span>
+        <h3 style="margin:0;color:#E2E8F0;">Upload Genetic Data</h3>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 col_a, col_b = st.columns(2)
 
@@ -372,7 +554,7 @@ if only_a or only_b:
         f"Showing individual carrier status for {parent_label} below."
     )
 
-    with st.spinner(f"Screening {parent_label} against 50-disease panel..."):
+    with st.spinner(f"Screening {parent_label} against {NUM_DISEASES}-disease panel..."):
         single_results = single_parent_carrier_screen(snps, CARRIER_PANEL_PATH)
 
     carriers = [r for r in single_results if r["status"] == "carrier"]
@@ -424,7 +606,7 @@ if both_valid:
         progress = st.progress(0, text="Starting analysis...")
 
         # Step 1: Carrier risk
-        progress.progress(10, text="\U0001f9ec Screening carrier risk (50 diseases)...")
+        progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({NUM_DISEASES} diseases)...")
         clinvar_client = ClinVarClient(api_key=ncbi_api_key if ncbi_api_key else None)
         try:
             carrier_results = analyze_carrier_risk(
@@ -434,7 +616,7 @@ if both_valid:
             st.error(f"Carrier analysis failed: {exc}")
             carrier_results = []
 
-        progress.progress(50, text="\U0001f3a8 Predicting offspring traits (30 traits)...")
+        progress.progress(50, text=f"\U0001f3a8 Predicting offspring traits ({NUM_TRAITS} traits)...")
 
         # Step 2: Trait prediction (using our corrected loader)
         try:
@@ -468,7 +650,16 @@ if both_valid:
 
         # ===== Summary metrics =====
         st.markdown("---")
-        st.markdown("## \U0001f4ca Results Dashboard")
+        st.markdown(
+            """
+            <div style="text-align:center;margin:1rem 0;">
+                <h2 style="margin:0;background:linear-gradient(135deg, #A78BFA, #60A5FA);
+                    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                    font-weight:700;">\U0001f4ca Results Dashboard</h2>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         mc1, mc2, mc3, mc4 = st.columns(4)
         mc1.metric("Diseases Screened", len(carrier_results))
@@ -497,7 +688,7 @@ if both_valid:
             if not high_risk and not carrier_detected:
                 st.success(
                     "\U0001f389 Great news! No high-risk or carrier matches detected "
-                    "across the 50-disease panel."
+                    f"across the {NUM_DISEASES}-disease panel."
                 )
 
             # -- HIGH RISK --
@@ -511,14 +702,16 @@ if both_valid:
                     with st.container():
                         st.markdown(
                             f"""
-                            <div style="border-left:4px solid #dc2626;background:#fef2f2;
-                            padding:16px;border-radius:8px;margin-bottom:12px;">
-                                <h4 style="margin:0 0 4px;">{r['condition']}
+                            <div style="border-left:4px solid #EF4444;
+                            background:linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%);
+                            padding:20px;border-radius:12px;margin-bottom:12px;
+                            border:1px solid rgba(239,68,68,0.2);">
+                                <h4 style="margin:0 0 4px;color:#F8FAFC;">{r['condition']}
                                     &nbsp;{severity_badge(r['severity'])}</h4>
-                                <p style="margin:0 0 8px;color:#64748b;font-size:0.9rem;">
-                                    Gene: <b>{r['gene']}</b> &nbsp;|&nbsp; rsID: <code>{r['rsid']}</code>
+                                <p style="margin:0 0 8px;color:#94A3B8;font-size:0.9rem;">
+                                    Gene: <b style="color:#A78BFA;">{r['gene']}</b> &nbsp;|&nbsp; rsID: <code>{r['rsid']}</code>
                                 </p>
-                                <p style="margin:0 0 8px;">{r['description']}</p>
+                                <p style="margin:0 0 8px;color:#CBD5E1;">{r['description']}</p>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -603,7 +796,7 @@ if both_valid:
             if not successful_traits:
                 st.warning(
                     "No traits could be predicted. This usually means the uploaded files "
-                    "do not contain the specific SNPs in our 30-trait panel."
+                    f"do not contain the specific SNPs in our {NUM_TRAITS}-trait panel."
                 )
             else:
                 # Group by category
@@ -618,6 +811,7 @@ if both_valid:
                     "Health & Metabolism",
                     "Taste & Senses",
                     "Behavior & Cognition",
+                    "Quirky & Fun",
                     "Other",
                 ]:
                     traits_in_cat = grouped.get(category)
@@ -700,7 +894,7 @@ if both_valid:
         # TAB: Individual Reports
         # -------------------------------------------------------
         with tab_individual:
-            st.markdown("Individual carrier screening for each parent against the full 50-disease panel.")
+            st.markdown(f"Individual carrier screening for each parent against the full {NUM_DISEASES}-disease panel.")
 
             ind_a, ind_b = st.tabs(["\U0001f464 Parent A", "\U0001f464 Parent B"])
 
@@ -756,20 +950,27 @@ if both_valid:
 # ===================================================================
 # Footer
 # ===================================================================
-st.markdown("---")
 st.markdown(
     """
-    <div style="text-align:center;padding:1rem;color:#94a3b8;font-size:0.8rem;">
-        <p><b>\u26a0\ufe0f Disclaimer:</b> Tortit is an educational tool and does <b>not</b>
-        provide medical advice, diagnosis, or treatment. Genetic predictions are
-        probabilistic and based on simplified Mendelian models. Many traits are
-        polygenic and influenced by environment. <b>Always consult a certified
-        genetic counselor or healthcare professional</b> for clinical interpretation
-        of genetic data.</p>
-        <p>\U0001f512 <b>Privacy:</b> All processing occurs locally in your session.
-        No genetic data is stored, transmitted, or shared. Files are discarded
-        when you close this page.</p>
-        <p>Built with Streamlit &bull; Powered by open-source genetics research</p>
+    <div style="text-align:center;padding:2rem 1rem;margin-top:2rem;
+         background:linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(59,130,246,0.05) 100%);
+         border-radius:20px;border:1px solid rgba(124,58,237,0.15);">
+        <p style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
+            <b>\u26a0\ufe0f Disclaimer:</b> Tortit is an educational tool and does <b>not</b>
+            provide medical advice, diagnosis, or treatment. Genetic predictions are
+            probabilistic and based on simplified Mendelian models. Many traits are
+            polygenic and influenced by environment. <b>Always consult a certified
+            genetic counselor or healthcare professional</b> for clinical interpretation.</p>
+        <p style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
+            \U0001f512 <b>Privacy:</b> All processing occurs locally in your session.
+            No genetic data is stored, transmitted, or shared.</p>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(124,58,237,0.2);">
+            <p style="color:#64748B;font-size:0.8rem;margin:0;">
+                Built with Streamlit &bull; Powered by open-source genetics research &bull;
+                <span style="background:linear-gradient(135deg, #A78BFA, #60A5FA);
+                -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">Tortit v2.0</span>
+            </p>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,

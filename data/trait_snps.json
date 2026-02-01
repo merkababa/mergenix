@@ -1,903 +1,1472 @@
-{
-  "snps": [
-    {
-      "rsid": "rs12913832",
-      "trait": "Eye Color",
-      "gene": "HERC2/OCA2",
-      "chromosome": "15",
-      "inheritance": "codominant",
-      "alleles": {
-        "ref": "G",
-        "alt": "A"
-      },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Brown Eyes",
-          "description": "Very high likelihood of brown eyes (>95%)",
-          "probability": "high"
-        },
-        "AG": {
-          "phenotype": "Green/Hazel Eyes",
-          "description": "Intermediate pigmentation, likely green or hazel eyes (70-80%)",
-          "probability": "high"
-        },
-        "AA": {
-          "phenotype": "Blue Eyes",
-          "description": "Very high likelihood of blue eyes (>90%)",
-          "probability": "high"
-        }
-      },
-      "description": "Primary determinant of eye color variation in Europeans. This SNP in the HERC2 gene regulates OCA2 expression, controlling melanin production in the iris.",
-      "confidence": "high"
+[
+  {
+    "rsid": "rs12913832",
+    "trait": "Eye Color",
+    "gene": "HERC2/OCA2",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
     },
-    {
-      "rsid": "rs1800407",
-      "trait": "Eye Color",
-      "gene": "OCA2",
-      "chromosome": "15",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Brown Eyes",
+        "description": "Very high likelihood of brown eyes (>95%)",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Darker Eye Color",
-          "description": "Normal melanin production, contributes to darker eye color",
-          "probability": "medium"
-        },
-        "CT": {
-          "phenotype": "Moderate Eye Color",
-          "description": "Slightly reduced melanin, may lighten eye color",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Lighter Eye Color",
-          "description": "Reduced melanin production, contributes to lighter eye colors",
-          "probability": "medium"
-        }
+      "AG": {
+        "phenotype": "Green/Hazel Eyes",
+        "description": "Intermediate pigmentation, likely green or hazel eyes (70-80%)",
+        "probability": "high"
       },
-      "description": "OCA2 gene variant that modifies eye color by affecting melanin production. Works in combination with rs12913832.",
-      "confidence": "high"
+      "AA": {
+        "phenotype": "Blue Eyes",
+        "description": "Very high likelihood of blue eyes (>90%)",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs12896399",
-      "trait": "Eye Color",
-      "gene": "SLC24A4",
-      "chromosome": "14",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "G",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Darker Eyes",
-          "description": "Higher melanin, contributes to darker eye colors",
-          "probability": "medium"
-        },
-        "GT": {
-          "phenotype": "Intermediate Eyes",
-          "description": "Moderate melanin levels",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Lighter Eyes",
-          "description": "Lower melanin, contributes to lighter eye colors (especially green)",
-          "probability": "medium"
-        }
-      },
-      "description": "SLC24A4 gene variant associated with green eye color variation. Secondary modifier of eye pigmentation.",
-      "confidence": "medium"
+    "description": "Primary determinant of eye color variation in Europeans. This SNP in the HERC2 gene regulates OCA2 expression, controlling melanin production in the iris.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1800407",
+    "trait": "Eye Color",
+    "gene": "OCA2",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
     },
-    {
-      "rsid": "rs1805007",
-      "trait": "Hair Color - Red Hair",
-      "gene": "MC1R",
-      "chromosome": "16",
-      "inheritance": "recessive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Eye Color",
+        "description": "Normal melanin production, contributes to darker eye color",
+        "probability": "medium"
       },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Non-Red Hair",
-          "description": "Normal MC1R function, no red hair from this variant",
-          "probability": "high"
-        },
-        "CT": {
-          "phenotype": "Red Hair Carrier",
-          "description": "Carrier of red hair variant, may have subtle red tints or increased freckling",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Red Hair",
-          "description": "High likelihood of red or strawberry blonde hair (80-90%)",
-          "probability": "high"
-        }
+      "CT": {
+        "phenotype": "Moderate Eye Color",
+        "description": "Slightly reduced melanin, may lighten eye color",
+        "probability": "medium"
       },
-      "description": "Most common MC1R variant associated with red hair. Loss of function mutation in melanocortin receptor, shifting eumelanin to pheomelanin production.",
-      "confidence": "high"
+      "TT": {
+        "phenotype": "Lighter Eye Color",
+        "description": "Reduced melanin production, contributes to lighter eye colors",
+        "probability": "medium"
+      }
     },
-    {
-      "rsid": "rs1805008",
-      "trait": "Hair Color - Red Hair",
-      "gene": "MC1R",
-      "chromosome": "16",
-      "inheritance": "recessive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Non-Red Hair",
-          "description": "Normal MC1R function",
-          "probability": "high"
-        },
-        "CT": {
-          "phenotype": "Red Hair Carrier",
-          "description": "Carrier status, possible subtle red tones",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Red Hair",
-          "description": "High likelihood of red or auburn hair (75-85%)",
-          "probability": "high"
-        }
-      },
-      "description": "Another common MC1R red hair variant (R151C mutation). Often found in combination with other MC1R variants.",
-      "confidence": "high"
+    "description": "OCA2 gene variant that modifies eye color by affecting melanin production. Works in combination with rs12913832.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs12896399",
+    "trait": "Eye Color",
+    "gene": "SLC24A4",
+    "chromosome": "14",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
     },
-    {
-      "rsid": "rs12821256",
-      "trait": "Hair Color - Blond Hair",
-      "gene": "KITLG",
-      "chromosome": "12",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Darker Eyes",
+        "description": "Higher melanin, contributes to darker eye colors",
+        "probability": "medium"
       },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Darker Hair",
-          "description": "Higher melanin production, darker hair color",
-          "probability": "medium"
-        },
-        "CT": {
-          "phenotype": "Light Brown/Dark Blond",
-          "description": "Intermediate melanin, light brown or dark blond hair",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Blond Hair",
-          "description": "Reduced melanin, increased likelihood of blond hair in Europeans",
-          "probability": "medium"
-        }
+      "GT": {
+        "phenotype": "Intermediate Eyes",
+        "description": "Moderate melanin levels",
+        "probability": "medium"
       },
-      "description": "KITLG gene variant strongly associated with blond hair in European populations. Each T allele increases blond hair likelihood.",
-      "confidence": "high"
+      "TT": {
+        "phenotype": "Lighter Eyes",
+        "description": "Lower melanin, contributes to lighter eye colors (especially green)",
+        "probability": "medium"
+      }
     },
-    {
-      "rsid": "rs12203592",
-      "trait": "Hair/Skin Pigmentation",
-      "gene": "IRF4",
-      "chromosome": "6",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Darker Pigmentation",
-          "description": "Normal melanin production, darker hair and skin",
-          "probability": "medium"
-        },
-        "CT": {
-          "phenotype": "Moderate Pigmentation",
-          "description": "Intermediate pigmentation levels",
-          "probability": "medium"
-        },
-        "TT": {
-          "phenotype": "Lighter Pigmentation",
-          "description": "Reduced melanin, lighter hair (especially blond/red) and skin, more freckling",
-          "probability": "medium"
-        }
-      },
-      "description": "IRF4 transcription factor variant affecting melanocyte function. Associated with lighter hair, skin, and increased freckling.",
-      "confidence": "high"
+    "description": "SLC24A4 gene variant associated with green eye color variation. Secondary modifier of eye pigmentation.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1805007",
+    "trait": "Hair Color - Red Hair",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
     },
-    {
-      "rsid": "rs3827760",
-      "trait": "Hair Thickness/Straightness",
-      "gene": "EDAR",
-      "chromosome": "2",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "T",
-        "alt": "C"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Non-Red Hair",
+        "description": "Normal MC1R function, no red hair from this variant",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Thin/Wavy Hair",
-          "description": "Typical European/African hair characteristics, thinner hair strands",
-          "probability": "high"
-        },
-        "CT": {
-          "phenotype": "Thick Straight Hair",
-          "description": "Thicker hair strands, straighter hair",
-          "probability": "high"
-        },
-        "CC": {
-          "phenotype": "Very Thick Straight Hair",
-          "description": "Very thick hair strands, very straight hair (common in East Asians)",
-          "probability": "high"
-        }
+      "CT": {
+        "phenotype": "Red Hair Carrier",
+        "description": "Carrier of red hair variant, may have subtle red tints or increased freckling",
+        "probability": "medium"
       },
-      "description": "EDAR gene variant (370A allele) prevalent in East Asian populations. Affects hair follicle development, leading to thicker, straighter hair shafts.",
-      "confidence": "high"
+      "TT": {
+        "phenotype": "Red Hair",
+        "description": "High likelihood of red or strawberry blonde hair (80-90%)",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs1426654",
-      "trait": "Skin Pigmentation",
-      "gene": "SLC24A5",
-      "chromosome": "15",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
-      },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Light Skin",
-          "description": "Reduced melanin production, light skin pigmentation (European-type)",
-          "probability": "high"
-        },
-        "AG": {
-          "phenotype": "Medium Skin",
-          "description": "Intermediate melanin levels, medium skin tone",
-          "probability": "high"
-        },
-        "GG": {
-          "phenotype": "Dark Skin",
-          "description": "Normal melanin production, darker skin pigmentation",
-          "probability": "high"
-        }
-      },
-      "description": "Major determinant of light skin in European and South Asian populations. The A allele (derived) reduces melanin ~30-40%.",
-      "confidence": "high"
+    "description": "Most common MC1R variant associated with red hair. Loss of function mutation in melanocortin receptor, shifting eumelanin to pheomelanin production.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1805008",
+    "trait": "Hair Color - Red Hair",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
     },
-    {
-      "rsid": "rs16891982",
-      "trait": "Skin/Eye Pigmentation",
-      "gene": "SLC45A2",
-      "chromosome": "5",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "G",
-        "alt": "C"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Non-Red Hair",
+        "description": "Normal MC1R function",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Lighter Pigmentation",
-          "description": "Reduced melanin, lighter skin and eyes (European-type)",
-          "probability": "high"
-        },
-        "CG": {
-          "phenotype": "Intermediate Pigmentation",
-          "description": "Moderate melanin levels",
-          "probability": "medium"
-        },
-        "CC": {
-          "phenotype": "Darker Pigmentation",
-          "description": "Normal melanin production, darker skin and eyes",
-          "probability": "high"
-        }
+      "CT": {
+        "phenotype": "Red Hair Carrier",
+        "description": "Carrier status, possible subtle red tones",
+        "probability": "medium"
       },
-      "description": "SLC45A2 variant affecting melanin synthesis. The G allele is nearly fixed in Europeans and contributes to light skin and eyes.",
-      "confidence": "high"
+      "TT": {
+        "phenotype": "Red Hair",
+        "description": "High likelihood of red or auburn hair (75-85%)",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs1805005",
-      "trait": "Freckling Tendency",
-      "gene": "MC1R",
-      "chromosome": "16",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "G",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Low Freckling",
-          "description": "Normal MC1R function, lower freckling tendency",
-          "probability": "medium"
-        },
-        "GT": {
-          "phenotype": "Moderate Freckling",
-          "description": "Increased freckling tendency, especially with sun exposure",
-          "probability": "high"
-        },
-        "TT": {
-          "phenotype": "High Freckling",
-          "description": "Strong freckling tendency, many freckles likely",
-          "probability": "high"
-        }
-      },
-      "description": "MC1R variant (D84E) strongly associated with freckling, even in non-redheads. Also associated with fair skin and sun sensitivity.",
-      "confidence": "high"
+    "description": "Another common MC1R red hair variant (R151C mutation). Often found in combination with other MC1R variants.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs12821256",
+    "trait": "Hair Color - Blond Hair",
+    "gene": "KITLG",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
     },
-    {
-      "rsid": "rs1042725",
-      "trait": "Height",
-      "gene": "HMGA2",
-      "chromosome": "12",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "T",
-        "alt": "C"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Hair",
+        "description": "Higher melanin production, darker hair color",
+        "probability": "medium"
       },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Taller Stature",
-          "description": "Each T allele adds ~0.4cm to height on average",
-          "probability": "low"
-        },
-        "CT": {
-          "phenotype": "Average Height Effect",
-          "description": "Intermediate height contribution",
-          "probability": "low"
-        },
-        "CC": {
-          "phenotype": "Shorter Stature",
-          "description": "Neutral or slightly reduced height contribution",
-          "probability": "low"
-        }
+      "CT": {
+        "phenotype": "Light Brown/Dark Blond",
+        "description": "Intermediate melanin, light brown or dark blond hair",
+        "probability": "medium"
       },
-      "description": "HMGA2 gene variant, one of the strongest single-SNP associations with adult height. However, height is polygenic with 700+ variants.",
-      "confidence": "medium"
+      "TT": {
+        "phenotype": "Blond Hair",
+        "description": "Reduced melanin, increased likelihood of blond hair in Europeans",
+        "probability": "medium"
+      }
     },
-    {
-      "rsid": "rs6060373",
-      "trait": "Height",
-      "gene": "GDF5",
-      "chromosome": "20",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
-      },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Taller Stature",
-          "description": "Minor positive contribution to height (~0.3cm per allele)",
-          "probability": "low"
-        },
-        "AG": {
-          "phenotype": "Average Height Effect",
-          "description": "Intermediate height contribution",
-          "probability": "low"
-        },
-        "GG": {
-          "phenotype": "Slightly Shorter",
-          "description": "Neutral or slightly reduced height contribution",
-          "probability": "low"
-        }
-      },
-      "description": "GDF5 growth factor variant associated with height and osteoarthritis. Small effect size as height is highly polygenic.",
-      "confidence": "medium"
+    "description": "KITLG gene variant strongly associated with blond hair in European populations. Each T allele increases blond hair likelihood.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs12203592",
+    "trait": "Hair/Skin Pigmentation",
+    "gene": "IRF4",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
     },
-    {
-      "rsid": "rs713598",
-      "trait": "Bitter Taste Perception",
-      "gene": "TAS2R38",
-      "chromosome": "7",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "C",
-        "alt": "G"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Pigmentation",
+        "description": "Normal melanin production, darker hair and skin",
+        "probability": "medium"
       },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Taster",
-          "description": "Can taste PTC/PROP bitter compounds strongly (supertaster possible)",
-          "probability": "high"
-        },
-        "CG": {
-          "phenotype": "Taster",
-          "description": "Can taste PTC/PROP bitter compounds (medium sensitivity)",
-          "probability": "high"
-        },
-        "GG": {
-          "phenotype": "Non-Taster",
-          "description": "Cannot taste PTC/PROP bitter compounds or very weakly",
-          "probability": "high"
-        }
+      "CT": {
+        "phenotype": "Moderate Pigmentation",
+        "description": "Intermediate pigmentation levels",
+        "probability": "medium"
       },
-      "description": "TAS2R38 bitter taste receptor variant (PAV/AVI haplotype). Determines ability to taste phenylthiocarbamide (PTC) and PROP bitterness.",
-      "confidence": "high"
+      "TT": {
+        "phenotype": "Lighter Pigmentation",
+        "description": "Reduced melanin, lighter hair (especially blond/red) and skin, more freckling",
+        "probability": "medium"
+      }
     },
-    {
-      "rsid": "rs1726866",
-      "trait": "Bitter Taste Perception",
-      "gene": "TAS2R38",
-      "chromosome": "7",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "T",
-        "alt": "C"
-      },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Non-Taster",
-          "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
-          "probability": "medium"
-        },
-        "CT": {
-          "phenotype": "Taster",
-          "description": "Intermediate bitter taste sensitivity",
-          "probability": "medium"
-        },
-        "CC": {
-          "phenotype": "Taster",
-          "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
-          "probability": "medium"
-        }
-      },
-      "description": "Another TAS2R38 variant that combines with rs713598 to form PAV/AVI haplotypes determining bitter taste sensitivity.",
-      "confidence": "high"
+    "description": "IRF4 transcription factor variant affecting melanocyte function. Associated with lighter hair, skin, and increased freckling.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs3827760",
+    "trait": "Hair Thickness/Straightness",
+    "gene": "EDAR",
+    "chromosome": "2",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
     },
-    {
-      "rsid": "rs10246939",
-      "trait": "Bitter Taste Perception",
-      "gene": "TAS2R38",
-      "chromosome": "7",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "T",
-        "alt": "C"
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Thin/Wavy Hair",
+        "description": "Typical European/African hair characteristics, thinner hair strands",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Taster",
-          "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
-          "probability": "medium"
-        },
-        "CT": {
-          "phenotype": "Taster",
-          "description": "Intermediate bitter taste sensitivity",
-          "probability": "medium"
-        },
-        "CC": {
-          "phenotype": "Non-Taster",
-          "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
-          "probability": "medium"
-        }
+      "CT": {
+        "phenotype": "Thick Straight Hair",
+        "description": "Thicker hair strands, straighter hair",
+        "probability": "high"
       },
-      "description": "Third key TAS2R38 variant completing the PAV/AVI haplotype. Works with rs713598 and rs1726866.",
-      "confidence": "high"
+      "CC": {
+        "phenotype": "Very Thick Straight Hair",
+        "description": "Very thick hair strands, very straight hair (common in East Asians)",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs4988235",
-      "trait": "Lactose Tolerance",
-      "gene": "MCM6/LCT",
-      "chromosome": "2",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Lactose Intolerant",
-          "description": "Lactase production stops after childhood, high likelihood of lactose intolerance (>90%)",
-          "probability": "high"
-        },
-        "CT": {
-          "phenotype": "Lactose Tolerant",
-          "description": "Lactase persistence, can digest lactose in adulthood",
-          "probability": "high"
-        },
-        "TT": {
-          "phenotype": "Lactose Tolerant",
-          "description": "Strong lactase persistence, very likely can digest lactose throughout life",
-          "probability": "high"
-        }
-      },
-      "description": "MCM6 regulatory variant controlling LCT (lactase) gene expression. The -13910 C>T variant enables lactase persistence into adulthood in ~35% of world population, mostly Europeans and some African/Middle Eastern groups.",
-      "confidence": "high"
+    "description": "EDAR gene variant (370A allele) prevalent in East Asian populations. Affects hair follicle development, leading to thicker, straighter hair shafts.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1426654",
+    "trait": "Skin Pigmentation",
+    "gene": "SLC24A5",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
     },
-    {
-      "rsid": "rs671",
-      "trait": "Alcohol Flush Reaction",
-      "gene": "ALDH2",
-      "chromosome": "12",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "G",
-        "alt": "A"
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Light Skin",
+        "description": "Reduced melanin production, light skin pigmentation (European-type)",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Normal Alcohol Metabolism",
-          "description": "Normal ALDH2 enzyme function, no flush reaction",
-          "probability": "high"
-        },
-        "GA": {
-          "phenotype": "Alcohol Flush",
-          "description": "Reduced ALDH2 activity, facial flushing with alcohol, increased hangover, higher cancer risk",
-          "probability": "high"
-        },
-        "AA": {
-          "phenotype": "Severe Alcohol Flush",
-          "description": "Very low ALDH2 activity, severe facial flushing, nausea with small amounts of alcohol, strongly protective against alcoholism",
-          "probability": "high"
-        }
+      "AG": {
+        "phenotype": "Medium Skin",
+        "description": "Intermediate melanin levels, medium skin tone",
+        "probability": "high"
       },
-      "description": "ALDH2*2 variant (Glu504Lys) causing aldehyde dehydrogenase deficiency. Common in East Asians (~40% carriers). Leads to acetaldehyde accumulation and 'Asian flush' reaction.",
-      "confidence": "high"
+      "GG": {
+        "phenotype": "Dark Skin",
+        "description": "Normal melanin production, darker skin pigmentation",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs17822931",
-      "trait": "Earwax Type",
-      "gene": "ABCC11",
-      "chromosome": "16",
-      "inheritance": "recessive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Wet Earwax",
-          "description": "Wet, sticky earwax (European/African type), active apocrine glands, more body odor",
-          "probability": "high"
-        },
-        "CT": {
-          "phenotype": "Wet Earwax",
-          "description": "Wet earwax (dominant), normal body odor",
-          "probability": "high"
-        },
-        "TT": {
-          "phenotype": "Dry Earwax",
-          "description": "Dry, flaky earwax (East Asian type), reduced apocrine gland activity, less body odor",
-          "probability": "high"
-        }
-      },
-      "description": "ABCC11 variant determining earwax type and apocrine gland secretion. TT genotype (dry earwax) is nearly fixed in East Asians (80-95%) but rare elsewhere.",
-      "confidence": "high"
+    "description": "Major determinant of light skin in European and South Asian populations. The A allele (derived) reduces melanin ~30-40%.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs16891982",
+    "trait": "Skin/Eye Pigmentation",
+    "gene": "SLC45A2",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
     },
-    {
-      "rsid": "rs4680",
-      "trait": "COMT Activity - Warrior vs Worrier",
-      "gene": "COMT",
-      "chromosome": "22",
-      "inheritance": "codominant",
-      "alleles": {
-        "ref": "G",
-        "alt": "A"
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lighter Pigmentation",
+        "description": "Reduced melanin, lighter skin and eyes (European-type)",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Worrier",
-          "description": "Slower dopamine breakdown (Val/Val), better memory/attention, more anxiety-prone, pain sensitive",
-          "probability": "medium"
-        },
-        "GA": {
-          "phenotype": "Balanced",
-          "description": "Intermediate dopamine metabolism (Val/Met), balanced cognitive/emotional profile",
-          "probability": "medium"
-        },
-        "AA": {
-          "phenotype": "Warrior",
-          "description": "Faster dopamine breakdown (Met/Met), better stress resilience, lower baseline cognition, less pain sensitive",
-          "probability": "medium"
-        }
+      "CG": {
+        "phenotype": "Intermediate Pigmentation",
+        "description": "Moderate melanin levels",
+        "probability": "medium"
       },
-      "description": "COMT Val158Met variant affecting dopamine metabolism in prefrontal cortex. 'Warrior' (Met) vs 'Worrier' (Val) cognitive-emotional tradeoff.",
-      "confidence": "medium"
+      "CC": {
+        "phenotype": "Darker Pigmentation",
+        "description": "Normal melanin production, darker skin and eyes",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs7495174",
-      "trait": "Eye Color",
-      "gene": "OCA2",
-      "chromosome": "15",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
-      },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Darker Eyes",
-          "description": "Contributes to darker eye pigmentation",
-          "probability": "low"
-        },
-        "AG": {
-          "phenotype": "Intermediate Eyes",
-          "description": "Moderate eye pigmentation effect",
-          "probability": "low"
-        },
-        "GG": {
-          "phenotype": "Lighter Eyes",
-          "description": "Contributes to lighter eye colors (blue/green)",
-          "probability": "low"
-        }
-      },
-      "description": "Additional OCA2 region variant modifying eye color. Secondary modifier with smaller effect than rs12913832.",
-      "confidence": "medium"
+    "description": "SLC45A2 variant affecting melanin synthesis. The G allele is nearly fixed in Europeans and contributes to light skin and eyes.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1805005",
+    "trait": "Freckling Tendency",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
     },
-    {
-      "rsid": "rs1799971",
-      "trait": "Pain Sensitivity",
-      "gene": "OPRM1",
-      "chromosome": "6",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Low Freckling",
+        "description": "Normal MC1R function, lower freckling tendency",
+        "probability": "medium"
       },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Higher Pain Sensitivity",
-          "description": "Normal opioid receptor, higher baseline pain sensitivity, better response to opioid medications",
-          "probability": "medium"
-        },
-        "AG": {
-          "phenotype": "Moderate Pain Sensitivity",
-          "description": "Intermediate pain sensitivity and opioid response",
-          "probability": "medium"
-        },
-        "GG": {
-          "phenotype": "Lower Pain Sensitivity",
-          "description": "Altered opioid receptor (Asn40Asp), reduced pain sensitivity, may need higher opioid doses",
-          "probability": "medium"
-        }
+      "GT": {
+        "phenotype": "Moderate Freckling",
+        "description": "Increased freckling tendency, especially with sun exposure",
+        "probability": "high"
       },
-      "description": "OPRM1 mu-opioid receptor variant (A118G) affecting pain perception and opioid medication response. G allele reduces receptor expression.",
-      "confidence": "medium"
+      "TT": {
+        "phenotype": "High Freckling",
+        "description": "Strong freckling tendency, many freckles likely",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs53576",
-      "trait": "Empathy/Social Behavior",
-      "gene": "OXTR",
-      "chromosome": "3",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
-      },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Lower Empathy",
-          "description": "Reduced oxytocin sensitivity, less empathetic behavior, more stress reactivity",
-          "probability": "low"
-        },
-        "AG": {
-          "phenotype": "Moderate Empathy",
-          "description": "Intermediate oxytocin signaling and social behavior",
-          "probability": "low"
-        },
-        "GG": {
-          "phenotype": "Higher Empathy",
-          "description": "Enhanced oxytocin sensitivity, more empathetic, better social skills, lower stress",
-          "probability": "low"
-        }
-      },
-      "description": "Oxytocin receptor variant associated with empathy, social behavior, and stress resilience. GG genotype linked to more prosocial behavior.",
-      "confidence": "low"
+    "description": "MC1R variant (D84E) strongly associated with freckling, even in non-redheads. Also associated with fair skin and sun sensitivity.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1042725",
+    "trait": "Height",
+    "gene": "HMGA2",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
     },
-    {
-      "rsid": "rs6152",
-      "trait": "Male Pattern Baldness",
-      "gene": "AR",
-      "chromosome": "X",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "A",
-        "alt": "G"
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Taller Stature",
+        "description": "Each T allele adds ~0.4cm to height on average",
+        "probability": "low"
       },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Higher Baldness Risk",
-          "description": "Increased androgen receptor sensitivity, higher risk of male pattern baldness",
-          "probability": "medium"
-        },
-        "AG": {
-          "phenotype": "Moderate Baldness Risk",
-          "description": "Intermediate risk (only in females, males have one copy on X chromosome)",
-          "probability": "medium"
-        },
-        "GG": {
-          "phenotype": "Lower Baldness Risk",
-          "description": "Reduced androgen receptor sensitivity, lower baldness risk",
-          "probability": "medium"
-        }
+      "CT": {
+        "phenotype": "Average Height Effect",
+        "description": "Intermediate height contribution",
+        "probability": "low"
       },
-      "description": "Androgen receptor gene variant on X chromosome. Males inherit from mother. Affects sensitivity to DHT, primary driver of male pattern baldness.",
-      "confidence": "medium"
+      "CC": {
+        "phenotype": "Shorter Stature",
+        "description": "Neutral or slightly reduced height contribution",
+        "probability": "low"
+      }
     },
-    {
-      "rsid": "rs1800497",
-      "trait": "Novelty Seeking",
-      "gene": "ANKK1/DRD2",
-      "chromosome": "11",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "C",
-        "alt": "T"
-      },
-      "phenotype_map": {
-        "CC": {
-          "phenotype": "Lower Novelty Seeking",
-          "description": "Normal D2 receptor density, less impulsive, lower addiction risk",
-          "probability": "low"
-        },
-        "CT": {
-          "phenotype": "Moderate Novelty Seeking",
-          "description": "Intermediate dopamine signaling and behavioral traits",
-          "probability": "low"
-        },
-        "TT": {
-          "phenotype": "Higher Novelty Seeking",
-          "description": "Reduced D2 receptor density (Taq1A), more novelty seeking, impulsivity, addiction susceptibility",
-          "probability": "low"
-        }
-      },
-      "description": "ANKK1 variant (formerly called DRD2 Taq1A) affecting dopamine D2 receptor expression. T allele associated with ~30% reduction in receptor density.",
-      "confidence": "low"
+    "description": "HMGA2 gene variant, one of the strongest single-SNP associations with adult height. However, height is polygenic with 700+ variants.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs6060373",
+    "trait": "Height",
+    "gene": "GDF5",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
     },
-    {
-      "rsid": "rs2228479",
-      "trait": "Sun Sensitivity",
-      "gene": "MC1R",
-      "chromosome": "16",
-      "inheritance": "dominant",
-      "alleles": {
-        "ref": "G",
-        "alt": "A"
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Taller Stature",
+        "description": "Minor positive contribution to height (~0.3cm per allele)",
+        "probability": "low"
       },
-      "phenotype_map": {
-        "GG": {
-          "phenotype": "Normal Sun Tolerance",
-          "description": "Normal MC1R function, typical sun sensitivity for skin type",
-          "probability": "medium"
-        },
-        "GA": {
-          "phenotype": "Increased Sun Sensitivity",
-          "description": "Partial MC1R dysfunction, burns more easily, higher melanoma risk",
-          "probability": "medium"
-        },
-        "AA": {
-          "phenotype": "High Sun Sensitivity",
-          "description": "Reduced MC1R function, very sun sensitive, high melanoma risk",
-          "probability": "medium"
-        }
+      "AG": {
+        "phenotype": "Average Height Effect",
+        "description": "Intermediate height contribution",
+        "probability": "low"
       },
-      "description": "MC1R variant (V92M) associated with sun sensitivity and melanoma risk, even in individuals without red hair.",
-      "confidence": "medium"
+      "GG": {
+        "phenotype": "Slightly Shorter",
+        "description": "Neutral or slightly reduced height contribution",
+        "probability": "low"
+      }
     },
-    {
-      "rsid": "rs7294919",
-      "trait": "Head Circumference",
-      "gene": "HMGA2",
-      "chromosome": "12",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "T",
-        "alt": "C"
-      },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Larger Head Size",
-          "description": "Each T allele adds ~0.1cm to head circumference on average",
-          "probability": "low"
-        },
-        "CT": {
-          "phenotype": "Average Head Size",
-          "description": "Intermediate head circumference contribution",
-          "probability": "low"
-        },
-        "CC": {
-          "phenotype": "Smaller Head Size",
-          "description": "Neutral or slightly reduced head circumference",
-          "probability": "low"
-        }
-      },
-      "description": "HMGA2 variant associated with head circumference variation. Same gene region affects overall height. Small individual effect.",
-      "confidence": "medium"
+    "description": "GDF5 growth factor variant associated with height and osteoarthritis. Small effect size as height is highly polygenic.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs713598",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "G"
     },
-    {
-      "rsid": "rs9939609",
-      "trait": "Obesity Risk",
-      "gene": "FTO",
-      "chromosome": "16",
-      "inheritance": "additive",
-      "alleles": {
-        "ref": "T",
-        "alt": "A"
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Taster",
+        "description": "Can taste PTC/PROP bitter compounds strongly (supertaster possible)",
+        "probability": "high"
       },
-      "phenotype_map": {
-        "TT": {
-          "phenotype": "Lower Obesity Risk",
-          "description": "Normal weight regulation, lower BMI tendency",
-          "probability": "medium"
-        },
-        "AT": {
-          "phenotype": "Moderate Obesity Risk",
-          "description": "~1.5kg higher weight on average, moderately increased obesity risk",
-          "probability": "medium"
-        },
-        "AA": {
-          "phenotype": "Higher Obesity Risk",
-          "description": "~3kg higher weight on average, increased appetite, 1.7x obesity risk",
-          "probability": "medium"
-        }
+      "CG": {
+        "phenotype": "Taster",
+        "description": "Can taste PTC/PROP bitter compounds (medium sensitivity)",
+        "probability": "high"
       },
-      "description": "FTO gene variant, strongest common genetic predictor of obesity. Each A allele increases weight ~1-1.5kg. Affects appetite regulation and energy expenditure.",
-      "confidence": "high"
+      "GG": {
+        "phenotype": "Non-Taster",
+        "description": "Cannot taste PTC/PROP bitter compounds or very weakly",
+        "probability": "high"
+      }
     },
-    {
-      "rsid": "rs762551",
-      "trait": "Caffeine Metabolism",
-      "gene": "CYP1A2",
-      "chromosome": "15",
-      "inheritance": "codominant",
-      "alleles": {
-        "ref": "A",
-        "alt": "C"
-      },
-      "phenotype_map": {
-        "AA": {
-          "phenotype": "Fast Caffeine Metabolizer",
-          "description": "Rapid caffeine breakdown, can drink coffee late without sleep issues, may need more for effects",
-          "probability": "high"
-        },
-        "AC": {
-          "phenotype": "Intermediate Metabolizer",
-          "description": "Moderate caffeine metabolism rate",
-          "probability": "high"
-        },
-        "CC": {
-          "phenotype": "Slow Caffeine Metabolizer",
-          "description": "Slow caffeine breakdown, caffeine effects last longer, may have sleep issues with afternoon coffee, increased hypertension risk with high intake",
-          "probability": "high"
-        }
-      },
-      "description": "CYP1A2*1F variant determining caffeine metabolism speed. AA (fast) metabolizers clear caffeine ~4x faster than CC (slow). Affects coffee tolerance and cardiovascular effects.",
-      "confidence": "high"
-    }
-  ],
-  "metadata": {
-    "version": "1.0",
-    "description": "Curated database of well-studied trait-associated SNPs for genetic prediction",
-    "total_snps": 30,
-    "trait_categories": [
-      "Eye Color",
-      "Hair Color",
-      "Hair Type",
-      "Skin Pigmentation",
-      "Physical Features",
-      "Taste/Smell",
-      "Metabolism",
-      "Behavior/Personality",
-      "Health Risk"
-    ],
-    "confidence_levels": {
-      "high": "Well-replicated in multiple large studies, strong effect size",
-      "medium": "Replicated in several studies, moderate effect size",
-      "low": "Some evidence but smaller studies or effect size, behavioral traits with complex genetics"
+    "description": "TAS2R38 bitter taste receptor variant (PAV/AVI haplotype). Determines ability to taste phenylthiocarbamide (PTC) and PROP bitterness.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1726866",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
     },
-    "notes": [
-      "Phenotype predictions are probabilistic, not deterministic",
-      "Many traits are polygenic - these SNPs explain only part of variation",
-      "Environmental factors significantly influence trait expression",
-      "Confidence levels reflect scientific consensus as of 2025",
-      "For behavioral/personality traits, effect sizes are generally small",
-      "Consult genetic counselor for health-related interpretations"
-    ]
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Non-Taster",
+        "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Taster",
+        "description": "Intermediate bitter taste sensitivity",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Taster",
+        "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
+        "probability": "medium"
+      }
+    },
+    "description": "Another TAS2R38 variant that combines with rs713598 to form PAV/AVI haplotypes determining bitter taste sensitivity.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs10246939",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Taster",
+        "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Taster",
+        "description": "Intermediate bitter taste sensitivity",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Non-Taster",
+        "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
+        "probability": "medium"
+      }
+    },
+    "description": "Third key TAS2R38 variant completing the PAV/AVI haplotype. Works with rs713598 and rs1726866.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs4988235",
+    "trait": "Lactose Tolerance",
+    "gene": "MCM6/LCT",
+    "chromosome": "2",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lactose Intolerant",
+        "description": "Lactase production stops after childhood, high likelihood of lactose intolerance (>90%)",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Lactose Tolerant",
+        "description": "Lactase persistence, can digest lactose in adulthood",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Lactose Tolerant",
+        "description": "Strong lactase persistence, very likely can digest lactose throughout life",
+        "probability": "high"
+      }
+    },
+    "description": "MCM6 regulatory variant controlling LCT (lactase) gene expression. The -13910 C>T variant enables lactase persistence into adulthood in ~35% of world population, mostly Europeans and some African/Middle Eastern groups.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs671",
+    "trait": "Alcohol Flush Reaction",
+    "gene": "ALDH2",
+    "chromosome": "12",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Alcohol Metabolism",
+        "description": "Normal ALDH2 enzyme function, no flush reaction",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Alcohol Flush",
+        "description": "Reduced ALDH2 activity, facial flushing with alcohol, increased hangover, higher cancer risk",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Severe Alcohol Flush",
+        "description": "Very low ALDH2 activity, severe facial flushing, nausea with small amounts of alcohol, strongly protective against alcoholism",
+        "probability": "high"
+      }
+    },
+    "description": "ALDH2*2 variant (Glu504Lys) causing aldehyde dehydrogenase deficiency. Common in East Asians (~40% carriers). Leads to acetaldehyde accumulation and 'Asian flush' reaction.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs17822931",
+    "trait": "Earwax Type",
+    "gene": "ABCC11",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Wet Earwax",
+        "description": "Wet, sticky earwax (European/African type), active apocrine glands, more body odor",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Wet Earwax",
+        "description": "Wet earwax (dominant), normal body odor",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Dry Earwax",
+        "description": "Dry, flaky earwax (East Asian type), reduced apocrine gland activity, less body odor",
+        "probability": "high"
+      }
+    },
+    "description": "ABCC11 variant determining earwax type and apocrine gland secretion. TT genotype (dry earwax) is nearly fixed in East Asians (80-95%) but rare elsewhere.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs4680",
+    "trait": "COMT Activity - Warrior vs Worrier",
+    "gene": "COMT",
+    "chromosome": "22",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Worrier",
+        "description": "Slower dopamine breakdown (Val/Val), better memory/attention, more anxiety-prone, pain sensitive",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Balanced",
+        "description": "Intermediate dopamine metabolism (Val/Met), balanced cognitive/emotional profile",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Warrior",
+        "description": "Faster dopamine breakdown (Met/Met), better stress resilience, lower baseline cognition, less pain sensitive",
+        "probability": "medium"
+      }
+    },
+    "description": "COMT Val158Met variant affecting dopamine metabolism in prefrontal cortex. 'Warrior' (Met) vs 'Worrier' (Val) cognitive-emotional tradeoff.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs7495174",
+    "trait": "Eye Color",
+    "gene": "OCA2",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Darker Eyes",
+        "description": "Contributes to darker eye pigmentation",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Intermediate Eyes",
+        "description": "Moderate eye pigmentation effect",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Lighter Eyes",
+        "description": "Contributes to lighter eye colors (blue/green)",
+        "probability": "low"
+      }
+    },
+    "description": "Additional OCA2 region variant modifying eye color. Secondary modifier with smaller effect than rs12913832.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1799971",
+    "trait": "Pain Sensitivity",
+    "gene": "OPRM1",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Pain Sensitivity",
+        "description": "Normal opioid receptor, higher baseline pain sensitivity, better response to opioid medications",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate Pain Sensitivity",
+        "description": "Intermediate pain sensitivity and opioid response",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Pain Sensitivity",
+        "description": "Altered opioid receptor (Asn40Asp), reduced pain sensitivity, may need higher opioid doses",
+        "probability": "medium"
+      }
+    },
+    "description": "OPRM1 mu-opioid receptor variant (A118G) affecting pain perception and opioid medication response. G allele reduces receptor expression.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs53576",
+    "trait": "Empathy/Social Behavior",
+    "gene": "OXTR",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Lower Empathy",
+        "description": "Reduced oxytocin sensitivity, less empathetic behavior, more stress reactivity",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Moderate Empathy",
+        "description": "Intermediate oxytocin signaling and social behavior",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Higher Empathy",
+        "description": "Enhanced oxytocin sensitivity, more empathetic, better social skills, lower stress",
+        "probability": "low"
+      }
+    },
+    "description": "Oxytocin receptor variant associated with empathy, social behavior, and stress resilience. GG genotype linked to more prosocial behavior.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs6152",
+    "trait": "Male Pattern Baldness",
+    "gene": "AR",
+    "chromosome": "X",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Baldness Risk",
+        "description": "Increased androgen receptor sensitivity, higher risk of male pattern baldness",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate Baldness Risk",
+        "description": "Intermediate risk (only in females, males have one copy on X chromosome)",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Baldness Risk",
+        "description": "Reduced androgen receptor sensitivity, lower baldness risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Androgen receptor gene variant on X chromosome. Males inherit from mother. Affects sensitivity to DHT, primary driver of male pattern baldness.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1800497",
+    "trait": "Novelty Seeking",
+    "gene": "ANKK1/DRD2",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Novelty Seeking",
+        "description": "Normal D2 receptor density, less impulsive, lower addiction risk",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Moderate Novelty Seeking",
+        "description": "Intermediate dopamine signaling and behavioral traits",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Novelty Seeking",
+        "description": "Reduced D2 receptor density (Taq1A), more novelty seeking, impulsivity, addiction susceptibility",
+        "probability": "low"
+      }
+    },
+    "description": "ANKK1 variant (formerly called DRD2 Taq1A) affecting dopamine D2 receptor expression. T allele associated with ~30% reduction in receptor density.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs2228479",
+    "trait": "Sun Sensitivity",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Sun Tolerance",
+        "description": "Normal MC1R function, typical sun sensitivity for skin type",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Increased Sun Sensitivity",
+        "description": "Partial MC1R dysfunction, burns more easily, higher melanoma risk",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "High Sun Sensitivity",
+        "description": "Reduced MC1R function, very sun sensitive, high melanoma risk",
+        "probability": "medium"
+      }
+    },
+    "description": "MC1R variant (V92M) associated with sun sensitivity and melanoma risk, even in individuals without red hair.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs7294919",
+    "trait": "Head Circumference",
+    "gene": "HMGA2",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Larger Head Size",
+        "description": "Each T allele adds ~0.1cm to head circumference on average",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Average Head Size",
+        "description": "Intermediate head circumference contribution",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "Smaller Head Size",
+        "description": "Neutral or slightly reduced head circumference",
+        "probability": "low"
+      }
+    },
+    "description": "HMGA2 variant associated with head circumference variation. Same gene region affects overall height. Small individual effect.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs9939609",
+    "trait": "Obesity Risk",
+    "gene": "FTO",
+    "chromosome": "16",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Obesity Risk",
+        "description": "Normal weight regulation, lower BMI tendency",
+        "probability": "medium"
+      },
+      "AT": {
+        "phenotype": "Moderate Obesity Risk",
+        "description": "~1.5kg higher weight on average, moderately increased obesity risk",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Higher Obesity Risk",
+        "description": "~3kg higher weight on average, increased appetite, 1.7x obesity risk",
+        "probability": "medium"
+      }
+    },
+    "description": "FTO gene variant, strongest common genetic predictor of obesity. Each A allele increases weight ~1-1.5kg. Affects appetite regulation and energy expenditure.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs762551",
+    "trait": "Caffeine Metabolism",
+    "gene": "CYP1A2",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Fast Caffeine Metabolizer",
+        "description": "Rapid caffeine breakdown, can drink coffee late without sleep issues, may need more for effects",
+        "probability": "high"
+      },
+      "AC": {
+        "phenotype": "Intermediate Metabolizer",
+        "description": "Moderate caffeine metabolism rate",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Slow Caffeine Metabolizer",
+        "description": "Slow caffeine breakdown, caffeine effects last longer, may have sleep issues with afternoon coffee, increased hypertension risk with high intake",
+        "probability": "high"
+      }
+    },
+    "description": "CYP1A2*1F variant determining caffeine metabolism speed. AA (fast) metabolizers clear caffeine ~4x faster than CC (slow). Affects coffee tolerance and cardiovascular effects.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs72921001",
+    "trait": "Cilantro Taste Aversion",
+    "gene": "OR6A2",
+    "chromosome": "11",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Cilantro Taste",
+        "description": "Normal cilantro taste - perceives herb flavor",
+        "probability": "high"
+      },
+      "CA": {
+        "phenotype": "Mild Soapy Taste",
+        "description": "Mild soapy taste tendency",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Strong Soapy Taste",
+        "description": "Strong soapy/unpleasant taste perception",
+        "probability": "high"
+      }
+    },
+    "description": "Genetic variation affecting olfactory receptor determining whether cilantro tastes like herbs or soap.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs4481887",
+    "trait": "Asparagus Smell Detection",
+    "gene": "OR2M7",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Can Detect Asparagus Odor",
+        "description": "Can detect asparagus metabolite odor in urine",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Moderate Detection",
+        "description": "Moderate detection ability",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Cannot Detect Asparagus Odor",
+        "description": "Cannot detect asparagus urine odor",
+        "probability": "high"
+      }
+    },
+    "description": "Olfactory receptor variant determining ability to smell asparagus metabolites in urine.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs10427255",
+    "trait": "Photic Sneeze Reflex (ACHOO Syndrome)",
+    "gene": "ZEB2",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "No Photic Sneeze Reflex",
+        "description": "No photic sneeze reflex",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Mild Sun-Induced Sneezing",
+        "description": "Mild sun-induced sneezing",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Strong Photic Sneeze Reflex",
+        "description": "Strong sneeze reflex when exposed to bright light",
+        "probability": "medium"
+      }
+    },
+    "description": "Autosomal dominant trait causing sneezing when suddenly exposed to bright light.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs823160",
+    "trait": "Dimples",
+    "gene": "ZBTB20",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "No Cheek Dimples",
+        "description": "No cheek dimples",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Dimples Present",
+        "description": "Likely to have dimples on one or both cheeks",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Strong Dimple Tendency",
+        "description": "Strong tendency for cheek dimples",
+        "probability": "medium"
+      }
+    },
+    "description": "Facial muscle variation creating visible indentations in cheeks when smiling.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs11684042",
+    "trait": "Cleft Chin",
+    "gene": "CHAD",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Smooth Chin",
+        "description": "Smooth chin",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Mild Chin Cleft",
+        "description": "Mild chin cleft",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Prominent Cleft Chin",
+        "description": "Prominent cleft chin",
+        "probability": "medium"
+      }
+    },
+    "description": "Variation in jaw bone fusion creating a visible Y-shaped dimple in the chin.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs2073963",
+    "trait": "Widow's Peak Hairline",
+    "gene": "FRAS1",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Straight Hairline",
+        "description": "Straight hairline",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Subtle V-Shaped Hairline",
+        "description": "Subtle V-shaped hairline",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Distinct Widow's Peak",
+        "description": "Distinct widow's peak hairline",
+        "probability": "low"
+      }
+    },
+    "description": "Characteristic V-shaped point in the center of the hairline.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs1288775",
+    "trait": "Tongue Rolling Ability",
+    "gene": "LOC100128714",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Cannot Roll Tongue",
+        "description": "Cannot roll tongue into tube shape",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Partial Tongue Rolling",
+        "description": "Partial tongue rolling ability",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Can Roll Tongue",
+        "description": "Can easily roll tongue into tube shape",
+        "probability": "low"
+      }
+    },
+    "description": "Ability to curl the lateral edges of the tongue upward into a tube shape.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs12927162",
+    "trait": "Chronotype (Morning/Night Person)",
+    "gene": "AKH",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Morning Person (Early Bird)",
+        "description": "Strong morning preference (early bird)",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate Chronotype",
+        "description": "Intermediate chronotype",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Night Owl",
+        "description": "Strong evening preference (night owl)",
+        "probability": "medium"
+      }
+    },
+    "description": "Circadian rhythm variation determining natural preference for morning or evening activity.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs73598374",
+    "trait": "Deep Sleep Quality",
+    "gene": "ADA",
+    "chromosome": "20",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Deep Sleep",
+        "description": "Normal deep sleep duration",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Enhanced Deep Sleep",
+        "description": "Enhanced deep sleep quality",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Significantly More Deep Sleep",
+        "description": "Significantly more deep sleep",
+        "probability": "medium"
+      }
+    },
+    "description": "Adenosine deaminase variant affecting deep sleep duration and sleep quality.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs6269",
+    "trait": "Fear of Pain Sensitivity",
+    "gene": "COMT",
+    "chromosome": "22",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Pain Sensitivity",
+        "description": "Higher pain sensitivity",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Average Pain Tolerance",
+        "description": "Average pain tolerance",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Pain Sensitivity",
+        "description": "Lower pain sensitivity - higher tolerance",
+        "probability": "medium"
+      }
+    },
+    "description": "COMT haplotype variant modulating catecholamine levels and pain perception thresholds.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs2937573",
+    "trait": "Misophonia Tendency",
+    "gene": "TENM2",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Low Sound Sensitivity",
+        "description": "Low sensitivity to trigger sounds",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Moderate Sound Sensitivity",
+        "description": "Moderate sound sensitivity",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "High Sound Sensitivity",
+        "description": "High sensitivity to chewing/repetitive sounds",
+        "probability": "low"
+      }
+    },
+    "description": "Genetic predisposition to strong emotional reactions triggered by specific sounds like chewing.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs35874116",
+    "trait": "Sweet Taste Preference",
+    "gene": "TAS1R2",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Sweet Perception",
+        "description": "Standard sweet taste perception",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Slightly Enhanced Sweet Sensitivity",
+        "description": "Slightly enhanced sweet sensitivity",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Enhanced Sweet Sensitivity",
+        "description": "Enhanced sweet taste sensitivity - prefers less sugar",
+        "probability": "medium"
+      }
+    },
+    "description": "Sweet taste receptor variant affecting sensitivity to sugars and sweet taste preference.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs12780242",
+    "trait": "Unibrow Tendency",
+    "gene": "PAX3",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Separated Eyebrows",
+        "description": "Separated eyebrows",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Some Eyebrow Connectivity",
+        "description": "Some eyebrow connectivity",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Unibrow Tendency",
+        "description": "Tendency for connected eyebrows (unibrow)",
+        "probability": "medium"
+      }
+    },
+    "description": "Transcription factor variant influencing eyebrow hair growth pattern and density.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs2651899",
+    "trait": "Ice Cream Headache (Brain Freeze)",
+    "gene": "TRPM8",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Resistant to Brain Freeze",
+        "description": "Resistant to brain freeze",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Brain Freeze Susceptibility",
+        "description": "Moderate brain freeze susceptibility",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Highly Susceptible to Brain Freeze",
+        "description": "Highly susceptible to ice cream headaches",
+        "probability": "medium"
+      }
+    },
+    "description": "Cold-sensing receptor variant affecting susceptibility to cold-stimulus headaches.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs56126437",
+    "trait": "Motion Sickness Susceptibility",
+    "gene": "GPD2",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Low Motion Sickness Risk",
+        "description": "Low motion sickness risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Motion Sickness Risk",
+        "description": "Moderate motion sickness risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "High Motion Sickness Susceptibility",
+        "description": "High susceptibility to motion sickness",
+        "probability": "medium"
+      }
+    },
+    "description": "Genetic variation affecting vestibular-visual conflict processing and nausea response.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs6437091",
+    "trait": "Mosquito Bite Attraction",
+    "gene": "HLA-related",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Less Attractive to Mosquitoes",
+        "description": "Less attractive to mosquitoes",
+        "probability": "low"
+      },
+      "TC": {
+        "phenotype": "Average Mosquito Attraction",
+        "description": "Average mosquito attraction",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "More Attractive to Mosquitoes",
+        "description": "More attractive to mosquitoes",
+        "probability": "low"
+      }
+    },
+    "description": "HLA-associated body odor compounds affecting attractiveness to mosquitoes.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs3057",
+    "trait": "Musical Pitch Perception",
+    "gene": "AVPR1A",
+    "chromosome": "12",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Pitch Perception",
+        "description": "Standard pitch perception",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Enhanced Pitch Discrimination",
+        "description": "Enhanced pitch discrimination",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Superior Pitch Perception",
+        "description": "Superior pitch perception ability",
+        "probability": "low"
+      }
+    },
+    "description": "Vasopressin receptor variant associated with musical aptitude and pitch recognition.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs199512",
+    "trait": "Handedness Tendency",
+    "gene": "PCSK6",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Strong Right-Hand Preference",
+        "description": "Strong right-hand preference",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Mixed/Ambidextrous Tendency",
+        "description": "Mixed or ambidextrous tendency",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Left-Hand Preference",
+        "description": "Left-hand preference more likely",
+        "probability": "low"
+      }
+    },
+    "description": "Proprotein convertase variant influencing left-right body asymmetry and handedness.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs9536314",
+    "trait": "Snoring Tendency",
+    "gene": "KLOTHO",
+    "chromosome": "13",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lower Snoring Tendency",
+        "description": "Lower snoring tendency",
+        "probability": "low"
+      },
+      "GT": {
+        "phenotype": "Moderate Snoring Risk",
+        "description": "Moderate snoring risk",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Snoring Tendency",
+        "description": "Higher tendency for snoring",
+        "probability": "low"
+      }
+    },
+    "description": "Klotho protein variant associated with respiratory muscle tone during sleep.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs1345417",
+    "trait": "Eyebrow Thickness",
+    "gene": "FOXL2",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Thinner Eyebrows",
+        "description": "Thinner eyebrows",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Medium Eyebrow Thickness",
+        "description": "Medium eyebrow thickness",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Thicker Eyebrows",
+        "description": "Thicker/bushier eyebrows",
+        "probability": "medium"
+      }
+    },
+    "description": "Forkhead transcription factor variant influencing eyebrow hair density and thickness.",
+    "confidence": "medium"
   }
-}
+]
