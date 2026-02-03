@@ -1468,5 +1468,905 @@
     },
     "description": "Forkhead transcription factor variant influencing eyebrow hair density and thickness.",
     "confidence": "medium"
+  },
+  {
+    "rsid": "rs2282679",
+    "trait": "Vitamin D Levels",
+    "gene": "GC",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Vitamin D Levels",
+        "description": "Higher vitamin D levels",
+        "probability": "high"
+      },
+      "AC": {
+        "phenotype": "Moderate Vitamin D Levels",
+        "description": "Moderate vitamin D levels",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Lower Vitamin D Levels",
+        "description": "Lower vitamin D levels - may need supplementation",
+        "probability": "high"
+      }
+    },
+    "description": "Vitamin D binding protein variant affecting circulating vitamin D levels.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs7903146",
+    "trait": "Type 2 Diabetes Risk",
+    "gene": "TCF7L2",
+    "chromosome": "10",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Diabetes Risk",
+        "description": "Lower diabetes risk",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Moderately Increased Risk",
+        "description": "Moderately increased risk",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Higher Type 2 Diabetes Risk",
+        "description": "Higher Type 2 diabetes risk",
+        "probability": "high"
+      }
+    },
+    "description": "Strongest common genetic risk factor for Type 2 diabetes affecting insulin secretion.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs2802292",
+    "trait": "Longevity / Aging",
+    "gene": "FOXO3",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Average Longevity Tendency",
+        "description": "Average longevity tendency",
+        "probability": "medium"
+      },
+      "TG": {
+        "phenotype": "Moderately Increased Longevity",
+        "description": "Moderately increased longevity",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Associated with Exceptional Longevity",
+        "description": "Associated with exceptional longevity",
+        "probability": "medium"
+      }
+    },
+    "description": "FOXO3 variant consistently associated with human longevity across multiple populations.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1800588",
+    "trait": "Body Odor Intensity",
+    "gene": "ABCC11",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Stronger Body Odor",
+        "description": "Stronger body odor",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Body Odor",
+        "description": "Moderate body odor",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Reduced Body Odor",
+        "description": "Reduced body odor",
+        "probability": "medium"
+      }
+    },
+    "description": "ATP-binding cassette transporter variant affecting apocrine sweat gland secretions.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs4911414",
+    "trait": "Freckle Density",
+    "gene": "IRF4",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Fewer Freckles",
+        "description": "Fewer freckles",
+        "probability": "medium"
+      },
+      "TG": {
+        "phenotype": "Moderate Freckling",
+        "description": "Moderate freckling",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Dense Freckling Tendency",
+        "description": "Dense freckling tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Interferon regulatory factor variant influencing melanocyte-driven freckle formation.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1800888",
+    "trait": "Wisdom Tooth Development",
+    "gene": "PAX9",
+    "chromosome": "14",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Wisdom Tooth Development",
+        "description": "Normal wisdom tooth development",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Possible Missing Wisdom Teeth",
+        "description": "Possible missing wisdom teeth",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Likely Missing Wisdom Teeth",
+        "description": "Likely missing one or more wisdom teeth",
+        "probability": "medium"
+      }
+    },
+    "description": "Transcription factor variant affecting third molar tooth development and agenesis.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs12722",
+    "trait": "Achilles Tendon Injury Risk",
+    "gene": "COL5A1",
+    "chromosome": "9",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Tendon Injury Risk",
+        "description": "Lower tendon injury risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Average Injury Risk",
+        "description": "Average injury risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Achilles Tendon Injury Susceptibility",
+        "description": "Higher Achilles tendon injury susceptibility",
+        "probability": "medium"
+      }
+    },
+    "description": "Collagen type V variant affecting tendon flexibility and injury predisposition.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs307355",
+    "trait": "Sensitivity to Umami Taste",
+    "gene": "TAS1R1",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Umami Perception",
+        "description": "Standard umami perception",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Enhanced Umami Sensitivity",
+        "description": "Enhanced umami sensitivity",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Highly Sensitive to Umami",
+        "description": "Highly sensitive to umami/savory taste",
+        "probability": "medium"
+      }
+    },
+    "description": "Taste receptor variant determining sensitivity to glutamate and savory flavors.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs16969968",
+    "trait": "Nicotine Dependence Risk",
+    "gene": "CHRNA5",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lower Nicotine Dependence Risk",
+        "description": "Lower nicotine dependence risk",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Moderate Risk",
+        "description": "Moderate risk",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Higher Risk of Nicotine Dependence",
+        "description": "Higher risk of nicotine dependence",
+        "probability": "high"
+      }
+    },
+    "description": "Nicotinic receptor variant affecting susceptibility to tobacco addiction.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs11803731",
+    "trait": "Hair Curliness",
+    "gene": "TCHH",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Straight Hair Tendency",
+        "description": "Straight hair tendency",
+        "probability": "medium"
+      },
+      "AT": {
+        "phenotype": "Wavy Hair Tendency",
+        "description": "Wavy hair tendency",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Curly Hair Tendency",
+        "description": "Curly hair tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Trichohyalin protein variant affecting hair fiber shape and curliness.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs601338",
+    "trait": "Resistance to Norovirus",
+    "gene": "FUT2",
+    "chromosome": "19",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Susceptible to Norovirus",
+        "description": "Susceptible to norovirus",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Partial Resistance",
+        "description": "Partial resistance",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Resistant to Most Norovirus Strains",
+        "description": "Resistant to most norovirus strains (non-secretor)",
+        "probability": "high"
+      }
+    },
+    "description": "Fucosyltransferase variant determining secretor status and norovirus binding.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs41423247",
+    "trait": "Cortisol Stress Response",
+    "gene": "NR3C1",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Stress Cortisol Response",
+        "description": "Standard stress cortisol response",
+        "probability": "medium"
+      },
+      "CG": {
+        "phenotype": "Slightly Enhanced Cortisol Sensitivity",
+        "description": "Slightly enhanced cortisol sensitivity",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Enhanced Cortisol Sensitivity",
+        "description": "Enhanced cortisol sensitivity - stronger stress response",
+        "probability": "medium"
+      }
+    },
+    "description": "Glucocorticoid receptor variant affecting hypothalamic-pituitary-adrenal axis sensitivity.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs10195570",
+    "trait": "Detached vs Attached Earlobes",
+    "gene": "EDAR",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Free (Detached) Earlobes",
+        "description": "Free (detached) earlobes",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Partially Attached Earlobes",
+        "description": "Partially attached earlobes",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Attached Earlobes",
+        "description": "Attached earlobes",
+        "probability": "medium"
+      }
+    },
+    "description": "Ectodysplasin receptor variant influencing earlobe attachment pattern.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1800566",
+    "trait": "Photophobia Tendency",
+    "gene": "NQO1",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Light Tolerance",
+        "description": "Normal light tolerance",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Mild Light Sensitivity",
+        "description": "Mild light sensitivity",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Increased Light Sensitivity",
+        "description": "Increased light sensitivity (photophobia)",
+        "probability": "low"
+      }
+    },
+    "description": "NAD(P)H dehydrogenase variant affecting retinal sensitivity to bright light.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs1835740",
+    "trait": "Migraine with Aura Risk",
+    "gene": "MTDH",
+    "chromosome": "8",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Migraine Risk",
+        "description": "Lower migraine risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Migraine Susceptibility",
+        "description": "Moderate migraine susceptibility",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Migraine with Aura Risk",
+        "description": "Higher migraine with aura risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Astrocyte glutamate transporter variant affecting cortical excitability and migraine.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs12946454",
+    "trait": "Seasonal Affective Disorder Risk",
+    "gene": "ZBTB20",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower SAD Risk",
+        "description": "Lower SAD risk",
+        "probability": "low"
+      },
+      "TC": {
+        "phenotype": "Moderate Seasonal Mood Sensitivity",
+        "description": "Moderate seasonal mood sensitivity",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "Higher Seasonal Affective Disorder Risk",
+        "description": "Higher seasonal affective disorder risk",
+        "probability": "low"
+      }
+    },
+    "description": "Circadian rhythm gene variant affecting seasonal mood and energy regulation.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs6313",
+    "trait": "Jaw Clenching/Bruxism Tendency",
+    "gene": "HTR2A",
+    "chromosome": "13",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Bruxism Tendency",
+        "description": "Lower bruxism tendency",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Moderate Clenching Risk",
+        "description": "Moderate clenching risk",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Jaw Clenching Tendency",
+        "description": "Higher jaw clenching/teeth grinding tendency",
+        "probability": "low"
+      }
+    },
+    "description": "Serotonin receptor variant associated with sleep bruxism and jaw clenching.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs3132572",
+    "trait": "Perfect Pitch (Absolute Pitch)",
+    "gene": "HLA-A",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Typical Pitch Perception",
+        "description": "Typical pitch perception",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Enhanced Pitch Memory",
+        "description": "Enhanced pitch memory",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Predisposition for Absolute Pitch",
+        "description": "Predisposition for absolute pitch ability",
+        "probability": "low"
+      }
+    },
+    "description": "HLA region variant associated with rare absolute pitch ability in musicians.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs660339",
+    "trait": "Marathon Runner Endurance",
+    "gene": "UCP2",
+    "chromosome": "11",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Endurance Capacity",
+        "description": "Standard endurance capacity",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Endurance Advantage",
+        "description": "Moderate endurance advantage",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Enhanced Mitochondrial Efficiency",
+        "description": "Enhanced mitochondrial efficiency for endurance",
+        "probability": "medium"
+      }
+    },
+    "description": "Uncoupling protein variant affecting mitochondrial energy efficiency during prolonged exercise.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs6025",
+    "trait": "Blood Clotting Speed",
+    "gene": "F5",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Clotting",
+        "description": "Normal clotting (no Factor V Leiden)",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Heterozygous Factor V Leiden",
+        "description": "Heterozygous Factor V Leiden - slightly increased clot risk",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Homozygous Factor V Leiden",
+        "description": "Homozygous Factor V Leiden - significantly increased clot risk",
+        "probability": "high"
+      }
+    },
+    "description": "Factor V Leiden mutation affecting blood clotting cascade and thrombosis risk.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs2576037",
+    "trait": "Introversion/Extraversion Tendency",
+    "gene": "KATNAL2",
+    "chromosome": "18",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Tendency Toward Extraversion",
+        "description": "Tendency toward extraversion",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Balanced Introversion/Extraversion",
+        "description": "Balanced introversion/extraversion",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Tendency Toward Introversion",
+        "description": "Tendency toward introversion",
+        "probability": "low"
+      }
+    },
+    "description": "Gene variant associated with personality trait dimensions in large GWAS studies.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs8192678",
+    "trait": "Response to Exercise (VO2 Max)",
+    "gene": "PPARGC1A",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Higher Baseline Aerobic Capacity",
+        "description": "Higher baseline aerobic capacity",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Average Aerobic Trainability",
+        "description": "Average aerobic trainability",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Greater VO2 Max Improvement with Training",
+        "description": "Greater VO2 max improvement with training",
+        "probability": "medium"
+      }
+    },
+    "description": "PGC-1alpha variant affecting mitochondrial biogenesis and aerobic fitness response.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs2187668",
+    "trait": "Gluten Sensitivity Risk",
+    "gene": "HLA-DQ2",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Celiac/Gluten Sensitivity Risk",
+        "description": "Lower celiac/gluten sensitivity risk",
+        "probability": "high"
+      },
+      "TC": {
+        "phenotype": "Carrier for HLA-DQ2 Celiac Risk Allele",
+        "description": "Carrier for HLA-DQ2 celiac risk allele",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Higher Celiac Disease Risk",
+        "description": "Higher celiac disease and gluten sensitivity risk",
+        "probability": "high"
+      }
+    },
+    "description": "HLA-DQ2 haplotype tag SNP strongly associated with celiac disease susceptibility.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs1049353",
+    "trait": "Fear Response Intensity",
+    "gene": "CNR1",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Typical Fear Extinction",
+        "description": "Typical fear extinction",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Slightly Slower Fear Extinction",
+        "description": "Slightly slower fear extinction",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Stronger Fear Conditioning",
+        "description": "Stronger fear conditioning and slower extinction",
+        "probability": "low"
+      }
+    },
+    "description": "Cannabinoid receptor variant affecting amygdala-based fear learning and anxiety.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs1805009",
+    "trait": "Sunburn Recovery Speed",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal UV Damage Recovery",
+        "description": "Normal UV damage recovery",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Slightly Slower Skin Repair",
+        "description": "Slightly slower skin repair",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Slower Sunburn Recovery",
+        "description": "Slower sunburn recovery and higher UV sensitivity",
+        "probability": "medium"
+      }
+    },
+    "description": "Melanocortin receptor variant affecting melanin production and UV damage repair.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs4410790",
+    "trait": "Coffee Consumption Tendency",
+    "gene": "AHR",
+    "chromosome": "7",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Habitual Coffee Intake",
+        "description": "Lower habitual coffee intake",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Moderate Coffee Consumption",
+        "description": "Moderate coffee consumption",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Higher Habitual Coffee Consumption",
+        "description": "Higher habitual coffee consumption tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Aryl hydrocarbon receptor variant influencing caffeine reward pathway and consumption habits.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs6625163",
+    "trait": "Male Pattern Baldness (Androgenetic)",
+    "gene": "HDAC9",
+    "chromosome": "7",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Lower Baldness Risk",
+        "description": "Lower baldness risk",
+        "probability": "medium"
+      },
+      "AC": {
+        "phenotype": "Moderate Baldness Risk",
+        "description": "Moderate baldness risk",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Higher Male Pattern Baldness Risk",
+        "description": "Higher male pattern baldness risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Histone deacetylase variant associated with androgenetic alopecia susceptibility.",
+    "confidence": "medium"
+  },
+  {
+    "rsid": "rs1229984",
+    "trait": "Facial Flushing from Alcohol",
+    "gene": "ADH1B",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Normal Alcohol Metabolism",
+        "description": "Normal alcohol metabolism",
+        "probability": "high"
+      },
+      "TC": {
+        "phenotype": "Faster Alcohol Conversion - Mild Flush",
+        "description": "Faster alcohol to acetaldehyde conversion - mild flush",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Rapid Conversion - Strong Facial Flushing",
+        "description": "Rapid conversion - strong facial flushing",
+        "probability": "high"
+      }
+    },
+    "description": "Alcohol dehydrogenase fast-metabolizer variant causing acetaldehyde accumulation.",
+    "confidence": "high"
+  },
+  {
+    "rsid": "rs7142862",
+    "trait": "Night Vision Quality",
+    "gene": "CNGA1",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Night Vision Adaptation",
+        "description": "Standard night vision adaptation",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Slightly Enhanced Dark Adaptation",
+        "description": "Slightly enhanced dark adaptation",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Better Than Average Night Vision",
+        "description": "Better than average night vision",
+        "probability": "low"
+      }
+    },
+    "description": "Cyclic nucleotide-gated channel variant affecting rod photoreceptor sensitivity.",
+    "confidence": "low"
+  },
+  {
+    "rsid": "rs7744813",
+    "trait": "Stretch Mark Susceptibility",
+    "gene": "ELN",
+    "chromosome": "7",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Stretch Mark Tendency",
+        "description": "Lower stretch mark tendency",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Stretch Mark Risk",
+        "description": "Moderate stretch mark risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Stretch Mark Susceptibility",
+        "description": "Higher stretch mark susceptibility",
+        "probability": "medium"
+      }
+    },
+    "description": "Elastin gene variant affecting skin elasticity and striae formation.",
+    "confidence": "medium"
   }
 ]

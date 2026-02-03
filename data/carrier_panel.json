@@ -8,7 +8,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Progressive disorder causing persistent lung infections and limiting breathing ability over time.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 3,500",
+    "omim_id": "219700"
   },
   {
     "rsid": "rs113993960",
@@ -19,7 +21,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Second most common CFTR mutation causing cystic fibrosis.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 3,500",
+    "omim_id": "219700"
   },
   {
     "rsid": "rs334",
@@ -30,7 +34,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "A",
     "description": "Blood disorder causing red blood cells to become crescent-shaped and block blood flow.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 500",
+    "omim_id": "603903"
   },
   {
     "rsid": "rs76173977",
@@ -41,7 +47,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Fatal genetic disorder causing progressive destruction of nerve cells in the brain and spinal cord.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 320,000",
+    "omim_id": "272800"
   },
   {
     "rsid": "rs5030858",
@@ -52,7 +60,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Metabolic disorder causing inability to break down phenylalanine, leading to intellectual disability if untreated.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 12,000",
+    "omim_id": "261600"
   },
   {
     "rsid": "rs76763715",
@@ -63,7 +73,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "A",
     "description": "Lysosomal storage disorder causing organ enlargement, bone pain, and blood abnormalities.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 40,000",
+    "omim_id": "230800"
   },
   {
     "rsid": "rs28940279",
@@ -74,7 +86,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Fatal neurological disorder causing progressive brain damage and developmental delays.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 6,400",
+    "omim_id": "271900"
   },
   {
     "rsid": "rs1800499",
@@ -85,7 +99,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Disorder affecting autonomic and sensory nervous system development.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 3,700",
+    "omim_id": "223900"
   },
   {
     "rsid": "rs74315350",
@@ -96,7 +112,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Metabolic disorder causing inability to process galactose, leading to liver damage and developmental delays.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 60,000",
+    "omim_id": "230400"
   },
   {
     "rsid": "rs76151636",
@@ -107,7 +125,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "Copper accumulation disorder affecting liver and brain function.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 30,000",
+    "omim_id": "277900"
   },
   {
     "rsid": "rs77931234",
@@ -118,7 +138,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Fatty acid oxidation disorder causing hypoglycemia and metabolic crisis.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 17,000",
+    "omim_id": "201450"
   },
   {
     "rsid": "rs7755898",
@@ -129,7 +151,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Disorder causing deficiency of cortisol and aldosterone with excess androgens.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 15,000",
+    "omim_id": "201910"
   },
   {
     "rsid": "rs61752717",
@@ -140,7 +164,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Inflammatory disorder causing recurrent fevers and painful inflammation.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 1,000",
+    "omim_id": "249100"
   },
   {
     "rsid": "rs1800562",
@@ -151,7 +177,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Iron overload disorder causing organ damage if untreated.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 200",
+    "omim_id": "235200"
   },
   {
     "rsid": "rs121907950",
@@ -162,7 +190,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Fatal lipid storage disorder causing progressive neurological deterioration.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "257200"
   },
   {
     "rsid": "rs28933981",
@@ -173,7 +203,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "T",
     "description": "Genetic disorder causing short stature, sun sensitivity, and increased cancer risk.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 48,000",
+    "omim_id": "210900"
   },
   {
     "rsid": "rs137852986",
@@ -184,7 +216,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "Bone marrow failure disorder with birth defects and cancer predisposition.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 160,000",
+    "omim_id": "227650"
   },
   {
     "rsid": "rs121908053",
@@ -195,7 +229,9 @@
     "pathogenic_allele": "G",
     "reference_allele": "A",
     "description": "Combined deafness and progressive vision loss disorder.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 25,000",
+    "omim_id": "276900"
   },
   {
     "rsid": "rs111033171",
@@ -206,7 +242,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Hearing loss and thyroid goiter disorder.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 10,000",
+    "omim_id": "274600"
   },
   {
     "rsid": "rs76917243",
@@ -217,7 +255,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Metabolic disorder causing severe reactions to fructose consumption.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 20,000",
+    "omim_id": "229600"
   },
   {
     "rsid": "rs28934574",
@@ -228,7 +268,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Metabolic disorder causing dark urine and arthritis in adulthood.",
-    "severity": "low"
+    "severity": "low",
+    "prevalence": "1 in 250,000",
+    "omim_id": "203500"
   },
   {
     "rsid": "rs121909211",
@@ -239,7 +281,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Metabolic disorder causing neurological and skin problems if untreated.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 60,000",
+    "omim_id": "253260"
   },
   {
     "rsid": "rs28940871",
@@ -250,7 +294,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Metabolic disorder preventing breakdown of certain amino acids.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 185,000",
+    "omim_id": "248600"
   },
   {
     "rsid": "rs28934895",
@@ -261,7 +307,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "More severe form of Gaucher disease affecting brain and nervous system.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "230800"
   },
   {
     "rsid": "rs121913530",
@@ -272,7 +320,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Cholesterol synthesis disorder causing developmental delays and birth defects.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 20,000",
+    "omim_id": "270400"
   },
   {
     "rsid": "rs28933690",
@@ -283,7 +333,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Metabolic disorder causing elevated homocysteine with vascular and skeletal issues.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 200,000",
+    "omim_id": "236250"
   },
   {
     "rsid": "rs121909229",
@@ -294,7 +346,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Metabolic disorder affecting methionine processing with eye, skeletal, and vascular complications.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 300,000",
+    "omim_id": "236200"
   },
   {
     "rsid": "rs121912706",
@@ -305,7 +359,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Alternative PKU mutation affecting phenylalanine metabolism.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 12,000",
+    "omim_id": "261600"
   },
   {
     "rsid": "rs121913059",
@@ -316,7 +372,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Urea cycle disorder causing ammonia buildup in blood.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 57,000",
+    "omim_id": "215700"
   },
   {
     "rsid": "rs121913326",
@@ -327,7 +385,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Most common urea cycle disorder causing hyperammonemia.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 14,000",
+    "omim_id": "311250"
   },
   {
     "rsid": "rs121908009",
@@ -338,7 +398,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "Glycine metabolism disorder causing severe neurological problems.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 76,000",
+    "omim_id": "605899"
   },
   {
     "rsid": "rs28936381",
@@ -349,7 +411,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Glucose metabolism disorder causing hypoglycemia and liver enlargement.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "232220"
   },
   {
     "rsid": "rs121907990",
@@ -360,7 +424,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Most common GSD type affecting glucose production.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "232200"
   },
   {
     "rsid": "rs121912617",
@@ -371,7 +437,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Glycogen storage disorder affecting muscles and heart.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "232300"
   },
   {
     "rsid": "rs28940580",
@@ -382,7 +450,9 @@
     "pathogenic_allele": "G",
     "reference_allele": "A",
     "description": "Insulin regulation disorder causing severe hypoglycemia in infants.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "256450"
   },
   {
     "rsid": "rs121909548",
@@ -393,7 +463,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Organic acid disorder causing toxic acid buildup.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "243500"
   },
   {
     "rsid": "rs121909547",
@@ -404,7 +476,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Organic acid disorder causing metabolic crisis and developmental delays.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "606054"
   },
   {
     "rsid": "rs121909258",
@@ -415,10 +489,12 @@
     "pathogenic_allele": "G",
     "reference_allele": "A",
     "description": "Metabolic disorder preventing breakdown of certain proteins and fats.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "251000"
   },
   {
-    "rsid": "rs28940279",
+    "rsid": "rs121918258",
     "gene": "MMACHC",
     "condition": "Methylmalonic Acidemia with Homocystinuria",
     "inheritance": "autosomal_recessive",
@@ -426,7 +502,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Combined disorder affecting B12 metabolism.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "277400"
   },
   {
     "rsid": "rs121908067",
@@ -437,7 +515,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Fatty acid oxidation disorder causing hypoglycemia and muscle breakdown.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "609016"
   },
   {
     "rsid": "rs121908066",
@@ -448,7 +528,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Fatty acid oxidation disorder affecting liver energy metabolism.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 500,000",
+    "omim_id": "255120"
   },
   {
     "rsid": "rs121908065",
@@ -459,7 +541,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Fatty acid oxidation disorder causing muscle breakdown and weakness.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 300,000",
+    "omim_id": "255110"
   },
   {
     "rsid": "rs121908064",
@@ -470,7 +554,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "Carnitine transport disorder affecting heart and muscle function.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "212140"
   },
   {
     "rsid": "rs28934269",
@@ -481,7 +567,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Progressive neurological disorder with cholesterol transport defect.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 120,000",
+    "omim_id": "257220"
   },
   {
     "rsid": "rs121909217",
@@ -492,7 +580,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Progressive demyelinating disorder affecting white matter.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "250100"
   },
   {
     "rsid": "rs121909218",
@@ -503,7 +593,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Fatal degenerative disorder destroying myelin protective coating of nerves.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "245200"
   },
   {
     "rsid": "rs121909216",
@@ -514,7 +606,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Lysosomal storage disorder causing pain, kidney failure, and heart disease.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "301500"
   },
   {
     "rsid": "rs28934576",
@@ -525,7 +619,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Fatal neurodegenerative disorder causing vision loss, seizures, and dementia.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "204200"
   },
   {
     "rsid": "rs121908054",
@@ -536,7 +632,9 @@
     "pathogenic_allele": "C",
     "reference_allele": "T",
     "description": "Congenital deafness with progressive vision loss.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 25,000",
+    "omim_id": "602083"
   },
   {
     "rsid": "rs121909215",
@@ -547,7 +645,9 @@
     "pathogenic_allele": "G",
     "reference_allele": "A",
     "description": "Juvenile macular degeneration causing progressive vision loss.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 8,000",
+    "omim_id": "248200"
   },
   {
     "rsid": "rs121909214",
@@ -558,7 +658,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Severe retinal dystrophy causing blindness in infancy.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 80,000",
+    "omim_id": "204000"
   },
   {
     "rsid": "rs121909192",
@@ -569,7 +671,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Progressive motor neuron degeneration causing muscle weakness and atrophy, leading cause of genetic infant death.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 10,000",
+    "omim_id": "253300"
   },
   {
     "rsid": "rs11549407",
@@ -580,7 +684,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Blood disorder reducing hemoglobin production causing severe anemia requiring lifelong transfusions.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "613985"
   },
   {
     "rsid": "rs41474145",
@@ -591,7 +697,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Hemoglobin disorder causing reduced alpha-globin chain production and chronic anemia.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 10,000",
+    "omim_id": "604131"
   },
   {
     "rsid": "rs121964987",
@@ -602,7 +710,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Metabolic disorder causing toxic tyrosine buildup damaging liver and kidneys.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "276700"
   },
   {
     "rsid": "rs121434369",
@@ -613,7 +723,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Organic acid disorder causing brain damage during metabolic crises.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "231670"
   },
   {
     "rsid": "rs121965024",
@@ -624,7 +736,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Lysosomal storage disorder causing progressive organ damage and skeletal abnormalities.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "607014"
   },
   {
     "rsid": "rs120074135",
@@ -635,7 +749,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Metabolic disorder causing cystine crystal accumulation damaging kidneys and other organs.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "219800"
   },
   {
     "rsid": "rs28936415",
@@ -646,7 +762,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Glycosylation defect causing developmental delays, liver dysfunction, and coagulation abnormalities.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 20,000",
+    "omim_id": "212065"
   },
   {
     "rsid": "rs121908752",
@@ -657,7 +775,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Fatal immune deficiency leaving infants unable to fight infections without treatment.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "102700"
   },
   {
     "rsid": "rs121434578",
@@ -668,7 +788,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Peroxisome biogenesis disorder causing severe neurological dysfunction and organ failure.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "214100"
   },
   {
     "rsid": "rs121907953",
@@ -679,7 +801,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Glycogen debrancher enzyme deficiency causing liver enlargement and muscle weakness.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "232400"
   },
   {
     "rsid": "rs121918270",
@@ -690,7 +814,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Lysosomal storage disorder causing psychomotor delays and progressive vision impairment.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "252650"
   },
   {
     "rsid": "rs1050828",
@@ -701,7 +827,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Enzyme deficiency causing hemolytic anemia triggered by certain foods, drugs, or infections.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 10",
+    "omim_id": "305900"
   },
   {
     "rsid": "rs121964993",
@@ -712,7 +840,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Mitochondrial enzyme deficiency causing lactic acidosis and progressive neurological decline.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "246900"
   },
   {
     "rsid": "rs121909311",
@@ -723,7 +853,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Organic acid disorder affecting leucine metabolism with variable severity.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 36,000",
+    "omim_id": "210200"
   },
   {
     "rsid": "rs121908089",
@@ -734,7 +866,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Brain malformation disorder with the distinctive molar tooth sign on brain imaging.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 80,000",
+    "omim_id": "213300"
   },
   {
     "rsid": "rs80338939",
@@ -745,7 +879,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Most common genetic cause of sensorineural hearing loss from birth.",
-    "severity": "moderate"
+    "severity": "moderate",
+    "prevalence": "1 in 1,000",
+    "omim_id": "220290"
   },
   {
     "rsid": "rs121907959",
@@ -756,7 +892,9 @@
     "pathogenic_allele": "A",
     "reference_allele": "G",
     "description": "Second common ACADM variant causing potentially fatal hypoglycemia during fasting.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 17,000",
+    "omim_id": "201450"
   },
   {
     "rsid": "rs28904921",
@@ -767,7 +905,9 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Progressive cerebellar degeneration with immune deficiency and cancer predisposition.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "208900"
   },
   {
     "rsid": "rs28942078",
@@ -778,6 +918,1308 @@
     "pathogenic_allele": "T",
     "reference_allele": "C",
     "description": "Severely elevated LDL cholesterol from birth causing premature cardiovascular disease.",
-    "severity": "high"
+    "severity": "high",
+    "prevalence": "1 in 250",
+    "omim_id": "143890"
+  },
+  {
+    "rsid": "rs121918353",
+    "gene": "JAG1",
+    "condition": "Alagille Syndrome",
+    "inheritance": "autosomal_dominant",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Bile duct disorder causing liver damage, heart defects, and characteristic facial features.",
+    "severity": "high",
+    "prevalence": "1 in 30,000",
+    "omim_id": "118450"
+  },
+  {
+    "rsid": "rs121434242",
+    "gene": "UBE3A",
+    "condition": "Angelman Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Neurological disorder causing severe intellectual disability, seizures, and happy demeanor.",
+    "severity": "high",
+    "prevalence": "1 in 15,000",
+    "omim_id": "105830"
+  },
+  {
+    "rsid": "rs121918327",
+    "gene": "BBS1",
+    "condition": "Bardet-Biedl Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Multi-system disorder causing vision loss, obesity, kidney abnormalities, and polydactyly.",
+    "severity": "high",
+    "prevalence": "1 in 140,000",
+    "omim_id": "209900"
+  },
+  {
+    "rsid": "rs121917905",
+    "gene": "ERCC6",
+    "condition": "Cockayne Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "DNA repair disorder causing dwarfism, photosensitivity, and progressive neurological degeneration.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "216400"
+  },
+  {
+    "rsid": "rs121909586",
+    "gene": "LAMA2",
+    "condition": "Congenital Muscular Dystrophy",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Muscle weakness disorder present from birth affecting movement and breathing.",
+    "severity": "high",
+    "prevalence": "1 in 25,000",
+    "omim_id": "607855"
+  },
+  {
+    "rsid": "rs4148323",
+    "gene": "UGT1A1",
+    "condition": "Crigler-Najjar Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Bilirubin metabolism disorder causing severe jaundice and risk of brain damage.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "218800"
+  },
+  {
+    "rsid": "rs121912690",
+    "gene": "SLC3A1",
+    "condition": "Cystinuria",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 100",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Amino acid transport disorder causing recurrent kidney stones from childhood.",
+    "severity": "moderate",
+    "prevalence": "1 in 7,000",
+    "omim_id": "220100"
+  },
+  {
+    "rsid": "rs717620",
+    "gene": "ABCC2",
+    "condition": "Dubin-Johnson Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Benign liver disorder causing chronic intermittent jaundice.",
+    "severity": "low",
+    "prevalence": "1 in 100,000",
+    "omim_id": "237500"
+  },
+  {
+    "rsid": "rs121918233",
+    "gene": "EVC",
+    "condition": "Ellis-van Creveld Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Skeletal disorder causing short limbs, polydactyly, and heart defects.",
+    "severity": "high",
+    "prevalence": "1 in 150,000",
+    "omim_id": "225500"
+  },
+  {
+    "rsid": "rs121912482",
+    "gene": "LAMB3",
+    "condition": "Epidermolysis Bullosa (Junctional)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Severe skin fragility disorder causing blistering from minimal friction.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "226700"
+  },
+  {
+    "rsid": "rs137852769",
+    "gene": "FXN",
+    "condition": "Friedreich Ataxia",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 100",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive nervous system damage causing movement problems and heart disease.",
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "229300"
+  },
+  {
+    "rsid": "rs121918304",
+    "gene": "SLC12A3",
+    "condition": "Gitelman Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Kidney salt-wasting disorder causing muscle weakness and fatigue.",
+    "severity": "moderate",
+    "prevalence": "1 in 40,000",
+    "omim_id": "263800"
+  },
+  {
+    "rsid": "rs28940868",
+    "gene": "GAA",
+    "condition": "Glycogen Storage Disease Type II (Infantile Pompe)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Severe glycogen storage disorder causing fatal heart and muscle failure in infancy.",
+    "severity": "high",
+    "prevalence": "1 in 40,000",
+    "omim_id": "232300"
+  },
+  {
+    "rsid": "rs121964956",
+    "gene": "ETFDH",
+    "condition": "Glutaric Acidemia Type II",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Multiple fatty acid oxidation disorder causing metabolic crises and organ damage.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "231680"
+  },
+  {
+    "rsid": "rs137852378",
+    "gene": "F8",
+    "condition": "Hemophilia A (Factor VIII)",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 5000",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "X-linked bleeding disorder causing prolonged bleeding from deficient clotting factor VIII.",
+    "severity": "high",
+    "prevalence": "1 in 5,000",
+    "omim_id": "306700"
+  },
+  {
+    "rsid": "rs137852368",
+    "gene": "F9",
+    "condition": "Hemophilia B (Factor IX)",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 25000",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked bleeding disorder from deficient clotting factor IX causing prolonged bleeding.",
+    "severity": "high",
+    "prevalence": "1 in 25,000",
+    "omim_id": "306900"
+  },
+  {
+    "rsid": "rs121912734",
+    "gene": "ANK1",
+    "condition": "Hereditary Spherocytosis",
+    "inheritance": "autosomal_dominant",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Red blood cell membrane disorder causing chronic hemolytic anemia and splenomegaly.",
+    "severity": "moderate",
+    "prevalence": "1 in 2,000",
+    "omim_id": "182900"
+  },
+  {
+    "rsid": "rs121964962",
+    "gene": "CBS",
+    "condition": "Homocystinuria (B6-responsive)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Methionine metabolism disorder responsive to vitamin B6 supplementation.",
+    "severity": "moderate",
+    "prevalence": "1 in 300,000",
+    "omim_id": "236200"
+  },
+  {
+    "rsid": "rs121918172",
+    "gene": "IDS",
+    "condition": "Hunter Syndrome (MPS II)",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Lysosomal storage disorder causing progressive organ damage and cognitive decline.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "309900"
+  },
+  {
+    "rsid": "rs121965025",
+    "gene": "IDUA",
+    "condition": "Hurler-Scheie Syndrome (MPS I, attenuated)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Milder form of MPS I causing joint stiffness, heart valve disease, and corneal clouding.",
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "607015"
+  },
+  {
+    "rsid": "rs121918311",
+    "gene": "AGXT",
+    "condition": "Hyperoxaluria Type I",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Oxalate metabolism disorder causing recurrent kidney stones and kidney failure.",
+    "severity": "high",
+    "prevalence": "1 in 120,000",
+    "omim_id": "259900"
+  },
+  {
+    "rsid": "rs121918007",
+    "gene": "ALPL",
+    "condition": "Hypophosphatasia",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Alkaline phosphatase deficiency causing defective bone mineralization.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "241500"
+  },
+  {
+    "rsid": "rs121908622",
+    "gene": "GNE",
+    "condition": "Inclusion Body Myopathy 2 (GNE Myopathy)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive muscle weakness disorder typically sparing the quadriceps.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "600737"
+  },
+  {
+    "rsid": "rs121918201",
+    "gene": "PPT1",
+    "condition": "Infantile Neuronal Ceroid Lipofuscinosis (CLN1)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Fatal neurodegenerative disorder causing seizures, blindness, and motor decline.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "256730"
+  },
+  {
+    "rsid": "rs121912514",
+    "gene": "KCNQ1",
+    "condition": "Jervell and Lange-Nielsen Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Cardiac arrhythmia disorder with congenital deafness and risk of sudden death.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "220400"
+  },
+  {
+    "rsid": "rs121918347",
+    "gene": "UBR1",
+    "condition": "Johanson-Blizzard Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Pancreatic insufficiency disorder with nasal alar hypoplasia and developmental delays.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "243800"
+  },
+  {
+    "rsid": "rs121909265",
+    "gene": "CAPN3",
+    "condition": "Limb-Girdle Muscular Dystrophy 2A",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive proximal muscle weakness affecting shoulders and hips.",
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "253600"
+  },
+  {
+    "rsid": "rs121907933",
+    "gene": "OCRL",
+    "condition": "Lowe Syndrome",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked disorder causing cataracts, intellectual disability, and kidney dysfunction.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "309000"
+  },
+  {
+    "rsid": "rs121918174",
+    "gene": "ARSB",
+    "condition": "Maroteaux-Lamy Syndrome (MPS VI)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Lysosomal storage disorder causing skeletal abnormalities and organ enlargement.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "253200"
+  },
+  {
+    "rsid": "rs121918175",
+    "gene": "GALNS",
+    "condition": "Morquio Syndrome A (MPS IVA)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Skeletal dysplasia disorder causing short stature and joint laxity.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "253000"
+  },
+  {
+    "rsid": "rs121918178",
+    "gene": "SGSH",
+    "condition": "Mucopolysaccharidosis III (Sanfilippo A)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive neurodegeneration disorder causing severe behavioral problems and dementia.",
+    "severity": "high",
+    "prevalence": "1 in 70,000",
+    "omim_id": "252900"
+  },
+  {
+    "rsid": "rs121918180",
+    "gene": "GUSB",
+    "condition": "Mucopolysaccharidosis VII (Sly Syndrome)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Lysosomal storage disorder with variable severity from fatal to mild.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "253220"
+  },
+  {
+    "rsid": "rs121918287",
+    "gene": "SUMF1",
+    "condition": "Multiple Sulfatase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Combined enzyme deficiency causing progressive neurological and organ damage.",
+    "severity": "high",
+    "prevalence": "1 in 1,400,000",
+    "omim_id": "272200"
+  },
+  {
+    "rsid": "rs28931614",
+    "gene": "FGFR3",
+    "condition": "Muenke Syndrome",
+    "inheritance": "autosomal_dominant",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Craniosynostosis disorder causing premature skull bone fusion.",
+    "severity": "moderate",
+    "prevalence": "1 in 30,000",
+    "omim_id": "602849"
+  },
+  {
+    "rsid": "rs121908336",
+    "gene": "NEB",
+    "condition": "Nemaline Myopathy",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Congenital muscle disorder causing weakness and respiratory insufficiency.",
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "256030"
+  },
+  {
+    "rsid": "rs121918202",
+    "gene": "TPP1",
+    "condition": "Neuronal Ceroid Lipofuscinosis 2 (CLN2)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Fatal childhood neurodegenerative disorder causing seizures and vision loss.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "204500"
+  },
+  {
+    "rsid": "rs121912660",
+    "gene": "NBN",
+    "condition": "Nijmegen Breakage Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Chromosomal instability disorder causing microcephaly, immunodeficiency, and cancer predisposition.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "251260"
+  },
+  {
+    "rsid": "rs121913178",
+    "gene": "TYR",
+    "condition": "Oculocutaneous Albinism Type 1",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 100",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Complete absence of melanin pigment in skin, hair, and eyes with vision problems.",
+    "severity": "moderate",
+    "prevalence": "1 in 40,000",
+    "omim_id": "203100"
+  },
+  {
+    "rsid": "rs121918166",
+    "gene": "OCA2",
+    "condition": "Oculocutaneous Albinism Type 2",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 150",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Reduced melanin causing light skin, hair, and eye color with visual impairment.",
+    "severity": "moderate",
+    "prevalence": "1 in 36,000",
+    "omim_id": "203200"
+  },
+  {
+    "rsid": "rs121918254",
+    "gene": "TCIRG1",
+    "condition": "Osteopetrosis (Autosomal Recessive)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Dense but brittle bone disorder causing fractures and bone marrow failure.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "259700"
+  },
+  {
+    "rsid": "rs121918273",
+    "gene": "PANK2",
+    "condition": "Pantothenate Kinase-Associated Neurodegeneration",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Iron accumulation in brain causing progressive movement and cognitive decline.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "234200"
+  },
+  {
+    "rsid": "rs121909583",
+    "gene": "PLP1",
+    "condition": "Pelizaeus-Merzbacher Disease",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked white matter disorder causing progressive motor and cognitive impairment.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "312080"
+  },
+  {
+    "rsid": "rs121918396",
+    "gene": "PKHD1",
+    "condition": "Polycystic Kidney Disease (Autosomal Recessive)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 70",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Kidney and liver cyst disorder presenting in infancy with enlarged kidneys.",
+    "severity": "high",
+    "prevalence": "1 in 20,000",
+    "omim_id": "263200"
+  },
+  {
+    "rsid": "rs121913462",
+    "gene": "PKLR",
+    "condition": "Pyruvate Kinase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Enzyme deficiency causing chronic hemolytic anemia from birth.",
+    "severity": "moderate",
+    "prevalence": "1 in 20,000",
+    "omim_id": "266200"
+  },
+  {
+    "rsid": "rs121918271",
+    "gene": "PHYH",
+    "condition": "Refsum Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Phytanic acid storage disorder causing peripheral neuropathy and vision loss.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "266500"
+  },
+  {
+    "rsid": "rs121907971",
+    "gene": "HEXB",
+    "condition": "Sandhoff Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Fatal lipid storage disorder similar to Tay-Sachs causing progressive neurodegeneration.",
+    "severity": "high",
+    "prevalence": "1 in 384,000",
+    "omim_id": "268800"
+  },
+  {
+    "rsid": "rs121918267",
+    "gene": "NEU1",
+    "condition": "Sialidosis",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Lysosomal storage disorder causing cherry-red eye spots and progressive neurological decline.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "256550"
+  },
+  {
+    "rsid": "rs121918381",
+    "gene": "ABCG5",
+    "condition": "Sitosterolemia",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Plant sterol absorption disorder causing premature atherosclerosis.",
+    "severity": "moderate",
+    "prevalence": "1 in 500,000",
+    "omim_id": "210250"
+  },
+  {
+    "rsid": "rs121918364",
+    "gene": "TALDO1",
+    "condition": "Transaldolase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Pentose phosphate pathway disorder causing liver disease and coagulation problems.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "606003"
+  },
+  {
+    "rsid": "rs121964988",
+    "gene": "TAT",
+    "condition": "Tyrosinemia Type II",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Metabolic disorder causing painful eye and skin lesions with possible intellectual disability.",
+    "severity": "moderate",
+    "prevalence": "1 in 250,000",
+    "omim_id": "276600"
+  },
+  {
+    "rsid": "rs104893877",
+    "gene": "PAX3",
+    "condition": "Waardenburg Syndrome Type 1",
+    "inheritance": "autosomal_dominant",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Pigmentation disorder causing deafness, white forelock, and heterochromia.",
+    "severity": "moderate",
+    "prevalence": "1 in 40,000",
+    "omim_id": "193500"
+  },
+  {
+    "rsid": "rs121909647",
+    "gene": "WAS",
+    "condition": "Wiskott-Aldrich Syndrome",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked immunodeficiency causing eczema, thrombocytopenia, and recurrent infections.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "301000"
+  },
+  {
+    "rsid": "rs121908688",
+    "gene": "LIPA",
+    "condition": "Wolman Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Fatal lipase deficiency causing liver failure and adrenal calcification in infancy.",
+    "severity": "high",
+    "prevalence": "1 in 350,000",
+    "omim_id": "278000"
+  },
+  {
+    "rsid": "rs121913071",
+    "gene": "ABCD1",
+    "condition": "X-linked Adrenoleukodystrophy",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Peroxisomal disorder causing progressive brain demyelination and adrenal failure.",
+    "severity": "high",
+    "prevalence": "1 in 17,000",
+    "omim_id": "300100"
+  },
+  {
+    "rsid": "rs121913256",
+    "gene": "XPA",
+    "condition": "Xeroderma Pigmentosum A",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "DNA repair deficiency causing extreme sun sensitivity and skin cancer predisposition.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "278700"
+  },
+  {
+    "rsid": "rs121913257",
+    "gene": "XPC",
+    "condition": "Xeroderma Pigmentosum C",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "UV repair deficiency causing severe photosensitivity and high cancer risk.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "278720"
+  },
+  {
+    "rsid": "rs121434579",
+    "gene": "PEX7",
+    "condition": "Zellweger Spectrum (PEX7)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Peroxisome disorder variant causing rhizomelic chondrodysplasia punctata.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "215100"
+  },
+  {
+    "rsid": "rs6471",
+    "gene": "CYP21A2",
+    "condition": "21-Hydroxylase Deficiency (Classic)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 60",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Severe cortisol deficiency with virilization and potential salt-wasting crisis.",
+    "severity": "high",
+    "prevalence": "1 in 15,000",
+    "omim_id": "201910"
+  },
+  {
+    "rsid": "rs121909305",
+    "gene": "CNGB3",
+    "condition": "Achromatopsia",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Complete color blindness with severe light sensitivity and reduced visual acuity.",
+    "severity": "moderate",
+    "prevalence": "1 in 30,000",
+    "omim_id": "262300"
+  },
+  {
+    "rsid": "rs121908107",
+    "gene": "ADA2",
+    "condition": "Adenosine Deaminase 2 Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Vasculitis and immunodeficiency disorder causing strokes and inflammation.",
+    "severity": "high",
+    "prevalence": "1 in 222,000",
+    "omim_id": "615688"
+  },
+  {
+    "rsid": "rs28929474",
+    "gene": "SERPINA1",
+    "condition": "Alpha-1 Antitrypsin Deficiency (Z allele)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 25",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Protease inhibitor deficiency causing early-onset emphysema and liver disease.",
+    "severity": "moderate",
+    "prevalence": "1 in 2,500",
+    "omim_id": "613490"
+  },
+  {
+    "rsid": "rs17580",
+    "gene": "SERPINA1",
+    "condition": "Alpha-1 Antitrypsin Deficiency (S allele)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 20",
+    "pathogenic_allele": "T",
+    "reference_allele": "A",
+    "description": "Mild protease inhibitor deficiency increasing COPD risk especially with Z allele.",
+    "severity": "low",
+    "prevalence": "1 in 2,500",
+    "omim_id": "613490"
+  },
+  {
+    "rsid": "rs121918291",
+    "gene": "KCC3",
+    "condition": "Andermann Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Peripheral neuropathy with agenesis of the corpus callosum and progressive weakness.",
+    "severity": "high",
+    "prevalence": "1 in 2,000,000",
+    "omim_id": "218000"
+  },
+  {
+    "rsid": "rs121964990",
+    "gene": "ASL",
+    "condition": "Argininosuccinate Lyase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Urea cycle disorder causing hyperammonemia with distinct hair abnormalities.",
+    "severity": "high",
+    "prevalence": "1 in 70,000",
+    "omim_id": "207900"
+  },
+  {
+    "rsid": "rs121964960",
+    "gene": "DDC",
+    "condition": "Aromatic L-Amino Acid Decarboxylase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Neurotransmitter synthesis disorder causing developmental delay and movement problems.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "608643"
+  },
+  {
+    "rsid": "rs121918379",
+    "gene": "ASNS",
+    "condition": "Asparagine Synthetase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Amino acid disorder causing microcephaly, seizures, and brain atrophy.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "615574"
+  },
+  {
+    "rsid": "rs121918397",
+    "gene": "PKHD1",
+    "condition": "Autosomal Recessive Polycystic Kidney Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 70",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Progressive kidney cyst formation with congenital hepatic fibrosis.",
+    "severity": "high",
+    "prevalence": "1 in 20,000",
+    "omim_id": "263200"
+  },
+  {
+    "rsid": "rs121964955",
+    "gene": "ACAT1",
+    "condition": "Beta-Ketothiolase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Isoleucine catabolism disorder causing episodic ketoacidosis.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "203750"
+  },
+  {
+    "rsid": "rs28934601",
+    "gene": "BTD",
+    "condition": "Biotinidase Deficiency (Profound)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 120",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Severe biotin recycling defect causing seizures, hearing loss, and skin rash.",
+    "severity": "high",
+    "prevalence": "1 in 60,000",
+    "omim_id": "253260"
+  },
+  {
+    "rsid": "rs121964957",
+    "gene": "CPS1",
+    "condition": "Carbamoyl Phosphate Synthetase I Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Severe urea cycle disorder causing life-threatening hyperammonemia in neonates.",
+    "severity": "high",
+    "prevalence": "1 in 800,000",
+    "omim_id": "237300"
+  },
+  {
+    "rsid": "rs121918592",
+    "gene": "RYR1",
+    "condition": "Central Core Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Congenital myopathy causing muscle weakness and malignant hyperthermia susceptibility.",
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "117000"
+  },
+  {
+    "rsid": "rs121909006",
+    "gene": "GAMT",
+    "condition": "Cerebral Creatine Deficiency (GAMT)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Creatine synthesis disorder causing intellectual disability and seizures.",
+    "severity": "high",
+    "prevalence": "1 in 250,000",
+    "omim_id": "612736"
+  },
+  {
+    "rsid": "rs116928232",
+    "gene": "LIPA",
+    "condition": "Cholesteryl Ester Storage Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 400",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Milder lipase deficiency causing liver fibrosis and accelerated atherosclerosis.",
+    "severity": "moderate",
+    "prevalence": "1 in 40,000",
+    "omim_id": "278000"
+  },
+  {
+    "rsid": "rs121908485",
+    "gene": "SLC25A13",
+    "condition": "Citrullinemia Type II",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Adult-onset liver disorder causing confusion and hyperammonemia with citrin deficiency.",
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "605814"
+  },
+  {
+    "rsid": "rs121918316",
+    "gene": "VPS13B",
+    "condition": "Cohen Syndrome",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Multi-system disorder with intellectual disability, microcephaly, and friendly personality.",
+    "severity": "moderate",
+    "prevalence": "1 in 100,000",
+    "omim_id": "216550"
+  },
+  {
+    "rsid": "rs121918358",
+    "gene": "GFM1",
+    "condition": "Combined Oxidative Phosphorylation Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Mitochondrial translation disorder causing liver failure and neurological decline.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "609060"
+  },
+  {
+    "rsid": "rs121434246",
+    "gene": "NIPBL",
+    "condition": "Cornelia de Lange Syndrome",
+    "inheritance": "autosomal_dominant",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Developmental disorder causing distinctive facial features and limb abnormalities.",
+    "severity": "high",
+    "prevalence": "1 in 10,000",
+    "omim_id": "122470"
+  },
+  {
+    "rsid": "rs121918329",
+    "gene": "HSD17B4",
+    "condition": "D-Bifunctional Protein Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Peroxisomal fatty acid oxidation disorder causing severe neonatal neurological impairment.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "261515"
+  },
+  {
+    "rsid": "rs121918284",
+    "gene": "LAMP2",
+    "condition": "Danon Disease",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked glycogen storage disorder causing cardiomyopathy and muscle weakness.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "300257"
+  },
+  {
+    "rsid": "rs121909317",
+    "gene": "DYSF",
+    "condition": "Distal Myopathy (Miyoshi)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive muscle weakness beginning in the calves and spreading to other muscles.",
+    "severity": "moderate",
+    "prevalence": "1 in 440,000",
+    "omim_id": "254130"
+  },
+  {
+    "rsid": "rs121918352",
+    "gene": "ETHE1",
+    "condition": "Ethylmalonic Encephalopathy",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Mitochondrial sulfide oxidation defect causing progressive brain and vascular damage.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "602473"
+  },
+  {
+    "rsid": "rs121909429",
+    "gene": "PRF1",
+    "condition": "Familial Hemophagocytic Lymphohistiocytosis 2",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Fatal immune dysregulation causing uncontrolled inflammation and organ destruction.",
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "603553"
+  },
+  {
+    "rsid": "rs121909412",
+    "gene": "LPL",
+    "condition": "Familial Lipoprotein Lipase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Severe hypertriglyceridemia causing recurrent pancreatitis from childhood.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "238600"
+  },
+  {
+    "rsid": "rs121909298",
+    "gene": "FKTN",
+    "condition": "Fukuyama Congenital Muscular Dystrophy",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Severe muscular dystrophy with brain malformation causing seizures and disability.",
+    "severity": "high",
+    "prevalence": "1 in 50,000",
+    "omim_id": "253800"
+  },
+  {
+    "rsid": "rs121918227",
+    "gene": "CTSA",
+    "condition": "Galactosialidosis",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Combined enzyme deficiency causing skeletal abnormalities and neurological decline.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "256540"
+  },
+  {
+    "rsid": "rs121907968",
+    "gene": "GLB1",
+    "condition": "Gangliosidosis GM1 Type I",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Fatal infantile neurodegenerative disorder with skeletal abnormalities and organ enlargement.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "230500"
+  },
+  {
+    "rsid": "rs121907972",
+    "gene": "GM2A",
+    "condition": "Gangliosidosis GM2 (AB variant)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Rare Tay-Sachs-like disorder caused by activator protein deficiency.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "272750"
+  },
+  {
+    "rsid": "rs121907921",
+    "gene": "GSS",
+    "condition": "Glutathione Synthetase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Antioxidant deficiency causing hemolytic anemia and metabolic acidosis.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "266130"
+  },
+  {
+    "rsid": "rs121918330",
+    "gene": "AMT",
+    "condition": "Glycine Encephalopathy (NKH variant)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 200",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Glycine cleavage system disorder causing severe neonatal seizures and encephalopathy.",
+    "severity": "high",
+    "prevalence": "1 in 76,000",
+    "omim_id": "605899"
+  },
+  {
+    "rsid": "rs121918373",
+    "gene": "UMPS",
+    "condition": "Hereditary Orotic Aciduria",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Pyrimidine synthesis disorder causing megaloblastic anemia and developmental delay.",
+    "severity": "moderate",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "258900"
+  },
+  {
+    "rsid": "rs121918318",
+    "gene": "HMGCL",
+    "condition": "HMG-CoA Lyase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Leucine metabolism disorder causing life-threatening metabolic crises.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "246450"
+  },
+  {
+    "rsid": "rs121918319",
+    "gene": "HLCS",
+    "condition": "Holocarboxylase Synthetase Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Biotin utilization disorder causing metabolic acidosis and skin problems.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "253270"
+  },
+  {
+    "rsid": "rs121907985",
+    "gene": "CD40LG",
+    "condition": "Hyper-IgM Syndrome Type 1",
+    "inheritance": "X-linked",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "X-linked immunodeficiency with elevated IgM and susceptibility to opportunistic infections.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "308230"
+  },
+  {
+    "rsid": "rs121918269",
+    "gene": "GNPTAB",
+    "condition": "I-Cell Disease (Mucolipidosis II)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Severe lysosomal enzyme targeting defect causing progressive organ and skeletal damage.",
+    "severity": "high",
+    "prevalence": "1 in 100,000",
+    "omim_id": "252500"
+  },
+  {
+    "rsid": "rs121918288",
+    "gene": "SLC17A5",
+    "condition": "Infantile Free Sialic Acid Storage Disease",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Fatal lysosomal storage disorder causing severe neurological deterioration.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "269920"
+  },
+  {
+    "rsid": "rs121434226",
+    "gene": "CLN5",
+    "condition": "Juvenile Neuronal Ceroid Lipofuscinosis (CLN5)",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Progressive neurodegenerative disorder causing vision loss, seizures, and motor decline.",
+    "severity": "high",
+    "prevalence": "1 in 200,000",
+    "omim_id": "256731"
+  },
+  {
+    "rsid": "rs121918391",
+    "gene": "EIF2B5",
+    "condition": "Leukoencephalopathy with Vanishing White Matter",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 300",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "White matter disorder causing progressive cerebellar ataxia triggered by stress.",
+    "severity": "high",
+    "prevalence": "1 in 80,000",
+    "omim_id": "603896"
+  },
+  {
+    "rsid": "rs121918356",
+    "gene": "MLYCD",
+    "condition": "Malonic Aciduria",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Fatty acid oxidation disorder causing developmental delay and cardiomyopathy.",
+    "severity": "moderate",
+    "prevalence": "1 in 500,000",
+    "omim_id": "248360"
+  },
+  {
+    "rsid": "rs121434243",
+    "gene": "MVK",
+    "condition": "Mevalonic Aciduria",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "T",
+    "reference_allele": "C",
+    "description": "Cholesterol biosynthesis disorder causing recurrent fevers and developmental delay.",
+    "severity": "high",
+    "prevalence": "1 in 1,000,000",
+    "omim_id": "610377"
+  },
+  {
+    "rsid": "rs121918357",
+    "gene": "MOCS1",
+    "condition": "Molybdenum Cofactor Deficiency",
+    "inheritance": "autosomal_recessive",
+    "carrier_frequency": "1 in 500",
+    "pathogenic_allele": "A",
+    "reference_allele": "G",
+    "description": "Fatal sulfite oxidase deficiency causing intractable seizures and brain damage.",
+    "severity": "high",
+    "prevalence": "1 in 500,000",
+    "omim_id": "252150"
   }
 ]

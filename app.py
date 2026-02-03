@@ -18,9 +18,10 @@ APP_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, APP_DIR)
 
 from Source.parser import (
-    parse_23andme,
-    validate_23andme_format,
     get_genotype_stats,
+    parse_genetic_file,
+    validate_genetic_file,
+    detect_format,
 )
 from Source.carrier_analysis import analyze_carrier_risk
 from Source.trait_prediction import (
@@ -107,6 +108,36 @@ TRAIT_CATEGORIES = {
     "Photic Sneeze Reflex (ACHOO Syndrome)": "Quirky & Fun",
     "Motion Sickness Susceptibility": "Quirky & Fun",
     "Mosquito Bite Attraction": "Quirky & Fun",
+    "Vitamin D Levels": "Health & Metabolism",
+    "Type 2 Diabetes Risk": "Health & Metabolism",
+    "Longevity / Aging": "Health & Metabolism",
+    "Body Odor Intensity": "Quirky & Fun",
+    "Freckle Density": "Appearance",
+    "Wisdom Tooth Development": "Physical",
+    "Achilles Tendon Injury Risk": "Physical",
+    "Sensitivity to Umami Taste": "Taste & Senses",
+    "Nicotine Dependence Risk": "Behavior & Cognition",
+    "Hair Curliness": "Appearance",
+    "Resistance to Norovirus": "Health & Metabolism",
+    "Cortisol Stress Response": "Behavior & Cognition",
+    "Detached vs Attached Earlobes": "Appearance",
+    "Photophobia Tendency": "Taste & Senses",
+    "Migraine with Aura Risk": "Health & Metabolism",
+    "Seasonal Affective Disorder Risk": "Behavior & Cognition",
+    "Jaw Clenching/Bruxism Tendency": "Quirky & Fun",
+    "Perfect Pitch (Absolute Pitch)": "Behavior & Cognition",
+    "Marathon Runner Endurance": "Physical",
+    "Blood Clotting Speed": "Health & Metabolism",
+    "Introversion/Extraversion Tendency": "Behavior & Cognition",
+    "Response to Exercise (VO2 Max)": "Physical",
+    "Gluten Sensitivity Risk": "Health & Metabolism",
+    "Fear Response Intensity": "Behavior & Cognition",
+    "Sunburn Recovery Speed": "Health & Metabolism",
+    "Coffee Consumption Tendency": "Behavior & Cognition",
+    "Male Pattern Baldness (Androgenetic)": "Appearance",
+    "Facial Flushing from Alcohol": "Health & Metabolism",
+    "Night Vision Quality": "Taste & Senses",
+    "Stretch Mark Susceptibility": "Physical",
 }
 
 CATEGORY_ICONS = {
@@ -120,8 +151,8 @@ CATEGORY_ICONS = {
 }
 
 CONFIDENCE_COLORS = {
-    "high": "#22c55e",
-    "medium": "#eab308",
+    "high": "#06d6a0",
+    "medium": "#f59e0b",
     "low": "#ef4444",
 }
 
@@ -203,32 +234,33 @@ def single_parent_carrier_screen(snps, panel_path):
 # UI helpers
 # ===================================================================
 def severity_badge(severity: str) -> str:
-    colors = {"high": "#dc2626", "moderate": "#d97706", "low": "#16a34a"}
-    color = colors.get(severity, "#6b7280")
+    badge_styles = {
+        "high": ("rgba(239,68,68,0.15)", "#ef4444", "rgba(239,68,68,0.4)"),
+        "moderate": ("rgba(245,158,11,0.15)", "#f59e0b", "rgba(245,158,11,0.4)"),
+        "low": ("rgba(6,214,160,0.15)", "#06d6a0", "rgba(6,214,160,0.4)"),
+    }
+    bg, text_color, border = badge_styles.get(severity, ("rgba(107,114,128,0.15)", "#6b7280", "rgba(107,114,128,0.4)"))
     return (
-        f'<span style="background:{color};color:white;padding:2px 8px;'
-        f'border-radius:10px;font-size:0.75rem;font-weight:600;">'
+        f'<span style="background:{bg};color:{text_color};padding:3px 10px;'
+        f'border:1px solid {border};'
+        f'border-radius:10px;font-size:0.75rem;font-weight:600;'
+        f"font-family:'Outfit',sans-serif;letter-spacing:0.03em;\">"
         f"{severity.upper()}</span>"
     )
 
 
 def status_badge(status: str) -> str:
-    colors = {
-        "carrier": "#d97706",
-        "affected": "#dc2626",
-        "normal": "#16a34a",
-        "unknown": "#6b7280",
+    badge_styles = {
+        "carrier": ("rgba(245,158,11,0.12)", "#f59e0b", "rgba(245,158,11,0.35)", "\u26a0\ufe0f"),
+        "affected": ("rgba(239,68,68,0.12)", "#ef4444", "rgba(239,68,68,0.35)", "\u274c"),
+        "normal": ("rgba(6,214,160,0.12)", "#06d6a0", "rgba(6,214,160,0.35)", "\u2705"),
+        "unknown": ("rgba(148,163,184,0.12)", "#94a3b8", "rgba(148,163,184,0.35)", "\u2753"),
     }
-    icons = {
-        "carrier": "\u26a0\ufe0f",
-        "affected": "\u274c",
-        "normal": "\u2705",
-        "unknown": "\u2753",
-    }
-    color = colors.get(status, "#6b7280")
-    icon = icons.get(status, "")
+    bg, text_color, border, icon = badge_styles.get(status, ("rgba(107,114,128,0.12)", "#6b7280", "rgba(107,114,128,0.35)", ""))
     return (
-        f'<span style="color:{color};font-weight:600;">'
+        f'<span style="background:{bg};color:{text_color};padding:3px 12px;'
+        f'border:1px solid {border};border-radius:20px;font-size:0.8rem;font-weight:600;'
+        f"font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:4px;\">"
         f"{icon} {status.replace('_', ' ').title()}</span>"
     )
 
@@ -237,12 +269,17 @@ def render_probability_bar(label: str, pct: float, color: str = "#6366f1"):
     """Render a horizontal bar for a probability percentage."""
     st.markdown(
         f"""
-        <div style="margin-bottom:4px;">
-            <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
-                <span>{label}</span><span style="font-weight:600;">{pct:.1f}%</span>
+        <div style="margin-bottom:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;
+                font-family:'DM Sans',sans-serif;margin-bottom:3px;">
+                <span style="color:#e2e8f0;">{label}</span>
+                <span style="font-weight:700;color:{color};font-family:'Outfit',sans-serif;">{pct:.1f}%</span>
             </div>
-            <div style="background:#e5e7eb;border-radius:6px;height:14px;overflow:hidden;">
-                <div style="background:{color};width:{min(pct, 100):.1f}%;height:100%;border-radius:6px;"></div>
+            <div style="background:rgba(148,163,184,0.1);border-radius:8px;height:12px;
+                overflow:hidden;border:1px solid rgba(148,163,184,0.08);">
+                <div style="background:linear-gradient(90deg,{color},
+                    {color}cc);width:{min(pct, 100):.1f}%;height:100%;border-radius:8px;
+                    transition:width 0.6s ease;"></div>
             </div>
         </div>
         """,
@@ -260,21 +297,219 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Comprehensive dark-theme CSS
+# Custom sidebar navigation
+st.sidebar.page_link("app.py", label="Offspring Analysis", icon="🧬")
+st.sidebar.page_link("pages/2_Disease_Catalog.py", label="Disease Catalog", icon="📋")
+
+# Comprehensive bioluminescent dark-theme CSS
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+    :root {
+        --bg-deep: #0a0e1a;
+        --bg-surface: #111827;
+        --bg-elevated: #1a2236;
+        --accent-teal: #06d6a0;
+        --accent-violet: #7c3aed;
+        --accent-cyan: #22d3ee;
+        --accent-amber: #f59e0b;
+        --accent-rose: #ef4444;
+        --text-primary: #e2e8f0;
+        --text-muted: #94a3b8;
+        --border-subtle: rgba(148, 163, 184, 0.12);
+    }
+
+    /* === Animations === */
+    @keyframes helixFloat {
+        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+        50% { transform: translateY(-8px) rotate(180deg); opacity: 1; }
+    }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 20px rgba(6, 214, 160, 0.1); }
+        50% { box-shadow: 0 0 40px rgba(6, 214, 160, 0.25); }
+    }
+    @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes dnaStrand {
+        0% { transform: rotateX(0deg); }
+        100% { transform: rotateX(360deg); }
+    }
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    @keyframes borderGlow {
+        0%, 100% { border-color: rgba(6, 214, 160, 0.15); }
+        50% { border-color: rgba(6, 214, 160, 0.4); }
+    }
+
     /* === Global === */
-    .block-container { padding-top: 1rem; max-width: 1200px; }
+    .block-container {
+        padding-top: 1rem;
+        max-width: 1200px;
+        animation: fadeSlideUp 0.6s ease-out;
+    }
+    html, body, [data-testid="stAppViewContainer"], .main {
+        font-family: 'DM Sans', sans-serif !important;
+    }
+    h1, h2, h3, h4, h5 {
+        font-family: 'Outfit', sans-serif !important;
+    }
 
     /* === Metrics Cards === */
     div[data-testid="stMetric"] {
-        background: linear-gradient(135deg, #1E1E3A 0%, #2A2A4A 100%);
-        border: 1px solid rgba(124, 58, 237, 0.3);
+        background: linear-gradient(135deg, #111827 0%, #1a2236 100%);
+        border: 1px solid var(--border-subtle);
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 20px rgba(6,214,160,0.15);
+        border-color: rgba(6,214,160,0.25);
+    }
+    div[data-testid="stMetric"] label {
+        color: var(--accent-cyan) !important;
+        font-size: 0.8rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 500 !important;
+    }
+    div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: var(--accent-teal) !important;
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 800 !important;
+        font-size: 2rem !important;
+    }
+
+    /* === Tabs === */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: var(--bg-surface);
+        border-radius: 14px;
+        padding: 5px;
+        border: 1px solid var(--border-subtle);
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 10px;
+        padding: 10px 20px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-family: 'Outfit', sans-serif;
+        transition: all 0.2s ease;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: var(--accent-teal);
+        background: rgba(6,214,160,0.05);
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #06d6a0, #059669) !important;
+        color: #0a0e1a !important;
+        font-weight: 700 !important;
+    }
+
+    /* === Expanders === */
+    .streamlit-expanderHeader {
+        background: var(--bg-elevated);
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        font-weight: 500;
+        font-family: 'DM Sans', sans-serif;
+        transition: border-color 0.25s ease;
+    }
+    .streamlit-expanderHeader:hover {
+        border-color: rgba(6,214,160,0.3);
+    }
+    .streamlit-expanderContent {
+        background: rgba(17,24,39,0.7);
+        border: 1px solid var(--border-subtle);
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+    }
+
+    /* === Buttons === */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #06d6a0 0%, #059669 50%, #047857 100%);
+        border: none;
+        border-radius: 14px;
+        padding: 14px 28px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        font-family: 'Outfit', sans-serif;
+        letter-spacing: 0.02em;
+        color: #0a0e1a !important;
+        box-shadow: 0 4px 20px rgba(6, 214, 160, 0.3);
+        transition: all 0.3s ease;
+    }
+    .stButton > button[kind="primary"]:hover {
+        box-shadow: 0 6px 30px rgba(6, 214, 160, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* === File Uploader === */
+    [data-testid="stFileUploader"] {
+        background: var(--bg-elevated);
+        border: 2px dashed rgba(6, 214, 160, 0.2);
+        border-radius: 16px;
+        padding: 20px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    [data-testid="stFileUploader"]:hover {
+        border-color: rgba(6, 214, 160, 0.5);
+        box-shadow: 0 0 20px rgba(6, 214, 160, 0.08);
+    }
+
+    /* === Progress Bar === */
+    .stProgress > div > div {
+        background: linear-gradient(90deg, #06d6a0, #7c3aed, #22d3ee);
+        background-size: 200% 100%;
+        animation: gradientShift 3s ease infinite;
+        border-radius: 10px;
+    }
+
+    /* === Sidebar === */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0a0e1a 0%, #111827 100%);
+        border-right: 1px solid var(--border-subtle);
+    }
+
+    /* === Scrollbar === */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #06d6a0, #7c3aed);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-teal); }
+
+    /* === Success/Warning/Error boxes === */
+    .stAlert { border-radius: 12px; }
+
+    /* === Links === */
+    a { color: var(--accent-teal) !important; transition: color 0.2s ease; }
+    a:hover { color: var(--accent-cyan) !important; }
+
+    /* === Dividers === */
+    hr { border-color: var(--border-subtle) !important; }
+
+    /* === Select boxes / Inputs === */
+    .stSelectbox > div > div, .stTextInput > div > div > input {
+        background: var(--bg-elevated) !important;
+        border-color: var(--border-subtle) !important;
+        border-radius: 10px !important;
+        font-family: 'DM Sans', sans-serif !important;
     }
     div[data-testid="stMetric"]:hover {
         transform: translateY(-2px);
@@ -392,10 +627,20 @@ st.markdown(
 with st.sidebar:
     st.markdown(
         """
-        <div style="text-align:center;padding:1rem 0;margin-bottom:1rem;">
-            <span style="font-size:2rem;">\U0001f9ec</span>
-            <h3 style="margin:4px 0 0;background:linear-gradient(135deg, #A78BFA, #60A5FA);
+        <div style="text-align:center;padding:1.5rem 0;margin-bottom:1rem;">
+            <div style="display:inline-flex;gap:4px;margin-bottom:8px;">
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+                    background:#06d6a0;animation:helixFloat 2s ease-in-out infinite;"></span>
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+                    background:#7c3aed;animation:helixFloat 2s ease-in-out infinite 0.4s;"></span>
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+                    background:#22d3ee;animation:helixFloat 2s ease-in-out infinite 0.8s;"></span>
+            </div>
+            <h3 style="margin:4px 0 0;font-family:'Outfit',sans-serif;font-weight:800;
+                background:linear-gradient(135deg, #06d6a0, #22d3ee);
                 -webkit-background-clip:text;-webkit-text-fill-color:transparent;">Tortit</h3>
+            <p style="font-size:0.7rem;color:#94a3b8;margin:4px 0 0;font-family:'DM Sans',sans-serif;
+                letter-spacing:0.15em;text-transform:uppercase;">Genetic Platform</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -406,8 +651,9 @@ with st.sidebar:
     ncbi_api_key = st.text_input(
         "NCBI API Key (optional)",
         type="password",
-        help="Providing an NCBI API key increases ClinVar query rate from 3/s to 10/s. "
-        "Get one free at https://www.ncbi.nlm.nih.gov/account/",
+        help="Optional. Enables ClinVar cross-reference for enhanced variant annotation. "
+        "Without a key, analysis uses local data only (faster). "
+        "With a key, query rate is 10/s. Get one free at https://www.ncbi.nlm.nih.gov/account/",
     )
 
     st.markdown("---")
@@ -418,7 +664,7 @@ with st.sidebar:
     )
     st.markdown("---")
     st.markdown(
-        '<p style="font-size:0.75rem;color:#64748B;">Tortit v2.0 &mdash; '
+        '<p style="font-size:0.75rem;color:#64748B;font-family:\'DM Sans\',sans-serif;">Tortit v2.0 &mdash; '
         "For educational purposes only.</p>",
         unsafe_allow_html=True,
     )
@@ -427,25 +673,21 @@ with st.sidebar:
 # Header
 # ===================================================================
 st.markdown(
-    f"""
-    <div style="text-align:center;padding:2rem 1rem;
-         background:linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(59,130,246,0.1) 50%, rgba(16,185,129,0.1) 100%);
-         border-radius:20px;margin-bottom:1.5rem;
-         border:1px solid rgba(124,58,237,0.2);">
-        <div style="font-size:3.5rem;margin-bottom:0.5rem;">\U0001f9ec</div>
-        <h1 style="margin:0;font-size:2.5rem;
-            background:linear-gradient(135deg, #A78BFA, #60A5FA, #34D399);
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-            font-weight:800;">Tortit</h1>
-        <p style="font-size:1.15rem;color:#94A3B8;margin-top:8px;margin-bottom:12px;">
-            Genetic Offspring Analysis Platform
-        </p>
-        <p style="font-size:0.95rem;color:#64748B;max-width:600px;margin:0 auto;">
-            Upload 23andMe raw-data files for both parents to screen for <b style="color:#A78BFA;">carrier risk</b>
-            of {NUM_DISEASES} genetic diseases and predict <b style="color:#60A5FA;">{NUM_TRAITS} offspring traits</b> using Mendelian genetics.
-        </p>
-    </div>
-    """,
+    f"""<div class="tortit-hero" style="text-align:center;padding:2.5rem 2rem;background:linear-gradient(135deg, #0d1321 0%, #111827 40%, #1a1040 100%);border-radius:28px;margin-bottom:1.5rem;position:relative;overflow:hidden;border:1px solid rgba(148,163,184,0.12);animation: pulseGlow 4s ease-in-out infinite;">
+<div style="display:flex;justify-content:center;gap:6px;margin-bottom:1rem;">
+<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#06d6a0,#22d3ee);animation:helixFloat 2s ease-in-out infinite;"></span>
+<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);animation:helixFloat 2s ease-in-out infinite 0.3s;"></span>
+<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#06d6a0,#22d3ee);animation:helixFloat 2s ease-in-out infinite 0.6s;"></span>
+<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);animation:helixFloat 2s ease-in-out infinite 0.9s;"></span>
+<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#06d6a0,#22d3ee);animation:helixFloat 2s ease-in-out infinite 1.2s;"></span>
+</div>
+<h1 style="margin:0;font-size:2.8rem;font-family:'Outfit',sans-serif;font-weight:800;background:linear-gradient(135deg, #06d6a0, #22d3ee, #7c3aed);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 6s ease infinite;">Tortit</h1>
+<p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:1.1rem;margin:8px 0 0;">Genetic Offspring Analysis Platform</p>
+<div style="display:inline-block;margin-top:1rem;padding:8px 20px;background:linear-gradient(90deg,transparent,rgba(6,214,160,0.1),transparent);background-size:200% 100%;animation:shimmer 3s linear infinite;border:1px solid rgba(6,214,160,0.2);border-radius:20px;">
+<span style="color:#06d6a0;font-family:'DM Sans',sans-serif;font-size:0.85rem;">\U0001f9ec Carrier Risk &bull; Trait Prediction &bull; Mendelian Genetics</span>
+</div>
+<p style="font-size:0.92rem;color:#64748B;max-width:600px;margin:1rem auto 0;font-family:'DM Sans',sans-serif;">Upload 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF (Whole Genome Sequencing) raw-data files for both parents to screen for <b style="color:#06d6a0;">carrier risk</b> of {NUM_DISEASES} genetic diseases and predict <b style="color:#22d3ee;">{NUM_TRAITS} offspring traits</b> using Mendelian genetics.</p>
+</div>""",
     unsafe_allow_html=True,
 )
 
@@ -454,9 +696,10 @@ st.markdown(
 # ===================================================================
 st.markdown(
     """
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;
+        animation:fadeSlideUp 0.4s ease-out 0.2s both;">
         <span style="font-size:1.5rem;">\U0001f4c2</span>
-        <h3 style="margin:0;color:#E2E8F0;">Upload Genetic Data</h3>
+        <h3 style="margin:0;color:#e2e8f0;font-family:'Outfit',sans-serif;font-weight:700;">Upload Genetic Data (23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF)</h3>
     </div>
     """,
     unsafe_allow_html=True,
@@ -467,8 +710,8 @@ col_a, col_b = st.columns(2)
 with col_a:
     st.markdown("**Parent A**")
     file_a = st.file_uploader(
-        "Upload Parent A 23andMe file",
-        type=["txt"],
+        "Upload Parent A genetic data (23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF)",
+        type=["txt", "csv", "vcf"],
         key="file_a",
         label_visibility="collapsed",
     )
@@ -476,8 +719,8 @@ with col_a:
 with col_b:
     st.markdown("**Parent B**")
     file_b = st.file_uploader(
-        "Upload Parent B 23andMe file",
-        type=["txt"],
+        "Upload Parent B genetic data (23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF)",
+        type=["txt", "csv", "vcf"],
         key="file_b",
         label_visibility="collapsed",
     )
@@ -485,9 +728,9 @@ with col_b:
 # ---------------------------------------------------------------------------
 # Validate & parse uploads, cache in session_state
 # ---------------------------------------------------------------------------
-for label, file_obj, snp_key, valid_key, stats_key in [
-    ("Parent A", file_a, "snps_a", "valid_a", "stats_a"),
-    ("Parent B", file_b, "snps_b", "valid_b", "stats_b"),
+for label, file_obj, snp_key, valid_key, stats_key, fmt_key in [
+    ("Parent A", file_a, "snps_a", "valid_a", "stats_a", "fmt_a"),
+    ("Parent B", file_b, "snps_b", "valid_b", "stats_b", "fmt_b"),
 ]:
     if file_obj is not None:
         # Only re-parse when the file changes
@@ -495,36 +738,38 @@ for label, file_obj, snp_key, valid_key, stats_key in [
         if st.session_state.get(f"_fid_{snp_key}") != file_id:
             try:
                 buf = BytesIO(file_obj.getvalue())
-                is_valid, err = validate_23andme_format(buf)
-                buf.seek(0)
-                if is_valid:
-                    snps = parse_23andme(buf)
-                    stats = get_genotype_stats(snps)
-                    st.session_state[snp_key] = snps
-                    st.session_state[valid_key] = True
-                    st.session_state[stats_key] = stats
-                else:
-                    st.session_state[valid_key] = False
-                    st.session_state[snp_key] = None
-                    st.session_state[stats_key] = None
-                    st.session_state[f"_err_{snp_key}"] = err
+                snps, fmt_name = parse_genetic_file(buf)
+                stats = get_genotype_stats(snps)
+                st.session_state[snp_key] = snps
+                st.session_state[valid_key] = True
+                st.session_state[stats_key] = stats
+                st.session_state[fmt_key] = fmt_name
+            except (ValueError, FileNotFoundError) as exc:
+                st.session_state[valid_key] = False
+                st.session_state[snp_key] = None
+                st.session_state[stats_key] = None
+                st.session_state[fmt_key] = None
+                st.session_state[f"_err_{snp_key}"] = str(exc)
             except Exception as exc:
                 st.session_state[valid_key] = False
                 st.session_state[snp_key] = None
                 st.session_state[stats_key] = None
+                st.session_state[fmt_key] = None
                 st.session_state[f"_err_{snp_key}"] = str(exc)
             st.session_state[f"_fid_{snp_key}"] = file_id
     else:
         # File removed
-        for k in [snp_key, valid_key, stats_key, f"_fid_{snp_key}", f"_err_{snp_key}"]:
+        for k in [snp_key, valid_key, stats_key, fmt_key, f"_fid_{snp_key}", f"_err_{snp_key}"]:
             st.session_state.pop(k, None)
 
 # Display validation status
 col_sa, col_sb = st.columns(2)
 
-for col, label, file_obj, valid_key, stats_key, snp_key in [
-    (col_sa, "Parent A", file_a, "valid_a", "stats_a", "snps_a"),
-    (col_sb, "Parent B", file_b, "valid_b", "stats_b", "snps_b"),
+_FORMAT_DISPLAY_NAMES = {"23andme": "23andMe", "ancestry": "AncestryDNA", "myheritage": "MyHeritage/FTDNA", "vcf": "VCF (Whole Genome)", "unknown": "Unknown"}
+
+for col, label, file_obj, valid_key, stats_key, snp_key, fmt_key in [
+    (col_sa, "Parent A", file_a, "valid_a", "stats_a", "snps_a", "fmt_a"),
+    (col_sb, "Parent B", file_b, "valid_b", "stats_b", "snps_b", "fmt_b"),
 ]:
     with col:
         if file_obj is not None:
@@ -533,7 +778,13 @@ for col, label, file_obj, valid_key, stats_key, snp_key in [
                 total = stats.get("total_snps", 0)
                 homo = stats.get("homozygous_count", 0)
                 hetero = stats.get("heterozygous_count", 0)
-                st.success(f"\u2705 {label}: **{total:,}** SNPs loaded  (homo: {homo:,} | hetero: {hetero:,})")
+                fmt_display = _FORMAT_DISPLAY_NAMES.get(
+                    st.session_state.get(fmt_key, "unknown"), "Unknown"
+                )
+                st.success(
+                    f"\u2705 {label} ({fmt_display}): **{total:,}** SNPs loaded"
+                    f"  (homo: {homo:,} | hetero: {hetero:,})"
+                )
             else:
                 err = st.session_state.get(f"_err_{snp_key}", "Unknown error")
                 st.error(f"\u274c {label}: Invalid file -- {err}")
@@ -607,7 +858,8 @@ if both_valid:
 
         # Step 1: Carrier risk
         progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({NUM_DISEASES} diseases)...")
-        clinvar_client = ClinVarClient(api_key=ncbi_api_key if ncbi_api_key else None)
+        # Only use ClinVar if API key is provided (otherwise too slow due to rate limiting)
+        clinvar_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else None
         try:
             carrier_results = analyze_carrier_risk(
                 snps_a, snps_b, CARRIER_PANEL_PATH, clinvar_client=clinvar_client
@@ -652,8 +904,10 @@ if both_valid:
         st.markdown("---")
         st.markdown(
             """
-            <div style="text-align:center;margin:1rem 0;">
-                <h2 style="margin:0;background:linear-gradient(135deg, #A78BFA, #60A5FA);
+            <div style="text-align:center;margin:1rem 0;animation:fadeSlideUp 0.5s ease-out;">
+                <h2 style="margin:0;font-family:'Outfit',sans-serif;
+                    background:linear-gradient(135deg, #06d6a0, #22d3ee);
+                    background-size:200% 200%;animation:gradientShift 6s ease infinite;
                     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
                     font-weight:700;">\U0001f4ca Results Dashboard</h2>
             </div>
@@ -702,16 +956,21 @@ if both_valid:
                     with st.container():
                         st.markdown(
                             f"""
-                            <div style="border-left:4px solid #EF4444;
-                            background:linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%);
-                            padding:20px;border-radius:12px;margin-bottom:12px;
-                            border:1px solid rgba(239,68,68,0.2);">
-                                <h4 style="margin:0 0 4px;color:#F8FAFC;">{r['condition']}
+                            <div style="border-left:4px solid #ef4444;
+                            background:linear-gradient(135deg, #111827 0%, #1a2236 60%, rgba(239,68,68,0.06) 100%);
+                            padding:20px;border-radius:0 16px 16px 0;margin-bottom:12px;
+                            border-top:1px solid rgba(239,68,68,0.15);
+                            border-right:1px solid rgba(239,68,68,0.15);
+                            border-bottom:1px solid rgba(239,68,68,0.15);
+                            box-shadow:0 4px 24px rgba(0,0,0,0.3), inset 0 0 30px rgba(239,68,68,0.03);
+                            animation:fadeSlideUp 0.4s ease-out;">
+                                <h4 style="margin:0 0 6px;color:#f8fafc;font-family:'Outfit',sans-serif;
+                                    font-weight:700;">{r['condition']}
                                     &nbsp;{severity_badge(r['severity'])}</h4>
-                                <p style="margin:0 0 8px;color:#94A3B8;font-size:0.9rem;">
-                                    Gene: <b style="color:#A78BFA;">{r['gene']}</b> &nbsp;|&nbsp; rsID: <code>{r['rsid']}</code>
+                                <p style="margin:0 0 8px;color:#94a3b8;font-size:0.9rem;font-family:'DM Sans',sans-serif;">
+                                    Gene: <b style="color:#06d6a0;">{r['gene']}</b> &nbsp;|&nbsp; rsID: <code style="background:rgba(148,163,184,0.1);padding:2px 6px;border-radius:4px;">{r['rsid']}</code>
                                 </p>
-                                <p style="margin:0 0 8px;color:#CBD5E1;">{r['description']}</p>
+                                <p style="margin:0 0 8px;color:#cbd5e1;font-family:'DM Sans',sans-serif;">{r['description']}</p>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -861,10 +1120,10 @@ if both_valid:
                                         probs.items(), key=lambda x: x[1], reverse=True
                                     )
                                     palette = [
-                                        "#6366f1",
-                                        "#8b5cf6",
-                                        "#a78bfa",
-                                        "#c4b5fd",
+                                        "#06d6a0",
+                                        "#22d3ee",
+                                        "#7c3aed",
+                                        "#f59e0b",
                                     ]
                                     for idx, (pheno, pct) in enumerate(sorted_probs):
                                         color = palette[idx % len(palette)]
@@ -952,23 +1211,38 @@ if both_valid:
 # ===================================================================
 st.markdown(
     """
-    <div style="text-align:center;padding:2rem 1rem;margin-top:2rem;
-         background:linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(59,130,246,0.05) 100%);
-         border-radius:20px;border:1px solid rgba(124,58,237,0.15);">
-        <p style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
-            <b>\u26a0\ufe0f Disclaimer:</b> Tortit is an educational tool and does <b>not</b>
+    <div style="text-align:center;padding:2rem 1.5rem;margin-top:2rem;
+         background:linear-gradient(135deg, #0d1321 0%, #111827 40%, #1a1040 100%);
+         border-radius:24px;border:1px solid rgba(148,163,184,0.12);
+         box-shadow:0 4px 30px rgba(0,0,0,0.3);
+         animation:fadeSlideUp 0.5s ease-out;">
+        <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:12px;font-family:'DM Sans',sans-serif;">
+            <b style="color:#f59e0b;">\u26a0\ufe0f Disclaimer:</b> Tortit is an educational tool and does <b>not</b>
             provide medical advice, diagnosis, or treatment. Genetic predictions are
             probabilistic and based on simplified Mendelian models. Many traits are
-            polygenic and influenced by environment. <b>Always consult a certified
+            polygenic and influenced by environment. <b style="color:#e2e8f0;">Always consult a certified
             genetic counselor or healthcare professional</b> for clinical interpretation.</p>
-        <p style="color:#94A3B8;font-size:0.85rem;margin-bottom:12px;">
+        <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:12px;font-family:'DM Sans',sans-serif;">
             \U0001f512 <b>Privacy:</b> All processing occurs locally in your session.
             No genetic data is stored, transmitted, or shared.</p>
-        <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(124,58,237,0.2);">
-            <p style="color:#64748B;font-size:0.8rem;margin:0;">
+        <div style="margin-top:16px;padding-top:16px;
+            border-top:1px solid transparent;
+            background-image:linear-gradient(#111827,#111827),linear-gradient(90deg,transparent,#06d6a0,#7c3aed,#22d3ee,transparent);
+            background-origin:border-box;background-clip:padding-box,border-box;
+            border-top:1px solid;">
+            <div style="display:flex;justify-content:center;gap:4px;margin-bottom:10px;">
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
+                    background:#06d6a0;animation:helixFloat 2.5s ease-in-out infinite;"></span>
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
+                    background:#7c3aed;animation:helixFloat 2.5s ease-in-out infinite 0.3s;"></span>
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
+                    background:#22d3ee;animation:helixFloat 2.5s ease-in-out infinite 0.6s;"></span>
+            </div>
+            <p style="color:#64748B;font-size:0.8rem;margin:0;font-family:'DM Sans',sans-serif;">
                 Built with Streamlit &bull; Powered by open-source genetics research &bull;
-                <span style="background:linear-gradient(135deg, #A78BFA, #60A5FA);
-                -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">Tortit v2.0</span>
+                <span style="background:linear-gradient(135deg, #06d6a0, #22d3ee);
+                -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                font-weight:700;font-family:'Outfit',sans-serif;">Tortit v2.0</span>
             </p>
         </div>
     </div>
