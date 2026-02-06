@@ -11,7 +11,7 @@
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
 | Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
-| Platform redesign: CSS centralization + router + all pages + pricing | Claude | PR Open | feature/platform-redesign | PR #14 — awaiting review |
+| Platform redesign: CSS, router, pages, Mergenix rebrand, one-time pricing, CI | Claude | PR Open | feature/platform-redesign | PR #14 — includes rebrand, pricing model fix, CI workflow, card rendering fix |
 
 ---
 
@@ -42,7 +42,7 @@
 - [x] Linting setup (ruff) — PR #13
 - [x] Pre-commit hooks — PR #13
 - [ ] Comprehensive test coverage
-- [ ] CI/CD pipeline (GitHub Actions)
+- [x] CI/CD pipeline (GitHub Actions) — PR #14
 
 ### Phase 5: Polish & Launch (Upcoming)
 - [ ] Error handling improvements
@@ -63,6 +63,10 @@
 | 2025-02-xx | Maayan | Auth system, payments, expanded carrier panel, tests | 5206193 |
 | 2026-02-06 | Claude | Project workflow setup: CLAUDE.md, PROGRESS.md, linting, README | PR #13 |
 | 2026-02-06 | Claude | Platform redesign: centralize CSS, router, 9 pages, pricing update | PR #14 |
+| 2026-02-06 | Claude | Rebrand Tortit → Mergenix across 48 files | PR #14 |
+| 2026-02-06 | Claude | Switch to one-time pricing model (no subscriptions) | PR #14 |
+| 2026-02-06 | Claude | Add CI workflow (pytest + ruff, Python 3.10/3.12 matrix) | PR #14 |
+| 2026-02-06 | Claude | Fix pricing card rendering (blank line in HTML block) | PR #14 |
 
 ---
 
