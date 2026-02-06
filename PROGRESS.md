@@ -10,7 +10,7 @@
 
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
-| Project workflow setup (CLAUDE.md, linting, README) | Claude | In Progress | feature/project-workflow-setup | Setting up dev infrastructure |
+| Project workflow setup (CLAUDE.md, linting, README) | Claude | PR Review | feature/project-workflow-setup | PR #13 — awaiting review |
 
 ---
 
@@ -37,9 +37,9 @@
 - [ ] Payment flow end-to-end testing
 
 ### Phase 4: Dev Infrastructure
-- [ ] Project workflow rules (CLAUDE.md)
-- [ ] Linting setup (ruff)
-- [ ] Pre-commit hooks
+- [x] Project workflow rules (CLAUDE.md) — PR #13
+- [x] Linting setup (ruff) — PR #13
+- [x] Pre-commit hooks — PR #13
 - [ ] Comprehensive test coverage
 - [ ] CI/CD pipeline (GitHub Actions)
 
@@ -60,7 +60,7 @@
 | 2025-01-xx | Team | Expand diseases, traits, redesign | #5 |
 | 2025-01-xx | Team | Disease Catalog page, sample data fixes | #11 |
 | 2025-02-xx | Maayan | Auth system, payments, expanded carrier panel, tests | 5206193 |
-| 2026-02-06 | Claude | Project workflow setup: CLAUDE.md, PROGRESS.md, linting, README | TBD |
+| 2026-02-06 | Claude | Project workflow setup: CLAUDE.md, PROGRESS.md, linting, README | PR #13 |
 
 ---
 
