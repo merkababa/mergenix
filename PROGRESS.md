@@ -10,7 +10,7 @@
 
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
-| Project workflow setup (CLAUDE.md, linting, README) | Claude | PR Review | feature/project-workflow-setup | PR #13 — awaiting review |
+| Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
 
 ---
 
