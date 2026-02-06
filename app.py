@@ -31,6 +31,8 @@ from Source.trait_prediction import (
 )
 from Source.clinvar_client import ClinVarClient
 from Source.snpedia_client import SNPediaClient
+from Source.auth import AuthManager, render_login_form, render_register_form, get_current_user, render_user_menu
+from Source.tier_config import TierType, get_tier_config, get_diseases_for_tier, get_traits_for_tier, get_upgrade_message
 
 # ---------------------------------------------------------------------------
 # Data paths
@@ -38,6 +40,13 @@ from Source.snpedia_client import SNPediaClient
 DATA_DIR = os.path.join(APP_DIR, "data")
 CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
 TRAIT_DB_PATH = os.path.join(DATA_DIR, "trait_snps.json")
+
+# ---------------------------------------------------------------------------
+# Authentication Manager (cached)
+# ---------------------------------------------------------------------------
+@st.cache_resource
+def get_auth_manager():
+    return AuthManager()
 
 # ---------------------------------------------------------------------------
 # Dynamic counts (avoid hardcoding "50 diseases" / "30 traits")
@@ -155,6 +164,15 @@ CONFIDENCE_COLORS = {
     "medium": "#f59e0b",
     "low": "#ef4444",
 }
+
+# ---------------------------------------------------------------------------
+# Tier badge helper
+# ---------------------------------------------------------------------------
+def render_tier_badge(tier: str):
+    """Render a tier badge with appropriate color."""
+    colors = {"free": "#6b7280", "premium": "#3b82f6", "pro": "#fbbf24"}
+    color = colors.get(tier.lower(), "#6b7280")
+    return f'<span style="background:{color};padding:4px 12px;border-radius:12px;color:white;font-weight:600;font-size:0.75rem;text-transform:uppercase;font-family:\'Outfit\',sans-serif;letter-spacing:0.05em;">{tier.upper()}</span>'
 
 
 # ===================================================================
@@ -646,7 +664,28 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-    st.markdown("### \u2699\ufe0f Settings")
+    # Authentication UI
+    auth_manager = get_auth_manager()
+    current_user = get_current_user(auth_manager)
+
+    if current_user:
+        # Logged in - show user menu
+        render_user_menu(current_user, auth_manager)
+        st.markdown("---")
+    else:
+        # Not logged in - show login/register
+        st.markdown("### 🔐 Account")
+        auth_tab1, auth_tab2 = st.tabs(["Login", "Register"])
+
+        with auth_tab1:
+            render_login_form(auth_manager)
+
+        with auth_tab2:
+            render_register_form(auth_manager)
+
+        st.markdown("---")
+
+    st.markdown("### ⚙️ Settings")
 
     ncbi_api_key = st.text_input(
         "NCBI API Key (optional)",
@@ -799,14 +838,23 @@ if only_a or only_b:
     st.markdown("---")
     parent_label = "Parent A" if only_a else "Parent B"
     snps = st.session_state.get("snps_a" if only_a else "snps_b")
+
+    # Get user tier for filtering
+    auth_manager = get_auth_manager()
+    current_user = get_current_user(auth_manager)
+    user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
+    tier_config = get_tier_config(TierType(user_tier))
+
     st.markdown(f"### \U0001f9ea Individual Carrier Screening -- {parent_label}")
     st.info(
         "Upload the second parent's file to unlock **offspring risk analysis** and **trait predictions**. "
         f"Showing individual carrier status for {parent_label} below."
     )
 
-    with st.spinner(f"Screening {parent_label} against {NUM_DISEASES}-disease panel..."):
+    with st.spinner(f"Screening {parent_label} against {tier_config.disease_limit}-disease panel ({user_tier.upper()} plan)..."):
         single_results = single_parent_carrier_screen(snps, CARRIER_PANEL_PATH)
+        # Filter by tier limit
+        single_results = single_results[:tier_config.disease_limit]
 
     carriers = [r for r in single_results if r["status"] == "carrier"]
     affected = [r for r in single_results if r["status"] == "affected"]
@@ -835,6 +883,12 @@ if only_a or only_b:
         for r in normals:
             st.markdown(f"- **{r['condition']}** ({r['gene']})")
 
+    # Show upgrade prompt for single-parent mode
+    if user_tier != TierType.PRO.value:
+        st.markdown("---")
+        upgrade_msg = get_upgrade_message(TierType(user_tier))
+        st.info(f"💎 {upgrade_msg}")
+
 # ===================================================================
 # Both parents uploaded -- Analyze button
 # ===================================================================
@@ -853,26 +907,50 @@ if both_valid:
         snps_a = st.session_state["snps_a"]
         snps_b = st.session_state["snps_b"]
 
+        # Get current user's tier
+        auth_manager = get_auth_manager()
+        current_user = get_current_user(auth_manager)
+        user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
+
+        # Get tier configuration
+        tier_config = get_tier_config(user_tier)
+
+        # Load full panel and get tier configuration
+        with open(CARRIER_PANEL_PATH, "r") as f:
+            full_panel = json.load(f)
+
+        tier_config = get_tier_config(TierType(user_tier))
+        total_diseases = len(full_panel)
+        analyzing_count = tier_config.disease_limit
+
         # -- progress UI --
         progress = st.progress(0, text="Starting analysis...")
 
+        # Show tier-based analysis info
+        st.info(f"Analyzing {analyzing_count} of {total_diseases} diseases (based on your {user_tier.upper()} plan)")
+
         # Step 1: Carrier risk
-        progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({NUM_DISEASES} diseases)...")
+        progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({analyzing_count} diseases)...")
         # Only use ClinVar if API key is provided (otherwise too slow due to rate limiting)
         clinvar_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else None
         try:
+            # Pass tier parameter to analyze_carrier_risk for built-in filtering
             carrier_results = analyze_carrier_risk(
-                snps_a, snps_b, CARRIER_PANEL_PATH, clinvar_client=clinvar_client
+                snps_a, snps_b, CARRIER_PANEL_PATH,
+                clinvar_client=clinvar_client,
+                tier=TierType(user_tier)
             )
         except Exception as exc:
             st.error(f"Carrier analysis failed: {exc}")
             carrier_results = []
 
-        progress.progress(50, text=f"\U0001f3a8 Predicting offspring traits ({NUM_TRAITS} traits)...")
+        progress.progress(50, text=f"\U0001f3a8 Predicting offspring traits...")
 
         # Step 2: Trait prediction (using our corrected loader)
         try:
-            trait_results = run_trait_analysis(snps_a, snps_b, TRAIT_DB_PATH)
+            all_trait_results = run_trait_analysis(snps_a, snps_b, TRAIT_DB_PATH)
+            # Filter traits based on tier limit
+            trait_results = all_trait_results[:tier_config.trait_limit]
         except Exception as exc:
             st.error(f"Trait prediction failed: {exc}")
             trait_results = []
@@ -883,6 +961,13 @@ if both_valid:
         st.session_state["carrier_results"] = carrier_results
         st.session_state["trait_results"] = trait_results
         st.session_state["analysis_done"] = True
+        st.session_state["user_tier"] = user_tier
+
+        # Track analysis count for free users
+        if user_tier == TierType.FREE.value:
+            if "analysis_count" not in st.session_state:
+                st.session_state["analysis_count"] = 0
+            st.session_state["analysis_count"] += 1
 
     # ---------------------------------------------------------------
     # Display results (persisted in session_state)
@@ -890,6 +975,7 @@ if both_valid:
     if st.session_state.get("analysis_done"):
         carrier_results = st.session_state["carrier_results"]
         trait_results = st.session_state["trait_results"]
+        user_tier = st.session_state.get("user_tier", TierType.FREE.value)
 
         # Classify carrier results
         high_risk = [r for r in carrier_results if r["risk_level"] == "high_risk"]
@@ -925,6 +1011,20 @@ if both_valid:
         )
         mc3.metric("Carrier Matches", len(carrier_detected))
         mc4.metric("Traits Predicted", len(successful_traits))
+
+        # Show tier badge and upgrade prompt
+        tier_col1, tier_col2 = st.columns([2, 1])
+        with tier_col1:
+            st.markdown(f"**Your Plan:** {render_tier_badge(user_tier)}", unsafe_allow_html=True)
+        with tier_col2:
+            if user_tier == TierType.FREE.value:
+                analysis_count = st.session_state.get("analysis_count", 0)
+                st.caption(f"📊 Analyses this month: {analysis_count}/5")
+
+        # Show upgrade message if not on highest tier
+        if user_tier != TierType.PRO.value:
+            upgrade_msg = get_upgrade_message(TierType(user_tier))
+            st.info(f"💎 {upgrade_msg}")
 
         # ===== Tabs =====
         tab_risk, tab_traits, tab_individual = st.tabs(
@@ -1055,9 +1155,28 @@ if both_valid:
             if not successful_traits:
                 st.warning(
                     "No traits could be predicted. This usually means the uploaded files "
-                    f"do not contain the specific SNPs in our {NUM_TRAITS}-trait panel."
+                    "do not contain the specific SNPs in our trait panel, or your plan limits have been reached."
                 )
             else:
+                # Show locked traits preview for non-PRO users
+                if user_tier != TierType.PRO.value:
+                    with open(TRAIT_DB_PATH, "r") as f:
+                        all_traits_data = json.load(f)
+                        if isinstance(all_traits_data, list):
+                            all_traits = all_traits_data
+                        else:
+                            all_traits = all_traits_data.get("snps", [])
+
+                    total_traits = len(all_traits)
+                    analyzed_traits = len(successful_traits)
+                    locked_count = total_traits - analyzed_traits
+
+                    if locked_count > 0:
+                        st.warning(
+                            f"🔒 {locked_count} additional traits are locked. "
+                            f"Upgrade to {'Premium' if user_tier == TierType.FREE.value else 'Pro'} to unlock all traits!"
+                        )
+
                 # Group by category
                 grouped = {}
                 for t in successful_traits:
@@ -1153,7 +1272,12 @@ if both_valid:
         # TAB: Individual Reports
         # -------------------------------------------------------
         with tab_individual:
-            st.markdown(f"Individual carrier screening for each parent against the full {NUM_DISEASES}-disease panel.")
+            # Get tier config for disease limit
+            tier_config = get_tier_config(TierType(user_tier))
+            st.markdown(
+                f"Individual carrier screening for each parent against {tier_config.disease_limit} diseases "
+                f"(based on your {user_tier.upper()} plan)."
+            )
 
             ind_a, ind_b = st.tabs(["\U0001f464 Parent A", "\U0001f464 Parent B"])
 
@@ -1168,6 +1292,10 @@ if both_valid:
                         continue
 
                     single = single_parent_carrier_screen(snps, CARRIER_PANEL_PATH)
+                    # Filter by tier limit
+                    tier_config = get_tier_config(TierType(user_tier))
+                    single = single[:tier_config.disease_limit]
+
                     carriers = [r for r in single if r["status"] == "carrier"]
                     affecteds = [r for r in single if r["status"] == "affected"]
                     normals = [r for r in single if r["status"] == "normal"]

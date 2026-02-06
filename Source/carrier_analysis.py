@@ -7,6 +7,7 @@ diseases to identify offspring risk based on Mendelian autosomal recessive inher
 
 import json
 from typing import Optional
+from Source.tier_config import TierType, get_diseases_for_tier, TOP_25_FREE_DISEASES, get_tier_config, get_upgrade_message
 
 
 def load_carrier_panel(panel_path: str) -> list[dict]:
@@ -31,6 +32,38 @@ def load_carrier_panel(panel_path: str) -> list[dict]:
     with open(panel_path, 'r') as f:
         panel = json.load(f)
     return panel
+
+
+def load_carrier_panel_for_tier(panel_path: str, tier: TierType = TierType.FREE) -> list[dict]:
+    """
+    Load carrier panel filtered by user's subscription tier.
+
+    Args:
+        panel_path: Path to the carrier_panel.json file
+        tier: User's subscription tier (FREE, BASIC, PRO)
+
+    Returns:
+        List of disease panel entries filtered according to tier limits.
+        Free tier returns top 25 common diseases.
+        Basic tier returns 171 diseases.
+        Pro tier returns all diseases.
+    """
+    all_diseases = load_carrier_panel(panel_path)
+    return get_diseases_for_tier(tier, all_diseases)
+
+
+def is_free_disease(disease_name: str) -> bool:
+    """
+    Check if a disease is included in the free tier.
+
+    Args:
+        disease_name: Name of the disease/condition to check
+
+    Returns:
+        True if disease is in the top 25 free diseases, False otherwise
+    """
+    return any(free_name.lower() in disease_name.lower()
+               for free_name in TOP_25_FREE_DISEASES)
 
 
 def determine_carrier_status(
@@ -159,7 +192,8 @@ def analyze_carrier_risk(
     parent_a_snps: dict,
     parent_b_snps: dict,
     panel_path: str,
-    clinvar_client: Optional[object] = None
+    clinvar_client: Optional[object] = None,
+    tier: Optional[TierType] = None
 ) -> list[dict]:
     """
     Main carrier risk analysis function.
@@ -170,6 +204,9 @@ def analyze_carrier_risk(
         parent_b_snps: Dict mapping rsid -> genotype for parent B
         panel_path: Path to carrier_panel.json
         clinvar_client: Optional ClinVarClient instance for cross-reference
+        tier: Optional subscription tier for filtering disease panel.
+              If None, analyzes all diseases (backward compatibility).
+              If specified, filters panel according to tier limits.
 
     Returns:
         List of result dicts, sorted by risk level (highest risk first), each containing:
@@ -183,8 +220,11 @@ def analyze_carrier_risk(
         - risk_level: Overall risk classification
         - rsid: SNP identifier (for reference)
     """
-    # Load disease panel
-    panel = load_carrier_panel(panel_path)
+    # Load disease panel (with optional tier filtering)
+    if tier is not None:
+        panel = load_carrier_panel_for_tier(panel_path, tier)
+    else:
+        panel = load_carrier_panel(panel_path)
 
     results = []
 
@@ -273,3 +313,31 @@ def analyze_carrier_risk(
     ))
 
     return results
+
+
+def get_analysis_summary(results: list, tier: TierType) -> dict:
+    """
+    Return summary of analysis including tier limitations.
+
+    Args:
+        results: List of analysis results from analyze_carrier_risk
+        tier: User's subscription tier
+
+    Returns:
+        Dict containing:
+        - diseases_analyzed: Number of diseases in the results
+        - diseases_available: Max diseases available at this tier
+        - total_diseases: Total diseases in full panel (1211)
+        - tier: Tier name as string
+        - is_limited: True if tier has restrictions (not PRO)
+        - upgrade_message: Message encouraging upgrade (None for PRO tier)
+    """
+    tier_config = get_tier_config(tier)
+    return {
+        "diseases_analyzed": len(results),
+        "diseases_available": tier_config.disease_limit,
+        "total_diseases": 1211,
+        "tier": tier.value,
+        "is_limited": tier != TierType.PRO,
+        "upgrade_message": get_upgrade_message(tier) if tier != TierType.PRO else None
+    }
