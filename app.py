@@ -665,12 +665,11 @@ with st.sidebar:
     )
 
     # Authentication UI
-    auth_manager = get_auth_manager()
-    current_user = get_current_user(auth_manager)
+    current_user = get_current_user()
 
     if current_user:
         # Logged in - show user menu
-        render_user_menu(current_user, auth_manager)
+        render_user_menu()
         st.markdown("---")
     else:
         # Not logged in - show login/register
@@ -678,10 +677,10 @@ with st.sidebar:
         auth_tab1, auth_tab2 = st.tabs(["Login", "Register"])
 
         with auth_tab1:
-            render_login_form(auth_manager)
+            render_login_form()
 
         with auth_tab2:
-            render_register_form(auth_manager)
+            render_register_form()
 
         st.markdown("---")
 
@@ -841,7 +840,7 @@ if only_a or only_b:
 
     # Get user tier for filtering
     auth_manager = get_auth_manager()
-    current_user = get_current_user(auth_manager)
+    current_user = get_current_user()
     user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
     tier_config = get_tier_config(TierType(user_tier))
 
@@ -909,7 +908,7 @@ if both_valid:
 
         # Get current user's tier
         auth_manager = get_auth_manager()
-        current_user = get_current_user(auth_manager)
+        current_user = get_current_user()
         user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
 
         # Get tier configuration
