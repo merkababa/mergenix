@@ -11,6 +11,7 @@
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
 | Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
+| Platform redesign: CSS centralization + router + all pages + pricing | Claude | PR Open | feature/platform-redesign | PR #14 — awaiting review |
 
 ---
 
@@ -61,6 +62,7 @@
 | 2025-01-xx | Team | Disease Catalog page, sample data fixes | #11 |
 | 2025-02-xx | Maayan | Auth system, payments, expanded carrier panel, tests | 5206193 |
 | 2026-02-06 | Claude | Project workflow setup: CLAUDE.md, PROGRESS.md, linting, README | PR #13 |
+| 2026-02-06 | Claude | Platform redesign: centralize CSS, router, 9 pages, pricing update | PR #14 |
 
 ---
 
