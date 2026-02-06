@@ -11,7 +11,7 @@
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
 | Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
-| Platform redesign: CSS, router, pages, Mergenix rebrand, one-time pricing, CI | Claude | PR Open | feature/platform-redesign | PR #14 — includes rebrand, pricing model fix, CI workflow, card rendering fix |
+| Platform redesign + disease expansion (1211→2715) | Claude | PR Open | feature/platform-redesign | PR #14 — rebrand, pricing, CI, card fix, +1504 diseases |
 
 ---
 
@@ -67,6 +67,7 @@
 | 2026-02-06 | Claude | Switch to one-time pricing model (no subscriptions) | PR #14 |
 | 2026-02-06 | Claude | Add CI workflow (pytest + ruff, Python 3.10/3.12 matrix) | PR #14 |
 | 2026-02-06 | Claude | Fix pricing card rendering (blank line in HTML block) | PR #14 |
+| 2026-02-06 | Claude | Expand carrier panel from 1,211 to 2,715 diseases (+1,504 new entries) | PR #14 |
 
 ---
 
