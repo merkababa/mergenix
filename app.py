@@ -31,7 +31,7 @@ from Source.trait_prediction import (
 )
 from Source.clinvar_client import ClinVarClient
 from Source.snpedia_client import SNPediaClient
-from Source.auth import AuthManager, render_login_form, render_register_form, get_current_user, render_user_menu
+from Source.auth import AuthManager, get_current_user, render_user_menu
 from Source.tier_config import TierType, get_tier_config, get_diseases_for_tier, get_traits_for_tier, get_upgrade_message
 
 # ---------------------------------------------------------------------------
@@ -318,6 +318,7 @@ st.set_page_config(
 # Custom sidebar navigation
 st.sidebar.page_link("app.py", label="Offspring Analysis", icon="🧬")
 st.sidebar.page_link("pages/2_Disease_Catalog.py", label="Disease Catalog", icon="📋")
+st.sidebar.page_link("pages/3_Subscription.py", label="Subscription", icon="💳")
 
 # Comprehensive bioluminescent dark-theme CSS
 st.markdown(
@@ -668,20 +669,16 @@ with st.sidebar:
     current_user = get_current_user()
 
     if current_user:
-        # Logged in - show user menu
+        # Logged in - show user info
+        st.markdown("### 👤 Account")
         render_user_menu()
         st.markdown("---")
     else:
-        # Not logged in - show login/register
+        # Not logged in - show sign in prompt
         st.markdown("### 🔐 Account")
-        auth_tab1, auth_tab2 = st.tabs(["Login", "Register"])
-
-        with auth_tab1:
-            render_login_form()
-
-        with auth_tab2:
-            render_register_form()
-
+        st.info("Sign in to save your analyses and access premium features.")
+        if st.button("🔐 Sign In", use_container_width=True, key="sidebar_signin"):
+            st.switch_page("pages/1_Login.py")
         st.markdown("---")
 
     st.markdown("### ⚙️ Settings")
@@ -896,77 +893,85 @@ both_valid = st.session_state.get("valid_a") and st.session_state.get("valid_b")
 if both_valid:
     st.markdown("---")
 
-    analyze_clicked = st.button(
-        "\U0001f52c  Run Offspring Analysis",
-        type="primary",
-        use_container_width=True,
-    )
+    # Check if user is logged in before allowing analysis
+    current_user = get_current_user()
 
-    if analyze_clicked:
-        snps_a = st.session_state["snps_a"]
-        snps_b = st.session_state["snps_b"]
+    if not current_user:
+        st.warning("⚠️ Please sign in to run analyses and save your results.")
+        if st.button("🔐 Sign In to Continue", type="primary", use_container_width=True):
+            st.switch_page("pages/1_Login.py")
+    else:
+        analyze_clicked = st.button(
+            "\U0001f52c  Run Offspring Analysis",
+            type="primary",
+            use_container_width=True,
+        )
 
-        # Get current user's tier
-        auth_manager = get_auth_manager()
-        current_user = get_current_user()
-        user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
+        if analyze_clicked:
+            snps_a = st.session_state["snps_a"]
+            snps_b = st.session_state["snps_b"]
 
-        # Get tier configuration
-        tier_config = get_tier_config(user_tier)
+            # Get current user's tier
+            auth_manager = get_auth_manager()
+            current_user = get_current_user()
+            user_tier = current_user.get("tier", TierType.FREE.value) if current_user else TierType.FREE.value
 
-        # Load full panel and get tier configuration
-        with open(CARRIER_PANEL_PATH, "r") as f:
-            full_panel = json.load(f)
+            # Get tier configuration
+            tier_config = get_tier_config(user_tier)
 
-        tier_config = get_tier_config(TierType(user_tier))
-        total_diseases = len(full_panel)
-        analyzing_count = tier_config.disease_limit
+            # Load full panel and get tier configuration
+            with open(CARRIER_PANEL_PATH, "r") as f:
+                full_panel = json.load(f)
 
-        # -- progress UI --
-        progress = st.progress(0, text="Starting analysis...")
+            tier_config = get_tier_config(TierType(user_tier))
+            total_diseases = len(full_panel)
+            analyzing_count = tier_config.disease_limit
 
-        # Show tier-based analysis info
-        st.info(f"Analyzing {analyzing_count} of {total_diseases} diseases (based on your {user_tier.upper()} plan)")
+            # -- progress UI --
+            progress = st.progress(0, text="Starting analysis...")
 
-        # Step 1: Carrier risk
-        progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({analyzing_count} diseases)...")
-        # Only use ClinVar if API key is provided (otherwise too slow due to rate limiting)
-        clinvar_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else None
-        try:
-            # Pass tier parameter to analyze_carrier_risk for built-in filtering
-            carrier_results = analyze_carrier_risk(
-                snps_a, snps_b, CARRIER_PANEL_PATH,
-                clinvar_client=clinvar_client,
-                tier=TierType(user_tier)
-            )
-        except Exception as exc:
-            st.error(f"Carrier analysis failed: {exc}")
-            carrier_results = []
+            # Show tier-based analysis info
+            st.info(f"Analyzing {analyzing_count} of {total_diseases} diseases (based on your {user_tier.upper()} plan)")
 
-        progress.progress(50, text=f"\U0001f3a8 Predicting offspring traits...")
+            # Step 1: Carrier risk
+            progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({analyzing_count} diseases)...")
+            # Only use ClinVar if API key is provided (otherwise too slow due to rate limiting)
+            clinvar_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else None
+            try:
+                # Pass tier parameter to analyze_carrier_risk for built-in filtering
+                carrier_results = analyze_carrier_risk(
+                    snps_a, snps_b, CARRIER_PANEL_PATH,
+                    clinvar_client=clinvar_client,
+                    tier=TierType(user_tier)
+                )
+            except Exception as exc:
+                st.error(f"Carrier analysis failed: {exc}")
+                carrier_results = []
 
-        # Step 2: Trait prediction (using our corrected loader)
-        try:
-            all_trait_results = run_trait_analysis(snps_a, snps_b, TRAIT_DB_PATH)
-            # Filter traits based on tier limit
-            trait_results = all_trait_results[:tier_config.trait_limit]
-        except Exception as exc:
-            st.error(f"Trait prediction failed: {exc}")
-            trait_results = []
+            progress.progress(50, text=f"\U0001f3a8 Predicting offspring traits...")
 
-        progress.progress(100, text="\u2705 Analysis complete!")
+            # Step 2: Trait prediction (using our corrected loader)
+            try:
+                all_trait_results = run_trait_analysis(snps_a, snps_b, TRAIT_DB_PATH)
+                # Filter traits based on tier limit
+                trait_results = all_trait_results[:tier_config.trait_limit]
+            except Exception as exc:
+                st.error(f"Trait prediction failed: {exc}")
+                trait_results = []
 
-        # Cache results
-        st.session_state["carrier_results"] = carrier_results
-        st.session_state["trait_results"] = trait_results
-        st.session_state["analysis_done"] = True
-        st.session_state["user_tier"] = user_tier
+            progress.progress(100, text="\u2705 Analysis complete!")
 
-        # Track analysis count for free users
-        if user_tier == TierType.FREE.value:
-            if "analysis_count" not in st.session_state:
-                st.session_state["analysis_count"] = 0
-            st.session_state["analysis_count"] += 1
+            # Cache results
+            st.session_state["carrier_results"] = carrier_results
+            st.session_state["trait_results"] = trait_results
+            st.session_state["analysis_done"] = True
+            st.session_state["user_tier"] = user_tier
+
+            # Track analysis count for free users
+            if user_tier == TierType.FREE.value:
+                if "analysis_count" not in st.session_state:
+                    st.session_state["analysis_count"] = 0
+                st.session_state["analysis_count"] += 1
 
     # ---------------------------------------------------------------
     # Display results (persisted in session_state)
