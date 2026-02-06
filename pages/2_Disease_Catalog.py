@@ -586,6 +586,14 @@ with st.sidebar:
         key="inheritance_filter",
     )
 
+    category_options = sorted(set(d.get("category", "Other") for d in diseases))
+    category_filter = st.multiselect(
+        "Category",
+        options=category_options,
+        default=[],
+        key="category_filter",
+    )
+
     # Carrier frequency range
     all_freqs = [parse_carrier_freq(d["carrier_frequency"]) for d in diseases]
     min_freq = min(all_freqs)
@@ -601,7 +609,7 @@ with st.sidebar:
 
     st.markdown("---")
     if st.button("\U0001f504 Reset Filters", use_container_width=True):
-        for key in ["disease_search", "severity_filter", "inheritance_filter", "freq_range"]:
+        for key in ["disease_search", "severity_filter", "inheritance_filter", "category_filter", "freq_range"]:
             if key in st.session_state:
                 del st.session_state[key]
         st.rerun()
@@ -630,6 +638,9 @@ if severity_filter:
 
 if inheritance_filter:
     filtered = [d for d in filtered if d["inheritance"] in inheritance_filter]
+
+if category_filter:
+    filtered = [d for d in filtered if d.get("category", "Other") in category_filter]
 
 filtered = [
     d for d in filtered
@@ -665,6 +676,7 @@ for d in filtered:
             "Severity": severity_indicator(d.get("severity", "unknown")),
             "Prevalence": d.get("prevalence", "---"),
             "Inheritance": format_inheritance(d["inheritance"]),
+            "Category": d.get("category", "Other"),
             "_freq_sort": freq_num,
         }
     )
@@ -684,6 +696,7 @@ if not df.empty:
             "Severity": st.column_config.TextColumn("Severity", width="small"),
             "Prevalence": st.column_config.TextColumn("Prevalence", width="small"),
             "Inheritance": st.column_config.TextColumn("Inheritance", width="medium"),
+            "Category": st.column_config.TextColumn("Category", width="medium"),
         },
     )
 else:
@@ -701,7 +714,7 @@ st.markdown(
 )
 
 if len(filtered) > 0:
-    ITEMS_PER_PAGE = 20
+    ITEMS_PER_PAGE = 30
     total_pages = max(1, math.ceil(len(filtered) / ITEMS_PER_PAGE))
 
     # Pagination controls
@@ -709,6 +722,11 @@ if len(filtered) > 0:
     with page_cols[0]:
         if st.button("\u25c0 Previous", disabled=(st.session_state.get("catalog_page", 1) <= 1), key="prev_page"):
             st.session_state["catalog_page"] = max(1, st.session_state.get("catalog_page", 1) - 1)
+            st.rerun()
+    with page_cols[1]:
+        new_page = st.number_input("Page", min_value=1, max_value=total_pages, value=st.session_state.get("catalog_page", 1), key="page_jump")
+        if new_page != st.session_state.get("catalog_page", 1):
+            st.session_state["catalog_page"] = new_page
             st.rerun()
     with page_cols[2]:
         if st.button("Next \u25b6", disabled=(st.session_state.get("catalog_page", 1) >= total_pages), key="next_page"):
@@ -740,11 +758,13 @@ if len(filtered) > 0:
 
         with st.expander(f"{d['condition']}  ({d['gene']})", expanded=False):
             # Build card HTML
+            category = d.get("category", "Other")
             meta_tags = f"""
                 <span class="meta-tag"><b>Gene:</b> {d['gene']}</span>
                 <span class="meta-tag"><b>Inheritance:</b> {format_inheritance(d['inheritance'])}</span>
                 <span class="meta-tag"><b>Carrier Freq:</b> {d['carrier_frequency']}</span>
                 <span class="meta-tag"><b>rsID:</b> {d['rsid']}</span>
+                <span class="meta-tag"><b>Category:</b> {category}</span>
             """
             if prevalence:
                 meta_tags += f'<span class="meta-tag"><b>Prevalence:</b> {prevalence}</span>'
@@ -867,7 +887,57 @@ with chart_col2:
     )
     st.plotly_chart(fig_sev, use_container_width=True)
 
-# Chart 3: Top 15 Most Common Diseases (by carrier frequency)
+# Chart 3: Category Distribution (Horizontal Bar)
+st.markdown(
+    """<div class="section-header" style="margin-top:0.5rem;">
+        <h2>\U0001f4ca Category Distribution</h2>
+        <p>Diseases grouped by medical category</p>
+    </div>""",
+    unsafe_allow_html=True,
+)
+
+category_counts = Counter(d.get("category", "Other") for d in diseases)
+sorted_cats = category_counts.most_common()
+cat_labels = [c[0] for c in sorted_cats]
+cat_values = [c[1] for c in sorted_cats]
+
+# Cycle through colors
+color_palette = ["#06d6a0", "#7c3aed", "#22d3ee", "#f59e0b", "#ef4444", "#ec4899", "#8b5cf6", "#14b8a6", "#f97316", "#6366f1", "#84cc16", "#06b6d4"]
+cat_colors = [color_palette[i % len(color_palette)] for i in range(len(cat_labels))]
+
+fig_cat = go.Figure(
+    data=[
+        go.Bar(
+            y=list(reversed(cat_labels)),
+            x=list(reversed(cat_values)),
+            orientation="h",
+            marker=dict(
+                color=list(reversed(cat_colors)),
+                line=dict(color="#0a0e1a", width=1),
+                cornerradius=6,
+            ),
+            text=[f"  {v}" for v in reversed(cat_values)],
+            textposition="outside",
+            textfont=dict(family="Outfit", size=13, color="#e2e8f0"),
+            hovertemplate="<b>%{y}</b>: %{x} conditions<extra></extra>",
+        )
+    ]
+)
+fig_cat.update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    xaxis=dict(
+        showgrid=True, gridcolor="rgba(148,163,184,0.06)",
+        tickfont=dict(family="DM Sans", color="#94a3b8"),
+        title=dict(text="Number of Conditions", font=dict(family="DM Sans", size=12, color="#64748b")),
+    ),
+    yaxis=dict(tickfont=dict(family="DM Sans", size=11, color="#e2e8f0")),
+    margin=dict(l=10, r=80, t=20, b=40),
+    height=max(400, len(cat_labels) * 25),
+)
+st.plotly_chart(fig_cat, use_container_width=True)
+
+# Chart 4: Top 15 Most Common Diseases (by carrier frequency)
 st.markdown(
     """<div class="section-header" style="margin-top:0.5rem;">
         <h2>\U0001f3af Most Common Carrier Conditions</h2>

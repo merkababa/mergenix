@@ -328,19 +328,20 @@ def main():
         (SAMPLE_DIR / subdir).mkdir(parents=True, exist_ok=True)
 
     # Profile types for variety
-    profiles_23andme = ['healthy', 'carrier', 'mixed', 'affected_some', 'mixed']
+    profiles_23andme = ['healthy', 'carrier', 'mixed', 'affected_some', 'mixed', 'carrier']
     profiles_ancestry = ['healthy', 'carrier', 'mixed', 'affected_some', 'healthy', 'carrier']
     profiles_myheritage = ['healthy', 'carrier', 'mixed', 'affected_some', 'healthy', 'carrier']
     profiles_vcf = ['healthy', 'carrier', 'mixed', 'affected_some', 'mixed']
 
-    # Generate 23andMe files (5 files)
+    # Generate 23andMe files (6 files)
     print("\n=== Generating 23andMe files ===")
     files_23andme = [
         "sample_23andme_v3_male_01.txt",
         "sample_23andme_v4_female_01.txt",
         "sample_23andme_v5_male_02.txt",
         "sample_23andme_v4_female_02.txt",
-        "sample_23andme_v5_mixed_01.txt"
+        "sample_23andme_v5_mixed_01.txt",
+        "sample_23andme_v3_carrier_01.txt"
     ]
     for i, filename in enumerate(files_23andme):
         filepath = SAMPLE_DIR / "23andme" / filename
