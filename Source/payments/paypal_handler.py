@@ -8,7 +8,8 @@ subscription creation, retrieval, cancellation, and webhook handling.
 import logging
 from typing import Dict, Optional
 import paypalrestsdk
-from paypalrestsdk import ResourceNotFound, UnauthorizedAccess, BadRequest
+from paypalrestsdk import ResourceNotFound, UnauthorizedAccess
+from paypalrestsdk.exceptions import MissingConfig
 
 
 # Configure logging
@@ -163,7 +164,7 @@ class PayPalHandler:
                 logger.error(error_msg)
                 raise PayPalError(error_msg)
 
-        except (UnauthorizedAccess, BadRequest) as e:
+        except (UnauthorizedAccess, Exception) as e:
             error_msg = f"PayPal API error during subscription creation: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
@@ -214,7 +215,7 @@ class PayPalHandler:
             error_msg = f"Subscription not found: {subscription_id}"
             logger.error(error_msg)
             raise PayPalError(error_msg)
-        except (UnauthorizedAccess, BadRequest) as e:
+        except (UnauthorizedAccess, Exception) as e:
             error_msg = f"PayPal API error retrieving subscription: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
@@ -256,7 +257,7 @@ class PayPalHandler:
             error_msg = f"Subscription not found: {subscription_id}"
             logger.error(error_msg)
             raise PayPalError(error_msg)
-        except (UnauthorizedAccess, BadRequest) as e:
+        except (UnauthorizedAccess, Exception) as e:
             error_msg = f"PayPal API error cancelling subscription: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e

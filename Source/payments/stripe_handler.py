@@ -11,7 +11,7 @@ Handles Stripe integration for subscription management including:
 import logging
 from typing import Dict, Optional, Any
 import stripe
-from stripe.error import (
+from stripe import (
     StripeError,
     CardError,
     InvalidRequestError,
