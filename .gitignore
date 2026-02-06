@@ -1,8 +1,51 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
-.env
+*.pyd
 *.egg-info/
 dist/
 build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment / Secrets
+.env
+.env.local
+.env.production
 .streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+nul
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Ruff
+.ruff_cache/
+
+# Pre-commit
+.pre-commit-cache/
+
+# OMC state (Claude Code plugin)
+.omc/
+
+# Logs
+*.log
