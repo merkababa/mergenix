@@ -1,0 +1,75 @@
+# Tortit - Progress Tracker
+
+> This file is the single source of truth for project status.
+> **Push directly to `main`** whenever you update it.
+> Check this file at the start of every session.
+
+---
+
+## Current Sprint
+
+| Task | Owner | Status | Branch | Notes |
+|------|-------|--------|--------|-------|
+| Project workflow setup (CLAUDE.md, linting, README) | Claude | In Progress | feature/project-workflow-setup | Setting up dev infrastructure |
+
+---
+
+## Milestones
+
+### Phase 1: Data Foundation & Analysis Engine
+- [x] Genetic file parser (23andMe, AncestryDNA, MyHeritage/FTDNA, VCF)
+- [x] Carrier risk analysis engine (Mendelian inheritance)
+- [x] Trait prediction engine (Punnett square)
+- [x] Sample data files for all formats
+- [x] ClinVar and SNPedia integration
+
+### Phase 2: Web Interface
+- [x] Streamlit app with file upload
+- [x] Results dashboard (risk factors, traits, individual reports)
+- [x] Disease Catalog page
+- [x] Dark bioluminescent UI theme
+
+### Phase 3: Authentication & Payments
+- [x] Authentication system (login page, OAuth research)
+- [x] Payment processing (Stripe, PayPal handlers)
+- [x] Subscription/tier configuration
+- [ ] Complete OAuth integration with Google
+- [ ] Payment flow end-to-end testing
+
+### Phase 4: Dev Infrastructure
+- [ ] Project workflow rules (CLAUDE.md)
+- [ ] Linting setup (ruff)
+- [ ] Pre-commit hooks
+- [ ] Comprehensive test coverage
+- [ ] CI/CD pipeline (GitHub Actions)
+
+### Phase 5: Polish & Launch (Upcoming)
+- [ ] Error handling improvements
+- [ ] Performance optimization
+- [ ] User onboarding flow
+- [ ] Production deployment
+
+---
+
+## Completed Work Log
+
+| Date | Who | What | PR/Commit |
+|------|-----|------|-----------|
+| 2025-01-xx | Team | Phase 1 & 2: Data foundation + analysis engine | #3 |
+| 2025-01-xx | Team | Phase 3 & 4: Streamlit web interface + deployment | #4 |
+| 2025-01-xx | Team | Expand diseases, traits, redesign | #5 |
+| 2025-01-xx | Team | Disease Catalog page, sample data fixes | #11 |
+| 2025-02-xx | Maayan | Auth system, payments, expanded carrier panel, tests | 5206193 |
+| 2026-02-06 | Claude | Project workflow setup: CLAUDE.md, PROGRESS.md, linting, README | TBD |
+
+---
+
+## Active Blockers
+_None currently_
+
+---
+
+## Notes
+- kukiz works from two computers (work room + living room) — always pull first!
+- Maayan sometimes shares machines with kukiz — check PROGRESS.md to avoid conflicts
+- Claude pushes PROGRESS.md directly to main; all other changes go through PRs
