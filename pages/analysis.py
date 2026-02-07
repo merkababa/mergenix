@@ -18,7 +18,6 @@ from Source.parser import (
     get_genotype_stats,
     parse_genetic_file,
 )
-from Source.snpedia_client import SNPediaClient
 from Source.tier_config import TierType, get_tier_config, get_upgrade_message
 from Source.trait_prediction import predict_trait
 from Source.ui.components import (
@@ -472,15 +471,28 @@ if both_valid:
                             render_probability_bar("Carrier", risk["carrier"], "#d97706")
                             render_probability_bar("Normal", risk["normal"], "#16a34a")
 
-                        btn_key = f"snpedia_risk_{r['rsid']}"
+                        btn_key = f"clinvar_risk_{r['rsid']}"
                         if st.button(f"\U0001f50d Learn More about {r['rsid']}", key=btn_key):
-                            with st.spinner("Querying SNPedia..."):
-                                client = SNPediaClient()
-                                details = client.get_snp_details(r["rsid"])
-                            if details:
-                                st.info(f"**SNPedia:** {details['summary']}\n\n[View on SNPedia]({details['url']})")
+                            with st.spinner("Querying ClinVar..."):
+                                cv_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else ClinVarClient()
+                                cv_details = cv_client.query_variant(r["rsid"])
+                            if cv_details:
+                                sig = cv_details.get("clinical_significance", "Unknown")
+                                cond = cv_details.get("condition", "Unknown")
+                                gene = cv_details.get("gene", "Unknown")
+                                review = cv_details.get("review_status", "Unknown")
+                                rsid_clean = r["rsid"].lower()
+                                ncbi_url = f"https://www.ncbi.nlm.nih.gov/clinvar/?term={rsid_clean}"
+                                st.info(
+                                    f"**ClinVar** \u2014 `{r['rsid']}`\n\n"
+                                    f"- **Clinical significance:** {sig}\n"
+                                    f"- **Condition:** {cond}\n"
+                                    f"- **Gene:** {gene}\n"
+                                    f"- **Review status:** {review}\n\n"
+                                    f"[View on NCBI ClinVar]({ncbi_url})"
+                                )
                             else:
-                                st.warning("No additional information found on SNPedia.")
+                                st.warning("No ClinVar entry found for this variant.")
                         st.markdown("---")
 
             if carrier_detected:
@@ -494,15 +506,28 @@ if both_valid:
                         render_probability_bar("Carrier", risk["carrier"], "#d97706")
                         render_probability_bar("Normal", risk["normal"], "#16a34a")
 
-                        btn_key = f"snpedia_carrier_{r['rsid']}"
+                        btn_key = f"clinvar_carrier_{r['rsid']}"
                         if st.button(f"\U0001f50d Learn More about {r['rsid']}", key=btn_key):
-                            with st.spinner("Querying SNPedia..."):
-                                client = SNPediaClient()
-                                details = client.get_snp_details(r["rsid"])
-                            if details:
-                                st.info(f"**SNPedia:** {details['summary']}\n\n[View on SNPedia]({details['url']})")
+                            with st.spinner("Querying ClinVar..."):
+                                cv_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else ClinVarClient()
+                                cv_details = cv_client.query_variant(r["rsid"])
+                            if cv_details:
+                                sig = cv_details.get("clinical_significance", "Unknown")
+                                cond = cv_details.get("condition", "Unknown")
+                                gene = cv_details.get("gene", "Unknown")
+                                review = cv_details.get("review_status", "Unknown")
+                                rsid_clean = r["rsid"].lower()
+                                ncbi_url = f"https://www.ncbi.nlm.nih.gov/clinvar/?term={rsid_clean}"
+                                st.info(
+                                    f"**ClinVar** \u2014 `{r['rsid']}`\n\n"
+                                    f"- **Clinical significance:** {sig}\n"
+                                    f"- **Condition:** {cond}\n"
+                                    f"- **Gene:** {gene}\n"
+                                    f"- **Review status:** {review}\n\n"
+                                    f"[View on NCBI ClinVar]({ncbi_url})"
+                                )
                             else:
-                                st.warning("No additional information found.")
+                                st.warning("No ClinVar entry found for this variant.")
 
             if low_risk:
                 with st.expander(f"\u2705 Low Risk ({len(low_risk)} conditions)", expanded=False):

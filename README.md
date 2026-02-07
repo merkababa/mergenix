@@ -8,7 +8,7 @@ A Streamlit web application that analyzes genetic data from two parents to predi
 - **Carrier risk screening** — Screen against a panel of 2,700+ genetic diseases with offspring risk calculation
 - **Trait prediction** — Predict 60+ offspring traits across appearance, health, behavior, and more using Punnett square genetics
 - **Single-parent mode** — Individual carrier screening when only one file is uploaded
-- **ClinVar & SNPedia integration** — Optional enrichment with external genetic databases
+- **ClinVar integration** — Optional enrichment with NCBI's clinical variant database
 - **Privacy-first** — All processing happens locally in your browser session. No data is stored or transmitted.
 
 ## Quick Start
@@ -73,9 +73,7 @@ Mergenix/
 │   ├── carrier_analysis.py # Disease carrier risk engine
 │   ├── trait_prediction.py # Trait prediction engine
 │   ├── clinvar_client.py   # ClinVar API integration
-│   ├── snpedia_client.py   # SNPedia API integration
 │   ├── tier_config.py      # Subscription tier configuration
-│   └── utils.py            # Shared utilities
 ├── data/                   # JSON data files
 │   ├── carrier_panel.json  # Disease panel (2,700+ conditions)
 │   └── trait_snps.json     # Trait SNP database (60+ traits)

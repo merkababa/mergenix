@@ -24,7 +24,7 @@
 - [x] Carrier risk analysis engine (Mendelian inheritance)
 - [x] Trait prediction engine (Punnett square)
 - [x] Sample data files for all formats
-- [x] ClinVar and SNPedia integration
+- [x] ClinVar integration
 
 ### Phase 2: Web Interface
 - [x] Streamlit app with file upload

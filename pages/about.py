@@ -52,7 +52,7 @@ render_section_header("\U0001f4da Data Sources", "Curated from leading genetics 
 
 sources = [
     ("\U0001f3e5", "ClinVar (NCBI)", "NIH's public archive of genomic variation and its relationship to human health. We cross-reference carrier variants against ClinVar's clinical significance annotations."),
-    ("\U0001f4d6", "SNPedia", "A wiki-based bioinformatics resource documenting the effects of human genetic variations. Used for detailed SNP descriptions and population-level insights."),
+    ("\U0001f4d6", "dbSNP (NCBI)", "NCBI's database of single nucleotide polymorphisms — the authoritative public-domain source for rsID identifiers used throughout the app."),
     ("\U0001f9ec", "OMIM", "Online Mendelian Inheritance in Man -- the authoritative compendium of human genes and genetic phenotypes. Disease entries link directly to OMIM for clinical detail."),
     ("\U0001f4ca", "Published Literature", "Trait prediction models are built from peer-reviewed GWAS (Genome-Wide Association Studies) and validated against known genotype-phenotype correlations."),
 ]
