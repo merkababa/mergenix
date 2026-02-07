@@ -1,6 +1,6 @@
 # PRD Option 1: Freemium Model
 
-## "Tortit Free + Premium"
+## "Mergenix Free + Premium"
 
 ---
 
@@ -198,12 +198,12 @@ Strategic upgrade prompts:
 
 ### 5.2 Competitive Positioning
 
-| Competitor | Price | Tortit Comparison |
+| Competitor | Price | Mergenix Comparison |
 |------------|-------|-------------------|
 | Promethease | $12 one-time | Free tier offers more guidance |
 | 23andMe Health | $229 one-time | Premium annual is cheaper, more diseases |
 | Color | $249 one-time | Premium+ includes counselor access |
-| Nebula | $149-999 | Tortit focuses on offspring, not WGS |
+| Nebula | $149-999 | Mergenix focuses on offspring, not WGS |
 
 ### 5.3 Promotional Pricing
 
@@ -223,7 +223,7 @@ Strategic upgrade prompts:
 ```
 Week 1: Discovery
 ├── Google search: "genetic compatibility test"
-├── Land on Tortit homepage
+├── Land on Mergenix homepage
 ├── Upload 23andMe file (free)
 ├── View 25-disease results
 └── Share on social media

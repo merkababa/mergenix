@@ -1,6 +1,6 @@
 # PRD Option 3: One-Time Purchase + Marketplace
 
-## "Tortit Lifetime + Add-Ons"
+## "Mergenix Lifetime + Add-Ons"
 
 ---
 
@@ -19,7 +19,7 @@
 
 ---
 
-## 2. Core Product: Tortit Personal License
+## 2. Core Product: Mergenix Personal License
 
 ### 2.1 Pricing
 
@@ -170,7 +170,7 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 ### 4.1 Standalone Offering
 
-**Tortit Partner Match - $49**
+**Mergenix Partner Match - $49**
 
 A focused product for couples:
 
@@ -231,13 +231,13 @@ Partner A:                     Partner B:
 
 ### 5.2 Price Anchoring
 
-| Competitor | Model | Annual Cost | Tortit Comparison |
+| Competitor | Model | Annual Cost | Mergenix Comparison |
 |------------|-------|-------------|-------------------|
-| 23andMe Health | One-time | $229 | Tortit Personal cheaper, more focused |
-| Nebula WGS | One-time | $249-999 | Tortit cheaper, carrier-focused |
-| Color | One-time | $249 | Tortit comparable, no physician needed |
-| SelfDecode | Subscription | $297/yr | Tortit = 6 months of SelfDecode |
-| Promethease | One-time | $12 | Tortit has guidance, offspring focus |
+| 23andMe Health | One-time | $229 | Mergenix Personal cheaper, more focused |
+| Nebula WGS | One-time | $249-999 | Mergenix cheaper, carrier-focused |
+| Color | One-time | $249 | Mergenix comparable, no physician needed |
+| SelfDecode | Subscription | $297/yr | Mergenix = 6 months of SelfDecode |
+| Promethease | One-time | $12 | Mergenix has guidance, offspring focus |
 
 **Positioning:** More than Promethease, less than clinical. The "Goldilocks" option.
 
@@ -300,7 +300,7 @@ Expansion:
 ```
 Discovery:
 ├── Couple discussing family planning
-├── One partner finds Tortit
+├── One partner finds Mergenix
 ├── Shares Partner Match link
 └── Both create accounts
 
@@ -341,7 +341,7 @@ Activation Limits:
 ### 7.2 Desktop App Architecture
 
 ```
-Tortit Desktop App
+Mergenix Desktop App
 ├── Electron wrapper
 ├── Local SQLite database
 ├── Offline analysis engine
@@ -474,7 +474,7 @@ Allow developers to create add-on packs:
 |-------------|-------------|
 | API Access | Read user genetic data (with permission) |
 | Review Process | Medical accuracy review |
-| Revenue Share | 70% developer, 30% Tortit |
+| Revenue Share | 70% developer, 30% Mergenix |
 | Quality Standards | Peer-reviewed sources required |
 
 **Example third-party packs:**

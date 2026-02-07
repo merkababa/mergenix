@@ -3,7 +3,7 @@ Generated: 2026-02-06
 
 ## Executive Summary
 
-This research analyzed established design patterns and best practices for genetic testing applications, focusing on communicating risk, emotional considerations, and partner-based carrier screening. Key finding: **Red-green color coding (used by 90%+ genetic apps) is problematic for 8% of male users**. Evidence shows pictographic risk visualization improves memory retention by 40% vs. text alone. Progressive disclosure patterns reduce user anxiety by 35% when delivering potentially distressing results. Recommendations prioritize WCAG-compliant color schemes, empathetic microcopy, and gradual information reveal for Tortit's offspring analysis tool.
+This research analyzed established design patterns and best practices for genetic testing applications, focusing on communicating risk, emotional considerations, and partner-based carrier screening. Key finding: **Red-green color coding (used by 90%+ genetic apps) is problematic for 8% of male users**. Evidence shows pictographic risk visualization improves memory retention by 40% vs. text alone. Progressive disclosure patterns reduce user anxiety by 35% when delivering potentially distressing results. Recommendations prioritize WCAG-compliant color schemes, empathetic microcopy, and gradual information reveal for Mergenix's offspring analysis tool.
 
 ## Data Overview
 
@@ -128,7 +128,7 @@ Level 4: Offspring Risk Calc → Probability calculations, Punnett squares
 | Sequential screening | Female first → Partner if carrier | Minimizes unnecessary testing |
 | Tandem reflex | Automatic partner testing trigger | Maximizes compliance, simplifies workflow |
 
-**UX Implications for Tortit:**
+**UX Implications for Mergenix:**
 - Support individual uploads before partner linking
 - Clear status indicators: "Waiting for partner data" vs. "Ready for comparison"
 - Privacy controls: Each partner controls their own data visibility
@@ -152,7 +152,7 @@ Level 4: Offspring Risk Calc → Probability calculations, Punnett squares
 | Engagement sustainability low | Users complete analysis once, not repeatedly |
 | Personalization requirements high | Generic game elements don't align with individual genetic context |
 
-**Recommendation for Tortit**: **Avoid traditional gamification** (points, badges, leaderboards). Instead use:
+**Recommendation for Mergenix**: **Avoid traditional gamification** (points, badges, leaderboards). Instead use:
 - Progress indicators (upload → analysis → results → next steps)
 - Achievement unlocks for completing educational modules
 - Milestone markers (e.g., "Report ready to share with doctor")
@@ -238,7 +238,7 @@ Legend:
 █ = Each square represents 5 potential children
 ```
 
-## Recommendations for Tortit's Offspring Analysis Tool
+## Recommendations for Mergenix's Offspring Analysis Tool
 
 ### 1. **Implement WCAG-Compliant Color Scheme** (Priority: CRITICAL)
 
@@ -372,7 +372,7 @@ const riskColors = {
 ## Limitations
 
 - **Temporal Scope**: Research compiled from 2013-2025 studies; newest UX patterns from 2024-2025 may not have longitudinal effectiveness data
-- **Context Specificity**: Most studies focus on cancer genetics or prenatal screening, not comprehensive carrier screening panels (371 diseases like Tortit)
+- **Context Specificity**: Most studies focus on cancer genetics or prenatal screening, not comprehensive carrier screening panels (371 diseases like Mergenix)
 - **Cultural Factors**: Research primarily from US/European contexts; cultural attitudes toward genetic testing vary globally
 - **Sample Bias**: Patient preference studies often include only those who completed genetic testing, excluding those who declined due to poor UX
 - **Privacy Regulations**: HIPAA/GINA frameworks analyzed; international regulations (GDPR, country-specific laws) not comprehensively covered

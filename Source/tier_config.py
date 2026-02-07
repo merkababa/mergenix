@@ -1,7 +1,8 @@
 """
-Tier configuration system for Tortit genetic analysis app.
+Tier configuration system for Mergenix genetic analysis app.
 
-Defines subscription tiers, limits, and access control for diseases and traits.
+Defines pricing tiers, limits, and access control for diseases and traits.
+All paid tiers are one-time purchases (no recurring subscriptions).
 """
 
 from dataclasses import dataclass
@@ -10,7 +11,7 @@ from typing import List, Dict, Optional
 
 
 class TierType(Enum):
-    """Subscription tier types."""
+    """Pricing tier types."""
     FREE = "free"
     PREMIUM = "premium"
     PRO = "pro"
@@ -18,11 +19,10 @@ class TierType(Enum):
 
 @dataclass
 class TierConfig:
-    """Configuration for a subscription tier."""
+    """Configuration for a pricing tier (one-time purchase)."""
     name: str
     display_name: str
-    price_monthly: float
-    price_yearly: float
+    price: float
     disease_limit: int
     trait_limit: int
     features: List[str]
@@ -33,8 +33,7 @@ TIER_CONFIGS: Dict[TierType, TierConfig] = {
     TierType.FREE: TierConfig(
         name="free",
         display_name="Free",
-        price_monthly=0.0,
-        price_yearly=0.0,
+        price=0.0,
         disease_limit=25,
         trait_limit=10,
         features=[
@@ -47,8 +46,7 @@ TIER_CONFIGS: Dict[TierType, TierConfig] = {
     TierType.PREMIUM: TierConfig(
         name="premium",
         display_name="Premium",
-        price_monthly=19.99,
-        price_yearly=159.99,
+        price=12.90,
         disease_limit=500,
         trait_limit=79,
         features=[
@@ -63,17 +61,17 @@ TIER_CONFIGS: Dict[TierType, TierConfig] = {
     TierType.PRO: TierConfig(
         name="pro",
         display_name="Pro",
-        price_monthly=49.99,
-        price_yearly=399.99,
-        disease_limit=1211,
+        price=29.90,
+        disease_limit=2715,
         trait_limit=79,
         features=[
-            "Analyze all 1211+ genetic diseases",
+            "Analyze all 2700+ genetic diseases",
             "Analyze all 79 genetic traits",
             "Comprehensive carrier reports",
             "Disease prevalence data with OMIM links",
             "Advanced filtering and search",
             "PDF export",
+            "All future disease updates included",
             "Priority support",
             "API access",
         ]
@@ -127,19 +125,10 @@ TOP_10_FREE_TRAITS: List[str] = [
 
 
 # Stripe price IDs (placeholders - replace with actual Stripe price IDs)
-STRIPE_PRICES: Dict[TierType, Dict[str, str]] = {
-    TierType.FREE: {
-        "monthly": None,
-        "yearly": None,
-    },
-    TierType.PREMIUM: {
-        "monthly": "price_premium_monthly_placeholder",
-        "yearly": "price_premium_yearly_placeholder",
-    },
-    TierType.PRO: {
-        "monthly": "price_pro_monthly_placeholder",
-        "yearly": "price_pro_yearly_placeholder",
-    }
+STRIPE_PRICES: Dict[TierType, Optional[str]] = {
+    TierType.FREE: None,
+    TierType.PREMIUM: "price_premium_onetime_placeholder",
+    TierType.PRO: "price_pro_onetime_placeholder",
 }
 
 
@@ -263,15 +252,15 @@ def get_upgrade_message(current_tier: TierType) -> str:
     if current_tier == TierType.FREE:
         return (
             "Upgrade to Premium for access to 500+ diseases and all 79 traits, "
-            "or Pro for the complete 1211+ disease panel."
+            "or Pro for the complete 2700+ disease panel."
         )
     elif current_tier == TierType.PREMIUM:
         return (
-            "Upgrade to Pro for access to the complete 1211+ disease panel, "
-            "priority support, and API access."
+            "Upgrade to Pro for access to the complete 2700+ disease panel, "
+            "priority support, API access, and all future disease updates."
         )
     else:  # PRO
-        return "You have access to all features!"
+        return "You have lifetime access to all features, including future disease updates!"
 
 
 def get_tier_comparison() -> Dict[str, List]:
@@ -283,15 +272,10 @@ def get_tier_comparison() -> Dict[str, List]:
     """
     return {
         "tiers": [TierType.FREE, TierType.PREMIUM, TierType.PRO],
-        "prices_monthly": [
-            TIER_CONFIGS[TierType.FREE].price_monthly,
-            TIER_CONFIGS[TierType.PREMIUM].price_monthly,
-            TIER_CONFIGS[TierType.PRO].price_monthly,
-        ],
-        "prices_yearly": [
-            TIER_CONFIGS[TierType.FREE].price_yearly,
-            TIER_CONFIGS[TierType.PREMIUM].price_yearly,
-            TIER_CONFIGS[TierType.PRO].price_yearly,
+        "prices": [
+            TIER_CONFIGS[TierType.FREE].price,
+            TIER_CONFIGS[TierType.PREMIUM].price,
+            TIER_CONFIGS[TierType.PRO].price,
         ],
         "disease_limits": [
             TIER_CONFIGS[TierType.FREE].disease_limit,
@@ -306,32 +290,28 @@ def get_tier_comparison() -> Dict[str, List]:
     }
 
 
-def get_stripe_price_id(tier: TierType, billing_period: str) -> Optional[str]:
+def get_stripe_price_id(tier: TierType) -> Optional[str]:
     """
-    Get Stripe price ID for a specific tier and billing period.
+    Get Stripe price ID for a specific tier (one-time purchase).
 
     Args:
-        tier: The subscription tier
-        billing_period: Either "monthly" or "yearly"
+        tier: The pricing tier
 
     Returns:
         Stripe price ID string, or None if not available
     """
-    if tier not in STRIPE_PRICES:
-        return None
-
-    return STRIPE_PRICES[tier].get(billing_period)
+    return STRIPE_PRICES.get(tier)
 
 
 # Example usage
 if __name__ == "__main__":
     # Display tier comparison
-    print("Tortit Subscription Tiers\n" + "=" * 50)
+    print("Mergenix Pricing Tiers\n" + "=" * 50)
 
     for tier_type in TierType:
         config = get_tier_config(tier_type)
         print(f"\n{config.display_name} Tier")
-        print(f"  Price: ${config.price_monthly}/mo (${config.price_yearly}/yr)")
+        print(f"  Price: {'Free' if config.price == 0 else f'${config.price:.2f} (one-time)'}")
         print(f"  Diseases: {config.disease_limit}")
         print(f"  Traits: {config.trait_limit}")
         print(f"  Features:")

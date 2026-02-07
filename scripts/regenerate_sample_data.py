@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Regenerate ALL sample data files to include the ACTUAL rsIDs from carrier_panel.json
-and trait_snps.json so the Tortit app can analyze them properly.
+and trait_snps.json so the Mergenix app can analyze them properly.
 """
 
 import json
@@ -14,7 +14,7 @@ from datetime import datetime
 random.seed(42)
 
 # Paths
-BASE_DIR = Path(r"C:\Users\t2tec\Tortit")
+BASE_DIR = Path(r"C:\Users\t2tec\Mergenix")
 DATA_DIR = BASE_DIR / "data"
 SAMPLE_DIR = BASE_DIR / "sample_data"
 
@@ -257,7 +257,7 @@ def generate_vcf_file(filepath, diseases, traits, filler_rsids, profile_type, fi
     lines = [
         "##fileformat=VCFv4.2",
         f"##fileDate={today}",
-        "##source=TortitSampleGenerator",
+        "##source=MergenixSampleGenerator",
         "##reference=GRCh38",
         '##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">',
         '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',

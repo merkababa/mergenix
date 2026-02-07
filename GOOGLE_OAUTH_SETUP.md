@@ -1,6 +1,6 @@
-# Google OAuth Setup Guide for Tortit
+# Google OAuth Setup Guide for Mergenix
 
-This guide walks you through setting up Google OAuth authentication for Tortit.
+This guide walks you through setting up Google OAuth authentication for Mergenix.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Click "Select a project" → "New Project"
-3. Enter project name: "Tortit Genetic Platform"
+3. Enter project name: "Mergenix Genetic Platform"
 4. Click "Create"
 
 ## Step 2: Enable Google+ API
@@ -26,7 +26,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 2. Choose "External" user type
 3. Click "Create"
 4. Fill in required fields:
-   - App name: `Tortit Genetic Platform`
+   - App name: `Mergenix Genetic Platform`
    - User support email: Your email
    - Developer contact: Your email
 5. Click "Save and Continue"
@@ -43,7 +43,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 1. Go to "APIs & Services" → "Credentials"
 2. Click "Create Credentials" → "OAuth client ID"
 3. Application type: "Web application"
-4. Name: "Tortit Web Client"
+4. Name: "Mergenix Web Client"
 5. Authorized redirect URIs:
    - Add: `http://localhost:8501/Login?oauth_callback=google`
    - For production, add: `https://yourdomain.com/Login?oauth_callback=google`
@@ -52,7 +52,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 
 ## Step 5: Configure Environment Variables
 
-1. Create a `.env` file in your Tortit project root (copy from `.env.example`):
+1. Create a `.env` file in your Mergenix project root (copy from `.env.example`):
    ```bash
    cp .env.example .env
    ```
@@ -79,7 +79,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 2. Navigate to the Login page
 3. Click "🔵 Google" button
 4. You should be redirected to Google's login page
-5. After login, you'll be redirected back to Tortit
+5. After login, you'll be redirected back to Mergenix
 6. Your account will be created automatically
 
 ## Troubleshooting
@@ -113,7 +113,7 @@ This guide walks you through setting up Google OAuth authentication for Tortit.
 
 ## User Data Stored
 
-When a user signs in with Google, Tortit stores:
+When a user signs in with Google, Mergenix stores:
 - Email address (verified by Google)
 - Full name
 - Profile picture URL

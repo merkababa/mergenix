@@ -13,7 +13,7 @@ from .validators import validate_email, validate_password
 
 
 class AuthManager:
-    """Manages user authentication and authorization for Tortit."""
+    """Manages user authentication and authorization for Mergenix."""
 
     TIERS = ["free", "premium", "pro"]
     TIER_HIERARCHY = {"free": 0, "premium": 1, "pro": 2}

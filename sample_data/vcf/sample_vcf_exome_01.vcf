@@ -1,6 +1,6 @@
 ##fileformat=VCFv4.2
 ##fileDate=20260205
-##source=TortitSampleGenerator
+##source=MergenixSampleGenerator
 ##reference=GRCh38
 ##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">

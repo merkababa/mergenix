@@ -1,5 +1,5 @@
 """
-Carrier Risk Analysis Engine for Tortit Genetic Offspring Analysis
+Carrier Risk Analysis Engine for Mergenix Genetic Offspring Analysis
 
 This module compares two parents' genotypes against a panel of known recessive
 diseases to identify offspring risk based on Mendelian autosomal recessive inheritance.
@@ -327,7 +327,7 @@ def get_analysis_summary(results: list, tier: TierType) -> dict:
         Dict containing:
         - diseases_analyzed: Number of diseases in the results
         - diseases_available: Max diseases available at this tier
-        - total_diseases: Total diseases in full panel (1211)
+        - total_diseases: Total diseases in full panel (2715)
         - tier: Tier name as string
         - is_limited: True if tier has restrictions (not PRO)
         - upgrade_message: Message encouraging upgrade (None for PRO tier)
@@ -336,7 +336,7 @@ def get_analysis_summary(results: list, tier: TierType) -> dict:
     return {
         "diseases_analyzed": len(results),
         "diseases_available": tier_config.disease_limit,
-        "total_diseases": 1211,
+        "total_diseases": 2715,
         "tier": tier.value,
         "is_limited": tier != TierType.PRO,
         "upgrade_message": get_upgrade_message(tier) if tier != TierType.PRO else None

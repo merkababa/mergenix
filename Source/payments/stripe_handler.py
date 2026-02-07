@@ -1,5 +1,5 @@
 """
-Stripe Payment Handler for Tortit
+Stripe Payment Handler for Mergenix
 
 Handles Stripe integration for subscription management including:
 - Checkout session creation
@@ -54,7 +54,7 @@ class StripeHandlerError(Exception):
 
 class StripeHandler:
     """
-    Handles all Stripe payment operations for Tortit subscriptions.
+    Handles all Stripe payment operations for Mergenix subscriptions.
 
     This class provides methods for creating checkout sessions, managing
     customer portals, tracking subscriptions, and handling webhook events.

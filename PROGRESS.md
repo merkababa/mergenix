@@ -1,4 +1,4 @@
-# Tortit - Progress Tracker
+# Mergenix - Progress Tracker
 
 > This file is the single source of truth for project status.
 > **Push directly to `main`** whenever you update it.

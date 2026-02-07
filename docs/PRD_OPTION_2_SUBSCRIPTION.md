@@ -1,6 +1,6 @@
 # PRD Option 2: Tiered Subscription Model
 
-## "Tortit Essential / Plus / Pro"
+## "Mergenix Essential / Plus / Pro"
 
 ---
 
@@ -323,7 +323,7 @@ Features:
 ```
 Discovery:
 ├── Searches "genetic test before pregnancy"
-├── Finds Tortit via SEO
+├── Finds Mergenix via SEO
 ├── Signs up for 7-day Essential trial
 └── Uploads genetic file
 
@@ -373,7 +373,7 @@ Family Planning:
 ```
 Clinical Referral:
 ├── OB/GYN recommends genetic screening
-├── Patient given Tortit Pro code
+├── Patient given Mergenix Pro code
 ├── 30-day trial begins
 └── Full analysis completed
 
@@ -566,7 +566,7 @@ CREATE TABLE gc_sessions (
 
 ### 11.2 Differentiation
 
-**Only Tortit offers:**
+**Only Mergenix offers:**
 1. Offspring-focused genetic analysis
 2. Partner matching and comparison
 3. "What If" scenario modeling

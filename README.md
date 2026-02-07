@@ -1,11 +1,11 @@
-# Tortit - Genetic Offspring Analysis Platform
+# Mergenix - Genetic Offspring Analysis Platform
 
 A Streamlit web application that analyzes genetic data from two parents to predict offspring traits and assess carrier risk for recessive diseases using Mendelian genetics.
 
 ## Features
 
 - **Multi-format support** — Upload 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF (Whole Genome Sequencing) raw data files
-- **Carrier risk screening** — Screen against a panel of 100+ genetic diseases with offspring risk calculation
+- **Carrier risk screening** — Screen against a panel of 2,700+ genetic diseases with offspring risk calculation
 - **Trait prediction** — Predict 60+ offspring traits across appearance, health, behavior, and more using Punnett square genetics
 - **Single-parent mode** — Individual carrier screening when only one file is uploaded
 - **ClinVar & SNPedia integration** — Optional enrichment with external genetic databases
@@ -21,8 +21,8 @@ A Streamlit web application that analyzes genetic data from two parents to predi
 
 ```bash
 # Clone the repository
-git clone https://github.com/maayango285/Tortit.git
-cd Tortit
+git clone https://github.com/maayango285/Mergenix.git
+cd Mergenix
 
 # Create virtual environment (recommended)
 python -m venv venv
@@ -60,7 +60,7 @@ ruff check Source/ pages/ tests/ app.py
 ## Project Structure
 
 ```
-Tortit/
+Mergenix/
 ├── app.py                  # Main Streamlit application
 ├── pages/                  # Streamlit multipage apps
 │   ├── 1_Login.py          # Authentication page
@@ -77,7 +77,7 @@ Tortit/
 │   ├── tier_config.py      # Subscription tier configuration
 │   └── utils.py            # Shared utilities
 ├── data/                   # JSON data files
-│   ├── carrier_panel.json  # Disease panel (100+ conditions)
+│   ├── carrier_panel.json  # Disease panel (2,700+ conditions)
 │   └── trait_snps.json     # Trait SNP database (60+ traits)
 ├── tests/                  # Test suite
 ├── sample_data/            # Sample genetic data files for testing
@@ -113,7 +113,7 @@ cp .env.example .env
 
 ## Disclaimer
 
-Tortit is an **educational tool** and does not provide medical advice, diagnosis, or treatment. Genetic predictions are probabilistic and based on simplified Mendelian models. Many traits are polygenic and influenced by environment. Always consult a certified genetic counselor or healthcare professional for clinical interpretation.
+Mergenix is an **educational tool** and does not provide medical advice, diagnosis, or treatment. Genetic predictions are probabilistic and based on simplified Mendelian models. Many traits are polygenic and influenced by environment. Always consult a certified genetic counselor or healthcare professional for clinical interpretation.
 
 ## Contributors
 

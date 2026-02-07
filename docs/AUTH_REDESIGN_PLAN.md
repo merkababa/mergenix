@@ -1,8 +1,8 @@
-# Tortit Authentication Redesign Plan
+# Mergenix Authentication Redesign Plan
 
 ## Executive Summary
 
-Based on comprehensive research across 5 areas (competitor analysis, UI patterns, OAuth/social login, HIPAA security, and Streamlit solutions), here is the recommended authentication redesign for Tortit.
+Based on comprehensive research across 5 areas (competitor analysis, UI patterns, OAuth/social login, HIPAA security, and Streamlit solutions), here is the recommended authentication redesign for Mergenix.
 
 ---
 
@@ -10,7 +10,7 @@ Based on comprehensive research across 5 areas (competitor analysis, UI patterns
 
 ### 1. Competitor Analysis (23andMe, Ancestry, Nebula, Color, Invitae)
 
-| Finding | Implication for Tortit |
+| Finding | Implication for Mergenix |
 |---------|----------------------|
 | Passwordless authentication dominates 2026 | Implement magic links |
 | 64% signup drop-off due to complexity | Simplify to 3-4 fields |
@@ -72,9 +72,9 @@ Based on comprehensive research across 5 areas (competitor analysis, UI patterns
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                                                             │
-│                    [Tortit Logo + DNA helix]                │
+│                    [Mergenix Logo + DNA helix]                │
 │                                                             │
-│                  Welcome Back to Tortit                     │
+│                  Welcome Back to Mergenix                     │
 │            Genetic Offspring Analysis Platform              │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐   │
@@ -122,7 +122,7 @@ Based on comprehensive research across 5 areas (competitor analysis, UI patterns
 3. **"or" divider** for email/password option
 4. **Show/hide password toggle** (eye icon)
 5. **Trust signals at bottom** (encryption badge, HIPAA, links)
-6. **Clean, minimal design** matching Tortit's bioluminescent theme
+6. **Clean, minimal design** matching Mergenix's bioluminescent theme
 
 ---
 
@@ -139,7 +139,7 @@ Based on comprehensive research across 5 areas (competitor analysis, UI patterns
 | Add forgot password link/flow | High | 2 |
 | Add trust signals (encryption badge) | Medium | 1 |
 | Mobile responsive design | High | 2 |
-| Dark mode matching Tortit theme | High | 2 |
+| Dark mode matching Mergenix theme | High | 2 |
 
 ### Phase 2: Database Migration (Week 1-2)
 
@@ -244,7 +244,7 @@ CREATE INDEX idx_audit_created ON audit_logs(created_at);
 ## File Structure
 
 ```
-Tortit/
+Mergenix/
 ├── pages/
 │   ├── 1_Login.py           # NEW: Full-page login/register
 │   ├── 2_Disease_Catalog.py
@@ -269,14 +269,14 @@ Tortit/
 
 ```bash
 # Database
-DATABASE_URL=postgresql://user:pass@host:5432/tortit
+DATABASE_URL=postgresql://user:pass@host:5432/mergenix
 
 # Google OAuth
 GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=xxx
 
 # Apple OAuth (optional)
-APPLE_CLIENT_ID=com.tortit.auth
+APPLE_CLIENT_ID=com.mergenix.auth
 APPLE_TEAM_ID=xxx
 APPLE_KEY_ID=xxx
 APPLE_PRIVATE_KEY=xxx
@@ -290,7 +290,7 @@ SMTP_HOST=smtp.sendgrid.net
 SMTP_PORT=587
 SMTP_USER=apikey
 SMTP_PASSWORD=xxx
-FROM_EMAIL=noreply@tortit.com
+FROM_EMAIL=noreply@mergenix.com
 ```
 
 ---

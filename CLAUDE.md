@@ -1,4 +1,4 @@
-# Tortit - Project Rules
+# Mergenix - Project Rules
 
 ## Session Start Protocol
 1. **ALWAYS run `git pull origin main`** at the start of every session
@@ -61,7 +61,7 @@ pytest tests/ -v
 
 ## File Organization
 ```
-Tortit/
+Mergenix/
 ├── app.py                  # Main Streamlit app
 ├── pages/                  # Streamlit multipage apps
 ├── Source/                  # Core Python modules

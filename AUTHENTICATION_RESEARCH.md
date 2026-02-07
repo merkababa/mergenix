@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-For Tortit's genetic health app, we have multiple authentication approaches ranging from simple built-in solutions to enterprise-grade platforms. The choice depends on your priorities: **cost**, **security compliance** (HIPAA for genetic data), **ease of implementation**, and **scalability**.
+For Mergenix's genetic health app, we have multiple authentication approaches ranging from simple built-in solutions to enterprise-grade platforms. The choice depends on your priorities: **cost**, **security compliance** (HIPAA for genetic data), **ease of implementation**, and **scalability**.
 
 **Key Finding**: If handling Protected Health Information (PHI) or genetic data, **Supabase Auth** offers the best balance of cost, HIPAA compliance, and ease of use. For maximum security with enterprise features, **AWS Cognito** is recommended.
 
@@ -465,7 +465,7 @@ with col2:
 
 ## 3. RECOMMENDATION BY USE CASE
 
-### For Tortit (Genetic Health App with PHI)
+### For Mergenix (Genetic Health App with PHI)
 
 **TIER 1 RECOMMENDATION: Supabase Auth (Team Plan)**
 
@@ -519,7 +519,7 @@ Justification:
 
 ---
 
-## 4. IMPLEMENTATION ROADMAP FOR TORTIT
+## 4. IMPLEMENTATION ROADMAP FOR MERGENIX
 
 ### Phase 1: MVP (Week 1-2)
 **Option**: Supabase Auth Free Tier OR Streamlit-Authenticator
@@ -599,7 +599,7 @@ See GitHub repositories:
 
 ---
 
-## 8. NEXT STEPS FOR TORTIT
+## 8. NEXT STEPS FOR MERGENIX
 
 1. **Confirm PHI/HIPAA Requirements**
    - Are you storing genetic data from patients?
@@ -615,7 +615,7 @@ See GitHub repositories:
    - Set up encryption
    - Create compliance documentation
 
-4. **Integrate into Tortit**
+4. **Integrate into Mergenix**
    - Wrap authentication around main app
    - Protect disease catalog page with auth
    - Store user roles in database

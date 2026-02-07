@@ -1,8 +1,8 @@
-# Tortit Product Requirements Document (PRD) Options
+# Mergenix Product Requirements Document (PRD) Options
 
 ## Executive Summary
 
-Tortit is a genetic offspring analysis tool that compares two parents' DNA to predict disease risk and traits in potential children. This document presents three distinct product strategies with different monetization approaches.
+Mergenix is a genetic offspring analysis tool that compares two parents' DNA to predict disease risk and traits in potential children. This document presents three distinct product strategies with different monetization approaches.
 
 **Current State:**
 - 1,211 genetic diseases across 15 categories
@@ -37,7 +37,7 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 ## PRD Option 1: Freemium Model
 
-### "Tortit Free + Premium"
+### "Mergenix Free + Premium"
 
 **Philosophy:** Maximize user acquisition with generous free tier, convert power users to premium.
 
@@ -99,7 +99,7 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 ## PRD Option 2: Tiered Subscription Model
 
-### "Tortit Essential / Plus / Pro"
+### "Mergenix Essential / Plus / Pro"
 
 **Philosophy:** Clear value tiers for different user segments, recurring revenue focus.
 
@@ -190,13 +190,13 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 ## PRD Option 3: One-Time Purchase + Add-Ons
 
-### "Tortit Lifetime + Marketplace"
+### "Mergenix Lifetime + Marketplace"
 
 **Philosophy:** Own your genetic analysis forever, pay for specialized add-ons as needed.
 
 ### Core Product (One-Time Purchase)
 
-#### Tortit Personal License - $149
+#### Mergenix Personal License - $149
 
 - All 1,211 diseases
 - All 79 traits
@@ -403,7 +403,7 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 ## Recommendation
 
-**For Tortit's current stage, we recommend Option 1 (Freemium)** with a path to Option 2.
+**For Mergenix's current stage, we recommend Option 1 (Freemium)** with a path to Option 2.
 
 **Rationale:**
 1. Maximizes user acquisition with zero barrier
@@ -422,7 +422,7 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 ## Appendix: Competitive Feature Matrix
 
-| Feature | 23andMe | Ancestry | Nebula | Color | Invitae | **Tortit** |
+| Feature | 23andMe | Ancestry | Nebula | Color | Invitae | **Mergenix** |
 |---------|---------|----------|--------|-------|---------|------------|
 | Carrier Screening | 44 | No | 30+ | 30 | 280+ | **1,211** |
 | Offspring Prediction | No | No | No | No | No | **Yes** |
@@ -437,4 +437,4 @@ Tortit is a genetic offspring analysis tool that compares two parents' DNA to pr
 
 *Document Version: 1.0*
 *Created: February 2026*
-*Author: Tortit Product Team*
+*Author: Mergenix Product Team*

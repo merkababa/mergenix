@@ -1,6 +1,6 @@
 # Sample Data Files
 
-Synthetic genetic data files for testing Tortit's multi-format parsers and web upload functionality.
+Synthetic genetic data files for testing Mergenix's multi-format parsers and web upload functionality.
 
 ## Data Sources
 
@@ -18,7 +18,7 @@ All data in this directory is **synthetic and generated** for testing purposes. 
 ## Usage
 
 Use these files to:
-- Test the Tortit web app upload functionality
+- Test the Mergenix web app upload functionality
 - Validate parser implementations for each genetic data format
 - Verify data transformation pipelines
 - Develop and test multi-sample analysis features

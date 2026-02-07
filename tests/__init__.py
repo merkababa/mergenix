@@ -1,1 +1,1 @@
-"""Test suite for Tortit genetic analysis project."""
+"""Test suite for Mergenix genetic analysis project."""

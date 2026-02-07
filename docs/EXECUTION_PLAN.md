@@ -1,4 +1,4 @@
-# Tortit Execution Plan
+# Mergenix Execution Plan
 
 ## Executive Summary
 
@@ -219,7 +219,7 @@
 - User pays: $49.99/mo Pro (includes 1 session)
 - Additional sessions: $75 each
 - GC receives: 70% ($52.50)
-- Tortit keeps: 30% ($22.50)
+- Mergenix keeps: 30% ($22.50)
 
 ### Phase 4 Deliverables
 - [ ] GC scheduling system working

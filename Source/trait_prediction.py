@@ -1,5 +1,5 @@
 """
-Trait Prediction Engine for Tortit Genetic Offspring Analysis
+Trait Prediction Engine for Mergenix Genetic Offspring Analysis
 
 This module implements Mendelian genetics (Punnett square) to predict offspring
 trait probabilities from two parents' genotypes using 23andMe SNP data.

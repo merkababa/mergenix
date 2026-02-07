@@ -1,5 +1,5 @@
 """
-PayPal Payment Integration Handler for Tortit
+PayPal Payment Integration Handler for Mergenix
 
 This module provides PayPal subscription management functionality including
 subscription creation, retrieval, cancellation, and webhook handling.
@@ -124,7 +124,7 @@ class PayPalHandler:
             subscription_attrs = {
                 "plan_id": plan_id,
                 "application_context": {
-                    "brand_name": "Tortit Genetics",
+                    "brand_name": "Mergenix Genetics",
                     "locale": "en-US",
                     "shipping_preference": "NO_SHIPPING",
                     "user_action": "SUBSCRIBE_NOW",
@@ -378,8 +378,8 @@ if __name__ == "__main__":
     # result = handler.create_subscription(
     #     tier="premium",
     #     billing_period="monthly",
-    #     return_url="https://tortit.com/subscription/success",
-    #     cancel_url="https://tortit.com/subscription/cancel",
+    #     return_url="https://mergenix.com/subscription/success",
+    #     cancel_url="https://mergenix.com/subscription/cancel",
     #     custom_id="user_12345"
     # )
     # print(f"Approval URL: {result['approval_url']}")

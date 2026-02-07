@@ -1,4 +1,4 @@
-# Tortit PRD Options: Quick Comparison Matrix
+# Mergenix PRD Options: Quick Comparison Matrix
 
 ## At a Glance
 

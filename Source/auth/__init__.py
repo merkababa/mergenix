@@ -1,5 +1,5 @@
 """
-Authentication package for Tortit.
+Authentication package for Mergenix.
 Provides user registration, login, session management, and tier-based access control.
 """
 

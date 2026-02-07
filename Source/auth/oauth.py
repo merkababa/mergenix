@@ -1,5 +1,5 @@
 """
-Google OAuth integration for Tortit authentication.
+Google OAuth integration for Mergenix authentication.
 Handles OAuth flow, token exchange, and user creation/linking.
 """
 
