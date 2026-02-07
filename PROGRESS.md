@@ -11,7 +11,8 @@
 | Task | Owner | Status | Branch | Notes |
 |------|-------|--------|--------|-------|
 | Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
-| Platform redesign + disease expansion (1211→2715) | Claude | PR Open | feature/platform-redesign | PR #14 — rebrand, pricing, CI, card fix, +1504 diseases |
+| Platform redesign + disease expansion (1211→2715) | Claude | Merged | feature/platform-redesign | PR #14 — rebrand, pricing, CI, card fix, +1504 diseases |
+| Bioluminescent Laboratory frontend redesign | Claude | PR Open | feature/frontend-bioluminescent | PR #18 — new fonts (Sora/Lexend/JetBrains Mono), glassmorphism, glow effects, noise texture, deeper palette |
 
 ---
 
