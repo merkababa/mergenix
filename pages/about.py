@@ -35,11 +35,11 @@ methods = [
 for col, icon, title, desc in methods:
     with col:
         st.markdown(
-            f"""<div style="background:linear-gradient(135deg,#111827,#1a2236);border:1px solid rgba(148,163,184,0.12);
+            f"""<div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.12);
                 border-radius:16px;padding:24px;text-align:center;height:100%;animation:cardReveal 0.5s ease-out both;">
                 <div style="font-size:2.2rem;margin-bottom:0.8rem;">{icon}</div>
-                <h4 style="font-family:'Outfit',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 10px;">{title}</h4>
-                <p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.9rem;line-height:1.65;margin:0;">{desc}</p>
+                <h4 style="font-family:'Sora',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 10px;">{title}</h4>
+                <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.9rem;line-height:1.65;margin:0;">{desc}</p>
             </div>""",
             unsafe_allow_html=True,
         )
@@ -58,12 +58,12 @@ sources = [
 ]
 for icon, title, desc in sources:
     st.markdown(
-        f"""<div style="background:linear-gradient(135deg,#111827,#1a2236);border:1px solid rgba(148,163,184,0.1);
+        f"""<div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.1);
             border-radius:14px;padding:20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;">
             <div style="font-size:1.8rem;flex-shrink:0;">{icon}</div>
             <div>
-                <h4 style="font-family:'Outfit',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 6px;">{title}</h4>
-                <p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.9rem;line-height:1.6;margin:0;">{desc}</p>
+                <h4 style="font-family:'Sora',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 6px;">{title}</h4>
+                <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.9rem;line-height:1.6;margin:0;">{desc}</p>
             </div>
         </div>""",
         unsafe_allow_html=True,
@@ -78,7 +78,7 @@ render_section_header("\u26a0\ufe0f Important Limitations")
 st.markdown(
     """
     <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:16px;padding:24px;">
-        <ul style="font-family:'DM Sans',sans-serif;color:#cbd5e1;font-size:0.92rem;line-height:1.8;margin:0;padding-left:20px;">
+        <ul style="font-family:'Lexend',sans-serif;color:#cbd5e1;font-size:0.92rem;line-height:1.8;margin:0;padding-left:20px;">
             <li>Mergenix is an <b style="color:#f59e0b;">educational tool</b> and does not provide medical advice, diagnosis, or treatment.</li>
             <li>Many human traits are <b>polygenic</b> (influenced by multiple genes) and affected by environmental factors. Our single-gene models provide probabilities, not certainties.</li>
             <li>Carrier risk analysis is based on known pathogenic alleles. Novel or rare variants may not be captured.</li>
@@ -106,11 +106,11 @@ formats = [
 for col, name, ext, desc in formats:
     with col:
         st.markdown(
-            f"""<div style="background:linear-gradient(135deg,#111827,#1a2236);border:1px solid rgba(148,163,184,0.12);
+            f"""<div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.12);
                 border-radius:14px;padding:20px;text-align:center;">
-                <h4 style="font-family:'Outfit',sans-serif;font-weight:700;color:#06d6a0;margin:0 0 6px;font-size:1rem;">{name}</h4>
-                <p style="font-family:'DM Sans',sans-serif;color:#22d3ee;font-size:0.85rem;margin:0 0 6px;"><code>{ext}</code></p>
-                <p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.82rem;margin:0;">{desc}</p>
+                <h4 style="font-family:'Sora',sans-serif;font-weight:700;color:#06d6a0;margin:0 0 6px;font-size:1rem;">{name}</h4>
+                <p style="font-family:'Lexend',sans-serif;color:#06b6d4;font-size:0.85rem;margin:0 0 6px;"><code>{ext}</code></p>
+                <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.82rem;margin:0;">{desc}</p>
             </div>""",
             unsafe_allow_html=True,
         )

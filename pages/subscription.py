@@ -44,11 +44,11 @@ render_section_header("\U0001f4b3 Current Plan", "Your active plan and benefits"
 tier_config = get_tier_config(TierType(current_tier))
 st.markdown(
     f"""<div class="current-plan-card">
-        <h3 style="margin:0 0 16px;font-family:'Outfit',sans-serif;font-weight:700;color:#e2e8f0;">
+        <h3 style="margin:0 0 16px;font-family:'Sora',sans-serif;font-weight:700;color:#e2e8f0;">
             {tier_config.display_name} Tier
             <span class="tier-badge {current_tier}">{current_tier.upper()}</span>
         </h3>
-        <p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.95rem;margin-bottom:20px;">
+        <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.95rem;margin-bottom:20px;">
             {get_upgrade_message(TierType(current_tier))}</p>
     </div>""",
     unsafe_allow_html=True,
@@ -59,7 +59,7 @@ feature_cols = st.columns(2)
 for idx, feature in enumerate(tier_config.features):
     with feature_cols[idx % 2]:
         st.markdown(
-            f'<div style="font-family:\'DM Sans\',sans-serif;color:#cbd5e1;margin-bottom:8px;">'
+            f'<div style="font-family:\'Lexend\',sans-serif;color:#cbd5e1;margin-bottom:8px;">'
             f'<span style="color:#06d6a0;margin-right:8px;">\u2713</span>{feature}</div>',
             unsafe_allow_html=True,
         )
@@ -102,7 +102,7 @@ for idx, tier_type in enumerate([TierType.FREE, TierType.PREMIUM, TierType.PRO])
         elif tier_name == "free":
             st.markdown(
                 '<div style="margin-top:16px;"><button disabled style="width:100%;padding:12px;border-radius:10px;'
-                "background:rgba(148,163,184,0.2);color:#94a3b8;border:none;font-family:'Outfit',sans-serif;"
+                "background:rgba(148,163,184,0.2);color:#94a3b8;border:none;font-family:'Sora',sans-serif;"
                 'font-weight:600;">Always Free</button></div>',
                 unsafe_allow_html=True,
             )
@@ -138,7 +138,7 @@ if st.session_state.get("show_payment_selection", False):
                     )
                     st.markdown(
                         f'<a href="{session["url"]}" target="_blank" style="display:inline-block;padding:12px 24px;'
-                        f'background:#06d6a0;color:#0a0e1a;border-radius:10px;font-weight:700;text-decoration:none;margin-top:16px;">'
+                        f'background:#06d6a0;color:#050810;border-radius:10px;font-weight:700;text-decoration:none;margin-top:16px;">'
                         f'Proceed to Stripe Checkout</a>',
                         unsafe_allow_html=True,
                     )

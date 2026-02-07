@@ -183,8 +183,8 @@ filtered = [
 render_section_header("\U0001f4cb Disease Directory", "Browse, search, and sort all screened conditions")
 
 st.markdown(
-    f'<p style="font-family:\'DM Sans\',sans-serif;color:#94a3b8;font-size:0.9rem;margin-bottom:8px;">'
-    f'Showing <b style="color:#06d6a0;">{len(filtered)}</b> of <b style="color:#22d3ee;">{total_count}</b> conditions</p>',
+    f'<p style="font-family:\'Lexend\',sans-serif;color:#94a3b8;font-size:0.9rem;margin-bottom:8px;">'
+    f'Showing <b style="color:#06d6a0;">{len(filtered)}</b> of <b style="color:#06b6d4;">{total_count}</b> conditions</p>',
     unsafe_allow_html=True,
 )
 
@@ -287,7 +287,7 @@ if len(filtered) > 0:
                 omim_html = (
                     f'<a href="{omim_link}" target="_blank" style="display:inline-block;margin-top:12px;'
                     f"padding:5px 14px;background:rgba(6,214,160,0.08);border:1px solid rgba(6,214,160,0.2);"
-                    f"border-radius:8px;font-size:0.8rem;font-family:'DM Sans',sans-serif;color:#06d6a0 !important;"
+                    f"border-radius:8px;font-size:0.8rem;font-family:'Lexend',sans-serif;color:#06d6a0 !important;"
                     f'text-decoration:none;transition:all 0.2s ease;">'
                     f'\U0001f517 View on OMIM</a>'
                 )
@@ -314,22 +314,22 @@ chart_col1, chart_col2 = st.columns(2)
 with chart_col1:
     inh_labels = [format_inheritance(k) for k in inheritance_counts.keys()]
     inh_values = list(inheritance_counts.values())
-    inh_colors = {"Autosomal Recessive": "#06d6a0", "Autosomal Dominant": "#7c3aed", "X-Linked": "#22d3ee"}
+    inh_colors = {"Autosomal Recessive": "#06d6a0", "Autosomal Dominant": "#8b5cf6", "X-Linked": "#06b6d4"}
     colors_mapped = [inh_colors.get(lbl, "#94a3b8") for lbl in inh_labels]
 
     fig_inh = go.Figure(data=[go.Pie(
         labels=inh_labels, values=inh_values, hole=0.55,
-        marker=dict(colors=colors_mapped, line=dict(color="#0a0e1a", width=2)),
-        textfont=dict(family="Outfit", size=13, color="#e2e8f0"),
+        marker=dict(colors=colors_mapped, line=dict(color="#050810", width=2)),
+        textfont=dict(family="Sora", size=13, color="#e2e8f0"),
         hovertemplate="<b>%{label}</b><br>%{value} conditions<br>%{percent}<extra></extra>",
     )])
     fig_inh.update_layout(
-        title=dict(text="Inheritance Distribution", font=dict(family="Outfit", size=18, color="#e2e8f0"), x=0.5),
+        title=dict(text="Inheritance Distribution", font=dict(family="Sora", size=18, color="#e2e8f0"), x=0.5),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        legend=dict(font=dict(family="DM Sans", size=12, color="#94a3b8"), bgcolor="rgba(0,0,0,0)"),
+        legend=dict(font=dict(family="Lexend", size=12, color="#94a3b8"), bgcolor="rgba(0,0,0,0)"),
         margin=dict(l=20, r=20, t=60, b=20), height=380,
         annotations=[dict(text=f"<b>{total_count}</b><br><span style='font-size:11px;color:#94a3b8;'>Total</span>",
-                          x=0.5, y=0.5, font=dict(family="Outfit", size=24, color="#06d6a0"), showarrow=False)],
+                          x=0.5, y=0.5, font=dict(family="Sora", size=24, color="#06d6a0"), showarrow=False)],
     )
     st.plotly_chart(fig_inh, use_container_width=True)
 
@@ -344,17 +344,17 @@ with chart_col2:
 
     fig_sev = go.Figure(data=[go.Bar(
         y=sev_labels, x=sev_values, orientation="h",
-        marker=dict(color=sev_colors, line=dict(color="#0a0e1a", width=1), cornerradius=6),
+        marker=dict(color=sev_colors, line=dict(color="#050810", width=1), cornerradius=6),
         text=[f"  {v}" for v in sev_values], textposition="outside",
-        textfont=dict(family="Outfit", size=14, color="#e2e8f0"),
+        textfont=dict(family="Sora", size=14, color="#e2e8f0"),
         hovertemplate="<b>%{y}</b>: %{x} conditions<extra></extra>",
     )])
     fig_sev.update_layout(
-        title=dict(text="Severity Distribution", font=dict(family="Outfit", size=18, color="#e2e8f0"), x=0.5),
+        title=dict(text="Severity Distribution", font=dict(family="Sora", size=18, color="#e2e8f0"), x=0.5),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="DM Sans", color="#94a3b8"),
-                   title=dict(text="Number of Conditions", font=dict(family="DM Sans", size=12, color="#64748b"))),
-        yaxis=dict(tickfont=dict(family="Outfit", size=14, color="#e2e8f0")),
+        xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="Lexend", color="#94a3b8"),
+                   title=dict(text="Number of Conditions", font=dict(family="Lexend", size=12, color="#64748b"))),
+        yaxis=dict(tickfont=dict(family="Sora", size=14, color="#e2e8f0")),
         margin=dict(l=20, r=60, t=60, b=40), height=380,
     )
     st.plotly_chart(fig_sev, use_container_width=True)
@@ -366,21 +366,21 @@ category_counts = Counter(d.get("category", "Other") for d in diseases)
 sorted_cats = category_counts.most_common()
 cat_labels = [c[0] for c in sorted_cats]
 cat_values = [c[1] for c in sorted_cats]
-color_palette = ["#06d6a0", "#7c3aed", "#22d3ee", "#f59e0b", "#ef4444", "#ec4899", "#8b5cf6", "#14b8a6", "#f97316", "#6366f1", "#84cc16", "#06b6d4"]
+color_palette = ["#06d6a0", "#8b5cf6", "#06b6d4", "#f59e0b", "#ef4444", "#ec4899", "#8b5cf6", "#14b8a6", "#f97316", "#6366f1", "#84cc16", "#06b6d4"]
 cat_colors = [color_palette[i % len(color_palette)] for i in range(len(cat_labels))]
 
 fig_cat = go.Figure(data=[go.Bar(
     y=list(reversed(cat_labels)), x=list(reversed(cat_values)), orientation="h",
-    marker=dict(color=list(reversed(cat_colors)), line=dict(color="#0a0e1a", width=1), cornerradius=6),
+    marker=dict(color=list(reversed(cat_colors)), line=dict(color="#050810", width=1), cornerradius=6),
     text=[f"  {v}" for v in reversed(cat_values)], textposition="outside",
-    textfont=dict(family="Outfit", size=13, color="#e2e8f0"),
+    textfont=dict(family="Sora", size=13, color="#e2e8f0"),
     hovertemplate="<b>%{y}</b>: %{x} conditions<extra></extra>",
 )])
 fig_cat.update_layout(
     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-    xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="DM Sans", color="#94a3b8"),
-               title=dict(text="Number of Conditions", font=dict(family="DM Sans", size=12, color="#64748b"))),
-    yaxis=dict(tickfont=dict(family="DM Sans", size=11, color="#e2e8f0")),
+    xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="Lexend", color="#94a3b8"),
+               title=dict(text="Number of Conditions", font=dict(family="Lexend", size=12, color="#64748b"))),
+    yaxis=dict(tickfont=dict(family="Lexend", size=11, color="#e2e8f0")),
     margin=dict(l=10, r=80, t=20, b=40), height=max(400, len(cat_labels) * 25),
 )
 st.plotly_chart(fig_cat, use_container_width=True)
@@ -398,16 +398,16 @@ top_colors = [{"high": "#ef4444", "moderate": "#f59e0b", "low": "#06d6a0"}.get(d
 
 fig_top = go.Figure(data=[go.Bar(
     y=list(reversed(top_labels)), x=list(reversed(top_display_values)), orientation="h",
-    marker=dict(color=list(reversed(top_colors)), line=dict(color="#0a0e1a", width=1), cornerradius=6),
+    marker=dict(color=list(reversed(top_colors)), line=dict(color="#050810", width=1), cornerradius=6),
     text=[f"  {t}" for t in reversed(top_hover_text)], textposition="outside",
-    textfont=dict(family="DM Sans", size=11, color="#94a3b8"),
+    textfont=dict(family="Lexend", size=11, color="#94a3b8"),
     hovertemplate="<b>%{y}</b><br>Carrier frequency: %{text}<extra></extra>",
 )])
 fig_top.update_layout(
     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-    xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="DM Sans", color="#94a3b8"),
-               title=dict(text="Relative Commonness (higher = more common)", font=dict(family="DM Sans", size=12, color="#64748b"))),
-    yaxis=dict(tickfont=dict(family="DM Sans", size=11, color="#e2e8f0")),
+    xaxis=dict(showgrid=True, gridcolor="rgba(148,163,184,0.06)", tickfont=dict(family="Lexend", color="#94a3b8"),
+               title=dict(text="Relative Commonness (higher = more common)", font=dict(family="Lexend", size=12, color="#64748b"))),
+    yaxis=dict(tickfont=dict(family="Lexend", size=11, color="#e2e8f0")),
     margin=dict(l=10, r=80, t=20, b=40), height=520,
 )
 st.plotly_chart(fig_top, use_container_width=True)

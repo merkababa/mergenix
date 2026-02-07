@@ -38,17 +38,17 @@ col1, col2 = st.columns([2, 1])
 with col1:
     st.markdown(
         f"""
-        <div style="background:linear-gradient(135deg,#111827,#1a2236);border:1px solid rgba(148,163,184,0.12);
+        <div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.12);
             border-radius:16px;padding:24px;">
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
                 <div style="width:60px;height:60px;border-radius:50%;
-                    background:linear-gradient(135deg,#06d6a0,#22d3ee);
+                    background:linear-gradient(135deg,#06d6a0,#06b6d4);
                     display:flex;align-items:center;justify-content:center;
-                    font-family:'Outfit',sans-serif;font-weight:800;font-size:1.5rem;color:#0a0e1a;">
+                    font-family:'Sora',sans-serif;font-weight:800;font-size:1.5rem;color:#050810;">
                     {user.get('name', 'U')[0].upper()}</div>
                 <div>
-                    <h3 style="margin:0;font-family:'Outfit',sans-serif;color:#e2e8f0;font-weight:700;">{user.get('name', 'User')}</h3>
-                    <p style="margin:4px 0 0;font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.9rem;">{user.get('email', '')}</p>
+                    <h3 style="margin:0;font-family:'Sora',sans-serif;color:#e2e8f0;font-weight:700;">{user.get('name', 'User')}</h3>
+                    <p style="margin:4px 0 0;font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.9rem;">{user.get('email', '')}</p>
                 </div>
             </div>
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
@@ -62,13 +62,13 @@ with col2:
     tier_config = get_tier_config(TierType(user.get("tier", "free")))
     st.markdown(
         f"""
-        <div style="background:linear-gradient(135deg,#111827,#1a2236);border:1px solid rgba(148,163,184,0.12);
+        <div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.12);
             border-radius:16px;padding:24px;text-align:center;">
-            <div style="font-family:'Outfit',sans-serif;font-weight:300;font-size:0.75rem;color:#64748b;
+            <div style="font-family:'Sora',sans-serif;font-weight:300;font-size:0.75rem;color:#64748b;
                 text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Current Plan</div>
-            <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.6rem;color:#06d6a0;">
+            <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.6rem;color:#06d6a0;">
                 {tier_config.display_name}</div>
-            <p style="font-family:'DM Sans',sans-serif;color:#94a3b8;font-size:0.82rem;margin:8px 0 0;">
+            <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.82rem;margin:8px 0 0;">
                 {tier_config.disease_limit} diseases &bull; {tier_config.trait_limit} traits</p>
         </div>
         """,
@@ -136,7 +136,7 @@ with col_delete:
     st.markdown(
         """<div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);
             border-radius:12px;padding:16px;text-align:center;">
-            <p style="font-family:'DM Sans',sans-serif;color:#ef4444;font-size:0.85rem;margin:0;">
+            <p style="font-family:'Lexend',sans-serif;color:#ef4444;font-size:0.85rem;margin:0;">
                 Account deletion is permanent and cannot be undone.<br>
                 Contact support@mergenix.com to request account deletion.</p>
         </div>""",

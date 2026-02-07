@@ -222,7 +222,7 @@ with st.expander("\u2699\ufe0f Analysis Settings", expanded=False):
 st.markdown(
     """<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;animation:fadeSlideUp 0.4s ease-out 0.2s both;">
         <span style="font-size:1.5rem;">\U0001f4c2</span>
-        <h3 style="margin:0;color:#e2e8f0;font-family:'Outfit',sans-serif;font-weight:700;">
+        <h3 style="margin:0;color:#e2e8f0;font-family:'Sora',sans-serif;font-weight:700;">
             Upload Genetic Data (23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF)</h3>
     </div>""",
     unsafe_allow_html=True,
@@ -407,8 +407,8 @@ if both_valid:
         st.markdown("---")
         st.markdown(
             """<div style="text-align:center;margin:1rem 0;animation:fadeSlideUp 0.5s ease-out;">
-                <h2 style="margin:0;font-family:'Outfit',sans-serif;
-                    background:linear-gradient(135deg, #06d6a0, #22d3ee);
+                <h2 style="margin:0;font-family:'Sora',sans-serif;
+                    background:linear-gradient(135deg, #06d6a0, #06b6d4);
                     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
                     font-weight:700;">\U0001f4ca Results Dashboard</h2>
             </div>""",
@@ -450,16 +450,16 @@ if both_valid:
                     with st.container():
                         st.markdown(
                             f"""<div style="border-left:4px solid #ef4444;
-                            background:linear-gradient(135deg, #111827 0%, #1a2236 60%, rgba(239,68,68,0.06) 100%);
+                            background:linear-gradient(135deg, #0c1220 0%, #1a2236 60%, rgba(239,68,68,0.06) 100%);
                             padding:20px;border-radius:0 16px 16px 0;margin-bottom:12px;
                             border-top:1px solid rgba(239,68,68,0.15);border-right:1px solid rgba(239,68,68,0.15);
                             border-bottom:1px solid rgba(239,68,68,0.15);box-shadow:0 4px 24px rgba(0,0,0,0.3);
                             animation:fadeSlideUp 0.4s ease-out;">
-                                <h4 style="margin:0 0 6px;color:#f8fafc;font-family:'Outfit',sans-serif;font-weight:700;">
+                                <h4 style="margin:0 0 6px;color:#f8fafc;font-family:'Sora',sans-serif;font-weight:700;">
                                     {r['condition']} &nbsp;{severity_badge(r['severity'])}</h4>
-                                <p style="margin:0 0 8px;color:#94a3b8;font-size:0.9rem;font-family:'DM Sans',sans-serif;">
+                                <p style="margin:0 0 8px;color:#94a3b8;font-size:0.9rem;font-family:'Lexend',sans-serif;">
                                     Gene: <b style="color:#06d6a0;">{r['gene']}</b> | rsID: <code>{r['rsid']}</code></p>
-                                <p style="margin:0 0 8px;color:#cbd5e1;font-family:'DM Sans',sans-serif;">{r['description']}</p>
+                                <p style="margin:0 0 8px;color:#cbd5e1;font-family:'Lexend',sans-serif;">{r['description']}</p>
                             </div>""",
                             unsafe_allow_html=True,
                         )
@@ -558,7 +558,7 @@ if both_valid:
                                 if probs:
                                     st.markdown("**Offspring probabilities:**")
                                     sorted_probs = sorted(probs.items(), key=lambda x: x[1], reverse=True)
-                                    palette = ["#06d6a0", "#22d3ee", "#7c3aed", "#f59e0b"]
+                                    palette = ["#06d6a0", "#06b6d4", "#8b5cf6", "#f59e0b"]
                                     for idx, (pheno, pct) in enumerate(sorted_probs):
                                         color = palette[idx % len(palette)]
                                         if isinstance(pheno, dict):
