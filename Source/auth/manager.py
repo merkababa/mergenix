@@ -5,7 +5,7 @@ Core authentication manager for user operations.
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple, Dict, Optional
+
 import bcrypt
 import streamlit as st
 
@@ -37,15 +37,15 @@ class AuthManager:
             with open(self.users_file, 'w') as f:
                 json.dump({}, f)
 
-    def _load_users(self) -> Dict:
+    def _load_users(self) -> dict:
         """Load users from the JSON file."""
         try:
-            with open(self.users_file, 'r') as f:
+            with open(self.users_file) as f:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return {}
 
-    def _save_users(self, users: Dict) -> None:
+    def _save_users(self, users: dict) -> None:
         """Save users to the JSON file."""
         with open(self.users_file, 'w') as f:
             json.dump(users, f, indent=2)
@@ -63,7 +63,7 @@ class AuthManager:
         except Exception:
             return False
 
-    def register_user(self, email: str, name: str, password: str) -> Tuple[bool, str]:
+    def register_user(self, email: str, name: str, password: str) -> tuple[bool, str]:
         """
         Register a new user.
 
@@ -112,7 +112,7 @@ class AuthManager:
         self._save_users(users)
         return True, "Registration successful"
 
-    def authenticate(self, email: str, password: str) -> Tuple[bool, Optional[Dict]]:
+    def authenticate(self, email: str, password: str) -> tuple[bool, dict | None]:
         """
         Authenticate a user.
 
@@ -154,7 +154,7 @@ class AuthManager:
 
         return False, None
 
-    def get_user(self, email: str) -> Optional[Dict]:
+    def get_user(self, email: str) -> dict | None:
         """
         Get user data by email.
 
@@ -174,7 +174,7 @@ class AuthManager:
 
         return None
 
-    def get_user_by_id(self, user_id: str) -> Optional[Dict]:
+    def get_user_by_id(self, user_id: str) -> dict | None:
         """
         Get user data by user ID (email in this implementation).
 
@@ -295,7 +295,7 @@ class AuthManager:
         self._save_users(users)
         return True
 
-    def change_password(self, email: str, old_password: str, new_password: str) -> Tuple[bool, str]:
+    def change_password(self, email: str, old_password: str, new_password: str) -> tuple[bool, str]:
         """
         Change user's password.
 
@@ -334,8 +334,8 @@ class AuthManager:
         name: str,
         provider: str,
         oauth_id: str,
-        profile_picture: Optional[str] = None
-    ) -> Tuple[bool, str]:
+        profile_picture: str | None = None
+    ) -> tuple[bool, str]:
         """
         Create a new user with OAuth authentication.
 
@@ -396,7 +396,7 @@ class AuthManager:
         email: str,
         provider: str,
         oauth_id: str,
-        profile_picture: Optional[str] = None
+        profile_picture: str | None = None
     ) -> bool:
         """
         Link OAuth account to existing user.
@@ -430,7 +430,7 @@ class AuthManager:
         self._save_users(users)
         return True
 
-    def get_user_by_oauth(self, provider: str, oauth_id: str) -> Optional[Dict]:
+    def get_user_by_oauth(self, provider: str, oauth_id: str) -> dict | None:
         """
         Get user data by OAuth provider and ID.
 

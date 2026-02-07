@@ -5,10 +5,9 @@ This module gracefully handles missing files.
 The curated trait_snps.json is the primary data source.
 """
 
-from typing import Dict, List
 
 
-def load_snpedia_gff(gff_path: str) -> Dict[str, str]:
+def load_snpedia_gff(gff_path: str) -> dict[str, str]:
     """Parse SNPedia GFF file into rsID lookup dict.
 
     GFF format (tab-separated):
@@ -24,7 +23,7 @@ def load_snpedia_gff(gff_path: str) -> Dict[str, str]:
     rsid_lookup = {}
 
     try:
-        with open(gff_path, 'r', encoding='utf-8') as f:
+        with open(gff_path, encoding='utf-8') as f:
             for line in f:
                 # Skip comments and empty lines
                 line = line.strip()
@@ -60,7 +59,7 @@ def load_snpedia_gff(gff_path: str) -> Dict[str, str]:
         return {}
 
 
-def enrich_with_snpedia(results: List[dict], gff_data: Dict[str, str]) -> List[dict]:
+def enrich_with_snpedia(results: list[dict], gff_data: dict[str, str]) -> list[dict]:
     """Add SNPedia annotations to analysis results.
 
     Args:

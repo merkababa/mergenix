@@ -2,11 +2,10 @@
 Session management for user authentication.
 """
 
-import streamlit as st
-from typing import Dict, Optional
-from datetime import datetime, timedelta
 import secrets
+from datetime import datetime, timedelta
 
+import streamlit as st
 
 # Session timeout in minutes
 SESSION_TIMEOUT = 60
@@ -37,7 +36,7 @@ def create_session(user: dict) -> str:
     return token
 
 
-def validate_session(token: str) -> Optional[Dict]:
+def validate_session(token: str) -> dict | None:
     """
     Validate session token and check timeout.
 
@@ -122,7 +121,7 @@ def cleanup_expired_sessions() -> None:
             invalidate_session(token)
 
 
-def get_session_info() -> Optional[Dict]:
+def get_session_info() -> dict | None:
     """
     Get current session information.
 

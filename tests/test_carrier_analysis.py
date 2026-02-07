@@ -1,11 +1,10 @@
 """Tests for carrier risk analysis engine."""
 import os
-import pytest
+
 from Source.carrier_analysis import (
-    load_carrier_panel,
-    determine_carrier_status,
-    calculate_offspring_risk,
     analyze_carrier_risk,
+    calculate_offspring_risk,
+    determine_carrier_status,
 )
 
 PANEL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "carrier_panel.json")

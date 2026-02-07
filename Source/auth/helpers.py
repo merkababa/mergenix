@@ -2,13 +2,13 @@
 Streamlit UI helper functions for authentication.
 """
 
+
 import streamlit as st
-from typing import Optional, Dict
 
 from .manager import AuthManager
 
 
-def render_login_form() -> Optional[Dict]:
+def render_login_form() -> dict | None:
     """
     Render login form in Streamlit.
 
@@ -41,7 +41,7 @@ def render_login_form() -> Optional[Dict]:
     return None
 
 
-def render_register_form() -> Optional[Dict]:
+def render_register_form() -> dict | None:
     """
     Render registration form in Streamlit.
 
@@ -81,7 +81,7 @@ def render_register_form() -> Optional[Dict]:
     return None
 
 
-def get_current_user() -> Optional[Dict]:
+def get_current_user() -> dict | None:
     """
     Get current logged-in user from session state.
 

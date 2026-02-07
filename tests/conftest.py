@@ -1,6 +1,7 @@
 """Shared test fixtures."""
 import json
 import os
+
 import pytest
 
 
@@ -13,5 +14,5 @@ def carrier_panel_path():
 @pytest.fixture
 def carrier_panel(carrier_panel_path):
     """Load and return carrier panel data."""
-    with open(carrier_panel_path, "r") as f:
+    with open(carrier_panel_path) as f:
         return json.load(f)

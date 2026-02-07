@@ -5,11 +5,10 @@ A client for querying variant pathogenicity from NCBI ClinVar database.
 Supports batch queries, rate limiting, caching, and retry logic.
 """
 
-import time
-import requests
-from typing import Dict, List, Optional
-from functools import lru_cache
 import logging
+import time
+
+import requests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,7 +27,7 @@ class ClinVarClient:
     MAX_RETRIES = 3
     RETRY_BACKOFF_BASE = 2
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         """
         Initialize ClinVar client.
 
@@ -41,7 +40,7 @@ class ClinVarClient:
         self.last_request_time = 0.0
 
         # In-memory cache for session
-        self._cache: Dict[str, Optional[Dict]] = {}
+        self._cache: dict[str, dict | None] = {}
 
     def _wait_for_rate_limit(self):
         """Enforce rate limiting between requests."""
@@ -50,7 +49,7 @@ class ClinVarClient:
             time.sleep(self.min_interval - elapsed)
         self.last_request_time = time.time()
 
-    def _make_request(self, url: str, params: Dict) -> Optional[requests.Response]:
+    def _make_request(self, url: str, params: dict) -> requests.Response | None:
         """
         Make HTTP request with retry logic and exponential backoff.
 
@@ -81,7 +80,7 @@ class ClinVarClient:
 
         return None
 
-    def _search_clinvar(self, rsid: str) -> Optional[List[str]]:
+    def _search_clinvar(self, rsid: str) -> list[str] | None:
         """
         Search ClinVar for variant by rsID.
 
@@ -110,7 +109,7 @@ class ClinVarClient:
             logger.error(f"Failed to parse esearch response for {rsid}: {e}")
             return None
 
-    def _fetch_clinvar_summary(self, clinvar_ids: List[str]) -> Optional[Dict]:
+    def _fetch_clinvar_summary(self, clinvar_ids: list[str]) -> dict | None:
         """
         Fetch ClinVar summary information for given IDs.
 
@@ -138,7 +137,7 @@ class ClinVarClient:
             logger.error(f"Failed to parse esummary response: {e}")
             return None
 
-    def _parse_clinvar_result(self, rsid: str, clinvar_data: Dict) -> Optional[Dict]:
+    def _parse_clinvar_result(self, rsid: str, clinvar_data: dict) -> dict | None:
         """
         Parse ClinVar summary data into structured result.
 
@@ -191,7 +190,7 @@ class ClinVarClient:
             logger.error(f"Failed to parse ClinVar data for {rsid}: {e}")
             return None
 
-    def query_variant(self, rsid: str) -> Optional[Dict]:
+    def query_variant(self, rsid: str) -> dict | None:
         """
         Query single variant by rsID.
 
@@ -229,7 +228,7 @@ class ClinVarClient:
         self._cache[rsid] = result
         return result
 
-    def query_variants_batch(self, rsids: List[str]) -> Dict[str, Optional[Dict]]:
+    def query_variants_batch(self, rsids: list[str]) -> dict[str, dict | None]:
         """
         Query multiple variants in batch.
 
@@ -308,7 +307,7 @@ class ClinVarClient:
         self._cache.clear()
         logger.info("Cache cleared")
 
-    def get_cache_stats(self) -> Dict:
+    def get_cache_stats(self) -> dict:
         """Get cache statistics."""
         total_cached = len(self._cache)
         pathogenic_cached = sum(

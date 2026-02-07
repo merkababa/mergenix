@@ -4,9 +4,9 @@ Used for "Learn more" functionality in the UI.
 NOT for batch analysis - use curated trait_snps.json instead.
 """
 
-import re
 import html
-from typing import Optional
+import re
+
 import requests
 
 
@@ -20,7 +20,7 @@ class SNPediaClient:
         """Initialize client with in-memory cache."""
         self._cache = {}
 
-    def get_snp_summary(self, rsid: str) -> Optional[str]:
+    def get_snp_summary(self, rsid: str) -> str | None:
         """Get human-readable summary for a single rsID.
 
         Args:
@@ -32,7 +32,7 @@ class SNPediaClient:
         details = self.get_snp_details(rsid)
         return details["summary"] if details else None
 
-    def get_snp_details(self, rsid: str) -> Optional[dict]:
+    def get_snp_details(self, rsid: str) -> dict | None:
         """Get detailed information for a single rsID.
 
         Args:

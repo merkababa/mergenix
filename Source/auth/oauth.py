@@ -5,9 +5,9 @@ Handles OAuth flow, token exchange, and user creation/linking.
 
 import os
 import secrets
-import requests
-from typing import Dict, Optional, Tuple
 from urllib.parse import urlencode
+
+import requests
 
 
 class GoogleOAuthHandler:
@@ -27,9 +27,9 @@ class GoogleOAuthHandler:
 
     def __init__(
         self,
-        client_id: Optional[str] = None,
-        client_secret: Optional[str] = None,
-        redirect_uri: Optional[str] = None
+        client_id: str | None = None,
+        client_secret: str | None = None,
+        redirect_uri: str | None = None
     ):
         """
         Initialize Google OAuth handler.
@@ -54,7 +54,7 @@ class GoogleOAuthHandler:
         """Generate a cryptographically secure state token for CSRF protection."""
         return secrets.token_urlsafe(32)
 
-    def get_authorization_url(self, state: Optional[str] = None) -> str:
+    def get_authorization_url(self, state: str | None = None) -> str:
         """
         Generate Google OAuth authorization URL.
 
@@ -82,7 +82,7 @@ class GoogleOAuthHandler:
 
         return f"{self.AUTHORIZATION_ENDPOINT}?{urlencode(params)}"
 
-    def exchange_code_for_tokens(self, code: str) -> Dict[str, any]:
+    def exchange_code_for_tokens(self, code: str) -> dict[str, any]:
         """
         Exchange authorization code for access and refresh tokens.
 
@@ -115,13 +115,14 @@ class GoogleOAuthHandler:
         response = requests.post(
             self.TOKEN_ENDPOINT,
             data=data,
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=30,
         )
         response.raise_for_status()
 
         return response.json()
 
-    def get_user_info(self, access_token: str) -> Dict[str, str]:
+    def get_user_info(self, access_token: str) -> dict[str, str]:
         """
         Fetch user information from Google.
 
@@ -142,7 +143,8 @@ class GoogleOAuthHandler:
         """
         response = requests.get(
             self.USERINFO_ENDPOINT,
-            headers={"Authorization": f"Bearer {access_token}"}
+            headers={"Authorization": f"Bearer {access_token}"},
+            timeout=30,
         )
         response.raise_for_status()
 
@@ -158,9 +160,9 @@ class GoogleOAuthHandler:
 
     def authenticate_or_create_user(
         self,
-        user_info: Dict[str, str],
+        user_info: dict[str, str],
         auth_manager
-    ) -> Tuple[bool, Optional[Dict], str]:
+    ) -> tuple[bool, dict | None, str]:
         """
         Authenticate or create user with Google OAuth.
 

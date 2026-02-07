@@ -1,8 +1,9 @@
 """Tests for carrier panel data integrity and schema validation."""
 import json
 import os
-import pytest
 import re
+
+import pytest
 
 PANEL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "carrier_panel.json")
 
@@ -10,7 +11,7 @@ PANEL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "c
 @pytest.fixture
 def panel():
     """Load carrier panel from JSON file."""
-    with open(PANEL_PATH, "r") as f:
+    with open(PANEL_PATH) as f:
         return json.load(f)
 
 

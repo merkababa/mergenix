@@ -6,8 +6,14 @@ diseases to identify offspring risk based on Mendelian autosomal recessive inher
 """
 
 import json
-from typing import Optional
-from Source.tier_config import TierType, get_diseases_for_tier, TOP_25_FREE_DISEASES, get_tier_config, get_upgrade_message
+
+from Source.tier_config import (
+    TOP_25_FREE_DISEASES,
+    TierType,
+    get_diseases_for_tier,
+    get_tier_config,
+    get_upgrade_message,
+)
 
 
 def load_carrier_panel(panel_path: str) -> list[dict]:
@@ -29,7 +35,7 @@ def load_carrier_panel(panel_path: str) -> list[dict]:
         - description: Condition description
         - severity: Severity rating
     """
-    with open(panel_path, 'r') as f:
+    with open(panel_path) as f:
         panel = json.load(f)
     return panel
 
@@ -192,8 +198,8 @@ def analyze_carrier_risk(
     parent_a_snps: dict,
     parent_b_snps: dict,
     panel_path: str,
-    clinvar_client: Optional[object] = None,
-    tier: Optional[TierType] = None
+    clinvar_client: object | None = None,
+    tier: TierType | None = None
 ) -> list[dict]:
     """
     Main carrier risk analysis function.
@@ -254,22 +260,22 @@ def analyze_carrier_risk(
             try:
                 # Cross-check parent A
                 if parent_a_genotype:
-                    clinvar_status_a = clinvar_client.get_carrier_status(
+                    clinvar_client.get_carrier_status(
                         rsid,
                         parent_a_genotype,
                         pathogenic_allele
                     )
-                    # Could use clinvar_status_a to validate or override if needed
+                    # Could use clinvar status to validate or override if needed
 
                 # Cross-check parent B
                 if parent_b_genotype:
-                    clinvar_status_b = clinvar_client.get_carrier_status(
+                    clinvar_client.get_carrier_status(
                         rsid,
                         parent_b_genotype,
                         pathogenic_allele
                     )
-                    # Could use clinvar_status_b to validate or override if needed
-            except Exception:
+                    # Could use clinvar status to validate or override if needed
+            except Exception:  # noqa: S110
                 # ClinVar lookup is optional - continue without it
                 pass
 

@@ -6,10 +6,9 @@ trait probabilities from two parents' genotypes using 23andMe SNP data.
 """
 
 import json
-from typing import Dict, List, Tuple, Optional
 
 
-def load_trait_database(db_path: str) -> List[Dict]:
+def load_trait_database(db_path: str) -> list[dict]:
     """
     Load the trait SNP database from JSON file.
 
@@ -20,11 +19,11 @@ def load_trait_database(db_path: str) -> List[Dict]:
         List of trait entries, each containing rsid, trait, gene, chromosome,
         inheritance, alleles, phenotype_map, description, and confidence
     """
-    with open(db_path, 'r') as f:
+    with open(db_path) as f:
         return json.load(f)
 
 
-def get_parent_alleles(genotype: str) -> Tuple[str, str]:
+def get_parent_alleles(genotype: str) -> tuple[str, str]:
     """
     Split a genotype string into two alleles.
 
@@ -40,9 +39,9 @@ def get_parent_alleles(genotype: str) -> Tuple[str, str]:
 
 
 def punnett_square(
-    parent_a_alleles: Tuple[str, str],
-    parent_b_alleles: Tuple[str, str]
-) -> Dict[str, float]:
+    parent_a_alleles: tuple[str, str],
+    parent_b_alleles: tuple[str, str]
+) -> dict[str, float]:
     """
     Calculate all possible offspring genotypes and their probabilities
     using Punnett square logic.
@@ -72,7 +71,7 @@ def punnett_square(
 def predict_offspring_genotypes(
     parent_a_genotype: str,
     parent_b_genotype: str
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Predict offspring genotype probabilities from parent genotypes.
 
@@ -102,7 +101,7 @@ def normalize_genotype(genotype: str) -> str:
     return ''.join(sorted(genotype))
 
 
-def map_genotype_to_phenotype(genotype: str, phenotype_map: Dict) -> Optional[str]:
+def map_genotype_to_phenotype(genotype: str, phenotype_map: dict) -> str | None:
     """
     Look up phenotype for a given genotype using the phenotype map.
 
@@ -126,10 +125,10 @@ def map_genotype_to_phenotype(genotype: str, phenotype_map: Dict) -> Optional[st
 
 
 def predict_trait(
-    parent_a_snps: Dict[str, str],
-    parent_b_snps: Dict[str, str],
-    trait_entry: Dict
-) -> Optional[Dict]:
+    parent_a_snps: dict[str, str],
+    parent_b_snps: dict[str, str],
+    trait_entry: dict
+) -> dict | None:
     """
     Predict offspring phenotype probabilities for a single trait.
 
@@ -227,10 +226,10 @@ def predict_trait(
 
 
 def analyze_traits(
-    parent_a_snps: Dict[str, str],
-    parent_b_snps: Dict[str, str],
+    parent_a_snps: dict[str, str],
+    parent_b_snps: dict[str, str],
     db_path: str
-) -> List[Dict]:
+) -> list[dict]:
     """
     Analyze all traits in the database for two parents.
 
@@ -253,7 +252,7 @@ def analyze_traits(
     return results
 
 
-def format_prediction_report(predictions: List[Dict]) -> str:
+def format_prediction_report(predictions: list[dict]) -> str:
     """
     Format prediction results into a human-readable report.
 

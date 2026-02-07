@@ -2,10 +2,9 @@
 Validation functions for user authentication inputs.
 """
 
-from typing import Tuple, Dict
 
 
-def validate_email(email: str) -> Tuple[bool, str]:
+def validate_email(email: str) -> tuple[bool, str]:
     """
     Validate email format.
 
@@ -28,7 +27,7 @@ def validate_email(email: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def validate_password(password: str) -> Tuple[bool, str]:
+def validate_password(password: str) -> tuple[bool, str]:
     """
     Validate password strength.
 
@@ -49,7 +48,7 @@ def validate_password(password: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def validate_name(name: str) -> Tuple[bool, str]:
+def validate_name(name: str) -> tuple[bool, str]:
     """
     Validate user name.
 
@@ -64,7 +63,7 @@ def validate_name(name: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def get_password_strength(password: str) -> Dict:
+def get_password_strength(password: str) -> dict:
     """
     Analyze password strength and provide feedback.
 

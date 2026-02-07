@@ -2,10 +2,10 @@
 Unit tests for Google OAuth integration.
 """
 
+from unittest.mock import Mock, patch
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
 from Source.auth.oauth import GoogleOAuthHandler
-from Source.auth import AuthManager
 
 
 class TestGoogleOAuthHandler:

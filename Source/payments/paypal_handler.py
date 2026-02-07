@@ -6,11 +6,9 @@ subscription creation, retrieval, cancellation, and webhook handling.
 """
 
 import logging
-from typing import Dict, Optional
+
 import paypalrestsdk
 from paypalrestsdk import ResourceNotFound, UnauthorizedAccess
-from paypalrestsdk.exceptions import MissingConfig
-
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -72,8 +70,8 @@ class PayPalHandler:
         billing_period: str,
         return_url: str,
         cancel_url: str,
-        custom_id: Optional[str] = None
-    ) -> Dict:
+        custom_id: str | None = None
+    ) -> dict:
         """
         Create a new PayPal subscription.
 
@@ -164,7 +162,7 @@ class PayPalHandler:
                 logger.error(error_msg)
                 raise PayPalError(error_msg)
 
-        except (UnauthorizedAccess, Exception) as e:
+        except UnauthorizedAccess as e:
             error_msg = f"PayPal API error during subscription creation: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
@@ -173,7 +171,7 @@ class PayPalHandler:
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
 
-    def get_subscription_details(self, subscription_id: str) -> Dict:
+    def get_subscription_details(self, subscription_id: str) -> dict:
         """
         Get details of an existing subscription.
 
@@ -211,11 +209,11 @@ class PayPalHandler:
                 "custom_id": getattr(subscription, "custom_id", None)
             }
 
-        except ResourceNotFound:
+        except ResourceNotFound as e:
             error_msg = f"Subscription not found: {subscription_id}"
             logger.error(error_msg)
-            raise PayPalError(error_msg)
-        except (UnauthorizedAccess, Exception) as e:
+            raise PayPalError(error_msg) from e
+        except UnauthorizedAccess as e:
             error_msg = f"PayPal API error retrieving subscription: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
@@ -253,11 +251,11 @@ class PayPalHandler:
                 logger.error(error_msg)
                 return False
 
-        except ResourceNotFound:
+        except ResourceNotFound as e:
             error_msg = f"Subscription not found: {subscription_id}"
             logger.error(error_msg)
-            raise PayPalError(error_msg)
-        except (UnauthorizedAccess, Exception) as e:
+            raise PayPalError(error_msg) from e
+        except UnauthorizedAccess as e:
             error_msg = f"PayPal API error cancelling subscription: {str(e)}"
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
@@ -266,7 +264,7 @@ class PayPalHandler:
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
 
-    def handle_webhook(self, payload: Dict) -> Dict:
+    def handle_webhook(self, payload: dict) -> dict:
         """
         Handle PayPal webhook events.
 

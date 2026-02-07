@@ -1,13 +1,15 @@
-import streamlit as st
 import requests
+import streamlit as st
 from cyvcf2 import VCF
+
 
 # ---- Parse 23andMe file ----
 def parse_23andme_txt(file):
     snps = {}
     for line in file:
         line = line.decode("utf-8")
-        if line.startswith('#'): continue
+        if line.startswith('#'):
+            continue
         parts = line.strip().split('\t')
         if len(parts) >= 4:
             rsid, chrom, pos, genotype = parts
@@ -23,11 +25,11 @@ def query_snpedia(rsid):
         'format': 'json'
     }
     try:
-        r = requests.get(url, params=params)
+        r = requests.get(url, params=params, timeout=30)
         if 'parse' in r.json():
             html = r.json()['parse']['text']['*']
             return html.split('<p>')[1].split('</p>')[0]
-    except:
+    except Exception:  # noqa: S110
         pass
     return None
 

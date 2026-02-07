@@ -7,7 +7,6 @@ All paid tiers are one-time purchases (no recurring subscriptions).
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Optional
 
 
 class TierType(Enum):
@@ -25,11 +24,11 @@ class TierConfig:
     price: float
     disease_limit: int
     trait_limit: int
-    features: List[str]
+    features: list[str]
 
 
 # Tier configurations
-TIER_CONFIGS: Dict[TierType, TierConfig] = {
+TIER_CONFIGS: dict[TierType, TierConfig] = {
     TierType.FREE: TierConfig(
         name="free",
         display_name="Free",
@@ -80,7 +79,7 @@ TIER_CONFIGS: Dict[TierType, TierConfig] = {
 
 
 # Top 25 diseases available in FREE tier
-TOP_25_FREE_DISEASES: List[str] = [
+TOP_25_FREE_DISEASES: list[str] = [
     "Cystic Fibrosis",
     "Sickle Cell Disease",
     "Tay-Sachs Disease",
@@ -110,7 +109,7 @@ TOP_25_FREE_DISEASES: List[str] = [
 
 
 # Top 10 traits available in FREE tier
-TOP_10_FREE_TRAITS: List[str] = [
+TOP_10_FREE_TRAITS: list[str] = [
     "Eye Color",
     "Hair Color",
     "Lactose Intolerance",
@@ -125,7 +124,7 @@ TOP_10_FREE_TRAITS: List[str] = [
 
 
 # Stripe price IDs (placeholders - replace with actual Stripe price IDs)
-STRIPE_PRICES: Dict[TierType, Optional[str]] = {
+STRIPE_PRICES: dict[TierType, str | None] = {
     TierType.FREE: None,
     TierType.PREMIUM: "price_premium_onetime_placeholder",
     TierType.PRO: "price_pro_onetime_placeholder",
@@ -145,7 +144,7 @@ def get_tier_config(tier: TierType) -> TierConfig:
     return TIER_CONFIGS[tier]
 
 
-def get_diseases_for_tier(tier: TierType, all_diseases: List[Dict]) -> List[Dict]:
+def get_diseases_for_tier(tier: TierType, all_diseases: list[dict]) -> list[dict]:
     """
     Get list of diseases available for a specific tier.
 
@@ -169,7 +168,7 @@ def get_diseases_for_tier(tier: TierType, all_diseases: List[Dict]) -> List[Dict
         return all_diseases[:config.disease_limit]
 
 
-def get_traits_for_tier(tier: TierType, all_traits: List[Dict]) -> List[Dict]:
+def get_traits_for_tier(tier: TierType, all_traits: list[dict]) -> list[dict]:
     """
     Get list of traits available for a specific tier.
 
@@ -196,7 +195,7 @@ def get_traits_for_tier(tier: TierType, all_traits: List[Dict]) -> List[Dict]:
 def can_access_disease(
     tier: TierType,
     disease_name: str,
-    all_diseases: List[Dict]
+    all_diseases: list[dict]
 ) -> bool:
     """
     Check if a user can access a specific disease based on their tier.
@@ -219,7 +218,7 @@ def can_access_disease(
 def can_access_trait(
     tier: TierType,
     trait_name: str,
-    all_traits: List[Dict]
+    all_traits: list[dict]
 ) -> bool:
     """
     Check if a user can access a specific trait based on their tier.
@@ -263,7 +262,7 @@ def get_upgrade_message(current_tier: TierType) -> str:
         return "You have lifetime access to all features, including future disease updates!"
 
 
-def get_tier_comparison() -> Dict[str, List]:
+def get_tier_comparison() -> dict[str, list]:
     """
     Get a comparison table of all tiers for display purposes.
 
@@ -290,7 +289,7 @@ def get_tier_comparison() -> Dict[str, List]:
     }
 
 
-def get_stripe_price_id(tier: TierType) -> Optional[str]:
+def get_stripe_price_id(tier: TierType) -> str | None:
     """
     Get Stripe price ID for a specific tier (one-time purchase).
 
@@ -314,7 +313,7 @@ if __name__ == "__main__":
         print(f"  Price: {'Free' if config.price == 0 else f'${config.price:.2f} (one-time)'}")
         print(f"  Diseases: {config.disease_limit}")
         print(f"  Traits: {config.trait_limit}")
-        print(f"  Features:")
+        print("  Features:")
         for feature in config.features:
             print(f"    - {feature}")
 

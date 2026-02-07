@@ -9,16 +9,10 @@ Handles Stripe integration for subscription management including:
 """
 
 import logging
-from typing import Dict, Optional, Any
+from typing import Any
+
 import stripe
-from stripe import (
-    StripeError,
-    CardError,
-    InvalidRequestError,
-    AuthenticationError,
-    APIConnectionError,
-    RateLimitError
-)
+from stripe import APIConnectionError, AuthenticationError, InvalidRequestError, RateLimitError, StripeError
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -80,10 +74,10 @@ class StripeHandler:
             logger.info("Stripe API initialized successfully")
         except AuthenticationError as e:
             logger.error(f"Stripe authentication failed: {str(e)}")
-            raise StripeHandlerError(f"Invalid Stripe API key: {str(e)}")
+            raise StripeHandlerError(f"Invalid Stripe API key: {str(e)}") from e
         except Exception as e:
             logger.error(f"Failed to initialize Stripe: {str(e)}")
-            raise StripeHandlerError(f"Stripe initialization failed: {str(e)}")
+            raise StripeHandlerError(f"Stripe initialization failed: {str(e)}") from e
 
     def create_checkout_session(
         self,
@@ -92,8 +86,8 @@ class StripeHandler:
         billing_period: str,
         success_url: str,
         cancel_url: str,
-        customer_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        customer_id: str | None = None
+    ) -> dict[str, Any]:
         """
         Create a Stripe Checkout session for subscription purchase.
 
@@ -181,16 +175,16 @@ class StripeHandler:
 
         except InvalidRequestError as e:
             logger.error(f"Invalid request for checkout session: {str(e)}")
-            raise StripeHandlerError(f"Invalid checkout session parameters: {str(e)}")
+            raise StripeHandlerError(f"Invalid checkout session parameters: {str(e)}") from e
         except RateLimitError as e:
             logger.error(f"Rate limit exceeded: {str(e)}")
-            raise StripeHandlerError("Too many requests. Please try again later.")
+            raise StripeHandlerError("Too many requests. Please try again later.") from e
         except APIConnectionError as e:
             logger.error(f"Stripe API connection failed: {str(e)}")
-            raise StripeHandlerError("Payment service unavailable. Please try again later.")
+            raise StripeHandlerError("Payment service unavailable. Please try again later.") from e
         except StripeError as e:
             logger.error(f"Stripe error creating checkout session: {str(e)}")
-            raise StripeHandlerError(f"Failed to create checkout session: {str(e)}")
+            raise StripeHandlerError(f"Failed to create checkout session: {str(e)}") from e
 
     def create_customer_portal_session(
         self,
@@ -230,15 +224,15 @@ class StripeHandler:
 
         except InvalidRequestError as e:
             logger.error(f"Invalid customer ID {customer_id}: {str(e)}")
-            raise StripeHandlerError(f"Invalid customer: {str(e)}")
+            raise StripeHandlerError(f"Invalid customer: {str(e)}") from e
         except APIConnectionError as e:
             logger.error(f"Stripe API connection failed: {str(e)}")
-            raise StripeHandlerError("Payment service unavailable. Please try again later.")
+            raise StripeHandlerError("Payment service unavailable. Please try again later.") from e
         except StripeError as e:
             logger.error(f"Stripe error creating portal session: {str(e)}")
-            raise StripeHandlerError(f"Failed to create portal session: {str(e)}")
+            raise StripeHandlerError(f"Failed to create portal session: {str(e)}") from e
 
-    def get_subscription_status(self, subscription_id: str) -> Dict[str, Any]:
+    def get_subscription_status(self, subscription_id: str) -> dict[str, Any]:
         """
         Retrieve current status and details of a subscription.
 
@@ -280,13 +274,13 @@ class StripeHandler:
 
         except InvalidRequestError as e:
             logger.error(f"Invalid subscription ID {subscription_id}: {str(e)}")
-            raise StripeHandlerError(f"Subscription not found: {str(e)}")
+            raise StripeHandlerError(f"Subscription not found: {str(e)}") from e
         except APIConnectionError as e:
             logger.error(f"Stripe API connection failed: {str(e)}")
-            raise StripeHandlerError("Payment service unavailable. Please try again later.")
+            raise StripeHandlerError("Payment service unavailable. Please try again later.") from e
         except StripeError as e:
             logger.error(f"Stripe error retrieving subscription: {str(e)}")
-            raise StripeHandlerError(f"Failed to retrieve subscription: {str(e)}")
+            raise StripeHandlerError(f"Failed to retrieve subscription: {str(e)}") from e
 
     def cancel_subscription(
         self,
@@ -326,20 +320,20 @@ class StripeHandler:
 
         except InvalidRequestError as e:
             logger.error(f"Invalid subscription ID {subscription_id}: {str(e)}")
-            raise StripeHandlerError(f"Subscription not found: {str(e)}")
+            raise StripeHandlerError(f"Subscription not found: {str(e)}") from e
         except APIConnectionError as e:
             logger.error(f"Stripe API connection failed: {str(e)}")
-            raise StripeHandlerError("Payment service unavailable. Please try again later.")
+            raise StripeHandlerError("Payment service unavailable. Please try again later.") from e
         except StripeError as e:
             logger.error(f"Stripe error canceling subscription: {str(e)}")
-            raise StripeHandlerError(f"Failed to cancel subscription: {str(e)}")
+            raise StripeHandlerError(f"Failed to cancel subscription: {str(e)}") from e
 
     def handle_webhook(
         self,
         payload: bytes,
         sig_header: str,
         webhook_secret: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Handle and validate Stripe webhook events.
 
@@ -432,13 +426,13 @@ class StripeHandler:
 
         except stripe.error.SignatureVerificationError as e:
             logger.error(f"Webhook signature verification failed: {str(e)}")
-            raise StripeHandlerError(f"Invalid webhook signature: {str(e)}")
+            raise StripeHandlerError(f"Invalid webhook signature: {str(e)}") from e
         except ValueError as e:
             logger.error(f"Invalid webhook payload: {str(e)}")
-            raise StripeHandlerError(f"Invalid webhook payload: {str(e)}")
+            raise StripeHandlerError(f"Invalid webhook payload: {str(e)}") from e
         except StripeError as e:
             logger.error(f"Stripe error processing webhook: {str(e)}")
-            raise StripeHandlerError(f"Failed to process webhook: {str(e)}")
+            raise StripeHandlerError(f"Failed to process webhook: {str(e)}") from e
         except Exception as e:
             logger.error(f"Unexpected error processing webhook: {str(e)}")
-            raise StripeHandlerError(f"Unexpected webhook error: {str(e)}")
+            raise StripeHandlerError(f"Unexpected webhook error: {str(e)}") from e

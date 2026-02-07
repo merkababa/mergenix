@@ -7,12 +7,12 @@ Handles multiple file format versions and validates data integrity.
 """
 
 import csv
-from typing import Dict, Tuple, Union, BinaryIO
-from io import StringIO, BytesIO
+from io import BytesIO, StringIO
 from pathlib import Path
+from typing import BinaryIO
 
 
-def parse_23andme(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
+def parse_23andme(file: str | Path | BinaryIO) -> dict[str, str]:
     """
     Parse a 23andMe raw data file into a dictionary mapping rsid to genotype.
 
@@ -31,7 +31,7 @@ def parse_23andme(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
         file_path = Path(file)
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
     elif isinstance(file, BytesIO):
         # Streamlit file_uploader returns BytesIO
@@ -52,7 +52,7 @@ def parse_23andme(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
     snps = {}
     lines = content.strip().split('\n')
 
-    for line_num, line in enumerate(lines, 1):
+    for _line_num, line in enumerate(lines, 1):
         line = line.strip()
 
         # Skip empty lines and comments
@@ -91,7 +91,7 @@ def parse_23andme(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
     return snps
 
 
-def validate_23andme_format(file: Union[str, Path, BinaryIO]) -> Tuple[bool, str]:
+def validate_23andme_format(file: str | Path | BinaryIO) -> tuple[bool, str]:
     """
     Validate that a file appears to be a valid 23andMe raw data file.
 
@@ -108,7 +108,7 @@ def validate_23andme_format(file: Union[str, Path, BinaryIO]) -> Tuple[bool, str
             file_path = Path(file)
             if not file_path.exists():
                 return False, f"File not found: {file_path}"
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
         elif isinstance(file, BytesIO):
             content = file.getvalue().decode('utf-8')
@@ -126,7 +126,7 @@ def validate_23andme_format(file: Union[str, Path, BinaryIO]) -> Tuple[bool, str
         return False, f"Error reading file: {str(e)}"
 
 
-def validate_23andme_format_from_content(content: str) -> Tuple[bool, str]:
+def validate_23andme_format_from_content(content: str) -> tuple[bool, str]:
     """
     Validate 23andMe format from file content string.
 
@@ -196,7 +196,7 @@ def validate_23andme_format_from_content(content: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def get_genotype_stats(snps: Dict[str, str]) -> Dict:
+def get_genotype_stats(snps: dict[str, str]) -> dict:
     """
     Calculate statistics about parsed genotype data.
 
@@ -255,7 +255,7 @@ def get_genotype_stats(snps: Dict[str, str]) -> Dict:
     }
 
 
-def parse_23andme_with_metadata(file: Union[str, Path, BinaryIO]) -> Tuple[Dict[str, str], Dict]:
+def parse_23andme_with_metadata(file: str | Path | BinaryIO) -> tuple[dict[str, str], dict]:
     """
     Parse 23andMe file and return both SNP data and metadata.
 
@@ -275,7 +275,7 @@ def parse_23andme_with_metadata(file: Union[str, Path, BinaryIO]) -> Tuple[Dict[
         file_path = Path(file)
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
     elif isinstance(file, BytesIO):
         content = file.getvalue().decode('utf-8')
@@ -339,7 +339,7 @@ def parse_23andme_with_metadata(file: Union[str, Path, BinaryIO]) -> Tuple[Dict[
     return snps, metadata
 
 
-def get_detailed_stats(snps: Dict[str, str], metadata: Dict) -> Dict:
+def get_detailed_stats(snps: dict[str, str], metadata: dict) -> dict:
     """
     Calculate detailed statistics using metadata from parse_23andme_with_metadata.
 
@@ -409,7 +409,7 @@ _ANCESTRY_VALID_CHROMOSOMES = {str(i) for i in range(1, 27)}
 _VALID_ALLELES = {'A', 'C', 'G', 'T'}
 
 
-def _read_file_content(file: Union[str, Path, BinaryIO]) -> str:
+def _read_file_content(file: str | Path | BinaryIO) -> str:
     """Read file content from a path or file-like object, returning a string.
 
     This is a shared helper used by multiple public functions to avoid
@@ -423,7 +423,7 @@ def _read_file_content(file: Union[str, Path, BinaryIO]) -> str:
         file_path = Path(file)
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             return f.read()
     elif isinstance(file, BytesIO):
         content = file.getvalue().decode('utf-8')
@@ -436,7 +436,7 @@ def _read_file_content(file: Union[str, Path, BinaryIO]) -> str:
         return content
 
 
-def detect_format(file: Union[str, Path, BinaryIO]) -> str:
+def detect_format(file: str | Path | BinaryIO) -> str:
     """Auto-detect whether a file is 23andMe, AncestryDNA, or MyHeritage/FTDNA format.
 
     Args:
@@ -555,7 +555,7 @@ def _detect_format_from_content(content: str) -> str:
     return "unknown"
 
 
-def validate_ancestry_format_from_content(content: str) -> Tuple[bool, str]:
+def validate_ancestry_format_from_content(content: str) -> tuple[bool, str]:
     """Validate AncestryDNA format from file content string.
 
     Args:
@@ -637,7 +637,7 @@ def validate_ancestry_format_from_content(content: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def validate_ancestry_format(file: Union[str, Path, BinaryIO]) -> Tuple[bool, str]:
+def validate_ancestry_format(file: str | Path | BinaryIO) -> tuple[bool, str]:
     """Validate that a file appears to be a valid AncestryDNA raw data file.
 
     Args:
@@ -655,7 +655,7 @@ def validate_ancestry_format(file: Union[str, Path, BinaryIO]) -> Tuple[bool, st
         return False, f"Error reading file: {str(e)}"
 
 
-def parse_ancestry(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
+def parse_ancestry(file: str | Path | BinaryIO) -> dict[str, str]:
     """Parse an AncestryDNA raw data file into a dictionary mapping rsid to
     combined genotype.
 
@@ -680,8 +680,8 @@ def parse_ancestry(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
 
 
 def parse_genetic_file(
-    file: Union[str, Path, BinaryIO],
-) -> Tuple[Dict[str, str], str]:
+    file: str | Path | BinaryIO,
+) -> tuple[dict[str, str], str]:
     """Universal parser -- auto-detect format and parse.
 
     Args:
@@ -736,8 +736,8 @@ def parse_genetic_file(
 
 
 def validate_genetic_file(
-    file: Union[str, Path, BinaryIO],
-) -> Tuple[bool, str, str]:
+    file: str | Path | BinaryIO,
+) -> tuple[bool, str, str]:
     """Universal validator -- auto-detect format and validate.
 
     Args:
@@ -789,7 +789,7 @@ _MYHERITAGE_VALID_CHROMOSOMES = (
 )
 
 
-def validate_myheritage_format_from_content(content: str) -> Tuple[bool, str]:
+def validate_myheritage_format_from_content(content: str) -> tuple[bool, str]:
     """Validate MyHeritage/FTDNA CSV format from file content string.
 
     MyHeritage and FamilyTreeDNA both use the same Gene by Gene lab format:
@@ -819,7 +819,7 @@ def validate_myheritage_format_from_content(content: str) -> Tuple[bool, str]:
         # Use csv module to correctly parse quoted/unquoted fields
         try:
             row = next(csv.reader([stripped]))
-        except Exception:
+        except Exception:  # noqa: S112
             continue
 
         if len(row) < 4:
@@ -876,8 +876,8 @@ def validate_myheritage_format_from_content(content: str) -> Tuple[bool, str]:
 
 
 def validate_myheritage_format(
-    file: Union[str, Path, BinaryIO],
-) -> Tuple[bool, str]:
+    file: str | Path | BinaryIO,
+) -> tuple[bool, str]:
     """Validate that a file appears to be a valid MyHeritage/FTDNA raw data file.
 
     Args:
@@ -895,7 +895,7 @@ def validate_myheritage_format(
         return False, f"Error reading file: {str(e)}"
 
 
-def parse_myheritage(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
+def parse_myheritage(file: str | Path | BinaryIO) -> dict[str, str]:
     """Parse a MyHeritage/FTDNA raw data CSV file into a dictionary mapping
     rsid to genotype.
 
@@ -923,9 +923,9 @@ def parse_myheritage(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
 # Internal content-based parsers (avoid re-reading files)
 # ===================================================================
 
-def _parse_ancestry_from_content(content: str) -> Dict[str, str]:
+def _parse_ancestry_from_content(content: str) -> dict[str, str]:
     """Parse AncestryDNA data from a content string."""
-    snps: Dict[str, str] = {}
+    snps: dict[str, str] = {}
     for line in content.strip().split('\n'):
         stripped = line.strip()
         if not stripped or stripped.startswith('#'):
@@ -951,9 +951,9 @@ def _parse_ancestry_from_content(content: str) -> Dict[str, str]:
     return snps
 
 
-def _parse_23andme_from_content(content: str) -> Dict[str, str]:
+def _parse_23andme_from_content(content: str) -> dict[str, str]:
     """Parse 23andMe data from a content string."""
-    snps: Dict[str, str] = {}
+    snps: dict[str, str] = {}
     for line in content.strip().split('\n'):
         stripped = line.strip()
         if not stripped or stripped.startswith('#'):
@@ -977,13 +977,13 @@ def _parse_23andme_from_content(content: str) -> Dict[str, str]:
     return snps
 
 
-def _parse_myheritage_from_content(content: str) -> Dict[str, str]:
+def _parse_myheritage_from_content(content: str) -> dict[str, str]:
     """Parse MyHeritage/FTDNA data from a content string.
 
     Uses Python's ``csv`` module to correctly handle both quoted and unquoted
     CSV fields.  Skips the header row and no-call entries (``'--'``).
     """
-    snps: Dict[str, str] = {}
+    snps: dict[str, str] = {}
     reader = csv.reader(StringIO(content))
 
     for row in reader:
@@ -1020,7 +1020,7 @@ def _parse_myheritage_from_content(content: str) -> Dict[str, str]:
 # ===================================================================
 
 
-def validate_vcf_format_from_content(content: str) -> Tuple[bool, str]:
+def validate_vcf_format_from_content(content: str) -> tuple[bool, str]:
     """Validate VCF format from file content string.
 
     Checks for:
@@ -1105,8 +1105,8 @@ def validate_vcf_format_from_content(content: str) -> Tuple[bool, str]:
 
 
 def validate_vcf_format(
-    file: Union[str, Path, BinaryIO],
-) -> Tuple[bool, str]:
+    file: str | Path | BinaryIO,
+) -> tuple[bool, str]:
     """Validate that a file appears to be a valid VCF file.
 
     Args:
@@ -1124,7 +1124,7 @@ def validate_vcf_format(
         return False, f"Error reading file: {str(e)}"
 
 
-def _parse_vcf_from_content(content: str) -> Dict[str, str]:
+def _parse_vcf_from_content(content: str) -> dict[str, str]:
     """Parse VCF data from a content string.
 
     Extracts SNPs (single nucleotide variants) that have an rsID.
@@ -1143,7 +1143,7 @@ def _parse_vcf_from_content(content: str) -> Dict[str, str]:
     Raises:
         ValueError: If no valid SNP data is found.
     """
-    snps: Dict[str, str] = {}
+    snps: dict[str, str] = {}
     past_header = False
 
     for line in content.strip().split('\n'):
@@ -1237,7 +1237,7 @@ def _parse_vcf_from_content(content: str) -> Dict[str, str]:
     return snps
 
 
-def parse_vcf(file: Union[str, Path, BinaryIO]) -> Dict[str, str]:
+def parse_vcf(file: str | Path | BinaryIO) -> dict[str, str]:
     """Parse a VCF (Variant Call Format) file into a dictionary mapping
     rsid to genotype.
 
