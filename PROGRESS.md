@@ -12,7 +12,8 @@
 |------|-------|--------|--------|-------|
 | Project workflow setup (CLAUDE.md, linting, README) | Claude | Merged | feature/project-workflow-setup | PR #13 — merged |
 | Platform redesign + disease expansion (1211→2715) | Claude | Merged | feature/platform-redesign | PR #14 — rebrand, pricing, CI, card fix, +1504 diseases |
-| Bioluminescent Laboratory frontend redesign | Claude | PR Open | feature/frontend-bioluminescent | PR #18 — new fonts (Sora/Lexend/JetBrains Mono), glassmorphism, glow effects, noise texture, deeper palette |
+| Bioluminescent Laboratory frontend redesign | Claude | Merged | feature/frontend-bioluminescent | PR #18 — new fonts (Sora/Lexend/JetBrains Mono), glassmorphism, glow effects, noise texture, deeper palette |
+| Dark/light mode toggle | Claude | PR Open | feature/dark-light-mode-toggle | PR #19 — Daylight Laboratory light theme, CSS var migration, toggle in navbar |
 
 ---
 
@@ -30,6 +31,7 @@
 - [x] Results dashboard (risk factors, traits, individual reports)
 - [x] Disease Catalog page
 - [x] Dark bioluminescent UI theme
+- [x] Dark/light mode toggle (Daylight Laboratory theme) — PR #19
 
 ### Phase 3: Authentication & Payments
 - [x] Authentication system (login page, OAuth research)
@@ -69,6 +71,8 @@
 | 2026-02-06 | Claude | Add CI workflow (pytest + ruff, Python 3.10/3.12 matrix) | PR #14 |
 | 2026-02-06 | Claude | Fix pricing card rendering (blank line in HTML block) | PR #14 |
 | 2026-02-06 | Claude | Expand carrier panel from 1,211 to 2,715 diseases (+1,504 new entries) | PR #14 |
+| 2026-02-07 | Claude | Bioluminescent Laboratory frontend redesign | PR #18 |
+| 2026-02-07 | Claude | Dark/light mode toggle: Daylight Laboratory theme, ~150 inline colors → CSS vars, toggle in navbar | PR #19 |
 
 ---
 
