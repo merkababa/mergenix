@@ -80,6 +80,13 @@ def render_navbar(current_page=None) -> None:
                 <span class="brand-text">Mergenix</span>
             </div>
             <div class="nav-links">{links_html}</div>
+            <div class="theme-toggle" title="Toggle light/dark mode">
+                <div class="toggle-track">
+                    <span class="icon-moon">🌙</span>
+                    <span class="icon-sun">☀️</span>
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
             <div class="nav-actions">{actions_html}</div>
         </div>
         """,

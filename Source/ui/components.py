@@ -74,11 +74,11 @@ def render_probability_bar(label: str, pct: float, color: str = "#6366f1"):
         <div style="margin-bottom:6px;">
             <div style="display:flex;justify-content:space-between;font-size:0.85rem;
                 font-family:'Lexend',sans-serif;margin-bottom:3px;">
-                <span style="color:#e2e8f0;">{label}</span>
+                <span style="color:var(--text-primary);">{label}</span>
                 <span style="font-weight:700;color:{color};font-family:'Sora',sans-serif;">{pct:.1f}%</span>
             </div>
-            <div style="background:rgba(148,163,184,0.1);border-radius:8px;height:12px;
-                overflow:hidden;border:1px solid rgba(148,163,184,0.08);">
+            <div style="background:var(--border-subtle);border-radius:8px;height:12px;
+                overflow:hidden;border:1px solid var(--glass-border);">
                 <div style="background:linear-gradient(90deg,{color},
                     {color}cc);width:{min(pct, 100):.1f}%;height:100%;border-radius:8px;
                     transition:width 0.6s ease;"></div>
@@ -101,19 +101,19 @@ def render_page_hero(title: str, subtitle: str, badge_text: str = ""):
             f'background:linear-gradient(90deg,transparent,rgba(6,214,160,0.1),transparent);'
             f'background-size:200% 100%;animation:shimmer 3s linear infinite;'
             f'border:1px solid rgba(6,214,160,0.2);border-radius:20px;">'
-            f'<span style="color:#06d6a0;font-family:\'Lexend\',sans-serif;font-size:0.85rem;">'
+            f'<span style="color:var(--accent-teal);font-family:\'Lexend\',sans-serif;font-size:0.85rem;">'
             f'{badge_text}</span></div>'
         )
 
     st.markdown(
         f"""
         <div style="text-align:center;padding:2.5rem 2rem 2rem;
-             background:rgba(12,18,32,0.65);backdrop-filter:blur(16px);
+             background:var(--bg-glass);backdrop-filter:blur(16px);
              -webkit-backdrop-filter:blur(16px);
              border-radius:24px;margin-bottom:1.5rem;position:relative;overflow:hidden;
-             border:1px solid rgba(148,163,184,0.08);
+             border:1px solid var(--glass-border);
              animation:biolumPulse 5s ease-in-out infinite;
-             box-shadow:0 8px 40px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.03);">
+             box-shadow:0 8px 40px var(--shadow-ambient),inset 0 1px 0 var(--inset-highlight);">
             <div style="position:absolute;top:0;left:0;right:0;bottom:0;
                  background:repeating-linear-gradient(0deg, transparent, transparent 50px,
                  rgba(6,214,160,0.012) 50px, rgba(6,214,160,0.012) 51px);
@@ -136,7 +136,7 @@ def render_page_hero(title: str, subtitle: str, badge_text: str = ""):
                 background:linear-gradient(135deg, #06d6a0, #06b6d4, #8b5cf6);
                 background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
                 animation:gradientShift 6s ease infinite;">{title}</h1>
-            <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:1.05rem;margin:8px 0 0;">
+            <p style="font-family:'Lexend',sans-serif;color:var(--text-muted);font-size:1.05rem;margin:8px 0 0;">
                 {subtitle}</p>
             {badge_html}
         </div>

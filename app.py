@@ -28,6 +28,17 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
+# Theme state
+# ---------------------------------------------------------------------------
+if "theme" not in st.session_state:
+    st.session_state["theme"] = "dark"
+
+
+def _toggle_theme():
+    st.session_state["theme"] = "light" if st.session_state["theme"] == "dark" else "dark"
+
+
+# ---------------------------------------------------------------------------
 # Define all pages
 # ---------------------------------------------------------------------------
 pages = [
@@ -49,6 +60,16 @@ pg = st.navigation(pages, position="hidden")
 # ---------------------------------------------------------------------------
 inject_global_css()
 render_navbar(current_page=pg)
+
+# Hidden theme toggle button (triggered by navbar JS)
+st.markdown(
+    '<style>div[data-testid="stButton"]:has(button[kind="secondary"]) '
+    '{ position: absolute; left: -9999px; }</style>',
+    unsafe_allow_html=True,
+)
+if st.button("theme_toggle_btn", key="theme_toggle_hidden", type="secondary"):
+    _toggle_theme()
+    st.rerun()
 
 # ---------------------------------------------------------------------------
 # Run the selected page

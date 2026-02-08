@@ -221,7 +221,7 @@ with st.expander("\u2699\ufe0f Analysis Settings", expanded=False):
 st.markdown(
     """<div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;animation:fadeSlideUp 0.4s ease-out 0.2s both;">
         <span style="font-size:1.5rem;">\U0001f4c2</span>
-        <h3 style="margin:0;color:#e2e8f0;font-family:'Sora',sans-serif;font-weight:700;">
+        <h3 style="margin:0;color:var(--text-primary);font-family:'Sora',sans-serif;font-weight:700;">
             Upload Genetic Data (23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF)</h3>
     </div>""",
     unsafe_allow_html=True,
@@ -454,11 +454,11 @@ if both_valid:
                             border-top:1px solid rgba(239,68,68,0.15);border-right:1px solid rgba(239,68,68,0.15);
                             border-bottom:1px solid rgba(239,68,68,0.15);box-shadow:0 4px 24px rgba(0,0,0,0.3);
                             animation:fadeSlideUp 0.4s ease-out;">
-                                <h4 style="margin:0 0 6px;color:#f8fafc;font-family:'Sora',sans-serif;font-weight:700;">
+                                <h4 style="margin:0 0 6px;color:var(--text-heading);font-family:'Sora',sans-serif;font-weight:700;">
                                     {r['condition']} &nbsp;{severity_badge(r['severity'])}</h4>
-                                <p style="margin:0 0 8px;color:#94a3b8;font-size:0.9rem;font-family:'Lexend',sans-serif;">
-                                    Gene: <b style="color:#06d6a0;">{r['gene']}</b> | rsID: <code>{r['rsid']}</code></p>
-                                <p style="margin:0 0 8px;color:#cbd5e1;font-family:'Lexend',sans-serif;">{r['description']}</p>
+                                <p style="margin:0 0 8px;color:var(--text-muted);font-size:0.9rem;font-family:'Lexend',sans-serif;">
+                                    Gene: <b style="color:var(--accent-teal);">{r['gene']}</b> | rsID: <code>{r['rsid']}</code></p>
+                                <p style="margin:0 0 8px;color:var(--text-body);font-family:'Lexend',sans-serif;">{r['description']}</p>
                             </div>""",
                             unsafe_allow_html=True,
                         )
@@ -569,7 +569,7 @@ if both_valid:
                         conf_color = CONFIDENCE_COLORS.get(confidence, "#6b7280")
                         conf_dot = f'<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{conf_color};margin-right:4px;"></span>'
                         with st.expander(f"{t['trait']}  --  {t['gene']}  (confidence: {confidence})", expanded=True):
-                            st.markdown(f"<p style='color:#64748b;font-size:0.88rem;'>{t.get('description', '')}</p>", unsafe_allow_html=True)
+                            st.markdown(f"<p style='color:var(--text-dim);font-size:0.88rem;'>{t.get('description', '')}</p>", unsafe_allow_html=True)
                             st.markdown(
                                 f"**Chromosome:** {t.get('chromosome', '?')} | **Inheritance:** {t.get('inheritance', '?')} | "
                                 f"**Confidence:** {conf_dot}{confidence.title()} | **rsID:** `{t['rsid']}`",

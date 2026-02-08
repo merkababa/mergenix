@@ -61,9 +61,9 @@ st.markdown(
             background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
             animation:gradientShift 6s ease infinite;line-height:1.15;">
             Unlock Your Offspring's<br>Genetic Blueprint</h1>
-        <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:1.15rem;margin:16px auto 0;max-width:600px;">
-            Screen <b style="color:#06d6a0;">{NUM_DISEASES} genetic diseases</b> and predict
-            <b style="color:#06b6d4;">{NUM_TRAITS} offspring traits</b> using Mendelian genetics.
+        <p style="font-family:'Lexend',sans-serif;color:var(--text-muted);font-size:1.15rem;margin:16px auto 0;max-width:600px;">
+            Screen <b style="color:var(--accent-teal);">{NUM_DISEASES} genetic diseases</b> and predict
+            <b style="color:var(--accent-cyan);">{NUM_TRAITS} offspring traits</b> using Mendelian genetics.
             Upload raw data from 23andMe, AncestryDNA, MyHeritage, or VCF files.</p>
         <div style="display:flex;justify-content:center;gap:12px;margin-top:2rem;flex-wrap:wrap;">
             <span style="display:inline-block;"></span>
@@ -105,8 +105,8 @@ for col, num, icon, title, desc in steps:
             <div class="how-it-works-card">
                 <div class="step-number">{num}</div>
                 <div style="font-size:2rem;margin-bottom:0.5rem;">{icon}</div>
-                <h3 style="font-family:'Sora',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 8px;font-size:1.15rem;">{title}</h3>
-                <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.9rem;line-height:1.6;margin:0;">{desc}</p>
+                <h3 style="font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);margin:0 0 8px;font-size:1.15rem;">{title}</h3>
+                <p style="font-family:'Lexend',sans-serif;color:var(--text-muted);font-size:0.9rem;line-height:1.6;margin:0;">{desc}</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -179,11 +179,11 @@ for col, icon, title, desc in trust_items:
     with col:
         st.markdown(
             f"""
-            <div style="background:linear-gradient(135deg,#0c1220,#1a2236);border:1px solid rgba(148,163,184,0.12);
+            <div style="background:var(--card-bg);border:1px solid var(--card-border);
                 border-radius:16px;padding:24px;text-align:center;animation:cardReveal 0.5s ease-out both;">
                 <div style="font-size:2rem;margin-bottom:0.8rem;">{icon}</div>
-                <h4 style="font-family:'Sora',sans-serif;font-weight:700;color:#e2e8f0;margin:0 0 8px;">{title}</h4>
-                <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:0.88rem;line-height:1.6;margin:0;">{desc}</p>
+                <h4 style="font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);margin:0 0 8px;">{title}</h4>
+                <p style="font-family:'Lexend',sans-serif;color:var(--text-muted);font-size:0.88rem;line-height:1.6;margin:0;">{desc}</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -211,7 +211,7 @@ faqs = [
 ]
 for q, a in faqs:
     with st.expander(q):
-        st.markdown(f'<p style="color:#94a3b8;font-family:\'Lexend\',sans-serif;line-height:1.7;">{a}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p style="color:var(--text-muted);font-family:\'Lexend\',sans-serif;line-height:1.7;">{a}</p>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # Final CTA
@@ -220,13 +220,13 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center;padding:3rem 2rem;margin:1rem 0;
-         background:linear-gradient(135deg, #080c18 0%, #0c1220 40%, #0f0a24 100%);
-         border-radius:24px;border:1px solid rgba(148,163,184,0.12);">
+         background:var(--cta-gradient);
+         border-radius:24px;border:1px solid var(--card-border);">
         <h2 style="margin:0 0 12px;font-family:'Sora',sans-serif;font-weight:800;font-size:2rem;
             background:linear-gradient(135deg, #06d6a0, #06b6d4);
             -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
             Ready to Discover Your Offspring's Genetic Blueprint?</h2>
-        <p style="font-family:'Lexend',sans-serif;color:#94a3b8;font-size:1rem;margin:0 0 1.5rem;">
+        <p style="font-family:'Lexend',sans-serif;color:var(--text-muted);font-size:1rem;margin:0 0 1.5rem;">
             Join thousands of parents making informed decisions with genetic insights.</p>
     </div>
     """,
