@@ -4,12 +4,80 @@ Genetic Data Parser (23andMe, AncestryDNA, MyHeritage/FTDNA & VCF)
 This module provides robust parsing functionality for 23andMe, AncestryDNA,
 MyHeritage/FamilyTreeDNA, and VCF (Variant Call Format) genetic data files.
 Handles multiple file format versions and validates data integrity.
+
+Supports streaming (line-by-line) parsing to avoid loading entire files
+into memory, and enforces file size / SNP count limits.
 """
 
 import csv
 from io import BytesIO, StringIO
 from pathlib import Path
 from typing import BinaryIO
+
+# ---------------------------------------------------------------------------
+# Limits
+# ---------------------------------------------------------------------------
+MAX_FILE_SIZE_BYTES = 200 * 1024 * 1024  # 200 MB
+MAX_SNP_COUNT = 10_000_000
+
+
+# ---------------------------------------------------------------------------
+# Streaming helpers
+# ---------------------------------------------------------------------------
+
+def _line_iterator(file):
+    """Yield lines from *file* without loading the entire content into memory.
+
+    Accepts:
+    - ``str`` / ``Path`` — opens the file from disk.
+    - ``BytesIO`` — wraps in a ``TextIOWrapper`` (seeks to 0 first).
+    - Any other file-like object (text or binary).
+    """
+    if isinstance(file, (str, Path)):
+        with open(Path(file), encoding='utf-8') as handle:
+            for line in handle:
+                yield line.rstrip('\n\r')
+    elif isinstance(file, BytesIO):
+        file.seek(0)
+        for raw_line in file:
+            yield raw_line.decode('utf-8').rstrip('\n\r')
+    else:
+        for line in file:
+            line_str = line if isinstance(line, str) else line.decode('utf-8')
+            yield line_str.rstrip('\n\r')
+
+
+def _read_header_lines(file, max_lines=50):
+    """Read the first *max_lines* lines for format detection.
+
+    After reading, the file position is reset (if seekable) so that
+    subsequent parsing can iterate from the beginning.
+    """
+    lines = []
+    for i, line in enumerate(_line_iterator(file)):
+        lines.append(line)
+        if i >= max_lines - 1:
+            break
+    # Reset file position for the subsequent full parse
+    if hasattr(file, 'seek'):
+        file.seek(0)
+    return lines
+
+
+def _validate_file_size(file):
+    """Raise ``ValueError`` if *file* exceeds ``MAX_FILE_SIZE_BYTES``."""
+    if isinstance(file, (str, Path)):
+        size = Path(file).stat().st_size
+    elif isinstance(file, BytesIO):
+        size = len(file.getvalue())
+    else:
+        return  # Can't reliably check size for generic file objects
+
+    if size > MAX_FILE_SIZE_BYTES:
+        raise ValueError(
+            f"File too large ({size / 1024 / 1024:.1f} MB). "
+            f"Maximum: {MAX_FILE_SIZE_BYTES / 1024 / 1024:.0f} MB"
+        )
 
 
 def parse_23andme(file: str | Path | BinaryIO) -> dict[str, str]:
@@ -412,8 +480,10 @@ _VALID_ALLELES = {'A', 'C', 'G', 'T'}
 def _read_file_content(file: str | Path | BinaryIO) -> str:
     """Read file content from a path or file-like object, returning a string.
 
-    This is a shared helper used by multiple public functions to avoid
-    duplicating the read-and-decode logic.
+    .. deprecated::
+        Use ``_line_iterator`` for streaming access instead. This function
+        loads the entire file into memory and is kept only for backward
+        compatibility with existing validators that operate on content strings.
 
     Raises:
         FileNotFoundError: If a path is given and does not exist.
@@ -555,6 +625,17 @@ def _detect_format_from_content(content: str) -> str:
     return "unknown"
 
 
+def _detect_format_from_lines(lines: list[str]) -> str:
+    """Detect genetic file format from a list of header lines.
+
+    This is the streaming-friendly counterpart of ``_detect_format_from_content``.
+    It accepts the pre-read header lines (typically from ``_read_header_lines``)
+    and delegates to the existing content-based detector.
+    """
+    content = '\n'.join(lines)
+    return _detect_format_from_content(content)
+
+
 def validate_ancestry_format_from_content(content: str) -> tuple[bool, str]:
     """Validate AncestryDNA format from file content string.
 
@@ -684,6 +765,10 @@ def parse_genetic_file(
 ) -> tuple[dict[str, str], str]:
     """Universal parser -- auto-detect format and parse.
 
+    Uses a two-phase streaming approach:
+    1. Read only the first 50 header lines to detect the format.
+    2. Stream-parse the full file line-by-line (memory-efficient).
+
     Args:
         file: File path (str/Path) or file-like object.
 
@@ -693,46 +778,36 @@ def parse_genetic_file(
         or ``"unknown"``.
 
     Raises:
-        ValueError: If format is unknown or parsing fails.
+        ValueError: If format is unknown, parsing fails, or file
+            exceeds size / SNP count limits.
     """
-    # Read content once, then operate on the string to avoid seeking issues.
-    content = _read_file_content(file)
+    # Validate file size before anything else
+    _validate_file_size(file)
 
-    fmt = _detect_format_from_content(content)
+    # Phase 1: Detect format from header lines only
+    header_lines = _read_header_lines(file, max_lines=50)
+    detected_format = _detect_format_from_lines(header_lines)
 
-    if fmt == "vcf":
-        is_valid, err = validate_vcf_format_from_content(content)
-        if not is_valid:
-            raise ValueError(f"Invalid VCF file: {err}")
-        snps = _parse_vcf_from_content(content)
-        return snps, "vcf"
+    # Phase 2: Stream-parse the full file
+    if hasattr(file, 'seek'):
+        file.seek(0)
 
-    if fmt == "ancestry":
-        is_valid, err = validate_ancestry_format_from_content(content)
-        if not is_valid:
-            raise ValueError(f"Invalid AncestryDNA file: {err}")
-        # Parse from content directly (avoid re-reading the file)
-        snps = _parse_ancestry_from_content(content)
-        return snps, "ancestry"
+    parser_map = {
+        "23andme": _parse_23andme_streaming,
+        "ancestry": _parse_ancestry_streaming,
+        "myheritage": _parse_myheritage_streaming,
+        "vcf": _parse_vcf_streaming,
+    }
 
-    if fmt == "myheritage":
-        is_valid, err = validate_myheritage_format_from_content(content)
-        if not is_valid:
-            raise ValueError(f"Invalid MyHeritage/FTDNA file: {err}")
-        snps = _parse_myheritage_from_content(content)
-        return snps, "myheritage"
+    parser = parser_map.get(detected_format)
+    if not parser:
+        raise ValueError(
+            "Unrecognized genetic data format. "
+            "Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, "
+            "or VCF raw data file."
+        )
 
-    if fmt == "23andme":
-        is_valid, err = validate_23andme_format_from_content(content)
-        if not is_valid:
-            raise ValueError(f"Invalid 23andMe file: {err}")
-        snps = _parse_23andme_from_content(content)
-        return snps, "23andme"
-
-    raise ValueError(
-        "Unrecognized genetic data format. "
-        "Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file."
-    )
+    return parser(file), detected_format
 
 
 def validate_genetic_file(
@@ -1260,3 +1335,221 @@ def parse_vcf(file: str | Path | BinaryIO) -> dict[str, str]:
     if not is_valid:
         raise ValueError(f"Invalid VCF file format: {error_msg}")
     return _parse_vcf_from_content(content)
+
+
+# ===================================================================
+# Streaming parsers (line-by-line, memory-efficient)
+# ===================================================================
+
+def _parse_23andme_streaming(file) -> dict[str, str]:
+    """Stream-parse a 23andMe file.
+
+    Equivalent to ``_parse_23andme_from_content`` but reads the file
+    line-by-line via ``_line_iterator`` so that the entire content
+    never needs to reside in memory at once.
+    """
+    snps: dict[str, str] = {}
+    for line in _line_iterator(file):
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+        parts = stripped.split('\t')
+        if len(parts) < 4:
+            continue
+        rsid = parts[0].strip()
+        genotype = parts[3].strip()
+        if genotype == '--' or genotype == '':
+            continue
+        if not (rsid.startswith('rs') or rsid.startswith('i')):
+            if rsid.lower() in ('rsid', 'id', 'snp'):
+                continue
+        snps[rsid] = genotype
+        if len(snps) > MAX_SNP_COUNT:
+            raise ValueError(
+                f"SNP count exceeds maximum ({MAX_SNP_COUNT:,}). "
+                "File may be corrupted or not a genetic data file."
+            )
+
+    if len(snps) == 0:
+        raise ValueError(
+            "No valid SNP data found in 23andMe file."
+        )
+    return snps
+
+
+def _parse_ancestry_streaming(file) -> dict[str, str]:
+    """Stream-parse an AncestryDNA file.
+
+    Equivalent to ``_parse_ancestry_from_content`` but reads the file
+    line-by-line via ``_line_iterator``.
+    """
+    snps: dict[str, str] = {}
+    for line in _line_iterator(file):
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+        parts = stripped.split('\t')
+        if parts[0].lower() in ('rsid', 'id', 'snp'):
+            continue
+        if len(parts) < 5:
+            continue
+        rsid = parts[0].strip()
+        allele1 = parts[3].strip().upper()
+        allele2 = parts[4].strip().upper()
+        if allele1 == '0' or allele2 == '0':
+            continue
+        if not (rsid.startswith('rs') or rsid.startswith('i')):
+            continue
+        snps[rsid] = allele1 + allele2
+        if len(snps) > MAX_SNP_COUNT:
+            raise ValueError(
+                f"SNP count exceeds maximum ({MAX_SNP_COUNT:,}). "
+                "File may be corrupted or not a genetic data file."
+            )
+
+    if len(snps) == 0:
+        raise ValueError(
+            "No valid SNP data found in AncestryDNA file."
+        )
+    return snps
+
+
+def _parse_myheritage_streaming(file) -> dict[str, str]:
+    """Stream-parse a MyHeritage/FTDNA CSV file.
+
+    Equivalent to ``_parse_myheritage_from_content`` but reads the file
+    line-by-line via ``_line_iterator`` and uses ``csv.reader`` per line.
+    """
+    snps: dict[str, str] = {}
+    for line in _line_iterator(file):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            row = next(csv.reader([stripped]))
+        except Exception:  # noqa: BLE001, S112
+            continue
+        if len(row) < 4:
+            continue
+        rsid = row[0].strip()
+        genotype = row[3].strip()
+        # Skip header row
+        if rsid.lower() == 'rsid':
+            continue
+        # Skip no-calls and empty results
+        if genotype == '--' or genotype == '':
+            continue
+        # Accept rs*, i*, and VG* (proprietary) RSIDs
+        if not (rsid.startswith('rs') or rsid.startswith('i')
+                or rsid.startswith('VG')):
+            continue
+        snps[rsid] = genotype
+        if len(snps) > MAX_SNP_COUNT:
+            raise ValueError(
+                f"SNP count exceeds maximum ({MAX_SNP_COUNT:,}). "
+                "File may be corrupted or not a genetic data file."
+            )
+
+    if len(snps) == 0:
+        raise ValueError(
+            "No valid SNP data found in MyHeritage/FTDNA file."
+        )
+    return snps
+
+
+def _parse_vcf_streaming(file) -> dict[str, str]:
+    """Stream-parse a VCF file.
+
+    Equivalent to ``_parse_vcf_from_content`` but reads the file
+    line-by-line via ``_line_iterator``.
+    """
+    snps: dict[str, str] = {}
+    past_header = False
+
+    for line in _line_iterator(file):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith('##'):
+            continue
+        if stripped.startswith('#CHROM'):
+            past_header = True
+            continue
+        if not past_header:
+            continue
+
+        parts = stripped.split('\t')
+        if len(parts) < 10:
+            continue
+
+        variant_id = parts[2]   # ID column (rsid or '.')
+        ref = parts[3]          # REF allele
+        alt = parts[4]          # ALT allele(s), comma-separated
+        format_field = parts[8]  # FORMAT column
+        sample_field = parts[9]  # First sample column
+
+        # Only process variants with rsIDs
+        if not variant_id.startswith('rs'):
+            continue
+
+        # Only process SNPs: REF must be single char
+        if len(ref) != 1:
+            continue
+
+        # Split ALT alleles and check all are single-char (SNPs only)
+        alt_alleles = alt.split(',')
+        if any(len(a) != 1 for a in alt_alleles):
+            continue
+
+        # Build allele list: index 0 = REF, 1+ = ALT alleles
+        allele_list = [ref] + alt_alleles
+
+        # Find GT index in FORMAT field
+        format_keys = format_field.split(':')
+        try:
+            gt_index = format_keys.index('GT')
+        except ValueError:
+            continue
+
+        # Extract GT value from sample field
+        sample_values = sample_field.split(':')
+        if gt_index >= len(sample_values):
+            continue
+
+        gt_value = sample_values[gt_index]
+
+        # Skip no-call genotypes
+        if gt_value in ('./.', '.|.', '.'):
+            continue
+
+        # Parse GT: split on / or |
+        separator = '|' if '|' in gt_value else '/'
+        allele_indices = gt_value.split(separator)
+
+        if len(allele_indices) != 2:
+            continue
+
+        # Map indices to nucleotides
+        try:
+            idx_a = int(allele_indices[0])
+            idx_b = int(allele_indices[1])
+        except ValueError:
+            continue
+
+        if idx_a >= len(allele_list) or idx_b >= len(allele_list):
+            continue
+
+        genotype = allele_list[idx_a] + allele_list[idx_b]
+        snps[variant_id] = genotype
+        if len(snps) > MAX_SNP_COUNT:
+            raise ValueError(
+                f"SNP count exceeds maximum ({MAX_SNP_COUNT:,}). "
+                "File may be corrupted or not a genetic data file."
+            )
+
+    if len(snps) == 0:
+        raise ValueError(
+            "No valid SNP data found in VCF file. "
+            "Ensure the file contains variants with rsIDs and GT genotype data."
+        )
+    return snps

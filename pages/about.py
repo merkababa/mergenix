@@ -80,6 +80,10 @@ st.markdown(
     <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:16px;padding:24px;">
         <ul style="font-family:'Lexend',sans-serif;color:var(--text-body);font-size:0.92rem;line-height:1.8;margin:0;padding-left:20px;">
             <li>Mergenix is an <b style="color:var(--accent-amber);">educational tool</b> and does not provide medical advice, diagnosis, or treatment.</li>
+            <li><b style="color:var(--accent-rose);">Not FDA-Cleared:</b> This product has not been cleared or approved by the U.S. Food and Drug Administration (FDA).</li>
+            <li><b>SNP Testing Limitations:</b> This analysis tests specific genetic variants (SNPs) and does not sequence entire genes. Many pathogenic variants cannot be detected by this method. A negative result does not guarantee the absence of carrier status.</li>
+            <li><b>Ancestry Limitations:</b> Risk estimates are primarily derived from studies of European-descent populations and may be less accurate for other ancestries.</li>
+            <li><b>Incomplete Penetrance:</b> Not all carriers will develop the associated condition (incomplete penetrance). Severity can vary among affected individuals.</li>
             <li>Many human traits are <b>polygenic</b> (influenced by multiple genes) and affected by environmental factors. Our single-gene models provide probabilities, not certainties.</li>
             <li>Carrier risk analysis is based on known pathogenic alleles. Novel or rare variants may not be captured.</li>
             <li><b>Always consult a certified genetic counselor</b> or healthcare professional for clinical interpretation of genetic data.</li>

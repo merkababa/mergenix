@@ -97,7 +97,9 @@ def invalidate_session(token: str) -> None:
         "user_name",
         "user_tier",
         "session_token",
-        "last_activity"
+        "last_activity",
+        "2fa_pending_email",
+        "2fa_use_backup",
     ]
 
     for key in keys_to_clear:

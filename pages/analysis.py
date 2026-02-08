@@ -11,7 +11,7 @@ import os
 from io import BytesIO
 
 import streamlit as st
-from Source.auth import AuthManager, get_current_user
+from Source.auth import AuthManager, get_current_user, get_verified_tier
 from Source.carrier_analysis import analyze_carrier_risk
 from Source.clinvar_client import ClinVarClient
 from Source.parser import (
@@ -227,6 +227,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.info(
+    "**Important:** This analysis is for informational and educational purposes only. "
+    "It has not been cleared by the FDA and should not be used for clinical decisions. "
+    "Always consult a certified genetic counselor for medical guidance."
+)
+
 col_a, col_b = st.columns(2)
 with col_a:
     st.markdown("**Parent A**")
@@ -282,9 +288,9 @@ for col, label, file_obj, valid_key, stats_key, snp_key, fmt_key in [
                 st.error(f"\u274c {label}: Invalid file -- {err}")
 
 # ---------------------------------------------------------------------------
-# Get user tier
+# Get user tier (verified from database, not stale session)
 # ---------------------------------------------------------------------------
-user_tier = current_user.get("tier", TierType.FREE.value)
+user_tier = get_verified_tier(current_user.get("email"))
 tier_config = get_tier_config(TierType(user_tier))
 
 # ---------------------------------------------------------------------------
@@ -391,6 +397,12 @@ if both_valid:
     # Display results
     # ---------------------------------------------------------------
     if st.session_state.get("analysis_done"):
+        st.warning(
+            "**Disclaimer:** These results are for educational purposes only. "
+            "Carrier status does not equal diagnosis. Risk estimates may vary by ancestry. "
+            "Consult a genetic counselor for clinical interpretation."
+        )
+
         carrier_results = st.session_state["carrier_results"]
         trait_results = st.session_state["trait_results"]
         user_tier = st.session_state.get("user_tier", TierType.FREE.value)
@@ -542,6 +554,11 @@ if both_valid:
 
         # TAB: Predicted Traits
         with tab_traits:
+            st.info(
+                "**Trait Prediction Disclaimer:** Trait predictions are based on known genetic associations and simplified models. "
+                "Many traits are influenced by multiple genes and environmental factors."
+            )
+
             if not successful_traits:
                 st.warning("No traits could be predicted.")
             else:

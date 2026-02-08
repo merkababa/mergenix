@@ -47,5 +47,11 @@ htmlcov/
 # OMC state (Claude Code plugin)
 .omc/
 
+# Database
+data/mergenix.db
+data/mergenix.db-wal
+data/mergenix.db-shm
+
 # Logs
 *.log
+logs/

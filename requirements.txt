@@ -6,3 +6,6 @@ plotly>=5.0.0
 pandas>=1.5.0
 stripe>=7.0.0
 paypalrestsdk>=1.13.0
+pyotp>=2.9.0
+qrcode>=7.4.0
+Pillow>=10.0.0

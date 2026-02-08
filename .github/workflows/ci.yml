@@ -25,20 +25,41 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run carrier analysis tests
-        run: pytest tests/test_carrier_analysis.py -v
+      - name: Test - Carrier Analysis
+        run: pytest tests/test_carrier_analysis.py -v --tb=short
 
-      - name: Run trait prediction tests
-        run: pytest tests/test_trait_prediction.py -v
+      - name: Test - Trait Prediction
+        run: pytest tests/test_trait_prediction.py -v --tb=short
 
-      - name: Run carrier panel data tests
-        run: pytest tests/test_carrier_panel.py -v
+      - name: Test - Carrier Panel
+        run: pytest tests/test_carrier_panel.py -v --tb=short
 
-      - name: Run OAuth tests
-        run: pytest tests/test_oauth.py -v
+      - name: Test - OAuth
+        run: pytest tests/test_oauth.py -v --tb=short
 
-      - name: Run full test suite
-        run: pytest tests/ -v
+      - name: Test - Database
+        run: pytest tests/test_database.py -v --tb=short
+
+      - name: Test - Audit
+        run: pytest tests/test_audit.py -v --tb=short
+
+      - name: Test - Rate Limiter
+        run: pytest tests/test_rate_limiter.py -v --tb=short
+
+      - name: Test - Tier Validation
+        run: pytest tests/test_tier_validation.py -v --tb=short
+
+      - name: Test - Email Verification
+        run: pytest tests/test_email_verification.py -v --tb=short
+
+      - name: Test - TOTP
+        run: pytest tests/test_totp.py -v --tb=short
+
+      - name: Test - Parser Streaming
+        run: pytest tests/test_parser_streaming.py -v --tb=short
+
+      - name: Run Full Test Suite
+        run: pytest tests/ -v --tb=short
 
   lint:
     name: Lint (ruff)

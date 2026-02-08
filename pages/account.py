@@ -5,7 +5,7 @@ Profile management, password change, connected accounts, plan info.
 """
 
 import streamlit as st
-from Source.auth import AuthManager, get_current_user, require_auth
+from Source.auth import AuthManager, get_current_user, get_verified_tier, require_auth
 from Source.tier_config import TierType, get_tier_config
 from Source.ui.components import render_page_hero, render_section_header
 
@@ -23,6 +23,9 @@ def get_auth_manager():
 
 
 auth_manager = get_auth_manager()
+
+# Get verified tier from database (not stale session state)
+verified_tier = get_verified_tier(user.get("email"))
 
 render_page_hero(
     "Account Settings",
@@ -52,14 +55,14 @@ with col1:
                 </div>
             </div>
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                <span class="tier-badge {user.get('tier', 'free')}">{user.get('tier', 'free').upper()} PLAN</span>
+                <span class="tier-badge {verified_tier}">{verified_tier.upper()} PLAN</span>
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 with col2:
-    tier_config = get_tier_config(TierType(user.get("tier", "free")))
+    tier_config = get_tier_config(TierType(verified_tier))
     st.markdown(
         f"""
         <div style="background:var(--card-bg);border:1px solid var(--card-border);
@@ -96,17 +99,109 @@ with st.form("change_password_form"):
             st.error("Password must be at least 8 characters.")
         else:
             # Verify current password
-            success, _ = auth_manager.authenticate(user["email"], current_pw)
-            if not success:
+            success, _, _status = auth_manager.authenticate(user["email"], current_pw)
+            if not success and _status != "2fa_required":
                 st.error("Current password is incorrect.")
             else:
-                success, message = auth_manager.change_password(
-                    user["email"], current_pw, new_pw
-                )
-                if success:
-                    st.success(message)
+                ok, msg = auth_manager.change_password(user["email"], current_pw, new_pw)
+                if ok:
+                    st.success(msg)
                 else:
-                    st.error(message)
+                    st.error(msg)
+
+# ---------------------------------------------------------------------------
+# Two-Factor Authentication
+# ---------------------------------------------------------------------------
+st.markdown("---")
+render_section_header("Two-Factor Authentication")
+
+if auth_manager.is_2fa_enabled(user["email"]):
+    st.success("2FA is currently **enabled** on your account.")
+
+    # Disable 2FA
+    with st.expander("Disable 2FA"):
+        disable_code = st.text_input(
+            "Enter your authenticator code to disable 2FA",
+            max_chars=6,
+            key="disable_2fa_code",
+        )
+        if st.button("Disable 2FA", key="disable_2fa_btn"):
+            if not disable_code:
+                st.error("Please enter your authenticator code.")
+            elif auth_manager.disable_2fa(user["email"], disable_code.strip()):
+                st.success("2FA has been disabled.")
+                st.rerun()
+            else:
+                st.error("Invalid code. Could not disable 2FA.")
+
+    # Regenerate backup codes
+    with st.expander("Regenerate Backup Codes"):
+        regen_code = st.text_input(
+            "Enter your authenticator code to regenerate backup codes",
+            max_chars=6,
+            key="regen_backup_code",
+        )
+        if st.button("Regenerate Backup Codes", key="regen_backup_btn"):
+            if not regen_code:
+                st.error("Please enter your authenticator code.")
+            else:
+                regen_ok, new_codes = auth_manager.regenerate_backup_codes(
+                    user["email"], regen_code.strip()
+                )
+                if regen_ok and new_codes:
+                    st.success("New backup codes generated. Save them securely!")
+                    st.warning(
+                        "These codes will only be shown once. "
+                        "Store them in a safe place."
+                    )
+                    for bc in new_codes:
+                        st.code(bc)
+                else:
+                    st.error("Invalid code. Could not regenerate backup codes.")
+else:
+    st.info("2FA adds an extra layer of security to your account.")
+
+    # Step 1: Generate QR code
+    if st.button("Enable 2FA", key="enable_2fa_btn"):
+        setup_data = auth_manager.setup_2fa(user["email"])
+        if setup_data:
+            st.session_state["2fa_setup_secret"] = setup_data["secret"]
+            st.session_state["2fa_setup_qr"] = setup_data["qr_code"]
+
+    if st.session_state.get("2fa_setup_qr"):
+        st.image(
+            st.session_state["2fa_setup_qr"],
+            caption="Scan this QR code with your authenticator app",
+            width=250,
+        )
+        st.markdown("**Or enter this secret manually:**")
+        st.code(st.session_state["2fa_setup_secret"])
+
+        # Step 2: Verify code and enable
+        verify_code = st.text_input(
+            "Enter the 6-digit code from your authenticator app",
+            max_chars=6,
+            key="2fa_verify_code",
+        )
+        if st.button("Verify and Enable 2FA", key="2fa_verify_enable_btn"):
+            if not verify_code:
+                st.error("Please enter the 6-digit code.")
+            else:
+                enable_ok, backup_codes = auth_manager.verify_and_enable_2fa(
+                    user["email"], verify_code.strip()
+                )
+                if enable_ok and backup_codes:
+                    st.success("2FA is now enabled!")
+                    st.warning(
+                        "Save these backup codes securely. "
+                        "They will only be shown once!"
+                    )
+                    for bc in backup_codes:
+                        st.code(bc)
+                    st.session_state.pop("2fa_setup_secret", None)
+                    st.session_state.pop("2fa_setup_qr", None)
+                else:
+                    st.error("Invalid code. Please try again.")
 
 # ---------------------------------------------------------------------------
 # Plan Info
@@ -114,7 +209,7 @@ with st.form("change_password_form"):
 st.markdown("---")
 render_section_header("\U0001f4b3 Your Plan")
 
-if user.get("tier", "free") == "free":
+if verified_tier == "free":
     st.info("You're on the Free plan. Upgrade to unlock more features!")
     if st.button("\U0001f680 Upgrade Your Plan", type="primary", use_container_width=True):
         st.switch_page("pages/subscription.py")

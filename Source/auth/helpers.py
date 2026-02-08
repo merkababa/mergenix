@@ -25,7 +25,12 @@ def render_login_form() -> dict | None:
         submit = st.form_submit_button("Login")
 
         if submit:
-            success, user_data = auth_manager.authenticate(email, password)
+            success, user_data, status = auth_manager.authenticate(email, password)
+            if status == "2fa_required":
+                st.session_state["2fa_pending_email"] = user_data["email"]
+                st.info("Please complete two-factor authentication.")
+                st.rerun()
+                return None
             if success:
                 st.session_state["authenticated"] = True
                 st.session_state["user"] = user_data
@@ -67,7 +72,7 @@ def render_register_form() -> dict | None:
                 if success:
                     st.success(message)
                     # Auto-login after registration
-                    _, user_data = auth_manager.authenticate(email, password)
+                    _, user_data, _status = auth_manager.authenticate(email, password)
                     st.session_state["authenticated"] = True
                     st.session_state["user"] = user_data
                     st.session_state["user_email"] = user_data["email"]
@@ -112,9 +117,40 @@ def require_auth():
         st.stop()
 
 
+def get_verified_tier(email: str | None = None) -> str:
+    """
+    Re-read user tier from database (not session state).
+    Updates session state to keep it in sync.
+
+    Args:
+        email: User email. If None, reads from session state.
+
+    Returns:
+        Verified tier string ('free', 'premium', 'pro')
+    """
+    if email is None:
+        email = st.session_state.get("user_email")
+    if not email:
+        return "free"
+
+    auth_manager = AuthManager()
+    user = auth_manager.get_user(email)
+    if user:
+        verified_tier = user.get("tier", "free")
+        # Sync session state
+        if "user" in st.session_state:
+            st.session_state["user"]["tier"] = verified_tier
+        st.session_state["user_tier"] = verified_tier
+        return verified_tier
+    return "free"
+
+
 def require_tier(min_tier: str) -> bool:
     """
     Check if user has required tier level.
+
+    Uses get_verified_tier() to re-validate from the database instead
+    of trusting potentially stale session state.
 
     Args:
         min_tier: Minimum required tier (free, premium, pro)
@@ -128,7 +164,8 @@ def require_tier(min_tier: str) -> bool:
     if not user:
         return False
 
-    current_tier = user.get("tier", "free")
+    # Use verified tier from database, not stale session
+    current_tier = get_verified_tier(user.get("email"))
 
     tier_hierarchy = AuthManager.TIER_HIERARCHY
 
