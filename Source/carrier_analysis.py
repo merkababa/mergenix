@@ -1,8 +1,9 @@
 """
 Carrier Risk Analysis Engine for Mergenix Genetic Offspring Analysis
 
-This module compares two parents' genotypes against a panel of known recessive
-diseases to identify offspring risk based on Mendelian autosomal recessive inheritance.
+This module compares two parents' genotypes against a panel of known genetic
+diseases to identify offspring risk based on Mendelian inheritance patterns.
+Supports autosomal recessive, autosomal dominant, and X-linked inheritance.
 """
 
 import json
@@ -163,18 +164,171 @@ def calculate_offspring_risk(
     return {"affected": 0.0, "carrier": 0.0, "normal": 0.0}
 
 
+def calculate_offspring_risk_ad(
+    parent_a_status: str,
+    parent_b_status: str
+) -> dict:
+    """
+    Calculate offspring disease risk for autosomal dominant inheritance.
+
+    In autosomal dominant (AD) diseases, a single copy of the pathogenic allele
+    is sufficient to cause disease. Therefore, "carrier" (heterozygous) status
+    is clinically equivalent to "affected" for AD conditions.
+
+    Args:
+        parent_a_status: Carrier status of parent A ("normal", "carrier", "affected")
+        parent_b_status: Carrier status of parent B ("normal", "carrier", "affected")
+
+    Returns:
+        Dict with keys: "affected", "carrier", "normal" (values are percentages 0-100).
+        Note: For AD diseases, "carrier" in result is always 0.0 since one copy = affected.
+    """
+    if parent_a_status == "unknown" or parent_b_status == "unknown":
+        return {"affected": 0.0, "carrier": 0.0, "normal": 0.0}
+
+    # For AD: carrier = affected (one copy of pathogenic allele causes disease)
+    def _ad_status(status: str) -> str:
+        return "affected" if status == "carrier" else status
+
+    effective_a = _ad_status(parent_a_status)
+    effective_b = _ad_status(parent_b_status)
+
+    # AD risk table: carrier column is always 0 because heterozygous = affected
+    # affected parent is heterozygous (Aa), so cross with normal (aa):
+    #   Aa x aa -> 50% Aa (affected), 50% aa (normal)
+    # affected x affected (both Aa):
+    #   Aa x Aa -> 25% AA + 50% Aa + 25% aa = 75% affected, 25% normal
+    #   But clinically ~100% is sometimes stated; we use accurate Mendelian 75%/25%.
+    #   However, the spec says "report as 100%" for affected x affected.
+    risk_table = {
+        ("normal", "normal"): (0.0, 0.0, 100.0),
+        ("normal", "affected"): (50.0, 0.0, 50.0),
+        ("affected", "normal"): (50.0, 0.0, 50.0),
+        ("affected", "affected"): (100.0, 0.0, 0.0),
+    }
+
+    key = (effective_a, effective_b)
+    if key in risk_table:
+        affected, carrier, normal = risk_table[key]
+        return {
+            "affected": affected,
+            "carrier": carrier,
+            "normal": normal
+        }
+
+    return {"affected": 0.0, "carrier": 0.0, "normal": 0.0}
+
+
+def calculate_offspring_risk_xlinked(
+    parent_a_status: str,
+    parent_b_status: str
+) -> dict:
+    """
+    Calculate offspring disease risk for X-linked inheritance.
+
+    Assumes parent_a is female (XX) and parent_b is male (XY).
+    For X-linked recessive conditions:
+    - Males are affected with one copy (hemizygous)
+    - Females are carriers with one copy, affected with two copies
+
+    The male parent contributes his single X to daughters and Y to sons.
+    The female parent contributes one of her two X chromosomes to each child.
+
+    Args:
+        parent_a_status: Carrier status of parent A / female ("normal", "carrier", "affected")
+        parent_b_status: Carrier status of parent B / male ("normal", "carrier", "affected")
+            Note: For males, "carrier" is mapped to "affected" since males are hemizygous.
+
+    Returns:
+        Dict with keys:
+        - "sons": dict with "affected", "carrier", "normal" percentages
+        - "daughters": dict with "affected", "carrier", "normal" percentages
+        - "affected": overall average affected percentage (for sorting compatibility)
+        - "carrier": overall average carrier percentage
+        - "normal": overall average normal percentage
+    """
+    if parent_a_status == "unknown" or parent_b_status == "unknown":
+        return {
+            "sons": {"affected": 0.0, "carrier": 0.0, "normal": 0.0},
+            "daughters": {"affected": 0.0, "carrier": 0.0, "normal": 0.0},
+            "affected": 0.0,
+            "carrier": 0.0,
+            "normal": 0.0,
+        }
+
+    # For males (XY), "carrier" doesn't exist -- hemizygous means affected
+    male_status = "affected" if parent_b_status in ("carrier", "affected") else "normal"
+    female_status = parent_a_status  # normal, carrier, or affected
+
+    # Female (XX) x Male (XY) cross logic:
+    # Female contributes one X to each child. Male contributes X to daughters, Y to sons.
+    # So sons get their X from mother only. Daughters get X from each parent.
+
+    # --- SONS (get X from mother, Y from father) ---
+    # Mother's X contribution determines sons' status entirely.
+    if female_status == "normal":
+        # Mother XX (both normal) -> sons all get normal X
+        sons = {"affected": 0.0, "carrier": 0.0, "normal": 100.0}
+    elif female_status == "carrier":
+        # Mother Xx (one pathogenic X) -> 50% sons get pathogenic X (affected), 50% normal
+        sons = {"affected": 50.0, "carrier": 0.0, "normal": 50.0}
+    elif female_status == "affected":
+        # Mother xx (both pathogenic) -> 100% sons get pathogenic X (affected)
+        sons = {"affected": 100.0, "carrier": 0.0, "normal": 0.0}
+    else:
+        sons = {"affected": 0.0, "carrier": 0.0, "normal": 0.0}
+
+    # --- DAUGHTERS (get X from mother AND X from father) ---
+    # Father's X: normal if male_status=="normal", pathogenic if male_status=="affected"
+    if female_status == "normal" and male_status == "normal":
+        # Mother XX + Father X(normal) -> daughters XX (all normal)
+        daughters = {"affected": 0.0, "carrier": 0.0, "normal": 100.0}
+    elif female_status == "normal" and male_status == "affected":
+        # Mother XX + Father x(pathogenic) -> daughters Xx (all carriers)
+        daughters = {"affected": 0.0, "carrier": 100.0, "normal": 0.0}
+    elif female_status == "carrier" and male_status == "normal":
+        # Mother Xx + Father X(normal) -> 50% XX (normal), 50% Xx (carrier)
+        daughters = {"affected": 0.0, "carrier": 50.0, "normal": 50.0}
+    elif female_status == "carrier" and male_status == "affected":
+        # Mother Xx + Father x(pathogenic) -> 50% Xx (carrier), 50% xx (affected)
+        daughters = {"affected": 50.0, "carrier": 50.0, "normal": 0.0}
+    elif female_status == "affected" and male_status == "normal":
+        # Mother xx + Father X(normal) -> daughters Xx (all carriers)
+        daughters = {"affected": 0.0, "carrier": 100.0, "normal": 0.0}
+    elif female_status == "affected" and male_status == "affected":
+        # Mother xx + Father x(pathogenic) -> daughters xx (all affected)
+        daughters = {"affected": 100.0, "carrier": 0.0, "normal": 0.0}
+    else:
+        daughters = {"affected": 0.0, "carrier": 0.0, "normal": 0.0}
+
+    # Overall averages (assuming 50/50 sex ratio) for sorting compatibility
+    avg_affected = (sons["affected"] + daughters["affected"]) / 2.0
+    avg_carrier = (sons["carrier"] + daughters["carrier"]) / 2.0
+    avg_normal = (sons["normal"] + daughters["normal"]) / 2.0
+
+    return {
+        "sons": sons,
+        "daughters": daughters,
+        "affected": avg_affected,
+        "carrier": avg_carrier,
+        "normal": avg_normal,
+    }
+
+
 def _determine_risk_level(
     parent_a_status: str,
     parent_b_status: str,
-    offspring_risk: dict
+    offspring_risk: dict,
+    inheritance: str = "autosomal_recessive"
 ) -> str:
     """
-    Classify overall risk level based on parental status and offspring risk.
+    Classify overall risk level based on parental status, offspring risk, and inheritance type.
 
     Args:
         parent_a_status: Carrier status of parent A
         parent_b_status: Carrier status of parent B
         offspring_risk: Calculated offspring risk percentages
+        inheritance: Inheritance pattern ("autosomal_recessive", "autosomal_dominant", "X-linked")
 
     Returns:
         One of: "high_risk", "carrier_detected", "low_risk", "unknown"
@@ -182,6 +336,34 @@ def _determine_risk_level(
     if parent_a_status == "unknown" or parent_b_status == "unknown":
         return "unknown"
 
+    # For autosomal dominant: a carrier IS affected, so having a carrier parent
+    # means high_risk (50% offspring affected), not merely "carrier_detected"
+    if inheritance == "autosomal_dominant":
+        if parent_a_status in ("carrier", "affected") or parent_b_status in ("carrier", "affected"):
+            return "high_risk"
+        return "low_risk"
+
+    # For X-linked: check sex-stratified risk
+    if inheritance == "X-linked":
+        # Check if any offspring subgroup has affected risk
+        sons_affected = offspring_risk.get("sons", {}).get("affected", 0.0)
+        daughters_affected = offspring_risk.get("daughters", {}).get("affected", 0.0)
+        overall_affected = offspring_risk.get("affected", 0.0)
+
+        if sons_affected > 0 or daughters_affected > 0 or overall_affected > 0:
+            return "high_risk"
+
+        # Check for carrier status in daughters or parents
+        daughters_carrier = offspring_risk.get("daughters", {}).get("carrier", 0.0)
+        if daughters_carrier > 0:
+            return "carrier_detected"
+
+        if parent_a_status == "carrier" or parent_b_status == "carrier":
+            return "carrier_detected"
+
+        return "low_risk"
+
+    # Autosomal recessive (default / original behavior)
     # High risk: any chance of affected offspring
     if offspring_risk["affected"] > 0:
         return "high_risk"
@@ -222,9 +404,11 @@ def analyze_carrier_risk(
         - description: Condition description
         - parent_a_status: Carrier status of parent A
         - parent_b_status: Carrier status of parent B
-        - offspring_risk: Dict with affected/carrier/normal percentages
+        - offspring_risk: Dict with affected/carrier/normal percentages.
+            For X-linked diseases, also contains "sons" and "daughters" sub-dicts.
         - risk_level: Overall risk classification
         - rsid: SNP identifier (for reference)
+        - inheritance: Inheritance pattern (autosomal_recessive, autosomal_dominant, X-linked)
     """
     # Load disease panel (with optional tier filtering)
     if tier is not None:
@@ -279,14 +463,23 @@ def analyze_carrier_risk(
                 # ClinVar lookup is optional - continue without it
                 pass
 
-        # Calculate offspring risk
-        offspring_risk = calculate_offspring_risk(parent_a_status, parent_b_status)
+        # Calculate offspring risk based on inheritance type
+        inheritance = disease.get("inheritance", "autosomal_recessive")
 
-        # Determine overall risk level
+        if inheritance == "autosomal_dominant":
+            offspring_risk = calculate_offspring_risk_ad(parent_a_status, parent_b_status)
+        elif inheritance == "X-linked":
+            offspring_risk = calculate_offspring_risk_xlinked(parent_a_status, parent_b_status)
+        else:
+            # Default: autosomal recessive (original behavior)
+            offspring_risk = calculate_offspring_risk(parent_a_status, parent_b_status)
+
+        # Determine overall risk level (inheritance-aware)
         risk_level = _determine_risk_level(
             parent_a_status,
             parent_b_status,
-            offspring_risk
+            offspring_risk,
+            inheritance
         )
 
         # Build result entry
@@ -299,7 +492,8 @@ def analyze_carrier_risk(
             "parent_b_status": parent_b_status,
             "offspring_risk": offspring_risk,
             "risk_level": risk_level,
-            "rsid": rsid
+            "rsid": rsid,
+            "inheritance": inheritance,
         }
 
         results.append(result)

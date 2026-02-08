@@ -100,11 +100,13 @@ with st.form("change_password_form"):
             if not success:
                 st.error("Current password is incorrect.")
             else:
-                try:
-                    auth_manager.change_password(user["email"], new_pw)
-                    st.success("Password updated successfully!")
-                except Exception as e:
-                    st.error(f"Failed to update password: {e}")
+                success, message = auth_manager.change_password(
+                    user["email"], current_pw, new_pw
+                )
+                if success:
+                    st.success(message)
+                else:
+                    st.error(message)
 
 # ---------------------------------------------------------------------------
 # Plan Info

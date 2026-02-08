@@ -25,7 +25,19 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run tests
+      - name: Run carrier analysis tests
+        run: pytest tests/test_carrier_analysis.py -v
+
+      - name: Run trait prediction tests
+        run: pytest tests/test_trait_prediction.py -v
+
+      - name: Run carrier panel data tests
+        run: pytest tests/test_carrier_panel.py -v
+
+      - name: Run OAuth tests
+        run: pytest tests/test_oauth.py -v
+
+      - name: Run full test suite
         run: pytest tests/ -v
 
   lint:
@@ -43,4 +55,3 @@ jobs:
 
       - name: Run ruff check
         run: ruff check Source/ pages/ tests/ app.py
-        continue-on-error: true

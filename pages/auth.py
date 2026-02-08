@@ -262,7 +262,7 @@ st.markdown(
     """
     <div class="trust-footer">
         <p><span class="lock-icon">\U0001f512</span><strong>Your data is encrypted and never shared</strong></p>
-        <p style="font-size: 0.8rem;">HIPAA Compliant &bull;
+        <p style="font-size: 0.8rem;">Data Privacy First &bull;
         <a href="#" onclick="return false;">Privacy Policy</a> &bull;
         <a href="#" onclick="return false;">Terms of Service</a></p>
     </div>

@@ -71,7 +71,7 @@ st.markdown(
         <div style="display:flex;justify-content:center;gap:16px;margin-top:1.5rem;flex-wrap:wrap;">
             <span class="trust-badge">\U0001f512 256-bit Encryption</span>
             <span class="trust-badge">\U0001f6e1\ufe0f No Data Stored</span>
-            <span class="trust-badge">\u2705 HIPAA Principles</span>
+            <span class="trust-badge">\u2705 Privacy First</span>
         </div>
     </div>
     """,

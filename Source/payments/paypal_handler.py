@@ -5,6 +5,7 @@ This module provides PayPal subscription management functionality including
 subscription creation, retrieval, cancellation, and webhook handling.
 """
 
+import json
 import logging
 
 import paypalrestsdk
@@ -264,14 +265,21 @@ class PayPalHandler:
             logger.error(error_msg)
             raise PayPalError(error_msg) from e
 
-    def handle_webhook(self, payload: dict) -> dict:
+    def handle_webhook(self, payload: dict, headers: dict, webhook_id: str) -> dict:
         """
         Handle PayPal webhook events.
 
-        Processes subscription lifecycle events from PayPal webhooks.
+        Processes subscription lifecycle events from PayPal webhooks with signature verification.
 
         Args:
             payload: Webhook payload from PayPal
+            headers: HTTP headers from the webhook request, must include:
+                - PAYPAL-TRANSMISSION-ID: Unique ID for the webhook event
+                - PAYPAL-TRANSMISSION-TIME: Timestamp of the webhook event
+                - PAYPAL-TRANSMISSION-SIG: Signature of the webhook event
+                - PAYPAL-CERT-URL: URL to PayPal certificate for verification
+                - PAYPAL-AUTH-ALGO: Algorithm used for signature
+            webhook_id: PayPal webhook ID for signature verification
 
         Returns:
             Dictionary containing:
@@ -283,9 +291,47 @@ class PayPalHandler:
 
         Raises:
             ValueError: If payload is invalid or missing required fields
+            PayPalError: If webhook signature verification fails
         """
         if not payload:
             raise ValueError("Webhook payload is required")
+
+        if not webhook_id:
+            raise ValueError("PayPal webhook ID is required for verification")
+
+        # Verify webhook signature using PayPal SDK
+        # PayPal sends these headers for verification:
+        # - PAYPAL-TRANSMISSION-ID
+        # - PAYPAL-TRANSMISSION-TIME
+        # - PAYPAL-TRANSMISSION-SIG
+        # - PAYPAL-CERT-URL
+        # - PAYPAL-AUTH-ALGO
+        transmission_id = headers.get("PAYPAL-TRANSMISSION-ID", "")
+        timestamp = headers.get("PAYPAL-TRANSMISSION-TIME", "")
+
+        if not transmission_id or not timestamp:
+            raise ValueError("Missing required PayPal webhook headers for verification")
+
+        try:
+            is_valid = paypalrestsdk.WebhookEvent.verify(
+                transmission_id=transmission_id,
+                timestamp=timestamp,
+                webhook_id=webhook_id,
+                event_body=json.dumps(payload) if isinstance(payload, dict) else payload,
+                cert_url=headers.get("PAYPAL-CERT-URL", ""),
+                actual_sig=headers.get("PAYPAL-TRANSMISSION-SIG", ""),
+                auth_algo=headers.get("PAYPAL-AUTH-ALGO", "")
+            )
+
+            if not is_valid:
+                raise PayPalError("Webhook signature verification failed")
+
+            logger.info("PayPal webhook signature verified successfully")
+        except PayPalError:
+            raise
+        except Exception as e:
+            logger.error(f"Webhook verification error: {str(e)}")
+            raise PayPalError(f"Webhook verification failed: {str(e)}") from e
 
         event_type = payload.get("event_type")
 

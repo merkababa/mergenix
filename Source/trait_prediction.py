@@ -101,25 +101,48 @@ def normalize_genotype(genotype: str) -> str:
     return ''.join(sorted(genotype))
 
 
+def _extract_phenotype_string(value: str | dict) -> str:
+    """
+    Extract the phenotype string from a phenotype_map value.
+
+    Handles both formats:
+    - String format (legacy): value is the phenotype string directly
+    - Dict format (rich): value is {"phenotype": "...", "description": "...", ...}
+
+    Args:
+        value: The phenotype_map value (either a string or a dict)
+
+    Returns:
+        The phenotype string
+    """
+    if isinstance(value, dict):
+        return value["phenotype"]
+    return value
+
+
 def map_genotype_to_phenotype(genotype: str, phenotype_map: dict) -> str | None:
     """
     Look up phenotype for a given genotype using the phenotype map.
+
+    Handles both string and dict phenotype_map values:
+    - String format (legacy): {"GG": "Brown Eyes"}
+    - Dict format (rich): {"GG": {"phenotype": "Brown Eyes", "description": "...", ...}}
 
     Args:
         genotype: Offspring genotype (e.g., "AG")
         phenotype_map: Dictionary mapping genotypes to phenotype descriptions
 
     Returns:
-        Phenotype description or None if genotype not in map
+        Phenotype string or None if genotype not in map
     """
     # Try normalized version first
     normalized = normalize_genotype(genotype)
 
     # Check both original and normalized versions
     if genotype in phenotype_map:
-        return phenotype_map[genotype]
+        return _extract_phenotype_string(phenotype_map[genotype])
     elif normalized in phenotype_map:
-        return phenotype_map[normalized]
+        return _extract_phenotype_string(phenotype_map[normalized])
 
     return None
 
@@ -204,6 +227,17 @@ def predict_trait(
         for phenotype, prob in phenotype_probs.items()
     }
 
+    # Build phenotype_details from rich dict entries in phenotype_map
+    phenotype_details = {}
+    for _genotype_key, map_value in phenotype_map.items():
+        if isinstance(map_value, dict):
+            pheno_name = map_value["phenotype"]
+            if pheno_name not in phenotype_details:
+                # Include all extra fields (description, probability, etc.)
+                phenotype_details[pheno_name] = {
+                    k: v for k, v in map_value.items() if k != "phenotype"
+                }
+
     result = {
         'trait': trait_entry['trait'],
         'gene': trait_entry['gene'],
@@ -217,6 +251,10 @@ def predict_trait(
         'parent_b_genotype': parent_b_genotype,
         'offspring_probabilities': offspring_probabilities
     }
+
+    # Include phenotype_details if rich format data is available
+    if phenotype_details:
+        result['phenotype_details'] = phenotype_details
 
     # Add note if some genotypes were unmapped
     if unmapped_genotypes:
