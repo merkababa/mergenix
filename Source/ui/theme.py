@@ -28,7 +28,7 @@ ACCENT_AMBER = "#f59e0b"
 ACCENT_ROSE = "#f43f5e"
 TEXT_PRIMARY = "#e2e8f0"
 TEXT_MUTED = "#94a3b8"
-TEXT_DIM = "#64748b"
+TEXT_DIM = "#7c8db5"
 BORDER_SUBTLE = "rgba(148, 163, 184, 0.10)"
 GLOW_TEAL = "rgba(6, 214, 160, 0.25)"
 GLOW_VIOLET = "rgba(139, 92, 246, 0.20)"
@@ -56,7 +56,7 @@ CONFIDENCE_COLORS = {
 # ---------------------------------------------------------------------------
 def get_theme() -> str:
     """Return current theme name: 'dark' or 'light'."""
-    return st.session_state.get("theme", "dark")
+    return st.session_state.get("theme", "light")
 
 
 def get_plotly_theme() -> dict:
@@ -89,13 +89,19 @@ def get_plotly_theme() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Font preload (injected before CSS to avoid render-blocking @import)
+# ---------------------------------------------------------------------------
+_FONT_PRELOAD = """
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lexend:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+"""
+
+# ---------------------------------------------------------------------------
 # Global CSS (single <style> block, injected once)
 # ---------------------------------------------------------------------------
 _GLOBAL_CSS = """
 <style>
-/* ========== Google Fonts ========== */
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 /* ========== CSS Variables — Dark (default) ========== */
 :root {
     --bg-deep: #050810;
@@ -111,7 +117,7 @@ _GLOBAL_CSS = """
     --text-heading: #f1f5f9;
     --text-body: #cbd5e1;
     --text-muted: #94a3b8;
-    --text-dim: #64748b;
+    --text-dim: #7c8db5;
     --border-subtle: rgba(148, 163, 184, 0.10);
     --glow-teal: rgba(6, 214, 160, 0.25);
     --glow-violet: rgba(139, 92, 246, 0.20);
@@ -145,7 +151,7 @@ html.light-mode {
     --text-heading: #0f172a;
     --text-body: #334155;
     --text-muted: #475569;
-    --text-dim: #94a3b8;
+    --text-dim: #6b7280;
     --border-subtle: rgba(15, 23, 42, 0.08);
     --glow-teal: rgba(5, 150, 105, 0.15);
     --glow-violet: rgba(124, 58, 237, 0.12);
@@ -186,10 +192,6 @@ html.light-mode {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }
-@keyframes borderGlow {
-    0%, 100% { border-color: rgba(6, 214, 160, 0.10); }
-    50% { border-color: rgba(6, 214, 160, 0.35); }
-}
 @keyframes countUp {
     from { opacity: 0; transform: translateY(12px) scale(0.96); }
     to { opacity: 1; transform: translateY(0) scale(1); }
@@ -210,14 +212,6 @@ html.light-mode {
     from { opacity: 0; backdrop-filter: blur(0px); transform: translateY(16px); }
     to { opacity: 1; backdrop-filter: blur(var(--glass-blur)); transform: translateY(0); }
 }
-@keyframes breathe {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
-}
-@keyframes dnaStrandSpin {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(360deg); }
-}
 @keyframes borderRainbow {
     0% { border-color: rgba(6,214,160,0.3); }
     33% { border-color: rgba(139,92,246,0.3); }
@@ -237,11 +231,6 @@ html.light-mode {
     90% { transform: translate(10%, 5%); }
     100% { transform: translate(5%, 0); }
 }
-@keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 20px var(--glow-teal); }
-    50% { box-shadow: 0 0 50px var(--glow-teal); }
-}
-
 /* ========== Global ========== */
 .stApp {
     background: var(--app-gradient);
@@ -563,8 +552,11 @@ hr { border-color: var(--border-subtle) !important; }
     font-weight: 600; font-family: 'Sora', sans-serif; letter-spacing: 0.03em; vertical-align: middle; margin-left: 8px;
 }
 .sev-badge.high { background: rgba(244,63,94,0.15); color: #f43f5e; border: 1px solid rgba(244,63,94,0.4); }
+.sev-badge.high::before { content: "\25B2 "; /* triangle */ }
 .sev-badge.moderate { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.4); }
+.sev-badge.moderate::before { content: "\25C6 "; /* diamond */ }
 .sev-badge.low { background: rgba(6,214,160,0.15); color: #06d6a0; border: 1px solid rgba(6,214,160,0.4); }
+.sev-badge.low::before { content: "\25CF "; /* circle */ }
 
 /* ========== Insight card ========== */
 .insight-card {
@@ -923,6 +915,84 @@ html.light-mode .theme-toggle .toggle-thumb {
 .theme-toggle .icon-sun { position: absolute; top: 50%; transform: translateY(-50%); font-size: 12px; line-height: 1; }
 .theme-toggle .icon-moon { left: 6px; }
 .theme-toggle .icon-sun { right: 6px; }
+
+/* ========== Focus Visible (Accessibility) ========== */
+*:focus-visible {
+    outline: 2px solid var(--accent-teal);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ========== Responsive — Tablet (1024px) ========== */
+@media (max-width: 1024px) {
+    .block-container { max-width: 95% !important; padding: 0 0.5rem !important; }
+    .hero-section { padding: 2.5rem 1.5rem 2rem; }
+    .hero-section h1 { font-size: 2.4rem; }
+    .hero-section::after { display: none; }
+}
+
+/* ========== Responsive — Mobile (768px) ========== */
+@media (max-width: 768px) {
+    .mergenix-navbar {
+        flex-direction: column;
+        padding: 10px 1rem;
+        gap: 6px;
+    }
+    .mergenix-navbar .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        gap: 4px;
+    }
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    .hero-section { padding: 2rem 1rem; border-radius: 16px; }
+    .hero-section h1 { font-size: 1.8rem; }
+    .hero-section p { font-size: 0.95rem; max-width: 100%; }
+    [data-testid="stHorizontalBlock"] {
+        flex-direction: column !important;
+    }
+    [data-testid="stColumn"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+    .disease-card { padding: 16px; border-radius: 14px; }
+    .pricing-card { padding: 24px 16px; border-radius: 18px; }
+    .catalog-metric { padding: 16px 12px; border-radius: 14px; }
+    .catalog-metric .metric-value { font-size: 1.5rem; }
+    .insight-card { padding: 16px; }
+    .step-card { padding: 20px 16px; }
+}
+
+/* ========== Responsive — Small Mobile (480px) ========== */
+@media (max-width: 480px) {
+    .hero-section h1 { font-size: 1.5rem; }
+    .mergenix-navbar .brand-text { font-size: 1.2rem; }
+    .nav-link { padding: 6px 10px; font-size: 0.8rem; }
+    div[data-testid="stMetric"] { padding: 14px !important; }
+    div[data-testid="stMetric"] [data-testid="stMetricValue"] { font-size: 1.5rem !important; }
+    .disease-card h4 { font-size: 1rem; }
+    .meta-tag { font-size: 0.72rem; padding: 3px 8px; }
+}
+
+/* ========== Reduced Motion (Accessibility) ========== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
 </style>
 """
 
@@ -969,5 +1039,6 @@ def _get_theme_js(theme: str) -> str:
 def inject_global_css() -> None:
     """Inject the single, canonical CSS block for the entire app."""
     theme = get_theme()
+    st.markdown(_FONT_PRELOAD, unsafe_allow_html=True)
     st.markdown(_GLOBAL_CSS, unsafe_allow_html=True)
     st.markdown(_get_theme_js(theme), unsafe_allow_html=True)

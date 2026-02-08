@@ -8,15 +8,22 @@ This is a refactored version of pages/2_Disease_Catalog.py with CSS removed
 (injected globally by app.py) and sidebar filters moved to inline.
 """
 
-import json
 import math
 import os
 from collections import Counter
 
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from Source.ui.components import render_page_hero, render_section_header
+from Source.data_loader import load_carrier_panel
+from Source.ui.components import (
+    _TOOLTIP_CSS,
+    render_confidence_indicator,
+    render_page_hero,
+    render_section_header,
+    tooltip_term,
+)
 from Source.ui.theme import get_plotly_theme
 
 # ---------------------------------------------------------------------------
@@ -25,12 +32,6 @@ from Source.ui.theme import get_plotly_theme
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(APP_DIR, "data")
 CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
-
-
-@st.cache_data
-def load_diseases():
-    with open(CARRIER_PANEL_PATH) as f:
-        return json.load(f)
 
 
 def parse_carrier_freq(freq_str):
@@ -54,15 +55,52 @@ def severity_indicator(sev):
     return {"high": "\U0001f534 High", "moderate": "\U0001f7e1 Moderate", "low": "\U0001f7e2 Low"}.get(sev, sev)
 
 
+@st.cache_data
+def compute_catalog_stats(_diseases_tuple) -> dict:
+    """Pre-compute all catalog statistics from the disease list."""
+    diseases = list(_diseases_tuple)
+    total_count = len(diseases)
+    unique_genes = len(set(d["gene"] for d in diseases))
+    high_sev_count = sum(1 for d in diseases if d.get("severity") == "high")
+    inheritance_counts = Counter(d["inheritance"] for d in diseases)
+    category_counts = Counter(d.get("category", "Other") for d in diseases)
+
+    # Pre-parse all carrier frequencies ONCE
+    all_freqs = [parse_carrier_freq(d["carrier_frequency"]) for d in diseases]
+    sorted_by_freq = sorted(diseases, key=lambda d: parse_carrier_freq(d["carrier_frequency"]))
+
+    # Filter options (static)
+    inheritance_options = sorted(set(d["inheritance"] for d in diseases))
+    category_options = sorted(set(d.get("category", "Other") for d in diseases))
+
+    most_common_inheritance = inheritance_counts.most_common(1)[0]
+
+    return {
+        "total_count": total_count,
+        "unique_genes": unique_genes,
+        "high_sev_count": high_sev_count,
+        "inheritance_counts": inheritance_counts,
+        "category_counts": category_counts,
+        "all_freqs": all_freqs,
+        "min_freq": min(all_freqs) if all_freqs else 0,
+        "max_freq": max(all_freqs) if all_freqs else 1,
+        "sorted_by_freq": sorted_by_freq,
+        "inheritance_options": inheritance_options,
+        "category_options": category_options,
+        "most_common_inheritance": most_common_inheritance,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Load data
 # ---------------------------------------------------------------------------
-diseases = load_diseases()
-total_count = len(diseases)
-unique_genes = len(set(d["gene"] for d in diseases))
-high_sev_count = sum(1 for d in diseases if d.get("severity") == "high")
-inheritance_counts = Counter(d["inheritance"] for d in diseases)
-most_common_inheritance = inheritance_counts.most_common(1)[0]
+diseases = load_carrier_panel(CARRIER_PANEL_PATH)
+stats = compute_catalog_stats(tuple(tuple(sorted(d.items())) for d in diseases))
+total_count = stats["total_count"]
+unique_genes = stats["unique_genes"]
+high_sev_count = stats["high_sev_count"]
+inheritance_counts = stats["inheritance_counts"]
+most_common_inheritance = stats["most_common_inheritance"]
 most_common_inh_label = format_inheritance(most_common_inheritance[0])
 most_common_inh_pct = round(most_common_inheritance[1] / total_count * 100)
 
@@ -74,6 +112,9 @@ render_page_hero(
     "Comprehensive Genetic Disease Reference",
     f"\U0001f9ec {total_count} Conditions Screened",
 )
+
+# Inject tooltip CSS
+st.markdown(_TOOLTIP_CSS, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # Summary metrics
@@ -124,28 +165,25 @@ with st.expander("\U0001f50d Filters & Search", expanded=False):
             key="severity_filter",
         )
     with fc2:
-        inheritance_options = sorted(set(d["inheritance"] for d in diseases))
         inheritance_filter = st.multiselect(
             "Inheritance Pattern",
-            options=inheritance_options,
+            options=stats["inheritance_options"],
             format_func=format_inheritance,
             default=[],
             key="inheritance_filter",
         )
-        category_options = sorted(set(d.get("category", "Other") for d in diseases))
         category_filter = st.multiselect(
             "Category",
-            options=category_options,
+            options=stats["category_options"],
             default=[],
             key="category_filter",
         )
 
-    all_freqs = [parse_carrier_freq(d["carrier_frequency"]) for d in diseases]
     freq_range = st.slider(
         "Carrier Frequency (1 in X)",
-        min_value=min(all_freqs),
-        max_value=max(all_freqs),
-        value=(min(all_freqs), max(all_freqs)),
+        min_value=stats["min_freq"],
+        max_value=stats["max_freq"],
+        value=(stats["min_freq"], stats["max_freq"]),
         help="Lower numbers = more common carriers.",
         key="freq_range",
     )
@@ -272,12 +310,20 @@ if len(filtered) > 0:
 
         with st.expander(f"{d['condition']}  ({d['gene']})", expanded=False):
             category = d.get("category", "Other")
+            inh_display = format_inheritance(d["inheritance"])
+            inh_tooltip = tooltip_term(inh_display)
+            carrier_freq_tt = tooltip_term("Carrier Freq")
+            confidence = d.get("confidence", "")
+            conf_html = ""
+            if confidence:
+                conf_html = f'<span class="meta-tag"><b>Confidence:</b> {render_confidence_indicator(confidence)} {confidence.title()}</span>'
             meta_tags = (
                 f'<span class="meta-tag"><b>Gene:</b> {d["gene"]}</span>'
-                f'<span class="meta-tag"><b>Inheritance:</b> {format_inheritance(d["inheritance"])}</span>'
-                f'<span class="meta-tag"><b>Carrier Freq:</b> {d["carrier_frequency"]}</span>'
+                f'<span class="meta-tag"><b>Inheritance:</b> {inh_tooltip}</span>'
+                f'<span class="meta-tag"><b>{carrier_freq_tt}:</b> {d["carrier_frequency"]}</span>'
                 f'<span class="meta-tag"><b>rsID:</b> {d["rsid"]}</span>'
                 f'<span class="meta-tag"><b>Category:</b> {category}</span>'
+                f'{conf_html}'
             )
             if prevalence:
                 meta_tags += f'<span class="meta-tag"><b>Prevalence:</b> {prevalence}</span>'
@@ -365,35 +411,61 @@ with chart_col2:
 # Chart 3: Category Distribution
 render_section_header("\U0001f4ca Category Distribution", "Diseases grouped by medical category")
 
-category_counts = Counter(d.get("category", "Other") for d in diseases)
-sorted_cats = category_counts.most_common()
+sorted_cats = stats["category_counts"].most_common()
 cat_labels = [c[0] for c in sorted_cats]
 cat_values = [c[1] for c in sorted_cats]
 color_palette = ["#06d6a0", "#8b5cf6", "#06b6d4", "#f59e0b", "#ef4444", "#ec4899", "#8b5cf6", "#14b8a6", "#f97316", "#6366f1", "#84cc16", "#06b6d4"]
 cat_colors = [color_palette[i % len(color_palette)] for i in range(len(cat_labels))]
 
-pt3 = get_plotly_theme()
-fig_cat = go.Figure(data=[go.Bar(
-    y=list(reversed(cat_labels)), x=list(reversed(cat_values)), orientation="h",
-    marker=dict(color=list(reversed(cat_colors)), line=dict(color=pt3["line_color"], width=1), cornerradius=6),
-    text=[f"  {v}" for v in reversed(cat_values)], textposition="outside",
-    textfont=dict(family="Sora", size=13, color=pt3["font_color"]),
-    hovertemplate="<b>%{y}</b>: %{x} conditions<extra></extra>",
-)])
-fig_cat.update_layout(
-    paper_bgcolor=pt3["paper_bgcolor"], plot_bgcolor=pt3["plot_bgcolor"],
-    xaxis=dict(showgrid=True, gridcolor=pt3["gridcolor"], tickfont=dict(family="Lexend", color=pt3["tick_font_color"]),
-               title=dict(text="Number of Conditions", font=dict(family="Lexend", size=12, color=pt3["axis_title_color"]))),
-    yaxis=dict(tickfont=dict(family="Lexend", size=11, color=pt3["font_color"])),
-    margin=dict(l=10, r=80, t=20, b=40), height=max(400, len(cat_labels) * 25),
-)
-st.plotly_chart(fig_cat, use_container_width=True)
+cat_view_col1, cat_view_col2 = st.columns(2)
+
+# Bar chart (existing)
+with cat_view_col1:
+    pt3 = get_plotly_theme()
+    fig_cat = go.Figure(data=[go.Bar(
+        y=list(reversed(cat_labels)), x=list(reversed(cat_values)), orientation="h",
+        marker=dict(color=list(reversed(cat_colors)), line=dict(color=pt3["line_color"], width=1), cornerradius=6),
+        text=[f"  {v}" for v in reversed(cat_values)], textposition="outside",
+        textfont=dict(family="Sora", size=13, color=pt3["font_color"]),
+        hovertemplate="<b>%{y}</b>: %{x} conditions<extra></extra>",
+    )])
+    fig_cat.update_layout(
+        paper_bgcolor=pt3["paper_bgcolor"], plot_bgcolor=pt3["plot_bgcolor"],
+        xaxis=dict(showgrid=True, gridcolor=pt3["gridcolor"], tickfont=dict(family="Lexend", color=pt3["tick_font_color"]),
+                   title=dict(text="Number of Conditions", font=dict(family="Lexend", size=12, color=pt3["axis_title_color"]))),
+        yaxis=dict(tickfont=dict(family="Lexend", size=11, color=pt3["font_color"])),
+        margin=dict(l=10, r=80, t=20, b=40), height=max(400, len(cat_labels) * 25),
+    )
+    st.plotly_chart(fig_cat, use_container_width=True)
+
+# Treemap (T3.6c)
+with cat_view_col2:
+    pt3t = get_plotly_theme()
+    fig_treemap = px.treemap(
+        names=cat_labels,
+        parents=[""] * len(cat_labels),
+        values=cat_values,
+        color=cat_values,
+        color_continuous_scale=[[0, "#94a3b8"], [1, "#06d6a0"]],
+    )
+    fig_treemap.update_layout(
+        paper_bgcolor=pt3t["paper_bgcolor"],
+        plot_bgcolor=pt3t["plot_bgcolor"],
+        font=dict(family="Sora", color=pt3t["font_color"]),
+        margin=dict(l=10, r=10, t=30, b=10),
+        height=max(400, len(cat_labels) * 25),
+        coloraxis_showscale=False,
+    )
+    fig_treemap.update_traces(
+        textfont=dict(family="Sora", size=13),
+        hovertemplate="<b>%{label}</b><br>%{value} conditions<extra></extra>",
+    )
+    st.plotly_chart(fig_treemap, use_container_width=True)
 
 # Chart 4: Top 15 Most Common
 render_section_header("\U0001f3af Most Common Carrier Conditions", "Ranked by carrier frequency")
 
-sorted_by_freq = sorted(diseases, key=lambda d: parse_carrier_freq(d["carrier_frequency"]))
-top_15 = sorted_by_freq[:15]
+top_15 = stats["sorted_by_freq"][:15]
 top_labels = [d["condition"] for d in top_15]
 top_freqs = [parse_carrier_freq(d["carrier_frequency"]) for d in top_15]
 top_display_values = [round(1 / f * 1000, 2) for f in top_freqs]
@@ -423,8 +495,8 @@ st.plotly_chart(fig_top, use_container_width=True)
 st.markdown("---")
 render_section_header("\U0001f4a1 Insights", "Interesting facts from the disease panel")
 
-most_common = sorted_by_freq[0]
-rarest = sorted_by_freq[-1]
+most_common = stats["sorted_by_freq"][0]
+rarest = stats["sorted_by_freq"][-1]
 ar_pct = round(inheritance_counts.get("autosomal_recessive", 0) / total_count * 100)
 
 ins1, ins2, ins3, ins4 = st.columns(4)

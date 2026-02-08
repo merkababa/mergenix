@@ -6,8 +6,7 @@ diseases to identify offspring risk based on Mendelian inheritance patterns.
 Supports autosomal recessive, autosomal dominant, and X-linked inheritance.
 """
 
-import json
-
+import streamlit as st
 from Source.tier_config import (
     TOP_25_FREE_DISEASES,
     TierType,
@@ -17,9 +16,10 @@ from Source.tier_config import (
 )
 
 
+@st.cache_data
 def load_carrier_panel(panel_path: str) -> list[dict]:
     """
-    Load the carrier disease panel from JSON file.
+    Load the carrier disease panel from JSON file, cached across reruns.
 
     Args:
         panel_path: Path to the carrier_panel.json file
@@ -36,6 +36,8 @@ def load_carrier_panel(panel_path: str) -> list[dict]:
         - description: Condition description
         - severity: Severity rating
     """
+    import json
+
     with open(panel_path) as f:
         panel = json.load(f)
     return panel

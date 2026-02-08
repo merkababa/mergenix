@@ -11,6 +11,7 @@ def render_footer() -> None:
     """Render the shared footer with disclaimer, privacy, and branding."""
     st.markdown(
         """
+        <footer role="contentinfo">
         <div style="text-align:center;padding:2rem 1.5rem;margin-top:2rem;
              background:var(--bg-glass);backdrop-filter:blur(14px);
              -webkit-backdrop-filter:blur(14px);
@@ -28,7 +29,7 @@ def render_footer() -> None:
                 No genetic data is stored, transmitted, or shared.</p>
             <div style="margin-top:16px;padding-top:16px;
                 border-top:1px solid var(--glass-border);">
-                <div style="display:flex;justify-content:center;gap:4px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:center;gap:4px;margin-bottom:10px;" aria-hidden="true">
                     <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
                         background:#06d6a0;animation:helixFloat 2.5s ease-in-out infinite;box-shadow:0 0 6px rgba(6,214,160,0.4);"></span>
                     <span style="display:inline-block;width:6px;height:6px;border-radius:50%;
@@ -44,6 +45,7 @@ def render_footer() -> None:
                 </p>
             </div>
         </div>
+        </footer>
         """,
         unsafe_allow_html=True,
     )

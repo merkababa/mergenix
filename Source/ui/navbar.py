@@ -17,6 +17,7 @@ def render_navbar(current_page=None) -> None:
     """
     user = get_current_user()
     current_title = getattr(current_page, "title", "") if current_page else ""
+    is_dark = st.session_state.get("theme", "dark") == "dark"
 
     # Build nav links based on auth state
     if user:
@@ -49,9 +50,11 @@ def render_navbar(current_page=None) -> None:
     links_html = ""
     for label, _page_path, match_title in nav_items:
         active_class = "active" if current_title == match_title else ""
+        aria_current = ' aria-current="page"' if active_class else ""
         links_html += (
             f'<span class="nav-link {active_class}" '
-            f'style="cursor:pointer;" '
+            f'style="cursor:pointer;" tabindex="0" role="link"'
+            f'{aria_current} '
             f'data-page="{match_title}">{label}</span>'
         )
 
@@ -72,23 +75,28 @@ def render_navbar(current_page=None) -> None:
         )
 
     # Render the navbar HTML
+    toggle_checked = "false" if is_dark else "true"
     st.markdown(
         f"""
+        <nav role="navigation" aria-label="Main navigation">
         <div class="mergenix-navbar">
-            <div class="nav-brand" style="cursor:pointer;" data-page="Home">
-                <div style="display:flex;gap:4px;align-items:center;">{dots_html}</div>
+            <div class="nav-brand" style="cursor:pointer;" tabindex="0" role="link" data-page="Home">
+                <div style="display:flex;gap:4px;align-items:center;" aria-hidden="true">{dots_html}</div>
                 <span class="brand-text">Mergenix</span>
             </div>
             <div class="nav-links">{links_html}</div>
-            <div class="theme-toggle" title="Toggle light/dark mode">
+            <div class="theme-toggle" title="Toggle light/dark mode"
+                 role="switch" aria-checked="{toggle_checked}"
+                 aria-label="Toggle dark/light mode" tabindex="0">
                 <div class="toggle-track">
-                    <span class="icon-moon">🌙</span>
-                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon" aria-hidden="true">🌙</span>
+                    <span class="icon-sun" aria-hidden="true">☀️</span>
                     <div class="toggle-thumb"></div>
                 </div>
             </div>
             <div class="nav-actions">{actions_html}</div>
         </div>
+        </nav>
         """,
         unsafe_allow_html=True,
     )

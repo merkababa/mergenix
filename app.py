@@ -31,7 +31,7 @@ st.set_page_config(
 # Theme state
 # ---------------------------------------------------------------------------
 if "theme" not in st.session_state:
-    st.session_state["theme"] = "dark"
+    st.session_state["theme"] = "light"
 
 
 def _toggle_theme():
@@ -45,6 +45,7 @@ pages = [
     st.Page("pages/home.py", title="Home", default=True),
     st.Page("pages/products.py", title="Products"),
     st.Page("pages/disease_catalog.py", title="Disease Catalog"),
+    st.Page("pages/glossary.py", title="Glossary"),
     st.Page("pages/auth.py", title="Sign In"),
     st.Page("pages/analysis.py", title="Analysis"),
     st.Page("pages/subscription.py", title="Subscription"),

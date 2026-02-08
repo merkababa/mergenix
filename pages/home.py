@@ -6,37 +6,24 @@ disease showcase, trust signals, FAQ, and final CTA.
 Full implementation in Phase 2.
 """
 
-import json
 import os
+from pathlib import Path
 
 import streamlit as st
+from Source.data_loader import count_entries
 from Source.tier_config import TierType, get_tier_config
 from Source.ui.components import render_section_header
 
 # ---------------------------------------------------------------------------
-# Dynamic counts
+# Dynamic counts (cached via data_loader)
 # ---------------------------------------------------------------------------
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(APP_DIR, "data")
 CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
 TRAIT_DB_PATH = os.path.join(DATA_DIR, "trait_snps.json")
 
-
-def _count(path, key=None):
-    try:
-        with open(path) as f:
-            data = json.load(f)
-        if isinstance(data, list):
-            return len(data)
-        if key:
-            return len(data.get(key, []))
-        return len(data)
-    except Exception:
-        return "?"
-
-
-NUM_DISEASES = _count(CARRIER_PANEL_PATH)
-NUM_TRAITS = _count(TRAIT_DB_PATH, "snps")
+NUM_DISEASES = count_entries(CARRIER_PANEL_PATH)
+NUM_TRAITS = count_entries(TRAIT_DB_PATH, key="snps")
 
 # ---------------------------------------------------------------------------
 # Hero section
@@ -79,17 +66,46 @@ st.markdown(
 )
 
 # CTAs
-cta1, cta2 = st.columns(2)
+cta1, cta2, cta3 = st.columns(3)
 with cta1:
     if st.button("\U0001f680 Get Started Free", type="primary", use_container_width=True):
         st.switch_page("pages/auth.py")
 with cta2:
+    if st.button("\U0001f52c Try with Sample Data", use_container_width=True):
+        # Set demo mode flags so analysis page can pre-load sample data
+        sample_dir = Path(APP_DIR) / "sample_data" / "23andme"
+        sample_files = sorted(sample_dir.glob("*.txt"))
+        if len(sample_files) >= 2:
+            st.session_state["demo_mode"] = True
+            st.session_state["demo_parent_a"] = str(sample_files[0])
+            st.session_state["demo_parent_b"] = str(sample_files[1])
+            st.switch_page("pages/analysis.py")
+        else:
+            st.error("Sample data files not found.")
+with cta3:
     if st.button("\U0001f4cb See How It Works", use_container_width=True):
-        pass  # scroll anchor — handled below
+        # Scroll to the How It Works section via JS
+        st.markdown(
+            """
+            <script>
+            const target = document.getElementById('how-it-works-anchor');
+            if (target) { target.scrollIntoView({behavior: 'smooth'}); }
+            </script>
+            """,
+            unsafe_allow_html=True,
+        )
+
+st.markdown(
+    '<p style="text-align:center;color:var(--text-dim);font-size:0.85rem;'
+    "font-family:'Lexend',sans-serif;margin-top:0.5rem;\">"
+    "No account needed to try the demo -- explore with sample genetic data.</p>",
+    unsafe_allow_html=True,
+)
 
 # ---------------------------------------------------------------------------
 # How It Works
 # ---------------------------------------------------------------------------
+st.markdown('<div id="how-it-works-anchor"></div>', unsafe_allow_html=True)
 render_section_header("\U0001f52c How It Works", "Three simple steps to genetic insights")
 
 h1, h2, h3 = st.columns(3)
@@ -111,6 +127,40 @@ for col, num, icon, title, desc in steps:
             """,
             unsafe_allow_html=True,
         )
+
+# ---------------------------------------------------------------------------
+# How to Get Your DNA Data (expandable guide)
+# ---------------------------------------------------------------------------
+with st.expander("\U0001f4e5 How to Download Your Raw DNA Data"):
+    st.markdown(
+        """
+        <div style="font-family:'Lexend',sans-serif;color:var(--text-muted);line-height:1.8;">
+            <p style="margin-bottom:1rem;">To use Mergenix, you need your raw DNA data file from a
+            genetic testing provider. Here's how to download it:</p>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr style="border-bottom:1px solid var(--card-border);">
+                    <td style="padding:10px 12px;font-weight:600;color:var(--text-primary);white-space:nowrap;">23andMe</td>
+                    <td style="padding:10px 12px;">Settings &rarr; Raw Data &rarr; Download (.txt)</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--card-border);">
+                    <td style="padding:10px 12px;font-weight:600;color:var(--text-primary);white-space:nowrap;">AncestryDNA</td>
+                    <td style="padding:10px 12px;">Settings &rarr; DNA Settings &rarr; Download Raw DNA Data (.txt)</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--card-border);">
+                    <td style="padding:10px 12px;font-weight:600;color:var(--text-primary);white-space:nowrap;">MyHeritage</td>
+                    <td style="padding:10px 12px;">DNA &rarr; DNA Kit &rarr; Download Raw Data (.csv)</td>
+                </tr>
+                <tr>
+                    <td style="padding:10px 12px;font-weight:600;color:var(--text-primary);white-space:nowrap;">VCF</td>
+                    <td style="padding:10px 12px;">From your sequencing provider (Nebula Genomics, Dante Labs, etc.)</td>
+                </tr>
+            </table>
+            <p style="margin-top:1rem;font-size:0.85rem;color:var(--text-dim);">
+                Don't have DNA data yet? Use the <b>"Try with Sample Data"</b> button above to explore with demo files.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Disease Catalog Showcase

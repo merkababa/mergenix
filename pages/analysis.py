@@ -6,14 +6,16 @@ trait prediction.  Migrated from the old app.py (lines 730-1383).
 CSS removed (injected globally by router).
 """
 
-import json
 import os
+from collections import Counter
 from io import BytesIO
 
+import plotly.graph_objects as go
 import streamlit as st
 from Source.auth import AuthManager, get_current_user, get_verified_tier
 from Source.carrier_analysis import analyze_carrier_risk
 from Source.clinvar_client import ClinVarClient
+from Source.data_loader import count_entries, load_traits_corrected
 from Source.parser import (
     get_genotype_stats,
     parse_genetic_file,
@@ -21,12 +23,19 @@ from Source.parser import (
 from Source.tier_config import TierType, get_tier_config, get_upgrade_message
 from Source.trait_prediction import predict_trait
 from Source.ui.components import (
+    _TOOLTIP_CSS,
+    render_confidence_indicator,
     render_page_hero,
     render_probability_bar,
+    render_progress_stepper,
+    render_punnett_square,
+    render_skeleton_card,
     render_tier_badge,
     severity_badge,
     status_badge,
+    tooltip_term,
 )
+from Source.ui.theme import get_plotly_theme
 
 # ---------------------------------------------------------------------------
 # Data paths
@@ -37,10 +46,15 @@ CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
 TRAIT_DB_PATH = os.path.join(DATA_DIR, "trait_snps.json")
 
 # ---------------------------------------------------------------------------
-# Auth guard
+# Demo mode check (skip auth if demo)
+# ---------------------------------------------------------------------------
+_demo_mode = st.session_state.get("demo_mode", False)
+
+# ---------------------------------------------------------------------------
+# Auth guard (skipped in demo mode)
 # ---------------------------------------------------------------------------
 current_user = get_current_user()
-if not current_user:
+if not current_user and not _demo_mode:
     st.warning("Please sign in to access the analysis dashboard.")
     if st.button("\U0001f512 Sign In to Continue", type="primary", use_container_width=True):
         st.session_state["auth_redirect"] = "pages/analysis.py"
@@ -57,27 +71,10 @@ def get_auth_manager():
 
 
 # ---------------------------------------------------------------------------
-# Dynamic counts
+# Dynamic counts (cached via data_loader)
 # ---------------------------------------------------------------------------
-def _count_panel(path):
-    try:
-        with open(path) as f:
-            return len(json.load(f))
-    except Exception:
-        return "?"
-
-
-def _count_traits(path):
-    try:
-        with open(path) as f:
-            raw = json.load(f)
-        return len(raw) if isinstance(raw, list) else len(raw.get("snps", []))
-    except Exception:
-        return "?"
-
-
-NUM_DISEASES = _count_panel(CARRIER_PANEL_PATH)
-NUM_TRAITS = _count_traits(TRAIT_DB_PATH)
+NUM_DISEASES = count_entries(CARRIER_PANEL_PATH)
+NUM_TRAITS = count_entries(TRAIT_DB_PATH, key="snps")
 
 # ---------------------------------------------------------------------------
 # Trait category mapping
@@ -150,22 +147,6 @@ CONFIDENCE_COLORS = {"high": "#06d6a0", "medium": "#f59e0b", "low": "#ef4444"}
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-def load_traits_corrected(db_path: str):
-    with open(db_path) as f:
-        raw = json.load(f)
-    traits = raw if isinstance(raw, list) else raw.get("snps", raw)
-    for trait in traits:
-        original_map = trait.get("phenotype_map", {})
-        flat_map = {}
-        for genotype_key, value in original_map.items():
-            if isinstance(value, dict):
-                flat_map[genotype_key] = value.get("phenotype", str(value))
-            else:
-                flat_map[genotype_key] = value
-        trait["phenotype_map"] = flat_map
-    return traits
-
-
 def run_trait_analysis(parent_a_snps, parent_b_snps, db_path):
     traits = load_traits_corrected(db_path)
     results = []
@@ -206,6 +187,33 @@ render_page_hero(
     f"\U0001f9ec {NUM_DISEASES} Diseases \u2022 {NUM_TRAITS} Traits \u2022 Mendelian Genetics",
 )
 
+# Inject tooltip CSS
+st.markdown(_TOOLTIP_CSS, unsafe_allow_html=True)
+
+# Demo mode banner
+if _demo_mode:
+    st.markdown(
+        """<div style="background: linear-gradient(90deg, rgba(6,214,160,0.08), rgba(6,182,212,0.08));
+             border: 1px solid var(--accent-teal); border-radius: 12px;
+             padding: 16px 20px; margin-bottom: 16px; display: flex;
+             align-items: center; gap: 12px;">
+            <span style="font-size: 1.3rem;">&#128300;</span>
+            <div style="flex: 1;">
+                <strong style="color: var(--text-heading); font-family: 'Sora', sans-serif;">
+                    Demo Mode</strong>
+                <span style="color: var(--text-body); font-family: 'Lexend', sans-serif;">
+                    &mdash; You are viewing results from sample genetic data.
+                    Upload your own files for personalized results.</span>
+            </div>
+        </div>""",
+        unsafe_allow_html=True,
+    )
+    if st.button("\U0001f4c2 Upload My Files Instead", use_container_width=True):
+        st.session_state.pop("demo_mode", None)
+        st.session_state.pop("demo_parent_a", None)
+        st.session_state.pop("demo_parent_b", None)
+        st.rerun()
+
 # ---------------------------------------------------------------------------
 # Settings (inline, replaces sidebar)
 # ---------------------------------------------------------------------------
@@ -232,6 +240,27 @@ st.info(
     "It has not been cleared by the FDA and should not be used for clinical decisions. "
     "Always consult a certified genetic counselor for medical guidance."
 )
+
+# Demo mode: pre-load sample files if not already parsed
+if _demo_mode and not st.session_state.get("valid_a"):
+    demo_a = st.session_state.get("demo_parent_a")
+    demo_b = st.session_state.get("demo_parent_b")
+    if demo_a and demo_b:
+        for path, snp_key, valid_key, stats_key, fmt_key in [
+            (demo_a, "snps_a", "valid_a", "stats_a", "fmt_a"),
+            (demo_b, "snps_b", "valid_b", "stats_b", "fmt_b"),
+        ]:
+            try:
+                with open(path, "rb") as f:
+                    buf = BytesIO(f.read())
+                snps, fmt_name = parse_genetic_file(buf)
+                stats = get_genotype_stats(snps)
+                st.session_state[snp_key] = snps
+                st.session_state[valid_key] = True
+                st.session_state[stats_key] = stats
+                st.session_state[fmt_key] = fmt_name
+            except Exception:  # noqa: S110
+                pass  # Silently skip failed demo file parsing
 
 col_a, col_b = st.columns(2)
 with col_a:
@@ -290,7 +319,10 @@ for col, label, file_obj, valid_key, stats_key, snp_key, fmt_key in [
 # ---------------------------------------------------------------------------
 # Get user tier (verified from database, not stale session)
 # ---------------------------------------------------------------------------
-user_tier = get_verified_tier(current_user.get("email"))
+if current_user:
+    user_tier = get_verified_tier(current_user.get("email"))
+else:
+    user_tier = TierType.FREE.value  # Demo mode defaults to free tier
 tier_config = get_tier_config(TierType(user_tier))
 
 # ---------------------------------------------------------------------------
@@ -321,20 +353,20 @@ if only_a or only_b:
     m3.metric("Affected Variants", len(affected))
 
     if affected:
-        st.markdown("#### \u274c Affected (homozygous pathogenic)")
+        st.markdown("#### \u2139\ufe0f Both Copies Present")
         for r in affected:
             with st.expander(f"{r['condition']}  ({r['gene']})  {severity_badge(r['severity'])}", expanded=True):
                 st.markdown(r["description"])
                 st.markdown(f"**rsID:** `{r['rsid']}`")
 
     if carriers:
-        st.markdown("#### \u26a0\ufe0f Carrier Variants")
+        st.markdown("#### \u2139\ufe0f One Copy Found -- Carrier Variants")
         for r in carriers:
             with st.expander(f"{r['condition']}  ({r['gene']})"):
                 st.markdown(r["description"])
                 st.markdown(f"**Severity:** {severity_badge(r['severity'])}  |  **rsID:** `{r['rsid']}`", unsafe_allow_html=True)
 
-    with st.expander(f"\u2705 Normal ({len(normals)} conditions)", expanded=False):
+    with st.expander(f"\u2705 No Variant Detected ({len(normals)} conditions)", expanded=False):
         for r in normals:
             st.markdown(f"- **{r['condition']}** ({r['gene']})")
 
@@ -356,15 +388,28 @@ if both_valid:
         snps_a = st.session_state["snps_a"]
         snps_b = st.session_state["snps_b"]
 
-        with open(CARRIER_PANEL_PATH) as f:
-            full_panel = json.load(f)
-        total_diseases = len(full_panel)
+        total_diseases = count_entries(CARRIER_PANEL_PATH)
         analyzing_count = tier_config.disease_limit
 
+        # Multi-step progress indicator (T3.7)
+        stepper_slot = st.empty()
         progress = st.progress(0, text="Starting analysis...")
+        skeleton_slot = st.empty()
         st.info(f"Analyzing {analyzing_count} of {total_diseases} diseases ({user_tier.upper()} plan)")
 
-        progress.progress(10, text=f"\U0001f9ec Screening carrier risk ({analyzing_count} diseases)...")
+        # Step 1: Validate
+        stepper_slot.empty()
+        with stepper_slot.container():
+            render_progress_stepper(current_step=1)
+        progress.progress(5, text="\U0001f4e4 Validating input files...")
+        with skeleton_slot.container():
+            render_skeleton_card(count=3)
+
+        # Step 2: Screen carrier risk
+        stepper_slot.empty()
+        with stepper_slot.container():
+            render_progress_stepper(current_step=2)
+        progress.progress(10, text=f"\U0001f52c Screening carrier risk ({analyzing_count} diseases)...")
         clinvar_client = ClinVarClient(api_key=ncbi_api_key) if ncbi_api_key else None
         try:
             carrier_results = analyze_carrier_risk(
@@ -375,7 +420,11 @@ if both_valid:
             st.error(f"Carrier analysis failed: {exc}")
             carrier_results = []
 
-        progress.progress(50, text="\U0001f3a8 Predicting offspring traits...")
+        # Step 3: Predict traits
+        stepper_slot.empty()
+        with stepper_slot.container():
+            render_progress_stepper(current_step=3)
+        progress.progress(50, text="\U0001f9ec Predicting offspring traits...")
         try:
             all_trait_results = run_trait_analysis(snps_a, snps_b, TRAIT_DB_PATH)
             trait_results = all_trait_results[:tier_config.trait_limit]
@@ -383,6 +432,11 @@ if both_valid:
             st.error(f"Trait prediction failed: {exc}")
             trait_results = []
 
+        # Step 4: Complete
+        stepper_slot.empty()
+        with stepper_slot.container():
+            render_progress_stepper(current_step=4)
+        skeleton_slot.empty()
         progress.progress(100, text="\u2705 Analysis complete!")
         st.session_state["carrier_results"] = carrier_results
         st.session_state["trait_results"] = trait_results
@@ -401,6 +455,29 @@ if both_valid:
             "**Disclaimer:** These results are for educational purposes only. "
             "Carrier status does not equal diagnosis. Risk estimates may vary by ancestry. "
             "Consult a genetic counselor for clinical interpretation."
+        )
+
+        # Pre-results context card (T3.3 — Emotional Design)
+        st.markdown(
+            """<div style="background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+                 border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                <h4 style="color: var(--text-heading); margin-bottom: 12px;">
+                    Before You View Your Results
+                </h4>
+                <p style="color: var(--text-body); line-height: 1.7;">
+                    Genetic carrier screening often identifies variants — this is completely normal.
+                    About <strong>1 in 4 people</strong> carry at least one disease-associated variant.
+                </p>
+                <ul style="color: var(--text-body); line-height: 1.8;">
+                    <li>Being a carrier does <strong>NOT</strong> mean your children will develop the condition</li>
+                    <li>Most findings require <strong>both parents</strong> to carry the same variant for offspring risk</li>
+                    <li>These results are meant to <strong>inform</strong>, not diagnose</li>
+                    <li>We recommend discussing results with a
+                        <a href="https://www.nsgc.org/page/find-a-gc" target="_blank"
+                           style="color: var(--accent-teal);">certified genetic counselor</a></li>
+                </ul>
+            </div>""",
+            unsafe_allow_html=True,
         )
 
         carrier_results = st.session_state["carrier_results"]
@@ -442,6 +519,36 @@ if both_valid:
         if user_tier != TierType.PRO.value:
             st.info(f"\U0001f48e {get_upgrade_message(TierType(user_tier))}")
 
+        # Radar chart — Risk by category (T3.6b)
+        if high_risk:
+            category_risks = Counter(r.get("category", "Other") for r in high_risk if r.get("category"))
+            if len(category_risks) >= 2:
+                pt = get_plotly_theme()
+                fig_radar = go.Figure(data=go.Scatterpolar(
+                    r=list(category_risks.values()),
+                    theta=list(category_risks.keys()),
+                    fill="toself",
+                    fillcolor="rgba(6, 214, 160, 0.15)",
+                    line=dict(color="#06d6a0", width=2),
+                    marker=dict(size=[v * 3 + 6 for v in category_risks.values()]),
+                ))
+                fig_radar.update_layout(
+                    polar=dict(
+                        radialaxis=dict(visible=True, range=[0, max(category_risks.values()) + 1],
+                                        tickfont=dict(color=pt["tick_font_color"])),
+                        angularaxis=dict(tickfont=dict(family="Lexend", color=pt["font_color"])),
+                        bgcolor="rgba(0,0,0,0)",
+                    ),
+                    showlegend=False,
+                    paper_bgcolor=pt["paper_bgcolor"],
+                    plot_bgcolor=pt["plot_bgcolor"],
+                    font=dict(color=pt["font_color"], family="Lexend"),
+                    margin=dict(l=60, r=60, t=40, b=40),
+                    height=350,
+                    title=dict(text="Risk by Category", font=dict(family="Sora", size=16, color=pt["title_font_color"]), x=0.5),
+                )
+                st.plotly_chart(fig_radar, use_container_width=True)
+
         # Tabs
         tab_risk, tab_traits, tab_individual = st.tabs([
             f"\u26a0\ufe0f Risk Factors ({len(high_risk) + len(carrier_detected)})",
@@ -455,16 +562,21 @@ if both_valid:
                 st.success(f"\U0001f389 No high-risk or carrier matches across the {NUM_DISEASES}-disease panel.")
 
             if high_risk:
-                st.markdown("### \U0001f6a8 High Risk -- Both Parents Carry Variant")
-                st.markdown("Both parents carry at least one copy of the pathogenic allele.")
+                st.markdown("### \u2139\ufe0f Important Finding -- Both Parents Carry a Disease-Associated Variant")
+                _carrier_tt = tooltip_term("carrier")
+                _variant_tt = tooltip_term("variant", "A change in the DNA sequence compared to the reference genome.")
+                st.markdown(
+                    f"Both parents are a {_carrier_tt} of at least one disease-associated {_variant_tt}.",
+                    unsafe_allow_html=True,
+                )
                 for r in high_risk:
                     with st.container():
                         st.markdown(
-                            f"""<div style="border-left:4px solid #ef4444;
-                            background:linear-gradient(135deg, #0c1220 0%, #1a2236 60%, rgba(239,68,68,0.06) 100%);
+                            f"""<div style="border-left:4px solid #f59e0b;
+                            background:linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 60%, rgba(245,158,11,0.06) 100%);
                             padding:20px;border-radius:0 16px 16px 0;margin-bottom:12px;
-                            border-top:1px solid rgba(239,68,68,0.15);border-right:1px solid rgba(239,68,68,0.15);
-                            border-bottom:1px solid rgba(239,68,68,0.15);box-shadow:0 4px 24px rgba(0,0,0,0.3);
+                            border-top:1px solid rgba(245,158,11,0.15);border-right:1px solid rgba(245,158,11,0.15);
+                            border-bottom:1px solid rgba(245,158,11,0.15);box-shadow:0 4px 24px var(--shadow-ambient);
                             animation:fadeSlideUp 0.4s ease-out;">
                                 <h4 style="margin:0 0 6px;color:var(--text-heading);font-family:'Sora',sans-serif;font-weight:700;">
                                     {r['condition']} &nbsp;{severity_badge(r['severity'])}</h4>
@@ -474,7 +586,7 @@ if both_valid:
                             </div>""",
                             unsafe_allow_html=True,
                         )
-                        pcol1, pcol2 = st.columns(2)
+                        pcol1, pcol2, pcol3 = st.columns([2, 2, 2])
                         with pcol1:
                             st.markdown(f"**Parent A:** {status_badge(r['parent_a_status'])} &nbsp; **Parent B:** {status_badge(r['parent_b_status'])}", unsafe_allow_html=True)
                         with pcol2:
@@ -482,6 +594,26 @@ if both_valid:
                             render_probability_bar("Affected", risk["affected"], "#dc2626")
                             render_probability_bar("Carrier", risk["carrier"], "#d97706")
                             render_probability_bar("Normal", risk["normal"], "#16a34a")
+                        with pcol3:
+                            # Punnett square for this disease
+                            path_allele = r.get("pathogenic_allele", "a")
+                            ref_allele = r.get("reference_allele", "A")
+                            pa_status = r.get("parent_a_status", "")
+                            pb_status = r.get("parent_b_status", "")
+                            # Derive parent alleles from carrier status
+                            if pa_status == "carrier":
+                                pa_alleles = (ref_allele, path_allele)
+                            elif pa_status == "affected":
+                                pa_alleles = (path_allele, path_allele)
+                            else:
+                                pa_alleles = (ref_allele, ref_allele)
+                            if pb_status == "carrier":
+                                pb_alleles = (ref_allele, path_allele)
+                            elif pb_status == "affected":
+                                pb_alleles = (path_allele, path_allele)
+                            else:
+                                pb_alleles = (ref_allele, ref_allele)
+                            render_punnett_square(pa_alleles, pb_alleles, risk_type="carrier")
 
                         btn_key = f"clinvar_risk_{r['rsid']}"
                         if st.button(f"\U0001f50d Learn More about {r['rsid']}", key=btn_key):
@@ -508,7 +640,8 @@ if both_valid:
                         st.markdown("---")
 
             if carrier_detected:
-                st.markdown("### \u26a0\ufe0f Carrier Detected -- One Parent Carries Variant")
+                _carrier_label = tooltip_term("Carrier")
+                st.markdown(f"### \u2139\ufe0f One Copy Found -- One Parent Is a {_carrier_label}", unsafe_allow_html=True)
                 for r in carrier_detected:
                     with st.expander(f"{r['condition']}  ({r['gene']})  --  A: {r['parent_a_status']} | B: {r['parent_b_status']}"):
                         st.markdown(r["description"])
@@ -542,7 +675,7 @@ if both_valid:
                                 st.warning("No ClinVar entry found for this variant.")
 
             if low_risk:
-                with st.expander(f"\u2705 Low Risk ({len(low_risk)} conditions)", expanded=False):
+                with st.expander(f"\u2705 No Significant Findings ({len(low_risk)} conditions)", expanded=False):
                     for r in low_risk:
                         st.markdown(f"- **{r['condition']}** ({r['gene']}) -- A: {r['parent_a_status']}, B: {r['parent_b_status']}")
 
@@ -551,6 +684,29 @@ if both_valid:
                     st.caption("These conditions could not be assessed because one or both parents lack data for the relevant SNP.")
                     for r in unknown_risk:
                         st.markdown(f"- **{r['condition']}** ({r['gene']}) -- `{r['rsid']}`")
+
+            # Next Steps card (T3.3 — Emotional Design)
+            st.markdown(
+                """<div style="background: linear-gradient(135deg, var(--bg-elevated), var(--card-bg));
+                     border: 1px solid var(--accent-teal); border-radius: 16px; padding: 24px; margin: 24px 0;">
+                    <h4 style="color: var(--accent-teal); margin-bottom: 16px;">
+                        Next Steps for Your Family
+                    </h4>
+                    <div style="color: var(--text-body); line-height: 1.8;">
+                        <p><strong>1. Review with a professional</strong><br>
+                        We recommend discussing these results with a certified genetic counselor.<br>
+                        <a href="https://www.nsgc.org/page/find-a-gc" target="_blank"
+                           style="color: var(--accent-teal);">Find a genetic counselor near you</a></p>
+                        <p><strong>2. Understand the context</strong><br>
+                        Carrier screening provides probability estimates, not certainties.
+                        Many factors influence genetic expression.</p>
+                        <p><strong>3. Ask questions</strong><br>
+                        Our results pages include detailed explanations for each finding.
+                        Click "Learn More" on any result to see clinical details.</p>
+                    </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
         # TAB: Predicted Traits
         with tab_traits:
@@ -563,10 +719,8 @@ if both_valid:
                 st.warning("No traits could be predicted.")
             else:
                 if user_tier != TierType.PRO.value:
-                    with open(TRAIT_DB_PATH) as f:
-                        all_traits_data = json.load(f)
-                        all_traits = all_traits_data if isinstance(all_traits_data, list) else all_traits_data.get("snps", [])
-                    locked_count = len(all_traits) - len(successful_traits)
+                    total_trait_count = count_entries(TRAIT_DB_PATH, key="snps")
+                    locked_count = total_trait_count - len(successful_traits)
                     if locked_count > 0:
                         st.warning(f"\U0001f512 {locked_count} additional traits locked. Upgrade to unlock all traits!")
 
@@ -583,18 +737,25 @@ if both_valid:
                     st.markdown(f"### {icon} {category}")
                     for t in traits_in_cat:
                         confidence = t.get("confidence", "medium")
-                        conf_color = CONFIDENCE_COLORS.get(confidence, "#6b7280")
-                        conf_dot = f'<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{conf_color};margin-right:4px;"></span>'
+                        conf_indicator = render_confidence_indicator(confidence)
+                        inheritance_val = t.get("inheritance", "?")
+                        # Wrap inheritance with tooltip if it's a known term
+                        inh_display = tooltip_term(inheritance_val) if inheritance_val != "?" else "?"
                         with st.expander(f"{t['trait']}  --  {t['gene']}  (confidence: {confidence})", expanded=True):
                             st.markdown(f"<p style='color:var(--text-dim);font-size:0.88rem;'>{t.get('description', '')}</p>", unsafe_allow_html=True)
+                            genotype_tt = tooltip_term("genotype")
                             st.markdown(
-                                f"**Chromosome:** {t.get('chromosome', '?')} | **Inheritance:** {t.get('inheritance', '?')} | "
-                                f"**Confidence:** {conf_dot}{confidence.title()} | **rsID:** `{t['rsid']}`",
+                                f"**Chromosome:** {t.get('chromosome', '?')} | **Inheritance:** {inh_display} | "
+                                f"**Confidence:** {conf_indicator} {confidence.title()} | **rsID:** `{t['rsid']}`",
                                 unsafe_allow_html=True,
                             )
-                            gc1, gc2 = st.columns(2)
+                            gc1, gc2, gc3 = st.columns([2, 2, 2])
                             with gc1:
-                                st.markdown(f"\U0001f9ec **Parent A genotype:** `{t.get('parent_a_genotype', '?')}`  \n\U0001f9ec **Parent B genotype:** `{t.get('parent_b_genotype', '?')}`")
+                                st.markdown(
+                                    f"\U0001f9ec **Parent A {genotype_tt}:** `{t.get('parent_a_genotype', '?')}`  \n"
+                                    f"\U0001f9ec **Parent B {genotype_tt}:** `{t.get('parent_b_genotype', '?')}`",
+                                    unsafe_allow_html=True,
+                                )
                             with gc2:
                                 probs = t.get("offspring_probabilities", {})
                                 if probs:
@@ -606,6 +767,16 @@ if both_valid:
                                         if isinstance(pheno, dict):
                                             pheno = pheno.get("phenotype", str(pheno))
                                         render_probability_bar(str(pheno), pct, color)
+                            with gc3:
+                                # Punnett square for trait
+                                pa_geno = t.get("parent_a_genotype", "")
+                                pb_geno = t.get("parent_b_genotype", "")
+                                if len(pa_geno) == 2 and len(pb_geno) == 2:
+                                    render_punnett_square(
+                                        (pa_geno[0], pa_geno[1]),
+                                        (pb_geno[0], pb_geno[1]),
+                                        risk_type="trait",
+                                    )
                             if t.get("note"):
                                 st.caption(f"Note: {t['note']}")
 
@@ -638,14 +809,14 @@ if both_valid:
                     im3.metric("Affected", len(affecteds))
 
                     if affecteds:
-                        st.markdown("##### \u274c Affected")
+                        st.markdown("##### \u2139\ufe0f Both Copies Present")
                         for r in affecteds:
                             st.markdown(f"- **{r['condition']}** ({r['gene']}) -- {severity_badge(r['severity'])}  `{r['rsid']}`", unsafe_allow_html=True)
                     if carriers:
-                        st.markdown("##### \u26a0\ufe0f Carrier")
+                        st.markdown("##### \u2139\ufe0f One Copy Found")
                         for r in carriers:
                             st.markdown(f"- **{r['condition']}** ({r['gene']}) -- {severity_badge(r['severity'])}  `{r['rsid']}`", unsafe_allow_html=True)
-                    with st.expander(f"\u2705 Normal ({len(normals)})", expanded=False):
+                    with st.expander(f"\u2705 No Variant Detected ({len(normals)})", expanded=False):
                         for r in normals:
                             st.markdown(f"- {r['condition']} ({r['gene']})")
                     if unknowns:

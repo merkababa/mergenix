@@ -5,12 +5,13 @@ This module implements Mendelian genetics (Punnett square) to predict offspring
 trait probabilities from two parents' genotypes using 23andMe SNP data.
 """
 
-import json
+import streamlit as st
 
 
+@st.cache_data
 def load_trait_database(db_path: str) -> list[dict]:
     """
-    Load the trait SNP database from JSON file.
+    Load the trait SNP database from JSON file, cached across reruns.
 
     Args:
         db_path: Path to trait_snps.json
@@ -19,6 +20,8 @@ def load_trait_database(db_path: str) -> list[dict]:
         List of trait entries, each containing rsid, trait, gene, chromosome,
         inheritance, alleles, phenotype_map, description, and confidence
     """
+    import json
+
     with open(db_path) as f:
         return json.load(f)
 

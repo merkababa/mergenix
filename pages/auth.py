@@ -5,10 +5,15 @@ Mergenix — Authentication Page
 Migrated from pages/1_Login.py — CSS removed (injected globally).
 """
 
+import os
+from pathlib import Path
+
 import streamlit as st
 from Source.auth import AuthManager
 from Source.auth.email import send_password_reset_email, send_verification_email
 from Source.auth.oauth import GoogleOAuthHandler
+
+APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 @st.cache_resource
@@ -236,6 +241,51 @@ if st.session_state.get("2fa_pending_email"):
 
     st.stop()
 
+# ========== WELCOME FLOW (after registration) ==========
+if st.session_state.get("show_welcome", False) and st.session_state.get("authenticated", False):
+    user = st.session_state.get("user", {})
+    user_name = user.get("name", "there")
+
+    st.markdown(
+        f"""
+        <div class="login-card">
+            <div class="dna-logo">
+                <span class="dna-dot"></span><span class="dna-dot"></span>
+                <span class="dna-dot"></span><span class="dna-dot"></span>
+                <span class="dna-dot"></span>
+            </div>
+            <h1 class="login-title">Welcome to Mergenix, {user_name}!</h1>
+            <p class="login-subtitle">Your account is ready. What would you like to do first?</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    wc1, wc2, wc3 = st.columns(3)
+    with wc1:
+        if st.button("\U0001f52c Try Demo First", type="secondary", use_container_width=True,
+                      key="welcome_demo"):
+            st.session_state.pop("show_welcome", None)
+            sample_dir = Path(APP_DIR) / "sample_data" / "23andme"
+            sample_files = sorted(sample_dir.glob("*.txt"))
+            if len(sample_files) >= 2:
+                st.session_state["demo_mode"] = True
+                st.session_state["demo_parent_a"] = str(sample_files[0])
+                st.session_state["demo_parent_b"] = str(sample_files[1])
+            st.switch_page("pages/analysis.py")
+    with wc2:
+        if st.button("\U0001f4e4 Upload My Files", type="primary", use_container_width=True,
+                      key="welcome_upload"):
+            st.session_state.pop("show_welcome", None)
+            st.switch_page("pages/analysis.py")
+    with wc3:
+        if st.button("\U0001f4da Learn More", type="secondary", use_container_width=True,
+                      key="welcome_learn"):
+            st.session_state.pop("show_welcome", None)
+            st.switch_page("pages/about.py")
+
+    st.stop()
+
 # ========== ALREADY LOGGED IN ==========
 if st.session_state.get("authenticated", False):
     st.markdown(
@@ -425,8 +475,7 @@ with tab2:
                             "A verification link has been sent to your email address. "
                             "Please verify your email before logging in."
                         )
-                        # NOTE: auto-login after registration is preserved for now.
-                        # Newly-registered users never have 2FA enabled yet.
+                        # Auto-login after registration (no 2FA yet for new users)
                         _, user_data, _reg_status = auth_manager.authenticate(reg_email, reg_password)
                         if user_data:
                             st.session_state["authenticated"] = True
@@ -435,9 +484,9 @@ with tab2:
                             st.session_state["user_name"] = user_data["name"]
                             st.session_state["user_tier"] = user_data["tier"]
                         st.balloons()
-                        import time
-                        time.sleep(2)
-                        st.switch_page("pages/analysis.py")
+                        # Show welcome flow instead of immediate redirect
+                        st.session_state["show_welcome"] = True
+                        st.rerun()
                     else:
                         st.error(message)
 
