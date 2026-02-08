@@ -1,8 +1,8 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-02-08
-**Version:** 2.1.0 (Tier 5 genetic science in PR #26)
-**Branch:** feature/tier5-genetic-science (PR #26)
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 0 complete)
+**Active Branch:** rewrite/phase-0-polish (PR #28 → rewrite/main)
 
 ---
 
@@ -487,21 +487,38 @@ Use conventional commits:
 
 | PR | Title | Status |
 |----|-------|--------|
-| #22 | fix: tier 0 critical bugs — inheritance, traits, HIPAA, auth, webhooks | ✅ CURRENT BRANCH |
-| #21 | feat: add data provenance — sources, confidence & notes | ✅ Merged |
-| #20 | fix: remove all SNPedia dependencies (legal compliance) | ✅ Merged |
-| #19 | feat: add dark/light mode toggle with Daylight Laboratory theme | ✅ Merged |
-| #14 | feat: rebrand Tortit → Mergenix, expand disease panel to 2,715 | ✅ Merged |
+| #28 | V3 Rewrite Phase 0 Polish — 4-round review, all 4 Opus reviewers A+ | 🔄 In Review |
+| #27 | V3 Rewrite Phase 0 Scaffolding — Next.js 14 + FastAPI + TS genetics | ✅ Merged |
+| #26 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | 🔄 In Review |
+| #25 | Tier 4: Testing & infrastructure (515 tests, Docker, config) | 🔄 In Review |
+| #24 | Tier 2+3: Performance + frontend/UX (12 items, 440 tests) | ✅ Merged |
+| #23 | Tier 1: Security & data integrity (8 items, 378 tests) | ✅ Merged |
+| #22 | Tier 0: 6 critical bug fixes | ✅ Merged |
+| #21 | Data provenance — sources, confidence & notes | 🔄 In Review |
+| #20 | Remove SNPedia dependencies (legal compliance) | ✅ Merged |
+| #19 | Dark/light mode toggle | 🔄 In Review |
+| #18 | Bioluminescent Laboratory frontend redesign | ✅ Merged |
+| #14 | Platform redesign + disease expansion (2,715) | ✅ Merged |
 
 ---
 
-## Next Steps (After PR #22 Merge)
+## Next Steps
 
-1. **Begin Tier 1 work** — JSON → SQLite migration
-2. **Implement 2FA/MFA** — TOTP with pyotp
-3. **Add server-side tier validation** — protect against session bypass
-4. **Expand test coverage** — integration tests for auth flows
-5. **Performance optimization** — add @st.cache_data to data loaders
+### Immediate: V3 Rewrite Phase 1+
+1. **Merge PR #28** — Phase 0 Polish (all reviewers A+, merge-ready)
+2. **Phase 1: Marketing pages polish** — Home, products, about, legal, diseases, glossary
+3. **Phase 2: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side)
+4. **Phase 3: Analysis UI** — File upload, results dashboard, counseling
+5. **Phase 4: Auth + Payments** — JWT, TOTP 2FA, Stripe, Google OAuth
+6. **Phase 5: Remaining pages** — Account, subscription, admin
+7. **Phase 6: Testing + deployment** — Vitest, Playwright, Vercel + Railway
+
+### V3 Architecture (rewrite/main branch)
+- **Frontend:** Next.js 14 App Router + Tailwind CSS + shadcn/ui-style components
+- **Backend:** FastAPI + async SQLAlchemy 2.0 + PostgreSQL
+- **Genetics:** TypeScript client-side (Web Workers, DNA never leaves browser)
+- **Payments:** Stripe only (PayPal removed)
+- **Monorepo:** Turborepo + pnpm workspaces (apps/web, apps/api, packages/*)
 
 ---
 
