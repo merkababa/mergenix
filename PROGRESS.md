@@ -21,6 +21,7 @@
 | Tier 2+3: Performance + frontend/UX (12 items) | Claude | Merged | feature/tier2-tier3-improvements | PR #24 — cached loaders, pre-computed stats, font optimization, WCAG accessibility, responsive CSS, emotional design, onboarding/demo mode, glossary, Punnett squares, radar/treemap charts, progress stepper, light default. 20 files, +3063 lines, 440 tests |
 | Tier 4: Testing & infrastructure (8 items) | Claude | PR Open | feature/tier4-testing-infrastructure | PR #25 — 515 new tests (955 total), parser/auth/payment/tier/config test suites, unified config system (pydantic-settings), Dockerfile + docker-compose, CI improvements (coverage, fail-fast lint, caching), dependency audit. 13 files, +5053 lines |
 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | Claude | PR Open | feature/tier5-genetic-science | PR #26 — 5 new modules (1,482 LOC), 4 data files, counseling page, integration wiring, 303 new tests. Ethnicity adjustment (Bayesian), PGx (CPIC-guided), PRS (z-score normalized), ClinVar (approval-first), Counseling (triage + referrals). Grade: A (merge-ready). 24 files, +10,118 lines, 1,265 tests |
+| **V3 REWRITE: Phase 0 — Monorepo scaffolding** | Claude | PR Open | rewrite/phase-0-scaffolding | PR #27 → `rewrite/main`. Next.js 14 + FastAPI + TS genetics engine. Privacy-first (DNA never leaves browser). 138 files, +21,965 lines. 4 planning docs (13,187 lines). 4-reviewer panel: all 13 critical/high issues fixed. |
 
 ---
 
@@ -60,6 +61,15 @@
 - [x] User onboarding flow (demo mode, welcome flow, DNA download guide) — PR #24
 - [ ] Production deployment
 
+### V3 Rewrite (Next.js + FastAPI + TypeScript — privacy-first)
+- [x] Phase 0: Monorepo scaffolding (Turborepo, Next.js 14, FastAPI, TS genetics engine) — PR #27
+- [ ] Phase 1: Marketing pages polish (home, products, about, legal, diseases, glossary)
+- [ ] Phase 2: Genetics engine implementation (parser, carrier, PRS, PGx, traits — all client-side)
+- [ ] Phase 3: Analysis UI (file upload, results dashboard, counseling)
+- [ ] Phase 4: Auth + Payments (JWT, TOTP 2FA, Stripe, Google OAuth)
+- [ ] Phase 5: Remaining pages (account, subscription, admin)
+- [ ] Phase 6: Testing + deployment (Vitest, Playwright, Vercel + Railway)
+
 ---
 
 ## Completed Work Log
@@ -88,6 +98,7 @@
 | 2026-02-08 | Claude | Tier 2+3 performance + frontend/UX: cached data loaders, pre-computed catalog stats, font optimization, WCAG 2.1 AA accessibility, responsive CSS, compassionate language, onboarding/demo mode, genetic glossary, Punnett squares, radar chart, treemap, progress stepper, light default. 20 files, +3063 lines, 56 new tests (440 total) | PR #24 |
 | 2026-02-08 | Claude | Tier 4 testing & infrastructure: parser tests (157), auth tests (147), tier/payment tests (114), trait tests (+36), config system tests (61), unified pydantic-settings config, Dockerfile + docker-compose, CI coverage/lint/caching improvements, dependency audit + pinning. 13 files, +5053 lines, 515 new tests (955 total) | PR #25 |
 | 2026-02-08 | Claude | Tier 5 genetic science: ethnicity-adjusted frequencies (gnomAD, 9 populations), pharmacogenomics (CPIC-guided, 12 genes), polygenic risk scores (10 diseases, z-score normalized), ClinVar freshness pipeline (approval-first, monthly sync), genetic counseling system (triage + referral letters). 5 modules (1,482 LOC), 4 data files, 1 new page, 3 components, CLI tool, GitHub Actions workflow. 303 new tests (1,265 total). Architecture: A (merge-ready). | PR #26 |
+| 2026-02-08 | Claude | V3 Rewrite Phase 0: Full monorepo scaffolding. Next.js 14 App Router + FastAPI + TypeScript genetics engine. Privacy-first architecture (DNA never leaves browser via Web Workers). 138 files, +21,965 lines. 4 planning docs (13,187 lines: system architecture, design system, tech infrastructure, genetics porting guide). 4-reviewer panel (Architect A-, QA B+, Scientist B+, Technologist B+) → 13 issues found and fixed. Branching: rewrite/main → rewrite/phase-0-scaffolding. | PR #27 |
 
 ---
 
