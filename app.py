@@ -52,6 +52,7 @@ pages = [
     st.Page("pages/about.py", title="About"),
     st.Page("pages/legal.py", title="Legal"),
     st.Page("pages/account.py", title="Account"),
+    st.Page("pages/counseling.py", title="Genetic Counseling"),
 ]
 
 pg = st.navigation(pages, position="hidden")

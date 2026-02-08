@@ -70,3 +70,31 @@ def load_traits_corrected(db_path: str) -> list[dict]:
                 flat_map[genotype_key] = value
         trait["phenotype_map"] = flat_map
     return traits
+
+
+@st.cache_data
+def load_counseling_providers(providers_path: str) -> list[dict]:
+    """Load the genetic counseling provider directory from JSON, cached across reruns."""
+    with open(providers_path) as f:
+        return json.load(f)
+
+
+@st.cache_data
+def load_ethnicity_data(path: str = "data/ethnicity_frequencies.json") -> dict:
+    """Load ethnicity frequency data from JSON, cached across reruns."""
+    with open(path) as f:
+        return json.load(f)
+
+
+@st.cache_data
+def load_pgx_panel(path: str = "data/pgx_panel.json") -> dict:
+    """Load the pharmacogenomics panel from JSON, cached across reruns."""
+    with open(path) as f:
+        return json.load(f)
+
+
+@st.cache_data
+def load_prs_weights(path: str = "data/prs_weights.json") -> dict:
+    """Load the polygenic risk score weights from JSON, cached across reruns."""
+    with open(path) as f:
+        return json.load(f)

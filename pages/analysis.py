@@ -20,14 +20,25 @@ from Source.parser import (
     get_genotype_stats,
     parse_genetic_file,
 )
-from Source.tier_config import TierType, get_tier_config, get_upgrade_message
+from Source.tier_config import (
+    TierType,
+    can_access_ethnicity,
+    get_pgx_limit,
+    get_prs_limit,
+    get_tier_config,
+    get_upgrade_message,
+)
 from Source.trait_prediction import predict_trait
 from Source.ui.components import (
     _TOOLTIP_CSS,
     render_confidence_indicator,
+    render_counseling_banner,
+    render_ethnicity_selector,
+    render_metabolizer_badge,
     render_page_hero,
     render_probability_bar,
     render_progress_stepper,
+    render_prs_gauge,
     render_punnett_square,
     render_skeleton_card,
     render_tier_badge,
@@ -44,6 +55,9 @@ APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(APP_DIR, "data")
 CARRIER_PANEL_PATH = os.path.join(DATA_DIR, "carrier_panel.json")
 TRAIT_DB_PATH = os.path.join(DATA_DIR, "trait_snps.json")
+ETHNICITY_DATA_PATH = os.path.join(DATA_DIR, "ethnicity_frequencies.json")
+PGX_PANEL_PATH = os.path.join(DATA_DIR, "pgx_panel.json")
+PRS_WEIGHTS_PATH = os.path.join(DATA_DIR, "prs_weights.json")
 
 # ---------------------------------------------------------------------------
 # Demo mode check (skip auth if demo)
@@ -324,6 +338,18 @@ if current_user:
 else:
     user_tier = TierType.FREE.value  # Demo mode defaults to free tier
 tier_config = get_tier_config(TierType(user_tier))
+
+# ---------------------------------------------------------------------------
+# Ethnicity selector (Tier 5 — optional, appears before analysis)
+# ---------------------------------------------------------------------------
+_selected_population = None
+if can_access_ethnicity(TierType(user_tier)):
+    with st.expander("Population Background (optional)", expanded=False):
+        st.caption(
+            "Select your ancestry background to adjust carrier frequency estimates. "
+            "Leave as 'Global' for unadjusted results."
+        )
+        _selected_population = render_ethnicity_selector()
 
 # ---------------------------------------------------------------------------
 # Single-parent mode
@@ -823,3 +849,160 @@ if both_valid:
                         with st.expander(f"\u2753 Unknown ({len(unknowns)})", expanded=False):
                             for r in unknowns:
                                 st.markdown(f"- {r['condition']} ({r['gene']}) -- `{r['rsid']}`")
+
+        # ---------------------------------------------------------------
+        # Tier 5: Pharmacogenomics (PGx) Results
+        # ---------------------------------------------------------------
+        _tier_type = TierType(user_tier)
+        _pgx_limit = get_pgx_limit(_tier_type)
+        if _pgx_limit > 0:
+            st.markdown("---")
+            st.markdown(
+                """<div style="text-align:center;margin:1rem 0;">
+                    <h2 style="margin:0;font-family:'Sora',sans-serif;
+                        background:linear-gradient(135deg, #8b5cf6, #06b6d4);
+                        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                        font-weight:700;">Pharmacogenomics (PGx)</h2>
+                    <p style="color:var(--text-muted);font-family:'Lexend',sans-serif;font-size:0.9rem;">
+                        How your genetics may affect drug metabolism</p>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+            try:
+                from Source.data_loader import load_pgx_panel as _load_pgx
+                from Source.pharmacogenomics import analyze_pgx
+
+                _pgx_panel = _load_pgx(PGX_PANEL_PATH)
+                _pgx_results = analyze_pgx(
+                    st.session_state["snps_a"],
+                    st.session_state["snps_b"],
+                    _pgx_panel,
+                    tier=user_tier,
+                )
+                if _pgx_results["genes_analyzed"] > 0:
+                    for _gene_name, _gene_data in _pgx_results["results"].items():
+                        with st.expander(
+                            f"{_gene_name} -- {_gene_data.get('description', '')[:60]}",
+                            expanded=False,
+                        ):
+                            _pa_met = _gene_data["parent_a"]["metabolizer_status"]
+                            _pb_met = _gene_data["parent_b"]["metabolizer_status"]
+                            _pc1, _pc2 = st.columns(2)
+                            with _pc1:
+                                st.markdown("**Parent A:**")
+                                render_metabolizer_badge(_pa_met["status"])
+                                st.caption(f"Diplotype: {_gene_data['parent_a']['diplotype']}")
+                            with _pc2:
+                                st.markdown("**Parent B:**")
+                                render_metabolizer_badge(_pb_met["status"])
+                                st.caption(f"Diplotype: {_gene_data['parent_b']['diplotype']}")
+                            # Drug recommendations
+                            _all_recs = _gene_data["parent_a"]["drug_recommendations"] + _gene_data["parent_b"]["drug_recommendations"]
+                            if _all_recs:
+                                st.markdown("**Drug Recommendations:**")
+                                for _rec in _all_recs:
+                                    st.markdown(
+                                        f"- **{_rec['drug']}** ({_rec['category']}): {_rec['recommendation']} "
+                                        f"*[{_rec['source']}, {_rec['strength']}]*"
+                                    )
+                else:
+                    st.info("No pharmacogenomics data available for the analyzed genes.")
+                if _pgx_results.get("upgrade_message"):
+                    st.info(f"\U0001f48e {_pgx_results['upgrade_message']}")
+            except Exception as _pgx_exc:
+                st.warning(f"Pharmacogenomics analysis could not be completed: {_pgx_exc}")
+        elif user_tier == TierType.FREE.value:
+            st.markdown("---")
+            st.info(
+                "\U0001f48e **Pharmacogenomics:** Upgrade to Premium to see how genetics "
+                "affect drug metabolism across 5 key genes."
+            )
+
+        # ---------------------------------------------------------------
+        # Tier 5: Polygenic Risk Scores (PRS) Results
+        # ---------------------------------------------------------------
+        _prs_limit = get_prs_limit(_tier_type)
+        if _prs_limit > 0:
+            st.markdown("---")
+            st.markdown(
+                """<div style="text-align:center;margin:1rem 0;">
+                    <h2 style="margin:0;font-family:'Sora',sans-serif;
+                        background:linear-gradient(135deg, #06d6a0, #f59e0b);
+                        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                        font-weight:700;">Polygenic Risk Scores</h2>
+                    <p style="color:var(--text-muted);font-family:'Lexend',sans-serif;font-size:0.9rem;">
+                        Aggregate genetic predisposition across common conditions</p>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+            try:
+                from Source.data_loader import load_prs_weights as _load_prs
+                from Source.prs import analyze_prs, get_prs_disclaimer
+
+                _prs_weights = _load_prs(PRS_WEIGHTS_PATH)
+                _prs_results = analyze_prs(
+                    st.session_state["snps_a"],
+                    st.session_state["snps_b"],
+                    _prs_weights,
+                    tier=user_tier,
+                )
+                st.warning(get_prs_disclaimer())
+                if _prs_results["conditions"]:
+                    for _cond_key, _cond_data in _prs_results["conditions"].items():
+                        with st.expander(f"{_cond_data['name']}", expanded=False):
+                            _gc1, _gc2 = st.columns(2)
+                            with _gc1:
+                                st.markdown("**Parent A:**")
+                                render_prs_gauge(
+                                    _cond_data["parent_a"]["percentile"],
+                                    _cond_data["name"],
+                                )
+                            with _gc2:
+                                st.markdown("**Parent B:**")
+                                render_prs_gauge(
+                                    _cond_data["parent_b"]["percentile"],
+                                    _cond_data["name"],
+                                )
+                            _off = _cond_data["offspring"]
+                            st.markdown(
+                                f"**Offspring Expected Range:** "
+                                f"{_off['range_low']:.0f}th - {_off['range_high']:.0f}th percentile "
+                                f"(expected: {_off['expected_percentile']:.0f}th)"
+                            )
+                            if _cond_data.get("ancestry_note"):
+                                st.caption(f"Note: {_cond_data['ancestry_note']}")
+                else:
+                    st.info("No polygenic risk score data available.")
+            except Exception as _prs_exc:
+                st.warning(f"Polygenic risk score analysis could not be completed: {_prs_exc}")
+        elif user_tier == TierType.FREE.value:
+            st.markdown("---")
+            st.info(
+                "\U0001f48e **Polygenic Risk Scores:** Upgrade to Premium to see "
+                "genetic predisposition across 3 common conditions."
+            )
+
+        # ---------------------------------------------------------------
+        # Tier 5: Genetic Counseling Recommendation
+        # ---------------------------------------------------------------
+        try:
+            from Source.counseling import should_recommend_counseling as _should_counsel
+
+            _prs_for_counseling = []
+            if _prs_limit > 0:
+                try:
+                    for _ck, _cd in _prs_results.get("conditions", {}).items():
+                        _prs_for_counseling.append({
+                            "percentile": _cd["parent_a"]["percentile"],
+                            "trait": _cd["name"],
+                        })
+                except Exception:  # noqa: S110
+                    pass
+
+            _recommend, _reasons = _should_counsel(
+                carrier_results,
+                prs_results=_prs_for_counseling if _prs_for_counseling else None,
+            )
+            render_counseling_banner(_recommend, _reasons)
+        except Exception:  # noqa: S110
+            pass  # Counseling recommendation is non-critical

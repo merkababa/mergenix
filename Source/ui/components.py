@@ -4,6 +4,7 @@ Mergenix — Reusable UI components.
 Shared HTML/Streamlit helpers used across multiple pages.
 """
 
+import html as html_mod
 import json
 import os
 
@@ -11,6 +12,7 @@ import streamlit as st
 
 from .theme import (
     ACCENT_AMBER,
+    ACCENT_CYAN,
     ACCENT_ROSE,
     ACCENT_TEAL,
     SEVERITY_COLORS,
@@ -542,3 +544,181 @@ _TOOLTIP_CSS = """
 .genetic-tooltip:hover::after { opacity: 1; }
 </style>
 """
+
+
+# ---------------------------------------------------------------------------
+# Metabolizer status badge (Tier 5 — PGx)
+# ---------------------------------------------------------------------------
+_METABOLIZER_COLORS = {
+    "poor_metabolizer": (ACCENT_ROSE, "rgba(244,63,94,0.12)", "rgba(244,63,94,0.35)"),
+    "intermediate_metabolizer": (ACCENT_AMBER, "rgba(245,158,11,0.12)", "rgba(245,158,11,0.35)"),
+    "normal_metabolizer": (ACCENT_TEAL, "rgba(6,214,160,0.12)", "rgba(6,214,160,0.35)"),
+    "rapid_metabolizer": ("#06b6d4", "rgba(6,182,212,0.12)", "rgba(6,182,212,0.35)"),
+    "ultra_rapid_metabolizer": ("#8b5cf6", "rgba(139,92,246,0.12)", "rgba(139,92,246,0.35)"),
+}
+
+
+def render_metabolizer_badge(status: str) -> str:
+    """Return an HTML badge for a pharmacogenomic metabolizer status.
+
+    Args:
+        status: Metabolizer phenotype (e.g., "poor_metabolizer", "normal_metabolizer")
+
+    Returns:
+        HTML string with the styled badge markup.
+    """
+    color, bg, border = _METABOLIZER_COLORS.get(
+        status, ("#94a3b8", "rgba(148,163,184,0.12)", "rgba(148,163,184,0.35)")
+    )
+    label = status.replace("_", " ").title()
+    html = (
+        f'<span style="background:{bg};color:{color};padding:3px 12px;'
+        f'border:1px solid {border};border-radius:20px;font-size:0.8rem;font-weight:600;'
+        f"font-family:'Sora',sans-serif;display:inline-flex;align-items:center;gap:4px;\">"
+        f"{label}</span>"
+    )
+    st.markdown(html, unsafe_allow_html=True)
+    return html
+
+
+# ---------------------------------------------------------------------------
+# PRS risk gauge (Tier 5 — Polygenic Risk)
+# ---------------------------------------------------------------------------
+def render_prs_gauge(percentile: float, condition: str) -> str:
+    """Render a visual risk gauge for a polygenic risk score percentile.
+
+    Displays a horizontal bar with color-coded risk zones and a marker
+    at the individual's percentile position.
+
+    Args:
+        percentile: Population percentile (0-100).
+        condition: Condition name for the label.
+
+    Returns:
+        HTML string with the gauge markup.
+    """
+    # Determine color based on percentile
+    if percentile < 20:
+        marker_color = ACCENT_TEAL
+        risk_label = "Low"
+    elif percentile < 60:
+        marker_color = "#06b6d4"
+        risk_label = "Average"
+    elif percentile < 80:
+        marker_color = ACCENT_AMBER
+        risk_label = "Above Average"
+    elif percentile < 95:
+        marker_color = "#f97316"
+        risk_label = "Elevated"
+    else:
+        marker_color = ACCENT_ROSE
+        risk_label = "High"
+
+    clamped = min(max(percentile, 0), 100)
+    html = f"""
+    <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;
+            font-family:'Lexend',sans-serif;margin-bottom:4px;">
+            <span style="color:var(--text-primary);">{condition}</span>
+            <span style="font-weight:700;color:{marker_color};font-family:'Sora',sans-serif;">
+                {percentile:.0f}th percentile ({risk_label})</span>
+        </div>
+        <div style="position:relative;background:linear-gradient(90deg,
+            {ACCENT_TEAL}33 0%, #06b6d433 40%, {ACCENT_AMBER}33 65%,
+            #f9731633 82%, {ACCENT_ROSE}33 95%);
+            border-radius:8px;height:14px;border:1px solid var(--glass-border);">
+            <div style="position:absolute;left:{clamped}%;top:-2px;
+                width:4px;height:18px;background:{marker_color};border-radius:2px;
+                transform:translateX(-50%);box-shadow:0 0 6px {marker_color}80;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;
+            color:var(--text-dim);font-family:'Lexend',sans-serif;margin-top:2px;">
+            <span>Low</span><span>Average</span><span>High</span>
+        </div>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+    return html
+
+
+# ---------------------------------------------------------------------------
+# Ethnicity selector dropdown (Tier 5 — Ethnicity)
+# ---------------------------------------------------------------------------
+def render_ethnicity_selector() -> str | None:
+    """Render a dropdown for selecting population/ethnicity background.
+
+    Returns:
+        Selected population string, or None if "Global" is chosen.
+    """
+    populations = [
+        "Global",
+        "African/African American",
+        "East Asian",
+        "South Asian",
+        "European (Non-Finnish)",
+        "Finnish",
+        "Latino/Admixed American",
+        "Ashkenazi Jewish",
+        "Middle Eastern",
+    ]
+    selected = st.selectbox(
+        "Population Background (optional)",
+        options=populations,
+        index=0,
+        help="Select a population to adjust carrier frequencies based on ancestry. "
+             "Defaults to global averages if not specified.",
+        key="ethnicity_selector",
+    )
+    return selected if selected != "Global" else None
+
+
+# ---------------------------------------------------------------------------
+# Counseling recommendation banner (Tier 5 — Counseling)
+# ---------------------------------------------------------------------------
+def render_counseling_banner(should_recommend: bool, reasons: list[str]) -> str:
+    """Render a non-alarming banner suggesting genetic counseling if recommended.
+
+    Uses calming colors and supportive language to avoid causing anxiety.
+
+    Args:
+        should_recommend: Whether counseling is recommended.
+        reasons: List of human-readable reasons for the recommendation.
+
+    Returns:
+        HTML string with the banner markup (empty string if not recommended).
+    """
+    if not should_recommend:
+        return ""
+
+    reasons_html = "".join(f"<li>{html_mod.escape(str(r))}</li>" for r in reasons[:5])
+
+    html = f"""
+    <div style="background:linear-gradient(135deg, rgba(6,214,160,0.06), rgba(6,182,212,0.06));
+         border:1px solid rgba(6,214,160,0.25);border-radius:16px;
+         padding:24px;margin:24px 0;">
+        <div style="display:flex;align-items:flex-start;gap:16px;">
+            <div style="font-size:1.8rem;line-height:1;">&#x1f49a;</div>
+            <div style="flex:1;">
+                <h4 style="margin:0 0 8px;color:var(--text-heading);font-family:'Sora',sans-serif;
+                    font-weight:700;">Consider Speaking with a Genetic Counselor</h4>
+                <p style="margin:0 0 12px;color:var(--text-body);font-family:'Lexend',sans-serif;
+                    font-size:0.9rem;line-height:1.6;">
+                    Based on your results, you may benefit from speaking with a board-certified
+                    genetic counselor. This is a routine recommendation — many families consult
+                    genetic counselors as part of informed family planning.</p>
+                <ul style="color:var(--text-body);font-family:'Lexend',sans-serif;
+                    font-size:0.85rem;line-height:1.8;margin:0 0 12px;padding-left:20px;">
+                    {reasons_html}
+                </ul>
+                <a href="https://www.nsgc.org/findageneticcounselor" target="_blank"
+                   style="display:inline-block;padding:8px 20px;
+                   background:linear-gradient(135deg,{ACCENT_TEAL},{ACCENT_CYAN});
+                   color:#050810;border-radius:8px;font-family:'Sora',sans-serif;
+                   font-weight:600;font-size:0.85rem;text-decoration:none;
+                   transition:opacity 0.2s;">Find a Genetic Counselor</a>
+            </div>
+        </div>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+    return html

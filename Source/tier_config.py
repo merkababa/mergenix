@@ -25,6 +25,10 @@ class TierConfig:
     disease_limit: int
     trait_limit: int
     features: list[str]
+    ethnicity_access: bool = False
+    pgx_gene_limit: int = 0
+    prs_condition_limit: int = 0
+    counseling_level: str = "basic"
 
 
 # Tier configurations
@@ -40,7 +44,12 @@ TIER_CONFIGS: dict[TierType, TierConfig] = {
             "Analyze top 10 genetic traits",
             "Basic carrier status report",
             "Disease prevalence data",
-        ]
+            "Basic counseling recommendations",
+        ],
+        ethnicity_access=False,
+        pgx_gene_limit=0,
+        prs_condition_limit=0,
+        counseling_level="basic",
     ),
     TierType.PREMIUM: TierConfig(
         name="premium",
@@ -55,7 +64,15 @@ TIER_CONFIGS: dict[TierType, TierConfig] = {
             "Disease prevalence data with OMIM links",
             "Advanced filtering and search",
             "PDF export",
-        ]
+            "Ethnicity-adjusted carrier frequencies",
+            "Pharmacogenomics analysis (5 genes)",
+            "Polygenic risk scores (3 conditions)",
+            "Full counseling summary",
+        ],
+        ethnicity_access=True,
+        pgx_gene_limit=5,
+        prs_condition_limit=3,
+        counseling_level="full",
     ),
     TierType.PRO: TierConfig(
         name="pro",
@@ -73,7 +90,15 @@ TIER_CONFIGS: dict[TierType, TierConfig] = {
             "All future disease updates included",
             "Priority support",
             "API access",
-        ]
+            "Ethnicity-adjusted carrier frequencies",
+            "Pharmacogenomics analysis (all 12 genes)",
+            "Polygenic risk scores (all 10 conditions)",
+            "Full counseling summary with referral letter",
+        ],
+        ethnicity_access=True,
+        pgx_gene_limit=12,
+        prs_condition_limit=10,
+        counseling_level="full_plus_letter",
     )
 }
 
@@ -300,6 +325,54 @@ def get_stripe_price_id(tier: TierType) -> str | None:
         Stripe price ID string, or None if not available
     """
     return STRIPE_PRICES.get(tier)
+
+
+def can_access_ethnicity(tier: TierType) -> bool:
+    """Check if a tier has access to ethnicity-adjusted frequencies.
+
+    Args:
+        tier: The user's subscription tier
+
+    Returns:
+        True if ethnicity features are available at this tier
+    """
+    return TIER_CONFIGS[tier].ethnicity_access
+
+
+def get_pgx_limit(tier: TierType) -> int:
+    """Get the pharmacogenomics gene limit for a tier.
+
+    Args:
+        tier: The user's subscription tier
+
+    Returns:
+        Number of PGx genes accessible (0 means no access)
+    """
+    return TIER_CONFIGS[tier].pgx_gene_limit
+
+
+def get_prs_limit(tier: TierType) -> int:
+    """Get the polygenic risk score condition limit for a tier.
+
+    Args:
+        tier: The user's subscription tier
+
+    Returns:
+        Number of PRS conditions accessible (0 means no access)
+    """
+    return TIER_CONFIGS[tier].prs_condition_limit
+
+
+def get_counseling_level(tier: TierType) -> str:
+    """Get the counseling feature level for a tier.
+
+    Args:
+        tier: The user's subscription tier
+
+    Returns:
+        Counseling level: "basic", "full", or "full_plus_letter"
+    """
+    return TIER_CONFIGS[tier].counseling_level
 
 
 # Example usage

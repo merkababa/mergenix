@@ -1,0 +1,940 @@
+{
+  "metadata": {
+    "source": "CPIC Guidelines + PharmGKB",
+    "version": "2026.1",
+    "genes_covered": 12,
+    "drugs_covered": 100,
+    "last_updated": "2026-01-15"
+  },
+  "genes": {
+    "CYP2D6": {
+      "name": "CYP2D6",
+      "chromosome": "22",
+      "description": "Major drug-metabolizing enzyme, processes ~25% of all medications",
+      "defining_snps": ["rs3892097", "rs1065852", "rs1135840", "rs16947"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*2": {
+          "defining_variants": [
+            {"rsid": "rs16947", "genotype": "AG"}
+          ],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*4": {
+          "defining_variants": [
+            {"rsid": "rs3892097", "genotype": "AA"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*9": {
+          "defining_variants": [
+            {"rsid": "rs5030656", "genotype": "del"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        },
+        "*10": {
+          "defining_variants": [
+            {"rsid": "rs1065852", "genotype": "TT"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.25
+        },
+        "*41": {
+          "defining_variants": [
+            {"rsid": "rs28371725", "genotype": "TT"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "Very slow drug metabolism; medications may accumulate to toxic levels"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.25, 1.0],
+          "description": "Below average drug metabolism; may need dose adjustment"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.25, 2.25],
+          "description": "Normal drug metabolism; standard dosing expected to be effective"
+        },
+        "ultra_rapid_metabolizer": {
+          "activity_score_range": [2.5, 99],
+          "description": "Very fast drug metabolism; standard doses may be ineffective or cause toxicity with prodrugs"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Codeine",
+          "category": "Pain",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Avoid codeine. Use alternative analgesics not metabolized by CYP2D6 (e.g., morphine, non-opioids)",
+            "intermediate_metabolizer": "Use codeine with caution at reduced dose. Monitor for reduced efficacy",
+            "ultra_rapid_metabolizer": "Avoid codeine. Risk of life-threatening toxicity due to rapid conversion to morphine"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Tramadol",
+          "category": "Pain",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Avoid tramadol. Use alternative analgesic due to lack of efficacy",
+            "intermediate_metabolizer": "Use tramadol with caution. Consider reduced dose",
+            "ultra_rapid_metabolizer": "Avoid tramadol. Risk of respiratory depression due to rapid O-demethylation"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Tamoxifen",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Avoid tamoxifen. Consider aromatase inhibitor or alternative endocrine therapy",
+            "intermediate_metabolizer": "Consider alternative endocrine therapy or higher tamoxifen dose (40 mg/day)"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Fluoxetine",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider 50% dose reduction or use alternative SSRI not metabolized by CYP2D6 (e.g., sertraline, citalopram)",
+            "ultra_rapid_metabolizer": "Select alternative SSRI not metabolized by CYP2D6. Fluoxetine may be ineffective"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Paroxetine",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider 50% dose reduction or use alternative SSRI not metabolized by CYP2D6",
+            "ultra_rapid_metabolizer": "Select alternative SSRI not metabolized by CYP2D6"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Venlafaxine",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider 50% dose reduction or switch to desvenlafaxine (active metabolite)",
+            "ultra_rapid_metabolizer": "Consider titrating to higher dose or select alternative medication"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Amitriptyline",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Avoid tricyclic antidepressant or reduce dose by 50%. Use therapeutic drug monitoring",
+            "ultra_rapid_metabolizer": "Avoid tricyclic antidepressant. Select alternative not metabolized by CYP2D6"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Nortriptyline",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce dose by 50%. Use therapeutic drug monitoring",
+            "ultra_rapid_metabolizer": "Avoid nortriptyline. Select alternative not metabolized by CYP2D6"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Ondansetron",
+          "category": "Antiemetic",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Select alternative antiemetic (e.g., granisetron). Ondansetron may have reduced efficacy",
+            "ultra_rapid_metabolizer": "Select alternative antiemetic not metabolized by CYP2D6"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "CYP2C19": {
+      "name": "CYP2C19",
+      "chromosome": "10",
+      "description": "Drug-metabolizing enzyme critical for antiplatelet therapy and proton pump inhibitors",
+      "defining_snps": ["rs4244285", "rs4986893", "rs12248560"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*2": {
+          "defining_variants": [
+            {"rsid": "rs4244285", "genotype": "AA"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*3": {
+          "defining_variants": [
+            {"rsid": "rs4986893", "genotype": "AA"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*17": {
+          "defining_variants": [
+            {"rsid": "rs12248560", "genotype": "TT"}
+          ],
+          "function": "increased",
+          "activity_score": 1.5
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "Very slow CYP2C19 metabolism; clopidogrel is ineffective"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Reduced CYP2C19 metabolism; clopidogrel efficacy may be reduced"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.0, 2.0],
+          "description": "Normal CYP2C19 metabolism; standard drug response expected"
+        },
+        "rapid_metabolizer": {
+          "activity_score_range": [2.0, 2.5],
+          "description": "Increased CYP2C19 metabolism"
+        },
+        "ultra_rapid_metabolizer": {
+          "activity_score_range": [3.0, 99],
+          "description": "Very fast CYP2C19 metabolism; PPIs may be less effective"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Clopidogrel",
+          "category": "Antiplatelet",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Use alternative antiplatelet agent (e.g., prasugrel, ticagrelor). Clopidogrel is a prodrug requiring CYP2C19 activation",
+            "intermediate_metabolizer": "Use alternative antiplatelet agent (e.g., prasugrel, ticagrelor) if no contraindications"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Omeprazole",
+          "category": "GI",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce dose by 50%. Increased risk of side effects due to elevated drug levels",
+            "ultra_rapid_metabolizer": "Increase dose by 100% for H. pylori eradication. Standard dose may be insufficient"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Pantoprazole",
+          "category": "GI",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce dose by 50%. Monitor for adverse effects",
+            "ultra_rapid_metabolizer": "Consider dose increase for adequate acid suppression"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Escitalopram",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider 50% dose reduction. Maximum dose 10 mg/day",
+            "ultra_rapid_metabolizer": "Select alternative SSRI or titrate to higher dose with monitoring"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Sertraline",
+          "category": "Psychiatry",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider 50% dose reduction or select alternative SSRI",
+            "ultra_rapid_metabolizer": "Titrate to higher dose or select alternative medication"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Voriconazole",
+          "category": "Antifungal",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Use standard dose but monitor trough levels closely. Risk of supratherapeutic levels",
+            "ultra_rapid_metabolizer": "Use alternative antifungal agent. Voriconazole may be subtherapeutic"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "CYP2C9": {
+      "name": "CYP2C9",
+      "chromosome": "10",
+      "description": "Drug-metabolizing enzyme important for warfarin and NSAID metabolism",
+      "defining_snps": ["rs1799853", "rs1057910"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*2": {
+          "defining_variants": [
+            {"rsid": "rs1799853", "genotype": "TT"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        },
+        "*3": {
+          "defining_variants": [
+            {"rsid": "rs1057910", "genotype": "CC"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0.5],
+          "description": "Very slow CYP2C9 metabolism; significant warfarin dose reduction needed"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.5],
+          "description": "Reduced CYP2C9 metabolism; moderate warfarin dose adjustment may be needed"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal CYP2C9 metabolism; standard warfarin dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Warfarin",
+          "category": "Anticoagulant",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce warfarin dose by 50-80%. Use pharmacogenomic dosing algorithm. Increased bleeding risk",
+            "intermediate_metabolizer": "Reduce warfarin dose by 20-40%. Use pharmacogenomic dosing algorithm"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Phenytoin",
+          "category": "Anticonvulsant",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce phenytoin dose by 50%. Use therapeutic drug monitoring",
+            "intermediate_metabolizer": "Reduce phenytoin dose by 25%. Use therapeutic drug monitoring"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Celecoxib",
+          "category": "NSAID",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce dose by 50% or use alternative NSAID. Increased GI and cardiovascular risk"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Flurbiprofen",
+          "category": "NSAID",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce dose by 50% or use alternative NSAID"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "CYP3A5": {
+      "name": "CYP3A5",
+      "chromosome": "7",
+      "description": "Drug-metabolizing enzyme important for tacrolimus dosing in transplant patients",
+      "defining_snps": ["rs776746"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [
+            {"rsid": "rs776746", "genotype": "CC"}
+          ],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*3": {
+          "defining_variants": [
+            {"rsid": "rs776746", "genotype": "TT"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "Non-expressor (CYP3A5*3/*3); requires lower tacrolimus dose"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Heterozygous expressor (CYP3A5*1/*3); intermediate tacrolimus metabolism"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Homozygous expressor (CYP3A5*1/*1); standard tacrolimus metabolism"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Tacrolimus",
+          "category": "Immunosuppressant",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Use standard initial dose (0.15 mg/kg/day). Non-expressors need lower doses",
+            "normal_metabolizer": "Increase starting dose to 0.3 mg/kg/day. Expressors metabolize tacrolimus more rapidly"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "CYP1A2": {
+      "name": "CYP1A2",
+      "chromosome": "15",
+      "description": "Drug-metabolizing enzyme; metabolizes caffeine, theophylline, and some antipsychotics",
+      "defining_snps": ["rs762551"],
+      "star_alleles": {
+        "*1A": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*1F": {
+          "defining_variants": [
+            {"rsid": "rs762551", "genotype": "AA"}
+          ],
+          "function": "increased",
+          "activity_score": 1.5
+        }
+      },
+      "metabolizer_status": {
+        "slow_metabolizer": {
+          "activity_score_range": [0, 1.0],
+          "description": "Slow caffeine metabolism; higher sensitivity to caffeine"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.0, 2.0],
+          "description": "Normal caffeine metabolism"
+        },
+        "rapid_metabolizer": {
+          "activity_score_range": [2.5, 99],
+          "description": "Rapid caffeine metabolism; reduced caffeine sensitivity"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Caffeine",
+          "category": "Informational",
+          "recommendation_by_status": {
+            "slow_metabolizer": "Slow caffeine metabolizer. Higher cardiovascular risk with high caffeine intake (>3 cups/day)"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "DPYD": {
+      "name": "DPYD",
+      "chromosome": "1",
+      "description": "Dihydropyrimidine dehydrogenase; rate-limiting enzyme for fluoropyrimidine catabolism",
+      "defining_snps": ["rs3918290", "rs55886062", "rs67376798", "rs75017182"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*2A": {
+          "defining_variants": [
+            {"rsid": "rs3918290", "genotype": "TT"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*13": {
+          "defining_variants": [
+            {"rsid": "rs55886062", "genotype": "AA"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "c.2846A>T": {
+          "defining_variants": [
+            {"rsid": "rs67376798", "genotype": "TT"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        },
+        "HapB3": {
+          "defining_variants": [
+            {"rsid": "rs75017182", "genotype": "TT"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0.5],
+          "description": "DPYD deficiency; fluoropyrimidines are life-threatening"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.5],
+          "description": "Partial DPYD deficiency; fluoropyrimidine dose reduction required"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal DPYD activity; standard fluoropyrimidine dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Fluorouracil (5-FU)",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "AVOID fluorouracil. Use alternative non-fluoropyrimidine chemotherapy. DPYD deficiency causes potentially fatal toxicity",
+            "intermediate_metabolizer": "Reduce fluorouracil dose by 50%. Monitor for toxicity closely"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Capecitabine",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "AVOID capecitabine. Use alternative non-fluoropyrimidine chemotherapy",
+            "intermediate_metabolizer": "Reduce capecitabine dose by 50%. Monitor for toxicity closely"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "TPMT": {
+      "name": "TPMT",
+      "chromosome": "6",
+      "description": "Thiopurine S-methyltransferase; metabolizes thiopurine drugs used in autoimmune diseases and cancer",
+      "defining_snps": ["rs1800462", "rs1800460", "rs1142345"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*2": {
+          "defining_variants": [
+            {"rsid": "rs1800462", "genotype": "CC"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*3A": {
+          "defining_variants": [
+            {"rsid": "rs1800460", "genotype": "TT"},
+            {"rsid": "rs1142345", "genotype": "CC"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        },
+        "*3C": {
+          "defining_variants": [
+            {"rsid": "rs1142345", "genotype": "CC"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "TPMT deficiency; thiopurines cause life-threatening myelosuppression"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Reduced TPMT activity; thiopurine dose reduction required"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal TPMT activity; standard thiopurine dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Azathioprine",
+          "category": "Immunosuppressant",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce azathioprine dose by 90% or use alternative agent. Weekly CBC monitoring required",
+            "intermediate_metabolizer": "Reduce azathioprine dose by 30-70%. Monitor CBC weekly for first month"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Mercaptopurine",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce mercaptopurine dose by 90% and give 3 times per week. Monitor CBC closely",
+            "intermediate_metabolizer": "Reduce mercaptopurine dose by 30-70%. Monitor CBC weekly"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Thioguanine",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce thioguanine dose by 90%. Consider alternative therapy",
+            "intermediate_metabolizer": "Reduce thioguanine dose by 30-70%. Monitor CBC closely"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "NUDT15": {
+      "name": "NUDT15",
+      "chromosome": "13",
+      "description": "Nucleoside diphosphate-linked moiety X-type motif 15; hydrolyzes thiopurine metabolites",
+      "defining_snps": ["rs116855232"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*3": {
+          "defining_variants": [
+            {"rsid": "rs116855232", "genotype": "TT"}
+          ],
+          "function": "no_function",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "NUDT15 deficiency; thiopurines cause severe myelosuppression"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Reduced NUDT15 activity; thiopurine dose reduction required"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal NUDT15 activity; standard thiopurine dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Azathioprine",
+          "category": "Immunosuppressant",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce azathioprine dose by 90% or avoid. Monitor for severe leukopenia",
+            "intermediate_metabolizer": "Reduce azathioprine dose by 25-50%. Monitor CBC closely"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Mercaptopurine",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce mercaptopurine dose by 90%. Consider alternative therapy",
+            "intermediate_metabolizer": "Reduce mercaptopurine dose by 25-50%. Monitor CBC"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "SLCO1B1": {
+      "name": "SLCO1B1",
+      "chromosome": "12",
+      "description": "Solute carrier organic anion transporter; mediates hepatic uptake of statins",
+      "defining_snps": ["rs4149056"],
+      "star_alleles": {
+        "*1A": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*5": {
+          "defining_variants": [
+            {"rsid": "rs4149056", "genotype": "CC"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.0
+        },
+        "*15": {
+          "defining_variants": [
+            {"rsid": "rs4149056", "genotype": "TC"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        }
+      },
+      "metabolizer_status": {
+        "poor_function": {
+          "activity_score_range": [0, 0],
+          "description": "Significantly reduced SLCO1B1 transporter function; high myopathy risk with statins"
+        },
+        "decreased_function": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Moderately reduced SLCO1B1 function; increased myopathy risk"
+        },
+        "normal_function": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal SLCO1B1 function; standard statin dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Simvastatin",
+          "category": "Statin",
+          "recommendation_by_status": {
+            "poor_function": "Use alternative statin (rosuvastatin, pravastatin, fluvastatin). Avoid simvastatin >20mg - high myopathy risk",
+            "decreased_function": "Use lower simvastatin dose (max 20mg) or switch to alternative statin"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Atorvastatin",
+          "category": "Statin",
+          "recommendation_by_status": {
+            "poor_function": "Prescribe lower dose atorvastatin or use alternative statin. Monitor for myopathy",
+            "decreased_function": "Use with caution. Prescribe lower dose if possible"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Rosuvastatin",
+          "category": "Statin",
+          "recommendation_by_status": {
+            "poor_function": "Prescribe max 20mg rosuvastatin. Lower myopathy risk vs simvastatin",
+            "decreased_function": "Use standard dosing with monitoring for myopathy symptoms"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "VKORC1": {
+      "name": "VKORC1",
+      "chromosome": "16",
+      "description": "Vitamin K epoxide reductase complex subunit 1; target of warfarin anticoagulation",
+      "defining_snps": ["rs9923231"],
+      "star_alleles": {
+        "GG": {
+          "defining_variants": [
+            {"rsid": "rs9923231", "genotype": "GG"}
+          ],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "AG": {
+          "defining_variants": [
+            {"rsid": "rs9923231", "genotype": "AG"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.5
+        },
+        "AA": {
+          "defining_variants": [
+            {"rsid": "rs9923231", "genotype": "AA"}
+          ],
+          "function": "low",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "low_warfarin_sensitivity": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal VKORC1 expression; standard warfarin dose"
+        },
+        "intermediate_warfarin_sensitivity": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Reduced VKORC1 expression; lower warfarin dose needed"
+        },
+        "high_warfarin_sensitivity": {
+          "activity_score_range": [0, 0],
+          "description": "Very low VKORC1 expression; significantly reduced warfarin dose required"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Warfarin",
+          "category": "Anticoagulant",
+          "recommendation_by_status": {
+            "high_warfarin_sensitivity": "Reduce warfarin dose by 25-50% from standard. Use pharmacogenomic dosing algorithm incorporating CYP2C9 genotype",
+            "intermediate_warfarin_sensitivity": "Reduce warfarin dose by 15-30%. Monitor INR closely"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "HLA-B": {
+      "name": "HLA-B",
+      "chromosome": "6",
+      "description": "Human leukocyte antigen B; specific alleles associated with severe drug hypersensitivity reactions",
+      "defining_snps": ["rs2395029", "rs3909184", "rs2844682"],
+      "star_alleles": {
+        "normal": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*57:01": {
+          "defining_variants": [
+            {"rsid": "rs2395029", "genotype": "GG"}
+          ],
+          "function": "risk",
+          "activity_score": 0.0
+        },
+        "*15:02": {
+          "defining_variants": [
+            {"rsid": "rs3909184", "genotype": "CC"}
+          ],
+          "function": "risk",
+          "activity_score": 0.0
+        },
+        "*58:01": {
+          "defining_variants": [
+            {"rsid": "rs2844682", "genotype": "TT"}
+          ],
+          "function": "risk",
+          "activity_score": 0.0
+        }
+      },
+      "metabolizer_status": {
+        "positive": {
+          "activity_score_range": [0, 0],
+          "description": "Carrier of high-risk HLA-B allele; risk of severe hypersensitivity reaction"
+        },
+        "negative": {
+          "activity_score_range": [0.5, 2.0],
+          "description": "No high-risk HLA-B allele detected; standard prescribing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Abacavir",
+          "category": "Antiviral",
+          "recommendation_by_status": {
+            "positive": "AVOID abacavir. HLA-B*57:01 positive patients have 50% risk of potentially fatal hypersensitivity reaction"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Carbamazepine",
+          "category": "Anticonvulsant",
+          "recommendation_by_status": {
+            "positive": "AVOID carbamazepine. HLA-B*15:02 positive patients at risk for Stevens-Johnson Syndrome/Toxic Epidermal Necrolysis"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        },
+        {
+          "name": "Allopurinol",
+          "category": "Antigout",
+          "recommendation_by_status": {
+            "positive": "AVOID allopurinol. HLA-B*58:01 positive patients at risk for severe cutaneous adverse reactions"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    },
+    "UGT1A1": {
+      "name": "UGT1A1",
+      "chromosome": "2",
+      "description": "UDP glucuronosyltransferase 1A1; glucuronidation enzyme important for irinotecan and atazanavir metabolism",
+      "defining_snps": ["rs8175347"],
+      "star_alleles": {
+        "*1": {
+          "defining_variants": [],
+          "function": "normal",
+          "activity_score": 1.0
+        },
+        "*28": {
+          "defining_variants": [
+            {"rsid": "rs8175347", "genotype": "7/7"}
+          ],
+          "function": "decreased",
+          "activity_score": 0.0
+        },
+        "*80": {
+          "defining_variants": [
+            {"rsid": "rs8175347", "genotype": "6/7"}
+          ],
+          "function": "intermediate",
+          "activity_score": 0.5
+        }
+      },
+      "metabolizer_status": {
+        "poor_metabolizer": {
+          "activity_score_range": [0, 0],
+          "description": "UGT1A1 deficiency (Gilbert syndrome genotype); reduced drug glucuronidation"
+        },
+        "intermediate_metabolizer": {
+          "activity_score_range": [0.5, 1.0],
+          "description": "Intermediate UGT1A1 activity; may need dose adjustment for some drugs"
+        },
+        "normal_metabolizer": {
+          "activity_score_range": [1.5, 2.0],
+          "description": "Normal UGT1A1 activity; standard drug dosing"
+        }
+      },
+      "drugs": [
+        {
+          "name": "Atazanavir",
+          "category": "Antiviral",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Consider alternative antiretroviral if patient develops jaundice. UGT1A1*28/*28 increases risk of hyperbilirubinemia"
+          },
+          "strength": "moderate",
+          "source": "CPIC"
+        },
+        {
+          "name": "Irinotecan",
+          "category": "Oncology",
+          "recommendation_by_status": {
+            "poor_metabolizer": "Reduce irinotecan dose by 30%. UGT1A1*28/*28 increases risk of severe neutropenia and diarrhea",
+            "intermediate_metabolizer": "Use standard irinotecan dose with close monitoring for toxicity"
+          },
+          "strength": "strong",
+          "source": "CPIC"
+        }
+      ]
+    }
+  }
+}
