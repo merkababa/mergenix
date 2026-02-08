@@ -1,13 +1,16 @@
 # Mergenix - Project Rules
 
-## Session Start Protocol
+## Session Start Protocol (MANDATORY — every session, every PC)
 1. **ALWAYS run `git pull origin main`** at the start of every session
 2. **Check for open PRs** before starting new work: `gh pr list --state open`
    - If there are open PRs, review them first — they may need to be merged before branching
    - This prevents working on a stale `main` branch (critical for multi-PC workflows)
    - If an open PR is yours and approved, merge it before starting new work
-3. Check `PROGRESS.md` for current status and who's working on what
-4. Claim your task in PROGRESS.md before starting work
+3. **Read `PROGRESS.md`** for current status — this tells you exactly where we left off
+4. **Read `docs/PROJECT_STATUS.md`** for the full project state, known issues, and next steps
+5. **Present a status summary to the user** — show what's done, what's in progress, what's next
+   - Never ask the user "where did we leave off?" — the answer is always in PROGRESS.md and PROJECT_STATUS.md
+6. Claim your task in PROGRESS.md before starting work
 
 ## Git Workflow
 
@@ -58,10 +61,11 @@ pytest tests/ -v
 ```
 
 ## PROGRESS.md Rules
-- This is the **one file** that can be pushed directly to `main`
+- This is the **one file** that can be pushed directly to `main` (along with CLAUDE.md)
 - Update it when you: start a task, finish a task, or hit a blocker
 - Format: who did what, when, current status
 - This keeps everyone in sync across computers and sessions
+- **ALWAYS update PROGRESS.md at the END of every session** — so the next session on any PC knows exactly where we left off
 
 ## File Organization
 ```
@@ -97,14 +101,20 @@ Mergenix/
 | Maayan | Developer / Reviewer | Codes, reviews PRs, uses Claude Code |
 | Claude | AI Assistant | Creates PRs for review, pushes PROGRESS.md directly |
 
+## Session End Protocol (MANDATORY — before ending every session)
+1. **Update `PROGRESS.md`** with what was done, current status, and next steps
+2. **Update `docs/PROJECT_STATUS.md`** if any bugs were fixed, features added, or known issues changed
+3. **Push both files to `main`** so the next session on ANY PC starts with full context
+4. Never leave the user having to investigate where we left off — the status files must tell the full story
+
 ## Claude-Specific Rules
 - Always pull before starting work
 - **Always check for open PRs** (`gh pr list --state open`) before starting new work
 - Always create work on feature branches, never push code to main
-- PROGRESS.md is the only file Claude can push directly to main
+- PROGRESS.md and CLAUDE.md can be pushed directly to main
 - Always run `ruff check` and `pytest` before committing
 - Create small, focused PRs with clear descriptions
-- After completing work, update PROGRESS.md and push it
+- **After completing work, ALWAYS update PROGRESS.md and PROJECT_STATUS.md and push them**
 - If unsure about a design decision, ask — don't guess
 
 ## PR Summary Format (MANDATORY)
