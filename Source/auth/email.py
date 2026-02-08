@@ -5,10 +5,11 @@ Uses Python stdlib (smtplib) only. Gracefully degrades if SMTP is not configured
 """
 
 import logging
-import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from Source.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +18,9 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
     """
     Send an email via SMTP with TLS.
 
-    Reads SMTP configuration from environment variables. If SMTP is not
-    configured (missing host or user), logs a warning and returns False
-    without crashing.
+    Reads SMTP configuration from the unified config (Source.config.settings).
+    If SMTP is not configured (missing host or user), logs a warning and
+    returns False without crashing.
 
     Args:
         to_email: Recipient email address.
@@ -29,12 +30,12 @@ def send_email(to_email: str, subject: str, html_body: str) -> bool:
     Returns:
         True if the email was sent successfully, False otherwise.
     """
-    smtp_host = os.getenv("SMTP_HOST", "")
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_password = os.getenv("SMTP_PASSWORD", "")
-    from_email = os.getenv("FROM_EMAIL", "noreply@mergenix.com")
-    from_name = os.getenv("FROM_NAME", "Mergenix")
+    smtp_host = settings.smtp_host
+    smtp_port = settings.smtp_port
+    smtp_user = settings.smtp_username
+    smtp_password = settings.smtp_password
+    from_email = settings.from_email
+    from_name = settings.from_name
 
     if not smtp_host or not smtp_user:
         logger.warning(
@@ -84,7 +85,7 @@ def send_verification_email(to_email: str, token: str, base_url: str = "") -> bo
         True if the email was sent successfully, False otherwise.
     """
     if not base_url:
-        base_url = os.getenv("APP_BASE_URL", "http://localhost:8501")
+        base_url = settings.app_base_url
 
     verify_url = f"{base_url}/auth?action=verify&token={token}"
 
@@ -143,7 +144,7 @@ def send_password_reset_email(to_email: str, token: str, base_url: str = "") -> 
         True if the email was sent successfully, False otherwise.
     """
     if not base_url:
-        base_url = os.getenv("APP_BASE_URL", "http://localhost:8501")
+        base_url = settings.app_base_url
 
     reset_url = f"{base_url}/auth?action=reset&token={token}"
 

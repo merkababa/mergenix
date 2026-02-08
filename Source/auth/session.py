@@ -6,9 +6,10 @@ import secrets
 from datetime import datetime, timedelta
 
 import streamlit as st
+from Source.config import settings
 
-# Session timeout in minutes
-SESSION_TIMEOUT = 60
+# Session timeout in minutes (from unified config)
+SESSION_TIMEOUT = settings.session_timeout_minutes
 
 
 def create_session(user: dict) -> str:

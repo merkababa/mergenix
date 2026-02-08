@@ -3,11 +3,11 @@ Google OAuth integration for Mergenix authentication.
 Handles OAuth flow, token exchange, and user creation/linking.
 """
 
-import os
 import secrets
 from urllib.parse import urlencode
 
 import requests
+from Source.config import settings
 
 
 class GoogleOAuthHandler:
@@ -35,16 +35,13 @@ class GoogleOAuthHandler:
         Initialize Google OAuth handler.
 
         Args:
-            client_id: Google OAuth client ID (defaults to env var)
-            client_secret: Google OAuth client secret (defaults to env var)
-            redirect_uri: OAuth callback URL (defaults to env var)
+            client_id: Google OAuth client ID (defaults to settings)
+            client_secret: Google OAuth client secret (defaults to settings)
+            redirect_uri: OAuth callback URL (defaults to settings)
         """
-        self.client_id = client_id or os.getenv("GOOGLE_CLIENT_ID")
-        self.client_secret = client_secret or os.getenv("GOOGLE_CLIENT_SECRET")
-        self.redirect_uri = redirect_uri or os.getenv(
-            "GOOGLE_REDIRECT_URI",
-            "http://localhost:8501/Login?oauth_callback=google"
-        )
+        self.client_id = client_id or settings.google_client_id
+        self.client_secret = client_secret or settings.google_client_secret
+        self.redirect_uri = redirect_uri or settings.google_redirect_uri
 
     def is_configured(self) -> bool:
         """Check if OAuth credentials are configured."""

@@ -14,10 +14,12 @@ from io import BytesIO, StringIO
 from pathlib import Path
 from typing import BinaryIO
 
+from Source.config import settings
+
 # ---------------------------------------------------------------------------
 # Limits
 # ---------------------------------------------------------------------------
-MAX_FILE_SIZE_BYTES = 200 * 1024 * 1024  # 200 MB
+MAX_FILE_SIZE_BYTES = settings.max_upload_size_mb * 1024 * 1024
 MAX_SNP_COUNT = 10_000_000
 
 

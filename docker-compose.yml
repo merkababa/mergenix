@@ -1,0 +1,43 @@
+# =============================================================================
+# Mergenix — Docker Compose
+# =============================================================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mergenix
+    ports:
+      - "8501:8501"
+    volumes:
+      # Persist the data directory so user/audit data survives restarts
+      - ./data:/app/data
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Dev profile — mounts source code for hot-reload during development.
+  # Usage: docker compose --profile dev up
+  # ---------------------------------------------------------------------------
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mergenix-dev
+    ports:
+      - "8502:8501"
+    volumes:
+      - ./data:/app/data
+      - ./Source:/app/Source
+      - ./pages:/app/pages
+      - ./app.py:/app/app.py
+      - ./.streamlit/config.toml:/app/.streamlit/config.toml
+    env_file:
+      - .env
+    environment:
+      - MERGENIX_DEBUG=true
+    restart: unless-stopped
+    profiles:
+      - dev

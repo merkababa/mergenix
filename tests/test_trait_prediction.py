@@ -20,6 +20,7 @@ import pytest
 from Source.trait_prediction import (
     _extract_phenotype_string,
     analyze_traits,
+    format_prediction_report,
     get_parent_alleles,
     map_genotype_to_phenotype,
     normalize_genotype,
@@ -731,3 +732,480 @@ class TestAnalyzeTraits:
             assert results == []
         finally:
             os.unlink(db_path)
+
+    def test_analyze_partial_snp_coverage(self):
+        """Some traits match, some are missing — mixed results."""
+        entries = [
+            {
+                "rsid": "rs001",
+                "trait": "Trait A",
+                "gene": "GENE_A",
+                "phenotype_map": {"AA": "Pheno A1", "AG": "Pheno A2", "GG": "Pheno A3"},
+            },
+            {
+                "rsid": "rs002",
+                "trait": "Trait B",
+                "gene": "GENE_B",
+                "phenotype_map": {"CC": "Pheno B1", "CT": "Pheno B2", "TT": "Pheno B3"},
+            },
+        ]
+        db_path = self._create_temp_trait_db(entries)
+        try:
+            # Parents only have rs001, not rs002
+            parent_a = {"rs001": "AG"}
+            parent_b = {"rs001": "GG"}
+
+            results = analyze_traits(parent_a, parent_b, db_path)
+
+            assert len(results) == 2
+            statuses = {r["trait"]: r["status"] for r in results}
+            assert statuses["Trait A"] == "success"
+            assert statuses["Trait B"] == "missing"
+        finally:
+            os.unlink(db_path)
+
+    def test_analyze_multiple_traits_all_success(self):
+        """Multiple traits where both parents have all required SNPs."""
+        entries = [
+            {
+                "rsid": "rs001",
+                "trait": "Trait A",
+                "gene": "GENE_A",
+                "phenotype_map": {"AA": "A1", "AG": "A2", "GG": "A3"},
+            },
+            {
+                "rsid": "rs002",
+                "trait": "Trait B",
+                "gene": "GENE_B",
+                "phenotype_map": {"CC": "B1", "CT": "B2", "TT": "B3"},
+            },
+            {
+                "rsid": "rs003",
+                "trait": "Trait C",
+                "gene": "GENE_C",
+                "phenotype_map": {"AA": "C1", "AT": "C2", "TT": "C3"},
+            },
+        ]
+        db_path = self._create_temp_trait_db(entries)
+        try:
+            parent_a = {"rs001": "AG", "rs002": "CT", "rs003": "AT"}
+            parent_b = {"rs001": "GG", "rs002": "CC", "rs003": "TT"}
+
+            results = analyze_traits(parent_a, parent_b, db_path)
+
+            assert len(results) == 3
+            assert all(r["status"] == "success" for r in results)
+        finally:
+            os.unlink(db_path)
+
+
+# ---------------------------------------------------------------------------
+# Expanded Punnett square edge cases
+# ---------------------------------------------------------------------------
+
+class TestPunnettSquareEdgeCases:
+    """Additional edge cases for punnett_square()."""
+
+    def test_all_four_alleles_different(self):
+        """CT x AG -> 4 unique genotypes each at 25%."""
+        result = punnett_square(("C", "T"), ("A", "G"))
+        assert len(result) == 4
+        assert result == pytest.approx({"AC": 0.25, "CG": 0.25, "AT": 0.25, "GT": 0.25})
+
+    def test_homozygous_x_heterozygous_reversed(self):
+        """AA x AG -> 50% AA, 50% AG (reversed parent order)."""
+        result = punnett_square(("A", "A"), ("A", "G"))
+        assert result == pytest.approx({"AA": 0.5, "AG": 0.5})
+
+    def test_symmetry(self):
+        """Swapping parents should give the same result."""
+        result_ab = punnett_square(("A", "G"), ("C", "T"))
+        result_ba = punnett_square(("C", "T"), ("A", "G"))
+        assert result_ab == result_ba
+
+    @pytest.mark.parametrize("alleles_a,alleles_b", [
+        (("A", "A"), ("A", "A")),
+        (("A", "G"), ("A", "G")),
+        (("C", "T"), ("A", "G")),
+        (("G", "G"), ("A", "G")),
+        (("T", "T"), ("C", "C")),
+    ])
+    def test_probabilities_always_sum_to_one(self, alleles_a, alleles_b):
+        """Probabilities must sum to 1.0 for any input combination."""
+        result = punnett_square(alleles_a, alleles_b)
+        assert sum(result.values()) == pytest.approx(1.0)
+
+    def test_homozygous_different_alleles_cross(self):
+        """CC x TT -> 100% CT."""
+        result = punnett_square(("C", "C"), ("T", "T"))
+        assert result == {"CT": 1.0}
+        assert len(result) == 1
+
+
+# ---------------------------------------------------------------------------
+# predict_offspring_genotypes — expanded
+# ---------------------------------------------------------------------------
+
+class TestPredictOffspringGenotypesExpanded:
+    """Additional tests for predict_offspring_genotypes()."""
+
+    def test_invalid_genotype_single_char_raises(self):
+        """Invalid genotype length should propagate ValueError."""
+        with pytest.raises(ValueError, match="Invalid genotype format"):
+            predict_offspring_genotypes("A", "AG")
+
+    def test_invalid_genotype_three_chars_raises(self):
+        with pytest.raises(ValueError, match="Invalid genotype format"):
+            predict_offspring_genotypes("AG", "AGG")
+
+    def test_ct_x_ag_four_outcomes(self):
+        """CT x AG should produce 4 distinct genotypes."""
+        result = predict_offspring_genotypes("CT", "AG")
+        assert len(result) == 4
+        for prob in result.values():
+            assert prob == pytest.approx(0.25)
+
+
+# ---------------------------------------------------------------------------
+# predict_trait — expanded edge cases
+# ---------------------------------------------------------------------------
+
+class TestPredictTraitExpanded:
+    """Extended predict_trait() tests for edge cases and structure validation."""
+
+    def _make_trait_entry(self, **overrides):
+        """Build a trait entry with sensible defaults, applying overrides."""
+        entry = {
+            "rsid": "rs100",
+            "trait": "Test Trait",
+            "gene": "TEST_GENE",
+            "chromosome": "7",
+            "inheritance": "dominant",
+            "alleles": {"ref": "A", "alt": "G"},
+            "phenotype_map": {
+                "AA": "Phenotype Dominant",
+                "AG": "Phenotype Carrier",
+                "GG": "Phenotype Recessive",
+            },
+            "description": "A test trait for unit testing.",
+            "confidence": "medium",
+        }
+        entry.update(overrides)
+        return entry
+
+    def test_success_result_has_all_required_fields(self):
+        """Verify every required field is present in a successful result."""
+        parent_a = {"rs100": "AG"}
+        parent_b = {"rs100": "GG"}
+        trait_entry = self._make_trait_entry()
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        required_fields = [
+            "trait", "gene", "rsid", "chromosome", "description",
+            "confidence", "inheritance", "status", "parent_a_genotype",
+            "parent_b_genotype", "offspring_probabilities",
+        ]
+        for field in required_fields:
+            assert field in result, f"Missing required field: {field}"
+
+    def test_success_result_field_types(self):
+        """Verify field types in a successful result."""
+        parent_a = {"rs100": "AG"}
+        parent_b = {"rs100": "AG"}
+        trait_entry = self._make_trait_entry()
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert isinstance(result["trait"], str)
+        assert isinstance(result["gene"], str)
+        assert isinstance(result["rsid"], str)
+        assert isinstance(result["status"], str)
+        assert isinstance(result["offspring_probabilities"], dict)
+        assert result["status"] == "success"
+
+    def test_missing_optional_fields_use_defaults(self):
+        """Trait entry missing optional fields should use defaults."""
+        trait_entry = {
+            "rsid": "rs200",
+            "trait": "Minimal Trait",
+            "gene": "MIN_GENE",
+            "phenotype_map": {"AA": "Pheno A", "AG": "Pheno AG", "GG": "Pheno G"},
+        }
+        parent_a = {"rs200": "AA"}
+        parent_b = {"rs200": "GG"}
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert result["status"] == "success"
+        assert result["chromosome"] == "Unknown"
+        assert result["confidence"] == "Unknown"
+        assert result["inheritance"] == "Unknown"
+        assert result["description"] == ""
+
+    def test_both_parents_missing_snp(self):
+        """When both parents lack the SNP, Parent A's missing is reported first."""
+        parent_a = {}
+        parent_b = {}
+        trait_entry = self._make_trait_entry()
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert result["status"] == "missing"
+        assert "Parent A" in result["note"]
+
+    def test_missing_result_structure(self):
+        """Missing result should have trait, gene, rsid, status, and note."""
+        parent_a = {}
+        parent_b = {"rs100": "AG"}
+        trait_entry = self._make_trait_entry()
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert result["trait"] == "Test Trait"
+        assert result["gene"] == "TEST_GENE"
+        assert result["rsid"] == "rs100"
+        assert result["status"] == "missing"
+        assert "note" in result
+
+    def test_error_result_includes_parent_genotypes(self):
+        """Error results should include parent genotype information."""
+        trait_entry = self._make_trait_entry(
+            phenotype_map={"CC": "Unreachable Phenotype"},
+        )
+        parent_a = {"rs100": "AG"}
+        parent_b = {"rs100": "AG"}
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert result["status"] == "error"
+        assert result["parent_a_genotype"] == "AG"
+        assert result["parent_b_genotype"] == "AG"
+
+    def test_phenotype_probability_aggregation(self):
+        """Two genotypes mapping to the same phenotype should aggregate probabilities."""
+        trait_entry = self._make_trait_entry(
+            phenotype_map={
+                "AA": "Common Phenotype",
+                "AG": "Common Phenotype",  # Same phenotype as AA
+                "GG": "Rare Phenotype",
+            },
+        )
+        parent_a = {"rs100": "AG"}
+        parent_b = {"rs100": "AG"}
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        assert result["status"] == "success"
+        probs = result["offspring_probabilities"]
+        # AA (25%) + AG (50%) = 75% for Common Phenotype
+        assert probs["Common Phenotype"] == pytest.approx(75.0)
+        assert probs["Rare Phenotype"] == pytest.approx(25.0)
+
+    def test_offspring_probabilities_sum_to_100(self):
+        """Offspring probabilities should sum to 100% when all genotypes are mapped."""
+        parent_a = {"rs100": "AG"}
+        parent_b = {"rs100": "AG"}
+        trait_entry = self._make_trait_entry()
+
+        result = predict_trait(parent_a, parent_b, trait_entry)
+
+        total = sum(result["offspring_probabilities"].values())
+        assert total == pytest.approx(100.0)
+
+    def test_confidence_values_propagated(self):
+        """Confidence from trait entry should be propagated to result."""
+        for confidence in ["high", "medium", "low"]:
+            trait_entry = self._make_trait_entry(confidence=confidence)
+            parent_a = {"rs100": "AA"}
+            parent_b = {"rs100": "GG"}
+
+            result = predict_trait(parent_a, parent_b, trait_entry)
+
+            assert result["confidence"] == confidence
+
+    def test_inheritance_values_propagated(self):
+        """Inheritance pattern should be propagated to result."""
+        for inheritance in ["dominant", "recessive", "codominant", "additive"]:
+            trait_entry = self._make_trait_entry(inheritance=inheritance)
+            parent_a = {"rs100": "AA"}
+            parent_b = {"rs100": "GG"}
+
+            result = predict_trait(parent_a, parent_b, trait_entry)
+
+            assert result["inheritance"] == inheritance
+
+
+# ---------------------------------------------------------------------------
+# format_prediction_report — new test class
+# ---------------------------------------------------------------------------
+
+class TestFormatPredictionReport:
+    """Tests for format_prediction_report()."""
+
+    def test_report_with_successful_predictions(self):
+        """Report should include successful predictions section."""
+        predictions = [
+            {
+                "trait": "Eye Color",
+                "gene": "HERC2",
+                "rsid": "rs12913832",
+                "chromosome": "15",
+                "inheritance": "codominant",
+                "confidence": "high",
+                "description": "Eye color determination.",
+                "status": "success",
+                "parent_a_genotype": "AG",
+                "parent_b_genotype": "GG",
+                "offspring_probabilities": {"Brown Eyes": 50.0, "Green Eyes": 50.0},
+            },
+        ]
+
+        report = format_prediction_report(predictions)
+
+        assert "OFFSPRING TRAIT PREDICTION REPORT" in report
+        assert "PREDICTED TRAITS (1)" in report
+        assert "Eye Color" in report
+        assert "HERC2" in report
+        assert "Brown Eyes: 50.0%" in report
+        assert "Green Eyes: 50.0%" in report
+        assert "Successful predictions: 1" in report
+        assert "Total traits analyzed: 1" in report
+
+    def test_report_with_missing_predictions(self):
+        """Report should include missing data section."""
+        predictions = [
+            {
+                "trait": "Hair Type",
+                "gene": "TCHH",
+                "rsid": "rs999",
+                "status": "missing",
+                "note": "Parent A missing this SNP",
+            },
+        ]
+
+        report = format_prediction_report(predictions)
+
+        assert "MISSING DATA (1)" in report
+        assert "Hair Type (TCHH): Parent A missing this SNP" in report
+        assert "Missing data: 1" in report
+
+    def test_report_with_error_predictions(self):
+        """Report should include errors section."""
+        predictions = [
+            {
+                "trait": "Test Trait",
+                "gene": "GENE",
+                "rsid": "rs123",
+                "status": "error",
+                "note": "Genotypes ['XX'] not found in phenotype map",
+            },
+        ]
+
+        report = format_prediction_report(predictions)
+
+        assert "ERRORS (1)" in report
+        assert "Test Trait (GENE)" in report
+        assert "Errors: 1" in report
+
+    def test_report_with_mixed_statuses(self):
+        """Report with success, missing, and error predictions."""
+        predictions = [
+            {
+                "trait": "Trait A",
+                "gene": "GENE_A",
+                "rsid": "rs001",
+                "chromosome": "1",
+                "inheritance": "dominant",
+                "confidence": "high",
+                "description": "Trait A desc.",
+                "status": "success",
+                "parent_a_genotype": "AA",
+                "parent_b_genotype": "AA",
+                "offspring_probabilities": {"Pheno A": 100.0},
+            },
+            {
+                "trait": "Trait B",
+                "gene": "GENE_B",
+                "rsid": "rs002",
+                "status": "missing",
+                "note": "Parent B missing this SNP",
+            },
+            {
+                "trait": "Trait C",
+                "gene": "GENE_C",
+                "rsid": "rs003",
+                "status": "error",
+                "note": "Genotypes not found",
+            },
+        ]
+
+        report = format_prediction_report(predictions)
+
+        assert "PREDICTED TRAITS (1)" in report
+        assert "MISSING DATA (1)" in report
+        assert "ERRORS (1)" in report
+        assert "Total traits analyzed: 3" in report
+        assert "Successful predictions: 1" in report
+        assert "Missing data: 1" in report
+        assert "Errors: 1" in report
+
+    def test_report_empty_predictions(self):
+        """Report with no predictions should still have header and footer."""
+        report = format_prediction_report([])
+
+        assert "OFFSPRING TRAIT PREDICTION REPORT" in report
+        assert "Total traits analyzed: 0" in report
+        assert "Successful predictions: 0" in report
+        assert "Missing data: 0" in report
+        assert "Errors: 0" in report
+
+    def test_report_includes_note_when_present(self):
+        """Success prediction with a note should include it in the report."""
+        predictions = [
+            {
+                "trait": "Trait A",
+                "gene": "GENE_A",
+                "rsid": "rs001",
+                "chromosome": "1",
+                "inheritance": "dominant",
+                "confidence": "high",
+                "description": "desc.",
+                "status": "success",
+                "parent_a_genotype": "AG",
+                "parent_b_genotype": "AG",
+                "offspring_probabilities": {"Pheno A": 25.0},
+                "note": "Some genotypes unmapped: ['GG']",
+            },
+        ]
+
+        report = format_prediction_report(predictions)
+
+        assert "Note: Some genotypes unmapped" in report
+
+    def test_report_returns_string(self):
+        """format_prediction_report must return a string."""
+        report = format_prediction_report([])
+        assert isinstance(report, str)
+
+
+# ---------------------------------------------------------------------------
+# normalize_genotype — expanded
+# ---------------------------------------------------------------------------
+
+class TestNormalizeGenotypeExpanded:
+    """Additional normalize_genotype edge cases."""
+
+    @pytest.mark.parametrize("input_gt,expected", [
+        ("TA", "AT"),
+        ("GC", "CG"),
+        ("TG", "GT"),
+        ("CA", "AC"),
+    ])
+    def test_all_reverse_pairs(self, input_gt, expected):
+        """All reverse allele pairs should normalize correctly."""
+        assert normalize_genotype(input_gt) == expected
+
+    def test_single_char_input(self):
+        """Single character normalizes to itself (no validation here)."""
+        assert normalize_genotype("A") == "A"

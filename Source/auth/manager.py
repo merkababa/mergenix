@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 
 import bcrypt
 import streamlit as st
+from Source.config import settings as app_settings
 from Source.database import close_db, get_db, init_db
 
 from .audit import log_audit_event
@@ -409,14 +410,14 @@ class AuthManager:
 
         failed_attempts = row["failed_login_attempts"]
 
-        # Lock out after 5 failed attempts
-        if failed_attempts >= 5:
+        # Lock out after max_login_attempts failed attempts
+        if failed_attempts >= app_settings.max_login_attempts:
             last_failed = row["last_failed_login"]
             if last_failed:
-                # Auto-unlock after 30 minutes
+                # Auto-unlock after lockout_duration_minutes
                 last_failed_dt = datetime.fromisoformat(last_failed)
                 elapsed = (datetime.now() - last_failed_dt).total_seconds()
-                if elapsed > 1800:  # 30 minutes
+                if elapsed > app_settings.lockout_duration_minutes * 60:
                     # Reset lockout
                     conn.execute(
                         "UPDATE users SET failed_login_attempts = 0, last_failed_login = NULL WHERE email = ?",

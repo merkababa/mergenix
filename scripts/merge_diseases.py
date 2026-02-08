@@ -9,8 +9,8 @@ deduplicates against existing carrier_panel.json, and writes the
 merged result back.
 """
 
-import json
 import glob
+import json
 import os
 import re
 import sys

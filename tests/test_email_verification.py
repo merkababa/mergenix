@@ -390,17 +390,17 @@ class TestEmailSending:
     """Tests for email sending functions with mocked SMTP."""
 
     @patch("Source.auth.email.smtplib.SMTP")
-    @patch.dict("os.environ", {
-        "SMTP_HOST": "smtp.test.com",
-        "SMTP_PORT": "587",
-        "SMTP_USER": "testuser",
-        "SMTP_PASSWORD": "testpass",
-        "FROM_EMAIL": "test@mergenix.com",
-        "FROM_NAME": "Mergenix Test",
-    })
-    def test_send_email_success(self, mock_smtp):
+    @patch("Source.auth.email.settings")
+    def test_send_email_success(self, mock_settings, mock_smtp):
         """send_email should return True when SMTP succeeds."""
         from Source.auth.email import send_email
+
+        mock_settings.smtp_host = "smtp.test.com"
+        mock_settings.smtp_port = 587
+        mock_settings.smtp_username = "testuser"
+        mock_settings.smtp_password = "testpass"
+        mock_settings.from_email = "test@mergenix.com"
+        mock_settings.from_name = "Mergenix Test"
 
         mock_server = mock_smtp.return_value.__enter__.return_value
         result = send_email("user@example.com", "Test Subject", "<h1>Test</h1>")
@@ -413,9 +413,9 @@ class TestEmailSending:
         """send_email should return False when SMTP is not configured."""
         from Source.auth.email import send_email
 
-        with patch.dict("os.environ", {"SMTP_HOST": "", "SMTP_USER": ""}, clear=False):
-            result = send_email("user@example.com", "Test", "<p>body</p>")
-            assert result is False
+        # Default settings have empty smtp_host and smtp_username, so no patching needed
+        result = send_email("user@example.com", "Test", "<p>body</p>")
+        assert result is False
 
     @patch("Source.auth.email.send_email", return_value=True)
     def test_send_verification_email_calls_send(self, mock_send):

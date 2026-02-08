@@ -5,11 +5,10 @@ Manage your Mergenix plan, view pricing, and upgrade.
 All paid tiers are one-time purchases — pay once, use forever.
 """
 
-import os
-
 import pandas as pd
 import streamlit as st
 from Source.auth import get_current_user, require_auth
+from Source.config import settings
 from Source.payments.paypal_handler import PayPalError, PayPalHandler
 from Source.payments.stripe_handler import StripeHandler, StripeHandlerError
 from Source.tier_config import TierType, get_tier_config, get_upgrade_message
@@ -124,12 +123,12 @@ if st.session_state.get("show_payment_selection", False):
     with payment_col1:
         if st.button("Pay with Stripe", use_container_width=True, type="primary"):
             try:
-                stripe_key = os.getenv("STRIPE_SECRET_KEY", "")
+                stripe_key = settings.stripe_secret_key
                 if not stripe_key:
                     st.error("Stripe is not configured. Contact support.")
                 else:
                     handler = StripeHandler(stripe_key)
-                    base_url = os.getenv("BASE_URL", "http://localhost:8501")
+                    base_url = settings.app_base_url
                     session = handler.create_checkout_session(
                         customer_email=user["email"], tier=selected_tier,
                         billing_period="onetime",
@@ -148,13 +147,17 @@ if st.session_state.get("show_payment_selection", False):
     with payment_col2:
         if st.button("Pay with PayPal", use_container_width=True):
             try:
-                paypal_client_id = os.getenv("PAYPAL_CLIENT_ID", "")
-                paypal_secret = os.getenv("PAYPAL_CLIENT_SECRET", "")
+                paypal_client_id = settings.paypal_client_id
+                paypal_secret = settings.paypal_client_secret
                 if not paypal_client_id or not paypal_secret:
                     st.error("PayPal is not configured. Contact support.")
                 else:
-                    handler = PayPalHandler(client_id=paypal_client_id, client_secret=paypal_secret, sandbox=True)
-                    base_url = os.getenv("BASE_URL", "http://localhost:8501")
+                    handler = PayPalHandler(
+                        client_id=paypal_client_id,
+                        client_secret=paypal_secret,
+                        sandbox=(settings.paypal_mode == "sandbox"),
+                    )
+                    base_url = settings.app_base_url
                     result = handler.create_subscription(
                         tier=selected_tier, billing_period="onetime",
                         return_url=f"{base_url}/Subscription?success=true",

@@ -11,17 +11,16 @@ from Source.auth.oauth import GoogleOAuthHandler
 class TestGoogleOAuthHandler:
     """Test suite for GoogleOAuthHandler class."""
 
-    def test_init_with_env_vars(self):
-        """Test initialization with environment variables."""
-        with patch.dict('os.environ', {
-            'GOOGLE_CLIENT_ID': 'test_client_id',
-            'GOOGLE_CLIENT_SECRET': 'test_secret',
-            'GOOGLE_REDIRECT_URI': 'http://localhost:8501/callback'
-        }):
+    def test_init_with_settings(self):
+        """Test initialization with unified config settings."""
+        with patch("Source.auth.oauth.settings") as mock_settings:
+            mock_settings.google_client_id = "test_client_id"
+            mock_settings.google_client_secret = "test_secret"
+            mock_settings.google_redirect_uri = "http://localhost:8501/callback"
             handler = GoogleOAuthHandler()
-            assert handler.client_id == 'test_client_id'
-            assert handler.client_secret == 'test_secret'
-            assert handler.redirect_uri == 'http://localhost:8501/callback'
+            assert handler.client_id == "test_client_id"
+            assert handler.client_secret == "test_secret"
+            assert handler.redirect_uri == "http://localhost:8501/callback"
 
     def test_init_with_explicit_params(self):
         """Test initialization with explicit parameters."""

@@ -6,9 +6,8 @@ and trait_snps.json so the Mergenix app can analyze them properly.
 
 import json
 import random
-import os
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Set seed for reproducibility but still get variety
 random.seed(42)
@@ -19,7 +18,7 @@ DATA_DIR = BASE_DIR / "data"
 SAMPLE_DIR = BASE_DIR / "sample_data"
 
 def load_json(filepath):
-    with open(filepath, 'r', encoding='utf-8') as f:
+    with open(filepath, encoding='utf-8') as f:
         return json.load(f)
 
 def generate_filler_rsids(count=100):
@@ -27,7 +26,7 @@ def generate_filler_rsids(count=100):
     filler = []
     # Common rsIDs that are often in DTC tests but not in our panels
     common_prefixes = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000]
-    for i in range(count):
+    for _i in range(count):
         prefix = random.choice(common_prefixes)
         filler.append(f"rs{prefix + random.randint(1, 999)}")
     return list(set(filler))  # Remove duplicates
@@ -393,7 +392,7 @@ def main():
 
     # Check for CF rsID (rs75030207)
     test_file = SAMPLE_DIR / "23andme" / "sample_23andme_v3_male_01.txt"
-    with open(test_file, 'r') as f:
+    with open(test_file) as f:
         content = f.read()
         if 'rs75030207' in content:
             print(f"[OK] rs75030207 (CF) found in {test_file.name}")

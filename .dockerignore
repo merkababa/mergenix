@@ -1,0 +1,87 @@
+# =============================================================================
+# Mergenix — .dockerignore
+# =============================================================================
+# Keep the build context small and exclude anything not needed at runtime.
+# =============================================================================
+
+# Version control
+.git
+.gitignore
+
+# CI / tooling config
+.github/
+.pre-commit-config.yaml
+.pre-commit-cache/
+pyproject.toml
+ruff.toml
+.ruff_cache/
+
+# Tests and sample data (not shipped to production)
+tests/
+sample_data/
+test_*.py
+conftest.py
+
+# Documentation and screenshots
+docs/
+*.md
+!README.md
+*.png
+*.jpg
+*.jpeg
+
+# Environment and secrets
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+.eggs/
+dist/
+build/
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+Desktop.ini
+nul
+
+# Coverage / pytest cache
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Claude Code / OMC state
+.claude/
+.omc/
+
+# Database files (runtime-generated, mounted via volume)
+data/mergenix.db
+data/mergenix.db-wal
+data/mergenix.db-shm
+
+# Logs
+*.log
+logs/
+
+# Project management files
+PROGRESS.md
+CLAUDE.md
+PROJECT_SUMMARY.md
+MASTER_IMPROVEMENT_PLAN.md

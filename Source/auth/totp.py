@@ -11,6 +11,7 @@ import secrets
 import bcrypt
 import pyotp
 import qrcode
+from Source.config import settings
 
 
 def generate_totp_secret() -> str:
@@ -19,7 +20,7 @@ def generate_totp_secret() -> str:
 
 
 def generate_provisioning_uri(
-    email: str, secret: str, issuer: str = "Mergenix"
+    email: str, secret: str, issuer: str | None = None
 ) -> str:
     """
     Generate otpauth:// URI for authenticator apps.
@@ -27,11 +28,14 @@ def generate_provisioning_uri(
     Args:
         email: User's email (used as account name).
         secret: Base32-encoded TOTP secret.
-        issuer: Service name shown in authenticator apps.
+        issuer: Service name shown in authenticator apps (defaults to app_name
+                from unified config).
 
     Returns:
         otpauth:// URI string.
     """
+    if issuer is None:
+        issuer = settings.app_name
     totp = pyotp.TOTP(secret)
     return totp.provisioning_uri(name=email, issuer_name=issuer)
 
