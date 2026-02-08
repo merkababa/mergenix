@@ -1,8 +1,8 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-02-08
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 0 complete)
-**Active Branch:** rewrite/phase-0-polish (PR #28 → rewrite/main)
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 1 complete)
+**Active Branch:** rewrite/phase-1-marketing-pages (PR #29 → rewrite/main)
 
 ---
 
@@ -487,6 +487,7 @@ Use conventional commits:
 
 | PR | Title | Status |
 |----|-------|--------|
+| #29 | V3 Phase 1: Marketing pages polish — 6 pages, all 4 reviewers A+ | 🔄 In Review |
 | #28 | V3 Rewrite Phase 0 Polish — 4-round review, all 4 Opus reviewers A+ | 🔄 In Review |
 | #27 | V3 Rewrite Phase 0 Scaffolding — Next.js 14 + FastAPI + TS genetics | ✅ Merged |
 | #26 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | 🔄 In Review |
@@ -504,10 +505,11 @@ Use conventional commits:
 
 ## Next Steps
 
-### Immediate: V3 Rewrite Phase 1+
+### Immediate: V3 Rewrite Phase 2+
 1. **Merge PR #28** — Phase 0 Polish (all reviewers A+, merge-ready)
-2. **Phase 1: Marketing pages polish** — Home, products, about, legal, diseases, glossary
-3. **Phase 2: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side)
+2. **Merge PR #29** — Phase 1 Marketing Pages (all reviewers A+, merge-ready)
+3. **Phase 2: Auth Pages** — Login, Register, Account management, 2FA
+4. **Phase 3: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side)
 4. **Phase 3: Analysis UI** — File upload, results dashboard, counseling
 5. **Phase 4: Auth + Payments** — JWT, TOTP 2FA, Stripe, Google OAuth
 6. **Phase 5: Remaining pages** — Account, subscription, admin

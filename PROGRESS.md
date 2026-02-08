@@ -23,6 +23,7 @@
 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | Claude | PR Open | feature/tier5-genetic-science | PR #26 — 5 new modules (1,482 LOC), 4 data files, counseling page, integration wiring, 303 new tests. Ethnicity adjustment (Bayesian), PGx (CPIC-guided), PRS (z-score normalized), ClinVar (approval-first), Counseling (triage + referrals). Grade: A (merge-ready). 24 files, +10,118 lines, 1,265 tests |
 | **V3 REWRITE: Phase 0 — Monorepo scaffolding** | Claude | Merged | rewrite/phase-0-scaffolding | PR #27 → `rewrite/main`. Next.js 14 + FastAPI + TS genetics engine. Privacy-first (DNA never leaves browser). 138 files, +21,965 lines. |
 | **V3 REWRITE: Phase 0 — Polish** | Claude | PR Open | rewrite/phase-0-polish | PR #28 → `rewrite/main`. 4-round iterative review cycle with 4 Opus reviewers (Architect, QA, Scientist, Technologist). 72+ issues found and fixed. ALL 4 reviewers achieved **A+ grade**. 43 files, +450 lines. Data consistency, genetics accuracy, auth/security, infrastructure, frontend/UX fixes. |
+| **V3 REWRITE: Phase 1 — Marketing Pages** | Claude | PR Open | rewrite/phase-1-marketing-pages | PR #29 → `rewrite/main`. 6 polished marketing pages (Home, Products, About, Disease Catalog, Glossary, Legal) + Subscription fix. Server/client component split, Framer Motion animations (MotionConfig reducedMotion), WCAG 2.1 AA (focus trap, skip-to-main, aria-hidden), DRY extraction (6 shared utils, 7 shared components). 5-round ralph loop: ALL 4 reviewers achieved **A+ grade**. 38 files, +5,265/-2,125 lines. |
 
 ---
 
@@ -64,7 +65,7 @@
 
 ### V3 Rewrite (Next.js + FastAPI + TypeScript — privacy-first)
 - [x] Phase 0: Monorepo scaffolding (Turborepo, Next.js 14, FastAPI, TS genetics engine) — PR #27
-- [ ] Phase 1: Marketing pages polish (home, products, about, legal, diseases, glossary)
+- [x] Phase 1: Marketing pages polish (home, products, about, legal, diseases, glossary) — PR #29
 - [ ] Phase 2: Genetics engine implementation (parser, carrier, PRS, PGx, traits — all client-side)
 - [ ] Phase 3: Analysis UI (file upload, results dashboard, counseling)
 - [ ] Phase 4: Auth + Payments (JWT, TOTP 2FA, Stripe, Google OAuth)
@@ -101,6 +102,7 @@
 | 2026-02-08 | Claude | Tier 5 genetic science: ethnicity-adjusted frequencies (gnomAD, 9 populations), pharmacogenomics (CPIC-guided, 12 genes), polygenic risk scores (10 diseases, z-score normalized), ClinVar freshness pipeline (approval-first, monthly sync), genetic counseling system (triage + referral letters). 5 modules (1,482 LOC), 4 data files, 1 new page, 3 components, CLI tool, GitHub Actions workflow. 303 new tests (1,265 total). Architecture: A (merge-ready). | PR #26 |
 | 2026-02-08 | Claude | V3 Rewrite Phase 0: Full monorepo scaffolding. Next.js 14 App Router + FastAPI + TypeScript genetics engine. Privacy-first architecture (DNA never leaves browser via Web Workers). 138 files, +21,965 lines. 4 planning docs (13,187 lines: system architecture, design system, tech infrastructure, genetics porting guide). 4-reviewer panel (Architect A-, QA B+, Scientist B+, Technologist B+) → 13 issues found and fixed. Branching: rewrite/main → rewrite/phase-0-scaffolding. | PR #27 |
 | 2026-02-08 | Claude | V3 Rewrite Phase 0 Polish: 4-round iterative review with 4 Opus reviewers (Architect, QA, Scientist, Technologist). 72+ issues found and fixed across all rounds. ALL 4 reviewers achieved A+ grade. 43 files, +450 lines. Fixes: data consistency (tier pricing, feature limits), genetics accuracy (star alleles, repeat expansions, drug mappings), auth/security (2FA login, OAuth state), infrastructure (frozen-lockfile, pnpm pinning, Docker), frontend/UX (demo labels, forgot-password, layout). | PR #28 |
+| 2026-02-08 | Claude | V3 Rewrite Phase 1: Marketing pages polish — 6 pages (Home, Products, About, Disease Catalog, Glossary, Legal) + Subscription fix. Server/client component split (metadata exports), Framer Motion animations (MotionConfig reducedMotion), WCAG 2.1 AA (focus trap, skip-to-main, aria-hidden, scroll lock), DRY extraction (animation-variants, pricing-data, faq-data, glossary-data, use-count-up hook, disease-data). 5-round ralph loop → A+ from all 4 reviewers. 38 files, +5,265/-2,125 lines. | PR #29 |
 
 ---
 
