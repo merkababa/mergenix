@@ -2,8 +2,12 @@
 
 ## Session Start Protocol
 1. **ALWAYS run `git pull origin main`** at the start of every session
-2. Check `PROGRESS.md` for current status and who's working on what
-3. Claim your task in PROGRESS.md before starting work
+2. **Check for open PRs** before starting new work: `gh pr list --state open`
+   - If there are open PRs, review them first — they may need to be merged before branching
+   - This prevents working on a stale `main` branch (critical for multi-PC workflows)
+   - If an open PR is yours and approved, merge it before starting new work
+3. Check `PROGRESS.md` for current status and who's working on what
+4. Claim your task in PROGRESS.md before starting work
 
 ## Git Workflow
 
@@ -95,9 +99,29 @@ Mergenix/
 
 ## Claude-Specific Rules
 - Always pull before starting work
+- **Always check for open PRs** (`gh pr list --state open`) before starting new work
 - Always create work on feature branches, never push code to main
 - PROGRESS.md is the only file Claude can push directly to main
 - Always run `ruff check` and `pytest` before committing
 - Create small, focused PRs with clear descriptions
 - After completing work, update PROGRESS.md and push it
 - If unsure about a design decision, ask — don't guess
+
+## PR Summary Format (MANDATORY)
+Every PR description MUST include a summary table. Use this format:
+
+```
+| Item | Severity | File(s) | Status |
+|------|----------|---------|--------|
+| Short description of change | CRITICAL/HIGH/MEDIUM/LOW | path/to/file.py | Fixed + N tests |
+```
+
+When orchestrating multiple agents, ALWAYS show a final status table to the user:
+
+```
+| Task | Agent | Status | Tests Added |
+|------|-------|--------|-------------|
+| Task description | model tier | Done/Failed | N new |
+```
+
+These tables are mandatory — never skip them.
