@@ -1,8 +1,8 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-02-09
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 4 Analysis UI ready for PR)
-**Branch:** rewrite/phase-4-analysis-ui
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 4 Analysis UI merged)
+**Branch:** rewrite/main
 
 ---
 
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (483 tests: 366 engine + 117 web)
+- **Testing:** Vitest (514 tests: 366 engine + 148 web)
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -41,8 +41,8 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 |-------|-------------|-----|--------|-------|
 | Phase 1 | Monorepo scaffolding (Next.js, FastAPI, shared types, CI) | PR #28 | Merged | — |
 | Phase 2 | Frontend pages (home, products, about, legal, glossary, disease catalog, auth) | PR #30 | Merged | — |
-| Phase 3 | Genetics engine (TypeScript, Web Worker, 11 modules) | PR #31 | Open | 366 |
-| Phase 4 | Analysis UI (wire engine into Next.js, 6 result tabs, demo mode) | Ready for PR | **Done** | 117 |
+| Phase 3 | Genetics engine (TypeScript, Web Worker, 11 modules) | PR #31 | **Merged** | 366 |
+| Phase 4 | Analysis UI (wire engine into Next.js, 6 result tabs, demo mode) | PR #32 | **Merged** | 148 |
 
 ### Phase 4: Analysis UI (Current)
 
@@ -58,39 +58,42 @@ Wire the genetics engine Web Worker into the Next.js frontend. Replaces all stat
 - Tier-gated upgrade prompts in all 6 tabs
 - Lazy-loaded demo data via dynamic import
 
-**Review grades (R3, 3 rounds):**
+**Review grades (R5, 5 rounds → 6/6 A+):**
 
-| Reviewer | Grade | Key Notes |
-|----------|-------|-----------|
-| Architect | A | Clean separation, zero type duplication |
-| QA | A | 117/117 tests, all 8 suites complete |
-| Scientist | A | All 23 rsIDs verified correct |
-| Technologist | A- | try/catch, lazy-load, error clearing done |
-| Business | A | All 6 tabs have tier-gated CTAs |
-| Designer | A | ARIA tabs, semantic HTML, glassmorphism |
+| Reviewer | R4 | R5 (Final) | Key Notes |
+|----------|----|----|-----------|
+| Architect | A- | **A+** | Type derivation, shared constants, zero duplication |
+| QA | A- | **A+** | 148 tests, 12 suites, full coverage |
+| Scientist | A | **A+** | All rsIDs verified, freckling fixed, dynamic Punnett |
+| Technologist | A- | **A+** | useCallback, React.memo, next/dynamic, store selectors |
+| Business | B+ | **A+** | Dynamic tier banner, demo CTA, referral teaser, filled buttons |
+| Designer | A- | **A+** | ARIA progressbar, sr-only gauge, keyboard tables, heading hierarchy |
 
 **Test coverage (V3):**
 - Genetics engine: 366 tests (8 suites)
-- Web app: 117 tests (8 suites)
-- **Total: 483 tests passing**
+- Web app: 148 tests (12 suites)
+- **Total: 514 tests passing**
 
 ### Test Suites (V3 Web)
 
 | Suite | Tests | What it covers |
 |-------|-------|----------------|
-| `analysis-store.test.ts` | 10 | Store state transitions, demo loading, reset |
-| `use-genetics-worker.test.ts` | 12 | Worker lifecycle, message routing, cancel |
-| `overview-tab.test.tsx` | 10 | Stat cards, metadata, disclaimer, empty state |
-| `carrier-tab.test.tsx` | 13 | Search, filter, sort, Punnett squares, expand |
-| `traits-tab.test.tsx` | 11 | Grid display, probabilities, confidence, empty |
-| `pgx-tab.test.tsx` | 14 | Gene cards, metabolizer badges, drug tables |
-| `prs-tab.test.tsx` | 11 | Gauges, percentiles, ancestry notes, upgrade |
-| `counseling-tab.test.tsx` | 17 | Urgency, reasons, specialties, referral |
-| `medical-disclaimer.test.tsx` | 5 | Compact/full variants, ARIA, custom text |
+| `analysis-store.test.ts` | 17 | Store state transitions, demo loading, reset, derived values |
+| `use-genetics-worker.test.ts` | 16 | Worker lifecycle, message routing, cancel, file validation |
+| `overview-tab.test.tsx` | 13 | Stat cards, metadata, disclaimer, tier upgrade prompts |
+| `carrier-tab.test.tsx` | 21 | Search, filter, sort, Punnett squares, X-linked, ARIA expand |
+| `traits-tab.test.tsx` | 13 | Grid display, probabilities, confidence, tier upgrade |
+| `pgx-tab.test.tsx` | 17 | Gene cards, metabolizer badges, drug tables, categories |
+| `prs-tab.test.tsx` | 14 | Gauges, percentiles, ancestry notes, coverage, disclaimer |
+| `counseling-tab.test.tsx` | 19 | Urgency, reasons, specialties, referral, NSGC link |
+| `medical-disclaimer.test.tsx` | 6 | Compact/full variants, ARIA role/label, custom text |
+| `tier-upgrade-prompt.test.tsx` | 5 | Message, button text, /subscription link, aria-hidden |
+| `population-selector.test.tsx` | 4 | Options, free disabled, premium enabled, store update |
+| `analysis-page.test.tsx` | 8 | Idle/progress/complete states, tabs, error, demo, reset |
 
 ---
 
-## Recent Changes — Phase 4: Analysis UI (READY FOR PR)
+## Recent Changes — Phase 4: Analysis UI (MERGED — PR #32)
 
 Wire the genetics engine Web Worker into the Next.js frontend. Replaces all static demo content with a working end-to-end analysis flow: file upload → Web Worker parsing → full analysis → typed result rendering across 6 tabs.
 
@@ -136,12 +139,13 @@ Zustand store (analysis-store.ts) ← FullAnalysisResult
 | `apps/web/components/genetics/medical-disclaimer.tsx` | ~60 | Compact/full variants with ARIA role="note" |
 | `apps/web/components/genetics/population-selector.tsx` | ~60 | gnomAD population selector with clear option |
 
-### Commits (4)
+### Commits (5)
 
 1. `b90010e` feat: Phase 4 — Analysis UI wiring (Web Worker + store + 6 result tabs)
 2. `9664094` fix: R1 review fixes — accuracy, type safety, tests, tier gating, exports
 3. `a91a4ba` fix: R2 review fixes — tier gating, error handling, tests, polish
 4. `59d44c3` fix: R3 review fixes — demo try/catch, tier-specific carrier copy
+5. `22b01bd` fix: R4 review fixes — types, perf, accessibility, business, tests (+31 tests)
 
 ---
 
@@ -156,8 +160,10 @@ Zustand store (analysis-store.ts) ← FullAnalysisResult
 
 ### Performance Optimizations (from Phase 4 reviews)
 
+- [x] **useCallback for handlers** — All page handlers wrapped in useCallback (R4 fix)
+- [x] **React.memo sub-components** — GeneCard and PrsConditionCard memoized (R4 fix)
+- [x] **next/dynamic lazy tabs** — All 6 tab components lazy-loaded (R4 fix)
 - [ ] **Carrier tab virtualization** — For 2,715 disease results at Pro tier, consider windowed rendering
-- [ ] **useCallback for handlers** — Memoize event handlers in analysis page to reduce re-renders
 - [ ] **Worker pool** — Consider SharedWorker for multi-tab scenarios
 
 ### Legacy Streamlit App (v1/v2)
@@ -239,8 +245,8 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
-| — | Phase 4: Analysis UI (wire engine + 6 tabs + 117 tests) | Ready for PR |
-| #31 | Phase 3: Genetics Engine (TypeScript, 366 tests) | Open |
+| #32 | Phase 4: Analysis UI (wire engine + 6 tabs + 148 tests, 6/6 A+) | **Merged** |
+| #31 | Phase 3: Genetics Engine (TypeScript, 366 tests, 6/6 A+) | **Merged** |
 | #30 | Phase 2: Frontend pages (7 pages, design system) | Merged |
 | #28 | Phase 1: Monorepo scaffolding | Merged |
 | #26 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | Open |
@@ -253,8 +259,8 @@ FullAnalysisResult → postMessage → Zustand store
 
 ## Next Steps
 
-1. **Create PR** for Phase 4 (Analysis UI) → review + merge
-2. **Merge PR #31** (Phase 3 genetics engine) if not already merged
+1. ~~Create PR for Phase 4~~ → **PR #32 merged** (6/6 A+)
+2. ~~Merge PR #31 (Phase 3)~~ → **Merged**
 3. **Phase 5: Auth UI** — Login, register, OAuth pages in Next.js
 4. **Phase 6: Payment UI** — Stripe/PayPal integration
 5. **Phase 7: Backend API** — FastAPI endpoints + database
