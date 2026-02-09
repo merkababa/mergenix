@@ -95,8 +95,118 @@
 
 ---
 
+## Active Work — Phase 5: Auth UI (Branch: rewrite/phase-5-auth-ui)
+
+**Started:** 2026-02-09 | **Owner:** Claude | **Status:** IN PROGRESS — tests mostly passing, 4 W4a test files hang
+
+### What's Done
+1. **Wave 1 — Placeholder completion (4 files modified):**
+   - `auth-client.ts`: Added `getSessions()`, `revokeSession()`, `revokeAllSessions()`, `deleteAccount()` endpoints
+   - `auth-store.ts`: Added matching store actions, fixed `deleteAccount` to accept password
+   - `sessions-section.tsx`: Full rewrite from "Coming Soon" → session table with revoke buttons
+   - `danger-zone.tsx`: Full rewrite from disabled placeholder → expandable deletion UI with password+checkbox
+
+2. **Wave 2 — Store + API + utility tests (5 files, 127 tests PASSING):**
+   - `__tests__/stores/auth-store.test.ts` (42 tests)
+   - `__tests__/api/auth-client.test.ts` (24 tests)
+   - `__tests__/api/client.test.ts` (17 tests)
+   - `__tests__/lib/password-utils.test.ts` (14 tests)
+   - `__tests__/lib/account-utils.test.ts` (11 tests)
+   - **Verification: `cd apps/web && npx vitest run __tests__/stores __tests__/api __tests__/lib` → all pass**
+
+3. **Wave 3 — Auth page component tests (6 files, 66 tests PASSING):**
+   - `__tests__/components/auth/login-content.test.tsx` (15 tests)
+   - `__tests__/components/auth/register-content.test.tsx` (15 tests)
+   - `__tests__/components/auth/forgot-password-content.test.tsx` (8 tests)
+   - `__tests__/components/auth/reset-password-content.test.tsx` (10 tests)
+   - `__tests__/components/auth/verify-email-content.test.tsx` (10 tests)
+   - `__tests__/components/auth/callback-content.test.tsx` (8 tests)
+   - **Verification: `cd apps/web && npx vitest run __tests__/components/auth` → all pass**
+
+4. **Wave 4b — Infra tests (4 files, 37 tests PASSING):**
+   - `__tests__/components/account/sessions-section.test.tsx` (9 tests)
+   - `__tests__/components/account/danger-zone.test.tsx` (9 tests)
+   - `__tests__/providers/auth-provider.test.tsx` (8 tests)
+   - `__tests__/middleware.test.ts` (10 tests)
+   - **Verification: `cd apps/web && npx vitest run __tests__/middleware.test.ts __tests__/providers` → pass**
+   - **Verification: `cd apps/web && npx vitest run __tests__/components/account/sessions-section.test.tsx __tests__/components/account/danger-zone.test.tsx` → pass**
+
+### What's STUCK — Wave 4a (4 files, ~45 tests HANG)
+- `__tests__/components/account/profile-section.test.tsx` (10 tests)
+- `__tests__/components/account/security-section.test.tsx` (10 tests)
+- `__tests__/components/account/change-password-modal.test.tsx` (12 tests)
+- `__tests__/components/account/two-factor-setup-modal.test.tsx` (13 tests)
+
+**Root cause:** These 4 test files hang during vitest initialization — they never execute. The tests use a Proxy-based lucide-react mock but do NOT mock UI components (`@/components/ui/glass-card`, `@/components/ui/button`, `@/components/ui/badge`, `@/components/ui/input`). The working W4b tests (sessions, danger-zone) DO mock those UI components explicitly. The fix is to add explicit UI component mocks to all 4 W4a test files, matching the pattern used by sessions-section.test.tsx and danger-zone.test.tsx.
+
+**Fix pattern — add these mocks BEFORE the import of the component under test:**
+```tsx
+vi.mock('@/components/ui/glass-card', () => ({
+  GlassCard: ({ children, ...props }: any) => <div data-testid="glass-card" {...props}>{children}</div>,
+}));
+vi.mock('@/components/ui/badge', () => ({
+  Badge: ({ children, ...props }: any) => <span data-testid="badge" {...props}>{children}</span>,
+}));
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children, isLoading, disabled, ...props }: any) => (
+    <button disabled={disabled || isLoading} {...props}>{isLoading && <span data-testid="loader">Loading...</span>}{children}</button>
+  ),
+}));
+vi.mock('@/components/ui/input', () => ({
+  Input: ({ label, error, icon, ...props }: any) => (
+    <div><label htmlFor={label?.toLowerCase().replace(/\\s+/g, '-')}>{label}</label><input id={label?.toLowerCase().replace(/\\s+/g, '-')} {...props} />{error && <p role="alert">{error}</p>}</div>
+  ),
+}));
+vi.mock('@/components/auth/password-input', () => ({
+  PasswordInput: ({ label, value, onChange, error, ...rest }: any) => (
+    <div><label htmlFor="pw-input">{label}</label><input id="pw-input" type="password" value={value} onChange={onChange} aria-label={label || 'password'} />{error && <span role="alert">{error}</span>}</div>
+  ),
+}));
+```
+
+### What's Left After Fixing W4a
+1. Fix the 4 W4a test files (add UI component mocks)
+2. Run full combined test suite — `cd apps/web && npx vitest run`
+3. TypeScript check — `pnpm --filter web typecheck`
+4. Commit all changes on `rewrite/phase-5-auth-ui`
+5. Create PR targeting `rewrite/main`
+6. Run 6/6 A+ review cycle (Architect, QA, Scientist, Technologist, Business, Designer)
+7. Fix review issues, re-review until 6/6 A+
+8. Merge PR
+9. Update PROGRESS.md and PROJECT_STATUS.md
+
+### File List (all changes on rewrite/phase-5-auth-ui branch)
+**Modified (4):**
+- `apps/web/lib/api/auth-client.ts` — +4 endpoints, +types
+- `apps/web/lib/stores/auth-store.ts` — +3 actions, fixed deleteAccount
+- `apps/web/app/(app)/account/_components/sessions-section.tsx` — full rewrite
+- `apps/web/app/(app)/account/_components/danger-zone.tsx` — full rewrite
+
+**New test files (19):**
+- `apps/web/__tests__/stores/auth-store.test.ts`
+- `apps/web/__tests__/api/auth-client.test.ts`
+- `apps/web/__tests__/api/client.test.ts`
+- `apps/web/__tests__/lib/password-utils.test.ts`
+- `apps/web/__tests__/lib/account-utils.test.ts`
+- `apps/web/__tests__/components/auth/login-content.test.tsx`
+- `apps/web/__tests__/components/auth/register-content.test.tsx`
+- `apps/web/__tests__/components/auth/forgot-password-content.test.tsx`
+- `apps/web/__tests__/components/auth/reset-password-content.test.tsx`
+- `apps/web/__tests__/components/auth/verify-email-content.test.tsx`
+- `apps/web/__tests__/components/auth/callback-content.test.tsx`
+- `apps/web/__tests__/components/account/profile-section.test.tsx`
+- `apps/web/__tests__/components/account/security-section.test.tsx`
+- `apps/web/__tests__/components/account/change-password-modal.test.tsx`
+- `apps/web/__tests__/components/account/two-factor-setup-modal.test.tsx`
+- `apps/web/__tests__/components/account/sessions-section.test.tsx`
+- `apps/web/__tests__/components/account/danger-zone.test.tsx`
+- `apps/web/__tests__/providers/auth-provider.test.tsx`
+- `apps/web/__tests__/middleware.test.ts`
+
+---
+
 ## Active Blockers
-_None currently_
+_W4a test hang — see fix pattern above_
 
 ---
 
