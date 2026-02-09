@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-02-09
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 4 Analysis UI merged)
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 5 Auth UI merged)
 **Branch:** rewrite/main
 
 ---
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (514 tests: 366 engine + 148 web)
+- **Testing:** Vitest (789 tests: 366 engine + 423 web)
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -43,109 +43,72 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 | Phase 2 | Frontend pages (home, products, about, legal, glossary, disease catalog, auth) | PR #30 | Merged | — |
 | Phase 3 | Genetics engine (TypeScript, Web Worker, 11 modules) | PR #31 | **Merged** | 366 |
 | Phase 4 | Analysis UI (wire engine into Next.js, 6 result tabs, demo mode) | PR #32 | **Merged** | 148 |
+| Phase 5 | Auth UI (test suite + placeholder completion, 7/7 A+) | PR #34 | **Merged** | 423 |
 
-### Phase 4: Analysis UI (Current)
+### Phase 5: Auth UI (MERGED — PR #34)
 
-Wire the genetics engine Web Worker into the Next.js frontend. Replaces all static demo content with a working end-to-end analysis flow.
+Comprehensive auth test suite (19 new test files) + placeholder completion (sessions-section, danger-zone). Security hardening, accessibility improvements, and type safety fixes.
 
 **Key deliverables:**
-- Worker shim + `useGeneticsWorker` hook (Web Worker lifecycle, message routing, cancellation)
-- Zustand store rewrite with `FullAnalysisResult`, progress tracking, demo mode
-- 6 result tab components: Overview, Carrier Risk, Traits, PGx, PRS, Counseling
-- Demo data with 23 verified rsIDs (OMIM/ClinVar cross-referenced)
-- 3 polish components: TierUpgradePrompt, MedicalDisclaimer, PopulationSelector
-- Full ARIA tab navigation with keyboard support
-- Tier-gated upgrade prompts in all 6 tabs
-- Lazy-loaded demo data via dynamic import
+- 19 new test files covering auth-store, auth-client, HTTP client, 6 auth pages, 6 account components, middleware, auth-provider, password utils, account utils
+- Sessions section: full rewrite with session table, revoke buttons, AbortController cleanup, ARIA live regions
+- Danger zone: full rewrite with expandable deletion UI, password+checkbox confirmation, useCallback, ARIA
+- Security: encodeURIComponent for session IDs, URLSearchParams for OAuth callback, OAuth state preservation (CSRF)
+- Type safety: Tier from @mergenix/shared-types (not string)
+- Accessibility: aria-busy, aria-live, aria-describedby, aria-hidden, sr-only loading status
 
-**Review grades (R5, 5 rounds → 6/6 A+):**
+**Review grades (2 rounds → 7/7 A+):**
 
-| Reviewer | R4 | R5 (Final) | Key Notes |
+| Reviewer | R1 | R2 (Final) | Key Fixes |
 |----------|----|----|-----------|
-| Architect | A- | **A+** | Type derivation, shared constants, zero duplication |
-| QA | A- | **A+** | 148 tests, 12 suites, full coverage |
-| Scientist | A | **A+** | All rsIDs verified, freckling fixed, dynamic Punnett |
-| Technologist | A- | **A+** | useCallback, React.memo, next/dynamic, store selectors |
-| Business | B+ | **A+** | Dynamic tier banner, demo CTA, referral teaser, filled buttons |
-| Designer | A- | **A+** | ARIA progressbar, sr-only gauge, keyboard tables, heading hierarchy |
+| Architect | A | **A+** | Tier type from shared-types |
+| QA | A | **A+** | 423 tests verified, fixture types correct |
+| Scientist | A+ | **A+** | No genetics code affected |
+| Technologist | A- | **A+** | AbortController, URLSearchParams, useMemo, useCallback |
+| Business | A+ | **A+** | No business logic affected |
+| Designer | A- | **A+** | aria-busy, aria-live, aria-describedby, aria-hidden |
+| Security | A- | **A+** | encodeURIComponent, OAuth state, URLSearchParams |
 
 **Test coverage (V3):**
 - Genetics engine: 366 tests (8 suites)
-- Web app: 148 tests (12 suites)
-- **Total: 514 tests passing**
+- Web app: 423 tests (31 suites)
+- **Total: 789 tests passing**
 
-### Test Suites (V3 Web)
+### Test Suites (V3 Web — 31 files)
 
 | Suite | Tests | What it covers |
 |-------|-------|----------------|
-| `analysis-store.test.ts` | 17 | Store state transitions, demo loading, reset, derived values |
-| `use-genetics-worker.test.ts` | 16 | Worker lifecycle, message routing, cancel, file validation |
-| `overview-tab.test.tsx` | 13 | Stat cards, metadata, disclaimer, tier upgrade prompts |
-| `carrier-tab.test.tsx` | 21 | Search, filter, sort, Punnett squares, X-linked, ARIA expand |
-| `traits-tab.test.tsx` | 13 | Grid display, probabilities, confidence, tier upgrade |
-| `pgx-tab.test.tsx` | 17 | Gene cards, metabolizer badges, drug tables, categories |
-| `prs-tab.test.tsx` | 14 | Gauges, percentiles, ancestry notes, coverage, disclaimer |
-| `counseling-tab.test.tsx` | 19 | Urgency, reasons, specialties, referral, NSGC link |
-| `medical-disclaimer.test.tsx` | 6 | Compact/full variants, ARIA role/label, custom text |
-| `tier-upgrade-prompt.test.tsx` | 5 | Message, button text, /subscription link, aria-hidden |
-| `population-selector.test.tsx` | 4 | Options, free disabled, premium enabled, store update |
-| `analysis-page.test.tsx` | 8 | Idle/progress/complete states, tabs, error, demo, reset |
-
----
-
-## Recent Changes — Phase 4: Analysis UI (MERGED — PR #32)
-
-Wire the genetics engine Web Worker into the Next.js frontend. Replaces all static demo content with a working end-to-end analysis flow: file upload → Web Worker parsing → full analysis → typed result rendering across 6 tabs.
-
-### Architecture
-
-```
-User uploads 2 DNA files (23andMe/AncestryDNA/MyHeritage/VCF)
-    ↓
-useGeneticsWorker hook → reads File.text() on main thread
-    ↓
-Web Worker (genetics.worker.ts shim → @mergenix/genetics-engine)
-    ↓  parse → parse_progress → parse_complete
-    ↓  analyze → analysis_progress → analysis_complete
-    ↓
-Zustand store (analysis-store.ts) ← FullAnalysisResult
-    ↓
-6 result tabs read from store via selectors
-    ↓
-┌──────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
-│ Overview │ Carrier  │ Traits   │ PGx      │ PRS      │ Counsel. │
-│ 4 stats  │ Search   │ Grid     │ Gene     │ Gauges   │ Urgency  │
-│ Metadata │ Filter   │ Probs    │ Drugs    │ Ranges   │ Findings │
-│ Disclaim │ Punnett  │ Confid.  │ Metabol. │ Parents  │ Referral │
-└──────────┴──────────┴──────────┴──────────┴──────────┴──────────┘
-```
-
-### Key Files (30+ new/modified)
-
-| File | LOC | Description |
-|------|-----|-------------|
-| `apps/web/hooks/use-genetics-worker.ts` | ~150 | Worker lifecycle, message routing, cancel, error handling |
-| `apps/web/lib/stores/analysis-store.ts` | ~200 | Zustand store with FullAnalysisResult, progress, demo mode |
-| `apps/web/lib/workers/genetics.worker.ts` | ~5 | Thin shim re-exporting engine worker |
-| `apps/web/lib/data/demo-results.ts` | ~300 | Static FullAnalysisResult with 23 verified rsIDs |
-| `apps/web/app/(app)/analysis/page.tsx` | ~200 | Main page: upload, progress, cancel, results tabs |
-| `apps/web/components/genetics/results/overview-tab.tsx` | ~100 | 4 stat cards, metadata, MedicalDisclaimer |
-| `apps/web/components/genetics/results/carrier-tab.tsx` | ~250 | Search, filter, sort, Punnett squares, expandable |
-| `apps/web/components/genetics/results/traits-tab.tsx` | ~120 | 2-col grid, probabilities, confidence badges |
-| `apps/web/components/genetics/results/pgx-tab.tsx` | ~200 | Gene cards, metabolizer badges, drug tables |
-| `apps/web/components/genetics/results/prs-tab.tsx` | ~150 | PrsGauge, offspring range, parent details |
-| `apps/web/components/genetics/results/counseling-tab.tsx` | ~180 | Urgency header, findings, specialties, referral |
-| `apps/web/components/genetics/tier-upgrade-prompt.tsx` | ~50 | Reusable upgrade CTA (Lock icon + message) |
-| `apps/web/components/genetics/medical-disclaimer.tsx` | ~60 | Compact/full variants with ARIA role="note" |
-| `apps/web/components/genetics/population-selector.tsx` | ~60 | gnomAD population selector with clear option |
-
-### Commits (5)
-
-1. `b90010e` feat: Phase 4 — Analysis UI wiring (Web Worker + store + 6 result tabs)
-2. `9664094` fix: R1 review fixes — accuracy, type safety, tests, tier gating, exports
-3. `a91a4ba` fix: R2 review fixes — tier gating, error handling, tests, polish
-4. `59d44c3` fix: R3 review fixes — demo try/catch, tier-specific carrier copy
-5. `22b01bd` fix: R4 review fixes — types, perf, accessibility, business, tests (+31 tests)
+| `auth-store.test.ts` | 52 | All 23 store actions, login/2FA/OAuth flows, cookies, errors |
+| `auth-client.test.ts` | 24 | All 22 API functions, snake_case→camelCase, encoding |
+| `client.test.ts` | 20 | Base HTTP client, auth headers, retry, error handling |
+| `login-content.test.tsx` | 15 | Login form, validation, 2FA flow, OAuth button |
+| `register-content.test.tsx` | 15 | Registration form, validation, resend verification, OAuth |
+| `forgot-password-content.test.tsx` | 8 | Reset email form, success state, error handling |
+| `reset-password-content.test.tsx` | 10 | Token validation, password reset, success redirect |
+| `verify-email-content.test.tsx` | 10 | Token verification, auto-redirect, error states |
+| `callback-content.test.tsx` | 8 | OAuth callback, code/state extraction, error handling |
+| `profile-section.test.tsx` | 10 | Profile display, edit mode, save, cancel, validation |
+| `security-section.test.tsx` | 10 | 2FA toggle, password change trigger, modal opening |
+| `change-password-modal.test.tsx` | 12 | Password change form, validation, success/error states |
+| `two-factor-setup-modal.test.tsx` | 13 | QR code, TOTP verification, backup codes, 3-step flow |
+| `sessions-section.test.tsx` | 8 | Session table, revoke, revoke all, loading, error |
+| `danger-zone.test.tsx` | 10 | Expandable UI, password+checkbox, delete flow, error |
+| `auth-provider.test.tsx` | 8 | Token refresh, redirect, auth context, error boundary |
+| `middleware.test.ts` | 10 | Route protection, cookie checks, redirect logic |
+| `password-utils.test.ts` | 20 | Strength scoring, validation rules, edge cases |
+| `account-utils.test.ts` | 11 | Tier variants, format helpers, date formatting |
+| `analysis-store.test.ts` | 17 | Store state transitions, demo loading, reset |
+| `use-genetics-worker.test.ts` | 16 | Worker lifecycle, message routing, cancel |
+| `overview-tab.test.tsx` | 12 | Stat cards, metadata, disclaimer, tier upgrade |
+| `carrier-tab.test.tsx` | 21 | Search, filter, sort, Punnett squares, ARIA |
+| `traits-tab.test.tsx` | 12 | Grid display, probabilities, confidence |
+| `pgx-tab.test.tsx` | 15 | Gene cards, metabolizer badges, drug tables |
+| `prs-tab.test.tsx` | 13 | Gauges, percentiles, ancestry notes |
+| `counseling-tab.test.tsx` | 19 | Urgency, findings, specialties, referral |
+| `medical-disclaimer.test.tsx` | 6 | Compact/full variants, ARIA |
+| `tier-upgrade-prompt.test.tsx` | 5 | Upgrade CTA, button text, link |
+| `population-selector.test.tsx` | 4 | Population options, tier gating |
+| `analysis-page.test.tsx` | 8 | States, tabs, error, demo, reset |
 
 ---
 
@@ -153,7 +116,6 @@ Zustand store (analysis-store.ts) ← FullAnalysisResult
 
 ### V3 Rewrite — Remaining Phases
 
-- [ ] **Phase 5: Auth UI** — Login, register, OAuth, account management pages in Next.js
 - [ ] **Phase 6: Payment UI** — Stripe/PayPal integration, subscription management
 - [ ] **Phase 7: Backend API** — FastAPI endpoints, database, deployment
 - [ ] **Phase 8: Polish & Launch** — E2E tests, performance, production deployment
@@ -165,6 +127,11 @@ Zustand store (analysis-store.ts) ← FullAnalysisResult
 - [x] **next/dynamic lazy tabs** — All 6 tab components lazy-loaded (R4 fix)
 - [ ] **Carrier tab virtualization** — For 2,715 disease results at Pro tier, consider windowed rendering
 - [ ] **Worker pool** — Consider SharedWorker for multi-tab scenarios
+
+### Pre-existing TypeScript Issues (Not blocking)
+
+- `lib/api/client.ts:157` — Type comparison issue (`"HEAD"` vs method union)
+- `lib/data/demo-results.ts:268` — Type literal mismatch (`"complex/polygenic"` vs inheritance model union)
 
 ### Legacy Streamlit App (v1/v2)
 
@@ -180,9 +147,11 @@ The original Streamlit app (Source/, pages/, app.py) remains in the repo for ref
 Mergenix/
 ├── apps/
 │   ├── web/                         # Next.js 15 frontend
-│   │   ├── app/(app)/               # App routes (analysis, products, about, etc.)
+│   │   ├── app/(app)/               # App routes (analysis, account, products, about, etc.)
+│   │   ├── app/(auth)/              # Auth routes (login, register, forgot-password, etc.)
 │   │   ├── components/              # React components
 │   │   │   ├── ui/                  # Design system (GlassCard, Button, Badge, etc.)
+│   │   │   ├── auth/               # Auth components (password-input, oauth-button, etc.)
 │   │   │   └── genetics/            # Genetics-specific components
 │   │   │       ├── results/         # 6 result tab components
 │   │   │       ├── file-dropzone.tsx
@@ -192,10 +161,11 @@ Mergenix/
 │   │   │       └── population-selector.tsx
 │   │   ├── hooks/                   # Custom hooks (useGeneticsWorker)
 │   │   ├── lib/
+│   │   │   ├── api/                 # API clients (client.ts, auth-client.ts)
 │   │   │   ├── stores/              # Zustand stores (analysis, auth)
 │   │   │   ├── workers/             # Web Worker shims
 │   │   │   └── data/                # Static data (demo results)
-│   │   └── __tests__/               # Vitest test suites (117 tests)
+│   │   └── __tests__/               # Vitest test suites (423 tests, 31 files)
 │   └── api/                         # FastAPI backend (placeholder)
 ├── packages/
 │   ├── genetics-engine/             # TypeScript genetics engine (~5,500 LOC)
@@ -210,7 +180,7 @@ Mergenix/
 │   │   │   ├── worker.ts            # Web Worker entry point
 │   │   │   └── index.ts             # Barrel exports
 │   │   └── __tests__/               # 366 tests (8 suites)
-│   ├── shared-types/                # TypeScript types (FullAnalysisResult, etc.)
+│   ├── shared-types/                # TypeScript types (FullAnalysisResult, Tier, etc.)
 │   └── genetics-data/               # JSON data files (carrier panel, traits, etc.)
 ├── CLAUDE.md                        # Project rules
 ├── PROGRESS.md                      # Task tracking
@@ -245,6 +215,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #34 | Phase 5: Auth UI (423 tests, 7/7 A+) | **Merged** |
 | #32 | Phase 4: Analysis UI (wire engine + 6 tabs + 148 tests, 6/6 A+) | **Merged** |
 | #31 | Phase 3: Genetics Engine (TypeScript, 366 tests, 6/6 A+) | **Merged** |
 | #30 | Phase 2: Frontend pages (7 pages, design system) | Merged |
@@ -259,12 +230,10 @@ FullAnalysisResult → postMessage → Zustand store
 
 ## Next Steps
 
-1. ~~Create PR for Phase 4~~ → **PR #32 merged** (6/6 A+)
-2. ~~Merge PR #31 (Phase 3)~~ → **Merged**
-3. **Phase 5: Auth UI** — Login, register, OAuth pages in Next.js
-4. **Phase 6: Payment UI** — Stripe/PayPal integration
-5. **Phase 7: Backend API** — FastAPI endpoints + database
-6. **Phase 8: Polish & Launch** — E2E testing, deployment
+1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
+2. **Phase 6: Payment UI** — Stripe/PayPal integration in Next.js
+3. **Phase 7: Backend API** — FastAPI endpoints + database
+4. **Phase 8: Polish & Launch** — E2E testing, deployment
 
 ---
 
