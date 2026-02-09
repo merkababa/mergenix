@@ -107,6 +107,30 @@ Mergenix/
 3. **Push both files to `main`** so the next session on ANY PC starts with full context
 4. Never leave the user having to investigate where we left off — the status files must tell the full story
 
+## Gemini Delegation (MANDATORY — all PCs)
+The OMC MCP `mcp__gemini-cli__ask-gemini` tool is **broken on Windows** (`spawn()` ENOENT for `.cmd` files).
+**Always delegate to Gemini via Bash instead:**
+
+```bash
+# Simple prompt
+gemini -p "Your prompt here" 2>&1
+
+# Long prompt (via file)
+cat <<'EOF' > /tmp/gemini-prompt.txt
+Your long prompt here...
+EOF
+gemini -p "" < /tmp/gemini-prompt.txt 2>&1
+
+# With specific model
+gemini -p "prompt" --model gemini-2.5-flash 2>&1
+```
+
+- **Use `run_in_background: true`** — responses take 10-30s
+- **Always append `2>&1`** — CLI prints status to stderr
+- CLI: `@google/gemini-cli` (npm global), auth: cached Google credentials
+- Best for: design review, documentation, visual analysis, multi-file review (1M context window)
+- NOT for: code editing, codebase search, git ops, running tests (use Claude agents for those)
+
 ## Claude-Specific Rules
 - Always pull before starting work
 - **Always check for open PRs** (`gh pr list --state open`) before starting new work
