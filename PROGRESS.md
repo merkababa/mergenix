@@ -24,7 +24,7 @@
 | **V3 REWRITE: Phase 0 — Monorepo scaffolding** | Claude | Merged | rewrite/phase-0-scaffolding | PR #27 → `rewrite/main`. Next.js 14 + FastAPI + TS genetics engine. Privacy-first (DNA never leaves browser). 138 files, +21,965 lines. |
 | **V3 REWRITE: Phase 0 — Polish** | Claude | PR Open | rewrite/phase-0-polish | PR #28 → `rewrite/main`. 4-round iterative review cycle with 4 Opus reviewers (Architect, QA, Scientist, Technologist). 72+ issues found and fixed. ALL 4 reviewers achieved **A+ grade**. 43 files, +450 lines. Data consistency, genetics accuracy, auth/security, infrastructure, frontend/UX fixes. |
 | **V3 REWRITE: Phase 1 — Marketing Pages** | Claude | Merged | rewrite/phase-1-marketing-pages | PR #29 → `rewrite/main`. 6 polished marketing pages (Home, Products, About, Disease Catalog, Glossary, Legal) + Subscription fix. Server/client component split, Framer Motion animations (MotionConfig reducedMotion), WCAG 2.1 AA (focus trap, skip-to-main, aria-hidden), DRY extraction (6 shared utils, 7 shared components). 5-round ralph loop: ALL 4 reviewers achieved **A+ grade**. 38 files, +5,265/-2,125 lines. |
-| **V3 REWRITE: Phase 2 — Auth Pages** | Claude | PR Open | rewrite/phase-2-auth-pages | PR #30 → `rewrite/main`. Full auth system: Login + 2FA + OAuth, Register, Forgot/Reset Password, Verify Email, OAuth Callback, Account Dashboard (profile, security, 2FA setup, sessions, danger zone). 7 shared components (DnaDots, OAuthButton, TrustSignals, PasswordInput, PasswordStrengthDisplay, UserMenu, AuthProvider). httpOnly refresh tokens, indicator cookie, 15-min idle + 8-hr absolute timeout, WCAG 2.1 AA. 3-round ralph loop with **6 reviewers** (Architect A+, QA A+, Scientist A+, Technologist A, Business A+, Designer A). 37 files, +5,345 lines. |
+| **V3 REWRITE: Phase 2 — Auth Pages** | Claude | Merged | rewrite/phase-2-auth-pages | PR #30 → `rewrite/main`. Full auth system: Login + 2FA + OAuth, Register, Forgot/Reset Password, Verify Email, OAuth Callback, Account Dashboard (profile, security, 2FA setup, sessions, danger zone). 7 shared components (DnaDots, OAuthButton, TrustSignals, PasswordInput, PasswordStrengthDisplay, UserMenu, AuthProvider). httpOnly refresh tokens, indicator cookie, 15-min idle + 8-hr absolute timeout, WCAG 2.1 AA. 3-round ralph loop with **6 reviewers** (Architect A+, QA A+, Scientist A+, Technologist A, Business A+, Designer A). 37 files, +5,345 lines. |
 
 ---
 
@@ -65,13 +65,14 @@
 - [ ] Production deployment
 
 ### V3 Rewrite (Next.js + FastAPI + TypeScript — privacy-first)
-- [x] Phase 0: Monorepo scaffolding (Turborepo, Next.js 14, FastAPI, TS genetics engine) — PR #27
-- [x] Phase 1: Marketing pages polish (home, products, about, legal, diseases, glossary) — PR #29
-- [ ] Phase 2: Genetics engine implementation (parser, carrier, PRS, PGx, traits — all client-side)
-- [ ] Phase 3: Analysis UI (file upload, results dashboard, counseling)
-- [ ] Phase 4: Auth + Payments (JWT, TOTP 2FA, Stripe, Google OAuth)
-- [ ] Phase 5: Remaining pages (account, subscription, admin)
-- [ ] Phase 6: Testing + deployment (Vitest, Playwright, Vercel + Railway)
+- [x] Phase 0: Monorepo scaffolding (Turborepo, Next.js 14, FastAPI, TS genetics engine) — PR #27 + PR #28 (polish)
+- [x] Phase 1: Marketing pages (home, products, about, legal, diseases, glossary) — PR #29
+- [x] Phase 2: Auth pages (login, 2FA, register, forgot/reset password, verify email, OAuth, account dashboard) — PR #30
+- [ ] Phase 3: Genetics engine (parser, carrier, PRS, PGx, traits — all client-side in Web Workers)
+- [ ] Phase 4: Analysis UI (file upload, results dashboard, counseling)
+- [ ] Phase 5: Payments (Stripe integration, tier enforcement)
+- [ ] Phase 6: Remaining pages (subscription, admin)
+- [ ] Phase 7: Testing + deployment (Vitest, Playwright, Vercel + Railway)
 
 ---
 

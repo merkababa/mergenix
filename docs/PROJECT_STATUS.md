@@ -1,8 +1,8 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-08
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 2 Auth in PR #30)
-**Active Branch:** rewrite/phase-2-auth-pages (PR #30 → rewrite/main)
+**Last Updated:** 2026-02-09
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 2 Auth merged, Phase 3 Genetics Engine next)
+**Active Branch:** rewrite/main (Phases 0-2 complete)
 
 ---
 
@@ -487,7 +487,7 @@ Use conventional commits:
 
 | PR | Title | Status |
 |----|-------|--------|
-| #30 | V3 Phase 2: Auth pages — login, 2FA, OAuth, account, 37 files, 6 reviewers A/A+ | 🔄 In Review |
+| #30 | V3 Phase 2: Auth pages — login, 2FA, OAuth, account, 37 files, 6 reviewers A/A+ | ✅ Merged |
 | #29 | V3 Phase 1: Marketing pages polish — 6 pages, all 4 reviewers A+ | ✅ Merged |
 | #28 | V3 Rewrite Phase 0 Polish — 4-round review, all 4 Opus reviewers A+ | 🔄 In Review |
 | #27 | V3 Rewrite Phase 0 Scaffolding — Next.js 14 + FastAPI + TS genetics | ✅ Merged |
@@ -507,11 +507,11 @@ Use conventional commits:
 ## Next Steps
 
 ### Immediate: V3 Rewrite Phase 3+
-1. **Merge PR #30** — Phase 2 Auth Pages (6 reviewers A/A+, merge-ready)
-2. **Phase 3: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side Web Workers)
-3. **Phase 4: Analysis UI** — File upload, results dashboard, counseling page
-4. **Phase 5: Payments** — Stripe integration, pricing page wiring, subscription management
-5. **Phase 6: Testing + deployment** — Vitest, Playwright, Vercel + Railway
+1. **Phase 3: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side Web Workers)
+2. **Phase 4: Analysis UI** — File upload, results dashboard, counseling page
+3. **Phase 5: Payments** — Stripe integration, pricing page wiring, subscription management
+4. **Phase 6: Remaining pages** — Subscription, admin
+5. **Phase 7: Testing + deployment** — Vitest, Playwright, Vercel + Railway
 
 ### V3 Architecture (rewrite/main branch)
 - **Frontend:** Next.js 14 App Router + Tailwind CSS + shadcn/ui-style components
