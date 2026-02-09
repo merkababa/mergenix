@@ -487,6 +487,7 @@ Use conventional commits:
 
 | PR | Title | Status |
 |----|-------|--------|
+| #31 | V3 Phase 3: Genetics Engine — 11 TS modules, 366 tests, 7 rounds, **6/6 A+** | 🔄 In Review |
 | #30 | V3 Phase 2: Auth pages — login, 2FA, OAuth, account, 37 files, 6 reviewers A/A+ | ✅ Merged |
 | #29 | V3 Phase 1: Marketing pages polish — 6 pages, all 4 reviewers A+ | ✅ Merged |
 | #28 | V3 Rewrite Phase 0 Polish — 4-round review, all 4 Opus reviewers A+ | 🔄 In Review |
@@ -506,8 +507,8 @@ Use conventional commits:
 
 ## Next Steps
 
-### Immediate: V3 Rewrite Phase 3+
-1. **Phase 3: Genetics engine** — Port parser, carrier, PRS, PGx, traits to TypeScript (client-side Web Workers)
+### Immediate: V3 Rewrite Phase 4+
+1. **Phase 3: Genetics engine** — ✅ COMPLETE (PR #31, 6/6 A+ reviews)
 2. **Phase 4: Analysis UI** — File upload, results dashboard, counseling page
 3. **Phase 5: Payments** — Stripe integration, pricing page wiring, subscription management
 4. **Phase 6: Remaining pages** — Subscription, admin
