@@ -23,11 +23,17 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 - Memory files (`~/.claude/projects/*/memory/*.md`)
 - Git commands (commit, push, branch, PR creation via `gh`)
 
+### Team-First Rule:
+- **Default to TeamCreate** for any real work (phases, multi-file changes, code+tests)
+- Fire-and-forget Task agents only for single quick lookups or one-off Gemini calls
+- Teams let teammates coordinate, message when blocked, and keep context out of conductor
+
 ### Red flags (you're doing it wrong):
 - Reading a .ts/.tsx/.py file → delegate to explore agent
 - Writing code in Edit/Write → delegate to executor agent
 - Tool output >100 lines → should have delegated
 - Running vitest/pytest directly → delegate to agent
+- Spawning 3+ fire-and-forget Tasks instead of a team → use TeamCreate
 - Context filling fast → doing too much yourself
 
 ---
