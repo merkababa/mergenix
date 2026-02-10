@@ -166,6 +166,7 @@ gemini -p "prompt" --model gemini-2.5-flash 2>&1
 - Gemini CLI is already installed (`@google/gemini-cli` npm global) and authenticated on all PCs
 - Best for: design review, documentation, visual analysis, multi-file review (1M context window)
 - NOT for: code editing, codebase search, git ops, running tests (use Claude agents for those)
+- **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude. Don't delegate just to delegate — save tokens by using Gemini where it genuinely matches or exceeds Claude's output
 
 ### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
 That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
