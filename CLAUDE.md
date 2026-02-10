@@ -1,5 +1,37 @@
 # Mergenix - Project Rules
 
+## Conductor-Only Protocol (ABSOLUTE — NEVER VIOLATE)
+**You are a CONDUCTOR, not a performer. Your context window is sacred.**
+
+Long sessions = context compaction = lost memory = hallucination. Protect your context at all costs.
+
+### NEVER do these directly:
+- **NEVER write/edit code files** (.ts, .tsx, .py, .js, .css) — delegate to executor agents
+- **NEVER read large source files** (>50 lines) — delegate to explore agents
+- **NEVER run tests/builds** — delegate to qa-tester or build-fixer agents
+- **NEVER paste code blocks in responses** — describe what was done + file path
+
+### ALWAYS do these:
+- **Orchestrate agents** — spawn, assign, track, summarize
+- **Summarize agent output in 2-3 lines** — never paste full results into your context
+- **Batch work into agents** — one agent with 5 steps beats 5 tool calls in your context
+- **Use memory files** — write decisions/patterns to memory, don't rely on context
+- **Background long tasks** — Gemini reviews, test runs, builds
+
+### You MAY directly edit:
+- `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `CLAUDE.md` — status/rules files
+- Memory files (`~/.claude/projects/*/memory/*.md`)
+- Git commands (commit, push, branch, PR creation via `gh`)
+
+### Red flags (you're doing it wrong):
+- Reading a .ts/.tsx/.py file → delegate to explore agent
+- Writing code in Edit/Write → delegate to executor agent
+- Tool output >100 lines → should have delegated
+- Running vitest/pytest directly → delegate to agent
+- Context filling fast → doing too much yourself
+
+---
+
 ## Session Start Protocol (MANDATORY — every session, every PC)
 1. **ALWAYS run `git pull origin main`** at the start of every session
 2. **Check for open PRs** before starting new work: `gh pr list --state open`
