@@ -60,6 +60,39 @@ pytest tests/ -v
 # Never commit .env, credentials, API keys
 ```
 
+## Multi-Perspective Code Review (MANDATORY — before every PR)
+After code changes are complete and pass quality gates, Claude MUST review the changes from **all 7 perspectives** below. Each reviewer grades A+ through F. **Iterate and fix until every reviewer gives A+.**
+
+### Review Panel
+| Reviewer | Focus Area |
+|----------|------------|
+| **Architect** | System design, modularity, separation of concerns, scalability, design patterns, dependency management |
+| **Frontend Designer** | UI/UX quality, accessibility, responsiveness, visual consistency, user flow, Streamlit best practices |
+| **Businessman** | Business value, user impact, cost efficiency, market fit, feature completeness, ROI |
+| **Technologist** | Tech stack choices, performance, modern practices, maintainability, code elegance, DRY/SOLID |
+| **Security** | OWASP top 10, input validation, auth/authz, secrets management, data privacy, injection vectors |
+| **QA** | Test coverage, edge cases, error handling, regression risk, test quality, logging/observability |
+| **Code Reviewer** | Readability, naming, documentation, consistency with codebase style, PR size, commit hygiene |
+
+### Process
+1. After code is written and linting/tests pass, run the review panel
+2. Present findings in a table:
+   ```
+   | Reviewer | Grade | Key Findings | Action Items |
+   |----------|-------|--------------|--------------|
+   | Architect | B+ | Tight coupling in X | Extract interface |
+   ```
+3. Fix all action items from any reviewer grading below A+
+4. Re-review **only the perspectives that were below A+**
+5. Repeat until **all 7 reviewers grade A+**
+6. Only then proceed to create the PR
+
+### Rules
+- **No skipping reviewers** — all 7 must weigh in on every PR
+- **No hand-waving grades** — each grade must cite specific evidence from the code
+- **Not-applicable is not A+** — if a perspective doesn't apply (e.g., Frontend Designer for a pure backend change), grade it A+ with "N/A — no frontend impact" but still explicitly state it
+- This review happens **before** the PR is created, not after
+
 ## PROGRESS.md Rules
 - This is the **one file** that can be pushed directly to `main` (along with CLAUDE.md)
 - Update it when you: start a task, finish a task, or hit a blocker
@@ -108,28 +141,34 @@ Mergenix/
 4. Never leave the user having to investigate where we left off — the status files must tell the full story
 
 ## Gemini Delegation (MANDATORY — all PCs)
-The OMC MCP `mcp__gemini-cli__ask-gemini` tool is **broken on Windows** (`spawn()` ENOENT for `.cmd` files).
-**Always delegate to Gemini via Bash instead:**
 
+### CRITICAL: DO NOT use MCP tools for Gemini
+**The MCP tool is BROKEN on Windows.** `mcp__gemini-cli__ask-gemini`, `mcp_g_ask_gemini`, and ANY Gemini MCP tool will fail with ENOENT. **Do NOT attempt to use them. Do NOT suggest installing or configuring them. They do not work.**
+
+### ONLY use Bash to call Gemini (ALWAYS pass `--model gemini-3-pro-preview`)
+The default model without `--model` is gemini-2.0-flash (much weaker). Always specify the model explicitly.
 ```bash
 # Simple prompt
-gemini -p "Your prompt here" 2>&1
+gemini -p "Your prompt here" --model gemini-3-pro-preview 2>&1
 
 # Long prompt (via file)
 cat <<'EOF' > /tmp/gemini-prompt.txt
 Your long prompt here...
 EOF
-gemini -p "" < /tmp/gemini-prompt.txt 2>&1
+gemini -p "" --model gemini-3-pro-preview < /tmp/gemini-prompt.txt 2>&1
 
-# With specific model
+# Use gemini-2.5-flash ONLY for trivial tasks where speed matters more than quality
 gemini -p "prompt" --model gemini-2.5-flash 2>&1
 ```
 
 - **Use `run_in_background: true`** — responses take 10-30s
 - **Always append `2>&1`** — CLI prints status to stderr
-- CLI: `@google/gemini-cli` (npm global), auth: cached Google credentials
+- Gemini CLI is already installed (`@google/gemini-cli` npm global) and authenticated on all PCs
 - Best for: design review, documentation, visual analysis, multi-file review (1M context window)
 - NOT for: code editing, codebase search, git ops, running tests (use Claude agents for those)
+
+### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
+That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
 
 ## Claude-Specific Rules
 - Always pull before starting work
