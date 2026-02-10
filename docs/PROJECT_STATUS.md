@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-02-09
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 5 Auth UI merged)
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 6 Payment UI merged)
 **Branch:** rewrite/main
 
 ---
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (789 tests: 366 engine + 423 web)
+- **Testing:** Vitest (869 tests: 366 engine + 503 web)
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -44,6 +44,37 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 | Phase 3 | Genetics engine (TypeScript, Web Worker, 11 modules) | PR #31 | **Merged** | 366 |
 | Phase 4 | Analysis UI (wire engine into Next.js, 6 result tabs, demo mode) | PR #32 | **Merged** | 148 |
 | Phase 5 | Auth UI (test suite + placeholder completion, 7/7 A+) | PR #34 | **Merged** | 423 |
+| Phase 6 | Payment UI (Stripe checkout, upgrade modal, 8/8 A+) | PR #35 | **Merged** | 503 |
+
+### Phase 6: Payment UI (MERGED — PR #35)
+
+Payment API client, Zustand store, subscription page rewrite, upgrade modal, success/cancel pages. Full Stripe checkout flow with WCAG-compliant accessibility.
+
+**Key deliverables:**
+- Payment API client with 3 endpoints (checkout, history, subscription) and snake_case→camelCase transformers
+- Payment Zustand store with separate checkout loading state for better UX
+- Subscription page rewritten from hardcoded to data-driven with "pay the difference" pricing
+- Upgrade modal with focus trap (Tab/Shift+Tab cycling), Escape/backdrop close, body scroll lock
+- Success page with 20-second WCAG 2.2.1 auto-redirect + Suspense boundary
+- Cancel page with retry/dashboard navigation
+
+**Review grades (2 Gemini rounds + Claude final → 8/8 A+):**
+
+| Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |
+|----------|-----------|-----------|--------------|-----------|
+| Architect | A | — | **A+** | None needed |
+| QA | A | — | **A+** | None needed |
+| Scientist | N/A | — | **A+** | No genetics code |
+| Technologist | A- | A | **A+** | Focus trap in upgrade modal |
+| Business | A+ | — | **A+** | None needed |
+| Designer | B | A | **A+** | Focus trap + WCAG 2.2.1 redirect timer (20s) |
+| Security Analyst | A | — | **A+** | None needed |
+| Code Reviewer | A | — | **A+** | None needed |
+
+**Test coverage (V3):**
+- Genetics engine: 366 tests (8 suites)
+- Web app: 503 tests (37 suites)
+- **Total: 869 tests passing**
 
 ### Phase 5: Auth UI (MERGED — PR #34)
 
@@ -69,12 +100,12 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 | Designer | A- | **A+** | aria-busy, aria-live, aria-describedby, aria-hidden |
 | Security | A- | **A+** | encodeURIComponent, OAuth state, URLSearchParams |
 
-**Test coverage (V3):**
+**Test coverage (V3 at Phase 5):**
 - Genetics engine: 366 tests (8 suites)
 - Web app: 423 tests (31 suites)
-- **Total: 789 tests passing**
+- **Phase 5 total: 789 tests passing**
 
-### Test Suites (V3 Web — 31 files)
+### Test Suites (V3 Web — 37 files)
 
 | Suite | Tests | What it covers |
 |-------|-------|----------------|
@@ -109,6 +140,12 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 | `tier-upgrade-prompt.test.tsx` | 5 | Upgrade CTA, button text, link |
 | `population-selector.test.tsx` | 4 | Population options, tier gating |
 | `analysis-page.test.tsx` | 8 | States, tabs, error, demo, reset |
+| `payment-client.test.ts` | 18 | All 3 API functions, snake_case→camelCase, error handling |
+| `payment-store.test.ts` | 22 | All 5 store actions, loading states, checkout flow, reset |
+| `subscription-page.test.tsx` | 15 | Plan display, upgrade options, payment history, pricing |
+| `upgrade-modal.test.tsx` | 12 | Focus trap, keyboard nav, checkout trigger, error display |
+| `payment-success.test.tsx` | 8 | Auto-redirect, countdown, session ID, manual navigation |
+| `payment-cancel.test.tsx` | 5 | Retry link, dashboard link, messaging |
 
 ---
 
@@ -116,7 +153,7 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 
 ### V3 Rewrite — Remaining Phases
 
-- [ ] **Phase 6: Payment UI** — Stripe/PayPal integration, subscription management
+- [x] **Phase 6: Payment UI** — PR #35 merged (8/8 A+, 80 tests)
 - [ ] **Phase 7: Backend API** — FastAPI endpoints, database, deployment
 - [ ] **Phase 8: Polish & Launch** — E2E tests, performance, production deployment
 
@@ -161,11 +198,11 @@ Mergenix/
 │   │   │       └── population-selector.tsx
 │   │   ├── hooks/                   # Custom hooks (useGeneticsWorker)
 │   │   ├── lib/
-│   │   │   ├── api/                 # API clients (client.ts, auth-client.ts)
-│   │   │   ├── stores/              # Zustand stores (analysis, auth)
+│   │   │   ├── api/                 # API clients (client.ts, auth-client.ts, payment-client.ts)
+│   │   │   ├── stores/              # Zustand stores (analysis, auth, payment)
 │   │   │   ├── workers/             # Web Worker shims
 │   │   │   └── data/                # Static data (demo results)
-│   │   └── __tests__/               # Vitest test suites (423 tests, 31 files)
+│   │   └── __tests__/               # Vitest test suites (503 tests, 37 files)
 │   └── api/                         # FastAPI backend (placeholder)
 ├── packages/
 │   ├── genetics-engine/             # TypeScript genetics engine (~5,500 LOC)
@@ -215,6 +252,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #35 | Phase 6: Payment UI (503 tests, 8/8 A+) | **Merged** |
 | #34 | Phase 5: Auth UI (423 tests, 7/7 A+) | **Merged** |
 | #32 | Phase 4: Analysis UI (wire engine + 6 tabs + 148 tests, 6/6 A+) | **Merged** |
 | #31 | Phase 3: Genetics Engine (TypeScript, 366 tests, 6/6 A+) | **Merged** |
@@ -231,7 +269,7 @@ FullAnalysisResult → postMessage → Zustand store
 ## Next Steps
 
 1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
-2. **Phase 6: Payment UI** — Stripe/PayPal integration in Next.js
+2. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
 3. **Phase 7: Backend API** — FastAPI endpoints + database
 4. **Phase 8: Polish & Launch** — E2E testing, deployment
 
