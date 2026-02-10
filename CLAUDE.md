@@ -46,16 +46,18 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 - **No separate Dev Team Leader agent** — it was tried and failed (can't use TeamCreate, writes code itself, ignores fix requests)
 
 ### Planning Team (MANDATORY for phase planning):
-- Before starting any phase, spawn **separate planning agents** per perspective (default: all 8 reviewers)
+- Before starting any phase, spawn **separate planning agents** per perspective (default: all 10 reviewers)
 - **Ask user which perspectives to include each time**
 - Each agent analyzes the phase from their perspective, then Conductor aggregates into unified plan
 
 ### Pre-Flight Checklist (MANDATORY — before EVERY execution phase):
 Before spawning ANY agent, STOP and verify:
-1. Does each executor have **explicit file ownership**? (no agent touches 2+ directories)
-2. Did I **re-read conductor-protocol.md**? (not from memory — actually read the file)
-3. Did I include DEVELOPMENT_GOTCHAS.md + checklists in every executor prompt?
+1. Does each executor have **explicit file ownership**? (no agent touches 2+ directories — partition by directory/module)
+2. Did I re-read the Conductor-Only Protocol above? (not from memory — actually re-read this section)
+3. Did I include `docs/DEVELOPMENT_GOTCHAS.md` + checklists in every executor prompt?
 4. Am I about to do work I should delegate? (reading code, running tests, writing code)
+5. For Gemini reviews: am I including FULL source files (all changed `.py`/`.ts`/`.tsx` + relevant `.json` data/config) — not just the diff?
+6. Did I show the Gemini Delegation Plan table to the user and get approval?
 
 **If ANY box is unchecked, STOP and fix it.**
 
@@ -162,17 +164,17 @@ Executors MUST pass all static checks before code goes to reviewers:
 Only code that passes Layer 0 proceeds to Stage 1.
 
 #### Stage 1: Gemini Reviews — ALL 10 MUST BE A+ (ABSOLUTE — NO EXCEPTIONS)
-1. Conductor spawns a **Gemini Review Coordinator** team member
+1. Conductor spawns a **Gemini Review Coordinator** agent (dedicated team member, NOT a bash script)
 2. Coordinator reads changed files and prepares review prompts
-3. Coordinator spawns **separate Gemini instances** per reviewer role (one Gemini call = one reviewer)
-4. **CRITICAL:** Each Gemini reviewer gets FULL SOURCE FILES + diff (NOT just the diff — Gemini has 1M context, USE IT. Sending only the diff is a RULE VIOLATION.)
+3. Coordinator spawns **separate Gemini API calls** per reviewer role (one Gemini call = one reviewer — NEVER combine reviewers)
+4. **CRITICAL:** Each Gemini reviewer gets **FULL SOURCE FILES** + diff. "Full source files" = all changed `.py`/`.ts`/`.tsx` files in their entirety + relevant `.json` data/config files + test files if reviewing QA. NOT just the diff — Gemini has 1M context, USE IT. Sending only the diff is a RULE VIOLATION.
 5. Coordinator reports grades table to Conductor
-6. **Judge/Synthesis agent** deduplicates issues, resolves conflicts, produces final grade table + fix manifest
-7. **ALWAYS print Consolidated Issues table to the user** — cross-reviewer deduplication showing: Issue, Flagged By (which reviewers), Severity, Action Item. This is MANDATORY after every review round.
-8. Fix issues (6+ issues → Dev Team Leader + executor team; 1-5 → single executor)
-9. Re-review only failed roles
-10. **HARD GATE: Repeat steps 3-9 until ALL 10 Gemini reviewers grade A+. No exceptions. No "close enough". No moving on with A or A-. ALL 10 = A+.**
-10. **Pipeline overlap:** As each Gemini role reaches A+, immediately start the corresponding Claude Opus reviewer (don't wait for all Gemini roles)
+6. Conductor spawns a **Judge/Synthesis agent** (separate agent) that deduplicates issues across reviewers, resolves conflicts, and produces final grade table + fix manifest
+7. **ALWAYS print Consolidated Issues table to the user** — cross-reviewer deduplication showing: Issue | Flagged By (which reviewers) | Severity | Action Item. This is MANDATORY after every review round.
+8. Fix issues: **6+ issues → executor team with file ownership** (one executor per directory/module); **1-5 issues → single executor agent**
+9. Re-review only failed roles (roles that were below A+)
+10. **HARD GATE:** Repeat steps 3-9 until ALL 10 Gemini reviewers grade A+. No exceptions. No "close enough". No moving on with A or A-. ALL 10 = A+.
+11. **Pipeline overlap:** As each Gemini role reaches A+, immediately start the corresponding Claude Opus reviewer (don't wait for all Gemini roles)
 
 #### Stage 2: Claude Opus Independent Reviews — ALL 10 MUST BE A+ (ABSOLUTE — NO EXCEPTIONS)
 1. **ONLY after ALL 10 Gemini reviewers are A+** — this is a hard prerequisite, never skip
@@ -181,12 +183,12 @@ Only code that passes Layer 0 proceeds to Stage 1.
 4. Agents READ files themselves (they have tool access)
 5. All agents run in parallel
 6. Each agent grades independently — results are NOT combined into a single review
-7. **Judge/Synthesis agent** deduplicates, resolves conflicts, produces final grade table + fix manifest
-8. **ALWAYS print Consolidated Issues table to the user** — same format as Stage 1: Issue, Flagged By, Severity, Action Item. MANDATORY after every review round.
-9. Fix issues (6+ → Dev Team Leader + executor team; 1-5 → single executor)
+7. Conductor spawns a **Judge/Synthesis agent** (separate agent) — deduplicates, resolves conflicts, produces final grade table + fix manifest
+8. **ALWAYS print Consolidated Issues table to the user** — same format as Stage 1: Issue | Flagged By | Severity | Action Item. MANDATORY after every review round.
+9. Fix issues: **6+ → executor team with file ownership**; **1-5 → single executor**
 10. Re-review only failed roles
-11. **HARD GATE: Repeat steps 2-10 until ALL 10 Claude reviewers grade A+. No exceptions. ALL 10 = A+.**
-11. **ONLY after both Stage 1 (10/10 A+) AND Stage 2 (10/10 A+) may a PR be created**
+11. **HARD GATE:** Repeat steps 2-10 until ALL 10 Claude reviewers grade A+. No exceptions. ALL 10 = A+.
+12. **ONLY after both Stage 1 (10/10 A+) AND Stage 2 (10/10 A+) may a PR be created**
 
 ### Fix Flow After Reviews
 - **6+ issues:** Conductor → Dev Team Leader → executor team with file ownership
@@ -206,7 +208,7 @@ Classify each phase/PR by type to pre-select default reviewers (always confirm w
 ### Executor Enhancement
 - All executor prompts MUST reference `docs/DEVELOPMENT_GOTCHAS.md` for common pitfalls
 - Pre-embed Technologist checklist (asyncio.to_thread, useCallback, React.memo, N+1) and Business checklist (terminology, tier gating, price validation) in every executor prompt
-- Gemini reviews can use `scripts/gemini-review.sh` bash script instead of a dedicated Coordinator agent
+- Gemini reviews MUST use a dedicated **Coordinator agent** (not a bash script) — the Coordinator manages separate Gemini API calls and tracks per-role results
 
 ### Grades Table Format
 ```
@@ -303,6 +305,15 @@ gemini -p "prompt" --model gemini-2.5-flash 2>&1
 
 ### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
 That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
+
+### Gemini Pre-Flight Checklist (MANDATORY before every Gemini call)
+**NEVER skip this. User was burned by lazy delegation on Phase 8B.**
+1. For code reviews: ALWAYS include full source files (not just diff) — Gemini has 1M context, USE IT
+2. Before sending, list which of the 8 rules apply and show HOW each is satisfied
+3. Rule 4 (FEED GROUND TRUTH): attach actual source code, actual data files, actual schemas
+4. Rule 6 (SHOW EXISTING CODE): paste the current implementation, not just changes
+5. Rule 7 (DEFINE DONE): give checklistable success criteria, never vague asks
+6. **NEVER optimize for speed over quality** — taking 2 extra minutes to gather full context beats a shallow review
 
 ### Gemini Delegation Plan (MANDATORY — before planning AND before executing)
 **ALWAYS print a Gemini Delegation Table to the user BEFORE planning any phase AND BEFORE starting any execution.** The table must show:
