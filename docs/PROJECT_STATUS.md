@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-09
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 6 Payment UI merged)
+**Last Updated:** 2026-02-10
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 8A Integration Polish 10/10 A+, awaiting merge)
 **Branch:** rewrite/main
 
 ---
@@ -271,10 +271,10 @@ FullAnalysisResult → postMessage → Zustand store
 1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
 2. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
 3. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
-4. **Phase 8A: Integration Polish** → **PR #37 open** (5x A+, 4x A — 630 tests)
-5. **Phase 8B: Legal/Privacy** — Cookie consent, age verification, GDPR data export
+4. **Phase 8A: Integration Polish** → **PR #37 open** (10/10 A+, 643+ tests, awaiting merge)
+5. **Phase 8B: Legal/Privacy** — Cookie consent, age verification, GDPR data export, GINA notice, privacy policy
 6. **Phase 8C: E2E Tests** — Playwright integration tests
-7. **Phase 8D: Production Deploy** — Docker, CI/CD, route renaming
+7. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming
 
 ---
 
