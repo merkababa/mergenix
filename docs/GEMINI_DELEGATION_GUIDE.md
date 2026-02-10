@@ -160,27 +160,21 @@ Ask yourself:
 
 ---
 
-## Setup (Completed 2026-02-09)
+## Setup
 
-### Subscriptions
+### Authentication
 
-| Subscription | Price | What It Gives |
-|---|---|---|
-| **Claude Max** | $100/mo | Claude Code CLI, all models, ~50-200 prompts/5hr window |
-| **Google AI Pro** | $19.99/mo | Gemini CLI (120 RPM, 1,500 RPD), $10/mo Cloud credits, Gemini web app |
+- **API key** (`GEMINI_API_KEY` env var) set in `~/.bashrc` — Gemini CLI auto-detects it
+- Paid tier limits: **150+ RPM, 1,000+ RPD**
+- Run `source ~/.bashrc` if key not found in session
+- **NEVER hardcode the API key in any git-tracked file**
 
-### MCP Server: Gemini CLI Bridge
+### How to Call Gemini from Claude Code
 
-Installed via `claude mcp add gemini-cli -s user -- npx -y gemini-mcp-tool`
+**ONLY use Bash** — MCP tools are broken on Windows (ENOENT from `spawn()` not finding `.cmd` files).
 
-This routes Claude Code requests through Gemini CLI, which uses your Google AI Pro subscription for **120 RPM / 1,500 RPD** -- completely free.
-
-**WARNING: MCP tools are BROKEN on Windows.** The MCP server uses `spawn('gemini', args)` which fails on Windows because `gemini` is installed as `gemini.cmd` and `spawn()` can't find `.cmd` files without `shell: true`. This causes ENOENT errors.
-
-**How to use from Claude Code (Bash only):**
 ```bash
-# Always use --model gemini-3-pro-preview for best results
-# Default without --model is gemini-2.0-flash (much weaker)
+# ALWAYS pass --model gemini-3-pro-preview (default without flag is gemini-2.0-flash)
 gemini -p "Your prompt here" --model gemini-3-pro-preview 2>&1
 
 # Long prompt (via file)
@@ -192,23 +186,11 @@ gemini -p "" --model gemini-3-pro-preview < /tmp/gemini-prompt.txt 2>&1
 - Use `run_in_background: true` on Bash tool — responses take 10-30s
 - Always append `2>&1` — CLI prints status to stderr
 - Do NOT use any MCP Gemini tools — they will fail on Windows
-
-### Authentication
-
-- Gemini CLI authenticated via `gemini auth login` (Google account with AI Pro)
-- No API key needed for CLI-based access (CLI uses OAuth, not API key)
-- API key available at Google AI Studio if needed for API-based MCP later
+- **NEVER fall back to weaker models** when rate-limited — wait and retry (60s, 120s, 300s)
 
 ### Rate Limits
 
 | Auth Method | RPM | RPD | Cost |
 |---|---|---|---|
-| Gemini CLI (your setup) | 120 | 1,500 | Free (AI Pro) |
+| API key paid tier (your setup) | 150+ | 1,000+ | Pay-per-token |
 | API key free tier | 10 | 100 | Free |
-| API key paid tier | 150+ | 1,000+ | Pay-per-token |
-
-### Activating $10/mo Google Cloud Credits
-
-1. Go to https://developers.google.com/program/plans-and-pricing
-2. Link your Google AI Pro subscription
-3. Claim credits -- usable for Gemini API via Vertex AI if needed

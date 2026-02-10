@@ -211,15 +211,16 @@ gemini -p "prompt" --model gemini-2.5-flash 2>&1
 - **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude
 
 ### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
-That file contains the **A/B/C/D task tier matrix** and **7 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
+That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
 
-### Gemini Delegation Plan (MANDATORY — before every execution)
-**ALWAYS print a Gemini Delegation Table to the user BEFORE starting any execution.** The table must show:
+### Gemini Delegation Plan (MANDATORY — before planning AND before executing)
+**ALWAYS print a Gemini Delegation Table to the user BEFORE planning any phase AND BEFORE starting any execution.** The table must show:
 - Which tasks go to Gemini (with tier rating A/B/C/D)
 - Which tasks stay on Claude
 - Rationale for each assignment
-- **User must see and approve this table before any work begins**
-- Never skip this step. Never start execution without showing the table first.
+- **User must see and approve this table before any planning or work begins**
+- This applies TWICE: once when planning (to decide delegation), and again before executing (to confirm)
+- Never skip this step. Never start planning or execution without showing the table first.
 
 ### Consolidated Issues Table (MANDATORY — after every review round)
 **ALWAYS print a Consolidated Issues table to the user after every review round (both Gemini and Claude stages).**
