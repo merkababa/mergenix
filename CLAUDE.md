@@ -201,13 +201,30 @@ gemini -p "prompt" --model gemini-2.5-flash 2>&1
 
 - **Use `run_in_background: true`** — responses take 10-30s
 - **Always append `2>&1`** — CLI prints status to stderr
-- Gemini CLI is already installed (`@google/gemini-cli` npm global) and authenticated on all PCs
+- **Auth:** API key (`GEMINI_API_KEY` env var) in `~/.bashrc` — CLI auto-detects it (paid tier: 150+ RPM, 1,000+ RPD)
+- If key missing: `source ~/.bashrc` to reload
+- **NEVER hardcode the API key in any git-tracked file**
+- MCP tools for Gemini are BROKEN on Windows — always use Bash
+- **NEVER fall back to weaker models** when rate-limited — wait and retry (60s, 120s, 300s)
 - Best for: design review, documentation, visual analysis, multi-file review (1M context window)
 - NOT for: code editing, codebase search, git ops, running tests (use Claude agents for those)
-- **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude. Don't delegate just to delegate — save tokens by using Gemini where it genuinely matches or exceeds Claude's output
+- **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude
 
 ### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
-That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
+That file contains the **A/B/C/D task tier matrix** and **7 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
+
+### Gemini Delegation Plan (MANDATORY — before every execution)
+**ALWAYS print a Gemini Delegation Table to the user BEFORE starting any execution.** The table must show:
+- Which tasks go to Gemini (with tier rating A/B/C/D)
+- Which tasks stay on Claude
+- Rationale for each assignment
+- **User must see and approve this table before any work begins**
+- Never skip this step. Never start execution without showing the table first.
+
+### Consolidated Issues Table (MANDATORY — after every review round)
+**ALWAYS print a Consolidated Issues table to the user after every review round (both Gemini and Claude stages).**
+- Cross-reviewer deduplication showing: Issue, Flagged By (which reviewers), Severity, Action Item
+- Never skip this step. The user must see all issues before fixes begin.
 
 ## Claude-Specific Rules
 - Always pull before starting work
