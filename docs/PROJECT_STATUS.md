@@ -270,8 +270,11 @@ FullAnalysisResult → postMessage → Zustand store
 
 1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
 2. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
-3. **Phase 7: Backend API** — FastAPI endpoints + database
-4. **Phase 8: Polish & Launch** — E2E testing, deployment
+3. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
+4. **Phase 8A: Integration Polish** → **PR #37 open** (5x A+, 4x A — 630 tests)
+5. **Phase 8B: Legal/Privacy** — Cookie consent, age verification, GDPR data export
+6. **Phase 8C: E2E Tests** — Playwright integration tests
+7. **Phase 8D: Production Deploy** — Docker, CI/CD, route renaming
 
 ---
 
