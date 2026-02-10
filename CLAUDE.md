@@ -49,6 +49,7 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 - Before starting any phase, spawn **separate planning agents** per perspective (default: all 10 reviewers)
 - **Ask user which perspectives to include each time**
 - Each agent analyzes the phase from their perspective, then Conductor aggregates into unified plan
+- **Ask as many clarifying questions as needed** — during planning, NEVER guess or assume. If requirements are ambiguous, architecture decisions are unclear, or trade-offs need user input, ask. There is no limit on questions. Getting the plan right is more important than moving fast.
 
 ### Pre-Flight Checklist (MANDATORY — before EVERY execution phase):
 Before spawning ANY agent, STOP and verify:
