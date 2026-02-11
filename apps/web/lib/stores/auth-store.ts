@@ -258,6 +258,9 @@ export const useAuthStore = create<AuthState>()((set, get) => {
       try {
         const tokens = await authClient.refreshTokens();
         setAuthState(tokens, get().user);
+        // Re-fetch profile so tier changes propagate within one refresh cycle
+        const profile = await authClient.getProfile();
+        set({ user: profile });
       } catch (error) {
         clearAuthState();
         throw error;

@@ -364,6 +364,27 @@ describe('useAuthStore', () => {
       expect(state.token).toBeNull();
       expect(state.isAuthenticated).toBe(false);
     });
+
+    it('re-fetches user profile after token refresh to pick up tier changes', async () => {
+      // Start with a "free" user
+      useAuthStore.setState({
+        user: { ...mockProfile, tier: 'free' as const },
+        token: 'old-tok',
+        isAuthenticated: true,
+      });
+
+      // Simulate a successful token refresh
+      mockRefreshTokens.mockResolvedValue({ accessToken: 'refreshed-tok', expiresIn: 7200 });
+
+      // Simulate the profile now returning "pro" (e.g. user upgraded tier in DB)
+      mockGetProfile.mockResolvedValue({ ...mockProfile, tier: 'pro' as const });
+
+      await useAuthStore.getState().refreshTokens();
+
+      // Regression: getProfile MUST be called after refresh to pick up tier changes
+      expect(mockGetProfile).toHaveBeenCalled();
+      expect(useAuthStore.getState().user?.tier).toBe('pro');
+    });
   });
 
   // ── forgotPassword ────────────────────────────────────────────────────

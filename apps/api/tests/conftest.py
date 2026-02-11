@@ -209,21 +209,21 @@ async def pro_user(db_session: AsyncSession) -> User:
 @pytest_asyncio.fixture
 async def auth_headers(test_user: User) -> dict[str, str]:
     """Return Authorization headers with a valid access token for test_user."""
-    token = create_access_token(test_user.id, test_user.tier)
+    token = create_access_token(test_user.id)
     return {"Authorization": f"Bearer {token}"}
 
 
 @pytest_asyncio.fixture
 async def premium_auth_headers(premium_user: User) -> dict[str, str]:
     """Return Authorization headers for the premium test user."""
-    token = create_access_token(premium_user.id, premium_user.tier)
+    token = create_access_token(premium_user.id)
     return {"Authorization": f"Bearer {token}"}
 
 
 @pytest_asyncio.fixture
 async def pro_auth_headers(pro_user: User) -> dict[str, str]:
     """Return Authorization headers for the pro test user."""
-    token = create_access_token(pro_user.id, pro_user.tier)
+    token = create_access_token(pro_user.id)
     return {"Authorization": f"Bearer {token}"}
 
 

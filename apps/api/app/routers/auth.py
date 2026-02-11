@@ -13,6 +13,14 @@ import json
 import secrets as _stdlib_secrets
 import uuid
 from datetime import UTC, datetime, timedelta
+
+
+def _utcnow() -> datetime:
+    """Return current UTC time as a naive datetime (no tzinfo).
+
+    asyncpg requires naive datetimes for TIMESTAMP WITHOUT TIME ZONE columns.
+    """
+    return datetime.now(UTC).replace(tzinfo=None)
 from urllib.parse import urlencode
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
@@ -137,7 +145,7 @@ def _issue_tokens(user: User) -> tuple[str, str, int]:
     Returns:
         Tuple of (access_token, refresh_token, expires_in_seconds).
     """
-    access = create_access_token(user.id, user.tier)
+    access = create_access_token(user.id)
     refresh = create_refresh_token(user.id)
     expires_in = settings.access_token_expire_minutes * 60
     return access, refresh, expires_in
@@ -227,7 +235,7 @@ async def register(
     verification = EmailVerification(
         user_id=user.id,
         token_hash=hash_token(token),
-        expires_at=datetime.now(UTC) + timedelta(hours=24),
+        expires_at=_utcnow() + timedelta(hours=24),
     )
     db.add(verification)
 
@@ -292,7 +300,7 @@ async def login(
         )
 
     # Check account lockout
-    if user.locked_until and user.locked_until > datetime.now(UTC):
+    if user.locked_until and user.locked_until > _utcnow():
         await audit_service.log_event(
             db,
             user_id=user.id,
@@ -311,7 +319,7 @@ async def login(
     if not await verify_password(body.password, user.password_hash):
         user.failed_login_attempts += 1
         if user.failed_login_attempts >= 5:
-            user.locked_until = datetime.now(UTC) + timedelta(minutes=30)
+            user.locked_until = _utcnow() + timedelta(minutes=30)
         await audit_service.log_event(
             db,
             user_id=user.id,
@@ -332,7 +340,7 @@ async def login(
         # The token is a HMAC of user_id + timestamp + random nonce, so it cannot
         # be reversed without the server secret.
         challenge_nonce = _stdlib_secrets.token_hex(16)
-        challenge_ts = str(int(datetime.now(UTC).timestamp()))
+        challenge_ts = str(int(_utcnow().timestamp()))
         challenge_payload = f"{user.id}:{challenge_ts}:{challenge_nonce}"
         challenge_token = hashlib.sha256(
             f"{challenge_payload}:{settings.jwt_secret}".encode()
@@ -344,7 +352,7 @@ async def login(
         challenge_session = Session(
             user_id=user.id,
             refresh_token_hash=hash_token(challenge_token),
-            expires_at=datetime.now(UTC) + timedelta(minutes=5),
+            expires_at=_utcnow() + timedelta(minutes=5),
             ip_address=_client_ip(request),
             user_agent=_user_agent(request),
         )
@@ -376,7 +384,7 @@ async def login(
     session = Session(
         user_id=user.id,
         refresh_token_hash=hash_token(refresh_token),
-        expires_at=datetime.now(UTC) + timedelta(days=settings.refresh_token_expire_days),
+        expires_at=_utcnow() + timedelta(days=settings.refresh_token_expire_days),
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -426,7 +434,7 @@ async def login_2fa(
     result = await db.execute(
         select(Session).where(
             Session.refresh_token_hash == challenge_hash,
-            Session.expires_at > datetime.now(UTC),
+            Session.expires_at > _utcnow(),
         )
     )
     challenge_session = result.scalar_one_or_none()
@@ -494,7 +502,7 @@ async def login_2fa(
     session = Session(
         user_id=user.id,
         refresh_token_hash=hash_token(refresh_token),
-        expires_at=datetime.now(UTC) + timedelta(days=settings.refresh_token_expire_days),
+        expires_at=_utcnow() + timedelta(days=settings.refresh_token_expire_days),
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -566,7 +574,7 @@ async def refresh_token(
         select(Session).where(
             Session.user_id == user_id,
             Session.refresh_token_hash == token_hash,
-            Session.expires_at > datetime.now(UTC),
+            Session.expires_at > _utcnow(),
         )
     )
     session_record = result.scalar_one_or_none()
@@ -595,7 +603,7 @@ async def refresh_token(
     new_session = Session(
         user_id=user.id,
         refresh_token_hash=hash_token(new_refresh),
-        expires_at=datetime.now(UTC) + timedelta(days=settings.refresh_token_expire_days),
+        expires_at=_utcnow() + timedelta(days=settings.refresh_token_expire_days),
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -671,7 +679,7 @@ async def verify_email(
         select(EmailVerification).where(
             EmailVerification.token_hash == token_hashed,
             EmailVerification.verified_at.is_(None),
-            EmailVerification.expires_at > datetime.now(UTC),
+            EmailVerification.expires_at > _utcnow(),
         )
     )
     verification = result.scalar_one_or_none()
@@ -688,7 +696,7 @@ async def verify_email(
     if user:
         user.email_verified = True
 
-    verification.verified_at = datetime.now(UTC)
+    verification.verified_at = _utcnow()
 
     await audit_service.log_event(
         db,
@@ -732,7 +740,7 @@ async def resend_verification(
         verification = EmailVerification(
             user_id=user.id,
             token_hash=hash_token(token),
-            expires_at=datetime.now(UTC) + timedelta(hours=24),
+            expires_at=_utcnow() + timedelta(hours=24),
         )
         db.add(verification)
 
@@ -780,7 +788,7 @@ async def forgot_password(
         reset = PasswordReset(
             user_id=user.id,
             token_hash=hash_token(token),
-            expires_at=datetime.now(UTC) + timedelta(hours=1),
+            expires_at=_utcnow() + timedelta(hours=1),
         )
         db.add(reset)
 
@@ -822,7 +830,7 @@ async def reset_password(
         select(PasswordReset).where(
             PasswordReset.token_hash == token_hashed,
             PasswordReset.used_at.is_(None),
-            PasswordReset.expires_at > datetime.now(UTC),
+            PasswordReset.expires_at > _utcnow(),
         )
     )
     reset = result.scalar_one_or_none()
@@ -845,7 +853,7 @@ async def reset_password(
     user.password_hash = await hash_password(body.new_password)
     user.failed_login_attempts = 0
     user.locked_until = None
-    reset.used_at = datetime.now(UTC)
+    reset.used_at = _utcnow()
 
     await audit_service.log_event(
         db,
@@ -971,7 +979,7 @@ async def list_sessions(
         select(Session)
         .where(
             Session.user_id == user.id,
-            Session.expires_at > datetime.now(UTC),
+            Session.expires_at > _utcnow(),
         )
         .order_by(Session.created_at.desc())
     )
@@ -1524,7 +1532,7 @@ async def oauth_google_callback(
     session = Session(
         user_id=user.id,
         refresh_token_hash=hash_token(new_refresh),
-        expires_at=datetime.now(UTC) + timedelta(days=settings.refresh_token_expire_days),
+        expires_at=_utcnow() + timedelta(days=settings.refresh_token_expire_days),
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )

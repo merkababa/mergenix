@@ -135,7 +135,7 @@ describe('auth-client', () => {
 
       expect(mockPost).toHaveBeenCalledWith(
         '/auth/2fa/login',
-        { challenge_token: 'challenge-abc', totp_code: '123456' },
+        { challenge_token: 'challenge-abc', code: '123456' },
         { skipAuth: true },
       );
       expect(result).toEqual({ accessToken: 'at-2fa', expiresIn: 3600 });

@@ -1,33 +1,32 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /**
  * Hook that animates a number from 0 to `target` with an ease-out
  * cubic curve. Animation starts when the attached `ref` element
  * scrolls into view (IntersectionObserver, threshold 0.3).
  *
- * IMPORTANT: properly cancels the requestAnimationFrame loop on
- * unmount to prevent state updates on unmounted components.
+ * Compatible with React StrictMode (handles double-mount cleanup).
  *
  * @param target  - final number to count up to
  * @param duration - animation duration in ms (default 2000)
  */
 export function useCountUp(target: number, duration = 2000) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
   const rafIdRef = useRef<number | null>(null);
 
-  const start = useCallback(() => {
-    if (hasAnimated) return;
-    setHasAnimated(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
-    const startTime = performance.now();
+    let startTime: number | null = null;
 
     const step = (now: number) => {
+      if (startTime === null) startTime = now;
       const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min(Math.max(elapsed / duration, 0), 1);
       // Ease-out cubic for a satisfying deceleration
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(eased * target));
@@ -39,17 +38,10 @@ export function useCountUp(target: number, duration = 2000) {
       }
     };
 
-    rafIdRef.current = requestAnimationFrame(step);
-  }, [hasAnimated, target, duration]);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          start();
+          rafIdRef.current = requestAnimationFrame(step);
           observer.disconnect();
         }
       },
@@ -59,13 +51,14 @@ export function useCountUp(target: number, duration = 2000) {
 
     return () => {
       observer.disconnect();
-      // Cancel any in-flight rAF to prevent updates after unmount
       if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
+      // Reset count so animation restarts cleanly on re-mount (StrictMode)
+      setCount(0);
     };
-  }, [start]);
+  }, [target, duration]);
 
   return { count, ref };
 }

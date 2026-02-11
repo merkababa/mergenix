@@ -14,6 +14,7 @@ import pyotp
 import pytest
 from app.models.audit import Session
 from app.models.user import User
+from app.services.auth_service import create_access_token, decode_token
 from app.utils.security import hash_token
 from httpx import AsyncClient
 from sqlalchemy import select
@@ -976,3 +977,189 @@ async def test_update_profile(
     get_resp = await client.get("/auth/me", headers=auth_headers)
     assert get_resp.status_code == 200
     assert get_resp.json()["name"] == "Updated Name"
+
+
+# ── JWT Tier Claim Regression ────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_access_token_does_not_contain_tier_claim(
+    test_user: User,
+) -> None:
+    """Access tokens must NOT contain a 'tier' claim (regression test)."""
+    token = create_access_token(test_user.id)
+    payload = decode_token(token)
+
+    assert "tier" not in payload
+    assert "sub" in payload
+    assert payload["type"] == "access"
+
+
+@pytest.mark.asyncio
+async def test_login_returns_token_without_tier_claim(
+    client: AsyncClient,
+    test_user: User,
+) -> None:
+    """POST /auth/login access_token must NOT contain a 'tier' claim (regression test)."""
+    response = await client.post(
+        "/auth/login",
+        json={
+            "email": "test@example.com",
+            "password": "TestPass123",
+        },
+    )
+    assert response.status_code == 200
+    access_token = response.json()["access_token"]
+
+    payload = decode_token(access_token)
+
+    assert "tier" not in payload
+    assert "sub" in payload
+    assert payload["type"] == "access"
+
+
+# ── Naive Datetime (asyncpg) Regression ───────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_utcnow_returns_naive_utc_datetime() -> None:
+    """_utcnow() must return a naive datetime (no tzinfo) close to UTC now."""
+    from app.routers.auth import _utcnow
+
+    result = _utcnow()
+
+    # Must be naive (no timezone info) — asyncpg requires this for
+    # TIMESTAMP WITHOUT TIME ZONE columns.
+    assert result.tzinfo is None
+
+    # Sanity check: the value should be close to the current UTC time.
+    # datetime.utcnow() is deprecated but useful here as a naive-UTC reference.
+    now_naive = datetime.utcnow()
+    delta = abs((result - now_naive).total_seconds())
+    assert delta < 2, f"_utcnow() drifted {delta}s from datetime.utcnow()"
+
+
+@pytest.mark.asyncio
+async def test_login_stores_session_with_naive_datetime(
+    client: AsyncClient,
+    test_user: User,
+    db_session: AsyncSession,
+) -> None:
+    """Login should persist a Session whose expires_at is a naive datetime."""
+    response = await client.post(
+        "/auth/login",
+        json={"email": test_user.email, "password": "TestPass123"},
+    )
+    assert response.status_code == 200
+
+    # Query the session created for this user
+    result = await db_session.execute(
+        select(Session).where(Session.user_id == test_user.id)
+    )
+    sessions = result.scalars().all()
+    assert len(sessions) >= 1
+
+    session = sessions[0]
+    assert session.expires_at.tzinfo is None, (
+        f"Session.expires_at should be naive but has tzinfo={session.expires_at.tzinfo}"
+    )
+    if session.created_at is not None:
+        assert session.created_at.tzinfo is None, (
+            f"Session.created_at should be naive but has tzinfo={session.created_at.tzinfo}"
+        )
+
+
+@pytest.mark.asyncio
+async def test_register_stores_verification_with_naive_datetime(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    mock_email,
+) -> None:
+    """Registration should persist an EmailVerification with naive expires_at."""
+    from app.models.audit import EmailVerification
+
+    response = await client.post(
+        "/auth/register",
+        json={
+            "email": "naive_dt_test@example.com",
+            "password": "SecurePass1",
+            "name": "Naive DT Test",
+        },
+    )
+    assert response.status_code == 201
+
+    # Find the newly created user
+    result = await db_session.execute(
+        select(User).where(User.email == "naive_dt_test@example.com")
+    )
+    user = result.scalar_one()
+
+    # Query EmailVerification for this user
+    result = await db_session.execute(
+        select(EmailVerification).where(EmailVerification.user_id == user.id)
+    )
+    verifications = result.scalars().all()
+    assert len(verifications) >= 1
+
+    verification = verifications[0]
+    assert verification.expires_at.tzinfo is None, (
+        f"EmailVerification.expires_at should be naive but has tzinfo={verification.expires_at.tzinfo}"
+    )
+
+
+@pytest.mark.asyncio
+async def test_token_refresh_stores_session_with_naive_datetime(
+    client: AsyncClient,
+    user_with_session: tuple[User, str],
+    db_session: AsyncSession,
+) -> None:
+    """After token refresh, the new Session.expires_at must be a naive datetime."""
+    user, raw_refresh = user_with_session
+
+    # Set the refresh token cookie and call refresh
+    client.cookies.set("refresh_token", raw_refresh)
+    response = await client.post("/auth/refresh")
+    assert response.status_code == 200
+
+    # The old session was rotated; query for the new one
+    result = await db_session.execute(
+        select(Session).where(Session.user_id == user.id)
+    )
+    sessions = result.scalars().all()
+    assert len(sessions) >= 1
+
+    new_session = sessions[0]
+    assert new_session.expires_at.tzinfo is None, (
+        f"Refreshed Session.expires_at should be naive but has tzinfo={new_session.expires_at.tzinfo}"
+    )
+
+
+@pytest.mark.asyncio
+async def test_2fa_challenge_stores_session_with_naive_datetime(
+    client: AsyncClient,
+    totp_user: tuple[User, str],
+    db_session: AsyncSession,
+) -> None:
+    """2FA challenge session (created on login with TOTP user) must have naive expires_at."""
+    user, _secret = totp_user
+
+    # Login with 2FA user — should return 403 with 2FA_REQUIRED
+    login_resp = await client.post(
+        "/auth/login",
+        json={"email": user.email, "password": "TotpPass123"},
+    )
+    assert login_resp.status_code == 403
+    detail = login_resp.json()["detail"]
+    assert detail["code"] == "2FA_REQUIRED"
+
+    # Query the challenge session created for this user
+    result = await db_session.execute(
+        select(Session).where(Session.user_id == user.id)
+    )
+    sessions = result.scalars().all()
+    assert len(sessions) >= 1
+
+    challenge_session = sessions[0]
+    assert challenge_session.expires_at.tzinfo is None, (
+        f"Challenge Session.expires_at should be naive but has tzinfo={challenge_session.expires_at.tzinfo}"
+    )

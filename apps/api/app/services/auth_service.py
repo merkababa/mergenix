@@ -60,12 +60,11 @@ async def verify_password(password: str, hashed: str) -> bool:
 # ── JWT Tokens ────────────────────────────────────────────────────────────
 
 
-def create_access_token(user_id: uuid.UUID, tier: str) -> str:
+def create_access_token(user_id: uuid.UUID) -> str:
     """Create a short-lived JWT access token.
 
     Args:
         user_id: The user's UUID (becomes the ``sub`` claim).
-        tier: The user's current tier (embedded for fast authz checks).
 
     Returns:
         Encoded JWT string.
@@ -74,7 +73,6 @@ def create_access_token(user_id: uuid.UUID, tier: str) -> str:
     expire = now + timedelta(minutes=settings.access_token_expire_minutes)
     payload = {
         "sub": str(user_id),
-        "tier": tier,
         "type": "access",
         "iat": now,
         "exp": expire,
