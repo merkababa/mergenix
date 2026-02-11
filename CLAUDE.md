@@ -44,7 +44,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 
 ### Planning (before starting any phase):
 - Spawn separate planning agents per reviewer perspective
-- Ask user which perspectives to include (default: all 10)
+- Conductor autonomously selects reviewers using phase-type defaults in `/review-pipeline` — better safe than sorry (include when in doubt)
 - Ask as many clarifying questions as needed — never guess during planning
 
 ## Session Start Protocol (every session, every PC)

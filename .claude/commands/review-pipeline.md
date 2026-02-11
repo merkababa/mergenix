@@ -24,7 +24,7 @@ Only code that passes Layer 0 proceeds to Stage 1.
 | 9 | Legal + Privacy | GDPR, GINA, data retention, consent, right to deletion, cookie consent, age verification |
 | 10 | Ethics / Bioethics | Population bias, responsible result framing, emotional harm prevention, eugenics guardrails |
 
-Ask user which roles to include each time (default: all 10). Skip only clearly irrelevant roles.
+Conductor autonomously selects reviewers using the phase-type defaults below. **Policy: better safe than sorry** — when in doubt, include the reviewer. Only skip a role if the PR has absolutely zero relevance to that domain (e.g., Designer for a pure backend config change with no UI impact). Never ask the user which reviewers to include.
 
 ### Phase-Type Pre-Selection Defaults
 - **Frontend-only:** Architect, QA, Technologist, Business, Designer, Code Reviewer
