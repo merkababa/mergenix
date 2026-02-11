@@ -27,7 +27,7 @@
 | V3 Rewrite Phase 6: Payment UI | Claude | **Merged** | rewrite/phase-6-payment-ui | PR #35 — Payment API client, Zustand store, subscription page rewrite (hardcoded→data-driven), upgrade modal (focus trap, WCAG), success/cancel pages. 2 Gemini rounds + Claude final → **8/8 A+**. 12 files, +2,302 LOC, 80 new tests (503 web total, 869 V3 total) |
 | V3 Rewrite Phase 7: Backend API | Claude | **Merged** | rewrite/phase-7-backend | PR #36 — Cookie-based auth refactor, 5 new endpoints (sessions CRUD, account deletion, resend-verification), backup codes (SHA-256, constant-time), 60 backend tests, Alembic migration, Docker entrypoint. 3 review rounds → **8/8 A+**. 13 files, ~1,500 LOC |
 | V3 Rewrite Phase 8A: Integration Polish | Claude | **Merged** | rewrite/phase-8a-integration-polish | PR #37 — Save/load analysis results (AES-256-GCM encrypted), counseling page, TOCTOU fix, consent chain, summary whitelist, OAuth backend-only CSRF, rate limiters on all endpoints. 2 review rounds → **10/10 A+**. 9+42 files, ~3,300 LOC, 643+ frontend + 89 backend tests |
-| V3 Rewrite Phase 8B: Legal/Privacy | Claude | **PR Open (10/10 A+)** | rewrite/phase-8b-legal-privacy | PR #38 — GINA notice, cookie consent banner (GDPR Art 7 affirmative opt-in), age verification modal (18+ mandatory gate), GDPR data export endpoint, consent tracking (immutable audit trail), CCPA rights, data retention table. 2 review rounds → **10/10 A+**. 24 files, +3,641 LOC, 82 new tests |
+| V3 Rewrite Phase 8B: Legal/Privacy | Claude | **Merged** | rewrite/phase-8b-legal-privacy | PR #38 — GINA notice, cookie consent banner (GDPR Art 7 affirmative opt-in), age verification modal (18+ mandatory gate), GDPR data export endpoint, consent tracking (immutable audit trail), CCPA rights, data retention table. 3 review rounds → **10/10 A+ (Gemini) + 10/10 A+ (Claude)**. 34 files, +4,269 LOC, 82+ new tests |
 
 ---
 
@@ -182,8 +182,8 @@
 1. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
 2. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
 3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
-4. **Phase 8B: Legal/Privacy** → **PR #38 open** (10/10 A+, awaiting merge)
-5. **Phase 8C: E2E Tests** — Playwright integration tests
+4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
+5. **Phase 8C: E2E Tests** — Playwright integration tests ← **NEXT**
 6. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming
 
 ---
