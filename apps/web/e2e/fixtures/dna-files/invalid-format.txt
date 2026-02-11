@@ -1,0 +1,13 @@
+This is not a valid DNA genotyping file.
+It contains random text that should trigger a parse error
+when the genetics engine attempts to process it.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+No valid rsid, chromosome, position, or genotype data here.
+
+🧬 Not real genetic data! 🧬
+
+12345 abcde fghij klmno
+!!@@##$$%%^^&&**(())
+{ "invalid": "json that looks nothing like 23andMe format" }
+<xml>also not valid</xml>

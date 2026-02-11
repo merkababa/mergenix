@@ -77,6 +77,7 @@
 | UI prototyping | **A** | Praised for "vibe coding" and full-project scaffolding | "Prototype a user onboarding flow" | 1, 3, 6 |
 | Scientific accuracy checking | **A** | 91.9% GPQA Diamond (surpasses human experts) | "Are Punnett square calcs genetically sound?" | 1, 2, 4, 7 |
 | Screenshot / visual review | **A** | Native multimodal vision, battle-tested | "What's wrong with this page layout?" | 1, 5, 7 |
+| Planning perspective gathering | **A** | 10 personas in parallel, each gets full context; Claude synthesizes | "Analyze Phase 8C from security perspective" | 1, 3, 5, 7 |
 
 ### B-Tier: Gemini viable, saves tokens
 
@@ -97,7 +98,7 @@
 | API integration code | **C** | Gemini hallucinate field names; Claude adds defensive coding | "Integrate ClinVar REST API" |
 | CSS-to-Streamlit integration | **C** | Claude handles Streamlit-specific patterns better | "Wire dark/light mode CSS into Streamlit theming" |
 | Debugging complex issues | **C** | Claude better at systematic root-cause analysis | "VCF parser crashes on multi-allelic sites" |
-| Architecture / planning | **C** | Claude weighs tradeoffs more carefully | "Design payment flow with Stripe webhooks" |
+| Architecture / planning (final decisions) | **C** | Claude weighs tradeoffs more carefully | "Design payment flow with Stripe webhooks" |
 
 ### D-Tier: Never delegate
 
@@ -157,6 +158,93 @@ Ask yourself:
      YES -> Gemini (B-tier, saves tokens)
      NO  -> Claude (default)
 ```
+
+---
+
+## Planning with Gemini
+
+### When to Use
+Before every phase, use Gemini to gather perspectives from all 10 planning personas in parallel. This is **A-tier** work: each persona does a single-shot analysis of the phase from their domain. Claude then synthesizes all 10 perspectives into the final plan.
+
+### Planning Personas
+Located in `review-personas/planning-*.md`, invoked via `GEMINI_SYSTEM_MD`:
+| # | Persona | File |
+|---|---------|------|
+| 1 | Architect | `planning-architect.md` |
+| 2 | QA | `planning-qa.md` |
+| 3 | Scientist | `planning-scientist.md` |
+| 4 | Technologist | `planning-technologist.md` |
+| 5 | Business | `planning-business.md` |
+| 6 | Designer | `planning-designer.md` |
+| 7 | Security | `planning-security.md` |
+| 8 | Code Quality | `planning-code-quality.md` |
+| 9 | Legal/Privacy | `planning-legal-privacy.md` |
+| 10 | Ethics | `planning-ethics.md` |
+
+### Planning Prompt Template (MANDATORY)
+Every Gemini planning call MUST include this context:
+
+```
+## Phase: [Name]
+[1-3 sentence description of what this phase builds]
+
+## Goals
+- Goal 1
+- Goal 2
+
+## Current Architecture
+[Output of: find apps/ packages/ -name '*.ts' -o -name '*.tsx' | head -50]
+
+## Project Status
+[Contents of PROGRESS.md — what's done, what's next]
+
+## Relevant Source Files
+[FULL contents of files this phase will touch or interact with]
+[Include related test files for QA perspective]
+[Include data/config files for Scientist/Business perspectives]
+
+## Success Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+[Checklistable — Rule 7: DEFINE DONE]
+
+## Constraints
+- Must pass all 10 reviewers at A+ (both Gemini and Claude stages)
+- Must follow existing patterns in the codebase
+- [Phase-specific constraints]
+```
+
+### What to Include (per Rule 4: FEED GROUND TRUTH)
+| Context | Source | When to Include |
+|---|---|---|
+| Phase description + goals | User request | Always |
+| Directory tree | `find` output | Always |
+| PROGRESS.md | Full file | Always |
+| Source files the phase touches | Full contents | Always |
+| Related test files | Full contents | QA, Technologist perspectives |
+| Data/config files (JSON) | Full contents | Scientist, Business, Legal perspectives |
+| CLAUDE.md review standards | Relevant sections | Always |
+| Success criteria (checklistable) | User requirements | Always (Rule 7) |
+
+### What NOT to Include
+- Entire codebase (save that for review stage -- planning needs focused context)
+- Multi-turn conversation (Rule 1: single-shot)
+- Vague asks like "plan this phase" (Rule 7: give checklistable criteria)
+
+### Execution Flow
+1. Conductor prepares the planning prompt with all context above
+2. Fire **all 10 Gemini planning calls simultaneously** (no stagger -- paid API tier has 150+ RPM)
+3. Each returns: requirements checklist, risks, suggested approach, dependencies
+4. Claude synthesizes all 10 perspectives into unified plan
+5. User approves the plan before execution begins
+
+### Upgrade from C to A: What Changed
+The delegation guide previously rated "Architecture / planning" as C-tier (keep on Claude). This is still true for **final architectural decisions**. But **perspective gathering** -- asking each domain expert "what requirements and risks do you see?" -- is **A-tier** Gemini work because:
+- It's a single-shot analysis (Rule 1)
+- Each persona has a constrained domain (Rule 3)
+- Output format is specified (Rule 5)
+- Success criteria are checklistable (Rule 7)
+- Claude still makes the final decisions (Rule 8)
 
 ---
 

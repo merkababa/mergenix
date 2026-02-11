@@ -43,7 +43,10 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - No separate Dev Team Leader agent — Conductor spawns executors directly
 
 ### Planning (before starting any phase):
-- Use Gemini for planning — 10 parallel instances, one per reviewer perspective (1M context, zero conductor cost)
+1. **Gemini perspective gathering (Stage 0):** Fire all 10 Gemini planning personas in parallel (`review-personas/planning-*.md` via `GEMINI_SYSTEM_MD`). No stagger needed — paid API has 150+ RPM. Each persona returns: requirements checklist, risks, suggested approach, dependencies.
+2. **Claude synthesis:** Conductor aggregates all 10 Gemini perspectives into a unified plan. Claude makes final architectural decisions (Gemini proposes, Claude decides).
+3. **User approval:** Present the plan to the user before execution begins.
+- Planning prompt template and context requirements: see `docs/GEMINI_DELEGATION_GUIDE.md` → "Planning with Gemini"
 - Conductor autonomously selects reviewers using phase-type defaults in `/review-pipeline` — better safe than sorry (include when in doubt)
 - Ask as many clarifying questions as needed — never guess during planning
 
@@ -88,9 +91,11 @@ Run `/review-pipeline` for the full three-layer review process (Static → Gemin
 **10 Reviewers:** Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics — all must reach A+.
 
 **Resources:**
-- Gemini personas: `review-personas/*.md`
-- Claude agents: `.claude/agents/*-reviewer.md`
+- Gemini review personas: `review-personas/{role}.md` (10 files)
+- Gemini planning personas: `review-personas/planning-{role}.md` (10 files)
+- Claude review agents: `.claude/agents/*-reviewer.md` (10 files)
 - Calibration log: `docs/gemini-calibration.md`
+- Delegation rules: `docs/GEMINI_DELEGATION_GUIDE.md`
 
 ## Gemini Delegation
 Call via bash CLI — MCP tools are broken on Windows. No rate limit waits needed (API tokens).

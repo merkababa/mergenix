@@ -29,6 +29,7 @@
 | V3 Rewrite Phase 8A: Integration Polish | Claude | **Merged** | rewrite/phase-8a-integration-polish | PR #37 — Save/load analysis results (AES-256-GCM encrypted), counseling page, TOCTOU fix, consent chain, summary whitelist, OAuth backend-only CSRF, rate limiters on all endpoints. 2 review rounds → **10/10 A+**. 9+42 files, ~3,300 LOC, 643+ frontend + 89 backend tests |
 | V3 Rewrite Phase 8B: Legal/Privacy | Claude | **Merged** | rewrite/phase-8b-legal-privacy | PR #38 — GINA notice, cookie consent banner (GDPR Art 7 affirmative opt-in), age verification modal (18+ mandatory gate), GDPR data export endpoint, consent tracking (immutable audit trail), CCPA rights, data retention table. 3 review rounds → **10/10 A+ (Gemini) + 10/10 A+ (Claude)**. 34 files, +4,269 LOC, 82+ new tests |
 | Review Infrastructure: Dual persona system | Claude | **Done** | rewrite/main | 10 Claude agents (`.claude/agents/`) + 10 Gemini CLI personas (`review-personas/`). Gemini CLI reads local files via `GEMINI_SYSTEM_MD` — no upload needed. Tested: single, persona-switch, parallel (15s stagger). 20 files, +837 lines |
+| V3 Rewrite Phase 8C: E2E Tests | Claude | **Merged** | test/phase-8c-e2e | PR #40 — Playwright E2E test suite. 23 spec files, 153 scenarios across 8 categories (auth, app, marketing, legal, accessibility, performance, security, API). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Dependencies: @axe-core/playwright, otplib. 46 files, +10,965 LOC. |
 
 ---
 
@@ -102,6 +103,7 @@
 | 2026-02-10 | Claude | V3 Rewrite Phase 6 — Payment UI: Payment API client, Zustand store, subscription page rewrite, upgrade modal (focus trap, WCAG), success/cancel pages. 80 new tests (503 web total). 2 Gemini rounds + Claude final → **8/8 A+**. 12 files, +2,302 LOC. | PR #35 |
 | 2026-02-10 | Claude | V3 Rewrite Phase 7 — Backend API: Cookie-based auth (HttpOnly refresh tokens), 5 new endpoints (sessions, account deletion, resend-verification), backup codes (SHA-256, constant-time), async event loop safety (asyncio.to_thread for bcrypt/Stripe/email), webhook hardening (price validation + idempotency), subscription→tier-status naming, Alembic migration (6 tables), Docker entrypoint. 60 backend tests. 5 review rounds (Gemini R1→R2 + Claude + independent 8-agent + re-verify) → **8/8 A+**. 15 files, ~1,700 LOC. | PR #36 |
 | 2026-02-10 | Claude | Review Infrastructure: Dual persona system. 10 Claude agents (`.claude/agents/`, YAML frontmatter, opus model) + 10 Gemini CLI personas (`review-personas/`, pure markdown, `GEMINI_SYSTEM_MD`). Discovered Gemini CLI reads local files directly (no upload). Tested single, persona-switch, parallel (15s stagger). 20 files, +837 lines. | rewrite/main |
+| 2026-02-11 | Claude | V3 Rewrite Phase 8C — E2E Tests: Playwright E2E test suite. 23 spec files, 153 scenarios (P0:25, P1:94, P2:34). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Categories: auth(25), app(50), marketing(16), legal(13), accessibility(22), performance(14), security(7), API(6). 7 parallel executor agents. 46 files, +10,965 LOC. | PR #40 |
 
 ---
 
@@ -115,8 +117,8 @@
 2. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
 3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
 4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
-5. **Phase 8C: E2E Tests** — Playwright integration tests ← **NEXT**
-6. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming
+5. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
+6. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming ← **NEXT**
 
 ---
 
