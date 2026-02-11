@@ -265,7 +265,7 @@ export const DEMO_RESULTS: FullAnalysisResult = {
       description:
         "Freckling propensity is influenced by variants in the IRF4 gene and MC1R. The rs12203592 variant in IRF4 is strongly associated with skin pigmentation and freckling.",
       confidence: "medium",
-      inheritance: "complex/polygenic",
+      inheritance: "additive",
       status: "success",
       parentAGenotype: "CT",
       parentBGenotype: "CC",

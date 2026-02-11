@@ -61,7 +61,7 @@ export function LoginContent() {
 
   // Field-level validation
   const [emailTouched, setEmailTouched] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [, setPasswordTouched] = useState(false);
 
   // Refs
   const emailRef = useRef<HTMLInputElement>(null);

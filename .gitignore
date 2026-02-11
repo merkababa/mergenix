@@ -62,3 +62,5 @@ data/mergenix.db-shm
 *.log
 logs/
 OMG.txt
+
+.vercel

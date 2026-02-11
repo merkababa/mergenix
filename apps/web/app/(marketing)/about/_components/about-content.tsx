@@ -24,7 +24,6 @@ import {
   fadeUp,
   fadeIn,
   scaleIn,
-  staggerItem,
   createStaggerContainer,
 } from "@/lib/animation-variants";
 

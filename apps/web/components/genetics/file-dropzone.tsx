@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Shield, FileCheck, AlertCircle, Dna } from "lucide-react";
+import { Shield, FileCheck, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GeneticFileFormat } from "@/lib/stores/analysis-store";
 

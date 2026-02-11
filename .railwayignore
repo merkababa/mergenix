@@ -1,0 +1,12 @@
+node_modules
+.next
+.turbo
+.git
+Source
+pages
+Genoms
+__pycache__
+.pytest_cache
+.ruff_cache
+apps/web/e2e
+apps/api/.venv

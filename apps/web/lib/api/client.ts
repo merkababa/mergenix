@@ -67,7 +67,7 @@ export function setUnauthorizedHandler(handler: () => Promise<boolean>): void {
 // ── Request helpers ─────────────────────────────────────────────────────
 
 interface RequestOptions {
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method: "GET" | "HEAD" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   body?: unknown;
   /** Skip adding Authorization header (e.g., for login/register). */

@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { ConsentRecord, CookiePreferences } from "@mergenix/shared-types";
+import type { ConsentRecord } from "@mergenix/shared-types";
 import * as legalClient from "@/lib/api/legal-client";
 import { COOKIE_CONSENT_KEY, AGE_VERIFIED_KEY } from "../constants/legal";
 import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";

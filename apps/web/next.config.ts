@@ -3,9 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   transpilePackages: ["@mergenix/shared-types", "@mergenix/genetics-engine", "@mergenix/genetics-data"],
-  experimental: {
-    typedRoutes: true,
-  },
   images: {
     formats: ["image/avif", "image/webp"],
   },

@@ -25,7 +25,7 @@ function getRiskInfo(percentile: number): { color: string; label: string; glowCo
 
 export function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
   const clamped = Math.min(Math.max(percentile, 0), 100);
-  const { color, label, glowColor } = getRiskInfo(clamped);
+  const { color, label } = getRiskInfo(clamped);
 
   // SVG gauge math
   const radius = 80;

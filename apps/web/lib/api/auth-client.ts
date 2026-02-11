@@ -198,7 +198,7 @@ export async function login2FA(
 ): Promise<TokenResponse> {
   const raw = await post<RawTokenResponse>(
     "/auth/2fa/login",
-    { challenge_token: challengeToken, totp_code: totpCode },
+    { challenge_token: challengeToken, code: totpCode },
     { skipAuth: true },
   );
   return toTokenResponse(raw);
