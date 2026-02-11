@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mergenix - Orchestration Model</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --blue: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+    --cyan: #39d2c0;
+    --yellow: #e3b341;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+  }
+  h1 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: var(--blue); }
+  h2 { font-size: 1.5rem; margin: 2rem 0 1rem; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; color: var(--cyan); }
+  .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 2rem; }
+
+  /* Flow Diagram */
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 2rem 0; }
+  .flow-step {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 2rem;
+    min-width: 340px;
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+  }
+  .flow-step.conductor { border-color: var(--blue); }
+  .flow-step.leader { border-color: var(--orange); }
+  .flow-step.executor { border-color: var(--green); }
+  .flow-step.gemini { border-color: var(--purple); }
+  .flow-step.claude { border-color: var(--pink); }
+  .flow-step.fix { border-color: var(--red); }
+  .flow-step.decision { border-color: var(--yellow); border-radius: 0; transform: rotate(0deg); }
+
+  .flow-step .label {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  .flow-step.conductor .label { color: var(--blue); }
+  .flow-step.leader .label { color: var(--orange); }
+  .flow-step.executor .label { color: var(--green); }
+  .flow-step.gemini .label { color: var(--purple); }
+  .flow-step.claude .label { color: var(--pink); }
+  .flow-step.fix .label { color: var(--red); }
+  .flow-step.decision .label { color: var(--yellow); }
+
+  .flow-step .title { font-weight: 600; font-size: 1.1rem; }
+  .flow-step .desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem; }
+
+  .arrow {
+    width: 2px;
+    height: 30px;
+    background: var(--border);
+    position: relative;
+  }
+  .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: -5px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border);
+  }
+  .arrow.loop {
+    background: var(--red);
+  }
+  .arrow.loop::after {
+    border-top-color: var(--red);
+  }
+
+  .parallel-box {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+  }
+  .parallel-box .flow-step {
+    min-width: 180px;
+    max-width: 250px;
+    flex: 1;
+  }
+
+  .loop-label {
+    color: var(--red);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.2rem 0;
+  }
+
+  /* Rules Section */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  .rule-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+  }
+  .rule-card h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .rule-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .rule-card li {
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .rule-card li:last-child { border-bottom: none; }
+  .rule-card li::before { content: ''; margin-right: 0.5rem; }
+
+  .do { color: var(--green); }
+  .dont { color: var(--red); }
+  .warn { color: var(--orange); }
+  .info { color: var(--blue); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  th {
+    background: var(--surface);
+    color: var(--blue);
+    font-weight: 600;
+  }
+  td { color: var(--text-muted); }
+
+  .tag {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .tag.blue { background: rgba(88,166,255,0.15); color: var(--blue); }
+  .tag.green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag.orange { background: rgba(210,153,34,0.15); color: var(--orange); }
+  .tag.red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag.purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+  .tag.pink { background: rgba(247,120,186,0.15); color: var(--pink); }
+
+  .phase-label {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+  }
+  .phase-label.plan { background: rgba(88,166,255,0.2); color: var(--blue); border: 1px solid var(--blue); }
+  .phase-label.execute { background: rgba(63,185,80,0.2); color: var(--green); border: 1px solid var(--green); }
+  .phase-label.review { background: rgba(188,140,255,0.2); color: var(--purple); border: 1px solid var(--purple); }
+  .phase-label.fix { background: rgba(248,81,73,0.2); color: var(--red); border: 1px solid var(--red); }
+
+  .section-divider {
+    border: none;
+    border-top: 2px dashed var(--border);
+    margin: 3rem 0;
+  }
+
+  .highlight-box {
+    background: rgba(88,166,255,0.08);
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .highlight-box.warn {
+    background: rgba(248,81,73,0.08);
+    border-color: var(--red);
+  }
+  .highlight-box.info {
+    background: rgba(57,210,192,0.08);
+    border-color: var(--cyan);
+  }
+</style>
+</head>
+<body>
+
+<h1>Mergenix Orchestration Model</h1>
+<p class="subtitle">Full lifecycle: Plan &rarr; Execute &rarr; Review &rarr; Fix &rarr; Re-review &rarr; Ship</p>
+
+<!-- ===== PHASE 1: PLANNING ===== -->
+<h2><span class="phase-label plan">PHASE 1</span> Planning</h2>
+
+<div class="flow">
+  <div class="flow-step conductor">
+    <div class="label">Conductor (You)</div>
+    <div class="title">Ask user which reviewer perspectives to include</div>
+    <div class="desc">Default: all 8 reviewers. User can exclude irrelevant ones.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Spawn separate planning agents (one per perspective)</div>
+    <div class="desc">Each agent analyzes the phase from their domain. All run in parallel.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="parallel-box">
+    <div class="flow-step executor">
+      <div class="label">Agent 1</div>
+      <div class="title">Architect</div>
+      <div class="desc">System design, file structure, deps</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 2</div>
+      <div class="title">QA</div>
+      <div class="desc">Test strategy, coverage targets</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 3</div>
+      <div class="title">Scientist</div>
+      <div class="desc">Scientific accuracy reqs</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 4</div>
+      <div class="title">Technologist</div>
+      <div class="desc">Tech stack, performance targets</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 5</div>
+      <div class="title">Business</div>
+      <div class="desc">Features, tier gating, value</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 6</div>
+      <div class="title">Designer</div>
+      <div class="desc">UI/UX, accessibility checklist</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 7</div>
+      <div class="title">Security</div>
+      <div class="desc">Threat model, security reqs</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Agent 8</div>
+      <div class="title">Code Reviewer</div>
+      <div class="desc">Coding standards, naming</div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Aggregate into unified plan &rarr; Present to user</div>
+    <div class="desc">User approves or requests changes before execution begins.</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== PHASE 2: EXECUTION ===== -->
+<h2><span class="phase-label execute">PHASE 2</span> Execution</h2>
+
+<div class="flow">
+  <div class="flow-step conductor">
+    <div class="label">Conductor (You)</div>
+    <div class="title">Create team via TeamCreate</div>
+    <div class="desc">Named after the work (e.g., "phase-8-polish"). Creates task list.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step leader">
+    <div class="label">Dev Team Leader</div>
+    <div class="title">Orchestrates executors — does NOT write code</div>
+    <div class="desc">Splits work into tasks with file ownership boundaries. Can delegate to Gemini.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="parallel-box">
+    <div class="flow-step executor">
+      <div class="label">Executor 1</div>
+      <div class="title">Frontend files</div>
+      <div class="desc">Owns: components, pages, stores</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Executor 2</div>
+      <div class="title">Backend files</div>
+      <div class="desc">Owns: routers, services, models</div>
+    </div>
+    <div class="flow-step executor">
+      <div class="label">Executor 3</div>
+      <div class="title">Tests</div>
+      <div class="desc">Owns: test files, fixtures</div>
+    </div>
+    <div class="flow-step gemini">
+      <div class="label">Gemini (optional)</div>
+      <div class="title">Delegated tasks</div>
+      <div class="desc">CSS, docs, data validation</div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+  <div class="flow-step leader">
+    <div class="label">Dev Team Leader</div>
+    <div class="title">Collect results &rarr; QA agent runs tests</div>
+    <div class="desc">All tests must pass before moving to review.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Commit &amp; push to feature branch</div>
+    <div class="desc">Conventional commit format. Never push to main.</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== PHASE 3: GEMINI REVIEW ===== -->
+<h2><span class="phase-label review">PHASE 3</span> Stage 1: Gemini Review</h2>
+
+<div class="flow">
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Spawn Gemini Review Coordinator</div>
+    <div class="desc">Team member who manages all Gemini review instances.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step gemini">
+    <div class="label">Gemini Coordinator</div>
+    <div class="title">Read changed files + prepare prompts</div>
+    <div class="desc">CRITICAL: Include FULL code files + diff (Gemini can't read local files).</div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="parallel-box">
+    <div class="flow-step gemini">
+      <div class="label">Gemini Instance</div>
+      <div class="title">Architect Review</div>
+      <div class="desc">Full code + diff + role prompt</div>
+    </div>
+    <div class="flow-step gemini">
+      <div class="label">Gemini Instance</div>
+      <div class="title">QA Review</div>
+      <div class="desc">Full code + diff + role prompt</div>
+    </div>
+    <div class="flow-step gemini">
+      <div class="label">Gemini Instance</div>
+      <div class="title">Technologist Review</div>
+      <div class="desc">Full code + diff + role prompt</div>
+    </div>
+    <div class="flow-step gemini">
+      <div class="label">Gemini Instance</div>
+      <div class="title">Security Review</div>
+      <div class="desc">Full code + diff + role prompt</div>
+    </div>
+    <div class="flow-step gemini">
+      <div class="label">Gemini Instance</div>
+      <div class="title">+ Other Roles...</div>
+      <div class="desc">Business, Designer, Code Reviewer, Scientist, Legal+Privacy, Ethics</div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+  <div class="flow-step gemini">
+    <div class="label">Gemini Coordinator</div>
+    <div class="title">Collect grades &rarr; Report to Conductor</div>
+    <div class="desc">Grades table with issues per reviewer (up to 10 roles).</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step decision">
+    <div class="label">Decision</div>
+    <div class="title">All Gemini reviewers A+?</div>
+    <div class="desc">YES &rarr; Move to Stage 2 (Claude) &nbsp;|&nbsp; NO &rarr; Fix &amp; re-review</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== PHASE 4: FIX (if needed) ===== -->
+<h2><span class="phase-label fix">PHASE 4</span> Fix Issues</h2>
+
+<div class="flow">
+  <div class="flow-step decision">
+    <div class="label">Decision</div>
+    <div class="title">How many issues?</div>
+    <div class="desc">Count total action items across all reviewers below A+.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="parallel-box">
+    <div class="flow-step fix" style="max-width: 400px;">
+      <div class="label">3+ Issues &rarr; Full Team</div>
+      <div class="title">Dev Team Leader &rarr; Executor Team</div>
+      <div class="desc">
+        1. Conductor spawns Dev Team Leader<br>
+        2. Leader creates executors with file ownership<br>
+        3. Executors fix issues in parallel<br>
+        4. QA agent verifies tests pass
+      </div>
+    </div>
+    <div class="flow-step fix" style="max-width: 400px;">
+      <div class="label">1-2 Issues &rarr; Single Executor</div>
+      <div class="title">One executor agent handles all</div>
+      <div class="desc">
+        1. Conductor spawns single executor<br>
+        2. Agent fixes issues + runs tests<br>
+        3. Reports back to Conductor
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow loop"></div>
+  <div class="loop-label">Re-review ONLY the roles that were below A+ &rarr; back to review stage</div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== PHASE 5: CLAUDE REVIEW ===== -->
+<h2><span class="phase-label review">PHASE 5</span> Stage 2: Claude Opus Independent Review</h2>
+
+<div class="flow">
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Spawn separate Claude Opus agents per reviewer</div>
+    <div class="desc">Each agent has its OWN context. Fully independent. All run in parallel.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="parallel-box">
+    <div class="flow-step claude">
+      <div class="label">Claude Opus</div>
+      <div class="title">Architect</div>
+      <div class="desc">Reads files with tool access</div>
+    </div>
+    <div class="flow-step claude">
+      <div class="label">Claude Opus</div>
+      <div class="title">QA</div>
+      <div class="desc">Reads files with tool access</div>
+    </div>
+    <div class="flow-step claude">
+      <div class="label">Claude Opus</div>
+      <div class="title">Technologist</div>
+      <div class="desc">Reads files with tool access</div>
+    </div>
+    <div class="flow-step claude">
+      <div class="label">Claude Opus</div>
+      <div class="title">Security</div>
+      <div class="desc">Reads files with tool access</div>
+    </div>
+    <div class="flow-step claude">
+      <div class="label">Claude Opus</div>
+      <div class="title">+ Other Roles...</div>
+      <div class="desc">Business, Designer, Code Reviewer, Scientist, Legal+Privacy, Ethics</div>
+    </div>
+  </div>
+
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Collect grades from all agents</div>
+    <div class="desc">Compile into grades table.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step decision">
+    <div class="label">Decision</div>
+    <div class="title">All Claude reviewers A+?</div>
+    <div class="desc">YES &rarr; Ship! &nbsp;|&nbsp; NO &rarr; Fix &amp; re-review (same fix flow)</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== PHASE 6: SHIP ===== -->
+<h2><span class="phase-label execute">PHASE 6</span> Ship</h2>
+
+<div class="flow">
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Create PR with full description</div>
+    <div class="desc">Includes: summary table, review grades table (all rounds), test plan.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Update PROGRESS.md + PROJECT_STATUS.md</div>
+    <div class="desc">Push status files to main. Update memory files.</div>
+  </div>
+  <div class="arrow"></div>
+  <div class="flow-step conductor">
+    <div class="label">Conductor</div>
+    <div class="title">Clean up team + report to user</div>
+    <div class="desc">Shutdown teammates, TeamDelete, show final status table.</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== FULL LIFECYCLE SUMMARY ===== -->
+<h2>Full Lifecycle (Linear View)</h2>
+
+<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; margin: 1rem 0;">
+  <span class="phase-label plan">1. PLAN</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label execute">2. EXECUTE</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label review">3. GEMINI REVIEW</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label fix">4. FIX</span>
+  <span style="color: var(--red); font-size: 1rem;">&circlearrowleft;</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label review">5. CLAUDE REVIEW</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label fix">6. FIX</span>
+  <span style="color: var(--red); font-size: 1rem;">&circlearrowleft;</span>
+  <span style="color: var(--text-muted); font-size: 1.5rem;">&rarr;</span>
+  <span class="phase-label execute">7. SHIP</span>
+</div>
+
+<div class="highlight-box info">
+  <strong>Key:</strong> Phases 3-4 loop until all Gemini reviewers give A+. Then phases 5-6 loop until all Claude Opus reviewers give A+. Only then does Phase 7 (Ship) happen.
+</div>
+
+<hr class="section-divider">
+
+<!-- ===== ALL RULES ===== -->
+<h2>All Rules &amp; Protocols</h2>
+
+<!-- Conductor Rules -->
+<h3>Conductor Protocol (ABSOLUTE)</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 class="do">Conductor DOES</h4>
+    <ul>
+      <li>Orchestrate agents (spawn, track, summarize)</li>
+      <li>Git operations (commit, push, branch, PR via gh)</li>
+      <li>Update status files (PROGRESS.md, PROJECT_STATUS.md)</li>
+      <li>Update memory files (MEMORY.md, *.md)</li>
+      <li>Communicate with user (tables, summaries)</li>
+      <li>Quick file checks (Glob, Grep patterns)</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="dont">Conductor NEVER</h4>
+    <ul>
+      <li>Write/edit code files (.ts, .tsx, .py, .js, .css)</li>
+      <li>Read large source files (>50 lines)</li>
+      <li>Run tests or builds directly</li>
+      <li>Paste code blocks in responses</li>
+      <li>Debug failing tests</li>
+      <li>Combine 8 reviewers into 1 agent</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Team Rules -->
+<h3>Team Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 class="info">Team-First Rule</h4>
+    <ul>
+      <li>Default to TeamCreate for ANY real work</li>
+      <li>Fire-and-forget Tasks ONLY for single quick lookups</li>
+      <li>Dev Team Leader does NOT write code</li>
+      <li>Executors have file ownership boundaries</li>
+      <li>Teams let agents coordinate + message when blocked</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="warn">Dev Team Leader Rules</h4>
+    <ul>
+      <li>Spawned via TeamCreate (not fire-and-forget)</li>
+      <li>Orchestrates executor agents &mdash; never writes code</li>
+      <li>Splits work with file ownership boundaries</li>
+      <li>CAN delegate to Gemini where appropriate</li>
+      <li>Reports summary back to Conductor</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Review Rules -->
+<h3>Review Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 style="color: var(--purple);">Gemini Review Rules (Stage 1)</h4>
+    <ul>
+      <li>Gemini Review Coordinator = dedicated team member</li>
+      <li>Spawns SEPARATE Gemini instance per reviewer role</li>
+      <li>ALWAYS send FULL code files + diff (never just diff)</li>
+      <li>Skip only clearly irrelevant roles</li>
+      <li>Iterate until ALL relevant reviewers give A+</li>
+      <li>Use subagents to parallelize if faster</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 style="color: var(--pink);">Claude Review Rules (Stage 2)</h4>
+    <ul>
+      <li>Separate Claude Opus agent per reviewer role</li>
+      <li>Each agent has its OWN independent context</li>
+      <li>Agents read files themselves (tool access)</li>
+      <li>All agents run in parallel</li>
+      <li>Iterate until ALL reviewers give A+</li>
+      <li>Never combine reviewers into one agent</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Fix Rules -->
+<h3>Fix Flow Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 style="color: var(--red);">Fix Thresholds</h4>
+    <ul>
+      <li><strong>3+ issues:</strong> Dev Team Leader &rarr; executor team with file ownership</li>
+      <li><strong>1-2 issues:</strong> Single executor agent</li>
+      <li>NEVER spawn single agent for 3+ fixes</li>
+      <li>After fixes: re-review ONLY failed roles</li>
+      <li>Use same stage (Gemini or Claude) that found issues</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 style="color: var(--cyan);">Planning Rules</h4>
+    <ul>
+      <li>Separate planning agent per perspective</li>
+      <li>ASK user which roles each time (default: all 8)</li>
+      <li>Each agent analyzes from their domain</li>
+      <li>Conductor aggregates into unified plan</li>
+      <li>User approves before execution begins</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Gemini Delegation -->
+<h3>Gemini Delegation Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 class="do">Gemini A-Tier (Good At)</h4>
+    <ul>
+      <li>Code review (with full code context)</li>
+      <li>Codebase analysis (1M context window)</li>
+      <li>JSON validation, CSS/UI review</li>
+      <li>Documentation writing</li>
+      <li>PR descriptions</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="dont">Gemini D-Tier (Never Use For)</h4>
+    <ul>
+      <li>Auth/payment implementation</li>
+      <li>Git operations</li>
+      <li>Multi-step agentic tasks</li>
+      <li>Debugging complex issues</li>
+      <li>Tasks requiring tool access</li>
+    </ul>
+  </div>
+</div>
+
+<div class="highlight-box warn">
+  <strong>CRITICAL:</strong> MCP is BROKEN on Windows. NEVER use MCP tools for Gemini. ONLY use Bash: <code>gemini -p "prompt" --model gemini-3-pro-preview 2>&1</code> with <code>run_in_background: true</code>.
+</div>
+
+<!-- Context Hygiene -->
+<h3>Context Hygiene Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 class="warn">Context Protection</h4>
+    <ul>
+      <li>Summarize agent output in 2-3 lines max</li>
+      <li>Never paste &gt;100 lines of tool output</li>
+      <li>Batch work into agents (1 agent with 5 steps &gt; 5 tool calls)</li>
+      <li>Background everything long-running</li>
+      <li>Memory over context &mdash; write decisions to memory files</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="info">Agent Prompt Packaging</h4>
+    <ul>
+      <li>Include file PATHS in agent prompts (agents read files themselves)</li>
+      <li>Never read files yourself then pass content to agents</li>
+      <li>Let agents gather their own context</li>
+      <li>Describe what to do, not how &mdash; agents are smart</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Git & Session Rules -->
+<h3>Git &amp; Session Rules</h3>
+<div class="rules-grid">
+  <div class="rule-card">
+    <h4 class="info">Session Start (MANDATORY)</h4>
+    <ul>
+      <li><code>git pull origin main</code></li>
+      <li>Check for open PRs: <code>gh pr list --state open</code></li>
+      <li>Read PROGRESS.md for current status</li>
+      <li>Read PROJECT_STATUS.md for full state</li>
+      <li>Present status summary to user</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="info">Session End (MANDATORY)</h4>
+    <ul>
+      <li>Update PROGRESS.md with what was done</li>
+      <li>Update PROJECT_STATUS.md if state changed</li>
+      <li>Push both to main</li>
+      <li>Never leave user guessing where we left off</li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="warn">Git Rules</h4>
+    <ul>
+      <li>Never push code to main (only status files)</li>
+      <li>Rewrite branches: <code>rewrite/phase-N-description</code></li>
+      <li>Squash merge PRs for clean history</li>
+      <li>Conventional commit messages</li>
+      <li><code>gh</code> path: <code>"C:\Program Files\GitHub CLI\gh.exe"</code></li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h4 class="do">PR Format (MANDATORY)</h4>
+    <ul>
+      <li>Summary table: Item | Severity | File(s) | Status</li>
+      <li>Review grades table: Reviewer | Gemini R1 | R2 | Claude | Fixes</li>
+      <li>Test plan with verification commands</li>
+      <li>Multi-agent status table at end of orchestration</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Red Flags -->
+<h3>Red Flags (You're Doing It Wrong If...)</h3>
+<div class="highlight-box warn">
+  <ul style="list-style: none; padding: 0;">
+    <li style="padding: 0.3rem 0;">Reading a .ts/.tsx/.py file &rarr; STOP, delegate to explore agent</li>
+    <li style="padding: 0.3rem 0;">Writing code in Edit/Write &rarr; STOP, delegate to executor agent</li>
+    <li style="padding: 0.3rem 0;">Tool output &gt;100 lines &rarr; STOP, you should have delegated</li>
+    <li style="padding: 0.3rem 0;">Running vitest/pytest directly &rarr; STOP, delegate to agent</li>
+    <li style="padding: 0.3rem 0;">Combining 8 reviewers into 1 agent &rarr; STOP, each needs own context</li>
+    <li style="padding: 0.3rem 0;">Sending Gemini only a diff &rarr; STOP, include full file contents</li>
+    <li style="padding: 0.3rem 0;">Single agent fixing 3+ issues &rarr; STOP, use Dev Team Leader + team</li>
+    <li style="padding: 0.3rem 0;">Dev Team Leader writing code &rarr; STOP, should delegate to executors</li>
+    <li style="padding: 0.3rem 0;">Context filling fast &rarr; STOP, you're doing too much yourself</li>
+    <li style="padding: 0.3rem 0;">Spawning 3+ fire-and-forget Tasks &rarr; STOP, use TeamCreate</li>
+  </ul>
+</div>
+
+<!-- The 8 Reviewers -->
+<h3>The 8 Reviewer Roles</h3>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Reviewer</th>
+      <th>Focus Area</th>
+      <th>Strictness Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><span class="tag blue">Architect</span></td>
+      <td>System design, modularity, separation of concerns, scalability, type safety</td>
+      <td>No type duplication, derive from shared-types, extract shared constants</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><span class="tag green">QA</span></td>
+      <td>Test coverage, edge cases, assertions, error handling, observability</td>
+      <td>Wants caplog assertions, edge case coverage, environment isolation</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><span class="tag purple">Scientist</span></td>
+      <td>rsID accuracy, genetics correctness, citations, data integrity</td>
+      <td>N/A for non-genetics changes</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><span class="tag orange">Technologist</span></td>
+      <td>Performance, React patterns, bundle size, async correctness</td>
+      <td>useCallback, React.memo, next/dynamic, asyncio.to_thread for blocking</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><span class="tag red">Business</span></td>
+      <td>Tier gating, conversion funnel, CTAs, copy quality, naming accuracy</td>
+      <td>STRICTEST. Needs demo CTAs, dynamic tier banners, accurate naming</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><span class="tag pink">Designer</span></td>
+      <td>Accessibility (ARIA), responsive, heading hierarchy, keyboard nav</td>
+      <td>progressbar roles, sr-only text, aria-controls, heading hierarchy</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><span class="tag red">Security Analyst</span></td>
+      <td>OWASP top 10, injection, CSRF, token handling, timing attacks</td>
+      <td>Constant-time comparison, strict validation, rate limiting</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><span class="tag blue">Code Reviewer</span></td>
+      <td>Readability, naming, DRY/SOLID, style consistency, dead code</td>
+      <td>Refactor business logic out of routers, define constants, clean imports</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><span class="tag purple">Legal + Privacy</span></td>
+      <td>GDPR, GINA, data retention, consent, deletion, cookie consent, data flow mapping, encryption, cross-border transfers</td>
+      <td>Right-to-erasure completeness, genetic data as special category, data flow violations</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><span class="tag green">Ethics / Bioethics</span></td>
+      <td>Population bias, responsible result framing, emotional harm, informed consent UX, eugenics guardrails</td>
+      <td>GWAS European skew disclaimers, carrier result context, no "designer baby" language</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="text-align: center; color: var(--text-muted); margin-top: 3rem; padding: 1rem; border-top: 1px solid var(--border);">
+  Mergenix Orchestration Model v2.0 &mdash; Updated 2026-02-10
+</div>
+
+</body>
+</html>

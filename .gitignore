@@ -1,3 +1,9 @@
+# Node.js / PNPM
+node_modules/
+.next/
+.turbo/
+*.tsbuildinfo
+
 # Python
 __pycache__/
 *.pyc
@@ -55,3 +61,4 @@ data/mergenix.db-shm
 # Logs
 *.log
 logs/
+OMG.txt

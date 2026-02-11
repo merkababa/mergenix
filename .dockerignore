@@ -4,6 +4,14 @@
 # Keep the build context small and exclude anything not needed at runtime.
 # =============================================================================
 
+# Dependencies and build caches (reinstalled in Docker)
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+.turbo/
+**/.turbo/
+
 # Version control
 .git
 .gitignore

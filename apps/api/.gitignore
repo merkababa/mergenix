@@ -1,0 +1,26 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+.venv/
+venv/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+.pyright/
+
+# Misc
+.ruff_cache/

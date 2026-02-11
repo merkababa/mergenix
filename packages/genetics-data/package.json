@@ -1,0 +1,15 @@
+{
+  "name": "@mergenix/genetics-data",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "files": ["*.json", "*.ts"],
+  "scripts": {
+    "copy-data": "bash copy-data.sh",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

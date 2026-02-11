@@ -1,0 +1,342 @@
+name: Rewrite CI
+
+on:
+  pull_request:
+    branches: [rewrite/main, main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'turbo.json'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - 'eslint.config.js'
+      - '.prettierrc'
+  push:
+    branches: [rewrite/main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.12'
+  PNPM_VERSION: '10.4.1'
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Frontend Jobs
+  # ─────────────────────────────────────────────
+
+  frontend-lint:
+    name: Frontend Lint (ESLint + Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm run lint
+
+      - name: Check Prettier formatting
+        run: pnpm run format:check
+
+  frontend-typecheck:
+    name: Frontend Typecheck (tsc)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run TypeScript type checking
+        run: pnpm run typecheck
+
+  frontend-test:
+    name: Frontend Tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Vitest
+        run: pnpm run test
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: apps/web/coverage/
+          retention-days: 7
+
+  frontend-build:
+    name: Frontend Build (Next.js)
+    runs-on: ubuntu-latest
+    needs: [frontend-lint, frontend-typecheck]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/**/*.ts', 'apps/web/**/*.tsx') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            nextjs-${{ runner.os }}-
+
+      - name: Build Next.js app
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+          NEXT_PUBLIC_SENTRY_DSN: ''
+
+  # ─────────────────────────────────────────────
+  # Backend Jobs
+  # ─────────────────────────────────────────────
+
+  backend-lint:
+    name: Backend Lint (Ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff check
+        working-directory: apps/api
+        run: ruff check app/
+
+      - name: Run ruff format check
+        working-directory: apps/api
+        run: ruff format --check app/
+
+  backend-typecheck:
+    name: Backend Typecheck (mypy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install dependencies
+        working-directory: apps/api
+        run: |
+          pip install -r requirements.txt
+          pip install mypy
+
+      - name: Run mypy
+        working-directory: apps/api
+        run: mypy app/ --ignore-missing-imports
+
+  backend-test:
+    name: Backend Tests (pytest)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: mergenix
+          POSTGRES_PASSWORD: mergenix
+          POSTGRES_DB: mergenix_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install dependencies
+        working-directory: apps/api
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-cov factory-boy aiosqlite
+
+      - name: Run pytest
+        working-directory: apps/api
+        run: pytest tests/ -v --tb=short --cov=app --cov-report=term-missing --cov-report=xml
+        env:
+          DATABASE_URL: postgresql+asyncpg://mergenix:mergenix@localhost:5432/mergenix_test
+          JWT_SECRET: test-jwt-secret
+          ENVIRONMENT: testing
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: apps/api/coverage.xml
+          retention-days: 7
+
+  # ─────────────────────────────────────────────
+  # E2E Tests (only on push to rewrite/main)
+  # ─────────────────────────────────────────────
+
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/rewrite/main'
+    needs: [frontend-build, backend-test]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: mergenix
+          POSTGRES_PASSWORD: mergenix
+          POSTGRES_DB: mergenix_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Python dependencies
+        working-directory: apps/api
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build frontend
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+          NEXT_PUBLIC_SENTRY_DSN: ''
+
+      - name: Start API server
+        working-directory: apps/api
+        run: uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000 &
+        env:
+          DATABASE_URL: postgresql+asyncpg://mergenix:mergenix@localhost:5432/mergenix_e2e
+          JWT_SECRET: e2e-test-jwt-secret
+          ENVIRONMENT: testing
+          FRONTEND_URL: http://localhost:3000
+
+      - name: Start frontend server
+        working-directory: apps/web
+        run: pnpm start &
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_SECRET: e2e-test-secret
+
+      - name: Wait for servers
+        run: |
+          echo "Waiting for API..."
+          timeout 30 bash -c 'until curl -sf http://localhost:8000/health; do sleep 1; done' || echo "API not ready"
+          echo "Waiting for frontend..."
+          timeout 30 bash -c 'until curl -sf http://localhost:3000; do sleep 1; done' || echo "Frontend not ready"
+
+      - name: Run Playwright tests
+        run: pnpm run test:e2e
+        env:
+          BASE_URL: http://localhost:3000
+          API_URL: http://localhost:8000
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: apps/web/test-results/
+          retention-days: 7

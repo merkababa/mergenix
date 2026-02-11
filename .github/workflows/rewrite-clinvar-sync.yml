@@ -1,0 +1,199 @@
+name: ClinVar Freshness Check (Rewrite)
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'  # 1st of every month at 6 AM UTC
+  workflow_dispatch:
+    inputs:
+      force-update:
+        description: 'Force update even if data is current'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.12'
+  CLINVAR_URL: 'https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz'
+
+jobs:
+  check-freshness:
+    name: Check ClinVar Data Freshness
+    runs-on: ubuntu-latest
+    outputs:
+      needs-update: ${{ steps.check.outputs.needs-update }}
+      clinvar-date: ${{ steps.check.outputs.clinvar-date }}
+      local-date: ${{ steps.check.outputs.local-date }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Check ClinVar freshness
+        id: check
+        run: |
+          python - <<'PYEOF'
+          import httpx
+          import json
+          import os
+          from pathlib import Path
+          from datetime import datetime
+
+          # Check remote ClinVar last-modified date
+          resp = httpx.head("${{ env.CLINVAR_URL }}", follow_redirects=True)
+          remote_date = resp.headers.get("last-modified", "unknown")
+          print(f"Remote ClinVar date: {remote_date}")
+
+          # Check local data freshness marker
+          marker_path = Path("data/clinvar_last_sync.json")
+          local_date = "never"
+          if marker_path.exists():
+              with open(marker_path) as f:
+                  data = json.load(f)
+                  local_date = data.get("last_sync", "never")
+
+          print(f"Local data date: {local_date}")
+
+          force = "${{ inputs.force-update }}" == "true"
+          needs_update = force or (local_date == "never") or (remote_date != local_date)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"needs-update={'true' if needs_update else 'false'}\n")
+              f.write(f"clinvar-date={remote_date}\n")
+              f.write(f"local-date={local_date}\n")
+
+          if needs_update:
+              print("ClinVar data needs updating")
+          else:
+              print("ClinVar data is up to date")
+          PYEOF
+
+      - name: Freshness summary
+        run: |
+          echo "## ClinVar Freshness Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Remote Date | ${{ steps.check.outputs.clinvar-date }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Local Date | ${{ steps.check.outputs.local-date }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Needs Update | ${{ steps.check.outputs.needs-update }} |" >> $GITHUB_STEP_SUMMARY
+
+  create-update-pr:
+    name: Create Update PR
+    runs-on: ubuntu-latest
+    needs: check-freshness
+    if: needs.check-freshness.outputs.needs-update == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install httpx pandas
+          if [ -f apps/api/requirements.txt ]; then
+            pip install -r apps/api/requirements.txt
+          fi
+
+      - name: Download and process ClinVar data
+        run: |
+          python - <<'PYEOF'
+          import httpx
+          import gzip
+          import json
+          from pathlib import Path
+          from datetime import datetime, timezone
+
+          print("Downloading ClinVar variant summary...")
+          resp = httpx.get("${{ env.CLINVAR_URL }}", follow_redirects=True, timeout=300)
+          resp.raise_for_status()
+
+          output_dir = Path("clinvar-reports")
+          output_dir.mkdir(exist_ok=True)
+
+          # Save raw gzipped data
+          raw_path = output_dir / "variant_summary.txt.gz"
+          with open(raw_path, "wb") as f:
+              f.write(resp.content)
+
+          # Decompress and get line count for report
+          data = gzip.decompress(resp.content).decode("utf-8", errors="replace")
+          lines = data.strip().split("\n")
+          print(f"Downloaded {len(lines)} variant records")
+
+          # Save freshness report
+          report = {
+              "download_date": datetime.now(timezone.utc).isoformat(),
+              "remote_last_modified": resp.headers.get("last-modified", "unknown"),
+              "total_records": len(lines) - 1,  # subtract header
+              "file_size_bytes": len(resp.content),
+          }
+          with open(output_dir / "sync_report.json", "w") as f:
+              json.dump(report, f, indent=2)
+
+          # Update local freshness marker
+          marker_path = Path("data/clinvar_last_sync.json")
+          marker_path.parent.mkdir(exist_ok=True)
+          with open(marker_path, "w") as f:
+              json.dump({
+                  "last_sync": resp.headers.get("last-modified", "unknown"),
+                  "sync_date": datetime.now(timezone.utc).isoformat(),
+                  "record_count": len(lines) - 1,
+              }, f, indent=2)
+
+          print("ClinVar sync complete")
+          print(json.dumps(report, indent=2))
+          PYEOF
+
+      - name: Upload sync report
+        uses: actions/upload-artifact@v4
+        with:
+          name: clinvar-sync-report
+          path: clinvar-reports/
+          retention-days: 30
+
+      - name: Create branch and PR
+        run: |
+          BRANCH="chore/clinvar-sync-$(date +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH"
+          git add data/clinvar_last_sync.json
+          git commit -m "chore: update ClinVar data freshness marker
+
+          Remote date: ${{ needs.check-freshness.outputs.clinvar-date }}
+          Previous local date: ${{ needs.check-freshness.outputs.local-date }}"
+
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "chore: ClinVar data sync (${{ needs.check-freshness.outputs.clinvar-date }})" \
+            --body "## ClinVar Data Freshness Update
+
+          | Property | Value |
+          |----------|-------|
+          | Remote Date | ${{ needs.check-freshness.outputs.clinvar-date }} |
+          | Previous Local Date | ${{ needs.check-freshness.outputs.local-date }} |
+          | Triggered By | ${{ github.event_name }} |
+
+          This PR updates the ClinVar data freshness marker. Review the sync report artifact for details.
+
+          > Auto-generated by ClinVar Freshness Check workflow" \
+            --base rewrite/main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-10
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 8A Integration Polish 10/10 A+, awaiting merge)
+**Last Updated:** 2026-02-11
+**Version:** 3.0.0-alpha (V3 Rewrite — Phase 8B Legal/Privacy merged, 10/10 A+)
 **Branch:** rewrite/main
 
 ---
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (869 tests: 366 engine + 503 web)
+- **Testing:** Vitest (869 frontend: 366 engine + 503 web) + pytest (60 backend) = 929 total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -45,6 +45,38 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 | Phase 4 | Analysis UI (wire engine into Next.js, 6 result tabs, demo mode) | PR #32 | **Merged** | 148 |
 | Phase 5 | Auth UI (test suite + placeholder completion, 7/7 A+) | PR #34 | **Merged** | 423 |
 | Phase 6 | Payment UI (Stripe checkout, upgrade modal, 8/8 A+) | PR #35 | **Merged** | 503 |
+| Phase 7 | Backend API (cookie auth, 5 endpoints, async safety, 8/8 A+) | PR #36 | **Merged** | 60 |
+
+### Phase 7: Backend API (MERGED — PR #36)
+
+Cookie-based auth refactor, 5 new endpoints (sessions CRUD, account deletion, resend-verification), backup codes (SHA-256, constant-time), async event loop safety (asyncio.to_thread for bcrypt/Stripe/email), webhook hardening (price validation + idempotency), subscription→tier-status naming, Alembic migration (6 tables), Docker entrypoint. 60 backend tests.
+
+**Key deliverables:**
+- Cookie-based auth: HttpOnly/Secure/SameSite=Lax refresh token cookie (path `/auth`)
+- 5 new endpoints: account deletion (cascade), sessions list/revoke/revoke-all, resend-verification
+- Backup codes: SHA-256 hashing, constant-time comparison via hmac.compare_digest, single-use
+- Async safety: bcrypt, Stripe SDK, Resend SDK all wrapped in asyncio.to_thread()
+- Webhook hardening: expected price validation, idempotency via stripe_payment_intent
+- Infrastructure: Alembic migration (6 tables), Docker entrypoint (DB wait + auto-migration)
+
+**Review grades (5 rounds → 8/8 A+):**
+
+| Reviewer | Gemini R1 | Gemini R2 | Claude Combined | Independent | Re-verify | Key Fixes |
+|----------|-----------|-----------|-----------------|-------------|-----------|-----------|
+| Architect | A- | A+ | A+ | A | **A+** | JSON column, URL parsing, dead schemas, lazy="raise" |
+| QA | A | A+ | A+ | A+ | **A+** | caplog assertion, 57 to 60 tests |
+| Scientist | A+ | A+ | A+ | A+ | **A+** | N/A — no genetics impact |
+| Technologist | B+ | A+ | A+ | A- | **A+** | SHA-256, COOKIE_SECURE, asyncio.to_thread() |
+| Business | A | A+ | A+ | A- | **A+** | Price validation, idempotency, subscription→tier-status |
+| Designer | A | A+ | A+ | A+ | **A+** | N/A — API-only |
+| Security | A- | A+ | A+ | A+ | **A+** | Constant-time comparison, admin key timing fix |
+| Code Reviewer | B+ | A+ | A+ | A | **A+** | Refactor to auth_service, shared TIER_RANK, dedupe imports |
+
+**Test coverage (V3 at Phase 7):**
+- Genetics engine: 366 tests (8 suites)
+- Web app: 503 tests (37 suites)
+- Backend API: 60 tests (3 suites)
+- **Phase 7 total: 929 tests passing**
 
 ### Phase 6: Payment UI (MERGED — PR #35)
 
@@ -154,8 +186,8 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 ### V3 Rewrite — Remaining Phases
 
 - [x] **Phase 6: Payment UI** — PR #35 merged (8/8 A+, 80 tests)
-- [ ] **Phase 7: Backend API** — FastAPI endpoints, database, deployment
-- [ ] **Phase 8: Polish & Launch** — E2E tests, performance, production deployment
+- [x] **Phase 7: Backend API** — PR #36 merged (8/8 A+, 60 tests)
+- [ ] **Phase 8: Polish & Launch** — E2E tests, frontend↔backend integration, performance, production deployment
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -203,7 +235,7 @@ Mergenix/
 │   │   │   ├── workers/             # Web Worker shims
 │   │   │   └── data/                # Static data (demo results)
 │   │   └── __tests__/               # Vitest test suites (503 tests, 37 files)
-│   └── api/                         # FastAPI backend (placeholder)
+│   └── api/                         # FastAPI backend (24 endpoints, 60 tests)
 ├── packages/
 │   ├── genetics-engine/             # TypeScript genetics engine (~5,500 LOC)
 │   │   ├── src/
@@ -252,6 +284,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #36 | Phase 7: Backend API (60 tests, 8/8 A+) | **Merged** |
 | #35 | Phase 6: Payment UI (503 tests, 8/8 A+) | **Merged** |
 | #34 | Phase 5: Auth UI (423 tests, 7/7 A+) | **Merged** |
 | #32 | Phase 4: Analysis UI (wire engine + 6 tabs + 148 tests, 6/6 A+) | **Merged** |
@@ -271,8 +304,8 @@ FullAnalysisResult → postMessage → Zustand store
 1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
 2. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
 3. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
-4. **Phase 8A: Integration Polish** → **PR #37 open** (10/10 A+, 643+ tests, awaiting merge)
-5. **Phase 8B: Legal/Privacy** — Cookie consent, age verification, GDPR data export, GINA notice, privacy policy
+4. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
+5. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
 6. **Phase 8C: E2E Tests** — Playwright integration tests
 7. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming
 
@@ -282,8 +315,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 | Name | Role | Notes |
 |------|------|-------|
-| kukiz | Developer | Works from work room & living room computers |
-| Maayan | Developer / Reviewer | Codes, reviews PRs, uses Claude Code |
+| kukiz | Developer | Works from multiple PCs |
 | Claude | AI Assistant | Creates PRs for review, pushes PROGRESS.md directly |
 
 ---

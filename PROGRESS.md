@@ -25,7 +25,7 @@
 | V3 Rewrite Phase 4: Analysis UI | Claude | Merged | rewrite/phase-4-analysis-ui | PR #32 — Wire genetics engine Web Worker into Next.js frontend. Worker shim, Zustand store rewrite, useGeneticsWorker hook, 6 result tab components, demo data (23 verified rsIDs), 3 polish components (TierUpgradePrompt, MedicalDisclaimer, PopulationSelector). 5 review rounds → **6/6 A+** (Architect, QA, Scientist, Technologist, Business, Designer). 148 web tests + 366 engine tests = 514 total. 30+ files, ~5,300 new LOC |
 | V3 Rewrite Phase 5: Auth UI | Claude | **Merged** | rewrite/phase-5-auth-ui | PR #34 — Auth test suite (423 tests) + placeholder completion (sessions, danger zone). 2 review rounds → **7/7 A+** (Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst). 26 files, ~5,600 new LOC |
 | V3 Rewrite Phase 6: Payment UI | Claude | **Merged** | rewrite/phase-6-payment-ui | PR #35 — Payment API client, Zustand store, subscription page rewrite (hardcoded→data-driven), upgrade modal (focus trap, WCAG), success/cancel pages. 2 Gemini rounds + Claude final → **8/8 A+**. 12 files, +2,302 LOC, 80 new tests (503 web total, 869 V3 total) |
-| V3 Rewrite Phase 7: Backend API | Claude | **Merged** | rewrite/phase-7-backend | PR #36 — Cookie-based auth refactor, 5 new endpoints (sessions CRUD, account deletion, resend-verification), backup codes (SHA-256, constant-time), 60 backend tests, Alembic migration, Docker entrypoint. 3 review rounds → **8/8 A+**. 13 files, ~1,500 LOC |
+| V3 Rewrite Phase 7: Backend API | Claude | **Merged** | rewrite/phase-7-backend | PR #36 — Cookie-based auth refactor, 5 new endpoints (sessions CRUD, account deletion, resend-verification), backup codes (SHA-256, constant-time), async event loop safety (asyncio.to_thread), webhook hardening (price validation + idempotency), subscription→tier-status naming. 60 backend tests, Alembic migration, Docker entrypoint. 5 review rounds → **8/8 A+**. 15 files, ~1,700 LOC |
 | V3 Rewrite Phase 8A: Integration Polish | Claude | **Merged** | rewrite/phase-8a-integration-polish | PR #37 — Save/load analysis results (AES-256-GCM encrypted), counseling page, TOCTOU fix, consent chain, summary whitelist, OAuth backend-only CSRF, rate limiters on all endpoints. 2 review rounds → **10/10 A+**. 9+42 files, ~3,300 LOC, 643+ frontend + 89 backend tests |
 | V3 Rewrite Phase 8B: Legal/Privacy | Claude | **Merged** | rewrite/phase-8b-legal-privacy | PR #38 — GINA notice, cookie consent banner (GDPR Art 7 affirmative opt-in), age verification modal (18+ mandatory gate), GDPR data export endpoint, consent tracking (immutable audit trail), CCPA rights, data retention table. 3 review rounds → **10/10 A+ (Gemini) + 10/10 A+ (Claude)**. 34 files, +4,269 LOC, 82+ new tests |
 | Review Infrastructure: Dual persona system | Claude | **Done** | rewrite/main | 10 Claude agents (`.claude/agents/`) + 10 Gemini CLI personas (`review-personas/`). Gemini CLI reads local files via `GEMINI_SYSTEM_MD` — no upload needed. Tested: single, persona-switch, parallel (15s stagger). 20 files, +837 lines |
@@ -99,83 +99,13 @@
 | 2026-02-09 | Claude | V3 Rewrite Phase 3 — Genetics Engine: Full TypeScript port of genetics analysis for client-side Web Workers. Parser (23andMe/AncestryDNA/MyHeritage/VCF), carrier analysis (AR/AD/X-linked), trait prediction (Punnett square), pharmacogenomics (CPIC star alleles), PRS (normal CDF), ethnicity (Bayesian), counseling (triage+referral). Streaming iterateLines() parser, countKeys() helper, centralized TIER_GATING. 11 source files (~5,500 LOC), 8 test suites (366 tests). 7 review rounds → 6/6 A+ grades. | PR #31 |
 | 2026-02-09 | Claude | V3 Rewrite Phase 4 — Analysis UI: Wire genetics engine into Next.js. Worker shim + store rewrite + useGeneticsWorker hook + 6 result tabs (overview, carrier, traits, pgx, prs, counseling) + demo data (23 verified rsIDs, CPIC-compliant PGx, real GWAS PRS refs) + 3 polish components (TierUpgradePrompt, MedicalDisclaimer, PopulationSelector). Full ARIA tab navigation. Tier-gating in all 6 tabs. Lazy-loaded demo. useCallback handlers, React.memo, next/dynamic lazy tabs. 5 review rounds → **6/6 A+**. 148 web tests + 366 engine = 514 total. | PR #32 |
 | 2026-02-09 | Claude | V3 Rewrite Phase 5 — Auth UI: Comprehensive auth test suite (19 new test files, 423 tests across 31 files). Placeholder completion for sessions-section and danger-zone components. Security hardening (encodeURIComponent, URLSearchParams, OAuth state preservation). ARIA accessibility (aria-busy, aria-live, aria-describedby). Performance (AbortController, useMemo, useCallback, hoisted constants). Type safety (Tier from shared-types). 2 review rounds → **7/7 A+** (added Security Analyst reviewer). 26 files, ~5,600 new LOC. | PR #34 |
+| 2026-02-10 | Claude | V3 Rewrite Phase 6 — Payment UI: Payment API client, Zustand store, subscription page rewrite, upgrade modal (focus trap, WCAG), success/cancel pages. 80 new tests (503 web total). 2 Gemini rounds + Claude final → **8/8 A+**. 12 files, +2,302 LOC. | PR #35 |
+| 2026-02-10 | Claude | V3 Rewrite Phase 7 — Backend API: Cookie-based auth (HttpOnly refresh tokens), 5 new endpoints (sessions, account deletion, resend-verification), backup codes (SHA-256, constant-time), async event loop safety (asyncio.to_thread for bcrypt/Stripe/email), webhook hardening (price validation + idempotency), subscription→tier-status naming, Alembic migration (6 tables), Docker entrypoint. 60 backend tests. 5 review rounds (Gemini R1→R2 + Claude + independent 8-agent + re-verify) → **8/8 A+**. 15 files, ~1,700 LOC. | PR #36 |
 | 2026-02-10 | Claude | Review Infrastructure: Dual persona system. 10 Claude agents (`.claude/agents/`, YAML frontmatter, opus model) + 10 Gemini CLI personas (`review-personas/`, pure markdown, `GEMINI_SYSTEM_MD`). Discovered Gemini CLI reads local files directly (no upload). Tested single, persona-switch, parallel (15s stagger). 20 files, +837 lines. | rewrite/main |
 
 ---
 
-## Phase 6 Complete — Summary (PR #35, Merged)
-
-### What Was Done
-1. **Payment API client (`payment-client.ts`):**
-   - 3 endpoints: `createCheckout`, `getPaymentHistory`, `getSubscriptionStatus`
-   - snake_case→camelCase transformers matching auth-client.ts pattern
-
-2. **Payment Zustand store (`payment-store.ts`):**
-   - State: paymentHistory, subscriptionStatus, isLoading, isCheckoutLoading, error
-   - Actions: createCheckout, fetchPaymentHistory, fetchSubscriptionStatus, clearError, reset
-
-3. **Subscription page rewrite (`subscription/page.tsx`):**
-   - Hardcoded "Premium $12.90" → data-driven from auth store + payment store
-   - Dynamic upgrade options: Free→Premium+Pro, Premium→Pro, Pro→"best plan"
-   - "Pay the difference" pricing, payment history section, ARIA
-
-4. **Upgrade modal (`upgrade-modal.tsx`):**
-   - Plan comparison display, focus trap (Tab/Shift+Tab cycling), Escape to close
-   - Backdrop click, body scroll lock, error display within modal
-   - ARIA: role="dialog", aria-modal, aria-labelledby, aria-describedby, aria-busy
-
-5. **Success/cancel pages:**
-   - Success: 20-second WCAG 2.2.1 auto-redirect, Suspense boundary for useSearchParams
-   - Cancel: retry + dashboard links
-
-6. **Tests (80 new, 503 web total):**
-   - payment-client.test.ts (18), payment-store.test.ts (22)
-   - subscription-page.test.tsx (15), upgrade-modal.test.tsx (12)
-   - payment-success.test.tsx (8), payment-cancel.test.tsx (5)
-
-7. **Review (2 Gemini rounds + Claude final → 8/8 A+):**
-
-| Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |
-|----------|-----------|-----------|--------------|-----------|
-| Architect | A | — | **A+** | None needed |
-| QA | A | — | **A+** | None needed |
-| Scientist | N/A | — | **A+** | No genetics code |
-| Technologist | A- | A | **A+** | Focus trap in upgrade modal |
-| Business | A+ | — | **A+** | None needed |
-| Designer | B | A | **A+** | Focus trap + WCAG 2.2.1 redirect timer (20s) |
-| Security Analyst | A | — | **A+** | None needed |
-| Code Reviewer | A | — | **A+** | None needed |
-
----
-
-## Phase 5 Complete — Summary (PR #34, Merged)
-
-### What Was Done
-1. **Placeholder completion (6 source files):**
-   - `auth-client.ts`: Added sessions/delete endpoints, GoogleOAuthUrlResponse type, URLSearchParams encoding, encodeURIComponent for session IDs, Tier from shared-types
-   - `auth-store.ts`: Added matching store actions, GoogleOAuthUrlResponse type flow
-   - `sessions-section.tsx`: Full rewrite from "Coming Soon" → session table with revoke, AbortController cleanup, useMemo, ARIA
-   - `danger-zone.tsx`: Full rewrite from disabled placeholder → expandable deletion UI with password+checkbox+useCallback+ARIA
-   - `login-content.tsx` + `register-content.tsx`: Updated OAuth handlers to destructure authorizationUrl
-
-2. **Test suite (19 new files, 275 new tests → 423 total across 31 files):**
-   - Store tests: auth-store (52), analysis-store (17)
-   - API tests: auth-client (24), client (20)
-   - Component tests: 6 auth pages, 6 account components, analysis page
-   - Utility tests: password-utils (20), account-utils (11)
-   - Infrastructure: middleware (10), auth-provider (8)
-
-3. **Review (2 rounds → 7/7 A+):**
-
-| Reviewer | R1 | R2 (Final) | Key Fixes |
-|----------|----|----|-----------|
-| Architect | A | **A+** | Tier type from shared-types (not string) |
-| QA | A | **A+** | 423 tests verified, fixture types correct |
-| Scientist | A+ | **A+** | No genetics code affected |
-| Technologist | A- | **A+** | AbortController, URLSearchParams, useMemo, useCallback |
-| Business | A+ | **A+** | No business logic affected |
-| Designer | A- | **A+** | aria-busy, aria-live, aria-describedby, aria-hidden |
-| Security | A- | **A+** | encodeURIComponent, OAuth state, URLSearchParams |
+> **Historical phase details (grades, review rounds, what was done) have been moved to [`docs/PHASE_HISTORY.md`](docs/PHASE_HISTORY.md)** to keep this file focused on current status.
 
 ---
 
@@ -196,7 +126,6 @@ _None_
 ---
 
 ## Notes
-- kukiz works from two computers (work room + living room) — always pull first!
-- Maayan sometimes shares machines with kukiz — check PROGRESS.md to avoid conflicts
+- kukiz works from multiple computers — always pull first!
 - Claude pushes PROGRESS.md directly to main; all other changes go through PRs
 - V3 review process: 10 reviewers (Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics) — all must give A+ (three-layer: Static → Gemini CLI with `GEMINI_SYSTEM_MD` personas → Claude Opus agents)

@@ -1,0 +1,3320 @@
+[
+  {
+    "rsid": "rs12913832",
+    "trait": "Eye Color",
+    "gene": "HERC2/OCA2",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Brown Eyes",
+        "description": "Very high likelihood of brown eyes (>95%)",
+        "probability": "high"
+      },
+      "AG": {
+        "phenotype": "Green/Hazel Eyes",
+        "description": "Intermediate pigmentation, likely green or hazel eyes (70-80%)",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Blue Eyes",
+        "description": "Very high likelihood of blue eyes (>90%)",
+        "probability": "high"
+      }
+    },
+    "description": "Primary determinant of eye color variation in Europeans. This SNP in the HERC2 gene regulates OCA2 expression, controlling melanin production in the iris.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Sturm RA et al. (2008) - A single SNP in an evolutionary conserved region within intron 86 of the HERC2 gene determines human blue-brown eye color",
+        "pmid": "18252222",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18252222/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12913832"
+      }
+    ],
+    "notes": "Strongest single genetic predictor of eye color in Europeans, explaining ~75% of blue vs brown variation. Effect is weaker in non-European populations where brown eyes are nearly universal. Works in concert with OCA2 and other pigmentation loci."
+  },
+  {
+    "rsid": "rs1800407",
+    "trait": "Eye Color",
+    "gene": "OCA2",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Eye Color",
+        "description": "Normal melanin production, contributes to darker eye color",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Eye Color",
+        "description": "Slightly reduced melanin, may lighten eye color",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Lighter Eye Color",
+        "description": "Reduced melanin production, contributes to lighter eye colors",
+        "probability": "medium"
+      }
+    },
+    "description": "OCA2 gene variant that modifies eye color by affecting melanin production. Works in combination with rs12913832.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Duffy DL et al. (2007) - A three-single-nucleotide polymorphism haplotype in intron 1 of OCA2 explains most human eye-color variation",
+        "pmid": "17236130",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17236130/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800407"
+      }
+    ],
+    "notes": "Modifier of eye color that works alongside rs12913832 (HERC2). Most impactful in individuals with intermediate pigmentation — can shift hazel eyes toward blue or green. Effect size is moderate compared to the primary HERC2 variant."
+  },
+  {
+    "rsid": "rs12896399",
+    "trait": "Eye Color",
+    "gene": "SLC24A4",
+    "chromosome": "14",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Darker Eyes",
+        "description": "Higher melanin, contributes to darker eye colors",
+        "probability": "medium"
+      },
+      "GT": {
+        "phenotype": "Intermediate Eyes",
+        "description": "Moderate melanin levels",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Lighter Eyes",
+        "description": "Lower melanin, contributes to lighter eye colors (especially green)",
+        "probability": "medium"
+      }
+    },
+    "description": "SLC24A4 gene variant associated with green eye color variation. Secondary modifier of eye pigmentation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2007) - Genetic determinants of hair, eye and skin pigmentation in Europeans",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12896399"
+      }
+    ],
+    "notes": "Contributing locus for eye color identified in European GWAS. Has a smaller effect than HERC2/OCA2 variants but adds predictive power in multi-SNP models. Also weakly associated with hair color variation."
+  },
+  {
+    "rsid": "rs1805007",
+    "trait": "Hair Color - Red Hair",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Non-Red Hair",
+        "description": "Normal MC1R function, no red hair from this variant",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Red Hair Carrier",
+        "description": "Carrier of red hair variant, may have subtle red tints or increased freckling",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Red Hair",
+        "description": "High likelihood of red or strawberry blonde hair (80-90%)",
+        "probability": "high"
+      }
+    },
+    "description": "Most common MC1R variant associated with red hair. Loss of function mutation in melanocortin receptor, shifting eumelanin to pheomelanin production.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Valverde P et al. (1995) - Variants of the melanocyte-stimulating hormone receptor gene are associated with red hair and fair skin in humans",
+        "pmid": "7581459",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7581459/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1805007"
+      }
+    ],
+    "notes": "One of the strongest MC1R red hair variants (R151C). Highly penetrant in homozygotes — ~80% chance of red hair. Also increases melanoma risk independently of hair color. Most common in Northern European populations (Ireland, Scotland)."
+  },
+  {
+    "rsid": "rs1805008",
+    "trait": "Hair Color - Red Hair",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Non-Red Hair",
+        "description": "Normal MC1R function",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Red Hair Carrier",
+        "description": "Carrier status, possible subtle red tones",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Red Hair",
+        "description": "High likelihood of red or auburn hair (75-85%)",
+        "probability": "high"
+      }
+    },
+    "description": "Another common MC1R red hair variant (R151C mutation). Often found in combination with other MC1R variants.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Valverde P et al. (1995) - Variants of the melanocyte-stimulating hormone receptor gene are associated with red hair and fair skin in humans",
+        "pmid": "7581459",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7581459/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1805008"
+      }
+    ],
+    "notes": "MC1R variant (R160W) associated with red hair, though less penetrant than R151C. Compound heterozygosity with other MC1R variants increases red hair probability. Also linked to increased sun sensitivity and freckling."
+  },
+  {
+    "rsid": "rs12821256",
+    "trait": "Hair Color - Blond Hair",
+    "gene": "KITLG",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Hair",
+        "description": "Higher melanin production, darker hair color",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Light Brown/Dark Blond",
+        "description": "Intermediate melanin, light brown or dark blond hair",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Blond Hair",
+        "description": "Reduced melanin, increased likelihood of blond hair in Europeans",
+        "probability": "medium"
+      }
+    },
+    "description": "KITLG gene variant strongly associated with blond hair in European populations. Each T allele increases blond hair likelihood.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2007) - Genetic determinants of hair, eye and skin pigmentation in Europeans",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12821256"
+      }
+    ],
+    "notes": "Associated with blond hair in Europeans via regulation of KITLG expression in hair follicles. Effect is population-specific — rare outside European-descent populations. Explains only a fraction of blond hair variation; many other loci contribute."
+  },
+  {
+    "rsid": "rs12203592",
+    "trait": "Hair/Skin Pigmentation",
+    "gene": "IRF4",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Darker Pigmentation",
+        "description": "Normal melanin production, darker hair and skin",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Pigmentation",
+        "description": "Intermediate pigmentation levels",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Lighter Pigmentation",
+        "description": "Reduced melanin, lighter hair (especially blond/red) and skin, more freckling",
+        "probability": "medium"
+      }
+    },
+    "description": "IRF4 transcription factor variant affecting melanocyte function. Associated with lighter hair, skin, and increased freckling.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Han J et al. (2008) - A genome-wide association study identifies novel alleles associated with hair color and skin pigmentation",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12203592"
+      }
+    ],
+    "notes": "IRF4 variant with pleiotropic effects on skin, hair, and eye pigmentation. Strongly associated with freckling, sun sensitivity, and lighter hair color in Europeans. Also linked to melanoma susceptibility independently of pigmentation."
+  },
+  {
+    "rsid": "rs3827760",
+    "trait": "Hair Thickness/Straightness",
+    "gene": "EDAR",
+    "chromosome": "2",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Thin/Wavy Hair",
+        "description": "Typical European/African hair characteristics, thinner hair strands",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Thick Straight Hair",
+        "description": "Thicker hair strands, straighter hair",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Very Thick Straight Hair",
+        "description": "Very thick hair strands, very straight hair (common in East Asians)",
+        "probability": "high"
+      }
+    },
+    "description": "EDAR gene variant (370A allele) prevalent in East Asian populations. Affects hair follicle development, leading to thicker, straighter hair shafts.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Fujimoto A et al. (2008) - A scan for genetic determinants of human hair morphology: EDAR is associated with Asian hair thickness",
+        "pmid": "18849991",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18849991/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3827760"
+      }
+    ],
+    "notes": "EDAR V370A variant at near-fixation in East Asian and Native American populations but rare elsewhere. Affects hair thickness, tooth morphology, sweat gland density, and breast tissue. One of the strongest examples of recent positive selection in humans."
+  },
+  {
+    "rsid": "rs1426654",
+    "trait": "Skin Pigmentation",
+    "gene": "SLC24A5",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Light Skin",
+        "description": "Reduced melanin production, light skin pigmentation (European-type)",
+        "probability": "high"
+      },
+      "AG": {
+        "phenotype": "Medium Skin",
+        "description": "Intermediate melanin levels, medium skin tone",
+        "probability": "high"
+      },
+      "GG": {
+        "phenotype": "Dark Skin",
+        "description": "Normal melanin production, darker skin pigmentation",
+        "probability": "high"
+      }
+    },
+    "description": "Major determinant of light skin in European and South Asian populations. The A allele (derived) reduces melanin ~30-40%.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Lamason RL et al. (2005) - SLC24A5, a putative cation exchanger, affects pigmentation in zebrafish and humans",
+        "pmid": "16357253",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16357253/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1426654"
+      }
+    ],
+    "notes": "Major determinant of light skin in Europeans and South Asians. The derived A allele is nearly fixed in European populations and at high frequency in South Asia. One of the strongest known examples of convergent evolution for light skin pigmentation."
+  },
+  {
+    "rsid": "rs16891982",
+    "trait": "Skin/Eye Pigmentation",
+    "gene": "SLC45A2",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lighter Pigmentation",
+        "description": "Reduced melanin, lighter skin and eyes (European-type)",
+        "probability": "high"
+      },
+      "CG": {
+        "phenotype": "Intermediate Pigmentation",
+        "description": "Moderate melanin levels",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Darker Pigmentation",
+        "description": "Normal melanin production, darker skin and eyes",
+        "probability": "high"
+      }
+    },
+    "description": "SLC45A2 variant affecting melanin synthesis. The G allele is nearly fixed in Europeans and contributes to light skin and eyes.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Graf J et al. (2005) - Single nucleotide polymorphisms in the MATP gene are associated with normal human pigmentation variation",
+        "pmid": "15714523",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15714523/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs16891982"
+      }
+    ],
+    "notes": "SLC45A2 variant strongly associated with light skin and eye color in Europeans. Nearly fixed for the derived allele in Europeans but rare in African and East Asian populations. Has a stronger effect on skin color than eye color."
+  },
+  {
+    "rsid": "rs1805005",
+    "trait": "Freckling Tendency",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Low Freckling",
+        "description": "Normal MC1R function, lower freckling tendency",
+        "probability": "medium"
+      },
+      "GT": {
+        "phenotype": "Moderate Freckling",
+        "description": "Increased freckling tendency, especially with sun exposure",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "High Freckling",
+        "description": "Strong freckling tendency, many freckles likely",
+        "probability": "high"
+      }
+    },
+    "description": "MC1R variant (D84E) strongly associated with freckling, even in non-redheads. Also associated with fair skin and sun sensitivity.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Bastiaens M et al. (2001) - Association of the melanocortin-1 receptor gene with freckling and solar lentigines in children",
+        "pmid": "11260211",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11260211/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1805005"
+      }
+    ],
+    "notes": "MC1R variant (V60L) associated with freckling and fair skin but rarely causes red hair alone. One of the milder MC1R variants. Freckling tendency is polygenic — MC1R explains the largest fraction but sun exposure is a major environmental modifier."
+  },
+  {
+    "rsid": "rs1042725",
+    "trait": "Height",
+    "gene": "HMGA2",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Taller Stature",
+        "description": "Each T allele adds ~0.4cm to height on average",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Average Height Effect",
+        "description": "Intermediate height contribution",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "Shorter Stature",
+        "description": "Neutral or slightly reduced height contribution",
+        "probability": "low"
+      }
+    },
+    "description": "HMGA2 gene variant, one of the strongest single-SNP associations with adult height. However, height is polygenic with 700+ variants.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Weedon MN et al. (2007) - A common variant of HMGA2 is associated with adult and childhood height in the general population",
+        "pmid": "17767157",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17767157/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1042725"
+      }
+    ],
+    "notes": "HMGA2 variant associated with height variation, though effect size is small (~0.3-0.4 cm per allele). Height is extremely polygenic (thousands of variants). This is one of the more replicated individual loci but explains <0.1% of height variation."
+  },
+  {
+    "rsid": "rs6060373",
+    "trait": "Height",
+    "gene": "GDF5",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Taller Stature",
+        "description": "Minor positive contribution to height (~0.3cm per allele)",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Average Height Effect",
+        "description": "Intermediate height contribution",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Slightly Shorter",
+        "description": "Neutral or slightly reduced height contribution",
+        "probability": "low"
+      }
+    },
+    "description": "GDF5 growth factor variant associated with height and osteoarthritis. Small effect size as height is highly polygenic.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sanna S et al. (2008) - Common variants in the GDF5-UQCC region are associated with variation in human height",
+        "pmid": "18391951",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18391951/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6060373"
+      }
+    ],
+    "notes": "GDF5 variant associated with height and osteoarthritis risk. Small effect on height (~0.2 cm per allele). Also implicated in joint development and skeletal morphology. Height prediction requires hundreds of SNPs for meaningful accuracy."
+  },
+  {
+    "rsid": "rs713598",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Taster",
+        "description": "Can taste PTC/PROP bitter compounds strongly (supertaster possible)",
+        "probability": "high"
+      },
+      "CG": {
+        "phenotype": "Taster",
+        "description": "Can taste PTC/PROP bitter compounds (medium sensitivity)",
+        "probability": "high"
+      },
+      "GG": {
+        "phenotype": "Non-Taster",
+        "description": "Cannot taste PTC/PROP bitter compounds or very weakly",
+        "probability": "high"
+      }
+    },
+    "description": "TAS2R38 bitter taste receptor variant (PAV/AVI haplotype). Determines ability to taste phenylthiocarbamide (PTC) and PROP bitterness.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Kim UK et al. (2003) - Positional cloning of the human quantitative trait locus underlying taste sensitivity to phenylthiocarbamide",
+        "pmid": "12595690",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12595690/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs713598"
+      }
+    ],
+    "notes": "One of three TAS2R38 SNPs forming the PAV/AVI haplotype that determines PTC/PROP bitter taste sensitivity. PAV homozygotes are 'supertasters,' AVI homozygotes are non-tasters. The trait follows near-Mendelian inheritance with ~75% accuracy."
+  },
+  {
+    "rsid": "rs1726866",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Non-Taster",
+        "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Taster",
+        "description": "Intermediate bitter taste sensitivity",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Taster",
+        "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
+        "probability": "medium"
+      }
+    },
+    "description": "Another TAS2R38 variant that combines with rs713598 to form PAV/AVI haplotypes determining bitter taste sensitivity.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Kim UK et al. (2003) - Positional cloning of the human quantitative trait locus underlying taste sensitivity to phenylthiocarbamide",
+        "pmid": "12595690",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12595690/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1726866"
+      }
+    ],
+    "notes": "Part of the TAS2R38 haplotype for bitter taste perception. Works in combination with rs713598 and rs10246939. The three SNPs together determine taster/non-taster status with high accuracy across all studied populations."
+  },
+  {
+    "rsid": "rs10246939",
+    "trait": "Bitter Taste Perception",
+    "gene": "TAS2R38",
+    "chromosome": "7",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Taster",
+        "description": "Enhanced bitter taste sensitivity (part of PAV haplotype)",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Taster",
+        "description": "Intermediate bitter taste sensitivity",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Non-Taster",
+        "description": "Reduced bitter taste sensitivity (part of AVI haplotype)",
+        "probability": "medium"
+      }
+    },
+    "description": "Third key TAS2R38 variant completing the PAV/AVI haplotype. Works with rs713598 and rs1726866.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Kim UK et al. (2003) - Positional cloning of the human quantitative trait locus underlying taste sensitivity to phenylthiocarbamide",
+        "pmid": "12595690",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12595690/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs10246939"
+      }
+    ],
+    "notes": "Third SNP in the TAS2R38 bitter taste haplotype. The combined PAV/AVI haplotype is one of the best-characterized taste genetics examples. Non-taster frequency varies by population: ~30% in Europeans, ~3% in sub-Saharan Africans."
+  },
+  {
+    "rsid": "rs4988235",
+    "trait": "Lactose Tolerance",
+    "gene": "MCM6/LCT",
+    "chromosome": "2",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lactose Intolerant",
+        "description": "Lactase production stops after childhood, high likelihood of lactose intolerance (>90%)",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Lactose Tolerant",
+        "description": "Lactase persistence, can digest lactose in adulthood",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Lactose Tolerant",
+        "description": "Strong lactase persistence, very likely can digest lactose throughout life",
+        "probability": "high"
+      }
+    },
+    "description": "MCM6 regulatory variant controlling LCT (lactase) gene expression. The -13910 C>T variant enables lactase persistence into adulthood in ~35% of world population, mostly Europeans and some African/Middle Eastern groups.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Enattah NS et al. (2002) - Identification of a variant associated with adult-type hypolactasia",
+        "pmid": "11788828",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11788828/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4988235"
+      }
+    ],
+    "notes": "The primary lactase persistence variant in European populations (-13910C>T). T allele allows continued milk digestion into adulthood. Different lactase persistence mutations exist in African and Middle Eastern populations. One of the best examples of recent human adaptation."
+  },
+  {
+    "rsid": "rs671",
+    "trait": "Alcohol Flush Reaction",
+    "gene": "ALDH2",
+    "chromosome": "12",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Alcohol Metabolism",
+        "description": "Normal ALDH2 enzyme function, no flush reaction",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Alcohol Flush",
+        "description": "Reduced ALDH2 activity, facial flushing with alcohol, increased hangover, higher cancer risk",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Severe Alcohol Flush",
+        "description": "Very low ALDH2 activity, severe facial flushing, nausea with small amounts of alcohol, strongly protective against alcoholism",
+        "probability": "high"
+      }
+    },
+    "description": "ALDH2*2 variant (Glu504Lys) causing aldehyde dehydrogenase deficiency. Common in East Asians (~40% carriers). Leads to acetaldehyde accumulation and 'Asian flush' reaction.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Yoshida A et al. (1984) - Molecular abnormality of an inactive aldehyde dehydrogenase variant commonly found in Orientals",
+        "pmid": "6582480",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6582480/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs671"
+      }
+    ],
+    "notes": "ALDH2*2 variant causing the 'Asian flush' reaction to alcohol. Nearly 40% of East Asians carry at least one copy. Homozygotes have severe alcohol intolerance. Also associated with increased esophageal cancer risk with alcohol consumption."
+  },
+  {
+    "rsid": "rs17822931",
+    "trait": "Earwax Type",
+    "gene": "ABCC11",
+    "chromosome": "16",
+    "inheritance": "recessive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Wet Earwax",
+        "description": "Wet, sticky earwax (European/African type), active apocrine glands, more body odor",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Wet Earwax",
+        "description": "Wet earwax (dominant), normal body odor",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Dry Earwax",
+        "description": "Dry, flaky earwax (East Asian type), reduced apocrine gland activity, less body odor",
+        "probability": "high"
+      }
+    },
+    "description": "ABCC11 variant determining earwax type and apocrine gland secretion. TT genotype (dry earwax) is nearly fixed in East Asians (80-95%) but rare elsewhere.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Yoshiura K et al. (2006) - A SNP in the ABCC11 gene is the determinant of human earwax type",
+        "pmid": "16444273",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16444273/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs17822931"
+      }
+    ],
+    "notes": "Single SNP determining wet vs dry earwax type. The dry earwax allele (T) is near-fixation in East Asian populations. Also determines axillary (underarm) body odor intensity — dry earwax carriers produce less odorous secretions. Classic example of pleiotropic genetic variation."
+  },
+  {
+    "rsid": "rs4680",
+    "trait": "COMT Activity - Warrior vs Worrier",
+    "gene": "COMT",
+    "chromosome": "22",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Worrier",
+        "description": "Slower dopamine breakdown (Val/Val), better memory/attention, more anxiety-prone, pain sensitive",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Balanced",
+        "description": "Intermediate dopamine metabolism (Val/Met), balanced cognitive/emotional profile",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Warrior",
+        "description": "Faster dopamine breakdown (Met/Met), better stress resilience, lower baseline cognition, less pain sensitive",
+        "probability": "medium"
+      }
+    },
+    "description": "COMT Val158Met variant affecting dopamine metabolism in prefrontal cortex. 'Warrior' (Met) vs 'Worrier' (Val) cognitive-emotional tradeoff.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Lachman HM et al. (1996) - Human catechol-O-methyltransferase pharmacogenetics: description of a functional polymorphism and its potential application to neuropsychiatric disorders",
+        "pmid": "8807664",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8807664/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4680"
+      }
+    ],
+    "notes": "COMT Val158Met polymorphism — one of the most studied functional variants in psychiatric genetics. Val allele ('Warrior') has higher enzyme activity and lower prefrontal dopamine; Met allele ('Worrier') has lower activity and higher dopamine. Effects on cognition are context-dependent and modest."
+  },
+  {
+    "rsid": "rs7495174",
+    "trait": "Eye Color",
+    "gene": "OCA2",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Darker Eyes",
+        "description": "Contributes to darker eye pigmentation",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Intermediate Eyes",
+        "description": "Moderate eye pigmentation effect",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Lighter Eyes",
+        "description": "Contributes to lighter eye colors (blue/green)",
+        "probability": "low"
+      }
+    },
+    "description": "Additional OCA2 region variant modifying eye color. Secondary modifier with smaller effect than rs12913832.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Duffy DL et al. (2007) - A three-single-nucleotide polymorphism haplotype in intron 1 of OCA2 explains most human eye-color variation",
+        "pmid": "17236130",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17236130/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7495174"
+      }
+    ],
+    "notes": "Part of a three-SNP OCA2 haplotype associated with blue/brown eye color. Most studied in European-descent populations. Works additively with HERC2 rs12913832 to fine-tune iris pigmentation."
+  },
+  {
+    "rsid": "rs1799971",
+    "trait": "Pain Sensitivity",
+    "gene": "OPRM1",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Pain Sensitivity",
+        "description": "Normal opioid receptor, higher baseline pain sensitivity, better response to opioid medications",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate Pain Sensitivity",
+        "description": "Intermediate pain sensitivity and opioid response",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Pain Sensitivity",
+        "description": "Altered opioid receptor (Asn40Asp), reduced pain sensitivity, may need higher opioid doses",
+        "probability": "medium"
+      }
+    },
+    "description": "OPRM1 mu-opioid receptor variant (A118G) affecting pain perception and opioid medication response. G allele reduces receptor expression.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Fillingim RB et al. (2005) - The A118G single nucleotide polymorphism of the mu-opioid receptor gene (OPRM1) is associated with pressure pain sensitivity in humans",
+        "pmid": "15911459",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15911459/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1799971"
+      }
+    ],
+    "notes": "OPRM1 A118G variant affecting mu-opioid receptor function. Associated with altered pain sensitivity and variable analgesic response to opioids. Clinical relevance for pain management is being studied but is not yet standard of care. Effect varies by ancestry."
+  },
+  {
+    "rsid": "rs53576",
+    "trait": "Empathy/Social Behavior",
+    "gene": "OXTR",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Lower Empathy",
+        "description": "Reduced oxytocin sensitivity, less empathetic behavior, more stress reactivity",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Moderate Empathy",
+        "description": "Intermediate oxytocin signaling and social behavior",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Higher Empathy",
+        "description": "Enhanced oxytocin sensitivity, more empathetic, better social skills, lower stress",
+        "probability": "low"
+      }
+    },
+    "description": "Oxytocin receptor variant associated with empathy, social behavior, and stress resilience. GG genotype linked to more prosocial behavior.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Rodrigues SM et al. (2009) - Oxytocin receptor genetic variation relates to empathy and stress reactivity in humans",
+        "pmid": "19934046",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19934046/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs53576"
+      }
+    ],
+    "notes": "OXTR variant widely studied for associations with empathy, social behavior, and stress reactivity. Effect sizes are small and findings have been inconsistent in replication attempts. Social behavior is overwhelmingly shaped by environment; this SNP has minimal predictive value for any individual."
+  },
+  {
+    "rsid": "rs6152",
+    "trait": "Male Pattern Baldness",
+    "gene": "AR",
+    "chromosome": "X",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Baldness Risk",
+        "description": "Increased androgen receptor sensitivity, higher risk of male pattern baldness",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate Baldness Risk",
+        "description": "Intermediate risk (only in females, males have one copy on X chromosome)",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Baldness Risk",
+        "description": "Reduced androgen receptor sensitivity, lower baldness risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Androgen receptor gene variant on X chromosome. Males inherit from mother. Affects sensitivity to DHT, primary driver of male pattern baldness.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Hillmer AM et al. (2005) - Genetic variation in the human androgen receptor gene is the major determinant of common early-onset androgenetic alopecia",
+        "pmid": "16175509",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16175509/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6152"
+      }
+    ],
+    "notes": "Androgen receptor variant associated with male pattern baldness risk. One of multiple contributing loci — androgenetic alopecia is polygenic. The X-linked pattern means maternal family history is more informative. Environmental factors (stress, nutrition) also play a role."
+  },
+  {
+    "rsid": "rs1800497",
+    "trait": "Novelty Seeking",
+    "gene": "ANKK1/DRD2",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Novelty Seeking",
+        "description": "Normal D2 receptor density, less impulsive, lower addiction risk",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Moderate Novelty Seeking",
+        "description": "Intermediate dopamine signaling and behavioral traits",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Novelty Seeking",
+        "description": "Reduced D2 receptor density (Taq1A), more novelty seeking, impulsivity, addiction susceptibility",
+        "probability": "low"
+      }
+    },
+    "description": "ANKK1 variant (formerly called DRD2 Taq1A) affecting dopamine D2 receptor expression. T allele associated with ~30% reduction in receptor density.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Noble EP et al. (1998) - D2 dopamine receptor polymorphism and brain regional glucose metabolism",
+        "pmid": "9457173",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9457173/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800497"
+      }
+    ],
+    "notes": "TaqIA polymorphism near DRD2, associated with dopamine receptor density. Originally linked to novelty seeking and addiction risk, but meta-analyses show small and inconsistent effects. Behavioral genetics effects are highly polygenic — single-SNP predictions are unreliable."
+  },
+  {
+    "rsid": "rs2228479",
+    "trait": "Sun Sensitivity",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Sun Tolerance",
+        "description": "Normal MC1R function, typical sun sensitivity for skin type",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Increased Sun Sensitivity",
+        "description": "Partial MC1R dysfunction, burns more easily, higher melanoma risk",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "High Sun Sensitivity",
+        "description": "Reduced MC1R function, very sun sensitive, high melanoma risk",
+        "probability": "medium"
+      }
+    },
+    "description": "MC1R variant (V92M) associated with sun sensitivity and melanoma risk, even in individuals without red hair.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Valverde P et al. (1995) - Variants of the melanocyte-stimulating hormone receptor gene are associated with red hair and fair skin in humans",
+        "pmid": "7581459",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7581459/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2228479"
+      }
+    ],
+    "notes": "MC1R variant (V92M) associated with sun sensitivity and fair skin, though with lower penetrance than classic red-hair MC1R variants. Common across multiple populations. Carriers may have increased UV sensitivity without exhibiting red hair."
+  },
+  {
+    "rsid": "rs7294919",
+    "trait": "Head Circumference",
+    "gene": "HMGA2",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Larger Head Size",
+        "description": "Each T allele adds ~0.1cm to head circumference on average",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Average Head Size",
+        "description": "Intermediate head circumference contribution",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "Smaller Head Size",
+        "description": "Neutral or slightly reduced head circumference",
+        "probability": "low"
+      }
+    },
+    "description": "HMGA2 variant associated with head circumference variation. Same gene region affects overall height. Small individual effect.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Ikram MA et al. (2012) - Common variants at 6q22 and 17q21 are associated with intracranial volume",
+        "pmid": "22504419",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22504419/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7294919"
+      }
+    ],
+    "notes": "Associated with intracranial volume and head circumference in large GWAS meta-analyses. Effect size is small. Head circumference is highly polygenic and influenced by nutrition and prenatal environment. Not clinically predictive for any individual."
+  },
+  {
+    "rsid": "rs9939609",
+    "trait": "Obesity Risk",
+    "gene": "FTO",
+    "chromosome": "16",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Obesity Risk",
+        "description": "Normal weight regulation, lower BMI tendency",
+        "probability": "medium"
+      },
+      "AT": {
+        "phenotype": "Moderate Obesity Risk",
+        "description": "~1.5kg higher weight on average, moderately increased obesity risk",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Higher Obesity Risk",
+        "description": "~3kg higher weight on average, increased appetite, 1.7x obesity risk",
+        "probability": "medium"
+      }
+    },
+    "description": "FTO gene variant, strongest common genetic predictor of obesity. Each A allele increases weight ~1-1.5kg. Affects appetite regulation and energy expenditure.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Frayling TM et al. (2007) - A common variant in the FTO gene is associated with body mass index and predisposes to childhood and adult obesity",
+        "pmid": "17434869",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17434869/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs9939609"
+      }
+    ],
+    "notes": "Strongest common genetic variant for obesity risk, with ~0.39 kg/m2 BMI increase per risk allele. Effect is consistent across populations but can be attenuated by physical activity. FTO likely acts through regulation of nearby IRX3/IRX5 genes affecting adipocyte thermogenesis."
+  },
+  {
+    "rsid": "rs762551",
+    "trait": "Caffeine Metabolism",
+    "gene": "CYP1A2",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Fast Caffeine Metabolizer",
+        "description": "Rapid caffeine breakdown, can drink coffee late without sleep issues, may need more for effects",
+        "probability": "high"
+      },
+      "AC": {
+        "phenotype": "Intermediate Metabolizer",
+        "description": "Moderate caffeine metabolism rate",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Slow Caffeine Metabolizer",
+        "description": "Slow caffeine breakdown, caffeine effects last longer, may have sleep issues with afternoon coffee, increased hypertension risk with high intake",
+        "probability": "high"
+      }
+    },
+    "description": "CYP1A2*1F variant determining caffeine metabolism speed. AA (fast) metabolizers clear caffeine ~4x faster than CC (slow). Affects coffee tolerance and cardiovascular effects.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Sachse C et al. (1999) - Functional significance of a C→A polymorphism in intron 1 of the cytochrome P450 CYP1A2 gene",
+        "pmid": "10228163",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10228163/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs762551"
+      }
+    ],
+    "notes": "CYP1A2 variant determining fast vs slow caffeine metabolism. Fast metabolizers (AA genotype) clear caffeine ~4x faster. Clinically relevant — slow metabolizers may have increased cardiovascular risk with high coffee intake. Affects drug metabolism beyond caffeine."
+  },
+  {
+    "rsid": "rs72921001",
+    "trait": "Cilantro Taste Aversion",
+    "gene": "OR6A2",
+    "chromosome": "11",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Cilantro Taste",
+        "description": "Normal cilantro taste - perceives herb flavor",
+        "probability": "high"
+      },
+      "CA": {
+        "phenotype": "Mild Soapy Taste",
+        "description": "Mild soapy taste tendency",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Strong Soapy Taste",
+        "description": "Strong soapy/unpleasant taste perception",
+        "probability": "high"
+      }
+    },
+    "description": "Genetic variation affecting olfactory receptor determining whether cilantro tastes like herbs or soap.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Eriksson N et al. (2012) - A genetic variant near olfactory receptor genes influences cilantro preference",
+        "pmid": "22927851",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22927851/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs72921001"
+      }
+    ],
+    "notes": "Identified in a 23andMe GWAS as associated with perceiving cilantro as soapy-tasting. Located near olfactory receptor gene OR6A2. Effect is moderate — not all carriers dislike cilantro, and cultural exposure can modify preference. Well-replicated finding."
+  },
+  {
+    "rsid": "rs4481887",
+    "trait": "Asparagus Smell Detection",
+    "gene": "OR2M7",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Can Detect Asparagus Odor",
+        "description": "Can detect asparagus metabolite odor in urine",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Moderate Detection",
+        "description": "Moderate detection ability",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Cannot Detect Asparagus Odor",
+        "description": "Cannot detect asparagus urine odor",
+        "probability": "high"
+      }
+    },
+    "description": "Olfactory receptor variant determining ability to smell asparagus metabolites in urine.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Pelchat ML et al. (2011) - Excretion and perception of a characteristic odor in urine after asparagus ingestion: a psychophysical and genetic study",
+        "pmid": "20876394",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20876394/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4481887"
+      }
+    ],
+    "notes": "Associated with the ability to detect asparagus metabolite odor in urine. Approximately 40% of people cannot smell the characteristic odor. The trait is harmless and primarily of scientific curiosity. Effect is population-consistent."
+  },
+  {
+    "rsid": "rs10427255",
+    "trait": "Photic Sneeze Reflex (ACHOO Syndrome)",
+    "gene": "ZEB2",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "No Photic Sneeze Reflex",
+        "description": "No photic sneeze reflex",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Mild Sun-Induced Sneezing",
+        "description": "Mild sun-induced sneezing",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Strong Photic Sneeze Reflex",
+        "description": "Strong sneeze reflex when exposed to bright light",
+        "probability": "medium"
+      }
+    },
+    "description": "Autosomal dominant trait causing sneezing when suddenly exposed to bright light.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Eriksson N et al. (2010) - Web-based, participant-driven studies yield novel genetic associations for common traits",
+        "pmid": "20585627",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20585627/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs10427255"
+      }
+    ],
+    "notes": "Associated with photic sneeze reflex (ACHOO syndrome) in GWAS. The reflex affects ~25% of people and is harmless. Genetic architecture is poorly understood. This SNP explains only a small fraction of the trait."
+  },
+  {
+    "rsid": "rs823160",
+    "trait": "Dimples",
+    "gene": "ZBTB20",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "No Cheek Dimples",
+        "description": "No cheek dimples",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Dimples Present",
+        "description": "Likely to have dimples on one or both cheeks",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Strong Dimple Tendency",
+        "description": "Strong tendency for cheek dimples",
+        "probability": "medium"
+      }
+    },
+    "description": "Facial muscle variation creating visible indentations in cheeks when smiling.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Shaffer JR et al. (2016) - Genome-wide association study reveals multiple loci influencing normal human facial morphology",
+        "pmid": "27560520",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27560520/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs823160"
+      }
+    ],
+    "notes": "Weakly associated with cheek dimples in consumer genetics datasets. Evidence is limited to proprietary GWAS from direct-to-consumer companies; no peer-reviewed replication in independent cohorts. Dimple genetics remain poorly understood."
+  },
+  {
+    "rsid": "rs11684042",
+    "trait": "Cleft Chin",
+    "gene": "CHAD",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Smooth Chin",
+        "description": "Smooth chin",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Mild Chin Cleft",
+        "description": "Mild chin cleft",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Prominent Cleft Chin",
+        "description": "Prominent cleft chin",
+        "probability": "medium"
+      }
+    },
+    "description": "Variation in jaw bone fusion creating a visible Y-shaped dimple in the chin.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Adhikari K et al. (2016) - A genome-wide association scan in admixed Latin Americans identifies loci influencing facial and scalp hair features",
+        "pmid": "26926045",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26926045/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs11684042"
+      }
+    ],
+    "notes": "Associated with cleft chin morphology in consumer genetics studies. Limited peer-reviewed evidence. Facial morphology is highly polygenic and influenced by developmental environment. Treat prediction with caution."
+  },
+  {
+    "rsid": "rs2073963",
+    "trait": "Widow's Peak Hairline",
+    "gene": "FRAS1",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Straight Hairline",
+        "description": "Straight hairline",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Subtle V-Shaped Hairline",
+        "description": "Subtle V-shaped hairline",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Distinct Widow's Peak",
+        "description": "Distinct widow's peak hairline",
+        "probability": "low"
+      }
+    },
+    "description": "Characteristic V-shaped point in the center of the hairline.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Adhikari K et al. (2016) - A genome-wide association scan in admixed Latin Americans identifies loci influencing facial and scalp hair features",
+        "pmid": "26926045",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26926045/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2073963"
+      }
+    ],
+    "notes": "Linked to widow's peak hairline in facial morphology GWAS. The genetic architecture of hairline shape is complex and not well characterized. Limited evidence for this specific SNP-trait association."
+  },
+  {
+    "rsid": "rs1288775",
+    "trait": "Tongue Rolling Ability",
+    "gene": "LOC100128714",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Cannot Roll Tongue",
+        "description": "Cannot roll tongue into tube shape",
+        "probability": "low"
+      },
+      "AG": {
+        "phenotype": "Partial Tongue Rolling",
+        "description": "Partial tongue rolling ability",
+        "probability": "low"
+      },
+      "GG": {
+        "phenotype": "Can Roll Tongue",
+        "description": "Can easily roll tongue into tube shape",
+        "probability": "low"
+      }
+    },
+    "description": "Ability to curl the lateral edges of the tongue upward into a tube shape.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Eriksson N et al. (2010) - Web-based, participant-driven studies yield novel genetic associations for common traits",
+        "pmid": "20585627",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20585627/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1288775"
+      }
+    ],
+    "notes": "Associated with tongue rolling ability in consumer genetics platforms. The genetics of tongue rolling have been debated for decades — it is NOT a simple Mendelian trait as commonly taught. Monozygotic twin concordance is only ~70%, indicating environmental influence."
+  },
+  {
+    "rsid": "rs12927162",
+    "trait": "Chronotype (Morning/Night Person)",
+    "gene": "AKH",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Morning Person (Early Bird)",
+        "description": "Strong morning preference (early bird)",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate Chronotype",
+        "description": "Intermediate chronotype",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Night Owl",
+        "description": "Strong evening preference (night owl)",
+        "probability": "medium"
+      }
+    },
+    "description": "Circadian rhythm variation determining natural preference for morning or evening activity.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Jones SE et al. (2019) - Genome-wide association analyses of chronotype in 697,828 individuals provides insights into circadian rhythms",
+        "pmid": "30696823",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30696823/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12927162"
+      }
+    ],
+    "notes": "Associated with chronotype (morningness/eveningness) in UK Biobank GWAS. Effect is modest — circadian preference is influenced by age, light exposure, work schedules, and many other genetic variants. Part of a highly polygenic trait."
+  },
+  {
+    "rsid": "rs73598374",
+    "trait": "Deep Sleep Quality",
+    "gene": "ADA",
+    "chromosome": "20",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal Deep Sleep",
+        "description": "Normal deep sleep duration",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Enhanced Deep Sleep",
+        "description": "Enhanced deep sleep quality",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Significantly More Deep Sleep",
+        "description": "Significantly more deep sleep",
+        "probability": "medium"
+      }
+    },
+    "description": "Adenosine deaminase variant affecting deep sleep duration and sleep quality.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Retey JV et al. (2005) - A functional genetic variation of adenosine deaminase affects the duration and intensity of deep sleep in humans",
+        "pmid": "15834505",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15834505/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs73598374"
+      }
+    ],
+    "notes": "ADA variant (Asp8Asn) associated with increased slow-wave (deep) sleep. One of the few replicated single-gene effects on sleep architecture. Carriers of the Asn allele show ~30 minutes more deep sleep. Rare variant (~5-8% in Europeans)."
+  },
+  {
+    "rsid": "rs6269",
+    "trait": "Fear of Pain Sensitivity",
+    "gene": "COMT",
+    "chromosome": "22",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Pain Sensitivity",
+        "description": "Higher pain sensitivity",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Average Pain Tolerance",
+        "description": "Average pain tolerance",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Lower Pain Sensitivity",
+        "description": "Lower pain sensitivity - higher tolerance",
+        "probability": "medium"
+      }
+    },
+    "description": "COMT haplotype variant modulating catecholamine levels and pain perception thresholds.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Diatchenko L et al. (2005) - Genetic basis for individual variations in pain perception and the development of a chronic pain condition",
+        "pmid": "16199517",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16199517/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6269"
+      }
+    ],
+    "notes": "COMT haplotype variant influencing pain sensitivity through altered enzyme activity and mRNA structure. Part of a multi-SNP COMT haplotype — individual effect is modest. Pain perception is highly complex with major environmental and psychological components."
+  },
+  {
+    "rsid": "rs2937573",
+    "trait": "Misophonia Tendency",
+    "gene": "TENM2",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Low Sound Sensitivity",
+        "description": "Low sensitivity to trigger sounds",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Moderate Sound Sensitivity",
+        "description": "Moderate sound sensitivity",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "High Sound Sensitivity",
+        "description": "High sensitivity to chewing/repetitive sounds",
+        "probability": "low"
+      }
+    },
+    "description": "Genetic predisposition to strong emotional reactions triggered by specific sounds like chewing.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Sanchez-Roige S et al. (2017) - Genome-wide association studies of impulsive personality traits and misophonia",
+        "pmid": "28855714",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28855714/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2937573"
+      }
+    ],
+    "notes": "TENM2 variant linked to misophonia (sound sensitivity) in a single GWAS. Evidence is preliminary — misophonia genetics is poorly understood. The condition likely involves multiple genes and neurological pathways. Replication in larger cohorts is needed."
+  },
+  {
+    "rsid": "rs35874116",
+    "trait": "Sweet Taste Preference",
+    "gene": "TAS1R2",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Sweet Perception",
+        "description": "Standard sweet taste perception",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Slightly Enhanced Sweet Sensitivity",
+        "description": "Slightly enhanced sweet sensitivity",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Enhanced Sweet Sensitivity",
+        "description": "Enhanced sweet taste sensitivity - prefers less sugar",
+        "probability": "medium"
+      }
+    },
+    "description": "Sweet taste receptor variant affecting sensitivity to sugars and sweet taste preference.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Fushan AA et al. (2009) - Allelic polymorphism within the TAS1R3 promoter is associated with human taste sensitivity to sucrose",
+        "pmid": "19620771",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19620771/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs35874116"
+      }
+    ],
+    "notes": "TAS1R2 variant influencing sweet taste perception and sugar intake. Effect is moderate — sweet preference is heavily influenced by environment, age, and dietary habits. Some evidence links this variant to differences in sucrose detection thresholds."
+  },
+  {
+    "rsid": "rs12780242",
+    "trait": "Unibrow Tendency",
+    "gene": "PAX3",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Separated Eyebrows",
+        "description": "Separated eyebrows",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Some Eyebrow Connectivity",
+        "description": "Some eyebrow connectivity",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Unibrow Tendency",
+        "description": "Tendency for connected eyebrows (unibrow)",
+        "probability": "medium"
+      }
+    },
+    "description": "Transcription factor variant influencing eyebrow hair growth pattern and density.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Adhikari K et al. (2016) - A genome-wide association scan in admixed Latin Americans identifies loci influencing facial and scalp hair features",
+        "pmid": "26926045",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26926045/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12780242"
+      }
+    ],
+    "notes": "PAX3 variant associated with unibrow (synophrys) tendency, identified in a Latin American admixed population GWAS. Effect may differ across populations. Eyebrow morphology is influenced by multiple genetic and hormonal factors."
+  },
+  {
+    "rsid": "rs2651899",
+    "trait": "Ice Cream Headache (Brain Freeze)",
+    "gene": "TRPM8",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Resistant to Brain Freeze",
+        "description": "Resistant to brain freeze",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Brain Freeze Susceptibility",
+        "description": "Moderate brain freeze susceptibility",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Highly Susceptible to Brain Freeze",
+        "description": "Highly susceptible to ice cream headaches",
+        "probability": "medium"
+      }
+    },
+    "description": "Cold-sensing receptor variant affecting susceptibility to cold-stimulus headaches.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Anttila V et al. (2013) - Genome-wide meta-analysis identifies new susceptibility loci for migraine",
+        "pmid": "23793025",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23793025/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2651899"
+      }
+    ],
+    "notes": "TRPM8 variant primarily associated with migraine susceptibility. The link to 'brain freeze' (cold-stimulus headache) is indirect — TRPM8 is a cold-sensing receptor. Migraine genetics are highly polygenic with hundreds of loci."
+  },
+  {
+    "rsid": "rs56126437",
+    "trait": "Motion Sickness Susceptibility",
+    "gene": "GPD2",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Low Motion Sickness Risk",
+        "description": "Low motion sickness risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Motion Sickness Risk",
+        "description": "Moderate motion sickness risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "High Motion Sickness Susceptibility",
+        "description": "High susceptibility to motion sickness",
+        "probability": "medium"
+      }
+    },
+    "description": "Genetic variation affecting vestibular-visual conflict processing and nausea response.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Hromatka BS et al. (2015) - Genetic variants associated with motion sickness point to roles for inner ear development, neurological processes and glucose homeostasis",
+        "pmid": "26343385",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26343385/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs56126437"
+      }
+    ],
+    "notes": "Identified in a 23andMe GWAS for motion sickness susceptibility. Effect is modest. Motion sickness is influenced by vestibular function, visual processing, and psychological factors. Genetic contribution is polygenic."
+  },
+  {
+    "rsid": "rs6437091",
+    "trait": "Mosquito Bite Attraction",
+    "gene": "HLA-related",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Less Attractive to Mosquitoes",
+        "description": "Less attractive to mosquitoes",
+        "probability": "low"
+      },
+      "TC": {
+        "phenotype": "Average Mosquito Attraction",
+        "description": "Average mosquito attraction",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "More Attractive to Mosquitoes",
+        "description": "More attractive to mosquitoes",
+        "probability": "low"
+      }
+    },
+    "description": "HLA-associated body odor compounds affecting attractiveness to mosquitoes.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Fernandez-Grandon GM et al. (2015) - Heritability of attractiveness to mosquitoes",
+        "pmid": "25904069",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25904069/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6437091"
+      }
+    ],
+    "notes": "HLA-region variant loosely associated with mosquito bite attraction. Evidence is limited and the mechanism is poorly characterized. Mosquito attraction depends on skin microbiome, CO2 output, body heat, and many non-genetic factors."
+  },
+  {
+    "rsid": "rs3057",
+    "trait": "Musical Pitch Perception",
+    "gene": "AVPR1A",
+    "chromosome": "12",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Pitch Perception",
+        "description": "Standard pitch perception",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Enhanced Pitch Discrimination",
+        "description": "Enhanced pitch discrimination",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Superior Pitch Perception",
+        "description": "Superior pitch perception ability",
+        "probability": "low"
+      }
+    },
+    "description": "Vasopressin receptor variant associated with musical aptitude and pitch recognition.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Ukkola LT et al. (2009) - Musical aptitude is associated with AVPR1A-haplotypes",
+        "pmid": "19293841",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19293841/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3057"
+      }
+    ],
+    "notes": "AVPR1A variant studied for associations with musical aptitude and social cognition. Evidence is preliminary with small sample sizes. Musical ability is overwhelmingly shaped by training and environment — genetic contributions are minimal and polygenic."
+  },
+  {
+    "rsid": "rs199512",
+    "trait": "Handedness Tendency",
+    "gene": "PCSK6",
+    "chromosome": "15",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Strong Right-Hand Preference",
+        "description": "Strong right-hand preference",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Mixed/Ambidextrous Tendency",
+        "description": "Mixed or ambidextrous tendency",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Left-Hand Preference",
+        "description": "Left-hand preference more likely",
+        "probability": "low"
+      }
+    },
+    "description": "Proprotein convertase variant influencing left-right body asymmetry and handedness.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Brandler WM et al. (2013) - Common variants in left/right asymmetry genes and pathways are associated with relative hand skill",
+        "pmid": "24130509",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24130509/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs199512"
+      }
+    ],
+    "notes": "PCSK6 variant associated with handedness in individuals with dyslexia. Effect on handedness in the general population is very small. Handedness is ~25% heritable with the rest due to prenatal environment and chance. No single gene determines handedness."
+  },
+  {
+    "rsid": "rs9536314",
+    "trait": "Snoring Tendency",
+    "gene": "KLOTHO",
+    "chromosome": "13",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lower Snoring Tendency",
+        "description": "Lower snoring tendency",
+        "probability": "low"
+      },
+      "GT": {
+        "phenotype": "Moderate Snoring Risk",
+        "description": "Moderate snoring risk",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Snoring Tendency",
+        "description": "Higher tendency for snoring",
+        "probability": "low"
+      }
+    },
+    "description": "Klotho protein variant associated with respiratory muscle tone during sleep.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Campos AI et al. (2020) - Genome-wide association study of snoring identifies 42 loci and shared genetic architecture with distinct sleep and respiratory traits",
+        "pmid": "33060808",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33060808/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs9536314"
+      }
+    ],
+    "notes": "KLOTHO variant (KL-VS) primarily studied for aging and cognitive function. Association with snoring is indirect and based on limited evidence. Snoring is overwhelmingly influenced by BMI, sleeping position, nasal anatomy, and alcohol use."
+  },
+  {
+    "rsid": "rs1345417",
+    "trait": "Eyebrow Thickness",
+    "gene": "FOXL2",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Thinner Eyebrows",
+        "description": "Thinner eyebrows",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Medium Eyebrow Thickness",
+        "description": "Medium eyebrow thickness",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Thicker Eyebrows",
+        "description": "Thicker/bushier eyebrows",
+        "probability": "medium"
+      }
+    },
+    "description": "Forkhead transcription factor variant influencing eyebrow hair density and thickness.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Adhikari K et al. (2016) - A genome-wide association scan in admixed Latin Americans identifies loci influencing facial and scalp hair features",
+        "pmid": "26926045",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26926045/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1345417"
+      }
+    ],
+    "notes": "Associated with eyebrow thickness in admixed Latin American populations. Effect may vary across ethnic groups. Hair morphology traits are polygenic with substantial environmental influence (grooming habits)."
+  },
+  {
+    "rsid": "rs2282679",
+    "trait": "Vitamin D Levels",
+    "gene": "GC",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Higher Vitamin D Levels",
+        "description": "Higher vitamin D levels",
+        "probability": "high"
+      },
+      "AC": {
+        "phenotype": "Moderate Vitamin D Levels",
+        "description": "Moderate vitamin D levels",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Lower Vitamin D Levels",
+        "description": "Lower vitamin D levels - may need supplementation",
+        "probability": "high"
+      }
+    },
+    "description": "Vitamin D binding protein variant affecting circulating vitamin D levels.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Wang TJ et al. (2010) - Common genetic determinants of vitamin D insufficiency: a genome-wide association study",
+        "pmid": "20541252",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20541252/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2282679"
+      }
+    ],
+    "notes": "GC (vitamin D binding protein) variant — one of the strongest genetic determinants of circulating 25(OH)D levels. Clinically relevant: carriers of certain alleles may need higher vitamin D supplementation. Effect is consistent across populations. Vitamin D levels also strongly depend on sun exposure and diet."
+  },
+  {
+    "rsid": "rs7903146",
+    "trait": "Type 2 Diabetes Risk",
+    "gene": "TCF7L2",
+    "chromosome": "10",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Diabetes Risk",
+        "description": "Lower diabetes risk",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Moderately Increased Risk",
+        "description": "Moderately increased risk",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Higher Type 2 Diabetes Risk",
+        "description": "Higher Type 2 diabetes risk",
+        "probability": "high"
+      }
+    },
+    "description": "Strongest common genetic risk factor for Type 2 diabetes affecting insulin secretion.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Grant SFA et al. (2006) - Variant of transcription factor 7-like 2 (TCF7L2) gene confers risk of type 2 diabetes",
+        "pmid": "16415884",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16415884/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7903146"
+      }
+    ],
+    "notes": "Strongest common genetic risk factor for type 2 diabetes, with ~1.4x increased risk per T allele. Consistent across all studied populations. However, T2D risk is overwhelmingly driven by lifestyle factors (diet, exercise, weight). Genetic risk can be substantially mitigated by healthy habits."
+  },
+  {
+    "rsid": "rs2802292",
+    "trait": "Longevity / Aging",
+    "gene": "FOXO3",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Average Longevity Tendency",
+        "description": "Average longevity tendency",
+        "probability": "medium"
+      },
+      "TG": {
+        "phenotype": "Moderately Increased Longevity",
+        "description": "Moderately increased longevity",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Associated with Exceptional Longevity",
+        "description": "Associated with exceptional longevity",
+        "probability": "medium"
+      }
+    },
+    "description": "FOXO3 variant consistently associated with human longevity across multiple populations.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Willcox BJ et al. (2008) - FOXO3A genotype is strongly associated with human longevity",
+        "pmid": "18765803",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18765803/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2802292"
+      }
+    ],
+    "notes": "FOXO3 variant associated with longevity in multiple populations (European, Japanese, Chinese). G allele carriers show 1.2-1.5x increased odds of reaching 100 years. Mechanism involves improved stress resistance and insulin signaling. Longevity is highly polygenic and environmental."
+  },
+  {
+    "rsid": "rs1800588",
+    "trait": "Body Odor Intensity",
+    "gene": "ABCC11",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Stronger Body Odor",
+        "description": "Stronger body odor",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Body Odor",
+        "description": "Moderate body odor",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Reduced Body Odor",
+        "description": "Reduced body odor",
+        "probability": "medium"
+      }
+    },
+    "description": "ATP-binding cassette transporter variant affecting apocrine sweat gland secretions.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Yoshiura K et al. (2006) - A SNP in the ABCC11 gene is the determinant of human earwax type",
+        "pmid": "16444273",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16444273/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800588"
+      }
+    ],
+    "notes": "Linked to ABCC11 function affecting apocrine gland secretions and body odor intensity. Most relevant in populations polymorphic for ABCC11 variants. The same biological pathway controls earwax type (wet/dry) and axillary odor production."
+  },
+  {
+    "rsid": "rs4911414",
+    "trait": "Freckle Density",
+    "gene": "IRF4",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Fewer Freckles",
+        "description": "Fewer freckles",
+        "probability": "medium"
+      },
+      "TG": {
+        "phenotype": "Moderate Freckling",
+        "description": "Moderate freckling",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Dense Freckling Tendency",
+        "description": "Dense freckling tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Interferon regulatory factor variant influencing melanocyte-driven freckle formation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2007) - Genetic determinants of hair, eye and skin pigmentation in Europeans",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4911414"
+      }
+    ],
+    "notes": "IRF4 regulatory variant associated with freckle density and sun sensitivity in European populations. Pleiotropic effects include contributions to hair color and melanoma risk. Effect size is moderate; freckling is influenced by many loci plus UV exposure."
+  },
+  {
+    "rsid": "rs1800888",
+    "trait": "Wisdom Tooth Development",
+    "gene": "PAX9",
+    "chromosome": "14",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Wisdom Tooth Development",
+        "description": "Normal wisdom tooth development",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Possible Missing Wisdom Teeth",
+        "description": "Possible missing wisdom teeth",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Likely Missing Wisdom Teeth",
+        "description": "Likely missing one or more wisdom teeth",
+        "probability": "medium"
+      }
+    },
+    "description": "Transcription factor variant affecting third molar tooth development and agenesis.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Nieminen P et al. (2011) - Identification of new genetic loci associated with dental agenesis",
+        "pmid": "21749716",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21749716/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800888"
+      }
+    ],
+    "notes": "PAX9 variant associated with dental agenesis (missing teeth) including wisdom teeth. Evidence for wisdom tooth development specifically is limited. Dental development is influenced by multiple genes and jaw size/nutrition. Treat predictions with caution."
+  },
+  {
+    "rsid": "rs12722",
+    "trait": "Achilles Tendon Injury Risk",
+    "gene": "COL5A1",
+    "chromosome": "9",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Tendon Injury Risk",
+        "description": "Lower tendon injury risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Average Injury Risk",
+        "description": "Average injury risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Achilles Tendon Injury Susceptibility",
+        "description": "Higher Achilles tendon injury susceptibility",
+        "probability": "medium"
+      }
+    },
+    "description": "Collagen type V variant affecting tendon flexibility and injury predisposition.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Mokone GG et al. (2006) - The COL5A1 gene and Achilles tendon pathology",
+        "pmid": "16882895",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16882895/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12722"
+      }
+    ],
+    "notes": "COL5A1 variant associated with Achilles tendon injury risk in athletes. Effect has been replicated in multiple sports medicine studies. Risk is modifiable through training load management and proper conditioning. Most relevant for competitive athletes."
+  },
+  {
+    "rsid": "rs307355",
+    "trait": "Sensitivity to Umami Taste",
+    "gene": "TAS1R1",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Umami Perception",
+        "description": "Standard umami perception",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Enhanced Umami Sensitivity",
+        "description": "Enhanced umami sensitivity",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Highly Sensitive to Umami",
+        "description": "Highly sensitive to umami/savory taste",
+        "probability": "medium"
+      }
+    },
+    "description": "Taste receptor variant determining sensitivity to glutamate and savory flavors.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Shigemura N et al. (2009) - Genetic and molecular basis of individual differences in human umami taste perception",
+        "pmid": "19265170",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19265170/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs307355"
+      }
+    ],
+    "notes": "TAS1R1 variant associated with sensitivity to umami (savory) taste. Less well-characterized than bitter taste genetics. Umami perception is influenced by multiple receptor variants and dietary experience."
+  },
+  {
+    "rsid": "rs16969968",
+    "trait": "Nicotine Dependence Risk",
+    "gene": "CHRNA5",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Lower Nicotine Dependence Risk",
+        "description": "Lower nicotine dependence risk",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Moderate Risk",
+        "description": "Moderate risk",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Higher Risk of Nicotine Dependence",
+        "description": "Higher risk of nicotine dependence",
+        "probability": "high"
+      }
+    },
+    "description": "Nicotinic receptor variant affecting susceptibility to tobacco addiction.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Saccone SF et al. (2007) - Cholinergic nicotinic receptor genes implicated in a nicotine dependence association study targeting 348 candidate genes with 3713 SNPs",
+        "pmid": "17575050",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17575050/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs16969968"
+      }
+    ],
+    "notes": "CHRNA5 variant strongly associated with nicotine dependence and smoking heaviness (~1 extra cigarette/day per risk allele). Also linked to lung cancer risk through increased smoking. One of the most robust addiction genetics findings. Risk allele frequency ~35% in Europeans."
+  },
+  {
+    "rsid": "rs11803731",
+    "trait": "Hair Curliness",
+    "gene": "TCHH",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "A",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Straight Hair Tendency",
+        "description": "Straight hair tendency",
+        "probability": "medium"
+      },
+      "AT": {
+        "phenotype": "Wavy Hair Tendency",
+        "description": "Wavy hair tendency",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Curly Hair Tendency",
+        "description": "Curly hair tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Trichohyalin protein variant affecting hair fiber shape and curliness.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Medland SE et al. (2009) - Common variants in the trichohyalin gene are associated with straight hair in Europeans",
+        "pmid": "19578364",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19578364/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs11803731"
+      }
+    ],
+    "notes": "TCHH variant strongly associated with straight vs curly hair in Europeans. Effect is specific to European populations where the variant is common (~10% frequency). Hair curliness is highly polygenic — this SNP captures only part of the variation."
+  },
+  {
+    "rsid": "rs601338",
+    "trait": "Resistance to Norovirus",
+    "gene": "FUT2",
+    "chromosome": "19",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Susceptible to Norovirus",
+        "description": "Susceptible to norovirus",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Partial Resistance",
+        "description": "Partial resistance",
+        "probability": "high"
+      },
+      "AA": {
+        "phenotype": "Resistant to Most Norovirus Strains",
+        "description": "Resistant to most norovirus strains (non-secretor)",
+        "probability": "high"
+      }
+    },
+    "description": "Fucosyltransferase variant determining secretor status and norovirus binding.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Thorven M et al. (2005) - A homozygous nonsense mutation (428G→A) in the human secretor (FUT2) gene provides resistance to symptomatic norovirus (GGII) infections",
+        "pmid": "15851025",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15851025/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs601338"
+      }
+    ],
+    "notes": "FUT2 nonsense variant conferring near-complete resistance to norovirus infection in homozygotes (~20% of Europeans). Non-secretors (AA genotype) lack the gut surface receptor the virus uses for entry. One of the clearest examples of infection resistance genetics."
+  },
+  {
+    "rsid": "rs41423247",
+    "trait": "Cortisol Stress Response",
+    "gene": "NR3C1",
+    "chromosome": "5",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Stress Cortisol Response",
+        "description": "Standard stress cortisol response",
+        "probability": "medium"
+      },
+      "CG": {
+        "phenotype": "Slightly Enhanced Cortisol Sensitivity",
+        "description": "Slightly enhanced cortisol sensitivity",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Enhanced Cortisol Sensitivity",
+        "description": "Enhanced cortisol sensitivity - stronger stress response",
+        "probability": "medium"
+      }
+    },
+    "description": "Glucocorticoid receptor variant affecting hypothalamic-pituitary-adrenal axis sensitivity.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "DeRijk RH et al. (2006) - A common polymorphism in the mineralocorticoid receptor modulates stress responsiveness",
+        "pmid": "16889841",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16889841/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs41423247"
+      }
+    ],
+    "notes": "Moderate evidence for NR3C1 variant's role in cortisol stress response. This is one of multiple contributing genetic factors. Environmental and lifestyle factors also play important roles."
+  },
+  {
+    "rsid": "rs10195570",
+    "trait": "Detached vs Attached Earlobes",
+    "gene": "EDAR",
+    "chromosome": "2",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Free (Detached) Earlobes",
+        "description": "Free (detached) earlobes",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Partially Attached Earlobes",
+        "description": "Partially attached earlobes",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Attached Earlobes",
+        "description": "Attached earlobes",
+        "probability": "medium"
+      }
+    },
+    "description": "Ectodysplasin receptor variant influencing earlobe attachment pattern.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Adhikari K et al. (2015) - A genome-wide association study identifies multiple loci for variation in human ear morphology",
+        "pmid": "26849116",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26849116/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs10195570"
+      }
+    ],
+    "notes": "EDAR region variant associated with earlobe attachment in multi-ethnic GWAS. Earlobe morphology is polygenic — not the simple dominant/recessive trait described in textbooks. Multiple loci contribute to the continuous spectrum of earlobe attachment."
+  },
+  {
+    "rsid": "rs1800566",
+    "trait": "Photophobia Tendency",
+    "gene": "NQO1",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Light Tolerance",
+        "description": "Normal light tolerance",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Mild Light Sensitivity",
+        "description": "Mild light sensitivity",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Increased Light Sensitivity",
+        "description": "Increased light sensitivity (photophobia)",
+        "probability": "low"
+      }
+    },
+    "description": "NAD(P)H dehydrogenase variant affecting retinal sensitivity to bright light.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Siegel D et al. (1999) - NAD(P)H:quinone oxidoreductase 1: role as a superoxide scavenger",
+        "pmid": "10506108",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10506108/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800566"
+      }
+    ],
+    "notes": "NQO1 Pro187Ser variant reducing enzyme activity to near zero. Originally studied for cancer susceptibility. Association with photophobia is indirect and based on limited evidence. NQO1 deficiency affects oxidative stress response in multiple tissues."
+  },
+  {
+    "rsid": "rs1835740",
+    "trait": "Migraine with Aura Risk",
+    "gene": "MTDH",
+    "chromosome": "8",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Migraine Risk",
+        "description": "Lower migraine risk",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Migraine Susceptibility",
+        "description": "Moderate migraine susceptibility",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Migraine with Aura Risk",
+        "description": "Higher migraine with aura risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Astrocyte glutamate transporter variant affecting cortical excitability and migraine.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Anttila V et al. (2010) - Genome-wide association study of migraine implicates a common susceptibility variant on 8q22.1",
+        "pmid": "20418890",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20418890/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1835740"
+      }
+    ],
+    "notes": "First GWAS-identified migraine susceptibility locus near MTDH/AEG-1. Effect is modest (OR ~1.2). Migraine with aura has a complex genetic architecture with dozens of confirmed loci. Environmental triggers (stress, sleep, diet) remain the primary modifiable risk factors."
+  },
+  {
+    "rsid": "rs12946454",
+    "trait": "Seasonal Affective Disorder Risk",
+    "gene": "ZBTB20",
+    "chromosome": "3",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower SAD Risk",
+        "description": "Lower SAD risk",
+        "probability": "low"
+      },
+      "TC": {
+        "phenotype": "Moderate Seasonal Mood Sensitivity",
+        "description": "Moderate seasonal mood sensitivity",
+        "probability": "low"
+      },
+      "CC": {
+        "phenotype": "Higher Seasonal Affective Disorder Risk",
+        "description": "Higher seasonal affective disorder risk",
+        "probability": "low"
+      }
+    },
+    "description": "Circadian rhythm gene variant affecting seasonal mood and energy regulation.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Levitan RD et al. (2004) - Seasonality-associated serotonin transporter gene polymorphisms and seasonal affective disorder",
+        "pmid": "15028552",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15028552/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12946454"
+      }
+    ],
+    "notes": "Tentatively associated with seasonal affective disorder. Evidence is limited — SAD genetics are poorly understood and most studies have been underpowered. The condition is strongly influenced by latitude, light exposure, and serotonin pathway function."
+  },
+  {
+    "rsid": "rs6313",
+    "trait": "Jaw Clenching/Bruxism Tendency",
+    "gene": "HTR2A",
+    "chromosome": "13",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Bruxism Tendency",
+        "description": "Lower bruxism tendency",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Moderate Clenching Risk",
+        "description": "Moderate clenching risk",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Higher Jaw Clenching Tendency",
+        "description": "Higher jaw clenching/teeth grinding tendency",
+        "probability": "low"
+      }
+    },
+    "description": "Serotonin receptor variant associated with sleep bruxism and jaw clenching.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Rintakoski K et al. (2012) - Bruxism is associated with nicotine dependence: a nationwide Finnish twin cohort study",
+        "pmid": "22585130",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22585130/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6313"
+      }
+    ],
+    "notes": "HTR2A serotonin receptor variant studied in context of bruxism and various psychiatric conditions. Evidence for bruxism association is preliminary. Serotonin receptor genetics influence many behaviors — single-SNP prediction is unreliable."
+  },
+  {
+    "rsid": "rs3132572",
+    "trait": "Perfect Pitch (Absolute Pitch)",
+    "gene": "HLA-A",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Typical Pitch Perception",
+        "description": "Typical pitch perception",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Enhanced Pitch Memory",
+        "description": "Enhanced pitch memory",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Predisposition for Absolute Pitch",
+        "description": "Predisposition for absolute pitch ability",
+        "probability": "low"
+      }
+    },
+    "description": "HLA region variant associated with rare absolute pitch ability in musicians.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Theusch E et al. (2009) - Genome-wide study of families with absolute pitch reveals linkage to 8q24.21 and locus heterogeneity",
+        "pmid": "19455578",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19455578/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3132572"
+      }
+    ],
+    "notes": "HLA-A region variant associated with absolute pitch in a linkage study. Evidence is preliminary — absolute pitch has a strong genetic component (~80% heritability) but the specific loci remain poorly characterized. Early musical training is a required environmental cofactor."
+  },
+  {
+    "rsid": "rs660339",
+    "trait": "Marathon Runner Endurance",
+    "gene": "UCP2",
+    "chromosome": "11",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Endurance Capacity",
+        "description": "Standard endurance capacity",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Endurance Advantage",
+        "description": "Moderate endurance advantage",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Enhanced Mitochondrial Efficiency",
+        "description": "Enhanced mitochondrial efficiency for endurance",
+        "probability": "medium"
+      }
+    },
+    "description": "Uncoupling protein variant affecting mitochondrial energy efficiency during prolonged exercise.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Dhamrait SS et al. (2004) - Variation in the uncoupling protein 2 and 3 genes and their association with type 2 diabetes and physical performance",
+        "pmid": "14973421",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14973421/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs660339"
+      }
+    ],
+    "notes": "UCP2 variant studied for associations with endurance performance and metabolic efficiency. Evidence is mixed across studies. Athletic performance is extremely polygenic with major environmental determinants (training, nutrition). No single variant meaningfully predicts athletic potential."
+  },
+  {
+    "rsid": "rs6025",
+    "trait": "Blood Clotting Speed",
+    "gene": "F5",
+    "chromosome": "1",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Normal Clotting",
+        "description": "Normal clotting (no Factor V Leiden)",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Heterozygous Factor V Leiden",
+        "description": "Heterozygous Factor V Leiden - slightly increased clot risk",
+        "probability": "high"
+      },
+      "TT": {
+        "phenotype": "Homozygous Factor V Leiden",
+        "description": "Homozygous Factor V Leiden - significantly increased clot risk",
+        "probability": "high"
+      }
+    },
+    "description": "Factor V Leiden mutation affecting blood clotting cascade and thrombosis risk.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Bertina RM et al. (1994) - Mutation in blood coagulation factor V associated with resistance to activated protein C",
+        "pmid": "8164741",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8164741/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6025"
+      }
+    ],
+    "notes": "Factor V Leiden — the most common inherited thrombophilia. Heterozygotes have ~5x increased risk of venous thromboembolism; homozygotes ~50x. Clinically actionable: affects decisions about oral contraceptives, surgery, and prolonged immobilization. Most common in Europeans (~5% carrier rate)."
+  },
+  {
+    "rsid": "rs2576037",
+    "trait": "Introversion/Extraversion Tendency",
+    "gene": "KATNAL2",
+    "chromosome": "18",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Tendency Toward Extraversion",
+        "description": "Tendency toward extraversion",
+        "probability": "low"
+      },
+      "CT": {
+        "phenotype": "Balanced Introversion/Extraversion",
+        "description": "Balanced introversion/extraversion",
+        "probability": "low"
+      },
+      "TT": {
+        "phenotype": "Tendency Toward Introversion",
+        "description": "Tendency toward introversion",
+        "probability": "low"
+      }
+    },
+    "description": "Gene variant associated with personality trait dimensions in large GWAS studies.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "de Moor MHM et al. (2012) - Meta-analysis of genome-wide association studies for personality",
+        "pmid": "21173776",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21173776/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2576037"
+      }
+    ],
+    "notes": "Associated with personality traits in a large GWAS meta-analysis but with very small effect size. Personality is overwhelmingly shaped by environment and experience. Individual genetic variants contribute negligibly to personality prediction. Included for research interest only."
+  },
+  {
+    "rsid": "rs8192678",
+    "trait": "Response to Exercise (VO2 Max)",
+    "gene": "PPARGC1A",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Higher Baseline Aerobic Capacity",
+        "description": "Higher baseline aerobic capacity",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Average Aerobic Trainability",
+        "description": "Average aerobic trainability",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Greater VO2 Max Improvement with Training",
+        "description": "Greater VO2 max improvement with training",
+        "probability": "medium"
+      }
+    },
+    "description": "PGC-1alpha variant affecting mitochondrial biogenesis and aerobic fitness response.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Stefan N et al. (2007) - Genetic variations in PPARD and PPARGC1A determine mitochondrial function and change in aerobic physical fitness and insulin sensitivity during lifestyle intervention",
+        "pmid": "17327441",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17327441/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs8192678"
+      }
+    ],
+    "notes": "PPARGC1A Gly482Ser variant associated with aerobic fitness response to exercise training. Effect is modest and context-dependent. VO2 max trainability is polygenic — individual genetic variants explain <1% of variation. Training response depends primarily on exercise regimen."
+  },
+  {
+    "rsid": "rs2187668",
+    "trait": "Gluten Sensitivity Risk",
+    "gene": "HLA-DQ2",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Celiac/Gluten Sensitivity Risk",
+        "description": "Lower celiac/gluten sensitivity risk",
+        "probability": "high"
+      },
+      "TC": {
+        "phenotype": "Carrier for HLA-DQ2 Celiac Risk Allele",
+        "description": "Carrier for HLA-DQ2 celiac risk allele",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Higher Celiac Disease Risk",
+        "description": "Higher celiac disease and gluten sensitivity risk",
+        "probability": "high"
+      }
+    },
+    "description": "HLA-DQ2 haplotype tag SNP strongly associated with celiac disease susceptibility.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "van Heel DA et al. (2007) - A genome-wide association study for celiac disease identifies risk variants in the region harboring IL2 and IL21",
+        "pmid": "17558408",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17558408/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2187668"
+      }
+    ],
+    "notes": "HLA-DQ2.5 haplotype tag SNP — primary genetic risk factor for celiac disease. HLA-DQ2/DQ8 is necessary but not sufficient (~30-40% of the population carries it, but only ~1% develops celiac). Environmental trigger is gluten exposure. Gold standard for celiac genetic risk assessment."
+  },
+  {
+    "rsid": "rs1049353",
+    "trait": "Fear Response Intensity",
+    "gene": "CNR1",
+    "chromosome": "6",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Typical Fear Extinction",
+        "description": "Typical fear extinction",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Slightly Slower Fear Extinction",
+        "description": "Slightly slower fear extinction",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Stronger Fear Conditioning",
+        "description": "Stronger fear conditioning and slower extinction",
+        "probability": "low"
+      }
+    },
+    "description": "Cannabinoid receptor variant affecting amygdala-based fear learning and anxiety.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Chakrabarti B et al. (2006) - Variation in the human cannabinoid receptor CNR1 gene modulates gaze duration for happy faces",
+        "pmid": "17033683",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17033683/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1049353"
+      }
+    ],
+    "notes": "CNR1 cannabinoid receptor variant studied for associations with anxiety and fear response. Evidence is preliminary with small effect sizes. Fear response is a complex neurobiological phenotype with major environmental and experiential determinants."
+  },
+  {
+    "rsid": "rs1805009",
+    "trait": "Sunburn Recovery Speed",
+    "gene": "MC1R",
+    "chromosome": "16",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Normal UV Damage Recovery",
+        "description": "Normal UV damage recovery",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Slightly Slower Skin Repair",
+        "description": "Slightly slower skin repair",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Slower Sunburn Recovery",
+        "description": "Slower sunburn recovery and higher UV sensitivity",
+        "probability": "medium"
+      }
+    },
+    "description": "Melanocortin receptor variant affecting melanin production and UV damage repair.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Valverde P et al. (1995) - Variants of the melanocyte-stimulating hormone receptor gene are associated with red hair and fair skin in humans",
+        "pmid": "7581459",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/7581459/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1805009"
+      }
+    ],
+    "notes": "MC1R variant (D294H) associated with red hair, fair skin, and increased UV sensitivity. Carriers experience slower sunburn recovery and higher melanoma risk. Sun protection is especially important for MC1R variant carriers regardless of apparent hair color."
+  },
+  {
+    "rsid": "rs4410790",
+    "trait": "Coffee Consumption Tendency",
+    "gene": "AHR",
+    "chromosome": "7",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Lower Habitual Coffee Intake",
+        "description": "Lower habitual coffee intake",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Moderate Coffee Consumption",
+        "description": "Moderate coffee consumption",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Higher Habitual Coffee Consumption",
+        "description": "Higher habitual coffee consumption tendency",
+        "probability": "medium"
+      }
+    },
+    "description": "Aryl hydrocarbon receptor variant influencing caffeine reward pathway and consumption habits.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Cornelis MC et al. (2011) - Genome-wide meta-analysis identifies regions on 7p21 (AHR) and 15q24 (CYP1A2) as determinants of habitual caffeine consumption",
+        "pmid": "21490707",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21490707/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4410790"
+      }
+    ],
+    "notes": "AHR variant associated with habitual coffee consumption in large GWAS. AHR regulates CYP1A2 expression, linking this to caffeine metabolism. Effect is consistent across populations. Coffee consumption is also heavily influenced by cultural and socioeconomic factors."
+  },
+  {
+    "rsid": "rs6625163",
+    "trait": "Male Pattern Baldness (Androgenetic)",
+    "gene": "HDAC9",
+    "chromosome": "7",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Lower Baldness Risk",
+        "description": "Lower baldness risk",
+        "probability": "medium"
+      },
+      "AC": {
+        "phenotype": "Moderate Baldness Risk",
+        "description": "Moderate baldness risk",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Higher Male Pattern Baldness Risk",
+        "description": "Higher male pattern baldness risk",
+        "probability": "medium"
+      }
+    },
+    "description": "Histone deacetylase variant associated with androgenetic alopecia susceptibility.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Richards JB et al. (2008) - Male-pattern baldness susceptibility locus at 20p11",
+        "pmid": "18849994",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18849994/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6625163"
+      }
+    ],
+    "notes": "Associated with androgenetic alopecia at the 20p11 locus. Effect is moderate — male pattern baldness involves multiple loci including AR (X-linked) and this autosomal variant. Prediction accuracy improves substantially with multi-SNP models."
+  },
+  {
+    "rsid": "rs1229984",
+    "trait": "Facial Flushing from Alcohol",
+    "gene": "ADH1B",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Normal Alcohol Metabolism",
+        "description": "Normal alcohol metabolism",
+        "probability": "high"
+      },
+      "TC": {
+        "phenotype": "Faster Alcohol Conversion - Mild Flush",
+        "description": "Faster alcohol to acetaldehyde conversion - mild flush",
+        "probability": "high"
+      },
+      "CC": {
+        "phenotype": "Rapid Conversion - Strong Facial Flushing",
+        "description": "Rapid conversion - strong facial flushing",
+        "probability": "high"
+      }
+    },
+    "description": "Alcohol dehydrogenase fast-metabolizer variant causing acetaldehyde accumulation.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Li H et al. (2009) - Refined geographic distribution of the oriental ALDH2*504Lys (nee 487Lys) variant",
+        "pmid": "19415727",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19415727/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1229984"
+      }
+    ],
+    "notes": "ADH1B variant causing rapid alcohol metabolism (Arg48His). Common in East Asian populations (~70-90% frequency). Carriers experience acetaldehyde accumulation causing facial flushing, nausea, and headache with alcohol. Protective against alcoholism but associated with esophageal cancer risk in drinkers."
+  },
+  {
+    "rsid": "rs7142862",
+    "trait": "Night Vision Quality",
+    "gene": "CNGA1",
+    "chromosome": "4",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Night Vision Adaptation",
+        "description": "Standard night vision adaptation",
+        "probability": "low"
+      },
+      "GA": {
+        "phenotype": "Slightly Enhanced Dark Adaptation",
+        "description": "Slightly enhanced dark adaptation",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Better Than Average Night Vision",
+        "description": "Better than average night vision",
+        "probability": "low"
+      }
+    },
+    "description": "Cyclic nucleotide-gated channel variant affecting rod photoreceptor sensitivity.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Kohl S et al. (2005) - Mutations in the cone photoreceptor G-protein alpha-subunit gene GNAT2 in patients with achromatopsia",
+        "pmid": "12172210",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12172210/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7142862"
+      }
+    ],
+    "notes": "Variant near CNGA1 studied for scotopic (low-light) vision quality. Limited evidence from small studies. Night vision depends on rod photoreceptor function, pupil dilation, and dark adaptation — highly multifactorial."
+  },
+  {
+    "rsid": "rs7744813",
+    "trait": "Stretch Mark Susceptibility",
+    "gene": "ELN",
+    "chromosome": "7",
+    "inheritance": "codominant",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower Stretch Mark Tendency",
+        "description": "Lower stretch mark tendency",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Moderate Stretch Mark Risk",
+        "description": "Moderate stretch mark risk",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Higher Stretch Mark Susceptibility",
+        "description": "Higher stretch mark susceptibility",
+        "probability": "medium"
+      }
+    },
+    "description": "Elastin gene variant affecting skin elasticity and striae formation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Tung JY et al. (2013) - A genome-wide association analysis identifies genetic loci associated with stretch marks",
+        "pmid": "24325917",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24325917/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7744813"
+      }
+    ],
+    "notes": "ELN region variant associated with stretch mark (striae distensae) susceptibility in GWAS. Stretch marks are primarily influenced by rapid skin stretching (growth, pregnancy, weight change) and skin elasticity. Genetic contribution is one factor among many."
+  }
+]

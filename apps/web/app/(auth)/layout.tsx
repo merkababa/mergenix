@@ -1,0 +1,15 @@
+/**
+ * Auth layout — centered, minimal wrapper for login and register pages.
+ * Background gets the deep gradient for a focused, immersive feel.
+ */
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">{children}</div>
+    </div>
+  );
+}

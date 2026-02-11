@@ -1,0 +1,163 @@
+[
+  {
+    "term": "Allele",
+    "definition": "One of the possible versions of a gene. You inherit two alleles for each gene — one from each parent. Think of alleles as different 'editions' of the same book chapter.",
+    "category": "basics",
+    "related_terms": ["gene", "genotype", "heterozygous", "homozygous"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/gene/"
+  },
+  {
+    "term": "Autosomal Dominant",
+    "definition": "An inheritance pattern where only one copy of a variant (from either parent) is enough to cause the condition. If one parent carries the variant, each child has a 50% chance of inheriting it.",
+    "category": "inheritance",
+    "related_terms": ["autosomal recessive", "inheritance pattern", "allele"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/"
+  },
+  {
+    "term": "Autosomal Recessive",
+    "definition": "An inheritance pattern where a child must inherit two copies of a variant — one from each parent — to be affected. If both parents are carriers, each child has a 25% chance of being affected, a 50% chance of being a carrier, and a 25% chance of inheriting neither variant.",
+    "category": "inheritance",
+    "related_terms": ["carrier", "autosomal dominant", "inheritance pattern"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/"
+  },
+  {
+    "term": "Carrier",
+    "definition": "Someone who has one copy of a gene variant associated with a recessive condition. Carriers are typically healthy and show no symptoms, but they can pass the variant to their children. When both parents are carriers of the same condition, each pregnancy has a 25% chance of the child being affected.",
+    "category": "inheritance",
+    "related_terms": ["autosomal recessive", "heterozygous", "carrier frequency"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/carrier/"
+  },
+  {
+    "term": "Carrier Frequency",
+    "definition": "How common it is for people in a population to carry one copy of a particular gene variant. Expressed as a ratio like '1 in 25,' meaning roughly 1 out of every 25 people carries that variant. Higher carrier frequencies mean the variant is more common.",
+    "category": "clinical",
+    "related_terms": ["carrier", "prevalence", "autosomal recessive"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Carrier"
+  },
+  {
+    "term": "Chromosome",
+    "definition": "A thread-like structure inside cells that carries your genes. Humans have 23 pairs of chromosomes (46 total) — one set from each parent. Chromosomes 1-22 are called autosomes, and the 23rd pair determines biological sex (XX or XY).",
+    "category": "basics",
+    "related_terms": ["gene", "DNA", "X-linked"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/chromosome/"
+  },
+  {
+    "term": "DNA",
+    "definition": "Deoxyribonucleic acid — the molecule that stores your genetic instructions. DNA is like a biological instruction manual written in a four-letter alphabet (A, T, C, G). Nearly every cell in your body contains a complete copy of your DNA.",
+    "category": "basics",
+    "related_terms": ["gene", "genome", "SNP"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/dna/"
+  },
+  {
+    "term": "Gene",
+    "definition": "A segment of DNA that contains the instructions for making a specific protein or performing a specific function. Humans have about 20,000 genes. Think of genes as individual recipes in your body's cookbook.",
+    "category": "basics",
+    "related_terms": ["DNA", "allele", "chromosome", "genome"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/gene/"
+  },
+  {
+    "term": "Genetic Counselor",
+    "definition": "A healthcare professional specially trained in genetics and counseling. They help people understand genetic test results, assess risk, and make informed decisions. Mergenix is an educational tool — for clinical decisions, always consult a certified genetic counselor.",
+    "category": "clinical",
+    "related_terms": ["carrier", "pathogenic variant", "penetrance"],
+    "learn_more_url": "https://www.nsgc.org/page/whatisgeneticcounseling"
+  },
+  {
+    "term": "Genome",
+    "definition": "Your complete set of DNA — all of your genetic material. The human genome contains about 3 billion DNA base pairs and approximately 20,000 genes. Direct-to-consumer tests like 23andMe only read a small fraction of your genome (specific SNPs), not the whole thing.",
+    "category": "basics",
+    "related_terms": ["DNA", "gene", "SNP"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/genome/"
+  },
+  {
+    "term": "Genotype",
+    "definition": "The specific combination of alleles you have at a particular location in your DNA. For example, at a given SNP you might have 'AA,' 'AG,' or 'GG.' Your genotype is like the specific hand of cards you were dealt at that position.",
+    "category": "basics",
+    "related_terms": ["allele", "phenotype", "SNP", "heterozygous", "homozygous"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/genotype/"
+  },
+  {
+    "term": "Heterozygous",
+    "definition": "Having two different alleles at a specific gene location — one from each parent. For example, a genotype of 'AG' is heterozygous. In recessive conditions, a heterozygous person is typically a carrier — they have the variant but are not affected.",
+    "category": "basics",
+    "related_terms": ["homozygous", "carrier", "genotype", "allele"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Heterozygous"
+  },
+  {
+    "term": "Homozygous",
+    "definition": "Having two identical alleles at a specific gene location. For example, 'AA' or 'GG.' In recessive conditions, a person who is homozygous for the pathogenic variant (two copies) is typically affected by the condition.",
+    "category": "basics",
+    "related_terms": ["heterozygous", "genotype", "allele"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Homozygous"
+  },
+  {
+    "term": "Inheritance Pattern",
+    "definition": "The way a genetic condition is passed from parents to children. The main patterns are autosomal recessive (needs two copies), autosomal dominant (needs one copy), and X-linked (carried on the X chromosome). Understanding the inheritance pattern helps predict offspring risk.",
+    "category": "inheritance",
+    "related_terms": ["autosomal recessive", "autosomal dominant", "X-linked"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/"
+  },
+  {
+    "term": "Mutation vs Variant",
+    "definition": "Both terms describe changes in DNA, but 'variant' is now preferred by genetics professionals. 'Mutation' carries a negative connotation and implies the change is harmful, while 'variant' is neutral — it simply means a difference from the reference sequence. Some variants are harmless, some are beneficial, and some increase disease risk.",
+    "category": "clinical",
+    "related_terms": ["pathogenic variant", "SNP", "allele"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Mutation"
+  },
+  {
+    "term": "Pathogenic Variant",
+    "definition": "A genetic variant that is known to increase the risk of a disease or condition. Not all variants are pathogenic — most are harmless. Pathogenic variants have been identified through scientific research and are cataloged in databases like ClinVar. Previously called 'mutations,' the term 'pathogenic variant' is more precise and less stigmatizing.",
+    "category": "clinical",
+    "related_terms": ["variant", "mutation vs variant", "carrier", "ClinVar"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Pathogenic-Variant"
+  },
+  {
+    "term": "Penetrance",
+    "definition": "The likelihood that a person with a particular genetic variant will actually develop the associated condition. A variant with 'complete penetrance' means everyone with it develops the condition. 'Incomplete penetrance' means some people with the variant never show symptoms — other genes and environmental factors also play a role.",
+    "category": "clinical",
+    "related_terms": ["pathogenic variant", "genotype", "phenotype"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/"
+  },
+  {
+    "term": "Phenotype",
+    "definition": "The observable characteristics or traits of a person — such as eye color, height, or whether a condition develops. Your phenotype results from the interaction between your genotype (genetic makeup) and your environment. Two people with the same genotype can have different phenotypes.",
+    "category": "basics",
+    "related_terms": ["genotype", "penetrance", "allele"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/basics/phenotype/"
+  },
+  {
+    "term": "Punnett Square",
+    "definition": "A simple grid used to predict the possible genotypes of offspring from two parents. Each parent's alleles are placed on the edges of the grid, and the squares show all possible combinations. Mergenix uses Punnett squares to calculate the probability of a child being normal, a carrier, or affected for each condition.",
+    "category": "inheritance",
+    "related_terms": ["genotype", "allele", "carrier", "inheritance pattern"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Punnett-Square"
+  },
+  {
+    "term": "rsID",
+    "definition": "A reference SNP identifier — a unique label (like 'rs75030207') assigned by the dbSNP database to a specific known SNP location in the genome. Think of it as a postal address for a particular spot in your DNA. Mergenix uses rsIDs to look up your genotype at positions linked to specific conditions or traits.",
+    "category": "testing",
+    "related_terms": ["SNP", "genotype", "dbSNP"],
+    "learn_more_url": "https://www.ncbi.nlm.nih.gov/snp/"
+  },
+  {
+    "term": "SNP",
+    "definition": "Single Nucleotide Polymorphism — a single-letter change in your DNA at a specific position. For example, where most people have a 'C,' you might have a 'T.' SNPs are the most common type of genetic variation. Most are harmless, but some are linked to disease risk or traits like eye color. Think of a SNP as a single typo in your genetic instruction manual.",
+    "category": "testing",
+    "related_terms": ["rsID", "genotype", "allele", "DNA"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/genomicresearch/snp/"
+  },
+  {
+    "term": "Variant",
+    "definition": "Any difference in DNA sequence compared to a reference genome. Variants range from a single base change (SNP) to larger insertions or deletions. Most variants have no effect on health. Those linked to disease are called 'pathogenic variants.' The term 'variant' is preferred over 'mutation' because it is neutral and does not imply harm.",
+    "category": "clinical",
+    "related_terms": ["SNP", "pathogenic variant", "mutation vs variant"],
+    "learn_more_url": "https://www.genome.gov/genetics-glossary/Variant"
+  },
+  {
+    "term": "X-linked",
+    "definition": "An inheritance pattern where the gene variant is located on the X chromosome. Because males have only one X chromosome (XY), a single copy of an X-linked variant can cause the condition in males. Females (XX) are more often carriers because their second X can compensate. This is why some conditions (like hemophilia) are far more common in males.",
+    "category": "inheritance",
+    "related_terms": ["chromosome", "carrier", "inheritance pattern"],
+    "learn_more_url": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/"
+  }
+]

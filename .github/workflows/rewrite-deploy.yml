@@ -1,0 +1,222 @@
+name: Deploy Rewrite
+
+on:
+  push:
+    branches: [rewrite/main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.12'
+  PNPM_VERSION: '10.4.1'
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Pre-deployment checks
+  # ─────────────────────────────────────────────
+
+  preflight:
+    name: Pre-deployment Checks
+    runs-on: ubuntu-latest
+    outputs:
+      frontend-changed: ${{ steps.changes.outputs.frontend }}
+      backend-changed: ${{ steps.changes.outputs.backend }}
+      deploy-env: ${{ steps.env.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -qE '^(apps/web/|packages/)'; then
+            echo "frontend=true" >> $GITHUB_OUTPUT
+          else
+            echo "frontend=false" >> $GITHUB_OUTPUT
+          fi
+          if git diff --name-only HEAD~1 HEAD | grep -qE '^apps/api/'; then
+            echo "backend=true" >> $GITHUB_OUTPUT
+          else
+            echo "backend=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          else
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          fi
+
+  # ─────────────────────────────────────────────
+  # Deploy Frontend to Vercel
+  # ─────────────────────────────────────────────
+
+  deploy-frontend:
+    name: Deploy Frontend (Vercel)
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: needs.preflight.outputs.frontend-changed == 'true'
+    environment:
+      name: ${{ needs.preflight.outputs.deploy-env }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: pnpm add -g vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=${{ needs.preflight.outputs.deploy-env == 'production' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/web
+
+      - name: Build for Vercel
+        run: vercel build ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/web
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/web
+
+  # ─────────────────────────────────────────────
+  # Deploy Backend to Railway
+  # ─────────────────────────────────────────────
+
+  deploy-backend:
+    name: Deploy Backend (Railway)
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: needs.preflight.outputs.backend-changed == 'true'
+    environment:
+      name: ${{ needs.preflight.outputs.deploy-env }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        run: railway up --service mergenix-api --detach
+        working-directory: apps/api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  # ─────────────────────────────────────────────
+  # Run Database Migrations
+  # ─────────────────────────────────────────────
+
+  run-migrations:
+    name: Run Database Migrations
+    runs-on: ubuntu-latest
+    needs: [preflight, deploy-backend]
+    if: needs.preflight.outputs.backend-changed == 'true'
+    environment:
+      name: ${{ needs.preflight.outputs.deploy-env }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install dependencies
+        working-directory: apps/api
+        run: pip install -r requirements.txt
+
+      - name: Run Alembic migrations
+        working-directory: apps/api
+        run: alembic upgrade head
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  # ─────────────────────────────────────────────
+  # Health Check
+  # ─────────────────────────────────────────────
+
+  health-check:
+    name: Post-deployment Health Check
+    runs-on: ubuntu-latest
+    needs: [preflight, deploy-frontend, deploy-backend, run-migrations]
+    if: always() && (needs.deploy-frontend.result == 'success' || needs.deploy-backend.result == 'success')
+    environment:
+      name: ${{ needs.preflight.outputs.deploy-env }}
+    steps:
+      - name: Check API health
+        if: needs.deploy-backend.result == 'success'
+        run: |
+          echo "Checking API health..."
+          for i in $(seq 1 10); do
+            STATUS=$(curl -sf -o /dev/null -w "%{http_code}" "${{ secrets.API_URL }}/health" || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "API is healthy (attempt $i)"
+              exit 0
+            fi
+            echo "API not ready (attempt $i, status=$STATUS), waiting 10s..."
+            sleep 10
+          done
+          echo "API health check failed after 10 attempts"
+          exit 1
+
+      - name: Check frontend health
+        if: needs.deploy-frontend.result == 'success'
+        run: |
+          echo "Checking frontend health..."
+          for i in $(seq 1 5); do
+            STATUS=$(curl -sf -o /dev/null -w "%{http_code}" "${{ needs.deploy-frontend.outputs.url || secrets.FRONTEND_URL }}" || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "Frontend is healthy (attempt $i)"
+              exit 0
+            fi
+            echo "Frontend not ready (attempt $i, status=$STATUS), waiting 10s..."
+            sleep 10
+          done
+          echo "Frontend health check failed after 5 attempts"
+          exit 1
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | ${{ needs.preflight.outputs.deploy-env }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend | ${{ needs.deploy-frontend.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend | ${{ needs.deploy-backend.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Migrations | ${{ needs.run-migrations.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY

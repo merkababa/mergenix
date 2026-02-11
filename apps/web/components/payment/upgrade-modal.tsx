@@ -1,0 +1,365 @@
+"use client";
+
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { usePaymentStore } from "@/lib/stores/payment-store";
+import { getPricingTier } from "@mergenix/shared-types";
+import type { PricingTier } from "@mergenix/shared-types";
+import { GlassCard } from "@/components/ui/glass-card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Sparkles,
+  ArrowRight,
+  Shield,
+  X,
+  AlertCircle,
+  Check,
+} from "lucide-react";
+
+// ── Props ───────────────────────────────────────────────────────────────
+
+interface UpgradeModalProps {
+  /** Whether the modal is open */
+  isOpen: boolean;
+  /** Close handler */
+  onClose: () => void;
+  /** Target tier to upgrade to */
+  targetTier: "premium" | "pro";
+  /** Current user tier */
+  currentTier: "free" | "premium" | "pro";
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────────
+
+/** Format a dollar amount to two decimal places. */
+function formatPrice(price: number): string {
+  return `$${price.toFixed(2)}`;
+}
+
+/**
+ * Compute the upgrade price. For fresh purchases the full price is charged.
+ * For Premium -> Pro upgrades, the user pays the difference.
+ */
+function getUpgradePrice(
+  currentTier: PricingTier,
+  targetTier: PricingTier,
+): number {
+  return Math.max(targetTier.price - currentTier.price, 0);
+}
+
+/** Return only the features the target tier has that the current tier does not. */
+function getNewFeatures(
+  currentTier: PricingTier,
+  targetTier: PricingTier,
+): string[] {
+  const currentSet = new Set(currentTier.features);
+  return targetTier.features.filter((f) => !currentSet.has(f));
+}
+
+// ── Constants ───────────────────────────────────────────────────────────
+
+/** Maximum number of new features to display in the modal. */
+const MAX_FEATURES_SHOWN = 6;
+
+// ── Component ───────────────────────────────────────────────────────────
+
+export function UpgradeModal({
+  isOpen,
+  onClose,
+  targetTier,
+  currentTier,
+}: UpgradeModalProps) {
+  const { createCheckout, isCheckoutLoading } = usePaymentStore();
+  const [error, setError] = useState<string | null>(null);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  const headingId = useId();
+  const descriptionId = useId();
+
+  // ── Derived data ────────────────────────────────────────────────────
+
+  const currentPlan = getPricingTier(currentTier);
+  const targetPlan = getPricingTier(targetTier);
+
+  // Safeguard: should never happen if tier IDs are valid.
+  if (!currentPlan || !targetPlan) {
+    return null;
+  }
+
+  const upgradePrice = getUpgradePrice(currentPlan, targetPlan);
+  const isPayingDifference = currentPlan.price > 0;
+  const newFeatures = getNewFeatures(currentPlan, targetPlan);
+  const displayFeatures = newFeatures.slice(0, MAX_FEATURES_SHOWN);
+  const hiddenFeaturesCount = newFeatures.length - displayFeatures.length;
+
+  // ── Handlers ────────────────────────────────────────────────────────
+
+  const handleConfirm = useCallback(async () => {
+    setError(null);
+    try {
+      const { checkoutUrl } = await createCheckout(targetTier);
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(message);
+    }
+  }, [createCheckout, targetTier]);
+
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      // Only close if clicking the backdrop itself, not modal content.
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
+
+  // ── Effects ─────────────────────────────────────────────────────────
+
+  // Close on Escape key.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Prevent body scroll when modal is open.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  // Focus trap: cycle Tab/Shift+Tab within the modal.
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+
+    modalRef.current.focus();
+
+    function handleFocusTrap(e: KeyboardEvent) {
+      if (e.key !== "Tab" || !modalRef.current) return;
+
+      const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])',
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleFocusTrap);
+    return () => document.removeEventListener("keydown", handleFocusTrap);
+  }, [isOpen]);
+
+  // Clear error when modal closes.
+  useEffect(() => {
+    if (!isOpen) {
+      setError(null);
+    }
+  }, [isOpen]);
+
+  // ── Render ──────────────────────────────────────────────────────────
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={handleBackdropClick}
+      role="presentation"
+    >
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId}
+        aria-describedby={descriptionId}
+        tabIndex={-1}
+        className="relative w-full max-w-md mx-4 outline-none"
+      >
+        <GlassCard variant="strong" hover="none" className="p-6">
+          {/* ── Close button ────────────────────────────────────────── */}
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isCheckoutLoading}
+            className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] disabled:pointer-events-none disabled:opacity-50"
+            aria-label="Close modal"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
+          {/* ── Header ──────────────────────────────────────────────── */}
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
+              <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" />
+            </div>
+            <h2
+              id={headingId}
+              className="font-heading text-xl font-bold text-[var(--text-primary)]"
+            >
+              Upgrade to {targetPlan.name}
+            </h2>
+          </div>
+
+          {/* ── Description (for aria-describedby) ──────────────────── */}
+          <p
+            id={descriptionId}
+            className="mb-5 text-sm text-[var(--text-muted)]"
+          >
+            Unlock more features with a one-time upgrade to{" "}
+            {targetPlan.name}.
+          </p>
+
+          {/* ── Plan comparison ──────────────────────────────────────── */}
+          <div className="mb-5 flex items-center justify-center gap-4 rounded-2xl border border-[var(--glass-border)] bg-[rgba(148,163,184,0.04)] px-5 py-4">
+            {/* Current plan */}
+            <div className="flex flex-col items-center gap-1.5">
+              <Badge variant={currentTier === "free" ? "free" : currentTier}>
+                {currentPlan.name}
+              </Badge>
+              <span className="text-xs text-[var(--text-muted)]">
+                {currentPlan.price === 0
+                  ? "Free"
+                  : formatPrice(currentPlan.price)}
+              </span>
+            </div>
+
+            {/* Arrow */}
+            <ArrowRight className="h-5 w-5 shrink-0 text-[var(--accent-teal)]" />
+
+            {/* Target plan */}
+            <div className="flex flex-col items-center gap-1.5">
+              <Badge variant={targetTier}>
+                {targetPlan.name}
+              </Badge>
+              <span className="text-xs font-semibold text-[var(--text-primary)]">
+                {formatPrice(targetPlan.price)}
+              </span>
+            </div>
+          </div>
+
+          {/* ── New features list ────────────────────────────────────── */}
+          {displayFeatures.length > 0 && (
+            <div className="mb-5">
+              <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                What you get
+              </h3>
+              <ul className="space-y-2">
+                {displayFeatures.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2 text-sm text-[var(--text-body)]"
+                  >
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+                {hiddenFeaturesCount > 0 && (
+                  <li className="text-xs text-[var(--text-muted)] pl-6">
+                    +{hiddenFeaturesCount} more feature
+                    {hiddenFeaturesCount !== 1 ? "s" : ""}
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {/* ── Price display ────────────────────────────────────────── */}
+          <div className="mb-5 rounded-xl border border-[var(--glass-border)] bg-[rgba(6,214,160,0.04)] px-4 py-3">
+            {isPayingDifference ? (
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-[var(--text-body)]">
+                  Pay the difference
+                </span>
+                <span className="font-heading text-lg font-bold text-[var(--accent-teal)]">
+                  {formatPrice(upgradePrice)}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-[var(--text-body)]">
+                  One-time payment
+                </span>
+                <span className="font-heading text-lg font-bold text-[var(--accent-teal)]">
+                  {formatPrice(targetPlan.price)}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* ── Error message ────────────────────────────────────────── */}
+          {error && (
+            <div
+              className="mb-4 flex items-start gap-2 rounded-xl border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] px-4 py-3"
+              role="alert"
+              aria-live="assertive"
+            >
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#f43f5e]" />
+              <p className="text-sm text-[#f43f5e]">{error}</p>
+            </div>
+          )}
+
+          {/* ── Action buttons ───────────────────────────────────────── */}
+          <div className="flex flex-col gap-2.5">
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={handleConfirm}
+              disabled={isCheckoutLoading}
+              isLoading={isCheckoutLoading}
+              aria-busy={isCheckoutLoading}
+              autoFocus
+              className="w-full"
+            >
+              {isCheckoutLoading ? "Processing..." : "Confirm Upgrade"}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="md"
+              onClick={onClose}
+              disabled={isCheckoutLoading}
+              className="w-full"
+            >
+              Cancel
+            </Button>
+          </div>
+
+          {/* ── Disclaimer ───────────────────────────────────────────── */}
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-[var(--text-muted)]">
+            <Shield className="h-3.5 w-3.5" />
+            You&apos;ll be redirected to Stripe&apos;s secure checkout
+          </p>
+        </GlassCard>
+      </div>
+    </div>
+  );
+}
