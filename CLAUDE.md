@@ -43,7 +43,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - No separate Dev Team Leader agent — Conductor spawns executors directly
 
 ### Planning (before starting any phase):
-- Spawn separate planning agents per reviewer perspective
+- Use Gemini for planning — 10 parallel instances, one per reviewer perspective (1M context, zero conductor cost)
 - Conductor autonomously selects reviewers using phase-type defaults in `/review-pipeline` — better safe than sorry (include when in doubt)
 - Ask as many clarifying questions as needed — never guess during planning
 
