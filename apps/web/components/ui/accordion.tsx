@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useId } from "react";
+import { type ReactNode, useState, useCallback, useId } from "react";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ChevronDown } from "lucide-react";
@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface AccordionItem {
   question: string;
-  answer: string;
+  answer: ReactNode;
 }
 
 interface AccordionProps {

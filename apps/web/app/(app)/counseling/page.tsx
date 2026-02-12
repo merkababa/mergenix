@@ -251,7 +251,14 @@ export default function CounselingPage() {
 
       {/* ── Curated note ── */}
       <p className="mt-4 text-center text-xs text-[var(--text-dim)]">
-        Counselor directory is curated. Contact us to be listed.
+        Counselor directory is curated.{" "}
+        <a
+          href="mailto:hello@mergenix.com"
+          className="underline hover:text-[var(--accent-teal)]"
+        >
+          Contact us
+        </a>{" "}
+        to be listed.
       </p>
 
       {/* ── External link ── */}

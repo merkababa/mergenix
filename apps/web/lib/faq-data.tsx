@@ -3,9 +3,11 @@
 /*  Each page can import the full list or a tagged subset.            */
 /* ------------------------------------------------------------------ */
 
+import type { ReactNode } from "react";
+
 export interface FaqItem {
   question: string;
-  answer: string;
+  answer: ReactNode;
   /** Optional tags for filtering by page context */
   tags?: ("general" | "pricing" | "privacy" | "technical")[];
 }
@@ -59,8 +61,19 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: "Is there a refund policy?",
-    answer:
-      "Yes, we offer a 30-day money-back guarantee. If you're not satisfied, contact us for a full refund.",
+    answer: (
+      <>
+        Yes, we offer a 30-day money-back guarantee. If you&apos;re not
+        satisfied,{" "}
+        <a
+          href="mailto:care@mergenix.com"
+          className="underline text-[var(--accent-teal)] hover:brightness-110"
+        >
+          contact us
+        </a>{" "}
+        for a full refund.
+      </>
+    ),
     tags: ["pricing"],
   },
 ];

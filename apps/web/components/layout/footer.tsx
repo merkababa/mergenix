@@ -141,6 +141,40 @@ export function Footer() {
                 </a>
               ))}
             </div>
+
+            {/* Contact emails */}
+            <h4 className="mb-4 mt-8 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+              Contact
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="mailto:hello@mergenix.com"
+                  className="flex items-center gap-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
+                >
+                  <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                  hello@mergenix.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:care@mergenix.com"
+                  className="flex items-center gap-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
+                >
+                  <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                  care@mergenix.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:privacy@mergenix.com"
+                  className="flex items-center gap-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
+                >
+                  <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                  privacy@mergenix.com
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
