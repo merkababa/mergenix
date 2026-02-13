@@ -41,18 +41,32 @@ import type {
   Population,
 } from './types';
 
-import { parseGeneticFile, buildParseResultSummary } from './parser';
+import type {
+  WorkerConfig,
+  CoverageMetrics,
+  GenomeBuild,
+} from '@mergenix/shared-types';
+
+import {
+  parseGeneticFile,
+  buildParseResultSummary,
+  iterateStreamLines,
+  detectFormatFromStream,
+  chainIterators,
+  parseStreaming,
+} from './parser';
+import { decompress } from './decompression';
+import { ProgressReporter } from './progress';
 import { analyzeCarrierRisk } from './carrier';
 import { predictAllTraits } from './traits';
 import { analyzePgx } from './pgx';
 import { analyzePrs } from './prs';
 import { generateReferralSummary } from './counseling';
-import {
-  carrierPanel,
-  traitSnps,
-  pgxPanel,
-  prsWeights,
-} from '@mergenix/genetics-data';
+import { loadAllData } from './data-loader';
+import type { GeneticsData } from './data-loader';
+import { MemoryGovernor, detectDevice } from './device';
+import { calculateCoverageMetrics } from './coverage';
+import { detectChipVersion, ENGINE_VERSION } from './chip-detection';
 
 // ─── Worker State ───────────────────────────────────────────────────────────
 
@@ -68,29 +82,45 @@ let parsedGenotypes: GenotypeMap[] = [];
 /** Detected file formats stored after parsing, indexed by file order. */
 let parsedFormats: FileFormat[] = [];
 
-/** Engine version string for metadata. */
-const ENGINE_VERSION = '3.0.0';
+/** Lazily loaded genetics reference data (carrier panel, traits, PGx, PRS, etc.). */
+let geneticsData: GeneticsData | null = null;
+
+/** Memory governor instance, created during init. */
+let governor: MemoryGovernor | null = null;
+
+/** Worker configuration, set by the `init` message. */
+let workerConfig: WorkerConfig = {
+  maxMemory: 500 * 1024 * 1024,
+  sequential: false,
+  maxCompressionRatio: 100,
+  decompressionTimeout: 30000,
+};
+
+/**
+ * Progress reporter instance that throttles postMessage calls.
+ * Created once and reused across operations.
+ */
+const progressReporter = new ProgressReporter((event) => {
+  postResponse({
+    type: 'analysis_progress',
+    stage: event.stage,
+    progress: event.progress,
+    displayName: event.displayName,
+  });
+});
 
 /**
  * Check if a record has at least one own property.
- * O(1) early-exit alternative to `Object.keys(obj).length > 0`.
  */
 function isNonEmpty(obj: Record<string, unknown>): boolean {
-  for (const _ in obj) return true;
-  return false;
+  return Object.keys(obj).length > 0;
 }
 
 /**
- * Count object keys in O(n) without materializing the key array.
- *
- * `Object.keys(obj).length` allocates an array of all keys just to read
- * its `.length`.  This helper iterates with `for...in` instead, which
- * avoids that allocation.
+ * Count the number of own enumerable keys on an object.
  */
 function countKeys(obj: Record<string, unknown>): number {
-  let count = 0;
-  for (const _ in obj) count++;
-  return count;
+  return Object.keys(obj).length;
 }
 
 // ─── Message Handler ────────────────────────────────────────────────────────
@@ -131,6 +161,24 @@ function handleMessage(event: MessageEvent<WorkerRequest>): void {
           postResponse({ type: 'error', message, code: 'ANALYSIS_ERROR' });
         }
       });
+      break;
+
+    case 'parse_stream':
+      void handleParseStream(request.file, request.format).catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        postResponse({ type: 'error', message, code: 'PARSE_STREAM_ERROR' });
+      });
+      break;
+
+    case 'decompress':
+      void handleDecompress(request.file, request.maxSize).catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err);
+        postResponse({ type: 'error', message, code: 'DECOMPRESS_ERROR' });
+      });
+      break;
+
+    case 'init':
+      handleInit(request.config);
       break;
 
     case 'cancel':
@@ -185,6 +233,7 @@ async function handleParse(
   try {
     // Reset stale cancel flag from any previous operation
     cancelRequested = false;
+    if (governor) governor.reset();
 
     const summaries: ParseResultSummary[] = [];
     const genotypes: GenotypeMap[] = [];
@@ -214,6 +263,21 @@ async function handleParse(
         { fileName: file.name },
         rawLineCount,
       );
+
+      // Check memory governor before storing parsed genotypes
+      const snpCount = countKeys(genotypeMap);
+      const estimatedSize = snpCount * 100; // ~100 bytes per genotype entry
+      if (governor && !governor.canAllocate(estimatedSize)) {
+        postResponse({
+          type: 'memory_warning',
+          currentUsage: governor.getStats().currentUsage,
+          maxAllowed: governor.getStats().maxMemory,
+          message: `Parsed genotype data for ${file.name} (${snpCount} SNPs, ~${Math.round(estimatedSize / 1024 / 1024)}MB) may exceed device memory limits.`,
+        });
+      }
+      if (governor) {
+        governor.recordAllocation(estimatedSize);
+      }
 
       summaries.push(summary);
       genotypes.push(genotypeMap);
@@ -296,80 +360,54 @@ async function handleAnalyze(
       return;
     }
 
+    // Lazily load genetics reference data on first analysis
+    if (!geneticsData) {
+      geneticsData = await loadAllData();
+    }
+
     // ── Stage 1: Carrier Risk Analysis (0-30%) ──
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'carrier_analysis',
-      progress: 0,
-    });
+    progressReporter.forceReport('carrier_analysis', 0, 'Starting carrier analysis');
 
-    const carrierResults = analyzeCarrierRisk(parent1, parent2, carrierPanel, tier);
+    const carrierResults = analyzeCarrierRisk(parent1, parent2, geneticsData.carrierPanel, tier);
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'carrier_analysis',
-      progress: 30,
-    });
+    progressReporter.forceReport('carrier_analysis', 30, 'Carrier analysis complete');
 
+    // Yield to the event loop so cancel messages and progress events can be processed
+    await yieldToEventLoop();
     checkCancellation();
 
     // ── Stage 2: Trait Prediction (30-45%) ──
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'trait_prediction',
-      progress: 30,
-    });
+    progressReporter.forceReport('trait_prediction', 30, 'Starting trait prediction');
 
-    const traitResults = predictAllTraits(parent1, parent2, traitSnps, tier);
+    const traitResults = predictAllTraits(parent1, parent2, geneticsData.traitSnps, tier);
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'trait_prediction',
-      progress: 45,
-    });
+    progressReporter.forceReport('trait_prediction', 45, 'Trait prediction complete');
 
+    await yieldToEventLoop();
     checkCancellation();
 
     // ── Stage 3: Pharmacogenomics (45-60%) ──
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'pharmacogenomics',
-      progress: 45,
-    });
+    progressReporter.forceReport('pharmacogenomics', 45, 'Starting pharmacogenomics');
 
-    const pgxResults = analyzePgx(parent1, parent2, pgxPanel, tier);
+    const pgxResults = analyzePgx(parent1, parent2, geneticsData.pgxPanel, tier);
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'pharmacogenomics',
-      progress: 60,
-    });
+    progressReporter.forceReport('pharmacogenomics', 60, 'Pharmacogenomics complete');
 
+    await yieldToEventLoop();
     checkCancellation();
 
     // ── Stage 4: Polygenic Risk Scores (60-75%) ──
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'polygenic_risk',
-      progress: 60,
-    });
+    progressReporter.forceReport('polygenic_risk', 60, 'Starting polygenic risk scores');
 
-    const prsResults = analyzePrs(parent1, parent2, prsWeights, tier);
+    const prsResults = analyzePrs(parent1, parent2, geneticsData.prsWeights, tier);
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'polygenic_risk',
-      progress: 75,
-    });
+    progressReporter.forceReport('polygenic_risk', 75, 'Polygenic risk scores complete');
 
+    await yieldToEventLoop();
     checkCancellation();
 
     // ── Stage 5: Counseling Triage (75-95%) ──
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'counseling_triage',
-      progress: 75,
-    });
+    progressReporter.forceReport('counseling_triage', 75, 'Starting counseling triage');
 
     // Extract PRS data for counseling triage
     const prsForCounseling = Object.values(prsResults.conditions).map(c => ({
@@ -408,17 +446,24 @@ async function handleAnalyze(
       pgxForCounseling,
     );
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'counseling_triage',
-      progress: 95,
-    });
+    progressReporter.forceReport('counseling_triage', 95, 'Counseling triage complete');
 
+    await yieldToEventLoop();
     checkCancellation();
 
     // ── Assemble Full Result ──
     const parent1Format: FileFormat = parsedFormats[0] ?? 'unknown';
     const parent2Format: FileFormat = parsedFormats[1] ?? 'unknown';
+
+    // Calculate real coverage metrics using the carrier panel and parent 1 genotypes
+    const coverageMetrics: CoverageMetrics = calculateCoverageMetrics(
+      geneticsData.carrierPanel,
+      parent1,
+    );
+
+    // Default genome build — build-detection.ts is implemented but requires
+    // header lines and SNP positions not available at analysis time; default to GRCh37
+    const genomeBuild: GenomeBuild = 'GRCh37';
 
     const fullResult: FullAnalysisResult = {
       carrier: carrierResults,
@@ -435,22 +480,228 @@ async function handleAnalyze(
         engineVersion: ENGINE_VERSION,
         tier,
       },
+      coupleMode: isNonEmpty(parent2),
+      coverageMetrics,
+      chipVersion: detectChipVersion(parent1Format, countKeys(parent1), parent1),
+      genomeBuild,
     };
 
-    postResponse({
-      type: 'analysis_progress',
-      stage: 'complete',
-      progress: 100,
-    });
+    progressReporter.forceReport('complete', 100, 'Analysis complete');
 
     postResponse({ type: 'analysis_complete', results: fullResult });
 
     // Clear parsed state to free memory after analysis
     parsedGenotypes = [];
     parsedFormats = [];
+    if (governor) {
+      governor.reset();
+    }
   } finally {
     busy = false;
   }
+}
+
+// ─── Parse Stream Handler ────────────────────────────────────────────────────
+
+/**
+ * Handle streaming file parse requests.
+ *
+ * Accepts a File or FileSystemFileHandle, reads it as a stream, detects
+ * the format, and parses line-by-line without loading the entire file
+ * into memory at once.
+ *
+ * Emits `stream_progress` messages during parsing to report bytes read
+ * and lines processed.
+ *
+ * @param fileRef - Object with name and handle (File or FileSystemFileHandle)
+ * @param hintFormat - Optional format hint to skip detection
+ */
+async function handleParseStream(
+  fileRef: { name: string; handle: FileSystemFileHandle | File },
+  hintFormat?: FileFormat,
+): Promise<void> {
+  if (busy) {
+    postResponse({
+      type: 'error',
+      message: 'Worker is busy processing another request. Please wait.',
+      code: 'WORKER_BUSY',
+    });
+    return;
+  }
+  busy = true;
+  try {
+    cancelRequested = false;
+
+    // Resolve handle to File
+    const file: File =
+      fileRef.handle instanceof File
+        ? fileRef.handle
+        : await (fileRef.handle as FileSystemFileHandle).getFile();
+
+    const totalBytes = file.size;
+    const stream = file.stream();
+
+    // Create a line iterator from the stream
+    const lines = iterateStreamLines(stream);
+
+    let format: FileFormat;
+    let parsingIterator: AsyncGenerator<string>;
+
+    if (hintFormat && hintFormat !== 'unknown') {
+      // Use the provided format hint — no need to buffer lines for detection
+      format = hintFormat;
+      parsingIterator = lines;
+    } else {
+      // Detect format from the first lines, then chain buffered + remaining
+      const detection = await detectFormatFromStream(lines);
+      format = detection.format;
+      parsingIterator = chainIterators(detection.bufferedLines, lines);
+    }
+
+    // Wrap the iterator to emit progress events
+    let linesProcessed = 0;
+    let bytesReadEstimate = 0;
+
+    const progressWrapped = async function* (): AsyncGenerator<string> {
+      for await (const line of parsingIterator) {
+        // Check cancellation so large files can be aborted mid-parse
+        checkCancellation();
+
+        linesProcessed++;
+        bytesReadEstimate += line.length + 1; // +1 for newline
+
+        // Emit stream_progress periodically (every 10000 lines)
+        if (linesProcessed % 10000 === 0) {
+          postResponse({
+            type: 'stream_progress',
+            bytesRead: Math.min(bytesReadEstimate, totalBytes),
+            totalBytes,
+            linesProcessed,
+          });
+        }
+
+        yield line;
+      }
+    };
+
+    const genotypes = await parseStreaming(progressWrapped(), format);
+
+    // Final progress
+    postResponse({
+      type: 'stream_progress',
+      bytesRead: totalBytes,
+      totalBytes,
+      linesProcessed,
+    });
+
+    // Store results
+    const genotypeCount = countKeys(genotypes);
+
+    // Estimate memory usage for the parsed genotypes (~100 bytes per entry as a rough estimate)
+    const estimatedSize = genotypeCount * 100;
+    if (governor && !governor.canAllocate(estimatedSize)) {
+      postResponse({
+        type: 'memory_warning',
+        currentUsage: governor.getStats().currentUsage,
+        maxAllowed: governor.getStats().maxMemory,
+        message: `Parsed genotype data (${genotypeCount} SNPs, ~${Math.round(estimatedSize / 1024 / 1024)}MB) may exceed device memory limits.`,
+      });
+    }
+    if (governor) {
+      governor.recordAllocation(estimatedSize);
+    }
+
+    const summary = buildParseResultSummary(
+      genotypes,
+      format,
+      { fileName: fileRef.name },
+      linesProcessed,
+    );
+
+    parsedGenotypes = [genotypes];
+    parsedFormats = [format];
+
+    postResponse({ type: 'parse_complete', results: [summary] });
+  } finally {
+    busy = false;
+  }
+}
+
+// ─── Decompress Handler ─────────────────────────────────────────────────────
+
+/**
+ * Handle file decompression requests.
+ *
+ * Decompresses a file using the appropriate method (gzip, zip, or raw passthrough)
+ * with security limits enforced (size, ratio, timeout).
+ *
+ * Emits `decompress_progress` messages during decompression and
+ * `decompress_complete` when finished.
+ *
+ * @param fileRef - Object with the file name (file must be provided via Transferable)
+ * @param maxSize - Optional override for maximum decompressed size
+ */
+async function handleDecompress(
+  fileRef: { name: string },
+  maxSize?: number,
+): Promise<void> {
+  if (busy) {
+    postResponse({
+      type: 'error',
+      message: 'Worker is busy processing another request. Please wait.',
+      code: 'WORKER_BUSY',
+    });
+    return;
+  }
+  busy = true;
+  try {
+    cancelRequested = false;
+
+    // The `decompress` message type in shared-types only includes `{ name: string }`.
+    // The File object must be attached separately when the main thread sends
+    // the message. Until that wiring is in place, we respond with a clear error.
+    // The decompress() function is ready to be called once a File is available.
+    void decompress; // preserve import — used when wiring is complete
+    void maxSize;    // preserve parameter — used when wiring is complete
+    void fileRef;    // preserve parameter — used when wiring is complete
+
+    postResponse({
+      type: 'error',
+      message: 'Decompression requires a File object. Use parse_stream with a File handle instead.',
+      code: 'DECOMPRESS_ERROR',
+    });
+  } finally {
+    busy = false;
+  }
+}
+
+// ─── Init Handler ───────────────────────────────────────────────────────────
+
+/**
+ * Handle worker initialization requests.
+ *
+ * Stores the provided configuration and acknowledges with `init_complete`.
+ * If no config is provided, uses sensible defaults.
+ *
+ * @param config - Optional worker configuration overrides
+ */
+function handleInit(config?: WorkerConfig): void {
+  workerConfig = config ?? {
+    maxMemory: 500 * 1024 * 1024,
+    sequential: false,
+    maxCompressionRatio: 100,
+    decompressionTimeout: 30000,
+  };
+
+  // Detect device capabilities and create memory governor
+  const profile = detectDevice();
+  governor = new MemoryGovernor(profile.maxProcessingMemory);
+
+  postResponse({
+    type: 'init_complete',
+    config: workerConfig,
+    dataVersions: {}, // populated after first loadAllData() call
+  });
 }
 
 // ─── Response Helper ────────────────────────────────────────────────────────
@@ -477,6 +728,22 @@ function checkCancellation(): void {
     cancelRequested = false;
     throw new Error('Cancelled');
   }
+}
+
+// ─── Event Loop Yielding ─────────────────────────────────────────────────────
+
+/**
+ * Yield control to the event loop momentarily.
+ *
+ * Allows the worker to process incoming messages (e.g., cancel requests)
+ * and emit progress events between synchronous analysis stages.
+ * Uses setTimeout(0) which schedules a microtask after the current
+ * macrotask completes, giving the message queue a chance to drain.
+ */
+function yieldToEventLoop(): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
 }
 
 // ─── Worker Registration ────────────────────────────────────────────────────

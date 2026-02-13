@@ -249,7 +249,7 @@ describe('predictTrait', () => {
       traitEntry,
     );
     expect(result.status).toBe('error');
-    expect(result.note).toContain('not found in phenotype map');
+    expect(result.note).toContain('Unable to predict this trait');
   });
 
   it('should include base fields (trait, gene, rsid, chromosome)', () => {
@@ -280,7 +280,7 @@ describe('predictTrait', () => {
       traitEntry,
     );
     expect(result.status).toBe('success');
-    expect(result.note).toContain('unmapped');
+    expect(result.note).toContain('could not be mapped');
   });
 });
 

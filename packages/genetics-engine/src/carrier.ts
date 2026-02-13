@@ -9,6 +9,11 @@
  * - Autosomal dominant (AD): Single copy causes disease
  * - X-linked (XL): Variant on X chromosome with sex-specific expression
  *
+ * Gene-level features (E4/E5/E6):
+ * - Gene-level grouping: variants are grouped by gene symbol for aggregate analysis
+ * - Compound heterozygote detection: flags when 2+ different het variants in same gene
+ * - Not-tested distinction: differentiates "variant not detected" from "not tested"
+ *
  * Ported from Source/carrier_analysis.py (546 lines).
  */
 
@@ -26,7 +31,86 @@ import type {
 } from './types';
 
 import { TIER_GATING } from './types';
-import { TOP_25_FREE_DISEASES, CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
+import { TOP_25_FREE_DISEASES, CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
+
+// ─── Types (internal to carrier module) ─────────────────────────────────────
+
+/**
+ * Extended carrier status that distinguishes "not tested" from "unknown".
+ *
+ * - 'not_tested': The variant's rsID was NOT present in the genotype file at all
+ *   (not on the chip). Status is truly unknown — the variant may or may not be present.
+ * - 'unknown': The rsID WAS in the file but the genotype call is invalid
+ *   (e.g., '--', '00', empty, or malformed).
+ * - 'normal' / 'carrier' / 'affected': Standard carrier statuses from valid genotype calls.
+ */
+export type ExtendedCarrierStatus = CarrierStatus | 'not_tested';
+
+/**
+ * Testing status for a variant rsID in a genotype file.
+ *
+ * - 'tested': rsID exists in the genotype map with a valid genotype call
+ * - 'not_tested': rsID does not exist in the genotype map at all
+ * - 'no_call': rsID exists but the genotype is a no-call (e.g., '--', '00', empty)
+ */
+export type TestingStatus = 'tested' | 'not_tested' | 'no_call';
+
+/**
+ * Result of compound heterozygote detection for a single gene.
+ *
+ * When a person has 2+ DIFFERENT heterozygous pathogenic variants in the SAME gene,
+ * they may be compound heterozygous (one pathogenic variant on each chromosome copy).
+ * Since DTC data is unphased (we cannot determine which allele is on which chromosome),
+ * we label these as "Potential Risk" rather than "Affected".
+ */
+export interface CompoundHetResult {
+  /** Whether compound heterozygosity was detected. */
+  isCompoundHet: boolean;
+  /** rsIDs of the heterozygous variants involved. */
+  variants: string[];
+  /** Human-readable label for the compound het status. */
+  label: 'Potential Risk - Phasing Unknown' | 'Not Compound Het';
+  /** Plain language explanation of the phasing limitation. */
+  explanation: string;
+}
+
+/**
+ * Per-variant carrier status detail within a gene-level analysis.
+ */
+export interface VariantDetail {
+  /** SNP identifier. */
+  rsid: string;
+  /** Carrier status for this specific variant. */
+  status: ExtendedCarrierStatus;
+  /** Testing status for this variant. */
+  testingStatus: TestingStatus;
+  /** Condition name associated with this variant. */
+  condition: string;
+}
+
+/**
+ * Gene-level carrier analysis result for a single parent.
+ */
+export interface GeneCarrierResult {
+  /** Gene symbol. */
+  gene: string;
+  /** Worst-case carrier status across all variants in this gene. */
+  geneStatus: ExtendedCarrierStatus;
+  /** Per-variant breakdown. */
+  variantDetails: VariantDetail[];
+  /** Compound heterozygote detection result (if applicable). */
+  compoundHet: CompoundHetResult | null;
+}
+
+/**
+ * A group of carrier panel entries sharing the same gene symbol.
+ */
+export interface GeneVariantGroup {
+  /** Gene symbol. */
+  gene: string;
+  /** All panel entries for this gene. */
+  entries: CarrierPanelEntry[];
+}
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -41,7 +125,74 @@ const RISK_PRIORITY: Record<RiskLevel, number> = {
   unknown: 3,
 };
 
+/** Genotype patterns that indicate a no-call (present in file but no valid genotype). */
+const NO_CALL_PATTERNS: ReadonlySet<string> = new Set(['--', '00', '']);
+
+// ─── Testing Status (E6) ────────────────────────────────────────────────────
+
+/**
+ * Determine the testing status of a variant rsID in a genotype map.
+ *
+ * Distinguishes between three states:
+ * - 'tested': The rsID is in the file and has a valid genotype call
+ * - 'not_tested': The rsID is not in the file at all (not on the chip)
+ * - 'no_call': The rsID is in the file but the genotype is invalid/missing
+ *
+ * This is critical for DTC genotyping interpretation: "variant not detected"
+ * (tested, normal result) is fundamentally different from "not tested"
+ * (rsID not on chip, unknown status).
+ *
+ * @param rsid - The variant rsID to check
+ * @param genotypes - The genotype map from the parsed file
+ * @returns Testing status classification
+ */
+export function getTestingStatus(rsid: string, genotypes: GenotypeMap): TestingStatus {
+  if (!(rsid in genotypes)) {
+    return 'not_tested';
+  }
+
+  const genotype = genotypes[rsid] ?? '';
+  if (NO_CALL_PATTERNS.has(genotype)) {
+    return 'no_call';
+  }
+
+  return 'tested';
+}
+
 // ─── Carrier Status Determination ───────────────────────────────────────────
+
+/**
+ * Determine extended carrier status from a genotype, allele info, and genotype map.
+ *
+ * Extends the original `determineCarrierStatus()` to distinguish between
+ * "not tested" (rsID not in file) and "unknown" (rsID in file but no-call).
+ *
+ * @param rsid - The variant rsID
+ * @param genotypes - Full genotype map for this parent
+ * @param pathogenicAllele - The disease-causing allele
+ * @param referenceAllele - The normal/reference allele
+ * @returns Extended carrier status including 'not_tested'
+ */
+export function determineExtendedCarrierStatus(
+  rsid: string,
+  genotypes: GenotypeMap,
+  pathogenicAllele: string,
+  referenceAllele: string,
+): ExtendedCarrierStatus {
+  const testingStatus = getTestingStatus(rsid, genotypes);
+
+  if (testingStatus === 'not_tested') {
+    return 'not_tested';
+  }
+
+  if (testingStatus === 'no_call') {
+    return 'unknown';
+  }
+
+  // Variant was tested and has a valid genotype — use standard logic
+  const genotype = genotypes[rsid] ?? '';
+  return determineCarrierStatus(genotype, pathogenicAllele, referenceAllele);
+}
 
 /**
  * Determine carrier status from a genotype and allele information.
@@ -425,6 +576,193 @@ export function determineRiskLevel(
   return 'low_risk';
 }
 
+// ─── Gene-Level Grouping (E4) ───────────────────────────────────────────────
+
+/**
+ * Group carrier panel entries by gene symbol.
+ *
+ * Many genes have multiple pathogenic variants in the carrier panel (e.g.,
+ * CFTR has F508del, G542X, etc.). This function groups all entries sharing
+ * the same gene symbol so they can be analyzed together.
+ *
+ * @param panel - Array of carrier panel entries
+ * @returns Array of gene variant groups, one per unique gene symbol
+ */
+export function groupVariantsByGene(panel: CarrierPanelEntry[]): GeneVariantGroup[] {
+  const geneMap = new Map<string, CarrierPanelEntry[]>();
+
+  for (const entry of panel) {
+    const gene = entry.gene;
+    const existing = geneMap.get(gene);
+    if (existing) {
+      existing.push(entry);
+    } else {
+      geneMap.set(gene, [entry]);
+    }
+  }
+
+  const groups: GeneVariantGroup[] = [];
+  for (const [gene, entries] of geneMap) {
+    groups.push({ gene, entries });
+  }
+
+  return groups;
+}
+
+/**
+ * Analyze carrier status at the gene level for a single parent.
+ *
+ * For a given gene with multiple variants:
+ * 1. Determines per-variant extended carrier status (including not_tested)
+ * 2. Produces a gene-level status (worst-case across all variants)
+ * 3. If multiple heterozygous pathogenic variants are found, flags for compound het
+ *
+ * The "worst-case" status hierarchy is:
+ *   affected > carrier > normal > unknown > not_tested
+ *
+ * @param gene - Gene symbol
+ * @param entries - All carrier panel entries for this gene
+ * @param genotypes - Parent's genotype map
+ * @returns Gene-level carrier analysis result
+ */
+export function analyzeGeneCarrierStatus(
+  gene: string,
+  entries: CarrierPanelEntry[],
+  genotypes: GenotypeMap,
+): GeneCarrierResult {
+  const variantDetails: VariantDetail[] = [];
+
+  for (const entry of entries) {
+    const extStatus = determineExtendedCarrierStatus(
+      entry.rsid,
+      genotypes,
+      entry.pathogenic_allele,
+      entry.reference_allele,
+    );
+    const testingStatus = getTestingStatus(entry.rsid, genotypes);
+
+    variantDetails.push({
+      rsid: entry.rsid,
+      status: extStatus,
+      testingStatus,
+      condition: entry.condition,
+    });
+  }
+
+  // Determine gene-level status: worst-case across all variants
+  const geneStatus = worstCaseStatus(variantDetails.map((v) => v.status));
+
+  // Check for compound heterozygosity
+  const hetVariants = variantDetails.filter((v) => v.status === 'carrier');
+  let compoundHet: CompoundHetResult | null = null;
+
+  if (hetVariants.length >= 2) {
+    compoundHet = detectCompoundHet(
+      hetVariants.map((v) => ({ rsid: v.rsid, status: 'carrier' as CarrierStatus })),
+      gene,
+    );
+  }
+
+  return {
+    gene,
+    geneStatus,
+    variantDetails,
+    compoundHet,
+  };
+}
+
+/**
+ * Determine the worst-case (most severe) status from an array of extended statuses.
+ *
+ * Priority order (highest severity first):
+ *   affected > carrier > normal > unknown > not_tested
+ *
+ * @param statuses - Array of extended carrier statuses
+ * @returns The most severe status found
+ */
+function worstCaseStatus(statuses: ExtendedCarrierStatus[]): ExtendedCarrierStatus {
+  const priority: Record<ExtendedCarrierStatus, number> = {
+    affected: 0,
+    carrier: 1,
+    normal: 2,
+    unknown: 3,
+    not_tested: 4,
+  };
+
+  let worst: ExtendedCarrierStatus = 'not_tested';
+  let worstPriority = priority[worst];
+
+  for (const status of statuses) {
+    const p = priority[status];
+    if (p < worstPriority) {
+      worst = status;
+      worstPriority = p;
+    }
+  }
+
+  return worst;
+}
+
+// ─── Compound Heterozygote Detection (E5) ───────────────────────────────────
+
+/**
+ * Detect potential compound heterozygosity within a gene.
+ *
+ * Compound heterozygosity occurs when a person has two DIFFERENT heterozygous
+ * pathogenic variants in the SAME gene, potentially on different chromosomal
+ * copies. If one variant is on the maternal copy and the other on the paternal
+ * copy, both copies of the gene are disrupted — functionally equivalent to
+ * homozygous affected for autosomal recessive conditions.
+ *
+ * CRITICAL LIMITATION: DTC genotyping data is UNPHASED — we cannot determine
+ * which allele is on which chromosome. Therefore:
+ * - Both variants could be on the SAME chromosome (cis) = carrier only
+ * - Variants could be on DIFFERENT chromosomes (trans) = compound het = affected
+ * - We CANNOT distinguish these cases without phasing data
+ *
+ * For this reason, compound hets are labeled "Potential Risk - Phasing Unknown"
+ * and NEVER "Affected". Clinical confirmation via phased sequencing is required.
+ *
+ * @param variantStatuses - Array of variant rsIDs and their carrier statuses
+ *   (should contain only 'carrier' status variants for compound het detection)
+ * @param gene - Gene symbol for the compound het
+ * @returns Compound het detection result
+ */
+export function detectCompoundHet(
+  variantStatuses: Array<{ rsid: string; status: CarrierStatus }>,
+  gene: string,
+): CompoundHetResult {
+  // Filter to only heterozygous (carrier) variants
+  const hetVariants = variantStatuses.filter((v) => v.status === 'carrier');
+
+  if (hetVariants.length < 2) {
+    return {
+      isCompoundHet: false,
+      variants: [],
+      label: 'Not Compound Het',
+      explanation: `Only ${hetVariants.length} heterozygous variant(s) found in ${gene}. ` +
+        'Compound heterozygosity requires at least 2 different heterozygous pathogenic variants in the same gene.',
+    };
+  }
+
+  const involvedRsids = hetVariants.map((v) => v.rsid);
+
+  return {
+    isCompoundHet: true,
+    variants: involvedRsids,
+    label: 'Potential Risk - Phasing Unknown',
+    explanation:
+      `${hetVariants.length} different heterozygous pathogenic variants detected in ${gene} ` +
+      `(${involvedRsids.join(', ')}). ` +
+      'These variants may be on different chromosomal copies (trans configuration), which would ' +
+      'result in compound heterozygosity — functionally equivalent to being affected for autosomal ' +
+      'recessive conditions. However, DTC genotyping data is unphased, meaning we cannot determine ' +
+      'whether these variants are on the same chromosome (cis, carrier only) or different chromosomes ' +
+      '(trans, compound het). Clinical confirmation with phased sequencing or family studies is ' +
+      'recommended to determine the true configuration.',
+  };
+}
+
 // ─── Panel Filtering ────────────────────────────────────────────────────────
 
 /**
@@ -481,13 +819,40 @@ function filterPanelByTier(
 // ─── Main Analysis Function ─────────────────────────────────────────────────
 
 /**
+ * Extended carrier result with gene-level grouping information.
+ *
+ * Extends the base CarrierResult interface with additional fields for:
+ * - Gene-level variant grouping (which other variants exist in the same gene)
+ * - Extended carrier status (distinguishing 'not_tested' from 'unknown')
+ * - Compound heterozygote detection results
+ *
+ * This type is a strict superset of CarrierResult, so it's backward-compatible:
+ * any code expecting CarrierResult[] will work with ExtendedCarrierResult[].
+ */
+export interface ExtendedCarrierResult extends CarrierResult {
+  /** Extended carrier status for parent A (includes 'not_tested'). */
+  parentAExtendedStatus: ExtendedCarrierStatus;
+  /** Extended carrier status for parent B (includes 'not_tested'). */
+  parentBExtendedStatus: ExtendedCarrierStatus;
+  /** Testing status for parent A at this rsID. */
+  parentATestingStatus: TestingStatus;
+  /** Testing status for parent B at this rsID. */
+  parentBTestingStatus: TestingStatus;
+  /** All variants in the same gene for parent A (gene-level view). */
+  geneAnalysisParentA: GeneCarrierResult | null;
+  /** All variants in the same gene for parent B (gene-level view). */
+  geneAnalysisParentB: GeneCarrierResult | null;
+}
+
+/**
  * Analyze carrier risk for all diseases in the panel.
  *
  * For each disease in the panel:
  * 1. Look up both parents' genotypes at the disease rsID
- * 2. Determine carrier status for each parent
+ * 2. Determine carrier status for each parent (standard + extended)
  * 3. Calculate offspring risk based on inheritance pattern
  * 4. Classify overall risk level
+ * 5. Attach gene-level analysis with compound het detection
  *
  * Results are sorted by risk (highest first):
  * - Primary: risk level (high_risk > carrier_detected > low_risk > unknown)
@@ -500,19 +865,37 @@ function filterPanelByTier(
  * @param parentBSnps - Parent B's genotype map (rsid -> genotype)
  * @param panel - Carrier disease panel entries
  * @param tier - Subscription tier for filtering (optional; undefined = all diseases)
- * @returns Array of carrier results, sorted by risk level
+ * @returns Array of extended carrier results (backward-compatible with CarrierResult[]),
+ *   sorted by risk level
  */
 export function analyzeCarrierRisk(
   parentASnps: GenotypeMap,
   parentBSnps: GenotypeMap,
   panel: CarrierPanelEntry[],
   tier?: Tier,
-): CarrierResult[] {
+): ExtendedCarrierResult[] {
   // Filter panel by tier if specified
   const filteredPanel: CarrierPanelEntry[] =
     tier != null ? filterPanelByTier(panel, tier) : panel;
 
-  const results: CarrierResult[] = [];
+  // Pre-compute gene-level analysis for both parents (E4)
+  const geneGroups = groupVariantsByGene(filteredPanel);
+
+  const geneAnalysisCacheA = new Map<string, GeneCarrierResult>();
+  const geneAnalysisCacheB = new Map<string, GeneCarrierResult>();
+
+  for (const group of geneGroups) {
+    geneAnalysisCacheA.set(
+      group.gene,
+      analyzeGeneCarrierStatus(group.gene, group.entries, parentASnps),
+    );
+    geneAnalysisCacheB.set(
+      group.gene,
+      analyzeGeneCarrierStatus(group.gene, group.entries, parentBSnps),
+    );
+  }
+
+  const results: ExtendedCarrierResult[] = [];
 
   for (const disease of filteredPanel) {
     const rsid = disease.rsid;
@@ -523,7 +906,7 @@ export function analyzeCarrierRisk(
     const parentAGenotype: string = parentASnps[rsid] ?? '';
     const parentBGenotype: string = parentBSnps[rsid] ?? '';
 
-    // Determine carrier status for each parent
+    // Determine carrier status for each parent (standard, for backward compat)
     const parentAStatus = determineCarrierStatus(
       parentAGenotype,
       pathogenicAllele,
@@ -534,6 +917,18 @@ export function analyzeCarrierRisk(
       pathogenicAllele,
       referenceAllele,
     );
+
+    // Determine extended carrier status (E6: not_tested distinction)
+    const parentAExtendedStatus = determineExtendedCarrierStatus(
+      rsid, parentASnps, pathogenicAllele, referenceAllele,
+    );
+    const parentBExtendedStatus = determineExtendedCarrierStatus(
+      rsid, parentBSnps, pathogenicAllele, referenceAllele,
+    );
+
+    // Testing status (E6)
+    const parentATestingStatus = getTestingStatus(rsid, parentASnps);
+    const parentBTestingStatus = getTestingStatus(rsid, parentBSnps);
 
     // Calculate offspring risk based on inheritance type
     const inheritance: InheritancePattern = disease.inheritance;
@@ -557,8 +952,13 @@ export function analyzeCarrierRisk(
       inheritance,
     );
 
-    // Build result entry
-    const result: CarrierResult = {
+    // Get gene-level analysis (E4, includes compound het from E5)
+    const geneAnalysisParentA = geneAnalysisCacheA.get(disease.gene) ?? null;
+    const geneAnalysisParentB = geneAnalysisCacheB.get(disease.gene) ?? null;
+
+    // Build extended result entry
+    const result: ExtendedCarrierResult = {
+      // Base CarrierResult fields (backward compatible)
       condition: disease.condition,
       gene: disease.gene,
       severity: disease.severity,
@@ -569,6 +969,13 @@ export function analyzeCarrierRisk(
       riskLevel,
       rsid,
       inheritance,
+      // Extended fields (E4/E5/E6)
+      parentAExtendedStatus,
+      parentBExtendedStatus,
+      parentATestingStatus,
+      parentBTestingStatus,
+      geneAnalysisParentA,
+      geneAnalysisParentB,
     };
 
     results.push(result);
@@ -611,13 +1018,13 @@ function getUpgradeMessage(tier: Tier): string | null {
   switch (tier) {
     case 'free':
       return (
-        'Upgrade to Premium for access to 500+ diseases and all 79 traits, ' +
-        'or Pro for the complete 2700+ disease panel.'
+        `Upgrade to Premium for access to 500+ diseases and all 79 traits, ` +
+        `or Pro for the complete ${CARRIER_PANEL_COUNT_DISPLAY}+ disease panel.`
       );
     case 'premium':
       return (
-        'Upgrade to Pro for access to the complete 2700+ disease panel, ' +
-        'priority support, API access, and all future disease updates.'
+        `Upgrade to Pro for access to the complete ${CARRIER_PANEL_COUNT_DISPLAY}+ disease panel, ` +
+        `priority support, API access, and all future disease updates.`
       );
     case 'pro':
       return null;

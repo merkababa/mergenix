@@ -15,10 +15,358 @@
 
 import type { FileFormat, GenotypeMap, ParseResultSummary } from './types';
 
+// ─── Streaming Infrastructure ────────────────────────────────────────────────
+
+/**
+ * Async generator that yields one line at a time from a ReadableStream of bytes.
+ *
+ * Uses `TextDecoderStream` to convert bytes to text, then splits on line
+ * boundaries (`\n`, `\r\n`, `\r`). Correctly handles partial lines that
+ * span chunk boundaries.
+ *
+ * @param stream - A ReadableStream of Uint8Array chunks (e.g., from File.stream())
+ * @yields Individual lines (without line terminators)
+ */
+export async function* iterateStreamLines(
+  stream: ReadableStream<Uint8Array>,
+): AsyncGenerator<string> {
+  const decoder = new TextDecoderStream();
+  // Type assertion needed: TextDecoderStream's writable accepts BufferSource,
+  // but pipeThrough expects exact Uint8Array match. Safe at runtime.
+  const readable = stream.pipeThrough(
+    decoder as unknown as TransformStream<Uint8Array, string>,
+  );
+  const reader = readable.getReader();
+
+  let buffer = '';
+
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      buffer += value;
+
+      // Process all complete lines in the buffer
+      let startIdx = 0;
+      for (let i = 0; i < buffer.length; i++) {
+        const ch = buffer[i];
+        if (ch === '\n') {
+          // Yield the line (strip trailing \r if present for CRLF)
+          const line = buffer.substring(startIdx, i);
+          yield line.endsWith('\r') ? line.slice(0, -1) : line;
+          startIdx = i + 1;
+        } else if (ch === '\r') {
+          // Check if this is \r\n or standalone \r
+          if (i + 1 < buffer.length) {
+            if (buffer[i + 1] === '\n') {
+              // \r\n — yield line, skip both characters
+              yield buffer.substring(startIdx, i);
+              startIdx = i + 2;
+              i++; // skip the \n
+            } else {
+              // Standalone \r
+              yield buffer.substring(startIdx, i);
+              startIdx = i + 1;
+            }
+          } else {
+            // \r at end of buffer — could be start of \r\n split across chunks
+            // Leave it in the buffer for the next iteration
+            break;
+          }
+        }
+      }
+
+      // Keep any remaining partial line in the buffer
+      buffer = buffer.substring(startIdx);
+    }
+
+    // Yield any remaining content after the stream ends
+    if (buffer.length > 0) {
+      // Strip trailing \r if present
+      yield buffer.endsWith('\r') ? buffer.slice(0, -1) : buffer;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+/**
+ * Detect the file format by reading the first lines from an async line iterator.
+ *
+ * Reads up to 20 lines to detect the format. Returns the detected format
+ * AND all buffered lines so they can be replayed during parsing.
+ *
+ * @param lineIterator - Async generator yielding lines from a file
+ * @returns Object with the detected format and all buffered lines
+ */
+export async function detectFormatFromStream(
+  lineIterator: AsyncGenerator<string>,
+): Promise<{ format: FileFormat; bufferedLines: string[] }> {
+  const bufferedLines: string[] = [];
+  const maxLines = 20;
+
+  for (let i = 0; i < maxLines; i++) {
+    const { value, done } = await lineIterator.next();
+    if (done) break;
+    bufferedLines.push(value);
+  }
+
+  // Use the existing detectFormat on the buffered lines joined with newlines
+  const headContent = bufferedLines.join('\n');
+  const format = detectFormat(headContent);
+
+  return { format, bufferedLines };
+}
+
+/**
+ * Chain a pre-buffered array of lines with an async generator of remaining lines.
+ *
+ * This is used after format detection: the first N lines were consumed to detect
+ * the format, and now we need to replay them before continuing with the rest of
+ * the stream.
+ *
+ * @param bufferedLines - Lines already consumed during format detection
+ * @param remaining - Async generator for the remaining lines from the stream
+ * @yields All lines: buffered first, then remaining
+ */
+export async function* chainIterators(
+  bufferedLines: string[],
+  remaining: AsyncGenerator<string>,
+): AsyncGenerator<string> {
+  for (const line of bufferedLines) {
+    yield line;
+  }
+  yield* remaining;
+}
+
+/**
+ * Parse a genetic data file by streaming through an async line iterator.
+ *
+ * Processes lines one at a time without loading the entire file into memory.
+ * Dispatches to the appropriate format-specific line-parsing logic based on
+ * the provided format.
+ *
+ * @param lineIterator - Async generator yielding lines from a file
+ * @param format - The detected file format
+ * @returns Parsed genotype map
+ * @throws Error if no valid SNP data is found or format is unknown
+ */
+export async function parseStreaming(
+  lineIterator: AsyncGenerator<string>,
+  format: FileFormat,
+): Promise<GenotypeMap> {
+  switch (format) {
+    case '23andme':
+      return parseStreamingGeneric(lineIterator, parse23andMeLine);
+    case 'ancestrydna':
+      return parseStreamingGeneric(lineIterator, parseAncestryDNALine);
+    case 'myheritage':
+      return parseStreamingGeneric(lineIterator, parseMyHeritageLine);
+    case 'vcf':
+      return parseStreamingVcf(lineIterator);
+    default:
+      throw new Error(
+        'Unrecognized genetic data format for streaming. ' +
+        'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
+      );
+  }
+}
+
+/**
+ * Parse a single 23andMe data line into an [rsid, genotype] tuple.
+ * Returns null if the line should be skipped (comment, header, no-call, malformed).
+ */
+function parse23andMeLine(line: string): [string, string] | null {
+  if (!line || line.startsWith('#')) return null;
+
+  const parts = line.split('\t');
+  if (parts.length < 4) return null;
+
+  const rsid = (parts[0] ?? '').trim();
+  const genotype = (parts[3] ?? '').trim();
+
+  if (genotype === '--' || genotype === '') return null;
+
+  const rsidLower = rsid.toLowerCase();
+  if (rsidLower === 'rsid' || rsidLower === 'id' || rsidLower === 'snp') return null;
+  if (!rsid.startsWith('rs') && !rsid.startsWith('i')) return null;
+
+  return [rsid, genotype];
+}
+
+/**
+ * Parse a single AncestryDNA data line into an [rsid, genotype] tuple.
+ * Returns null if the line should be skipped.
+ */
+function parseAncestryDNALine(line: string): [string, string] | null {
+  if (!line || line.startsWith('#')) return null;
+
+  const parts = line.split('\t');
+  const firstPart = (parts[0] ?? '').toLowerCase();
+  if (firstPart === 'rsid' || firstPart === 'id' || firstPart === 'snp') return null;
+  if (parts.length < 5) return null;
+
+  const rsid = (parts[0] ?? '').trim();
+  const allele1 = (parts[3] ?? '').trim().toUpperCase();
+  const allele2 = (parts[4] ?? '').trim().toUpperCase();
+
+  if (allele1 === '0' || allele2 === '0') return null;
+  if (!rsid.startsWith('rs') && !rsid.startsWith('i')) return null;
+
+  return [rsid, allele1 + allele2];
+}
+
+/**
+ * Parse a single MyHeritage CSV data line into an [rsid, genotype] tuple.
+ * Returns null if the line should be skipped.
+ */
+function parseMyHeritageLine(line: string): [string, string] | null {
+  if (!line) return null;
+
+  const row = parseCsvLine(line);
+  if (row.length < 4) return null;
+
+  const rsid = (row[0] ?? '').trim();
+  const genotype = (row[3] ?? '').trim();
+
+  if (rsid.toLowerCase() === 'rsid') return null;
+  if (genotype === '--' || genotype === '') return null;
+  if (!rsid.startsWith('rs') && !rsid.startsWith('i') && !rsid.startsWith('VG')) return null;
+
+  return [rsid, genotype];
+}
+
+/**
+ * Generic streaming parser for line-based formats (23andMe, AncestryDNA, MyHeritage).
+ *
+ * @param lineIterator - Async generator of lines
+ * @param parseLine - Format-specific line parser
+ * @returns Genotype map
+ */
+async function parseStreamingGeneric(
+  lineIterator: AsyncGenerator<string>,
+  parseLine: (line: string) => [string, string] | null,
+): Promise<GenotypeMap> {
+  const snps: GenotypeMap = {};
+  let snpCount = 0;
+
+  for await (const line of lineIterator) {
+    const result = parseLine(line);
+    if (result !== null) {
+      snps[result[0]] = result[1];
+      snpCount++;
+      checkSnpLimit(snpCount);
+    }
+  }
+
+  if (snpCount === 0) {
+    throw new Error('No valid SNP data found in genetic data file (streaming parser).');
+  }
+
+  return snps;
+}
+
+/**
+ * Streaming VCF parser. VCF needs stateful parsing (past-header tracking).
+ * Supports SNPs, small indels (up to 50bp), and multi-allelic records.
+ *
+ * @param lineIterator - Async generator of lines
+ * @returns Genotype map
+ */
+async function parseStreamingVcf(
+  lineIterator: AsyncGenerator<string>,
+): Promise<GenotypeMap> {
+  const snps: GenotypeMap = {};
+  let pastHeader = false;
+  let snpCount = 0;
+
+  for await (const line of lineIterator) {
+    if (!line) continue;
+    if (line.startsWith('##')) continue;
+
+    if (line.startsWith('#CHROM')) {
+      pastHeader = true;
+      continue;
+    }
+
+    if (!pastHeader) continue;
+
+    const parts = line.split('\t');
+    if (parts.length < 10) continue;
+
+    const variantId = parts[2] ?? '';
+    const ref = parts[3] ?? '';
+    const alt = parts[4] ?? '';
+    const formatField = parts[8] ?? '';
+    const sampleField = parts[9] ?? '';
+
+    if (!variantId.startsWith('rs')) continue;
+
+    // Validate REF allele: must be valid nucleotides and within size limit
+    if (!isValidVcfAllele(ref) || ref.length > MAX_INDEL_LENGTH) continue;
+
+    // Split and validate ALT alleles
+    const altAlleles = alt.split(',');
+    let allAllelesValid = true;
+    for (const a of altAlleles) {
+      if (!isValidVcfAllele(a) || a.length > MAX_INDEL_LENGTH) {
+        allAllelesValid = false;
+        break;
+      }
+    }
+    if (!allAllelesValid) continue;
+
+    const alleleList = [ref, ...altAlleles];
+
+    const formatKeys = formatField.split(':');
+    const gtIndex = formatKeys.indexOf('GT');
+    if (gtIndex === -1) continue;
+
+    const sampleValues = sampleField.split(':');
+    if (gtIndex >= sampleValues.length) continue;
+
+    const gtValue = sampleValues[gtIndex] ?? '';
+    if (gtValue === './.' || gtValue === '.|.' || gtValue === '.') continue;
+
+    const separator = gtValue.includes('|') ? '|' : '/';
+    const alleleIndices = gtValue.split(separator);
+    if (alleleIndices.length !== 2) continue;
+
+    const idxA = parseInt(alleleIndices[0] ?? '', 10);
+    const idxB = parseInt(alleleIndices[1] ?? '', 10);
+    if (isNaN(idxA) || isNaN(idxB)) continue;
+    if (idxA >= alleleList.length || idxB >= alleleList.length) continue;
+
+    const alleleA = alleleList[idxA];
+    const alleleB = alleleList[idxB];
+    if (alleleA === undefined || alleleB === undefined) continue;
+
+    snps[variantId] = formatVcfGenotype(alleleA, alleleB);
+    snpCount++;
+    checkSnpLimit(snpCount);
+  }
+
+  if (snpCount === 0) {
+    throw new Error(
+      'No valid SNP data found in VCF file (streaming parser). ' +
+      'Ensure the file contains variants with rsIDs and GT genotype data.',
+    );
+  }
+
+  return snps;
+}
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 /** Maximum number of SNPs before we consider the file corrupted. */
 const MAX_SNP_COUNT = 10_000_000;
+
+/** Maximum allele length for indels (insertions/deletions). */
+const MAX_INDEL_LENGTH = 50;
+
+/** Valid nucleotide characters for VCF allele validation. */
+const VALID_NUCLEOTIDE_CHARS = /^[ACGTN]+$/;
 
 /** Valid nucleotide alleles for AncestryDNA format. */
 const VALID_ALLELES = new Set(['A', 'C', 'G', 'T']);
@@ -67,16 +415,13 @@ function* iterateLines(content: string): Generator<string> {
 }
 
 /**
- * Count object keys in O(n) without materializing the key array.
+ * Count the number of own enumerable keys on an object.
  *
- * `Object.keys(obj).length` allocates an array of all keys just to read
- * its `.length`.  This helper iterates with `for...in` instead, which
- * avoids that allocation.
+ * Uses `Object.keys()` which only iterates own enumerable properties,
+ * avoiding the need for a `hasOwnProperty` guard that `for...in` requires.
  */
 function countKeys(obj: Record<string, unknown>): number {
-  let count = 0;
-  for (const _ in obj) count++;
-  return count;
+  return Object.keys(obj).length;
 }
 
 /**
@@ -766,6 +1111,37 @@ export function validateMyHeritage(content: string): [boolean, string] {
   return [true, ''];
 }
 
+// ─── VCF Helpers ────────────────────────────────────────────────────────────
+
+/**
+ * Validate that a VCF allele string contains only valid nucleotide characters (ACGTN).
+ *
+ * @param allele - The allele string to validate
+ * @returns true if allele contains only valid characters
+ */
+function isValidVcfAllele(allele: string): boolean {
+  return allele.length > 0 && VALID_NUCLEOTIDE_CHARS.test(allele);
+}
+
+/**
+ * Format a VCF genotype string from two resolved alleles.
+ *
+ * For SNPs (both alleles are single characters), concatenates directly: "AG".
+ * For indels (any allele is multi-character), uses "/" separator: "ATCT/A".
+ *
+ * @param alleleA - First resolved allele
+ * @param alleleB - Second resolved allele
+ * @returns Formatted genotype string
+ */
+function formatVcfGenotype(alleleA: string, alleleB: string): string {
+  if (alleleA.length === 1 && alleleB.length === 1) {
+    // SNP: concatenate directly (existing behavior)
+    return alleleA + alleleB;
+  }
+  // Indel: use "/" separator to distinguish from SNP notation
+  return alleleA + '/' + alleleB;
+}
+
 // ─── VCF Parser ─────────────────────────────────────────────────────────────
 
 /**
@@ -775,18 +1151,21 @@ export function validateMyHeritage(content: string): [boolean, string] {
  * - Meta-information lines start with "##"
  * - Header line starts with "#CHROM" (10+ tab-separated columns)
  * - Data lines are tab-separated: CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE...
- * - Only extracts SNPs (single nucleotide variants) with rsIDs
+ * - Extracts SNPs and small indels (up to 50bp) with rsIDs
+ * - Supports multi-allelic records (comma-separated ALT alleles)
  * - Genotype (GT) field encodes alleles as integers:
  *   0 = REF allele, 1 = first ALT, 2 = second ALT, etc.
  *   Separated by "/" (unphased) or "|" (phased)
- * - Skips indels, multi-base variants, no-calls
+ * - SNP genotypes: concatenated (e.g., "AG")
+ * - Indel genotypes: "/" separated (e.g., "ATCT/A")
+ * - Skips structural variants (alleles > 50bp), no-calls, and invalid alleles
  * - Only uses the first sample column (index 9)
  *
  * Ported from Source/parser.py `_parse_vcf_from_content()` and
- * `_parse_vcf_streaming()`.
+ * `_parse_vcf_streaming()`, enhanced with indel and multi-allelic support.
  *
  * @param content - Full file content as a string
- * @returns Genotype map: rsid -> genotype (e.g., {"rs6054257": "GG"})
+ * @returns Genotype map: rsid -> genotype (e.g., {"rs6054257": "GG", "rs113993960": "ATCT/A"})
  * @throws Error if no valid SNP data found
  */
 export function parseVcf(content: string): GenotypeMap {
@@ -831,14 +1210,21 @@ export function parseVcf(content: string): GenotypeMap {
       continue;
     }
 
-    // Only process SNPs: REF must be single char
-    if (ref.length !== 1) {
+    // Validate REF allele: must be valid nucleotides and within size limit
+    if (!isValidVcfAllele(ref) || ref.length > MAX_INDEL_LENGTH) {
       continue;
     }
 
-    // Split ALT alleles and check all are single-char (SNPs only)
+    // Split and validate ALT alleles
     const altAlleles = alt.split(',');
-    if (altAlleles.some(a => a.length !== 1)) {
+    let allAllelesValid = true;
+    for (const a of altAlleles) {
+      if (!isValidVcfAllele(a) || a.length > MAX_INDEL_LENGTH) {
+        allAllelesValid = false;
+        break;
+      }
+    }
+    if (!allAllelesValid) {
       continue;
     }
 
@@ -895,7 +1281,7 @@ export function parseVcf(content: string): GenotypeMap {
       continue;
     }
 
-    snps[variantId] = alleleA + alleleB;
+    snps[variantId] = formatVcfGenotype(alleleA, alleleB);
     snpCount++;
     checkSnpLimit(snpCount);
   }
@@ -1124,6 +1510,177 @@ export function getGenotypeStats(genotypes: GenotypeMap): {
     heterozygousCount,
     genotypeDistribution,
   };
+}
+
+// ─── Chip Version Detection ──────────────────────────────────────────────────
+
+/**
+ * Known marker SNPs that are unique to specific chip versions.
+ *
+ * These rsIDs are present on one chip version but absent from others,
+ * enabling reliable version differentiation when SNP count alone is ambiguous.
+ */
+const CHIP_MARKERS: Record<string, string[]> = {
+  // 23andMe v5 (GSA-based): Illumina GSA-specific markers not on OmniExpress
+  '23andme_v5': ['rs548049170', 'rs13354714', 'rs2298108'],
+  // 23andMe v3 (OmniExpress Plus): high-density markers not on later chips
+  '23andme_v3': ['rs4851251', 'rs2296442', 'rs2032582'],
+  // AncestryDNA v2 (GSA-based): GSA-specific markers
+  'ancestry_v2': ['rs548049170', 'rs13354714'],
+};
+
+/**
+ * Chip version detection result.
+ */
+export interface ChipVersionInfo {
+  /** Data provider name (e.g., "23andMe", "AncestryDNA", "MyHeritage"). */
+  provider: string;
+  /** Detected chip version (e.g., "v3", "v4", "v5", "v1", "v2", "unknown"). */
+  version: string;
+  /** Confidence in the version detection (0.0 to 1.0). */
+  confidence: number;
+}
+
+/**
+ * Detect the chip version used to generate a genetic data file.
+ *
+ * Uses a combination of SNP count ranges and version-specific marker SNPs
+ * to determine which genotyping chip produced the data.
+ *
+ * @param format - The detected file format
+ * @param snpCount - Total number of parsed SNPs
+ * @param genotypes - The parsed genotype map (used for marker SNP checks)
+ * @returns Chip version info, or null if format is not from a known provider
+ */
+export function detectChipVersion(
+  format: FileFormat,
+  snpCount: number,
+  genotypes: GenotypeMap,
+): ChipVersionInfo | null {
+  switch (format) {
+    case '23andme':
+      return detect23andMeChipVersion(snpCount, genotypes);
+    case 'ancestrydna':
+      return detectAncestryChipVersion(snpCount, genotypes);
+    case 'myheritage':
+      return detectMyHeritageChipVersion(snpCount);
+    case 'vcf':
+      // VCF files don't come from a specific DTC provider chip
+      return null;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Detect 23andMe chip version from SNP count and marker SNPs.
+ *
+ * Version breakdown by approximate SNP count:
+ * - v3 (Illumina OmniExpress Plus): ~960K SNPs
+ * - v4 (Illumina HumanOmniExpress-24): ~570K SNPs
+ * - v5 (Illumina GSA): ~640K SNPs
+ */
+function detect23andMeChipVersion(
+  snpCount: number,
+  genotypes: GenotypeMap,
+): ChipVersionInfo {
+  const base: ChipVersionInfo = { provider: '23andMe', version: 'unknown', confidence: 0 };
+
+  // Check marker SNPs for definitive version identification
+  const v5Markers = CHIP_MARKERS['23andme_v5'] ?? [];
+  const v3Markers = CHIP_MARKERS['23andme_v3'] ?? [];
+  const v5MarkerCount = v5Markers.filter(m => m in genotypes).length;
+  const v3MarkerCount = v3Markers.filter(m => m in genotypes).length;
+
+  // SNP count ranges (with overlap tolerance of ~15%)
+  if (snpCount >= 850000) {
+    // ~960K = v3
+    base.version = 'v3';
+    base.confidence = v3MarkerCount >= 2 ? 0.95 : 0.8;
+  } else if (snpCount >= 590000 && snpCount <= 720000) {
+    // Could be v4 (~570K) or v5 (~640K)
+    if (v5MarkerCount >= 2) {
+      base.version = 'v5';
+      base.confidence = 0.9;
+    } else if (snpCount <= 620000) {
+      base.version = 'v4';
+      base.confidence = 0.7;
+    } else {
+      base.version = 'v5';
+      base.confidence = 0.6;
+    }
+  } else if (snpCount >= 500000 && snpCount < 590000) {
+    // ~570K = v4
+    base.version = 'v4';
+    base.confidence = 0.75;
+  } else {
+    // Outside known ranges
+    base.version = 'unknown';
+    base.confidence = 0;
+  }
+
+  return base;
+}
+
+/**
+ * Detect AncestryDNA chip version from SNP count and marker SNPs.
+ *
+ * Version breakdown:
+ * - v1 (Illumina OmniExpress): ~700K SNPs
+ * - v2 (Illumina GSA): ~670K SNPs
+ */
+function detectAncestryChipVersion(
+  snpCount: number,
+  genotypes: GenotypeMap,
+): ChipVersionInfo {
+  const base: ChipVersionInfo = { provider: 'AncestryDNA', version: 'unknown', confidence: 0 };
+
+  const v2Markers = CHIP_MARKERS['ancestry_v2'] ?? [];
+  const v2MarkerCount = v2Markers.filter(m => m in genotypes).length;
+
+  if (snpCount >= 680000) {
+    // ~700K = v1
+    base.version = 'v1';
+    base.confidence = v2MarkerCount >= 1 ? 0.5 : 0.75;
+    // If v2 markers present even with high count, could be v2 with extras
+    if (v2MarkerCount >= 2) {
+      base.version = 'v2';
+      base.confidence = 0.7;
+    }
+  } else if (snpCount >= 600000 && snpCount < 680000) {
+    // ~670K = v2
+    base.version = 'v2';
+    base.confidence = v2MarkerCount >= 1 ? 0.85 : 0.7;
+  } else if (snpCount >= 500000 && snpCount < 600000) {
+    // Lower count, likely older version
+    base.version = 'v1';
+    base.confidence = 0.5;
+  } else {
+    base.version = 'unknown';
+    base.confidence = 0;
+  }
+
+  return base;
+}
+
+/**
+ * Detect MyHeritage chip version from SNP count.
+ *
+ * MyHeritage uses a single known format (Illumina OmniExpress-based),
+ * so version detection is simple.
+ */
+function detectMyHeritageChipVersion(snpCount: number): ChipVersionInfo {
+  const base: ChipVersionInfo = { provider: 'MyHeritage', version: 'unknown', confidence: 0 };
+
+  if (snpCount >= 600000 && snpCount <= 800000) {
+    base.version = 'v1';
+    base.confidence = 0.7;
+  } else if (snpCount > 0) {
+    base.version = 'v1';
+    base.confidence = 0.4;
+  }
+
+  return base;
 }
 
 /**

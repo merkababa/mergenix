@@ -112,7 +112,7 @@ export const TIER_GATING: Record<Tier, TierGating> = {
     pgxGeneLimit: 5,
     prsConditionLimit: 3,
     counselingLevel: 'full',
-    ethnicityAccess: true,
+    ethnicityAccess: false,
   },
   pro: {
     diseaseLimit: CARRIER_PANEL_COUNT,

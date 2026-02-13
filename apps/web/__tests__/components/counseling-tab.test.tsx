@@ -37,6 +37,10 @@ const baseResults: Omit<FullAnalysisResult, 'counseling'> = {
     engineVersion: '3.0.0',
     tier: 'pro',
   },
+  coupleMode: false,
+  coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
+  chipVersion: null,
+  genomeBuild: 'GRCh37',
 };
 
 /** Full counseling results: recommend=true, urgency=high, with all sections. */

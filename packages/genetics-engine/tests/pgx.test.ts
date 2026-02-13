@@ -2,7 +2,8 @@
  * Tests for the pharmacogenomics (PGx) analysis engine.
  *
  * Tests cover star allele determination, metabolizer status classification,
- * drug recommendations, offspring prediction, and tier gating.
+ * drug recommendations, offspring prediction, tier gating, array limitation
+ * disclaimers, and gene-specific warnings.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -13,6 +14,8 @@ import {
   predictOffspringPgx,
   analyzePgx,
   getPgxDisclaimer,
+  getGeneSpecificWarning,
+  ARRAY_LIMITATION_DISCLAIMER,
 } from '../src/pgx';
 import type { PgxPanel } from '../src/types';
 
@@ -453,5 +456,113 @@ describe('getPgxDisclaimer', () => {
   it('should recommend consulting healthcare provider', () => {
     const disclaimer = getPgxDisclaimer();
     expect(disclaimer).toContain('healthcare provider');
+  });
+
+  it('should include the general array limitation disclaimer text', () => {
+    const disclaimer = getPgxDisclaimer();
+    expect(disclaimer).toContain('Array-based genotyping');
+    expect(disclaimer).toContain('structural variants');
+    expect(disclaimer).toContain('copy number variations');
+    expect(disclaimer).toContain('clinical-grade testing');
+  });
+
+  it('should include the ARRAY_LIMITATION_DISCLAIMER constant text', () => {
+    const disclaimer = getPgxDisclaimer();
+    expect(disclaimer).toContain(ARRAY_LIMITATION_DISCLAIMER);
+  });
+});
+
+// ─── Array Limitation Disclaimer ─────────────────────────────────────────────
+
+describe('ARRAY_LIMITATION_DISCLAIMER', () => {
+  it('should be a non-empty string', () => {
+    expect(typeof ARRAY_LIMITATION_DISCLAIMER).toBe('string');
+    expect(ARRAY_LIMITATION_DISCLAIMER.length).toBeGreaterThan(0);
+  });
+
+  it('should mention structural variants and CNVs', () => {
+    expect(ARRAY_LIMITATION_DISCLAIMER).toContain('structural variants');
+    expect(ARRAY_LIMITATION_DISCLAIMER).toContain('copy number variations');
+  });
+
+  it('should mention star alleles', () => {
+    expect(ARRAY_LIMITATION_DISCLAIMER).toContain('star alleles');
+  });
+
+  it('should recommend clinical-grade testing', () => {
+    expect(ARRAY_LIMITATION_DISCLAIMER).toContain('clinical-grade testing');
+  });
+
+  it('should warn about medication changes', () => {
+    expect(ARRAY_LIMITATION_DISCLAIMER).toContain('medication changes');
+  });
+});
+
+// ─── Gene-Specific Warnings ──────────────────────────────────────────────────
+
+describe('getGeneSpecificWarning', () => {
+  it('should return a CYP2D6-specific warning', () => {
+    const warning = getGeneSpecificWarning('CYP2D6');
+    expect(warning).not.toBeNull();
+    expect(warning).toContain('CYP2D6');
+    expect(warning).toContain('highly polymorphic');
+    expect(warning).toContain('hybrid alleles');
+    expect(warning).toContain('duplications/deletions');
+    expect(warning).toContain('CANNOT be detected');
+    expect(warning).toContain('particularly limited');
+  });
+
+  it('should return a CYP2C19-specific warning', () => {
+    const warning = getGeneSpecificWarning('CYP2C19');
+    expect(warning).not.toBeNull();
+    expect(warning).toContain('CYP2C19');
+    expect(warning).toContain('ultrarapid');
+  });
+
+  it('should return a DPYD-specific warning', () => {
+    const warning = getGeneSpecificWarning('DPYD');
+    expect(warning).not.toBeNull();
+    expect(warning).toContain('DPYD');
+    expect(warning).toContain('fluoropyrimidine');
+  });
+
+  it('should return null for genes without specific warnings', () => {
+    expect(getGeneSpecificWarning('TPMT')).toBeNull();
+    expect(getGeneSpecificWarning('CYP2C9')).toBeNull();
+    expect(getGeneSpecificWarning('UGT1A1')).toBeNull();
+    expect(getGeneSpecificWarning('HLA-B')).toBeNull();
+  });
+
+  it('should return null for unknown genes', () => {
+    expect(getGeneSpecificWarning('FAKE_GENE')).toBeNull();
+    expect(getGeneSpecificWarning('')).toBeNull();
+  });
+
+  it('should be case-sensitive (gene symbols are uppercase)', () => {
+    // Gene symbols are standardized as uppercase
+    expect(getGeneSpecificWarning('cyp2d6')).toBeNull();
+    expect(getGeneSpecificWarning('Cyp2D6')).toBeNull();
+    // Only exact uppercase match should work
+    expect(getGeneSpecificWarning('CYP2D6')).not.toBeNull();
+  });
+});
+
+// ─── Disclaimer Integration in Analysis Results ──────────────────────────────
+
+describe('analyzePgx — disclaimer integration', () => {
+  it('should include array limitation text in the disclaimer field', () => {
+    const panel = makePgxPanel();
+    const result = analyzePgx({}, {}, panel, 'premium');
+    expect(result.disclaimer).toContain('Array-based genotyping');
+    expect(result.disclaimer).toContain('structural variants');
+    expect(result.disclaimer).toContain('copy number variations');
+  });
+
+  it('should include DTC and CYP2D6 warnings in disclaimer', () => {
+    const panel = makePgxPanel();
+    const result = analyzePgx({}, {}, panel, 'pro');
+    expect(result.disclaimer).toContain('Direct-to-consumer');
+    expect(result.disclaimer).toContain('CYP2D6');
+    expect(result.disclaimer).toContain('healthcare provider');
   });
 });

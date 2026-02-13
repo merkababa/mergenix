@@ -8,6 +8,10 @@
  *
  * Supports 12 pharmacogenes with clinical guidelines from CPIC and DPWG.
  *
+ * Includes prominent array-limitation disclaimers for all PGx genes,
+ * with additional gene-specific warnings for highly polymorphic genes
+ * like CYP2D6 where consumer arrays have known blind spots.
+ *
  * Ported from Source/pharmacogenomics.py (525 lines).
  */
 
@@ -25,6 +29,67 @@ import type {
 
 import { TIER_GATING } from './types';
 import { PREMIUM_PGX_GENES, PGX_GENES } from '@mergenix/genetics-data';
+
+// ─── Array Limitation Disclaimers ────────────────────────────────────────────
+
+/**
+ * General array limitation disclaimer applicable to ALL pharmacogenes.
+ *
+ * This text should be displayed prominently on any PGx report to inform
+ * users that consumer DNA arrays cannot detect the full range of
+ * pharmacogenomic variation.
+ */
+export const ARRAY_LIMITATION_DISCLAIMER =
+  'Array-based genotyping cannot detect structural variants, copy number ' +
+  'variations (CNVs), or all known star alleles for any pharmacogene. ' +
+  'Results should be confirmed with clinical-grade testing before making ' +
+  'medication changes.';
+
+/**
+ * Gene-specific warnings for pharmacogenes with known array blind spots.
+ *
+ * Maps gene symbols to warning text that should be displayed alongside
+ * that gene's results. Genes not in this map have no additional
+ * gene-specific warning beyond the general disclaimer.
+ */
+const GENE_SPECIFIC_WARNINGS: Record<string, string> = {
+  CYP2D6:
+    'CYP2D6 is highly polymorphic with known hybrid alleles and gene ' +
+    'duplications/deletions that CANNOT be detected by consumer DNA arrays. ' +
+    'CYP2D6 results from this analysis are particularly limited.',
+  CYP2C19:
+    'CYP2C19*17 (ultrarapid allele) detection depends on rs12248560, which ' +
+    'may not be present on all consumer arrays. Results may underreport ' +
+    'ultrarapid metabolizer status.',
+  DPYD:
+    'DPYD has rare but clinically critical variants (e.g., *2A, *13) that ' +
+    'cause severe fluoropyrimidine toxicity. Consumer arrays may not cover ' +
+    'all clinically relevant DPYD variants.',
+};
+
+/**
+ * Get a gene-specific array limitation warning, if one exists.
+ *
+ * Returns a warning string for genes with known consumer array blind spots
+ * that go beyond the general disclaimer. These warnings highlight specific
+ * structural or polymorphic characteristics that make the gene particularly
+ * poorly suited for consumer array-based genotyping.
+ *
+ * @param gene - Gene symbol (e.g., "CYP2D6", "CYP2C19")
+ * @returns Gene-specific warning text, or null if no additional warning
+ *   is warranted beyond the general array limitation disclaimer
+ *
+ * @example
+ * getGeneSpecificWarning('CYP2D6')
+ * // Returns: "CYP2D6 is highly polymorphic with known hybrid alleles..."
+ *
+ * @example
+ * getGeneSpecificWarning('TPMT')
+ * // Returns: null (no additional gene-specific warning)
+ */
+export function getGeneSpecificWarning(gene: string): string | null {
+  return GENE_SPECIFIC_WARNINGS[gene] ?? null;
+}
 
 // ─── Star Allele Determination ──────────────────────────────────────────────
 
@@ -492,16 +557,29 @@ function getGenesForTier(tier: Tier): string[] {
 /**
  * Return the pharmacogenomics disclaimer text.
  *
- * Covers DTC limitations, CYP2D6 structural variants, and clinical guidance.
+ * Includes:
+ * - General array limitation disclaimer (applicable to all pharmacogenes)
+ * - DTC-specific limitations for structural variant detection
+ * - CYP2D6-specific warnings about deletions and duplications
+ * - Clinical guidance recommending professional testing
+ *
+ * This function returns a single comprehensive disclaimer that should be
+ * displayed at the top of any PGx report. For gene-specific warnings,
+ * use {@link getGeneSpecificWarning} in addition to this disclaimer.
  *
  * Ported from Source/pharmacogenomics.py `get_pgx_disclaimer()`.
  *
- * @returns Disclaimer string
+ * @returns Full disclaimer string including general array limitations
+ *
+ * @example
+ * const disclaimer = getPgxDisclaimer();
+ * // "IMPORTANT LIMITATIONS: ... Array-based genotyping cannot detect..."
  */
 export function getPgxDisclaimer(): string {
   return (
     'IMPORTANT LIMITATIONS: This pharmacogenomics analysis is for educational ' +
     'purposes only and is NOT a clinical pharmacogenomic test. ' +
+    ARRAY_LIMITATION_DISCLAIMER + ' ' +
     'Direct-to-consumer (DTC) genotyping arrays cannot detect gene deletions, ' +
     'duplications, or structural rearrangements. This is especially significant ' +
     'for CYP2D6, where gene deletions (*5, ~5-10% of Europeans) and duplications ' +

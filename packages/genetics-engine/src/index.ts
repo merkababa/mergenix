@@ -102,6 +102,8 @@ export {
   predictOffspringPgx,
   analyzePgx,
   getPgxDisclaimer,
+  getGeneSpecificWarning,
+  ARRAY_LIMITATION_DISCLAIMER,
 } from './pgx';
 
 export {
@@ -138,7 +140,76 @@ export {
   clamp,
 } from './utils';
 
+// ─── Device Detection & Memory Management ──────────────────────────────────
+export { detectDevice, getArgon2Params, MemoryGovernor } from './device';
+export type { DeviceProfile, Argon2Params } from './device';
+
+// ─── Lazy Data Loading ──────────────────────────────────────────────────────
+export {
+  fetchWithRetry,
+  loadAllData,
+  getCachedVersions,
+  clearReferenceCache,
+  DataLoadError,
+  DEFAULT_MANIFEST,
+} from './data-loader';
+export type { DataManifest, GeneticsData } from './data-loader';
+
+// ─── Decompression ──────────────────────────────────────────────────────────
+export { detectCompression, decompress, DecompressionError } from './decompression';
+export type {
+  CompressionFormat,
+  DecompressionResult,
+  DecompressionOptions,
+  DecompressionErrorCode,
+} from './decompression';
+
+// ─── Progress Reporter ──────────────────────────────────────────────────────
+export { ProgressReporter, STAGE_DISPLAY_NAMES, getStageDisplayName } from './progress';
+export type { ProgressEvent } from './progress';
+
 // ─── Tier Gating Config ──────────────────────────────────────────────────────
 // Re-export tier gating constants for frontend tier-gating UI.
 export { TIER_GATING } from './types';
 export type { TierGating } from './types';
+
+// ─── Build Detection ────────────────────────────────────────────────────────
+export { detectBuildFromHeaders, detectBuildFromSentinels, detectGenomeBuild } from './build-detection';
+export type { BuildDetectionResult, SentinelSnp } from './build-detection';
+
+// ─── Liftover ───────────────────────────────────────────────────────────────
+export { LiftoverTable, createLiftoverTable } from './liftover';
+export type { LiftoverEntry, LiftoverResult, LiftoverSummary } from './liftover';
+
+// ─── Strand Harmonization ───────────────────────────────────────────────────
+export { isPalindromicPair, analyzeStrand, flipStrand, harmonizeStrand, STRAND_REFERENCE_SNPS } from './strand';
+export type { StrandAnalysisResult, ReferenceAllele } from './strand';
+
+// ─── Coverage Calculator ───────────────────────────────────────────────────
+export { calculateDiseaseCoverage, calculateCoverageMetrics, getCoverageSummary } from './coverage';
+
+// ─── Couple/Offspring Combiner ─────────────────────────────────────────────
+export {
+  calculateARRisk,
+  calculateADRisk,
+  calculateXLinkedRisk,
+  combineForCondition,
+  combineAllConditions,
+} from './combiner';
+export type { ParentConditionInput, OffspringPrediction } from './combiner';
+
+// ─── Residual Risk Calculator ───────────────────────────────────────────────
+export {
+  COMMON_DETECTION_RATES,
+  calculateResidualRisk,
+  getResidualRisk,
+  formatResidualRisk,
+} from './residual-risk';
+export type { DetectionRateEntry, ResidualRiskResult } from './residual-risk';
+
+// ─── Chip Version Detection ──────────────────────────────────────────────────
+export {
+  detectChipVersion as detectChipVersionFromProfile,
+  getChipNotes,
+  ENGINE_VERSION,
+} from './chip-detection';

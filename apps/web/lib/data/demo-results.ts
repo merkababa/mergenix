@@ -950,4 +950,10 @@ Mergenix Automated Referral System
     engineVersion: "3.0.0",
     tier: "pro",
   },
+
+  // ─── Coverage & Chip Detection ──────────────────────────────────────────
+  coupleMode: true,
+  coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
+  chipVersion: null,
+  genomeBuild: "GRCh37",
 };

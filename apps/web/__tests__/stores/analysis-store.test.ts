@@ -102,6 +102,10 @@ const mockResults: FullAnalysisResult = {
     engineVersion: '3.0.0',
     tier: 'free',
   },
+  coupleMode: false,
+  coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
+  chipVersion: null,
+  genomeBuild: 'GRCh37',
 };
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -612,7 +616,7 @@ describe('useAnalysisStore', () => {
             parentAStatus: 'carrier',
             parentBStatus: 'normal',
             offspringRisk: { affected: 0, carrier: 50, normal: 50 },
-            riskLevel: 'carrier_risk',
+            riskLevel: 'carrier_detected',
             rsid: 'rs2',
             inheritance: 'autosomal_recessive',
           },

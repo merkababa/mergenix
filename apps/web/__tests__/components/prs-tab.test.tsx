@@ -115,6 +115,10 @@ const mockResults: FullAnalysisResult = {
     engineVersion: '3.0.0',
     tier: 'pro',
   },
+  coupleMode: false,
+  coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
+  chipVersion: null,
+  genomeBuild: 'GRCh37',
 };
 
 /** Results with no PRS conditions for empty state testing. */

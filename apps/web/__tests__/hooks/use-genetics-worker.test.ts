@@ -339,7 +339,7 @@ describe('useGeneticsWorker', () => {
     // Simulate trait_prediction progress
     act(() => {
       const event = new MessageEvent('message', {
-        data: { type: 'analysis_progress', stage: 'trait_prediction', progress: 60 },
+        data: { type: 'analysis_progress', stage: 'trait_prediction', progress: 60, displayName: 'Trait Prediction' },
       });
       lastWorkerInstance!.onmessage?.(event);
     });
@@ -353,7 +353,7 @@ describe('useGeneticsWorker', () => {
     // Simulate "complete" stage — should NOT update currentStep
     act(() => {
       const event = new MessageEvent('message', {
-        data: { type: 'analysis_progress', stage: 'complete', progress: 100 },
+        data: { type: 'analysis_progress', stage: 'complete', progress: 100, displayName: 'Complete' },
       });
       lastWorkerInstance!.onmessage?.(event);
     });
@@ -437,6 +437,10 @@ describe('useGeneticsWorker', () => {
         engineVersion: '3.0.0',
         tier: 'free',
       },
+      coupleMode: false,
+      coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
+      chipVersion: null,
+      genomeBuild: 'GRCh37',
     };
 
     act(() => {

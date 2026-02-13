@@ -15,6 +15,20 @@ import {
   analyzeCarrierRisk,
   getAnalysisSummary,
   getCarrierDisclaimer,
+  // E4: Gene-level grouping
+  groupVariantsByGene,
+  analyzeGeneCarrierStatus,
+  // E5: Compound het detection
+  detectCompoundHet,
+  // E6: Testing status
+  getTestingStatus,
+  determineExtendedCarrierStatus,
+} from '../src/carrier';
+import type {
+  ExtendedCarrierResult,
+  CompoundHetResult,
+  GeneVariantGroup,
+  GeneCarrierResult,
 } from '../src/carrier';
 import type { CarrierPanelEntry } from '../src/types';
 import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
@@ -528,5 +542,460 @@ describe('getCarrierDisclaimer', () => {
   it('should clarify carrier status does not guarantee disease', () => {
     const disclaimer = getCarrierDisclaimer();
     expect(disclaimer).toMatch(/carrier status does not guarantee/i);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// E6: Testing Status — "Not Tested" vs "Variant Not Detected"
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('getTestingStatus', () => {
+  it('should return "not_tested" when rsID is not in the genotype map', () => {
+    const genotypes = { rs111: 'CC', rs222: 'AG' };
+    expect(getTestingStatus('rs999', genotypes)).toBe('not_tested');
+  });
+
+  it('should return "tested" when rsID has a valid genotype call', () => {
+    const genotypes = { rs111: 'CC', rs222: 'AG' };
+    expect(getTestingStatus('rs111', genotypes)).toBe('tested');
+    expect(getTestingStatus('rs222', genotypes)).toBe('tested');
+  });
+
+  it('should return "no_call" when rsID has "--" genotype', () => {
+    const genotypes = { rs111: '--' };
+    expect(getTestingStatus('rs111', genotypes)).toBe('no_call');
+  });
+
+  it('should return "no_call" when rsID has "00" genotype', () => {
+    const genotypes = { rs111: '00' };
+    expect(getTestingStatus('rs111', genotypes)).toBe('no_call');
+  });
+
+  it('should return "no_call" when rsID has empty string genotype', () => {
+    const genotypes = { rs111: '' };
+    expect(getTestingStatus('rs111', genotypes)).toBe('no_call');
+  });
+
+  it('should return "tested" for a valid single-letter genotype that is not a no-call pattern', () => {
+    // Note: "A" is not in the no-call set, so it counts as tested even if
+    // determineCarrierStatus would return unknown for length != 2
+    const genotypes = { rs111: 'A' };
+    expect(getTestingStatus('rs111', genotypes)).toBe('tested');
+  });
+});
+
+describe('determineExtendedCarrierStatus', () => {
+  it('should return "not_tested" when rsID is not in genotype map', () => {
+    const genotypes = { rs222: 'CC' };
+    expect(determineExtendedCarrierStatus('rs111', genotypes, 'T', 'C')).toBe('not_tested');
+  });
+
+  it('should return "unknown" when rsID has a no-call genotype', () => {
+    expect(determineExtendedCarrierStatus('rs111', { rs111: '--' }, 'T', 'C')).toBe('unknown');
+    expect(determineExtendedCarrierStatus('rs111', { rs111: '00' }, 'T', 'C')).toBe('unknown');
+    expect(determineExtendedCarrierStatus('rs111', { rs111: '' }, 'T', 'C')).toBe('unknown');
+  });
+
+  it('should return "normal" for tested reference genotype', () => {
+    expect(determineExtendedCarrierStatus('rs111', { rs111: 'CC' }, 'T', 'C')).toBe('normal');
+  });
+
+  it('should return "carrier" for tested heterozygous genotype', () => {
+    expect(determineExtendedCarrierStatus('rs111', { rs111: 'CT' }, 'T', 'C')).toBe('carrier');
+  });
+
+  it('should return "affected" for tested homozygous pathogenic genotype', () => {
+    expect(determineExtendedCarrierStatus('rs111', { rs111: 'TT' }, 'T', 'C')).toBe('affected');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// E4: Gene-Level Carrier Analysis
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('groupVariantsByGene', () => {
+  it('should group entries by gene symbol', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', condition: 'CF F508del' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', condition: 'CF G542X' }),
+      makePanelEntry({ rsid: 'rs3', gene: 'HBB', condition: 'Sickle Cell' }),
+      makePanelEntry({ rsid: 'rs4', gene: 'CFTR', condition: 'CF N1303K' }),
+    ];
+
+    const groups = groupVariantsByGene(panel);
+
+    expect(groups).toHaveLength(2);
+
+    const cftrGroup = groups.find((g) => g.gene === 'CFTR');
+    const hbbGroup = groups.find((g) => g.gene === 'HBB');
+
+    expect(cftrGroup).toBeDefined();
+    expect(cftrGroup!.entries).toHaveLength(3);
+    expect(cftrGroup!.entries.map((e) => e.rsid)).toEqual(['rs1', 'rs2', 'rs4']);
+
+    expect(hbbGroup).toBeDefined();
+    expect(hbbGroup!.entries).toHaveLength(1);
+    expect(hbbGroup!.entries[0]!.rsid).toBe('rs3');
+  });
+
+  it('should return empty array for empty panel', () => {
+    expect(groupVariantsByGene([])).toEqual([]);
+  });
+
+  it('should handle single-variant genes correctly', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'GENE_A', condition: 'Disease A' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'GENE_B', condition: 'Disease B' }),
+      makePanelEntry({ rsid: 'rs3', gene: 'GENE_C', condition: 'Disease C' }),
+    ];
+
+    const groups = groupVariantsByGene(panel);
+    expect(groups).toHaveLength(3);
+    groups.forEach((g) => {
+      expect(g.entries).toHaveLength(1);
+    });
+  });
+});
+
+describe('analyzeGeneCarrierStatus', () => {
+  it('should return worst-case status across multiple variants in a gene', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    // rs1: carrier (CT), rs2: normal (GG) -> gene-level: carrier
+    const genotypes = { rs1: 'CT', rs2: 'GG' };
+    const result = analyzeGeneCarrierStatus('CFTR', entries, genotypes);
+
+    expect(result.gene).toBe('CFTR');
+    expect(result.geneStatus).toBe('carrier');
+    expect(result.variantDetails).toHaveLength(2);
+    expect(result.variantDetails[0]!.status).toBe('carrier');
+    expect(result.variantDetails[1]!.status).toBe('normal');
+  });
+
+  it('should return "affected" as worst case when one variant is affected', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'HBB', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'HBB', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    // rs1: normal (CC), rs2: affected (AA) -> gene-level: affected
+    const genotypes = { rs1: 'CC', rs2: 'AA' };
+    const result = analyzeGeneCarrierStatus('HBB', entries, genotypes);
+
+    expect(result.geneStatus).toBe('affected');
+  });
+
+  it('should return "not_tested" when all variants are missing from genotype map', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'GENE_X' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'GENE_X' }),
+    ];
+
+    const genotypes = { rs999: 'CC' }; // Neither rs1 nor rs2 present
+    const result = analyzeGeneCarrierStatus('GENE_X', entries, genotypes);
+
+    expect(result.geneStatus).toBe('not_tested');
+    expect(result.variantDetails[0]!.status).toBe('not_tested');
+    expect(result.variantDetails[1]!.status).toBe('not_tested');
+  });
+
+  it('should prefer "normal" over "not_tested" for gene-level status', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'GENE_Y', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'GENE_Y', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    // rs1: normal (CC), rs2: not in map -> gene-level: normal (worse than not_tested)
+    const genotypes = { rs1: 'CC' };
+    const result = analyzeGeneCarrierStatus('GENE_Y', entries, genotypes);
+
+    expect(result.geneStatus).toBe('normal');
+    expect(result.variantDetails[0]!.status).toBe('normal');
+    expect(result.variantDetails[1]!.status).toBe('not_tested');
+  });
+
+  it('should not flag compound het when only one variant is carrier', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    const genotypes = { rs1: 'CT', rs2: 'GG' }; // Only rs1 is carrier
+    const result = analyzeGeneCarrierStatus('CFTR', entries, genotypes);
+
+    expect(result.compoundHet).toBeNull();
+  });
+
+  it('should flag compound het when 2+ variants are carrier in the same gene', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', pathogenic_allele: 'A', reference_allele: 'G' }),
+      makePanelEntry({ rsid: 'rs3', gene: 'CFTR', pathogenic_allele: 'T', reference_allele: 'G' }),
+    ];
+
+    // rs1: carrier (CT), rs2: carrier (GA), rs3: normal (GG)
+    const genotypes = { rs1: 'CT', rs2: 'GA', rs3: 'GG' };
+    const result = analyzeGeneCarrierStatus('CFTR', entries, genotypes);
+
+    expect(result.compoundHet).not.toBeNull();
+    expect(result.compoundHet!.isCompoundHet).toBe(true);
+    expect(result.compoundHet!.variants).toEqual(['rs1', 'rs2']);
+    expect(result.compoundHet!.label).toBe('Potential Risk - Phasing Unknown');
+  });
+
+  it('should include testing status in variant details', () => {
+    const entries: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'TEST', pathogenic_allele: 'A', reference_allele: 'G' }),
+      makePanelEntry({ rsid: 'rs3', gene: 'TEST', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+
+    const genotypes = { rs1: 'CC', rs2: '--' }; // rs1 tested, rs2 no-call, rs3 not in map
+    const result = analyzeGeneCarrierStatus('TEST', entries, genotypes);
+
+    expect(result.variantDetails[0]!.testingStatus).toBe('tested');
+    expect(result.variantDetails[1]!.testingStatus).toBe('no_call');
+    expect(result.variantDetails[2]!.testingStatus).toBe('not_tested');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// E5: Compound Heterozygote Detection
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('detectCompoundHet', () => {
+  it('should return isCompoundHet=false for zero carrier variants', () => {
+    const result = detectCompoundHet(
+      [{ rsid: 'rs1', status: 'normal' }, { rsid: 'rs2', status: 'affected' }],
+      'CFTR',
+    );
+    expect(result.isCompoundHet).toBe(false);
+    expect(result.variants).toEqual([]);
+    expect(result.label).toBe('Not Compound Het');
+  });
+
+  it('should return isCompoundHet=false for a single carrier variant', () => {
+    const result = detectCompoundHet(
+      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'normal' }],
+      'CFTR',
+    );
+    expect(result.isCompoundHet).toBe(false);
+    expect(result.variants).toEqual([]);
+    expect(result.label).toBe('Not Compound Het');
+  });
+
+  it('should detect compound het when 2 carrier variants present', () => {
+    const result = detectCompoundHet(
+      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      'CFTR',
+    );
+    expect(result.isCompoundHet).toBe(true);
+    expect(result.variants).toEqual(['rs1', 'rs2']);
+    expect(result.label).toBe('Potential Risk - Phasing Unknown');
+    expect(result.explanation).toContain('unphased');
+    expect(result.explanation).toContain('CFTR');
+  });
+
+  it('should detect compound het when 3+ carrier variants present', () => {
+    const result = detectCompoundHet(
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'carrier' },
+        { rsid: 'rs3', status: 'carrier' },
+      ],
+      'HBB',
+    );
+    expect(result.isCompoundHet).toBe(true);
+    expect(result.variants).toEqual(['rs1', 'rs2', 'rs3']);
+    expect(result.explanation).toContain('3 different heterozygous');
+    expect(result.explanation).toContain('HBB');
+  });
+
+  it('should never label as "Affected" — always "Potential Risk"', () => {
+    const result = detectCompoundHet(
+      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      'CFTR',
+    );
+    // The label must NEVER say "Affected" — DTC data is unphased
+    expect(result.label).not.toContain('Affected');
+    expect(result.label).toBe('Potential Risk - Phasing Unknown');
+  });
+
+  it('should include phasing explanation in the result', () => {
+    const result = detectCompoundHet(
+      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      'TEST_GENE',
+    );
+    expect(result.explanation).toContain('phased sequencing');
+    expect(result.explanation).toContain('cis');
+    expect(result.explanation).toContain('trans');
+    expect(result.explanation).toContain('TEST_GENE');
+  });
+
+  it('should filter out non-carrier variants and only count carriers', () => {
+    const result = detectCompoundHet(
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'affected' },
+        { rsid: 'rs3', status: 'carrier' },
+        { rsid: 'rs4', status: 'normal' },
+      ],
+      'GENE_X',
+    );
+    // Only rs1 and rs3 are carriers
+    expect(result.isCompoundHet).toBe(true);
+    expect(result.variants).toEqual(['rs1', 'rs3']);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Integration: Extended fields in analyzeCarrierRisk results
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('analyzeCarrierRisk — extended fields (E4/E5/E6)', () => {
+  it('should include extended status fields in results', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST1', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+
+    const parentA = { rs1: 'CT' }; // carrier
+    const parentB = { rs1: 'CC' }; // normal
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0] as ExtendedCarrierResult;
+
+    expect(result.parentAExtendedStatus).toBe('carrier');
+    expect(result.parentBExtendedStatus).toBe('normal');
+    expect(result.parentATestingStatus).toBe('tested');
+    expect(result.parentBTestingStatus).toBe('tested');
+  });
+
+  it('should set parentAExtendedStatus to "not_tested" when rsID not in parent A map', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST1', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+
+    const parentA = {}; // rs1 not present — not tested
+    const parentB = { rs1: 'CC' };
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0] as ExtendedCarrierResult;
+
+    // Standard status falls back to 'unknown' (empty genotype)
+    expect(result.parentAStatus).toBe('unknown');
+    // Extended status distinguishes "not tested"
+    expect(result.parentAExtendedStatus).toBe('not_tested');
+    expect(result.parentATestingStatus).toBe('not_tested');
+  });
+
+  it('should set extended status to "unknown" for no-call genotype (not "not_tested")', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST1', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+
+    const parentA = { rs1: '--' }; // no-call
+    const parentB = { rs1: 'CC' };
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0] as ExtendedCarrierResult;
+
+    // NOTE: The standard determineCarrierStatus treats '--' as a valid 2-char genotype
+    // where neither '-' matches 'T', so it returns 'normal'. The EXTENDED status
+    // correctly catches '--' as a no-call and returns 'unknown'. This is the key
+    // improvement from E6 — the extended status is more semantically correct.
+    expect(result.parentAStatus).toBe('normal'); // standard logic: 2 chars, 0 pathogenic = normal
+    expect(result.parentAExtendedStatus).toBe('unknown'); // extended: catches '--' as no-call
+    expect(result.parentATestingStatus).toBe('no_call');
+  });
+
+  it('should include gene-level analysis in results', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', condition: 'CF-1', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', condition: 'CF-2', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    const parentA = { rs1: 'CT', rs2: 'GG' }; // carrier at rs1, normal at rs2
+    const parentB = { rs1: 'CC', rs2: 'CC' }; // normal at both
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+
+    // Both results share the same gene, so geneAnalysis should be the same object
+    const result1 = results.find((r) => r.rsid === 'rs1') as ExtendedCarrierResult;
+    const result2 = results.find((r) => r.rsid === 'rs2') as ExtendedCarrierResult;
+
+    expect(result1.geneAnalysisParentA).not.toBeNull();
+    expect(result1.geneAnalysisParentA!.gene).toBe('CFTR');
+    expect(result1.geneAnalysisParentA!.geneStatus).toBe('carrier');
+    expect(result1.geneAnalysisParentA!.variantDetails).toHaveLength(2);
+
+    // Same gene analysis for both results from same gene
+    expect(result2.geneAnalysisParentA).toBe(result1.geneAnalysisParentA);
+  });
+
+  it('should detect compound het in gene-level analysis when parent has 2+ carrier variants', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', condition: 'CF-1', pathogenic_allele: 'T', reference_allele: 'C' }),
+      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', condition: 'CF-2', pathogenic_allele: 'A', reference_allele: 'G' }),
+    ];
+
+    // Parent A is carrier at BOTH CFTR variants -> compound het flag
+    const parentA = { rs1: 'CT', rs2: 'GA' };
+    const parentB = { rs1: 'CC', rs2: 'GG' };
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0] as ExtendedCarrierResult;
+
+    expect(result.geneAnalysisParentA).not.toBeNull();
+    expect(result.geneAnalysisParentA!.compoundHet).not.toBeNull();
+    expect(result.geneAnalysisParentA!.compoundHet!.isCompoundHet).toBe(true);
+    expect(result.geneAnalysisParentA!.compoundHet!.variants).toContain('rs1');
+    expect(result.geneAnalysisParentA!.compoundHet!.variants).toContain('rs2');
+
+    // Parent B has no carrier variants -> no compound het
+    expect(result.geneAnalysisParentB).not.toBeNull();
+    expect(result.geneAnalysisParentB!.compoundHet).toBeNull();
+  });
+
+  it('should remain backward-compatible with CarrierResult type', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST1', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+    const parentA = { rs1: 'CT' };
+    const parentB = { rs1: 'CC' };
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0]!;
+
+    // All original CarrierResult fields must be present
+    expect(result.condition).toBe('Test Disease');
+    expect(result.gene).toBe('TEST1');
+    expect(result.severity).toBe('high');
+    expect(result.description).toBe('A test disease');
+    expect(result.parentAStatus).toBe('carrier');
+    expect(result.parentBStatus).toBe('normal');
+    expect(result.offspringRisk).toBeDefined();
+    expect(result.riskLevel).toBe('carrier_detected');
+    expect(result.rsid).toBe('rs1');
+    expect(result.inheritance).toBe('autosomal_recessive');
+  });
+
+  it('should handle "00" no-call genotype correctly in extended status', () => {
+    const panel: CarrierPanelEntry[] = [
+      makePanelEntry({ rsid: 'rs1', gene: 'TEST1', pathogenic_allele: 'T', reference_allele: 'C' }),
+    ];
+
+    const parentA = { rs1: '00' }; // no-call
+    const parentB = { rs1: 'CT' };
+
+    const results = analyzeCarrierRisk(parentA, parentB, panel);
+    const result = results[0] as ExtendedCarrierResult;
+
+    expect(result.parentAExtendedStatus).toBe('unknown');
+    expect(result.parentATestingStatus).toBe('no_call');
+    expect(result.parentBExtendedStatus).toBe('carrier');
+    expect(result.parentBTestingStatus).toBe('tested');
   });
 });

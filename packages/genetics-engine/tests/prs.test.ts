@@ -3,19 +3,31 @@
  *
  * Tests cover the normal CDF implementation, raw PRS calculation,
  * normalization, risk categorization, offspring prediction, and tier gating.
+ *
+ * V2 enhancement tests:
+ * - Per-allele average normalization
+ * - Insufficient coverage threshold
+ * - CLT offspring prediction with 25th-75th percentile
+ * - Population note for European-derived weights
+ * - Inverse normal CDF
  */
 
 import { describe, it, expect } from 'vitest';
 import {
   normalCdf,
+  normalInvCdf,
   zScoreToPercentile,
   calculateRawPrs,
   normalizePrs,
   getRiskCategory,
   predictOffspringPrsRange,
+  predictOffspringPrsClt,
+  isInsufficientCoverage,
+  getPopulationNote,
   analyzePrs,
   getPrsDisclaimer,
 } from '../src/prs';
+import type { EnhancedPrsConditionResult, CltOffspringPrediction } from '../src/prs';
 import type { PrsWeightsData } from '../src/types';
 
 // ─── Test Fixtures ────────────────────────────────────────────────────────
@@ -156,6 +168,61 @@ describe('normalCdf', () => {
   });
 });
 
+// ─── Inverse Normal CDF ────────────────────────────────────────────────────
+
+describe('normalInvCdf', () => {
+  it('should return 0 for p=0.5', () => {
+    expect(normalInvCdf(0.5)).toBeCloseTo(0, 5);
+  });
+
+  it('should return approximately 1.96 for p=0.975', () => {
+    expect(normalInvCdf(0.975)).toBeCloseTo(1.96, 2);
+  });
+
+  it('should return approximately -1.96 for p=0.025', () => {
+    expect(normalInvCdf(0.025)).toBeCloseTo(-1.96, 2);
+  });
+
+  it('should return approximately -0.6745 for p=0.25 (25th percentile)', () => {
+    expect(normalInvCdf(0.25)).toBeCloseTo(-0.6745, 3);
+  });
+
+  it('should return approximately 0.6745 for p=0.75 (75th percentile)', () => {
+    expect(normalInvCdf(0.75)).toBeCloseTo(0.6745, 3);
+  });
+
+  it('should be the inverse of normalCdf', () => {
+    const zValues = [-2, -1, -0.5, 0.1, 0.5, 1, 2];
+    for (const z of zValues) {
+      const p = normalCdf(z);
+      const zRecovered = normalInvCdf(p);
+      expect(zRecovered).toBeCloseTo(z, 4);
+    }
+  });
+
+  it('should throw for p=0', () => {
+    expect(() => normalInvCdf(0)).toThrow('p must be in (0, 1)');
+  });
+
+  it('should throw for p=1', () => {
+    expect(() => normalInvCdf(1)).toThrow('p must be in (0, 1)');
+  });
+
+  it('should throw for negative p', () => {
+    expect(() => normalInvCdf(-0.1)).toThrow('p must be in (0, 1)');
+  });
+
+  it('should handle extreme low tail (p=0.001)', () => {
+    const z = normalInvCdf(0.001);
+    expect(z).toBeCloseTo(-3.09, 1);
+  });
+
+  it('should handle extreme high tail (p=0.999)', () => {
+    const z = normalInvCdf(0.999);
+    expect(z).toBeCloseTo(3.09, 1);
+  });
+});
+
 describe('zScoreToPercentile', () => {
   it('should convert z=0 to 50th percentile', () => {
     expect(zScoreToPercentile(0)).toBe(50);
@@ -174,21 +241,21 @@ describe('zScoreToPercentile', () => {
   });
 });
 
-// ─── Raw PRS Calculation ────────────────────────────────────────────────────
+// ─── Raw PRS Calculation (Per-Allele Average) ─────────────────────────────
 
 describe('calculateRawPrs', () => {
-  it('should sum effect_weight * dosage for matched SNPs', () => {
+  it('should compute per-allele average for all matched SNPs', () => {
     const weights = makePrsWeights();
     // rs1: genotype GG -> dosage 2 (effect allele G) -> 0.3 * 2 = 0.6
     // rs2: genotype AA -> dosage 2 (effect allele A) -> 0.2 * 2 = 0.4
     // rs3: genotype TT -> dosage 2 (effect allele T) -> 0.1 * 2 = 0.2
-    // Total = 1.2
+    // Sum = 1.2, count = 3, average = 0.4
     const result = calculateRawPrs(
       { rs1: 'GG', rs2: 'AA', rs3: 'TT' },
       'coronary_artery_disease',
       weights,
     );
-    expect(result.rawScore).toBeCloseTo(1.2, 5);
+    expect(result.rawScore).toBeCloseTo(0.4, 5);
     expect(result.snpsFound).toBe(3);
   });
 
@@ -199,9 +266,10 @@ describe('calculateRawPrs', () => {
     expect(result.snpsFound).toBe(0);
   });
 
-  it('should correctly count heterozygous dosage (1)', () => {
+  it('should correctly compute per-allele average with heterozygous dosage', () => {
     const weights = makePrsWeights();
     // rs1: genotype AG -> dosage 1 for effect allele G -> 0.3 * 1 = 0.3
+    // Only 1 SNP found, average = 0.3/1 = 0.3
     const result = calculateRawPrs(
       { rs1: 'AG' },
       'coronary_artery_disease',
@@ -211,9 +279,10 @@ describe('calculateRawPrs', () => {
     expect(result.snpsFound).toBe(1);
   });
 
-  it('should correctly count homozygous non-effect dosage (0)', () => {
+  it('should correctly handle homozygous non-effect dosage (0)', () => {
     const weights = makePrsWeights();
     // rs1: genotype AA -> dosage 0 for effect allele G -> 0.3 * 0 = 0
+    // Average = 0/1 = 0
     const result = calculateRawPrs(
       { rs1: 'AA' },
       'coronary_artery_disease',
@@ -230,10 +299,11 @@ describe('calculateRawPrs', () => {
     ).toThrow('not found in PRS weights');
   });
 
-  it('should skip SNPs not present in the genotype map', () => {
+  it('should compute per-allele average when some SNPs are missing', () => {
     const weights = makePrsWeights();
     // Only provide rs1, skip rs2 and rs3
     // rs1: GG -> dosage 2, weight 0.3 -> 0.6
+    // Average = 0.6 / 1 = 0.6
     const result = calculateRawPrs(
       { rs1: 'GG' },
       'coronary_artery_disease',
@@ -247,6 +317,7 @@ describe('calculateRawPrs', () => {
     const weights = makePrsWeights();
     // The source code uses toUpperCase() on genotype
     // rs1: effect allele "G", genotype "gg" -> should still count 2
+    // Average = (0.3 * 2) / 1 = 0.6
     const result = calculateRawPrs(
       { rs1: 'gg' },
       'coronary_artery_disease',
@@ -254,6 +325,33 @@ describe('calculateRawPrs', () => {
     );
     expect(result.rawScore).toBeCloseTo(0.6, 5);
     expect(result.snpsFound).toBe(1);
+  });
+
+  it('per-allele average should be stable regardless of missing SNPs', () => {
+    const weights = makePrsWeights();
+    // With all 3 SNPs, all homozygous effect alleles:
+    // rs1: 0.3*2=0.6, rs2: 0.2*2=0.4, rs3: 0.1*2=0.2 => sum=1.2, avg=0.4
+    const allSnps = calculateRawPrs(
+      { rs1: 'GG', rs2: 'AA', rs3: 'TT' },
+      'coronary_artery_disease',
+      weights,
+    );
+
+    // With only 2 SNPs (missing rs3):
+    // rs1: 0.3*2=0.6, rs2: 0.2*2=0.4 => sum=1.0, avg=0.5
+    const twoSnps = calculateRawPrs(
+      { rs1: 'GG', rs2: 'AA' },
+      'coronary_artery_disease',
+      weights,
+    );
+
+    // Both should be non-zero and reasonable (not diluted to near-zero)
+    expect(allSnps.rawScore).toBeGreaterThan(0);
+    expect(twoSnps.rawScore).toBeGreaterThan(0);
+    // Missing SNP shouldn't cause a dramatic drop like it would with sum-only
+    // (with sum-only: 1.2 vs 1.0 = 17% drop; with average: 0.4 vs 0.5 = no dilution)
+    expect(allSnps.snpsFound).toBe(3);
+    expect(twoSnps.snpsFound).toBe(2);
   });
 });
 
@@ -390,7 +488,68 @@ describe('getRiskCategory', () => {
   });
 });
 
-// ─── Offspring PRS Prediction ───────────────────────────────────────────────
+// ─── Coverage Threshold ─────────────────────────────────────────────────────
+
+describe('isInsufficientCoverage', () => {
+  it('should return true when coverage is below 75%', () => {
+    expect(isInsufficientCoverage(2, 4)).toBe(true); // 50%
+    expect(isInsufficientCoverage(1, 4)).toBe(true); // 25%
+    expect(isInsufficientCoverage(0, 4)).toBe(true); // 0%
+  });
+
+  it('should return false when coverage is at or above 75%', () => {
+    expect(isInsufficientCoverage(3, 4)).toBe(false); // 75%
+    expect(isInsufficientCoverage(4, 4)).toBe(false); // 100%
+    expect(isInsufficientCoverage(3, 3)).toBe(false); // 100%
+  });
+
+  it('should return true when snpsTotal is 0', () => {
+    expect(isInsufficientCoverage(0, 0)).toBe(true);
+  });
+
+  it('should return true when no SNPs found at all', () => {
+    expect(isInsufficientCoverage(0, 10)).toBe(true);
+  });
+
+  it('should handle boundary at exactly 75%', () => {
+    // 75/100 = 0.75 which is NOT < 0.75, so it's sufficient
+    expect(isInsufficientCoverage(75, 100)).toBe(false);
+    // 74/100 = 0.74 which is < 0.75, so it's insufficient
+    expect(isInsufficientCoverage(74, 100)).toBe(true);
+  });
+});
+
+// ─── Population Note ────────────────────────────────────────────────────────
+
+describe('getPopulationNote', () => {
+  it('should return note for European-derived weights', () => {
+    const note = getPopulationNote('European-derived');
+    expect(note).toContain('European-ancestry GWAS');
+    expect(note).toContain('non-European');
+  });
+
+  it('should return note for "Euro" substring', () => {
+    const note = getPopulationNote('Euro GWAS study');
+    expect(note).toContain('European-ancestry');
+  });
+
+  it('should return empty string for multi-ancestry weights', () => {
+    const note = getPopulationNote('Multi-ancestry');
+    expect(note).toBe('');
+  });
+
+  it('should return empty string for empty ancestry note', () => {
+    const note = getPopulationNote('');
+    expect(note).toBe('');
+  });
+
+  it('should be case-insensitive', () => {
+    const note = getPopulationNote('EUROPEAN-DERIVED');
+    expect(note).toContain('European-ancestry');
+  });
+});
+
+// ─── Offspring PRS Prediction (Legacy) ──────────────────────────────────────
 
 describe('predictOffspringPrsRange', () => {
   it('should predict offspring near 50th percentile when both parents are average', () => {
@@ -450,6 +609,65 @@ describe('predictOffspringPrsRange', () => {
     // Expected percentile ~ 50
     const result = predictOffspringPrsRange(-2, 2);
     expect(result.expectedPercentile).toBeCloseTo(50, 0);
+  });
+});
+
+// ─── CLT Offspring PRS Prediction ───────────────────────────────────────────
+
+describe('predictOffspringPrsClt', () => {
+  it('should compute mean PRS as average of both parents', () => {
+    const result = predictOffspringPrsClt(0.5, 0.3, 0, 0, 0.2);
+    expect(result.meanPrs).toBeCloseTo(0.4, 5);
+  });
+
+  it('should predict offspring near 50th percentile when both parents are average', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 0, 0, 0.2);
+    expect(result.expectedPercentile).toBeCloseTo(50, 0);
+  });
+
+  it('should include 25th and 75th percentile (IQR)', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 0, 0, 0.2);
+    expect(result.percentile25).toBeLessThan(result.expectedPercentile);
+    expect(result.percentile75).toBeGreaterThan(result.expectedPercentile);
+    // 25th < expected < 75th
+    expect(result.percentile25).toBeLessThan(result.percentile75);
+  });
+
+  it('should have IQR narrower than the full range', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 1, 1, 0.2);
+    // IQR (25th-75th) should be narrower than rangeLow-rangeHigh
+    const iqrWidth = result.percentile75 - result.percentile25;
+    const rangeWidth = result.rangeHigh - result.rangeLow;
+    expect(iqrWidth).toBeLessThan(rangeWidth);
+  });
+
+  it('should include prediction disclaimer', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 0, 0, 0.2);
+    expect(result.predictionDisclaimer).toContain('statistical modeling');
+    expect(result.predictionDisclaimer).toContain('random allele transmission');
+  });
+
+  it('should apply heritability factor for high z-score parents', () => {
+    // Both parents z=2 -> midParent=2, expected=2*0.5=1.0
+    const result = predictOffspringPrsClt(0.9, 0.9, 2, 2, 0.2);
+    expect(result.expectedPercentile).toBeCloseTo(84.13, 0);
+  });
+
+  it('should handle zero popStd gracefully', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 0, 0, 0);
+    // Should not throw, should produce valid output
+    expect(result.expectedPercentile).toBeCloseTo(50, 0);
+    expect(result.percentile25).toBeLessThan(50);
+    expect(result.percentile75).toBeGreaterThan(50);
+  });
+
+  it('should maintain backward compatibility with rangeLow/rangeHigh', () => {
+    const result = predictOffspringPrsClt(0.5, 0.5, 0, 0, 0.2);
+    // rangeLow and rangeHigh should still be present and valid
+    expect(result.rangeLow).toBeDefined();
+    expect(result.rangeHigh).toBeDefined();
+    expect(result.rangeLow).toBeLessThan(result.rangeHigh);
+    expect(result.confidence).toBe('moderate');
   });
 });
 
@@ -574,6 +792,98 @@ describe('analyzePrs', () => {
     if (cad) {
       // Parent A has high score, Parent B has low score
       expect(cad.parentA.percentile).toBeGreaterThan(cad.parentB.percentile);
+    }
+  });
+
+  // ─── V2 Enhancement Tests ───────────────────────────────────────────
+
+  it('should include insufficientCoverage flag for each condition', () => {
+    const weights = makePrsWeights();
+    const snps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro');
+
+    const conditionKeys = Object.keys(result.conditions);
+    for (const key of conditionKeys) {
+      const condition = result.conditions[key]!;
+      expect(typeof condition.insufficientCoverage).toBe('boolean');
+    }
+  });
+
+  it('should flag insufficientCoverage when <75% SNPs found', () => {
+    const weights = makePrsWeights();
+    // CAD has 3 SNPs. Provide only rs1 (1/3 = 33% < 75%)
+    const sparseSnps = { rs1: 'GG' };
+    const result = analyzePrs(sparseSnps, sparseSnps, weights, 'pro');
+
+    const cad = result.conditions['coronary_artery_disease'];
+    if (cad) {
+      expect(cad.insufficientCoverage).toBe(true);
+    }
+  });
+
+  it('should not flag insufficientCoverage when >=75% SNPs found', () => {
+    const weights = makePrsWeights();
+    // CAD has 3 SNPs. Provide all 3 (3/3 = 100% >= 75%)
+    const fullSnps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const result = analyzePrs(fullSnps, fullSnps, weights, 'pro');
+
+    const cad = result.conditions['coronary_artery_disease'];
+    if (cad) {
+      expect(cad.insufficientCoverage).toBe(false);
+    }
+  });
+
+  it('should flag insufficientCoverage if either parent has low coverage', () => {
+    const weights = makePrsWeights();
+    // Parent A has all SNPs, Parent B has only 1/3
+    const fullSnps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const sparseSnps = { rs1: 'GG' };
+    const result = analyzePrs(fullSnps, sparseSnps, weights, 'pro');
+
+    const cad = result.conditions['coronary_artery_disease'];
+    if (cad) {
+      expect(cad.insufficientCoverage).toBe(true);
+    }
+  });
+
+  it('should include populationNote for European-derived conditions', () => {
+    const weights = makePrsWeights();
+    const snps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro');
+
+    // CAD has "European-derived" ancestry note
+    const cad = result.conditions['coronary_artery_disease'];
+    if (cad) {
+      expect(cad.populationNote).toContain('European-ancestry');
+      expect(cad.populationNote).toContain('non-European');
+    }
+  });
+
+  it('should have empty populationNote for multi-ancestry conditions', () => {
+    const weights = makePrsWeights();
+    const snps = { rs4: 'CC', rs5: 'GG' };
+    const result = analyzePrs(snps, snps, weights, 'pro');
+
+    // T2D has "Multi-ancestry" ancestry note
+    const t2d = result.conditions['type_2_diabetes'];
+    if (t2d) {
+      expect(t2d.populationNote).toBe('');
+    }
+  });
+
+  it('should include CLT offspring prediction fields', () => {
+    const weights = makePrsWeights();
+    const snps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro');
+
+    const cad = result.conditions['coronary_artery_disease'];
+    if (cad) {
+      const offspring = cad.offspring as CltOffspringPrediction;
+      expect(offspring.meanPrs).toBeDefined();
+      expect(offspring.percentile25).toBeDefined();
+      expect(offspring.percentile75).toBeDefined();
+      expect(offspring.predictionDisclaimer).toBeDefined();
+      expect(offspring.percentile25).toBeLessThan(offspring.percentile75);
     }
   });
 });

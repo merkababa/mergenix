@@ -241,7 +241,7 @@ export function predictTrait(
       parentAGenotype,
       parentBGenotype,
       offspringProbabilities: {},
-      note: `Genotypes ${JSON.stringify(unmappedGenotypes)} not found in phenotype map`,
+      note: 'Unable to predict this trait from your genotype data. This may be due to an uncommon genetic variant.',
     };
   }
 
@@ -282,7 +282,7 @@ export function predictTrait(
 
   // Add note if some genotypes were unmapped
   if (unmappedGenotypes.length > 0) {
-    result.note = `Some genotypes unmapped: ${JSON.stringify(unmappedGenotypes)}`;
+    result.note = 'Some genetic variants could not be mapped to known phenotypes. Results may be partial.';
   }
 
   return result;

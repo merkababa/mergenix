@@ -425,17 +425,19 @@ describe('parseVcf', () => {
     expect(result['rs300']).toBe('GG');
   });
 
-  it('should skip indels (multi-base REF or ALT)', () => {
+  it('should accept small indels (up to 50bp) with "/" separator format', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1',       // SNP - kept
-      '1\t200\trs200\tAT\tG\t30\tPASS\t.\tGT\t0/1',      // Indel REF - skipped
-      '1\t300\trs300\tA\tGTT\t30\tPASS\t.\tGT\t0/1',     // Indel ALT - skipped
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1',       // SNP - kept, concatenated
+      '1\t200\trs200\tAT\tG\t30\tPASS\t.\tGT\t0/1',      // Indel REF - kept, "/" format
+      '1\t300\trs300\tA\tGTT\t30\tPASS\t.\tGT\t0/1',     // Indel ALT - kept, "/" format
     ].join('\n');
     const result = parseVcf(content);
-    expect(Object.keys(result)).toHaveLength(1);
+    expect(Object.keys(result)).toHaveLength(3);
     expect(result['rs100']).toBe('AG');
+    expect(result['rs200']).toBe('AT/G');
+    expect(result['rs300']).toBe('A/GTT');
   });
 
   it('should skip no-call genotypes (./.)', () => {

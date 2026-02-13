@@ -469,6 +469,51 @@ export interface CounselingResult {
   upgradeMessage: string | null;
 }
 
+// ─── Coverage & Chip Detection Types ────────────────────────────────────────
+
+/**
+ * Per-disease coverage detail — how many target variants were genotyped for one disease.
+ */
+export interface DiseaseCoverage {
+  /** How many of the disease's target variants were found in the file. */
+  variantsTested: number;
+  /** Total target variants for this disease. */
+  variantsTotal: number;
+  /** Coverage percentage (0-100). */
+  coveragePct: number;
+  /** Whether coverage is sufficient for meaningful analysis. */
+  isSufficient: boolean;
+}
+
+/**
+ * Per-disease coverage metrics — how many target variants were actually genotyped.
+ */
+export interface CoverageMetrics {
+  /** Total diseases in panel. */
+  totalDiseases: number;
+  /** Diseases with at least one variant genotyped. */
+  diseasesWithCoverage: number;
+  /** Per-disease detail (keyed by disease condition name). */
+  perDisease: Record<string, DiseaseCoverage>;
+}
+
+/**
+ * Detected chip/array information.
+ */
+export interface ChipVersion {
+  /** Provider name (e.g., "23andMe", "AncestryDNA"). */
+  provider: string;
+  /** Version string (e.g., "v5", "GSA v3"). */
+  version: string;
+  /** Total SNP count on the chip. */
+  snpCount: number;
+  /** Confidence of detection (0-1). */
+  confidence: number;
+}
+
+/** Genome build/assembly. */
+export type GenomeBuild = 'GRCh37' | 'GRCh38' | 'unknown';
+
 // ─── Full Analysis Result ───────────────────────────────────────────────────
 
 /**
@@ -498,9 +543,31 @@ export interface FullAnalysisResult {
     engineVersion: string;
     tier: Tier;
   };
+  /** True if analyzing two parents, false for single-parent mode. */
+  coupleMode: boolean;
+  /** Per-disease coverage statistics. */
+  coverageMetrics: CoverageMetrics;
+  /** Detected chip/array info, or null if undetected. */
+  chipVersion: ChipVersion | null;
+  /** Detected or assumed genome build. */
+  genomeBuild: GenomeBuild;
 }
 
 // ─── Web Worker Messages ────────────────────────────────────────────────────
+
+/**
+ * Configuration for the genetics Web Worker.
+ */
+export interface WorkerConfig {
+  /** Maximum memory usage in bytes (default: 500MB desktop, 50MB mobile). */
+  maxMemory: number;
+  /** Whether to process files sequentially (mobile) or in parallel (desktop). */
+  sequential: boolean;
+  /** Maximum decompression ratio before aborting (default: 100). */
+  maxCompressionRatio: number;
+  /** Decompression timeout in ms (default: 30000). */
+  decompressionTimeout: number;
+}
 
 /**
  * Messages sent from the main thread to the genetics Web Worker.
@@ -514,11 +581,19 @@ export type WorkerRequest =
       tier: Tier;
       population?: Population;
     }
-  | { type: 'cancel' };
+  | { type: 'cancel' }
+  | { type: 'parse_stream'; file: { name: string; handle: FileSystemFileHandle | File }; format?: FileFormat }
+  | { type: 'decompress'; file: { name: string }; maxSize?: number }
+  | { type: 'init'; config?: WorkerConfig };
 
 /** Analysis progress stage names for worker progress reporting. */
 export type AnalysisStage =
+  | 'initializing'
+  | 'decompressing'
   | 'parsing'
+  | 'strand_harmonization'
+  | 'build_detection'
+  | 'liftover'
   | 'carrier_analysis'
   | 'trait_prediction'
   | 'pharmacogenomics'
@@ -533,9 +608,14 @@ export type AnalysisStage =
 export type WorkerResponse =
   | { type: 'parse_progress'; fileIndex: number; progress: number }
   | { type: 'parse_complete'; results: ParseResultSummary[] }
-  | { type: 'analysis_progress'; stage: AnalysisStage; progress: number }
+  | { type: 'analysis_progress'; stage: AnalysisStage; progress: number; displayName: string }
   | { type: 'analysis_complete'; results: FullAnalysisResult }
-  | { type: 'error'; message: string; code: string };
+  | { type: 'error'; message: string; code: string }
+  | { type: 'stream_progress'; bytesRead: number; totalBytes: number; linesProcessed: number }
+  | { type: 'decompress_progress'; bytesIn: number; bytesOut: number; ratio: number }
+  | { type: 'decompress_complete'; format: 'zip' | 'gzip' | 'raw'; originalSize: number; decompressedSize: number }
+  | { type: 'init_complete'; config: WorkerConfig; dataVersions: Record<string, string> }
+  | { type: 'memory_warning'; currentUsage: number; maxAllowed: number; message: string };
 
 /**
  * Summary of a parsed genetic file (returned from worker after parsing).
