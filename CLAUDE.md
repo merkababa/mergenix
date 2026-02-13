@@ -118,6 +118,48 @@ gemini -p "prompt" --model gemini-3-pro-preview 2>&1
 - Every session that does V3 implementation work MUST append to this file
 - Format: `## Session: YYYY-MM-DD — [Topic]` headers, then content underneath
 
+## Comprehensive Logging (MANDATORY)
+
+**The user must be able to go back and see what was done, why, and how — for every task, forever.**
+
+### What to Log
+Log EVERYTHING. If in doubt, log it. Specifically:
+1. **Delegation plans** — which tasks go to Gemini vs Claude, tier ratings, rationale
+2. **Prompts sent** — the actual prompt text sent to Gemini CLI or Claude agents
+3. **Full raw results** — complete output from every Gemini/Claude task (tables, analysis, data)
+4. **Decisions made** — what was decided based on results, and WHY
+5. **Action items** — what needs to happen next as a result of findings
+6. **Review grades** — all reviewer grades, fixes applied, iteration history
+7. **Errors and retries** — rate limits, failures, workarounds (but strip noise like stack traces)
+
+### Where to Log
+
+| What | Where | When |
+|------|-------|------|
+| High-level summary, delegation plans, cross-cutting findings | `docs/V3_IMPLEMENTATION_LOG.md` | Append after each phase/stream completes |
+| Full research output (one file per task) | `docs/research/stream{N}/stream{N}-R{X}-{slug}.md` | Immediately when each research task completes |
+| Research index + synthesis | `docs/research/stream{N}/README.md` | After all tasks in a stream complete |
+| Execution/implementation details | `docs/research/stream{N}/` or `docs/implementation/stream{N}/` | As tasks are executed |
+| Current status, sprint table, work log | `PROGRESS.md` | Every session start/end |
+
+### Research Archive Format
+Every research/task log file MUST include:
+- **Task ID, delegation target, date, status**
+- **Objective** — what question was this answering?
+- **Prompt sent** — the actual prompt (or summary if very long)
+- **Key findings** — 3-5 bullet summary
+- **Full results** — complete tables, analysis, data (NEVER truncate)
+- **Action items** — what to do with these findings
+- **Impact on downstream** — which streams/tasks are affected
+
+### Rules
+- **NEVER delete raw output before archiving it** — save first, clean up temp files after
+- **NEVER skip logging a completed task** — every task gets a log file, even partial/failed ones
+- **NEVER truncate tables or data** — the archive is the permanent record
+- **Log files go on feature branches** (via PR), NOT directly to main
+- **Create log files IMMEDIATELY as tasks complete** — don't batch them for later
+- **If a task fails or is partial, log what was obtained** with a clear status note
+
 ## PROGRESS.md
 - Pushable directly to `main`
 - Update when: starting a task, finishing a task, hitting a blocker
