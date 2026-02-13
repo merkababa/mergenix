@@ -133,7 +133,14 @@
      - Research archive: PR #46 (`docs/research/stream0/`)
      - Key findings: 9 diseases to remove, 8 gene symbols to update, PRS ancestry-awareness critical, ethnicity data gap (153/2500+)
    - **Stream D (Data Cleanup): COMPLETE** — PR #47 merged. 2,697 entries. Centralized count.
-   - **Next: Stream E (Engine)** — implement engine changes based on cleaned data ← **NEXT**
+   - **Stream E (Engine): COMPLETE** — 25 tasks (T1+T8 + E1-E23) all implemented
+     - T1+T8 (shared types): DONE — CoverageMetrics, ChipVersion, GenomeBuild, WorkerConfig
+     - Phase 1 (Foundation & Safety): E12, E13, E23, E16, E14, E21 — **DONE** (503 tests)
+     - Phase 2 (Parsing & Normalization): E1, E2, E3, E18, E19, E20 — **DONE** (642 tests)
+     - Phase 3 (Gene-Centric Analysis): E4, E5, E6, E7, E11 — **DONE** (761 tests)
+     - Phase 4 (Advanced Features): E10, E15, E9, E17, E22, E8 — **DONE** (892 tests)
+     - **Totals:** 22 source files (10,062 LOC), 20 test files (10,472 LOC), 892 tests
+     - Branch: `feature/stream-e-engine-refactor` — awaiting review + PR
 
 ---
 
