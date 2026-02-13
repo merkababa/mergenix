@@ -149,19 +149,6 @@ export const DEMO_RESULTS: FullAnalysisResult = {
       inheritance: "autosomal_recessive",
     },
     {
-      condition: "Spinal Muscular Atrophy",
-      gene: "SMN1",
-      severity: "high",
-      description:
-        "Spinal muscular atrophy is a genetic disorder characterized by weakness and wasting of voluntary muscles. It is caused by loss of function of the SMN1 gene.",
-      parentAStatus: "normal",
-      parentBStatus: "normal",
-      offspringRisk: { affected: 0, carrier: 0, normal: 100 },
-      riskLevel: "low_risk",
-      rsid: "rs1554286580",
-      inheritance: "autosomal_recessive",
-    },
-    {
       condition: "Canavan Disease",
       gene: "ASPA",
       severity: "high",

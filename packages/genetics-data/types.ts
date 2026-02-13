@@ -11,8 +11,8 @@
 /**
  * A single entry in the carrier disease panel (carrier_panel.json).
  *
- * Each entry represents one rsID + condition pair. The panel contains
- * 2,715 entries covering diseases across multiple categories.
+ * Each entry represents one rsID + condition pair. The panel covers
+ * diseases across multiple categories (count derived from CARRIER_PANEL_COUNT).
  *
  * Field sources verified from data/carrier_panel.json first entry:
  * ```json
@@ -66,6 +66,8 @@ export interface CarrierPanelEntry {
   confidence: 'high' | 'medium' | 'low';
   /** Clinical notes and additional information. */
   notes: string;
+  /** Optional disclaimer for partially-testable genes (e.g., CNV limitations). */
+  disclaimer?: string;
 }
 
 /**

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { OverviewTab } from '../../components/genetics/results/overview-tab';
 import { useAnalysisStore } from '../../lib/stores/analysis-store';
 import type { FullAnalysisResult } from '@mergenix/shared-types';
+import { CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -228,7 +229,7 @@ describe('OverviewTab', () => {
     render(<OverviewTab />);
 
     expect(
-      screen.getByText(/Upgrade to Pro to unlock full 2,715 disease screening/),
+      screen.getByText(new RegExp(`Upgrade to Pro to unlock full ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`)),
     ).toBeInTheDocument();
   });
 

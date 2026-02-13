@@ -62,10 +62,19 @@ import counselingProvidersRaw from './counseling-providers.json';
 // ─── Typed Data Exports ─────────────────────────────────────────────────────
 
 /**
- * Carrier disease panel (2,715 entries).
+ * Carrier disease panel.
  * Source: data/carrier_panel.json
  */
 export const carrierPanel: CarrierPanelEntry[] = carrierPanelRaw as unknown as CarrierPanelEntry[];
+
+/** Total number of diseases in the carrier panel. Derived from actual data. */
+export const CARRIER_PANEL_COUNT: number = carrierPanel.length;
+
+/** Formatted disease count for display (e.g., "2,697"). */
+export const CARRIER_PANEL_COUNT_DISPLAY: string = CARRIER_PANEL_COUNT.toLocaleString('en-US');
+
+/** Data version for the carrier panel (tracks schema changes). */
+export const CARRIER_PANEL_VERSION = '2.0.0';
 
 /**
  * Trait SNP database (79 traits).
@@ -115,11 +124,8 @@ export const TOP_25_FREE_DISEASES: string[] = [
   'Cystic Fibrosis',
   'Sickle Cell Disease',
   'Tay-Sachs Disease',
-  'Spinal Muscular Atrophy',
   'Phenylketonuria',
   'Beta Thalassemia',
-  'Fragile X Syndrome',
-  'Duchenne Muscular Dystrophy',
   'Canavan Disease',
   'Gaucher Disease',
   'Familial Dysautonomia',
@@ -136,7 +142,6 @@ export const TOP_25_FREE_DISEASES: string[] = [
   'Niemann-Pick Disease',
   'Biotinidase Deficiency',
   'Hemophilia A',
-  "Huntington's Disease",
 ];
 
 /**

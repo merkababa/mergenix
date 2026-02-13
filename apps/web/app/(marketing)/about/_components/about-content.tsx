@@ -26,6 +26,7 @@ import {
   scaleIn,
   createStaggerContainer,
 } from "@/lib/animation-variants";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 const SCIENCE_PRINCIPLES = [
   {
@@ -38,7 +39,7 @@ const SCIENCE_PRINCIPLES = [
     icon: Dna,
     title: "Curated SNP Database",
     description:
-      "We maintain a panel of 2,715 genetic conditions mapped to clinically-validated SNPs sourced from ClinVar, OMIM, and peer-reviewed literature.",
+      `We maintain a panel of ${CARRIER_PANEL_COUNT_DISPLAY} genetic conditions mapped to clinically-validated SNPs sourced from ClinVar, OMIM, and peer-reviewed literature.`,
   },
   {
     icon: Brain,
@@ -90,7 +91,7 @@ const HOW_IT_WORKS = [
   {
     step: 2,
     title: "Analyze",
-    desc: "Screen 2,715 diseases, predict 79 traits, run PGx and polygenic risk scoring \u2014 all client-side.",
+    desc: `Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict 79 traits, run PGx and polygenic risk scoring \u2014 all client-side.`,
   },
   {
     step: 3,
@@ -100,7 +101,7 @@ const HOW_IT_WORKS = [
 ] as const;
 
 const STATS = [
-  { value: "2,715", label: "Diseases Screened", color: "teal" },
+  { value: CARRIER_PANEL_COUNT_DISPLAY, label: "Diseases Screened", color: "teal" },
   { value: "8,200+", label: "SNPs Analyzed", color: "cyan" },
   { value: "79", label: "Traits Predicted", color: "violet" },
   { value: "12", label: "PGx Genes", color: "amber" },

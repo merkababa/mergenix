@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 export function OverviewTab() {
   const fullResults = useAnalysisStore((s) => s.fullResults);
@@ -62,12 +63,12 @@ export function OverviewTab() {
       {/* Tier upgrade prompt for free/premium users */}
       {metadata.tier === "free" && (
         <TierUpgradePrompt
-          message={`You screened ${carrier.length.toLocaleString()} of 2,715 diseases and ${traits.length} of 79 traits. Upgrade to Pro for full screening.`}
+          message={`You screened ${carrier.length.toLocaleString()} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases and ${traits.length} of 79 traits. Upgrade to Pro for full screening.`}
         />
       )}
       {metadata.tier === "premium" && (
         <TierUpgradePrompt
-          message="Upgrade to Pro to unlock full 2,715 disease screening and all 79 traits."
+          message={`Upgrade to Pro to unlock full ${CARRIER_PANEL_COUNT_DISPLAY} disease screening and all 79 traits.`}
         />
       )}
 

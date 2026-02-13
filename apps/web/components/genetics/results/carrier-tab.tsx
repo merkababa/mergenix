@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { SelectFilter } from "@/components/ui/select-filter";
 import { PunnettSquare } from "@/components/genetics/punnett-square";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { INHERITANCE_BADGE_MAP, RISK_LABELS } from "@/lib/genetics-constants";
 import type {
@@ -210,13 +211,13 @@ export function CarrierTab() {
       {/* Tier upgrade prompt for free/premium users */}
       {tier === "free" && (
         <TierUpgradePrompt
-          message={`Showing ${filteredResults.length} of 2,715 diseases. Upgrade to unlock the complete carrier panel.`}
+          message={`Showing ${filteredResults.length} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases. Upgrade to unlock the complete carrier panel.`}
           buttonText="Unlock Full Screening"
         />
       )}
       {tier === "premium" && (
         <TierUpgradePrompt
-          message={`You're screening ${filteredResults.length} diseases on Premium. Upgrade to Pro to unlock all 2,715 diseases including rare genetic conditions.`}
+          message={`You're screening ${filteredResults.length} diseases on Premium. Upgrade to Pro to unlock all ${CARRIER_PANEL_COUNT_DISPLAY} diseases including rare genetic conditions.`}
           buttonText="Upgrade to Pro"
         />
       )}

@@ -24,10 +24,11 @@ import {
 } from "@/lib/animation-variants";
 import { PRICING_TIERS } from "@/lib/pricing-data";
 import { PRICING_FAQ } from "@/lib/faq-data";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 /* -- Comparison table rows -- */
 const COMPARISON = [
-  { feature: "Disease screening", free: "Top 25", premium: "500+", pro: "All 2,715" },
+  { feature: "Disease screening", free: "Top 25", premium: "500+", pro: `All ${CARRIER_PANEL_COUNT_DISPLAY}` },
   { feature: "Trait predictions", free: "10 traits", premium: "79 traits", pro: "79 traits" },
   { feature: "File formats", free: "23andMe only", premium: "All 4 formats", pro: "All 4 formats" },
   { feature: "Pharmacogenomics", free: false, premium: "5 genes", pro: "All 12 genes" },

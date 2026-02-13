@@ -75,7 +75,7 @@ function AnimatedCounter({
   useEffect(() => {
     if (!isInView) return;
 
-    // Parse the numeric part from the value string (e.g. "2,715" -> 2715)
+    // Parse the numeric part from the value string (e.g. "1,234" -> 1234)
     const numericString = value.replace(/[^0-9]/g, "");
     const target = parseInt(numericString, 10);
 

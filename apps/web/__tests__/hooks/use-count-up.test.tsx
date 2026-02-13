@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import React from 'react';
 import { useCountUp } from '../../hooks/use-count-up';
+import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -82,12 +83,12 @@ describe('useCountUp', () => {
   });
 
   it('starts at 0', async () => {
-    const { container } = render(<Counter target={2715} duration={2000} />);
+    const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2000} />);
     expect(readCount(container)).toBe(0);
   });
 
   it('reaches target after full duration', async () => {
-    const { container } = render(<Counter target={2715} duration={2000} />);
+    const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2000} />);
 
     // Let IO callback fire (queued as microtask)
     await act(async () => {
@@ -100,11 +101,11 @@ describe('useCountUp', () => {
     // Final rAF: progress = 1.0
     act(() => { flushRAF(2000); });
 
-    expect(readCount(container)).toBe(2715);
+    expect(readCount(container)).toBe(CARRIER_PANEL_COUNT);
   });
 
   it('never produces a negative count (regression: clock drift fix)', async () => {
-    const { container } = render(<Counter target={2715} duration={2200} />);
+    const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2200} />);
 
     await act(async () => { await Promise.resolve(); });
 
@@ -132,7 +133,7 @@ describe('useCountUp', () => {
   });
 
   it('count increases monotonically during animation', async () => {
-    const { container } = render(<Counter target={2715} duration={2000} />);
+    const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2000} />);
 
     await act(async () => { await Promise.resolve(); });
 
@@ -146,13 +147,13 @@ describe('useCountUp', () => {
       prev = current;
     }
 
-    expect(readCount(container)).toBe(2715);
+    expect(readCount(container)).toBe(CARRIER_PANEL_COUNT);
   });
 
   it('uses rAF timestamp as startTime, not performance.now()', async () => {
     // The fix: startTime is captured from the first rAF callback's timestamp,
     // not from performance.now(). This avoids cross-clock negative elapsed.
-    const { container } = render(<Counter target={2715} duration={2200} />);
+    const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2200} />);
 
     await act(async () => { await Promise.resolve(); });
 
@@ -165,6 +166,6 @@ describe('useCountUp', () => {
     act(() => { flushRAF(5100); });
     // elapsed = 100, progress = 100/2200 ≈ 0.045 → count > 0
     expect(readCount(container)).toBeGreaterThan(0);
-    expect(readCount(container)).toBeLessThan(2715);
+    expect(readCount(container)).toBeLessThan(CARRIER_PANEL_COUNT);
   });
 });

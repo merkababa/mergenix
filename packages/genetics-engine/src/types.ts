@@ -8,6 +8,7 @@
 // Import Tier locally so it can be used in the TIER_GATING const declaration.
 // The re-export below makes it available to consumers.
 import type { Tier } from '@mergenix/shared-types';
+import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 // Re-export all shared types for internal convenience
 export type {
@@ -114,7 +115,7 @@ export const TIER_GATING: Record<Tier, TierGating> = {
     ethnicityAccess: true,
   },
   pro: {
-    diseaseLimit: 2715,
+    diseaseLimit: CARRIER_PANEL_COUNT,
     traitLimit: 79,
     pgxGeneLimit: 12,
     prsConditionLimit: 10,

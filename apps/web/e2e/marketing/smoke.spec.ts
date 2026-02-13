@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 /**
  * Marketing Page Smoke Tests (Section 3.9)
@@ -22,7 +23,7 @@ test.describe('Marketing Page Smoke Tests', () => {
     await expect(heroHeadline).toBeVisible();
 
     // Verify key marketing content is present
-    await expect(page.getByText(/2,715 Disease Screening/i)).toBeVisible();
+    await expect(page.getByText(new RegExp(`${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`, 'i'))).toBeVisible();
     await expect(page.getByText(/79 Trait Predictions/i)).toBeVisible();
   });
 
@@ -56,7 +57,7 @@ test.describe('Marketing Page Smoke Tests', () => {
     // Verify all three pricing tiers are present
     await expect(page.getByText('Top 25')).toBeVisible();
     await expect(page.getByText('500+')).toBeVisible();
-    await expect(page.getByText('All 2,715')).toBeVisible();
+    await expect(page.getByText(`All ${CARRIER_PANEL_COUNT_DISPLAY}`)).toBeVisible();
 
     // Verify the comparison table is visible with key features
     await expect(page.getByText(/Disease screening/i)).toBeVisible();

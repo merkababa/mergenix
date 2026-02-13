@@ -14,7 +14,7 @@ export const DEMO_EXPECTED = {
   /** Expected carrier risk conditions (all 13 from demo-results) */
   carrier: {
     /** Total number of carrier conditions in the demo data */
-    totalCount: 13,
+    totalCount: 12,
 
     /** High-risk conditions where both parents are carriers (autosomal recessive) */
     highRiskAutosomalRecessive: [
@@ -87,7 +87,6 @@ export const DEMO_EXPECTED = {
       'Hemophilia A',
       'Phenylketonuria (PKU)',
       'Gaucher Disease Type 1',
-      'Spinal Muscular Atrophy',
       'Canavan Disease',
       'Bloom Syndrome',
       'Familial Dysautonomia',

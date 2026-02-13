@@ -7,6 +7,7 @@
  */
 
 import type { Tier } from './genetics';
+import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 /**
  * Payment processing status.
@@ -158,7 +159,7 @@ export const PRICING_TIERS: PricingTier[] = [
       'Full counseling summary with referral letter',
     ],
     limits: {
-      diseases: 2715,
+      diseases: CARRIER_PANEL_COUNT,
       traits: 79,
       pgxGenes: 12,
       prsConditions: 10,

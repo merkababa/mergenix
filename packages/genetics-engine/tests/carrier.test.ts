@@ -17,6 +17,7 @@ import {
   getCarrierDisclaimer,
 } from '../src/carrier';
 import type { CarrierPanelEntry } from '../src/types';
+import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 // ─── Test Fixtures ────────────────────────────────────────────────────────
 
@@ -497,11 +498,11 @@ describe('getAnalysisSummary', () => {
     expect(summary.diseasesAnalyzed).toBe(3);
   });
 
-  it('should report totalDiseases as 2715 regardless of tier', () => {
+  it('should report totalDiseases as CARRIER_PANEL_COUNT regardless of tier', () => {
     const carrierResults = analyzeCarrierRisk({}, {}, [makePanelEntry()]);
     for (const tier of ['free', 'premium', 'pro'] as const) {
       const summary = getAnalysisSummary(carrierResults, tier);
-      expect(summary.totalDiseases).toBe(2715);
+      expect(summary.totalDiseases).toBe(CARRIER_PANEL_COUNT);
     }
   });
 });

@@ -29,12 +29,13 @@ import { staggerContainer, staggerItem } from "@/lib/animation-variants";
 import { PRICING_TIERS } from "@/lib/pricing-data";
 import { HOME_FAQ } from "@/lib/faq-data";
 import { cn } from "@/lib/utils";
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 /* -- Feature data -- */
 const FEATURES = [
   {
     icon: Microscope,
-    title: "2,715 Disease Screening",
+    title: `${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`,
     description:
       "Comprehensive carrier screening across autosomal recessive, dominant, and X-linked conditions with Mendelian inheritance modeling.",
     badge: "Carrier Risk",
@@ -102,7 +103,7 @@ const STEPS = [
     icon: Brain,
     title: "Instant Analysis",
     description:
-      "Our engine screens 2,715 diseases, predicts 79 traits, and runs pharmacogenomic analysis in seconds.",
+      `Our engine screens ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predicts 79 traits, and runs pharmacogenomic analysis in seconds.`,
   },
   {
     number: 3,
@@ -119,7 +120,7 @@ function formatNumber(n: number): string {
 }
 
 export function HomeContent() {
-  const diseaseCount = useCountUp(2715, 2200);
+  const diseaseCount = useCountUp(CARRIER_PANEL_COUNT, 2200);
   const traitCount = useCountUp(79, 1800);
 
   return (
@@ -216,7 +217,7 @@ export function HomeContent() {
               href="/diseases"
               className={cn(buttonVariants({ variant: "secondary", size: "xl" }))}
             >
-              Browse 2,715 Diseases
+              Browse {CARRIER_PANEL_COUNT_DISPLAY} Diseases
             </Link>
           </motion.div>
 

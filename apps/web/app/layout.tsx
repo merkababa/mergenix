@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
 import { MotionProvider } from "./(marketing)/_components/motion-provider";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   },
   description:
     "Compare two parents' DNA to predict offspring disease risk and traits. " +
-    "Your DNA never leaves your device. Screen 2,715 diseases, predict 79 traits, " +
+    `Your DNA never leaves your device. Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict 79 traits, ` +
     "pharmacogenomics, and polygenic risk scoring.",
   keywords: [
     "genetic testing",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mergenix — Know Your Genetic Future",
     description:
-      "Privacy-first genetic offspring analysis. Screen 2,715 diseases, predict 79 traits. Your DNA never leaves your device.",
+      `Privacy-first genetic offspring analysis. Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict 79 traits. Your DNA never leaves your device.`,
     url: "https://mergenix.com",
     siteName: "Mergenix",
     type: "website",
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mergenix — Know Your Genetic Future",
     description:
-      "Privacy-first genetic offspring analysis. Screen 2,715 diseases, predict 79 traits.",
+      `Privacy-first genetic offspring analysis. Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict 79 traits.`,
   },
   robots: {
     index: true,

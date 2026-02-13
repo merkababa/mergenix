@@ -3,6 +3,8 @@
 /*  Consumed by home-content.tsx and products-content.tsx              */
 /* ------------------------------------------------------------------ */
 
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
+
 export interface PricingTier {
   /** Display name (e.g. "Free", "Premium", "Pro") */
   name: string;
@@ -91,7 +93,7 @@ export const PRICING_TIERS: PricingTier[] = [
     priceNote: "one-time",
     description: "Advanced insights with counselor referrals",
     features: [
-      "All 2,715 disease screening",
+      `All ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`,
       "Everything in Premium",
       "Ethnicity-adjusted frequencies",
       "Genetic counselor referrals",
@@ -100,7 +102,7 @@ export const PRICING_TIERS: PricingTier[] = [
       "Dedicated support",
     ],
     featuresExtended: [
-      "All 2,715 disease screening",
+      `All ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`,
       "Everything in Premium",
       "Ethnicity-adjusted carrier frequencies",
       "Genetic counselor referral system",

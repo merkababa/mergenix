@@ -15,7 +15,7 @@ test.describe('Disease Catalog', () => {
     const heading = page.getByRole('heading', { name: /Disease Catalog/i });
     await expect(heading).toBeVisible();
 
-    // Verify stats section shows disease count (2,715 total in the full database)
+    // Verify stats section shows disease count (derived from carrier panel data)
     await expect(page.getByText(/Diseases/i).first()).toBeVisible();
     await expect(page.getByText(/SNPs Tracked/i)).toBeVisible();
     await expect(page.getByText(/Inheritance Models/i)).toBeVisible();

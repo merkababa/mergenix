@@ -2,13 +2,15 @@
  * Static disease data for the Mergenix disease catalog.
  *
  * This is a curated representative dataset of ~60 diseases drawn from the full
- * carrier_panel.json (2,715 entries). It covers all 15 categories, all 3
- * inheritance models, and all severity/confidence levels.
+ * carrier_panel.json. It covers all 15 categories, all 3 inheritance models,
+ * and all severity/confidence levels.
  *
  * In a future iteration the full panel will be loaded via API or static
  * generation at build time. For now this provides an accurate, medically
  * grounded browsing experience.
  */
+
+import { CARRIER_PANEL_COUNT } from "@mergenix/genetics-data";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -67,17 +69,6 @@ export const DISEASES: DiseaseEntry[] = [
     inheritance: "Autosomal Recessive",
     severity: "high",
     snpCount: 3,
-    confidence: "high",
-  },
-  {
-    slug: "alpha-thalassemia",
-    name: "Alpha-Thalassemia",
-    description:
-      "Blood disorder caused by reduced alpha-globin chain synthesis, resulting in microcytic anemia and potentially hydrops fetalis.",
-    category: "Hematological",
-    inheritance: "Autosomal Recessive",
-    severity: "high",
-    snpCount: 1,
     confidence: "high",
   },
   {
@@ -146,17 +137,6 @@ export const DISEASES: DiseaseEntry[] = [
     inheritance: "Autosomal Recessive",
     severity: "high",
     snpCount: 4,
-    confidence: "high",
-  },
-  {
-    slug: "spinal-muscular-atrophy",
-    name: "Spinal Muscular Atrophy",
-    description:
-      "Progressive motor neuron degeneration causing muscle weakness and atrophy; leading genetic cause of infant mortality.",
-    category: "Neurological",
-    inheritance: "Autosomal Recessive",
-    severity: "high",
-    snpCount: 5,
     confidence: "high",
   },
   {
@@ -686,19 +666,6 @@ export const DISEASES: DiseaseEntry[] = [
     confidence: "high",
   },
 
-  // ── Neuromuscular ──────────────────────────────────────────────────────
-  {
-    slug: "duchenne-muscular-dystrophy",
-    name: "Duchenne Muscular Dystrophy",
-    description:
-      "Severe X-linked muscular dystrophy caused by dystrophin deficiency, with progressive proximal weakness and cardiomyopathy.",
-    category: "Neuromuscular",
-    inheritance: "X-Linked",
-    severity: "high",
-    snpCount: 1,
-    confidence: "high",
-  },
-
   // ── Skeletal ───────────────────────────────────────────────────────────
   {
     slug: "thanatophoric-dysplasia",
@@ -828,21 +795,6 @@ const DISEASE_DETAILS: Record<string, Omit<DiseaseDetail, keyof DiseaseEntry>> =
       "One of the most successfully treated genetic disorders due to universal newborn screening. Sapropterin (Kuvan) can reduce phenylalanine levels in some genotypes. Pegvaliase (Palynziq) is approved for adults. Gene therapy trials are underway.",
     sources: ["ClinVar", "OMIM", "GeneReviews", "BIOPKU Database"],
   },
-  "spinal-muscular-atrophy": {
-    fullDescription:
-      "Spinal muscular atrophy (SMA) is a genetic disease affecting the part of the nervous system that controls voluntary muscle movement. Motor neurons in the spinal cord degenerate due to loss of the SMN1 gene, causing progressive muscle weakness and atrophy. The severity ranges from type I (severe infantile) to type IV (adult onset). Revolutionary gene therapies have transformed the prognosis for many patients.",
-    snps: [
-      { rsid: "rs121909192", gene: "SMN1", allele: "C>T", source: "OMIM" },
-      { rsid: "rs121909193", gene: "SMN1", allele: "C>T", source: "OMIM" },
-      { rsid: "rs80356892", gene: "SMN1", allele: "C>T", source: "ClinVar" },
-      { rsid: "rs74912905", gene: "SMN1", allele: "A>G", source: "OMIM" },
-    ],
-    carrierFrequency: "1 in 50",
-    affectedFrequency: "1 in 10,000",
-    notes:
-      "Leading genetic cause of infant mortality. Three approved therapies: nusinersen (Spinraza), onasemnogene abeparvovec (Zolgensma), and risdiplam (Evrysdi). Earlier treatment leads to better outcomes. Newborn screening is increasingly standard.",
-    sources: ["ClinVar", "OMIM", "GeneReviews"],
-  },
   "familial-hypercholesterolemia": {
     fullDescription:
       "Familial hypercholesterolemia (FH) is an inherited condition causing very high levels of LDL cholesterol from birth. Without treatment, people with FH develop coronary artery disease much earlier than expected. Heterozygous FH affects about 1 in 250 people and is one of the most common serious genetic conditions. Homozygous FH is rarer but far more severe.",
@@ -886,18 +838,6 @@ const DISEASE_DETAILS: Record<string, Omit<DiseaseDetail, keyof DiseaseEntry>> =
     notes:
       "Founder mutations (185delAG, 5382insC, 6174delT) are more common in Ashkenazi Jewish populations. Risk management includes enhanced breast MRI screening, risk-reducing mastectomy, and risk-reducing salpingo-oophorectomy. PARP inhibitors are effective targeted therapies for BRCA-associated cancers.",
     sources: ["ClinVar", "OMIM", "GeneReviews", "NCCN Guidelines"],
-  },
-  "duchenne-muscular-dystrophy": {
-    fullDescription:
-      "Duchenne muscular dystrophy (DMD) is a severe X-linked recessive neuromuscular disorder caused by mutations in the DMD gene encoding dystrophin. It affects approximately 1 in 3,500 male births. Progressive proximal muscle weakness typically presents by age 3-5, with loss of ambulation by age 12, and cardiorespiratory complications in the second to third decade of life.",
-    snps: [
-      { rsid: "rs72554350", gene: "DMD", allele: "G>T", source: "ClinVar" },
-    ],
-    carrierFrequency: "1 in 5,000 females",
-    affectedFrequency: "1 in 3,500 males",
-    notes:
-      "About one-third of cases are de novo mutations. Corticosteroids (deflazacort, prednisone) delay disease progression. Exon-skipping therapies (eteplirsen, golodirsen, viltolarsen, casimersen) are approved for specific mutations. Gene therapy with micro-dystrophin is in clinical trials.",
-    sources: ["ClinVar", "OMIM", "GeneReviews"],
   },
   "severe-combined-immunodeficiency": {
     fullDescription:
@@ -987,7 +927,7 @@ export function getDiseaseStats() {
   const inheritanceModels = getAllInheritanceModels();
 
   return {
-    totalDiseases: 2_715, // Full carrier_panel.json count
+    totalDiseases: CARRIER_PANEL_COUNT,
     catalogDiseases: DISEASES.length,
     totalSnps: 8_200, // Approximate from full panel
     catalogSnps: totalSnps,

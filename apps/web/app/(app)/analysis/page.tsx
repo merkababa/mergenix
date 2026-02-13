@@ -26,6 +26,7 @@ import { useAuthStore } from "@/lib/stores/auth-store";
 import { useGeneticsWorker } from "@/hooks/use-genetics-worker";
 import { SaveResultDialog } from "@/components/analysis/save-result-dialog";
 import { SavedResultsList } from "@/components/analysis/saved-results-list";
+import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
 
@@ -203,7 +204,7 @@ export default function AnalysisPage() {
                 <>
                   <span className="font-semibold">Free tier:</span> Top 25 diseases + 10 traits.{" "}
                   <span className="text-[var(--accent-teal)]">
-                    Upgrade for full 2,715 disease screening.
+                    Upgrade for full {CARRIER_PANEL_COUNT_DISPLAY} disease screening.
                   </span>
                 </>
               )}

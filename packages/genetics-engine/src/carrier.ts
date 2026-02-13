@@ -26,12 +26,9 @@ import type {
 } from './types';
 
 import { TIER_GATING } from './types';
-import { TOP_25_FREE_DISEASES } from '@mergenix/genetics-data';
+import { TOP_25_FREE_DISEASES, CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
-
-/** Total number of diseases in the full carrier panel. */
-const TOTAL_DISEASES = 2715;
 
 /** Zero-risk offspring risk (used for unknown or fallback cases). */
 const ZERO_RISK: OffspringRisk = { affected: 0, carrier: 0, normal: 0 };
@@ -451,7 +448,7 @@ function isFreeTierDisease(diseaseName: string): boolean {
  *
  * - free: Only diseases matching TOP_25_FREE_DISEASES (up to 25)
  * - premium: First 500 diseases from the panel
- * - pro: All diseases (up to 2715)
+ * - pro: All diseases (full carrier panel)
  *
  * Mirrors the Python `get_diseases_for_tier()` from tier_config.py.
  *
@@ -650,12 +647,12 @@ export function getAnalysisSummary(
   upgradeMessage: string | null;
 } {
   const gating: TierGating | undefined = TIER_GATING[tier];
-  const diseasesAvailable = gating?.diseaseLimit ?? TOTAL_DISEASES;
+  const diseasesAvailable = gating?.diseaseLimit ?? CARRIER_PANEL_COUNT;
 
   return {
     diseasesAnalyzed: results.length,
     diseasesAvailable,
-    totalDiseases: TOTAL_DISEASES,
+    totalDiseases: CARRIER_PANEL_COUNT,
     tier,
     isLimited: tier !== 'pro',
     upgradeMessage: getUpgradeMessage(tier),
