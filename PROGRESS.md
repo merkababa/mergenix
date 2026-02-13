@@ -30,6 +30,7 @@
 | V3 Rewrite Phase 8B: Legal/Privacy | Claude | **Merged** | rewrite/phase-8b-legal-privacy | PR #38 — GINA notice, cookie consent banner (GDPR Art 7 affirmative opt-in), age verification modal (18+ mandatory gate), GDPR data export endpoint, consent tracking (immutable audit trail), CCPA rights, data retention table. 3 review rounds → **10/10 A+ (Gemini) + 10/10 A+ (Claude)**. 34 files, +4,269 LOC, 82+ new tests |
 | Review Infrastructure: Dual persona system | Claude | **Done** | rewrite/main | 10 Claude agents (`.claude/agents/`) + 10 Gemini CLI personas (`review-personas/`). Gemini CLI reads local files via `GEMINI_SYSTEM_MD` — no upload needed. Tested: single, persona-switch, parallel (15s stagger). 20 files, +837 lines |
 | V3 Rewrite Phase 8C: E2E Tests | Claude | **Merged** | test/phase-8c-e2e | PR #40 — Playwright E2E test suite. 23 spec files, 153 scenarios across 8 categories (auth, app, marketing, legal, accessibility, performance, security, API). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Dependencies: @axe-core/playwright, otplib. 46 files, +10,965 LOC. |
+| Refactor Plan + Research Alignment | Claude | **Merged** | docs/refactor-plan | PR #45 — Master refactor plan (172 tasks, 48 CRITICAL, 11 streams) + research alignment matrix (144+ decisions). Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 7 A- + 3 B+ Claude (5 rounds, ~73 fixes). |
 
 ---
 
@@ -104,6 +105,7 @@
 | 2026-02-10 | Claude | V3 Rewrite Phase 7 — Backend API: Cookie-based auth (HttpOnly refresh tokens), 5 new endpoints (sessions, account deletion, resend-verification), backup codes (SHA-256, constant-time), async event loop safety (asyncio.to_thread for bcrypt/Stripe/email), webhook hardening (price validation + idempotency), subscription→tier-status naming, Alembic migration (6 tables), Docker entrypoint. 60 backend tests. 5 review rounds (Gemini R1→R2 + Claude + independent 8-agent + re-verify) → **8/8 A+**. 15 files, ~1,700 LOC. | PR #36 |
 | 2026-02-10 | Claude | Review Infrastructure: Dual persona system. 10 Claude agents (`.claude/agents/`, YAML frontmatter, opus model) + 10 Gemini CLI personas (`review-personas/`, pure markdown, `GEMINI_SYSTEM_MD`). Discovered Gemini CLI reads local files directly (no upload). Tested single, persona-switch, parallel (15s stagger). 20 files, +837 lines. | rewrite/main |
 | 2026-02-11 | Claude | V3 Rewrite Phase 8C — E2E Tests: Playwright E2E test suite. 23 spec files, 153 scenarios (P0:25, P1:94, P2:34). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Categories: auth(25), app(50), marketing(16), legal(13), accessibility(22), performance(14), security(7), API(6). 7 parallel executor agents. 46 files, +10,965 LOC. | PR #40 |
+| 2026-02-12 | Claude | Refactor Plan + Research Alignment: Master plan for V3 implementation — 172 tasks across 11 streams (R=Research, E=Engine, F=Frontend, B=Backend, S=Security, D=DevOps, L=Legal, Q=QA, T=Type-gen, C=Content, Ops=Operations), 48 CRITICAL items, 144+ architectural decisions. Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 5 Claude review rounds, ~73 fixes. Zero-knowledge encryption (Argon2id+AES-256-GCM), HttpOnly cookies, streaming file parsing, CLT-based PRS, GDPR/GINA compliance, 3-tier pricing (Free/Premium $14.99/Pro $34.99). | PR #45 |
 
 ---
 
@@ -118,27 +120,17 @@
 3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
 4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
 5. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
-6. **Refactor Plan Review (docs/REFACTOR_PLAN_RESEARCH_ALIGNMENT.md)** ← **IN PROGRESS**
-   - Gate 1 (Gemini): **PASSED** — 10/10 A+ (Rounds 5-6, 15 decisions #130-#144 added)
-   - Gate 2 (Claude): **NOT PASSED** — 0/10 A+ (7x A-, 2x A, 1x B+)
-   - **8 BLOCK issues** identified, need fixing before re-review
-   - Status: About to fix BLOCKs iteratively (starting with #1: encryption migration gap)
-   - Branch: `docs/refactor-plan`
-7. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming ← **AFTER PLAN APPROVED**
+6. ~~Refactor Plan Review~~ → **PR #45 merged** (Gate 1: 10/10 A+ Gemini, Gate 2: 10/10 A- Claude — accepted)
+   - 5 Claude review rounds, ~73 fixes applied, 144+ architectural decisions documented
+   - Final: 7/10 A- (zero BLOCKs), 3/10 B+ — user accepted, merged
+7. **Begin V3 Implementation** — Execute refactor plan streams ← **NEXT**
+   - Stream 0 (Research) is the blocking prerequisite for all other streams
 
 ---
 
 ## Active Blockers
 
-### Gate 2 Claude Review — 8 BLOCK Issues to Fix
-1. **Encryption migration gap** — no task to migrate server-encrypted → zero-knowledge (Architect, Technologist)
-2. **Type gen direction inverted** — Pydantic → TS but TS is runtime producer (Architect)
-3. **Compound het ground truth** — no R-task for ClinVar clinical examples (QA)
-4. **Pricing migration gap** — $12.90→$14.99 / $29.90→$34.99 across 6+ files, no task (Code Quality, Business)
-5. **SMA/alpha-thalassemia in data** — still in carrier-panel.json & TOP_25 despite removal decisions (Business, Scientist)
-6. **E14 genetics data bundled** — JSON statically imported in worker, violates perf budgets (Technologist)
-7. **Mental health support missing** — no task for anxiety resources alongside results (Ethics)
-8. **Age verification spec** — plan says DOB but no implementation detail (Designer)
+*No active blockers — refactor plan merged, ready to begin implementation.*
 
 ---
 

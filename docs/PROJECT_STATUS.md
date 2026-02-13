@@ -1,8 +1,8 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-11
-**Version:** 3.0.0-alpha (V3 Rewrite — Phase 8B Legal/Privacy merged, 10/10 A+)
-**Branch:** rewrite/main
+**Last Updated:** 2026-02-12
+**Version:** 3.0.0-alpha (V3 Rewrite — Refactor plan approved, ready for implementation)
+**Branch:** main
 
 ---
 
@@ -187,7 +187,11 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 
 - [x] **Phase 6: Payment UI** — PR #35 merged (8/8 A+, 80 tests)
 - [x] **Phase 7: Backend API** — PR #36 merged (8/8 A+, 60 tests)
-- [ ] **Phase 8: Polish & Launch** — E2E tests, frontend↔backend integration, performance, production deployment
+- [x] **Phase 8A: Integration Polish** — PR #37 merged (10/10 A+)
+- [x] **Phase 8B: Legal/Privacy** — PR #38 merged (10/10 A+ Gemini + 10/10 A+ Claude)
+- [x] **Phase 8C: E2E Tests** — PR #40 merged (153 scenarios)
+- [x] **Refactor Plan** — PR #45 merged (172 tasks, 11 streams, 144+ decisions)
+- [ ] **V3 Implementation** — Execute refactor plan streams (Stream 0 Research first)
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -284,6 +288,10 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #45 | Refactor Plan + Research Alignment (172 tasks, 11 streams) | **Merged** |
+| #40 | Phase 8C: E2E Tests (153 scenarios, Playwright) | **Merged** |
+| #38 | Phase 8B: Legal/Privacy (10/10 A+ Gemini + 10/10 A+ Claude) | **Merged** |
+| #37 | Phase 8A: Integration Polish (10/10 A+) | **Merged** |
 | #36 | Phase 7: Backend API (60 tests, 8/8 A+) | **Merged** |
 | #35 | Phase 6: Payment UI (503 tests, 8/8 A+) | **Merged** |
 | #34 | Phase 5: Auth UI (423 tests, 7/7 A+) | **Merged** |
@@ -306,8 +314,9 @@ FullAnalysisResult → postMessage → Zustand store
 3. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
 4. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
 5. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
-6. **Phase 8C: E2E Tests** — Playwright integration tests
-7. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming
+6. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
+7. ~~Refactor Plan~~ → **PR #45 merged** (172 tasks, 11 streams, 144+ decisions)
+8. **V3 Implementation** — Execute refactor plan streams (Stream 0 Research → then parallel streams)
 
 ---
 
