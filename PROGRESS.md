@@ -32,6 +32,7 @@
 | V3 Rewrite Phase 8C: E2E Tests | Claude | **Merged** | test/phase-8c-e2e | PR #40 — Playwright E2E test suite. 23 spec files, 153 scenarios across 8 categories (auth, app, marketing, legal, accessibility, performance, security, API). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Dependencies: @axe-core/playwright, otplib. 46 files, +10,965 LOC. |
 | Refactor Plan + Research Alignment | Claude | **Merged** | docs/refactor-plan | PR #45 — Master refactor plan (172 tasks, 48 CRITICAL, 11 streams) + research alignment matrix (144+ decisions). Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 7 A- + 3 B+ Claude (5 rounds, ~73 fixes). |
 | Stream 0: Research Phase | Claude | **11/12 Done** | docs/stream0-research-archive | PR #46 — 11 Gemini tasks + 1 Claude task. Research archive in docs/research/stream0/. R12 partial. |
+| Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
 
 ---
 
@@ -108,6 +109,7 @@
 | 2026-02-11 | Claude | V3 Rewrite Phase 8C — E2E Tests: Playwright E2E test suite. 23 spec files, 153 scenarios (P0:25, P1:94, P2:34). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Categories: auth(25), app(50), marketing(16), legal(13), accessibility(22), performance(14), security(7), API(6). 7 parallel executor agents. 46 files, +10,965 LOC. | PR #40 |
 | 2026-02-12 | Claude | Refactor Plan + Research Alignment: Master plan for V3 implementation — 172 tasks across 11 streams (R=Research, E=Engine, F=Frontend, B=Backend, S=Security, D=DevOps, L=Legal, Q=QA, T=Type-gen, C=Content, Ops=Operations), 48 CRITICAL items, 144+ architectural decisions. Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 5 Claude review rounds, ~73 fixes. Zero-knowledge encryption (Argon2id+AES-256-GCM), HttpOnly cookies, streaming file parsing, CLT-based PRS, GDPR/GINA compliance, 3-tier pricing (Free/Premium $14.99/Pro $34.99). | PR #45 |
 | 2026-02-13 | Claude | Stream 0 Research: 11/12 Gemini research tasks completed. Chip coverage analysis, ClinVar counts, liftover methodology, CNV diseases (9 to remove), PRS transferability (ancestry-aware), detection rates by ethnicity, carrier panel validation (6 issues), gene-phenotype validity (9 concerns incl. MTHFR), ethnicity frequency gaps (153/2500+), compound het ground truth (10 cases). R6 synthetic genome factory spec. Research archive at docs/research/stream0/. | PR #46 |
+| 2026-02-13 | Claude | Stream D Data Cleanup: Remove 22 CNV-untestable diseases (SMN1, DMD, HBA1/2, FXN, DMPK, CNBP, C9orf72, PLP1, UBE3A, JPH3). Add disclaimers to 46 entries (9 partially-testable genes). Update 8 outdated gene symbols (IKBKAP→ELP1, etc). Add 4 missing variants (HbC, GALT S135L, MEFV V726A, PAH IVS12). Centralize count via CARRIER_PANEL_COUNT (no more magic numbers). 2,697 final entries. Gate 1: 5/5 Gemini passed. | PR #47 |
 
 ---
 
@@ -130,7 +132,8 @@
      - R1-R5, R7-R11: Done (Gemini). R6: Done (Claude). R12: Partial (audit script methodology issue)
      - Research archive: PR #46 (`docs/research/stream0/`)
      - Key findings: 9 diseases to remove, 8 gene symbols to update, PRS ancestry-awareness critical, ethnicity data gap (153/2500+)
-   - **Next: Stream D (Data Cleanup)** — fix carrier panel based on research findings ← **NEXT**
+   - **Stream D (Data Cleanup): COMPLETE** — PR #47 merged. 2,697 entries. Centralized count.
+   - **Next: Stream E (Engine)** — implement engine changes based on cleaned data ← **NEXT**
 
 ---
 
