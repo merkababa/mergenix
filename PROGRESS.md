@@ -118,12 +118,27 @@
 3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
 4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
 5. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
-6. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming ← **NEXT**
+6. **Refactor Plan Review (docs/REFACTOR_PLAN_RESEARCH_ALIGNMENT.md)** ← **IN PROGRESS**
+   - Gate 1 (Gemini): **PASSED** — 10/10 A+ (Rounds 5-6, 15 decisions #130-#144 added)
+   - Gate 2 (Claude): **NOT PASSED** — 0/10 A+ (7x A-, 2x A, 1x B+)
+   - **8 BLOCK issues** identified, need fixing before re-review
+   - Status: About to fix BLOCKs iteratively (starting with #1: encryption migration gap)
+   - Branch: `docs/refactor-plan`
+7. **Phase 8D: Production Deploy** — Docker, CI/CD, key rotation, route renaming ← **AFTER PLAN APPROVED**
 
 ---
 
 ## Active Blockers
-_None_
+
+### Gate 2 Claude Review — 8 BLOCK Issues to Fix
+1. **Encryption migration gap** — no task to migrate server-encrypted → zero-knowledge (Architect, Technologist)
+2. **Type gen direction inverted** — Pydantic → TS but TS is runtime producer (Architect)
+3. **Compound het ground truth** — no R-task for ClinVar clinical examples (QA)
+4. **Pricing migration gap** — $12.90→$14.99 / $29.90→$34.99 across 6+ files, no task (Code Quality, Business)
+5. **SMA/alpha-thalassemia in data** — still in carrier-panel.json & TOP_25 despite removal decisions (Business, Scientist)
+6. **E14 genetics data bundled** — JSON statically imported in worker, violates perf budgets (Technologist)
+7. **Mental health support missing** — no task for anxiety resources alongside results (Ethics)
+8. **Age verification spec** — plan says DOB but no implementation detail (Designer)
 
 ---
 

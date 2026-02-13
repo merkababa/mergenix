@@ -1,0 +1,620 @@
+# Mergenix Refactor Plan: Research Alignment
+
+> Generated 2026-02-11, Updated 2026-02-13 after 5x 10-persona Gemini review rounds + 152 product owner decisions + 35-fix batch update + 24-fix refinement pass + 23-fix quality pass.
+> This plan refactors the V3 app to handle all requirements from `docs/NEW_RESEARCH_VIABILITY_LEGAL_02_11.txt`.
+
+---
+
+## Product Owner Decisions (Locked)
+
+| # | Decision | Choice |
+|---|----------|--------|
+| 1 | VCF/WGS timing | Phase 2 (after traits MVP stabilizes) |
+| 2 | Imputation | No — genotyped only, "Not Tested" for missing SNPs |
+| 3 | Phasing | Ship everything at once (no staged rollout) |
+| 4 | Dating use | Blocked in ToS |
+| 5 | Trait scope | Physical + wellness only (no behavioral) |
+| 6 | Liftover | Client-side static lookup table (target SNPs only) |
+| 7 | File size limit | 500MB desktop / 50MB mobile (dynamic detection) |
+| 8 | Save results | User chooses: encrypted server save OR PDF download |
+| 9 | Partner flow | One person uploads both files |
+| 10 | Legacy code | Delete Source/, pages/, app.py |
+| 11 | Tier structure | Free (traits) / Premium $14.99 (individual) / Pro $34.99 (couple). Pay-difference upgrade ($20). |
+| 12 | Free tier scope | Traits only — no disease screening. Show count of risks found ("2 Carrier Risks Found"), blur details. |
+| 13 | Chip definition data | Need to source (research task) |
+| 14 | SMA | Remove entirely from panel |
+| 15 | Counseling | Link to NSGC directory |
+| 16 | Law enforcement | "We fight subpoenas" clause in privacy policy |
+| 17 | Password reset | **Wipe all saved results.** Warn users at signup: "If you reset your password, saved results are permanently deleted. Download a PDF backup first." |
+| 18 | Compound heterozygotes | "Potential Risk — Confirm Clinically" |
+| 19 | PRS ancestry | Show with "Low Confidence" warning for non-European |
+| 20 | Chip versions | All versions (23andMe v3/v4/v5, Ancestry v1/v2, MyHeritage) |
+| 21 | PDF generation | Client-side only (pdf-lib — Decision #150). Raw data never touches server for PDF. |
+| 22 | VCF indel parsing | Build now (future-proofing for Phase 2) |
+| 23 | Mobile file limit | Dynamic — desktop 500MB, mobile 50MB with friendly nudge to use desktop |
+| 24 | New task scope | All reviewer suggestions included (~168 tasks total) |
+| 25 | Partner consent | Mandatory checkbox: "I confirm I have my partner's explicit consent" before analysis |
+| 26 | Minimum age | 18+ worldwide (single rule, no regional exceptions). **Simple confirmation checkbox** ("I confirm I am 18 years of age or older"), NOT date of birth entry. No DOB stored. |
+| 27 | Analytics | Server-side anonymous event tracking only. No Google Analytics, no ad pixels, no third-party trackers. |
+| 28 | Free tier preview | Show count only ("2 Carrier Risks Found"), blur all details |
+| 29 | Virtual Baby disclaimer | Inline on card: "Simulation Only — Based on Probability, Not Certainty." Always visible. |
+| 30 | TS/Python type sync | CI integration test (JSON Schema generated from Python, validated against TS types) |
+| 31 | Rebrand timing | Stream 9 with legacy cleanup |
+| 32 | High Contrast Mode | Yes — add glassmorphism fallback with solid backgrounds + strong borders |
+| 33 | Access audit logging | Log all view/decrypt events (timestamp + user ID, no health data in log) |
+| 34 | Binary data formats | No — keep JSON + lazy-load. Benchmark later if needed. |
+| 35 | Pre-payment disclosure | Full chip limitation stats + comparison to clinical testing shown before paywall |
+| 36 | Clinical test comparison | Yes — explicitly recommend clinical carrier screening and genetic counselors on every results page |
+| 37 | Privacy policy style | Plain English + legal appendix |
+| 38 | Refund policy | Refund only for technical issues (disclosed before purchase) |
+| 39 | Open source engine | Closed source |
+| 40 | Per-page limitations | Collapsible "What This Cannot Tell You" section on every results page |
+| 41 | Password reset transparency | Warn at signup AND before saving results that password reset = data deletion |
+| 42 | Recovery key | Generate crypto wallet-style recovery key (PDF) at signup. Allows password reset WITHOUT data loss. Preserves zero-knowledge architecture. |
+| 43 | ClinVar denominator filtering | R2 counts only Pathogenic/Likely Pathogenic with 1+ star review, no conflicting interpretations |
+| 44 | PDF accessibility | Client-side PDFs must be tagged (PDF/UA standard) with logical reading order for screen readers |
+| 45 | Sensitive content granularity | Split F3 into 3 separate reveals: Carrier Status (reproductive), PRS (late-onset health), PGx (medication) |
+| 46 | Consent modal expansion | F2 adds: 1) Art. 9 explicit genetic data consent, 2) "Right not to know" acknowledgement |
+| 47 | Crypto architecture | Zero-knowledge: DEK derived from password via Argon2id client-side. Server never sees plaintext key. Recovery key is alternative KEK. |
+| 48 | Browser compat + Error Boundaries | Add browser compatibility matrix task + React Error Boundaries on all visualization components |
+| 49 | WASM | Stay TypeScript. Benchmark first (Q9), evaluate WASM only if needed. |
+| 50 | Pricing update | $14.99 (Premium) / $34.99 (Pro). Pay-difference upgrade path ($20 from Premium→Pro). |
+| 51 | mtDNA / Y-chromosome | Whitelist-only engine. Explicitly ignore mtDNA and Y-chr variants. Document in disclaimers. |
+| 52 | Virtual Baby naming | Keep "Virtual Baby" user-facing. Inline disclaimer handles ethical concern. |
+| 53 | Guest checkout | **Removed.** All users must create an account. (Reversed — see Decision #80) |
+| 54 | Hosting + breach plan | EU hosting (e.g., AWS eu-west-1). Specify jurisdiction in privacy policy. Add data breach response plan (GDPR Art. 33/34). |
+| 55 | Stale results UX | Show "Results Outdated — re-upload to update" banner when saved dataVersion < current. Transparent from the start. |
+| 56 | Security hardening | Add rate limiting (S7), SAST in CI (Bandit + Semgrep), expanded security headers (HSTS, X-Frame-Options, Permissions-Policy). |
+| 57 | Accessibility expansion | Add heading hierarchy enforcement, WCAG 1.4.10 reflow at 320px, virtualized list a11y (aria-rowcount). |
+| 58 | Test expansion | Port legacy Python tests to TS, re-validate carrier_panel.json vs ClinVar, add axe-core in CI. |
+| 59 | Code standards | Centralize magic numbers (constants file), structured logging (strip console.log in prod), i18n string isolation. |
+| 60 | Science hardening | E20: 1000 SNPs across chromosomes (unambiguous transversions). E15: self-reported ethnicity dropdown (not genetic ancestry). |
+| 61 | Sample report + partner email | Add sample report for landing page (conversion). Add partner notification email when their DNA is analyzed. |
+| 62 | Ops security | Crypto-shredding (DEK deletion = backups unreadable), secret rotation plan, incident alerting (auth spike detection). |
+| 63 | Trait evidence validation | New R9: verify all gene-trait associations meet evidence threshold (2+ GWAS replications or ClinGen validity). |
+| 64 | Email receipts | Transactional email receipts after payment (confirmation + results link). |
+| 65 | Version compat + error tests | Add data version backward-compat test (v1 result in v2 app) + error injection tests for all error codes. |
+| 66 | Partner flow simplified | Drop partner account requirement. User A encrypts couple report under their key. Consent = checkbox (F27). Partner gets notification email only. |
+| 67 | Auth token storage | Auth tokens use HttpOnly Secure Cookies (not sessionStorage). Backend sets cookies, immune to XSS. |
+| 68 | E20 strand check SNPs | E20 strand check uses non-palindromic SNPs (A/C, A/G, C/T, G/T). Exclude palindromic A/T, C/G. |
+| 69 | Free tier carrier language | Free tier "X Carrier Risks Found" includes normalizing language: "Most people are carriers for several conditions. This is a normal part of human genetics." |
+| 70 | TS/Python type generation | T7 auto-generates TS interfaces from Pydantic models (datamodel-code-generator). Single source of truth. |
+| 71 | Pro tier includes individual reports | Pro tier ($34.99) includes individual Premium reports for BOTH partners + Couple/Offspring report. |
+| 72 | Argon2id in Web Worker | Argon2id key derivation runs in dedicated Web Worker (not main thread). |
+| 73 | Web Crypto API only | All crypto operations use Web Crypto API (window.crypto.subtle). No JS crypto libraries. **UPDATED by Decision #152:** All symmetric crypto (AES-256-GCM) and random generation use Web Crypto API. Argon2id uses argon2-browser WASM (exempt from no-JS-crypto rule per Decision #152). Lazy-load the WASM binary — do not include in main bundle. |
+| 74 | Dating ToS + disclaimer | Dating ToS ban kept broad + SEO keywords kept. Add disclaimer: "This tool is for established couples, not dating screening." |
+| 75 | ClinVar R2 conflict filter | ClinVar R2 filter refined — allow P vs LP conflicts as acceptable. Filter on aggregate "Conflicting interpretations" flag (catches P vs B/VUS). |
+| 76 | E18 VCF scope | E18 VCF indel parsing is for chip VCFs only (e.g., MyHeritage). Full WGS VCF pipeline remains Phase 2. |
+| 77 | Inactive account deletion | Inactive accounts auto-deleted after 3 years with email warnings at 2.5yr and 2.9yr. |
+| 78 | F2 consent keyboard a11y | F2 consent modal keeps scroll detection + adds tabIndex="0" on scrollable area for keyboard a11y. |
+| 79 | PRS finer ancestry | PRS uses finer ancestry categories (East Asian / South Asian / Southeast Asian) where gnomAD data exists. Falls back to broad category + explicit limitation disclaimer. |
+| 80 | Guest checkout removed | Guest checkout removed. All users must create an account. (Reverses Decision #53) |
+| 81 | R10 ethnicity validation | Add R10 research task: validate ethnicity_frequencies.json against gnomAD v4. |
+| 82 | AnalysisResult naming | Both TS and Python use "AnalysisResult" (rename Python model from GeneticAnalysisResult). |
+| 83 | Pricing centralization | Pricing centralized in shared TierConfig constant (packages/shared-types). Frontend + backend import from same place. |
+| 84 | T8 WorkerMessage unions | Add T8 task: WorkerMessage discriminated unions for typed postMessage communication. |
+| 85 | Ops1 EU deployment | Add Ops1 task: Configure deployment region to eu-west-1 in vercel.json / infra config. |
+| 86 | F43 IndexedDB hydration | Add F43 task: Async IndexedDB hydration barrier component. |
+| 87 | L4 GINA limitations | L4 GINA disclaimer must note limitations: does NOT cover Life, Disability, or Long-Term Care insurance. |
+| 88 | L2 guardian policy | ~~L2 ToS adds guardian policy: uploading minor's data requires legal guardian declaration.~~ **SUPERSEDED by Decision #107: strict 18+ ban, no guardian exceptions.** |
+| 89 | Q21 PDF/UA audit | Add Q21 task: PDF/UA structural validation (verapdf-cli + NVDA test). |
+| 90 | Q22 fuzzing | Add Q22 task: Parser/decompression fuzzing (zip bombs, truncated files, garbage data). |
+| 91 | F33 color independence | F33 expanded: never rely on color alone for risk status. Use icons + text labels alongside color. |
+| 92 | F4 screen reader table | F4 Virtual Baby screen reader fallback = structured table listing all traits + probabilities. |
+| 93 | E14 fetch static assets | E14 uses fetch() for versioned static assets (e.g., /data/v1/carrier-panel.json), not dynamic import(). |
+| 94 | F21 mobile PDF memory | F21 adds mobile PDF memory guard — detect low memory → simplified report or desktop nudge. |
+| 95 | B9 webhook trigger | B9 emails triggered by Stripe checkout.session.completed webhook (server-side), not client. |
+| 96 | S1 worker-src CSP | S1 adds worker-src 'self' blob: to CSP for Web Workers. |
+| 97 | S1 Permissions-Policy | S1 adds Permissions-Policy: camera=(), microphone=(), geolocation=() to block hardware APIs. |
+| 98 | D1 SMA full removal | D1 expanded: remove SMA from BOTH data files AND engine logic/hardcoding. |
+| 99 | C5 developer docs | Add C5 task: Update README + CONTRIBUTING with new architecture (Workers, encryption, build flow). |
+| 100 | E15 Unknown/Mixed ethnicity | E15 ethnicity dropdown includes "Unknown/Mixed" option defaulting to most conservative detection rate. |
+| 101 | R1 manifest priority | R1 prioritizes manufacturer manifests (Illumina/Affymetrix) as primary. Community wikis as secondary verification only. |
+| 102 | E4 module split | E4 split into VariantGrouper (data transformation) + CarrierAnalyzer (analysis logic). |
+| 103 | Health Predispositions rename | "Polygenic Health Risks" renamed to "Health Predispositions" in UI. Technical subtitle: "(Polygenic Risk Scores)". |
+| 104 | Q12 nuclear delete verification | Q12 expanded: add nuclear delete verification test (delete → assert 404 + invalid key). |
+| 105 | Virtual Baby Free Tier | Preview in Free: eye color prediction free, other traits blurred. Conversion hook for Pro upgrade. |
+| 106 | EU Right of Withdrawal | Mandatory checkout checkbox: "I consent to immediate delivery and waive my right of withdrawal once analysis begins." |
+| 107 | Minor's data policy | Strict 18+ ban worldwide. Remove guardian clause from L2. No exceptions. (Supersedes Decision #88) |
+| 108 | Session DEK caching | See Decision #148 for canonical DEK storage specification. |
+| 109 | Release strategy | Internal alpha/dogfood deployment before public launch. Team tests with synthetic genomes at private URL. |
+| 110 | B1 Pydantic scope | AnalysisResult model used ONLY for type generation (T7) + client-side validation. Server validates EncryptedEnvelope schema (IV, salt, ciphertext, version). |
+| 111 | PRS weights source | Replace simulated PRS weights with validated scores from PGS Catalog. Add R5 sub-task before launch. |
+| 112 | FTC breach rule | Expand L11 to cover BOTH GDPR Art 33/34 (72h) AND FTC Health Breach Notification Rule (60 days) for US users. |
+| 113 | QA test expansion | Add Q23 (rate limit integration), Q24 (webhook security/idempotency), Q25 (Playwright blur/reveal for F3). |
+| 114 | Error observability | Add "Copy Debug Info" button to F23: non-sensitive stack trace copied to clipboard for support emails. Zero tracking. |
+| 115 | Accessibility expansion | F44: Skip to Main Content link (WCAG 2.4.1). F11 blurs: aria-hidden/inert. F4 visual: aria-hidden="true". F2: visible focus ring on scrollable. |
+| 116 | CSRF protection | S6 updated: SameSite=Lax on auth cookies + X-Requested-With custom header for state-changing endpoints. |
+| 117 | PGx disclaimer scope | Expand E9/F10: general array limitation disclaimer on ALL PGx genes, not just CYP2D6. |
+| 118 | CPRA evaluation | Expand L5 to include CPRA "Limit Use of My Sensitive Personal Information" evaluation for California users. |
+| 119 | IndexedDB migration | S6/F43: add schema version check. If stored dataVersion doesn't match current, prompt re-upload. Migration strategy for local data. |
+| 120 | CI orchestration | Add Ops2: monorepo CI pipeline with strict build order (Research Data → TS Types (define AnalysisResult in TypeScript) → Generate Pydantic Models (auto-generated from TS via T7) → Build App). |
+| 121 | F43 hydration | Skeleton UI + stale-while-revalidate, NOT blocking barrier. App shell paints immediately; data hydrates async. |
+| 122 | WASM contingency | Stay TypeScript (Decision #49 unchanged). If Q9 benchmarks show GC jank >100ms, scope WASM POC for parser core. |
+| 123 | Data fetching library | TanStack Query as standard data fetching layer. Caching, deduplication, retry, stale-while-revalidate. |
+| 124 | VB disclaimer in exports | Bake "Simulation Only — Not a Diagnosis" INTO all downloadable images/PDFs. Cannot be cropped out of screenshots. |
+| 125 | Partner data stewardship | F27 adds: "Data will be stored and managed under your account." L2 ToS indemnifies platform against unauthorized uploads. |
+| 126 | Session timeout warning | F32 adds: warn user 2 min before token expiry. "Session expiring soon — save your work." |
+| 127 | PDF in Worker | F21: offload PDF generation to dedicated Web Worker. Main thread stays responsive during compilation. |
+| 128 | S4 full monorepo scope | Supply chain audit expanded to ALL workspaces (frontend, backend, shared-types, root), not just genetics-engine. |
+| 129 | EU Article 27 | Include Article 27 representative evaluation in L7 (DPIA). If non-EU company, designate representative service. |
+| 130 | PRS normalization | **UPDATED by Decision #149:** PRS = (sum of matched allele effects) / (number of matched variants). Per-allele average handles missing data gracefully. Show overlap %. If <75% SNP match, show "Insufficient Coverage" instead of score. Add transparent disclosure: "Your DNA is processed entirely on your device. We cannot perform genotype imputation (requires server-side computation). Your PRS uses only directly measured variants." Chip-specific distributions deferred to Phase 2. |
+| 131 | DEK storage | See Decision #148 for canonical DEK storage specification. Add new F46: public /security page with architecture diagrams. |
+| 132 | RSC privacy boundary | Mandatory `"use client"` for all components under /analysis/, /results/, /upload/ paths. Enforced via ESLint plugin (@serviceup/eslint-plugin-enforce-use-client) + CI check. Code comment at top of each file explaining why. No Server Actions may touch genetic data. |
+| 133 | Client-side validation | ~~T7 expanded: generate BOTH TypeScript interfaces AND Zod schemas from Pydantic models. Pipeline: Pydantic → JSON Schema → (datamodel-code-generator for TS types) + (json-schema-to-zod for runtime validators). Zod used at data boundaries: IndexedDB hydration, Worker messages, API responses.~~ **SUPERSEDED by Decision #146** — TS now defines AnalysisResult; Python auto-generates from it. |
+| 134 | CNV disease removal | R4 updated: all CNV/deletion-based diseases (including alpha-thalassemia) are REMOVED from panel, not flagged. Same treatment as SMA. If primary pathogenic mechanism is undetectable on arrays, it must not appear in results. |
+| 135 | Partner CTA | Partner "Claim My Profile" CTA deferred to Phase 2. Partner notification email (B10) is sufficient for launch. |
+| 136 | Raw file warning | Add "Keep Your Raw File" warning at onboarding and before saving results: "We never store your raw DNA file. Keep your original file safe — you'll need it to update your report when new research becomes available." |
+| 137 | VAT/Currency | Pricing in USD. Stripe Tax handles EU VAT collection/remittance automatically. Regional pricing deferred to Phase 2. |
+| 138 | Analytics anonymity | B6 analytics: counter-based aggregates only (total events per type per day). No per-user journey tracking. No IP/session/user ID in analytics events. Advertise "zero tracking" transparency to users on /security page. |
+| 139 | Data migration | Schema-breaking engine updates require re-upload. Server cannot migrate encrypted data. F40 stale banner handles UX. Minor updates (disclaimers, UI) do NOT require re-upload. Be transparent about this in UX copy. |
+| 140 | Synthetic data validation | Add Q1a: validate synthetic genome factory output against 5 hand-curated golden standard files with known genotypes. Factory must reproduce expected genotypes exactly. |
+| 141 | Performance budget CI | Add performance budget CI step. Fail build if: LCP >2s, TTI >3s, JS bundle >500KB (gzipped). Use Lighthouse CI or Playwright trace assertions. |
+| 142 | PDF library | F21: **UPDATED by Decision #150:** Use pdf-lib (pure JS, browser-compatible) instead of PDFKit (Node.js-only). Works in Web Workers. Also provide HTML print stylesheet as accessible alternative. Advertise accessibility support as a feature. |
+| 143 | Compound het explanation | E5 output shows "Potential Risk" as primary label + info icon (hover/click) with plain language explanation: "We found two variants but can't tell if they're on the same or different chromosome copies. A clinical test can determine this." |
+| 144 | Upload labels | Keep "Mom / Dad" labels in couple upload flow (F1). Familiar and warm. |
+| 145 | Encryption migration | No migration task needed. V3 is a fresh launch with no production users. Delete test data and start clean. No server-side migration of encrypted results. |
+| 146 | Type generation direction | **Reversed.** TypeScript defines AnalysisResult (engine is the producer). Python auto-generates from TS types. T7 pipeline direction: TS → JSON Schema → Pydantic (was Pydantic → TS). |
+| 147 | Partner consent mechanism | Partner consent via checkbox — the uploading partner checks "My partner has agreed to this analysis" before proceeding. No email verification required for V3. **Known limitation:** checkbox is self-attested, not verified partner consent. Uploading user bears full legal liability. Documented as ethical debt for Phase 2 email verification. |
+| 148 | DEK storage method | DEK stored as non-extractable CryptoKey object via Web Crypto API (not sessionStorage). Even under XSS, the key can be used for encrypt/decrypt operations but cannot be read or exported. |
+| 149 | PRS normalization method | PRS normalization uses per-allele average method: PRS = (sum of matched allele effects) / (number of matched variants). |
+| 150 | PDF generation library | PDF generation uses pdf-lib (browser-compatible), not PDFKit (Node.js-only). Works in Web Workers. |
+| 151 | Gzip decompression strategy | Gzip decompression via DecompressionStream (Chrome/Edge) + fflate (~3KB) fallback for Firefox and older browsers. |
+| 152 | Argon2id parameters | Argon2id params — Desktop: 64MB memory, parallelism 4, iterations 3. Mobile (navigator.deviceMemory < 4GB): 19MB memory, parallelism 1, iterations 4. Compensating controls: server-side rate limiting, account lockout after 10 failures. Via argon2-browser WASM. Web Crypto API does NOT support Argon2id — WASM is required. (OWASP recommended) |
+
+---
+
+## Core Principle: Radical Transparency
+
+**Hide Nothing, Sue-Proof Everything.**
+
+- Every limitation disclosed before payment
+- Explicit comparison to clinical testing + recommendation to see genetic counselors
+- Persistent "What This Cannot Tell You" section on every results page
+- Plain English privacy policy (with legal appendix)
+- Refund for technical issues only (disclosed before purchase)
+- We never claim to be a medical device or diagnostic tool
+- Public /security page with architecture diagrams and plain English explanation
+- "Zero tracking" analytics disclosure — counter-based aggregates only, no per-user tracking
+- PRS methodology transparency — explicit disclosure that imputation is not performed for privacy
+
+This principle drives Decisions #25, #26, #28, #29, #35, #36, #37, #38, #40, #41 and manifests in tasks F25, F26, F27, F28, F31, L7, L8, L9, L10.
+
+---
+
+## Architecture Overview
+
+```
+User Browser (Privacy Boundary)
+├── File Upload (Mom + Dad, up to 500MB desktop / 50MB mobile)
+├── Client-Side Decompression (.zip/.gz → raw text)
+├── Age Verification Gate (18+ mandatory)
+├── Partner Consent Checkbox (mandatory for couple mode)
+├── Web Worker: genetics-engine
+│   ├── Parser (23andMe/Ancestry/MyHeritage, all versions)
+│   ├── VCF Indel Parser (small insertions/deletions up to 50bp)
+│   ├── Build Detector (hg19 vs hg38)
+│   ├── Liftover (static lookup, target SNPs only)
+│   ├── Gene-Level Carrier Analysis (not variant-level)
+│   ├── Trait Prediction (physical + wellness)
+│   ├── PGx Analysis (with CYP2D6 warning)
+│   ├── PRS (with ancestry confidence badge)
+│   ├── Couple/Offspring Combiner (Mendelian inheritance)
+│   ├── Coverage Calculator ("Tested X of Y variants")
+│   ├── Residual Risk Calculator (ethnicity-adjusted)
+│   ├── Mobile Memory Guard + Worker Concurrency Governor
+│   └── Granular Progress Events → main thread
+├── Client-Side PDF Generation (pdf-lib, tagged PDF/UA — Decision #150)
+├── Results Display
+│   ├── Pre-Payment Chip Limitation Disclosure
+│   ├── Consent Modal (before results)
+│   ├── Sensitive Content Guard (blur/reveal for carrier)
+│   ├── Virtual Baby Summary Card (traits + "Simulation Only" disclaimer)
+│   ├── Per-Page "What This Cannot Tell You" Section
+│   ├── Clinical Testing Recommendation
+│   ├── NSGC Counseling Link (on high-risk)
+│   └── PRS Environmental Context Education
+└── Save Choice: Encrypted to server (zero-knowledge Argon2id) OR PDF download (client-side)
+
+Server (Vault — never sees raw DNA)
+├── Auth (JWT)
+├── Tier Gating (Free/Premium/Pro)
+├── Encrypted Result Storage (AES-256-GCM, key versioning)
+├── Anonymous Conversion Analytics (server-side only)
+├── Nuclear Delete Endpoint (account + all data)
+├── GDPR Data Export (JSON)
+├── Access Audit Logging
+├── Payment (Stripe)
+├── Transactional Email Receipts
+├── Partner Notification Emails
+└── Incident Response Alerting
+```
+
+**Key Principle:** Raw DNA never leaves the browser. Server stores only encrypted results. Client-side processing is the privacy architecture.
+
+---
+
+## Work Streams
+
+### Stream 0: Research & Data Sourcing (BLOCKING — must complete first)
+
+These are prerequisites that gate all other work.
+
+| Task | Description | Blocks |
+|------|-------------|--------|
+| **R1. Source chip definition files** | Compile rsID lists for 23andMe v3/v4/v5, AncestryDNA v1/v2, MyHeritage. Needed for: parser detection, coverage metrics. Sources: **Illumina/Affymetrix manufacturer manifests** (primary), published research, community wikis (secondary verification only). (Decision #101) | Streams 1, 2, 4 |
+| **R2. Compile ClinVar pathogenic variant counts** | For each disease in our panel, get TOTAL known pathogenic variants. **Filter to Pathogenic/Likely Pathogenic with at least 1-star review status and no Pathogenic vs Benign/VUS conflicts** (filter on ClinVar aggregate "Conflicting interpretations of pathogenicity" status). Allow Pathogenic vs Likely Pathogenic discrepancies as acceptable. Exclude single-submitter assertions with no review. Source: ClinVar database. (Decisions #43, #75) | Streams 1, 4 |
+| **R3. Build liftover lookup table** | Map all target SNP positions from hg19 → hg38 (and reverse). Only our target SNPs (~5,000), not whole genome. Source: UCSC chain files. | Stream 1 |
+| **R4. Identify other CNV-based diseases** | SMA is removed. Find other diseases in our panel that have the same chip limitation (structural variants, deletions). e.g., Alpha-thalassemia (HBA deletions). **Remove them entirely** (not flag). Same treatment as SMA (Decision #134). | Stream 1 |
+| **R5. Compile ancestry-specific PRS distributions** | Get population-specific mean/SD for PRS scores. **Use finer categories where gnomAD data exists** (e.g., East Asian, South Asian, Southeast Asian) rather than broad "Asian". Fall back to broad category + explicit limitation disclaimer. Source: gnomAD, 1000 Genomes. (Decision #79) **Sub-task: Replace simulated PRS weights** in prs_weights.json with validated scores from PGS Catalog or published GWAS. Current file contains placeholder/educational data that must be replaced before launch (Decision #111). | Stream 1 |
+| **R6. Build synthetic test genome factory** | Script to generate valid 23andMe/Ancestry/MyHeritage files with injected known variants. Essential for testing. Cannot use real user data. | Stream 5 |
+| **R7. Compile clinical detection rates per ethnicity** | For top diseases, compile per-ethnicity detection rates (e.g., "CFTR on 23andMe v5 catches 89% of Caucasian carriers"). Needed for residual risk calculation (E15). Sources: published carrier screening validation studies. | E15 |
+| **R8. Re-validate carrier_panel.json against ClinVar** | Cross-reference all variants in carrier-panel.json against current ClinVar. Flag any reclassified variants (P→B, LP→VUS). Remove or update. | Streams 1, 2 |
+| **R9. Gene-phenotype validity check** | Verify every gene-trait association in trait_snps.json meets evidence threshold: 2+ independent GWAS replications or ClinGen validity. Remove unsupported traits. | Stream 2 |
+| **R10. Validate ethnicity carrier frequencies** | Cross-reference ethnicity_frequencies.json against gnomAD v4 or published carrier frequency studies. Ensure carrier rates exist for all supported ethnicities. Required for E15 residual risk calculation. (Decision #81) | E15 |
+| **R11. Compound heterozygote ground truth cases** | Source 5-10 known compound heterozygote cases from ClinVar for testing E5. Include genes like CFTR (cystic fibrosis), PAH (phenylketonuria). Document: gene, variant pair, clinical significance, inheritance pattern. Required for E5 validation. | E5, Q3 |
+| **R12. Audit carrier panel rsID mappings** | Verify ALL rsID→variant mappings in carrier-panel.json against ClinVar/OMIM. No carrier analysis code ships until data is verified. **Confirmed: rs113993960 is mislabeled as G542X in carrier-panel.json (actually maps to F508del region). R12 MUST complete before any carrier analysis code ships. Blocks all of Stream 1 (Data) and Stream 2 (Engine) carrier tasks.** Priority: CRITICAL. **Acceptance criteria:** Pass criteria: Every rsID in carrier-panel.json and trait_snps.json verified against dbSNP. Fail: any unverified rsID remains. Deliverable: audit spreadsheet with columns: rsID, gene, disease/trait, dbSNP match status, action needed. | E4, D1, D3 |
+
+### Stream 1: Genetics Data Refactor (`packages/genetics-data`)
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **D1. Remove SMA from disease panel** | Delete SMN1 entries from carrier-panel.json, TOP_25_FREE_DISEASES, **AND any SMN1-specific logic/hardcoding in the engine AND TOP_25_FREE_DISEASES constant**. (Decision #98) | CRITICAL |
+| **D2. Remove other CNV-based diseases** | Based on R4 findings, remove diseases with chip limitations. **Also clean TOP_25_FREE_DISEASES and any other constant arrays** referencing removed diseases. **Remove untestable diseases (Fragile X, Huntington's, SMA, DMD) from TOP_25_FREE_DISEASES** — these conditions cannot be detected from SNP array data (require specialized tests like Southern blot, trinucleotide repeat analysis). **DMD (Duchenne Muscular Dystrophy):** ~65-70% of DMD cases caused by large exonic deletions undetectable by SNP arrays (Decision #134 applies). | CRITICAL |
+| **D3. Add variant count metadata** | For each disease, add `totalKnownVariants` field (from R2) | HIGH |
+| **D4. Add chip coverage mapping** | For each variant, add which chips include it (from R1) | HIGH |
+| **D5. Add liftover lookup table** | Static JSON mapping: rsID → {hg19_pos, hg38_pos} (from R3) | HIGH |
+| **D6. Add ancestry PRS distributions** | Population-specific weights/distributions in prs-weights.json (from R5) | MEDIUM |
+| **D7. Add data version field** | Version string for the panel data (e.g., "carrier-panel-v2.0") for result tracking | MEDIUM |
+
+### Stream 2: Genetics Engine Refactor (`packages/genetics-engine`)
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **E1. Refactor parser for all chip versions** | Support 23andMe v3/v4/v5, Ancestry v1/v2, MyHeritage. Detect format from headers. Support VCF indels and multi-allelic sites (see E18, E19). Explicitly exclude full VCF pipeline per Decision #1 (Phase 2). | CRITICAL |
+| **E2. Add genome build detection** | Detect hg19 vs hg38 from file metadata/marker positions | CRITICAL |
+| **E3. Implement client-side liftover** | Use static lookup table (D5) to convert coordinates when builds mismatch | CRITICAL |
+| **E4. Refactor carrier.ts for gene-level analysis** | Group variants by GENE, not individual. Detect compound heterozygotes. Return gene-level status. **Split into two modules:** `VariantGrouper` (groups variants by gene, data transformation) and `CarrierAnalyzer` (detects compound heterozygotes, returns gene-level status). (Decision #102) | CRITICAL |
+| **E5. Add compound heterozygote logic** | If 2+ pathogenic alleles in same gene → "Potential Risk — Confirm Clinically" Display "Potential Risk" as primary label with info icon (hover/click) revealing plain language phasing explanation (Decision #143). | CRITICAL |
+| **E6. Add "Not Tested" vs "Variant Not Detected"** | Distinguish: variant genotyped as reference (safe-ish) vs variant not on chip (unknown) | CRITICAL |
+| **E7. Add coverage calculator** | Per disease: count how many target variants were actually in the file → "Tested X of Y" | HIGH |
+| **E8. Add chip version/density detection** | Estimate chip type from SNP count/specific markers. Pass as metadata to UI. | HIGH |
+| **E9. Add CYP2D6 hybrid allele warning** | **General PGx array limitation disclaimer on ALL genes** (not just CYP2D6): 'Array-based genotyping cannot detect structural variants, CNVs, or all star alleles for any gene.' Include CYP2D6-specific warning about hybrid alleles and CNVs. (Decision #117) | HIGH |
+| **E10. Add ancestry-adjusted PRS** | Detect user ancestry (from genotype PCA or user-input), apply correct population reference. **PRS normalization (Decision #149):** PRS = (sum of matched allele effects) / (number of matched variants). Per-allele average handles missing data gracefully. Report overlap percentage. If <75% SNP match, show "Insufficient Coverage" instead of score. Add transparent disclosure that imputation is not performed because DNA never leaves the browser (Decisions #130, #149). **Offspring PRS (depends on E11):** do NOT simply average parental PRS scores. **Method:** For each PRS SNP, each parent transmits one allele with 50% probability. Offspring PRS is a sum of independent random variables. Mean = (parent1_PRS + parent2_PRS) / 2. Variance = sum(variance_per_locus). Use CLT normal approximation for 25th/75th percentiles. No Monte Carlo simulation needed — this is analytically exact for unlinked loci. Display as a range (25th-75th percentile) with mean. A single-point offspring PRS is scientifically misleading. **Phase limitation:** Consumer VCF files are unphased. Without phased haplotype data, use random phase assumption (50/50 allele assignment per parent). Display confidence interval reflecting phase uncertainty. Add disclaimer: "PRS predictions use statistical modeling and assume random allele transmission." | HIGH |
+| **E11. Implement couple/offspring combiner** | Take two GenotypeMap → Mendelian inheritance → offspring probability for each trait/carrier/PGx. **Must implement three inheritance models:** (1) Autosomal Recessive (AR): 25% affected if both parents carriers. (2) Autosomal Dominant (AD): 50% affected if one parent heterozygous. (3) X-linked: 50% of sons affected if mother is carrier; daughters are carriers. Account for offspring sex probability in X-linked cases. The carrier panel contains 1,477 AR, 1,057 AD, and 181 X-linked variants. **AD results display:** NSGC counseling link and emotional support resources must appear directly inline with each AD offspring risk result, not just at page level. | CRITICAL |
+| **E12. Memory optimization** | Memory optimization: Accept File handles directly in Worker via Transferable objects. Enforce memory ceiling. Informed by performance benchmarks (Q9). Reduce main-thread memory by keeping file data in Worker thread. Cross-reference E13 for streaming implementation. **Large file transfer:** Parse VCF chunks as ArrayBuffer. Use postMessage() with Transferable objects to avoid memory copy. Worker receives ownership of the buffer (zero-copy transfer). | HIGH |
+| **E13. Streaming parser for large files** | Owns ReadableStream with 64KB chunks, backpressure (pause reading when processing queue exceeds threshold), TextDecoder for chunk-to-line conversion. Required for files up to 500MB. E12 handles memory optimization separately. **Prerequisite:** Refactor WorkerRequest type to accept File handle (via Transferable) instead of content: string. A 500MB string would consume ~1GB heap (UTF-16). Convert all 4 parser functions (parse23andMe, parseAncestryDNA, etc.) to accept a line iterator/async generator. Format detection (detectFormat) works from first chunk only. | HIGH |
+| **E14. Lazy-load genetic data** | Don't bundle JSON panels into worker. Use **fetch() for versioned static assets** (e.g., `/data/v1/carrier-panel.json`) instead of JS imports. Decouples data updates from code deploys and improves caching. **MUST NOT use import/require for JSON data files in Worker code.** (Decision #93) **Migration note:** Current code bundles JSON via static import. E14 changes to runtime fetch() for code-splitting benefits. Worker must handle fetch failures gracefully (retry with exponential backoff). **Caching:** Use Cache API (available in Workers) with versioned URLs. First analysis fetches from network, subsequent analyses use cache. Worker should fetch() all 4 data files in parallel (Promise.all) during Worker initialization, not on-demand. Pre-spawn Worker on analysis route mount to amortize fetch latency. | MEDIUM |
+| **E15. Add residual risk calculation** | Calculate residual risk based on Clinical Detection Rate (from R7). Use **self-reported ethnicity** from user dropdown (not genetic ancestry inference) to map to published clinical detection rate tables. Post-test probability adjusted by ethnicity + coverage. Include **"Unknown/Mixed" option** in the ethnicity dropdown that defaults to the most conservative detection rate (lowest detection %) to prevent false reassurance. (Decisions #60, #100) | MEDIUM |
+| **E16. Mobile memory guard + worker concurrency governor** | Detect device via navigator.hardwareConcurrency/memory API. On mobile: enforce 50MB limit, process files sequentially (not parallel). On desktop: allow parallel workers. (Decision #23) | HIGH |
+| **E17. Embed engineVersion in AnalysisResult** | Add `engineVersion` string to every AnalysisResult for debugging/tracking. | MEDIUM |
+| **E18. VCF indel parsing** | Support small deletions/insertions up to 50bp. Enables detection of F508del (CFTR) and similar pathogenic indels. **Scope: chip-format VCFs only** (e.g., MyHeritage VCF exports). Full WGS VCF pipeline remains Phase 2 per Decision #1. (Decisions #22, #76) | HIGH |
+| **E19. Multi-allelic VCF record support** | Parse comma-separated ALT alleles correctly instead of skipping them. | HIGH |
+| **E20. Strand orientation harmonization** | Sample **1,000** common homozygous SNPs **distributed across all chromosomes**; if >90% match complement, flip strand. Target **non-palindromic** SNPs (A/C, A/G, C/T, G/T) as anchors. **Explicitly exclude palindromic A/T and C/G sites** to prevent false strand detection. (Decisions #60, #68) | HIGH |
+| **E21. Emit granular progress events** | Emit progress events to main thread: parsing_started, parsing_progress_%, analysis_started, analysis_complete. Required for accessibility (F16) and UX. | HIGH |
+| **E22. JSDoc documentation for complex logic** | Document complex combinatorial logic: couple/offspring combiner (E11), carrier analysis (E4), residual risk (E15). | MEDIUM |
+| **E23. Client-side streaming decompression** | Support .zip and .gz file uploads within the Web Worker. Users upload compressed archives directly; decompression happens in-worker before parsing. **Three decompression paths:** (a) Zip container (23andMe .zip): extract via fflate's unzip() for container format, then stream extracted content. Full file buffered in Worker for central directory access. (b) Gzip stream (.gz): use DecompressionStream API + fflate fallback for browsers without support (Decision #151). (c) Raw text (.txt/.csv): no decompression needed, stream directly. Note: for zip archives, streaming benefits apply only after extraction. The 500MB limit must account for zip decompression memory overhead (compressed + extracted content simultaneously in memory). **Security:** enforce maximum uncompressed size (500MB desktop / 50MB mobile per Decision #7). Abort if compression ratio exceeds 100:1. Set wall-clock timeout on decompression (30 seconds). | HIGH |
+
+### Stream 3: Shared Types Refactor (`packages/shared-types`)
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **T1. Update AnalysisResult types** | Add: coupleMode, offspringPredictions, coverageMetrics, chipVersion, genomeBuild. **Current state:** `packages/shared-types/src/genetics.ts` contains `FullAnalysisResult` (555 lines). This task RENAMES `FullAnalysisResult` → `AnalysisResult` and extends with new fields. Not creating from scratch. | CRITICAL |
+| **T2. Add CoupleAnalysis types** | ParentA + ParentB → OffspringReport with trait probabilities, carrier risks, PGx | CRITICAL |
+| **T3. Add CoverageMetric type** | { disease, testedVariants, totalKnownVariants, coveragePercent, confidenceLevel } | HIGH |
+| **T4. Add RiskLevel "not_tested"** | Extend RiskLevel enum: add 'not_tested', 'potential_risk', 'coverage_insufficient' | HIGH |
+| **T5. Add shared error codes** | ErrorCode enum: MISSING_DATA, PARSE_ERROR, BUILD_MISMATCH, UNSUPPORTED_FORMAT | MEDIUM |
+| **T6. Add FileMetadata type** | { provider, chipVersion, genomeBuild, snpCount, detectedAncestry } | MEDIUM |
+| **T7. Cross-language type sync CI test** | **Auto-generate** Pydantic models from TypeScript interfaces (reversed — TS is the producer). Pipeline: TS interfaces → JSON Schema → Pydantic models + Zod schemas. Single source of truth is TypeScript (genetics engine). Run on every PR. Depends on T1 + B1. (Decisions #30, #70, #133, #146) **Scope:** Auto-generate AnalysisResult Pydantic model from TypeScript AnalysisResult interface. Keep hand-written Python schemas for API-envelope types: SaveAnalysisRequest, AnalysisDetailResponse, EncryptedEnvelope (these have no TypeScript counterpart). | HIGH |
+| **T8. Define WorkerMessage discriminated unions** | Define strictly typed request/response message types for all Web Worker communication (genetics engine). Prevents postMessage from being a type-safety gap. (Decision #84) **Current state:** `WorkerRequest` and `WorkerResponse` discriminated unions already exist in `genetics.ts`. This task EXTENDS them with new message types for streaming, decompression, and progress granularity. **Worker Topology:** 1 persistent genetics Worker (reused across analyses), 1 ephemeral crypto Worker (spawned on-demand for Argon2id, terminated after derivation), 1 ephemeral PDF Worker (spawned on-demand, terminated after generation). Concurrent Workers capped at Math.min(navigator.hardwareConcurrency - 1, 3) on desktop, 1 at a time on mobile. Worker lifecycle: creation on route mount, termination on route unmount or error. Error recovery: if Worker crashes, respawn and show F23 friendly error. | HIGH |
+
+### Stream 4: Frontend Refactor (`apps/web`)
+
+> **Data fetching:** TanStack Query (React Query) is the standard for all API data fetching hooks (Decision #123).
+
+#### 4A. Core UX Changes
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **F1. Couple upload flow** | "Upload Mom + Upload Dad" unified card. One person uploads both. Include mandatory partner consent checkbox (F27). Blocked by age gate (F28) and privacy policy (L1). User A uploads both files and encrypts the couple report under their own key. Mandatory partner consent checkbox (F27) required. Partner receives notification email (B10) but does not need an account for results to be saved. (Decisions #25, #66) Keep "Mom / Dad" labels (Decision #144). | CRITICAL |
+| **F2. Pre-analysis consent modal** | Mandatory click-through: "What this test CANNOT tell you." Must scroll + accept. **Add `tabIndex='0'` on scrollable content area** for keyboard accessibility. Keyboard accessible (focus trap). Use IntersectionObserver for scroll detection. **Add explicit Article 9 consent: 'I consent to the processing of my genetic data for health/trait analysis.' Add 'right not to know' acknowledgement: 'I understand I may learn information about my health that I cannot unlearn.'** (Decisions #46, #78) **Accessibility fallback for IntersectionObserver scroll-gate:** if user navigates to final element via keyboard/screen reader (focus on last focusable element), also enable the accept button. Screen reader users navigate by structure, not scrolling. WCAG 2.1.1. **App shell deliverable:** Add `lang="en"` attribute to root HTML element (WCAG 3.1.1 requirement for screen readers). | CRITICAL |
+| **F3. Sensitive content guard** | **Split into 3 granular reveals:** 1) 'Reveal Carrier Status' (reproductive risks), 2) 'Reveal **Health Predispositions**' (late-onset conditions, subtitle: 'Polygenic Risk Scores'), 3) 'Reveal Pharmacogenomics' (medication responses). Each has its own blur/reveal button with dynamic ARIA labels. Medical disclaimer per category. (Decisions #45, #103) **Blur/reveal buttons MUST use `aria-expanded='false/true'` and `aria-controls` pointing to content region.** Labels: 'Reveal [Category] (currently hidden)' / 'Hide [Category] (currently shown)'. WCAG 4.1.2, 1.3.1. **AD-specific pre-reveal:** For any Autosomal Dominant condition, the blur/reveal includes a specific pre-reveal warning: 'The following results include conditions where a single copy of a variant may cause disease. These results can be emotionally significant. We strongly recommend reviewing them with a genetic counselor.' | CRITICAL |
+| **F4. Virtual Baby summary card** | Visual summary of predicted traits (eye color probability, hair, etc.) — the "engagement hook". Inline "Simulation Only — Based on Probability, Not Certainty" disclaimer always visible on card. **Structured screen-reader-only table** listing all predicted traits and probabilities (e.g., "Eyes: Blue 80%, Hair: Brown 60%") as screen reader fallback. Ensure "Simulation Only" disclaimer is visually linked as subtitle to "Virtual Baby" title. (Decisions #29, #92) **Free tier shows eye color prediction only; other traits blurred as Pro upgrade hook (Decision #105).** Disclaimer baked into all downloadable images and PDFs — cannot be cropped out (Decision #124). | HIGH |
+| **F5. Coverage confidence meter** | Per-disease: "Tested 42 of 2,000 variants" with visual bar/badge (High/Medium/Low). **Accessibility:** Use role='meter' with aria-valuenow (variants tested), aria-valuemin='0', aria-valuemax (total known variants), and aria-label like 'Cystic Fibrosis coverage: 42 of 2000 variants tested (High confidence)'. Visible text label must always accompany the visual bar. | HIGH |
+| **F6. Global terminology rename** | "Negative" → "Variant Not Detected" everywhere. "Screening" → "Analysis". "Diagnosis" → "Report". | HIGH |
+| **F7. NSGC counseling link** | On any high-risk result: "Find a Genetic Counselor" → findageneticcounselor.com. **Include emotional support resources:** empathetic messaging ("It's normal to feel overwhelmed — you're not alone"), mental health helpline link, and reassuring context about carrier status being common. | HIGH |
+| **F8. Ancestry confidence badge** | On PRS results: "Low Confidence — ancestry mismatch" for non-European users | HIGH |
+| **F9. Residual risk display** | For carrier "Not Detected" results: show post-test probability (e.g., "Residual risk: 1 in 3,000") | MEDIUM |
+| **F10. CYP2D6 warning display** | On **all** PGx results: 'Array-based genotyping may miss structural variants and some star alleles.' CYP2D6-specific: 'Cannot detect hybrid alleles or copy number variations.' (Decision #117) | MEDIUM |
+| **F48. PDF/UA feasibility spike** | Validate that pdf-lib can produce a PDF passing verapdf PDF/UA validation. Test font embedding and image compositing in Web Worker. Measure memory usage for typical report on mobile. If pdf-lib cannot meet PDF/UA, fall back to HTML print stylesheet (already planned). Blocks F21. | HIGH |
+| **F21. Client-side PDF generation** | Use **pdf-lib** (pure JS, browser-compatible — Decision #150) instead of PDFKit (Node.js-only). Works in Web Workers. Replaces removed B4 (server-side PDF). Raw data never leaves browser for PDF generation. **Require PDF/UA tagging with logical reading order for screen reader accessibility. Lazy-load via next/dynamic — do not include in main bundle.** **Mobile memory guard:** Detect low device memory → generate "Simplified Report" (fewer charts/images) or nudge user to desktop. (Decisions #21, #44, #94, #150) **Offload PDF generation to dedicated Web Worker** (not main thread) to prevent UI freeze during compilation (Decision #127). Ensure 'Simulation Only' disclaimer is baked into all Virtual Baby pages/images in the PDF (Decision #124). Also provide HTML print stylesheet as accessible alternative. Advertise accessibility support as a feature (Decision #142). | HIGH |
+| **F22. List virtualization** | Use react-window or virtua for all variant/disease tables. Required for 2000+ row rendering at 60fps. | HIGH |
+| **F23. Friendly error mapping** | Translate error codes (PARSE_ERROR, BUILD_MISMATCH from T5) into actionable human-readable messages with recovery suggestions. **Ensure form field errors use aria-invalid='true' and aria-describedby='error-id' for inline feedback.** **Add 'Copy Debug Info' button** in error states that copies non-sensitive stack trace/state to clipboard. Allows users to paste into support emails. Zero tracking, full privacy compliance (Decision #114). **Analysis-level error banners must use role='alert' for immediate screen reader announcement. Include: error title, human-readable explanation, and recovery action.** | MEDIUM |
+| **F24. SEO & Open Graph metadata** | Target keywords: "baby eye color calculator", "genetic compatibility test", "compare 23andMe with partner". JSON-LD structured data. **Include disclaimer in couple-related marketing copy:** "This tool is for established couples, not dating screening." (Decision #74) | MEDIUM |
+| **F25. Pre-payment chip limitation disclosure** | Show chip coverage stats, "0.02% of genome", comparison to clinical testing, before paywall. Content from L10. (Decision #35) | CRITICAL |
+| **F26. Per-page "What This Cannot Tell You" section** | Collapsible section on every results tab. Lists: untested variants, diseases not covered, why this isn't a diagnosis. Includes recommendation to see genetic counselor. Content from L3. (Decisions #36, #40) | HIGH |
+| **F27. Partner consent mandatory checkbox** | In couple upload flow (F1): 'I confirm I have my partner's explicit consent to upload and analyze their genetic data. **I understand their data will be stored and managed under my account.**' Blocks analysis until checked. **Decision #147:** Partner consent via checkbox — the uploading partner checks "My partner has agreed to this analysis" before proceeding. No email verification required for V3. (Decisions #25, #125, #147) | CRITICAL |
+| **F28. Age verification gate** | 18+ mandatory modal before file upload. Simple confirmation checkbox: "I confirm I am 18 years of age or older." (Decision #26) Modal MUST include: `role='dialog'`, `aria-modal='true'`, `aria-labelledby` pointing to heading, focus trap. WCAG 4.1.2. | CRITICAL |
+| **F29. Delete Account & Data button** | In account settings. Triggers backend nuclear delete (B7). Clear confirmation dialog with explicit warning. | HIGH |
+| **F30. PRS environmental context** | Educational UI explaining "genes + environment" for polygenic traits. "Your genetic predisposition is one factor — lifestyle, diet, and environment also play major roles." **F30 environmental context also applies to offspring PRS display.** Add offspring-specific disclaimer: "These are statistical estimates based on population research. They do not predict your future child's actual health outcomes." | CRITICAL |
+| **F31. Clinical testing recommendation** | Explicit text on results pages: "This is an educational tool, NOT a replacement for clinical carrier screening. If planning a pregnancy, see a genetic counselor." (Decision #36) | HIGH |
+| **F45. Session DEK restore** | On page load, check for cached DEK (stored as non-extractable CryptoKey via Web Crypto API — Decision #148). If present, decrypt IndexedDB results without re-entering password. DEK cleared on tab close. Integrate with F43 hydration flow. (Decisions #108, #148) **Multi-tab:** each tab derives its own DEK independently (no BroadcastChannel sharing — simpler, avoids cross-tab key leakage). Crash recovery: always prompt for password on fresh tab load. CryptoKey is per-tab, not per-session. **Per-tab DEK:** destroyed automatically when tab closes. No cross-tab coordination needed. 15-minute idle timeout (setTimeout) clears DEK on inactivity. | HIGH |
+| **F46. Security Architecture page** | Public-facing `/security` page with: plain English explanation of zero-knowledge architecture, visual diagrams showing data flow (DNA stays in browser, encrypted blob goes to server), step-by-step "How your data is protected" with icons, password→Argon2id→DEK→AES-256-GCM encryption diagram, comparison to industry ("Unlike traditional genetics services, your raw DNA never touches our servers"), recovery key explanation, "zero tracking" analytics disclosure, PRS imputation transparency. Part of "Radical Transparency" brand. (Decisions #131, #138, #130) | HIGH |
+| **F47. GDPR compliance checklist** | Consent withdrawal UI (revoke consent button), privacy notice page (Articles 13/14), document Article 6 legal basis (explicit consent for Art 9 genetic data). See B-stream for data rectification endpoint (B12). See L-stream for DPO appointment (L14). Priority: HIGH. | HIGH |
+
+#### 4B. Tier Restructuring
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **F11. Free tier = traits only** | Free tier = traits only (eye color, hair texture, etc.). Carrier disease analysis requires Premium ($14.99) or higher. Remove disease screening from Free. Show count of risks found ("2 Carrier Risks Found"), blur all details as upsell. Include normalizing context alongside count: "Most people are carriers for several conditions. This is a normal part of human genetics." (Decisions #28, #69) **Ethical requirement:** The carrier risk count ('X Carrier Risks Found') and normalizing context ('Most people are carriers for several conditions. This is a normal part of human genetics.') are a single, inseparable UI component. The count must NEVER render without the normalizing context immediately adjacent and at equal or greater visual prominence. This applies to all loading states — never show count before context loads. **Note:** TOP_25_FREE_DISEASES constant in codebase needs renaming/removal to match this decision (free tier has NO disease access). **Virtual Baby preview included in Free tier** (eye color only, rest blurred — Decision #105). Blurred/locked content containers must have `aria-hidden='true'` or `inert` attribute to remove from accessibility tree (Decision #115). | CRITICAL |
+| **F12. Premium tier ($14.99)** | Individual health: carrier + PGx + PRS for single user. **$14.99.** (Decision #50) | HIGH |
+| **F13. Pro tier ($34.99)** | Couple/offspring report. **Includes Individual Premium Reports for BOTH partners** + Couple/Offspring Report. The full 'Virtual Baby' is a Pro preview of what you'll unlock. **$34.99. Premium→Pro upgrade pays $20 difference.** (Decisions #50, #71) Free tier gets limited Virtual Baby preview (eye color only). Pro tier unlocks full Virtual Baby with all traits (Decision #105). | HIGH |
+| **F14. PDF report trigger** | User triggers client-side PDF generation (F21). User chooses save-to-server OR PDF. | HIGH |
+| **F15. Save choice UX** | Clear UI: "Save results to your account (encrypted)" vs "Download PDF (nothing stored)". Warn that password reset deletes saved results (Decision #41). **Include recovery key download option at signup. Warn: 'Save this key — it's the only way to recover your data if you forget your password.'** (Decision #42) | HIGH |
+
+#### 4C. Accessibility & Responsive
+
+> **Design System Accessibility Requirements:** Skip-to-content link (F44), focus management on route changes (F32), prefers-reduced-motion media query support (F34), WCAG AA contrast ratios (4.5:1 minimum — F19), screen reader testing checklist (VoiceOver + NVDA). **React error boundary strategy:** ErrorBoundary component wrapping each major section (F36).
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **F16. aria-live on analysis progress** | Screen reader announces: "Parsing DNA...", "Calculating risks..." Driven by granular progress events from E21. | HIGH |
+| **F17. Mobile card view for variant tables** | On mobile: switch from wide tables to VariantCard components | MEDIUM |
+| **F18. Mobile stack layout for couple upload** | Stack Mom/Dad vertically on mobile with clear 1/2 indicators | MEDIUM |
+| **F19. Color contrast audit** | Verify glass card text meets 4.5:1 WCAG AA. Fix text-muted on bg-glass. | CRITICAL |
+| **F20. Touch target sizing** | FileDropzone tap area >= 44x44px on mobile | CRITICAL |
+| **F32. Focus management architecture** | Focus trapping for modals (F2, F3, F28), focus restoration on close/reveal. **Session timeout warning:** Warn user 2 minutes before token expiry: 'Session expiring soon — save your work.' Prevents data loss during analysis (Decision #126). Session timeout warning MUST use `role='alert'` or `aria-live='assertive'` for screen reader announcement. Provide mechanism to extend session (not just passive notice). WCAG 2.2.1. **Analysis completion focus:** When analysis transitions from running to complete, move focus to results heading or use aria-live announcement: 'Analysis complete. Results are now available below.' The existing aria-live on progress description announces completion but focus remains on progress area — explicitly manage focus transfer. | HIGH |
+| **F33. Accessible data visualization** | Screen-reader-only text equivalents for charts/meters. High Contrast Mode fallback with solid backgrounds + strong borders. Depends on F4 (Virtual Baby) and F5 (coverage meter). **WCAG 1.4.1 compliance (Level A — Use of Color): Do not rely on color alone for risk status.** Use icons (warning triangle, checkmark, info circle) and text labels alongside color coding. Must ship alongside F19. Audit all risk displays in carrier-tab.tsx, prs-tab.tsx, overview-tab.tsx for color-only risk communication. (Decisions #32, #91) | CRITICAL |
+| **F34. Reduced motion support** | Respect `prefers-reduced-motion` for all animations (Virtual Baby, progress indicators, transitions). Integrate into F4 scope. **Specifically disable/simplify Virtual Baby animations and transitions for prefers-reduced-motion users.** | MEDIUM |
+| **F35. Global error announcer** | Connect error codes (T5) to aria-live region for screen reader announcements. | HIGH |
+| **F36. React Error Boundaries** | Add Error Boundaries on all visualization components (F4 Virtual Baby, F5 coverage meter, F22 virtualized lists, charts). Prevent white-screen crashes. (Decision #48) | HIGH |
+| **F37. Heading hierarchy enforcement** | Audit and enforce logical h1→h2→h3 nesting across all result views. No skipped heading levels. (Decision #57) | MEDIUM |
+| **F38. WCAG 1.4.10 Reflow** | Ensure all content is legible at 400% zoom (320px width) without horizontal scrolling. Genetic tables and Virtual Baby card must reflow properly. (Decision #57) | MEDIUM |
+| **F39. Virtualized list accessibility** | Add aria-rowcount, aria-setsize, and focus management to all react-window/virtua lists. Screen reader announces "Row X of Y". (Decision #57) | HIGH |
+| **F40. Stale results banner** | When saved result's dataVersion < current version, show non-blocking banner: "New research available. Re-upload your file to update your report." (Decision #55) Transparent copy explaining why re-upload is needed: "Your data is encrypted with your key — we can't update it server-side" (Decision #139). | MEDIUM |
+| **F42. Sample report for landing page** | Create a realistic demo report (fake data) for the marketing page. Shows users what they get before uploading DNA. (Decision #61) | MEDIUM |
+| **F43. Async IndexedDB hydration barrier** | **Skeleton UI + stale-while-revalidate pattern** (NOT blocking barrier). App shell paints immediately with skeleton loaders while Zustand store hydrates async from IndexedDB. Prevents flash of unauthenticated content without degrading LCP. **Include schema version check:** if stored dataVersion doesn't match current app version, prompt user to re-upload (Decision #119, #121). Depends on S6. | HIGH |
+| **F44. Skip to Main Content link** | First focusable element on every page: visible "Skip to Content" link (WCAG 2.4.1 bypass block). Critical for keyboard users navigating past legal/disclaimer headers. (Decision #115) | HIGH |
+
+### Stream 5: Backend Refactor (`apps/api`)
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **B1. Strict Pydantic schema for results** | Replace dict[str, Any] with typed **AnalysisResult** model (matching TypeScript naming). (Decision #82) **For type generation (T7) and client-side validation ONLY.** Server API validates a separate `EncryptedEnvelope` schema (IV, salt, ciphertext, version) — server never sees or validates decrypted AnalysisResult content (Decision #110). **Authorization check on all data endpoints:** verify `result.owner_id == current_user.id` on every data access. Use UUIDs (not sequential integers) for result identifiers. | HIGH |
+| **B2. Data version tracking** | Add dataVersion field to saved results (which panel version generated them) | HIGH |
+| **B3. Separate DATA_ENCRYPTION_KEY** | **Zero-knowledge architecture:** DEK derived from user's password via **Argon2id** on client side. Server never stores plaintext DEK. Per-user unique key. Recovery key (Decision #42) serves as alternative KEK. Support key versioning (prepend `v1:` to ciphertext). **Run Argon2id key derivation in a dedicated Web Worker** to avoid blocking the main thread. **Use Web Crypto API (`window.crypto.subtle`)** for all AES-256-GCM operations — no JavaScript crypto libraries. **Decision #152: Argon2id via argon2-browser (WASM). Parameters: 64MB memory, 3 iterations, parallelism 4 (OWASP recommended). Web Crypto API does NOT support Argon2id — WASM is required.** DEK stored as non-extractable CryptoKey via Web Crypto API (Decision #148). DEK cleared on tab close. (Decisions #47, #72, #73, #148, #152) **Recovery key:** 256-bit random value generated client-side via `crypto.getRandomValues()`. Used to wrap (encrypt) the DEK via AES-KW. Only the wrapped DEK blob is stored server-side. The recovery key itself is NEVER transmitted to the server. Delivered to user as downloadable PDF. **IV/nonce policy:** Generate 12-byte random IV via `crypto.getRandomValues()` for EVERY AES-256-GCM encrypt operation. Generate 16-byte random salt for every Argon2id derivation. Store both in EncryptedEnvelope. NEVER reuse IV with same key (catastrophic for GCM mode). **Mobile-specific Argon2id params:** 19MB memory, parallelism 1, iterations 4 (OWASP minimum). Detect via `navigator.deviceMemory` or screen width heuristic. Add to E16 (mobile memory guard) scope. Tradeoff: slightly weaker KDF on mobile vs. preventing OOM crash on iOS Safari. **Compensating controls for reduced mobile memory:** higher iteration count (t=4 vs t=3 desktop), server-side rate limiting on auth endpoints (S7), account lockout after 10 consecutive failed attempts. **NOTE: B3 implementation is ~90% client-side** (Web Worker Argon2id, Web Crypto API, CryptoKey storage, recovery key PDF). Only the EncryptedEnvelope storage endpoint is server-side. Assign to a frontend/crypto developer, not a backend developer. See also E-stream for Worker integration. **Server deliverable:** Define EncryptedEnvelope Pydantic model (fields: iv, ciphertext, salt, kdf_params, version). **OAuth compatibility:** OAuth users authenticate without a password. They cannot derive a DEK via Argon2id. Resolution: require OAuth users to set an 'encryption passphrase' separate from their auth credential during onboarding. This passphrase is used solely for DEK derivation and is never stored server-side. Document in F15 (auth flow). | HIGH |
+| **B4. Server-side PDF generation** | REMOVED — replaced by F21 (client-side PDF via pdf-lib). All PDF generation is now client-side per Decision #150. | N/A |
+| **B5. Tier gating updates** | Update payment/tier logic for 3-tier structure (**$14.99/$34.99**). Implement **Premium→Pro upgrade path** (charge $20 difference). Implement password-reset flow: if no recovery key provided, wipe encrypted results. If recovery key provided, re-derive DEK and preserve data. Warn before saving results. (Decisions #17, #42, #50) | HIGH |
+| **B6. Server-side anonymous conversion analytics** | Track funnel: visit → upload → analyze → preview → purchase. No PII, no health data in events. Own infrastructure only, no third-party trackers. (Decision #27) **Counter-based aggregates only** — total events per type per day. No per-user journey tracking. No IP/session/user ID. Advertise "zero tracking" on /security page (Decision #138). | MEDIUM |
+| **B7. Nuclear delete endpoint** | Wipe user account, encryption keys, all encrypted blobs, audit logs (except legally required retention). Triggered by F29. Depends on B3 (key management). **Crypto-shredding guarantee:** Per-user unique DEK means key deletion renders all backups of that user's data permanently unreadable. Explicitly document this in the deletion flow. (Decision #62) **Authorization check:** verify `result.owner_id == current_user.id` on every data access. Use UUIDs (not sequential integers) for result identifiers. | HIGH |
+| **B8. JSON export endpoint for GDPR data portability** | GDPR Art. 20 compliance. Structured, machine-readable JSON format containing all user data. Ensure export covers ALL associated user data (genetic results, metadata, support tickets, audit logs) for full DSAR compliance (GDPR Art. 15), not just encrypted analysis results. **Authorization check:** verify `result.owner_id == current_user.id` on every data access. Use UUIDs (not sequential integers) for result identifiers. GDPR Articles 15 and 20 require data subject access and portability. Must be functional at launch. | HIGH |
+| **B9. Transactional email receipts** | Send purchase confirmation email with receipt + link to view results. Standard e-commerce practice. **Trigger via Stripe `checkout.session.completed` webhook** (server-side). Do not rely on client-side triggers (user may close tab). (Decisions #64, #95) | MEDIUM |
+| **B10. Partner notification email** | When couple analysis is run, send notification to partner: "Your genetic data was analyzed by [User] on Mergenix." Requires partner email input. (Decision #61) **Note:** This is a post-analysis notification, not a pre-analysis consent gate. Phase 2 will convert to pre-analysis consent. | MEDIUM |
+| **B11. Auth middleware** | FastAPI dependency implementing JWT validation on all protected routes. Centralized `get_current_user` dependency. Token refresh flow. Forced session invalidation on password reset. All state-changing endpoints reject GET/HEAD. **Auth tokens: HttpOnly Secure Cookies set by backend (per Decision #67). Immune to XSS. SameSite=Lax + X-Requested-With custom header for CSRF protection (per Decision #116).** | CRITICAL |
+| **B12. Data rectification API endpoint** | GDPR Art 16 compliance. Endpoint for users to correct personal data (name, email, profile fields). Coordinates with F47 GDPR compliance UI. Authorization check: verify `result.owner_id == current_user.id`. Extracted from F47 — this is a backend API task. | HIGH |
+| **B13. Remove server-side encryption and migrate analysis router** | Remove apps/api/app/encryption.py (server-side HKDF). Rewrite save_result endpoint to accept pre-encrypted EncryptedEnvelope blobs. Rewrite load_result to return encrypted blobs (server never decrypts). Drop result_nonce column. Depends on B3. Blocks B7, B8, Q12. | CRITICAL |
+
+### Stream 6: Legal & Compliance
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **L1. Update Privacy Policy** | Add law enforcement clause ("fight subpoenas"), ephemeral processing description. Plain English with legal appendix. Key point: "Raw DNA is processed in-memory client-side and is NOT sent to our servers. Only encrypted analysis results may be stored, at your choice." (Decision #37) **Specify EU hosting jurisdiction (e.g., AWS eu-west-1 Ireland). Include cross-border transfer mechanisms (SCCs) as fallback if US infrastructure ever used.** (Decision #54) | CRITICAL |
+| **L2. Update Terms of Service** | Add anti-dating-screening clause. Add binding arbitration. Update "wellness/educational" framing. **Add dispute resolution / chargeback handling clause for digital goods. Include binding arbitration clause and dispute resolution procedures for digital goods (merged from L12).** **Strict 18+ policy:** Processing of ANY individual's genetic data under 18 is prohibited. No guardian exceptions. (Decision #107, supersedes Decision #88). Add platform indemnification against unauthorized partner data uploads (Decision #125). | CRITICAL |
+| **L3. Disclaimer text finalization** | "For Educational, Informational, and Research Purposes Only. Not for Medical Use." — on EVERY report page. Feeds into F26 (per-page limitations). | CRITICAL |
+| **L4. GINA notice prominence** | Move GINA warning to appear BEFORE file upload, not just in footer. **Explicitly state GINA limitations: "GINA does NOT protect against discrimination in Life, Disability, or Long-Term Care insurance."** (Decision #87) | HIGH |
+| **L5. Cookie consent audit** | Verify marketing cookies are opt-IN (not opt-out) for GDPR. **CPRA evaluation:** Determine if 'Limit the Use of My Sensitive Personal Information' link is required in footer for California users. Genetic data is explicitly SPI under CPRA (Decision #118). **Required by ePrivacy Directive Art 5(3).** Must implement granular consent banner (functional, analytics, marketing toggles) before launch. | HIGH |
+| **L6. Data retention enforcement** | Implement auto-purge: payment records (7yr), audit logs (90d). **Retention period for encrypted analysis results:** retained while account is active. Deleted upon account deletion or inactivity (3 years per Decision #77). Document in privacy policy and DPIA (L7). | CRITICAL |
+| **L7. Draft DPIA document** | Data Protection Impact Assessment, required by GDPR Art. 35 for large-scale genetic data processing. Covers: data flows, risk analysis, safeguards, controller obligations. **Include EU Article 27 evaluation:** If company is established outside the EU but targets EU data subjects, designate an EU representative per GDPR Art. 27 (Decision #129). | HIGH |
+| **L8. Plain English privacy policy** | Separate from legal appendix. Key messaging: "Raw DNA is processed in-memory client-side and is NOT sent to our servers. Only encrypted analysis results may be stored, at your choice." Coordinates with L1. (Decision #37) | CRITICAL |
+| **L9. Refund policy** | Refund for technical issues only, clearly disclosed before purchase. Must be shown in F25 pre-payment flow. (Decision #38) | HIGH |
+| **L10. Pre-payment limitations disclosure text** | The copy that goes into F25. Chip stats, coverage %, clinical comparison, refund terms. Must be reviewed by legal before deployment. (Decision #35) | CRITICAL |
+| **L11. Data Breach Response Plan** | GDPR Art. 33/34 compliance. Pre-written notification templates, 72-hour supervisory authority notification procedure, user notification process. Genetic data = automatic "high risk." (Decision #54) **Include FTC Health Breach Notification Rule compliance** for US users: 60-day notification requirement with specific content requirements. In addition to GDPR Art 33/34 (72h) (Decision #112). | CRITICAL |
+| **L12. ~~Dispute resolution clause~~ MERGED into L2** | ~~Add to Terms of Service: dispute resolution and chargeback handling procedures for digital goods. Binding arbitration clause.~~ Scope merged into L2 (Terms of Service). (Decision #50) | N/A |
+| **L13. Records of Processing Activities (ROPA)** | Create and maintain written records per GDPR Article 30: all genetic data processing activities, legal bases, data categories, recipients, retention periods, and safeguards. | HIGH |
+| **L14. Appoint Data Protection Officer** | Standalone legal prerequisite. Must be completed before processing genetic data. Organizational requirement per GDPR Art 37(1)(c) for processing special category data (genetic). Part-time or outsourced acceptable. Document appointment in privacy policy per Article 37(7). Extracted from F47 — this is a legal/organizational task, not a frontend task. | CRITICAL |
+
+### Stream 7: Security Hardening
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **S1. Content Security Policy** | Strict CSP header: no unsafe-inline, no unsafe-eval. SRI hashes for scripts. Expand to include analytics — ensure no health events leak to any tracking script. **Expand to include: Strict-Transport-Security (HSTS), X-Content-Type-Options: nosniff, X-Frame-Options: DENY, Permissions-Policy.** **Add `worker-src 'self' blob:;`** for Web Worker support. **Add `Permissions-Policy: camera=(), microphone=(), geolocation=()`** to block unnecessary hardware APIs. **CORS policy: strict origin-only — allow only mergenix.com and localhost:3000 (dev). All other origins blocked.** (Decisions #56, #96, #97) | HIGH |
+| **S2. Block all third-party tracking scripts** | Audit ALL third-party scripts — GA4, ad pixels, session replay (Hotjar/FullStory/PostHog). Block any that could capture genetic data. data-mask attribute on analysis pages. (Decision #27) | HIGH |
+| **S3. Worker memory clearing** | After analysis completes, explicitly null/zero out raw DNA variables in worker | HIGH |
+| **S4. Supply chain audit** | Pin dependencies across **ALL monorepo workspaces** (genetics-engine, web, api, shared-types, root). Audit for malicious packages. (Decision #128) | MEDIUM |
+| **S5. Access audit logging** | Log all view/decrypt events for analysis results (timestamp + user ID, no health data in log). GDPR accountability requirement. (Decision #33) | HIGH |
+| **S6. Client-side storage enforcement** | Configure Zustand to use **IndexedDB** (via idb-keyval or similar wrapper, encrypted) for health-related analysis results. **Use HttpOnly Secure Cookies for auth tokens** (set by backend, immune to XSS). Use IndexedDB (via idb-keyval, encrypted) for health-related analysis results. Never persist sensitive data in localStorage. **IndexedDB handles large results without quota issues (sessionStorage limited to ~5MB).** (Decisions #67, sessionStorage→IndexedDB) **CSRF:** Configure auth cookies with `SameSite=Lax`. Require `X-Requested-With` custom header for all state-changing API endpoints (Decision #116). **IndexedDB schema versioning:** Add version field to stored data. On version mismatch, prompt user to re-upload rather than silently failing (Decision #119). | HIGH |
+| **S7. Rate limiting** | Redis-backed rate limiting on all public API endpoints (/auth/*, /save-results, /payment). Prevent brute force and DoS. (Decision #56) **Include API retry policy (3 retries, exponential backoff, 30s timeout), request input validation at API boundaries, and basic monitoring/health check endpoint (/health).** | HIGH |
+| **S8. Secret rotation plan** | Document and implement key versioning for JWT_SECRET, DB credentials, and DATA_ENCRYPTION_KEY. Graceful rollover without downtime. (Decision #62) | HIGH |
+| **S9. Incident response alerting** | Monitor and alert on: failed auth spikes, encryption errors, unusual API patterns. Minimum: email alerts to admin. (Decision #62) | MEDIUM |
+| **S10. RSC privacy boundary enforcement** | ESLint plugin (@serviceup/eslint-plugin-enforce-use-client) + CI check ensuring all files under /analysis/, /results/, /upload/ paths have `"use client"` directive. Code comment block at top of each file: "PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server." Prevents accidental Next.js 15 Server Component data leaks. (Decision #132) | CRITICAL |
+
+### Stream 8: Testing
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **Q1. Synthetic genome factory** | Script to generate valid test files for all supported formats with injected mutations (from R6). Must include indel and multi-allelic test cases for E18/E19. **Acceptance criteria:** minimum 500K variants per file. Must produce edge cases: empty file, BOM markers, mixed line endings (CRLF/LF), truncated last line, duplicate rsIDs, non-standard chromosomes. Golden files: curated from 1000 Genomes Project samples with manually verified genotypes. | CRITICAL |
+| **Q1a. Synthetic data golden standard validation** | Validate synthetic genome factory output against 5 hand-curated golden standard files with manually verified known genotypes. Factory must reproduce expected genotypes exactly. Prevents false-positive test suites. (Decision #140) | HIGH |
+| **Q2. Parser unit tests** | Test every format: 23andMe v3/v4/v5, Ancestry v1/v2, MyHeritage, edge cases. **Run engine tests in `web-worker` Vitest environment context** to catch postMessage serialization errors that wouldn't surface in Node/JSDOM. | CRITICAL |
+| **Q3. Carrier analysis accuracy tests** | Test known carrier scenarios: single het, compound het, affected, not tested | HIGH |
+| **Q4. Coverage metric tests** | Verify "Tested X of Y" accuracy against known chip definitions | HIGH |
+| **Q5. Disclaimer E2E tests** | Playwright: verify "Not for Medical Use" visible above fold on every report | HIGH |
+| **Q6. Privacy verification tests** | Verify free-tier analysis triggers zero network calls for raw DNA data | HIGH |
+| **Q7. Couple/offspring logic tests** | Test Mendelian inheritance: known parent genotypes → expected offspring probabilities. **Test cases for each inheritance pattern:** AR (both carriers → 25%), AD (one het → 50%), X-linked (carrier mother → 50% sons). **Q7a. Offspring PRS distribution test:** Given two parents with known PRS allele configurations, verify offspring PRS distribution mean equals (parent1_PRS + parent2_PRS) / 2 and variance matches analytical expectation. Test 3 scenarios: both high, both low, one high + one low. | HIGH |
+| **Q8. Liftover accuracy tests** | Verify coordinate conversion matches known reference values | MEDIUM |
+| **Q9. Client-side performance benchmarks** | Define max memory/time thresholds: 20MB (standard) vs 50MB (mobile) vs 500MB (desktop). Time to Interactive < 2s after file drop. No UI freeze > 100ms. Results inform E12 (memory optimization). | HIGH |
+| **Q9a. 500MB file stress test** | Verify Worker RSS stays under device memory limit during 500MB parse. Validate backpressure pauses reading when processing queue exceeds threshold. Confirm parsed variant count matches expected. Memory profiling required. | HIGH |
+| **Q10. PDF content parity verification** | Automated test comparing JSON result data against extracted client-side PDF text. | MEDIUM |
+| **Q11. Mobile device capability testing** | Verify parsing/analysis completes on standard iOS/Android without crashing. | HIGH |
+| **Q12. Save/Load integrity test** | Full cycle: analyze → encrypt → save → load → decrypt → display. Verify data matches original. **Add nuclear delete verification:** after deletion, assert subsequent fetch returns 404/410 and encryption key is invalid. (Decision #104) **Two tolerance levels:** (1) JSON round-trip (encrypt-save-load-decrypt): assert exact equality (=== 0 relative error) since JSON.stringify/parse preserves full double precision. (2) Computed values vs golden standards: use 1e-12 (conservative for double-precision sums of <10,000 terms). Rationale: double precision provides ~15-16 significant digits; PRS with 1000 SNPs accumulates at most ~10 ULP of error. For string/enum fields, assert strict equality. Provide shared comparison utility in test helpers. | HIGH |
+| **Q13. Smoke test suite for daily CI** | Lightweight test using small synthetic file, runs on every commit. | HIGH |
+| **Q14. Visual regression test** | Verify UI clearly distinguishes "Not Detected" vs "Not Tested" states. | MEDIUM |
+| **Q15. Linter enforcement** | Enable `no-explicit-any` in ESLint for genetics-engine, enable `strict: true` in tsconfig, update ruff for Python. **Add complexity metrics (Cyclomatic Complexity < 10 for critical modules). Add prettier-plugin-tailwindcss for CSS class ordering. Add no-console rule for production builds.** **Add CI check** that scans `carrier_panel.json` for forbidden variant types (CNVs, large structural variants) and fails the build if found. | MEDIUM |
+| **Q16. Port legacy Python test cases** | Migrate edge-case scenarios from old tests/test_parser.py and tests/test_carrier_analysis.py to packages/genetics-engine/tests. Preserve coverage for weird file formats, broken headers, encoding issues. (Decision #58) | HIGH |
+| **Q17. axe-core automated a11y testing** | Add @axe-core/playwright to CI pipeline. Run on every PR. Catch missing alt text, bad contrast, missing ARIA labels automatically. (Decision #58) | HIGH |
+| **Q18. Data version backward-compatibility test** | Load a v1 saved result into v2 app. Verify graceful handling (upgrade, warning, or clean failure). (Decision #65) | HIGH |
+| **Q19. Error injection tests** | Force all error codes from T5 (PARSE_ERROR, BUILD_MISMATCH, etc.) and verify UI displays correct friendly messages from F23. Include: corrupt files, wrong build, network failures. (Decision #65) | HIGH |
+| **Q20. Browser compatibility matrix** | Define minimum supported browser versions. Verify Web Worker, Transferable, TextDecoder, DecompressionStream support. Add feature detection fallbacks. (Decision #48) | MEDIUM |
+| **Q21. PDF/UA structural accessibility audit** | Validate generated PDFs meet PDF/UA standard using verapdf-cli or Adobe Acrobat Accessibility Checker. Manual NVDA screen reader test for logical reading order. (Decision #89) | MEDIUM |
+| **Q22. Parser/decompression fuzzing** | Test zip bombs (high compression ratio >100:1), truncated files, garbage headers, massive uncompressed sizes. Verify Worker terminates gracefully without browser crash. (Decision #90) **Acceptance criteria:** (1) File at 99:1 compression ratio passes, 101:1 aborts with DECOMPRESSION_RATIO_EXCEEDED. (2) Desktop: 500MB uncompressed passes, 501MB aborts. Mobile: 50MB passes, 51MB aborts. (3) File taking >30s to decompress aborts with DECOMPRESSION_TIMEOUT. (4) Zip bomb with recursive entries caught within timeout. (5) Size limit enforced during streaming (check accumulated bytes per chunk, not after full decompression). | HIGH |
+| **Q23. Rate limit integration test** | Script to trigger rate limits on auth/save/payment endpoints. Verify 429 responses with correct Retry-After headers. Ensure legitimate shared-IP users aren't accidentally blocked. (Decision #113) | HIGH |
+| **Q24. Webhook integration test** | Mock Stripe webhook events including duplicates, invalid signatures, and edge cases. Verify idempotent receipt generation and correct rejection of tampered payloads. (Decision #113) | HIGH |
+| **Q25. Blur/reveal interaction test** | Playwright tests for F3 sensitive content guard. Verify content is effectively hidden/blurred to screen readers AND sighted users until explicit reveal button press. Test all 3 granular reveals independently. (Decision #113) | HIGH |
+| **Q26. Performance budget CI enforcement** | Add Lighthouse CI or Playwright trace assertions to CI pipeline. Fail build if: LCP >2s, TTI >3s. **Performance budget:** Initial page load JS < 200KB gzipped (before user interaction). Analysis route total (including lazy-loaded chunks) < 500KB gzipped. WASM binaries (Argon2id) excluded from JS budget but tracked separately. Consider recharts alternatives if bundle target cannot be met. Prevents gradual performance regression. (Decision #141) | HIGH |
+| **Q27. Encryption unit tests** | Test: wrong password returns error (not garbage data), recovery key derives same DEK, `CryptoKey.extractable === false` assertion, AES-256-GCM authentication tag verification (tampered ciphertext rejected), IV uniqueness across operations. **Test mobile Argon2id parameter detection:** mock navigator.deviceMemory < 4, verify 19MB/p=1/t=4. Test desktop: verify 64MB/p=4/t=3. Test fallback when navigator.deviceMemory is undefined (Firefox). | CRITICAL |
+| **Q27a. Recovery key E2E test** | Full flow: (1) Create account, save encrypted analysis results. (2) Generate recovery key, download PDF. (3) Simulate password reset (wipe password-derived DEK). (4) Provide recovery key. (5) Verify all saved results decrypt correctly and match originals. (6) Negative test: wrong recovery key returns appropriate error, not garbage data. | HIGH |
+
+### Stream 9: Legacy Cleanup
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **C1. Delete Source/ directory** | Remove old Streamlit source code | LOW (do first, easy win) |
+| **C2. Delete pages/ directory** | Remove old Streamlit pages | LOW |
+| **C3. Delete app.py** | Remove old Streamlit entry point | LOW |
+| **C4. Mergenix rebrand** | Update manifest.json, `<title>`, meta tags, all "Tortit" strings in UI, logos, Open Graph images. (Decision #31) **Remove all 'no account required' claims** — contradicts Decision #80 (accounts required for paid tiers). | MEDIUM |
+| **C5. Update developer documentation** | Update README.md and CONTRIBUTING.md with new architecture: Web Workers, client-side encryption model, IndexedDB storage, build/run/debug flow. (Decision #99) | MEDIUM |
+| **C6. Pricing sweep** | Grep all files for old hardcoded prices ($12.90, $29.90) and replace with imports from shared TierConfig constant (Decision #83). **Update hardcoded prices ($12.90→$14.99, $29.90→$34.99). Define refund policy before launch (see L9).** Verify no orphaned price strings remain. Covers frontend, backend, tests, docs, and config files. | HIGH |
+
+### Stream 10: Operations
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| **Ops1. Configure EU deployment region** | Configure Vercel/AWS deployment to eu-west-1 (Ireland) per Decision #54. Enforce in vercel.json or infrastructure-as-code. (Decision #85) | HIGH |
+| **Ops2. Configure monorepo CI pipeline** | Strict build order: genetics-data → shared-types → (T7: JSON Schema → Pydantic) → genetics-engine → web app → api app. This matches the actual monorepo dependency graph (genetics-engine imports from both genetics-data and shared-types). Turbo caching configuration. Ensures type generation runs before app compilation. (Decision #120, aligned with Decision #146: TS-first pipeline) | HIGH |
+| **Ops3. Internal alpha deployment** | Deploy to private URL for team dogfooding with synthetic genomes before public DNS switchover. Validate full stack integration in production-like environment. (Decision #109) | HIGH |
+
+---
+
+## Dependency Graph (Critical Path)
+
+```
+Research (Stream 0)
+├── R1 (chip definitions) ──→ D4, E1, E7, E8
+├── R2 (ClinVar counts) ───→ D3, F5
+├── R3 (liftover table) ───→ D5, E3
+├── R4 (CNV diseases) ─────→ D2
+├── R5 (ancestry PRS) ─────→ D6, E10
+├── R6 (synthetic data) ───→ Q1 → Q2-Q8, E18, E19
+├── R7 (detection rates) ──→ E15
+├── R8 (ClinVar re-validation) ──→ D3, E4
+├── R9 (trait evidence) ──→ E-stream trait tasks (validates trait_snps.json, not carrier-panel.json)
+├── R10 (ethnicity frequencies) ──→ E15
+├── R11 (compound het cases) ──→ E5, Q3
+└── R12 (rsID audit) ──→ E4, E5, E6, E7, E11, D1, D3
+
+Data (Stream 1): D1-D7
+└── Depends on: R1-R5, R8, R9, R12
+
+Types (Stream 3): T1-T8
+├── T1-T6: Depends on nothing (can start immediately)
+├── T7: Depends on T1 + B1
+├── T8 (WorkerMessage unions) ──→ E12 (Worker communication)
+└── BLOCKS: Streams 2, 4, 5
+
+Engine (Stream 2): E1-E23
+├── Depends on: Stream 1 (data), Stream 3 (types)
+├── E10 (offspring PRS) ←── depends on E11 (couple/offspring combiner)
+├── E21 (progress events) ──→ F16 (aria-live)
+└── E23 (decompression) ──→ after E1 (parser)
+
+Frontend (Stream 4): F1-F48 (excluding removed F41)
+├── Depends on: Stream 2 (engine), Stream 3 (types)
+├── F1 (couple upload) ←── blocked by F28 (age gate) + L1 (privacy policy)
+├── F25 (pre-payment) ←── blocked by L10 (disclosure text)
+├── F26 (per-page limits) ←── blocked by L3 (disclaimer text)
+├── F27 (partner consent) ──→ F1 (couple upload)
+├── F29 (delete account) ──→ B7 (nuclear delete)
+├── F33 (accessible viz) ←── depends on F4 (Virtual Baby) + F5 (coverage meter)
+├── F43 (IndexedDB hydration) ←── depends on S6 (client-side storage)
+├── F48 (PDF/UA spike) ──→ blocks F21 (PDF generation)
+└── F36-F40, F42 ──→ after corresponding base tasks
+
+Backend (Stream 5): B1-B13 (B4 removed)
+├── Depends on: Stream 3 (types)
+├── B11 (auth middleware) ──→ blocks B5, B7, B8
+├── B13 (remove server encryption) ←── depends on B3 (key management) ──→ blocks B7, B8, Q12
+├── B7 (nuclear delete) ←── depends on B3 (key management) + B11 (auth middleware) + B13
+├── B9 (email receipts) ──→ after B5 (tier gating)
+└── B10 (partner email) ──→ after F1 (couple upload)
+
+Legal (Stream 6): L1-L14
+├── Depends on: nothing (can start immediately)
+├── L1 (privacy policy) ──→ F1 (couple upload)
+├── L3 (disclaimer text) ──→ F26 (per-page limitations)
+├── L10 (limitation text) ──→ F25 (pre-payment disclosure)
+├── L11 (breach plan) ──→ before deploy
+└── L13 (ROPA) ──→ before deploy
+
+Security (Stream 7): S1-S10
+├── Depends on: Stream 4 (frontend) for CSP/masking
+├── S10 (RSC enforcement) ──→ before any Stream 4 analysis code
+└── S7-S9 ──→ after Stream 5 (backend)
+
+Testing (Stream 8): Q1-Q27a, Q9a
+├── Depends on: R6 (synthetic data), Stream 2 (engine)
+├── Q1 (synthetic data) ──→ E18, E19 (indel/multiallelic testing)
+├── Q1a (golden standard) ──→ after Q1 (synthetic factory)
+├── Q9 (perf benchmarks) ──→ E12 (memory optimization)
+├── Q9a (500MB stress test) ←── depends on E12 (memory), E13 (streaming)
+├── Q12 (save/load integrity) ←── depends on B13 (server encryption removal)
+├── Q21 (PDF/UA audit) ←── depends on F21 (PDF generation)
+├── Q22 (parser fuzzing) ←── depends on E1 (parser), E23 (decompression)
+├── Q26 (perf budget) ──→ after Stream 4 (frontend)
+├── Q27 (encryption tests) ←── depends on B3 (encryption)
+├── Q27a (recovery key E2E) ←── depends on B3 (encryption) + B5 (tier gating)
+└── Q16-Q20 ──→ after Stream 2 (engine) + R6 (synthetic data)
+
+Legacy (Stream 9): C1-C6
+└── Depends on: nothing (can start immediately)
+
+Operations (Stream 10): Ops1-Ops3
+├── Ops1 (EU deployment) ──→ before deploy
+├── Ops2 (CI pipeline) ──→ after T7 + B1
+└── Ops3 (alpha deploy) ──→ after all streams complete, before public launch
+
+Cross-Language:
+└── T7 (type sync CI) ←── depends on T1 (TS types) + B1 (Pydantic schema)
+```
+
+## Parallel Start (Day 1)
+
+These can begin immediately with no blockers:
+
+1. **Stream 0 (Research)** — all 12 research tasks (R1-R12), including R10 (ethnicity frequency validation), R11 (compound het ground truth), and R12 (rsID audit)
+2. **Stream 3 (Shared Types)** — type definitions (T1-T6, T8; not T7 which depends on B1)
+3. **Stream 6 (Legal)** — 13 legal tasks (L1-L14, L12 merged into L2), including DPIA, plain English privacy policy, refund policy, pre-payment disclosure text, breach plan, ROPA, and DPO appointment
+4. **Stream 9 (Legacy Cleanup)** — delete old code (C1-C3) + rebrand (C4) + developer docs (C5) + pricing sweep (C6)
+5. **Stream 8 partial** — Q16 (port Python tests) can start immediately (reads old test files, no blockers)
+6. **Stream 10 (Operations)** — Ops1 (EU deployment config) + Ops2 (CI pipeline config) can start immediately
+7. **Stream 7 (Security)** — S10 (RSC enforcement config)
+
+## Total Task Count
+
+| Stream | Tasks | Critical |
+|--------|-------|----------|
+| 0. Research | 12 | 12 |
+| 1. Data | 7 | 2 |
+| 2. Engine | 23 | 7 |
+| 3. Types | 8 | 2 |
+| 4. Frontend | 47 | 11 |
+| 5. Backend | 13 (B4 removed = 12 active) | 2 |
+| 6. Legal | 14 (L12 merged into L2 = 13 active) | 8 |
+| 7. Security | 10 | 1 |
+| 8. Testing | 30 | 3 |
+| 9. Legacy | 6 | 0 |
+| 10. Operations | 3 | 0 |
+| **TOTAL** | **172** (active, excluding removed B4/L12/F41) | **48** |
+
+> **Footnote:** B4 removed, L12 merged into L2, F41 removed. Counts reflect listed rows including removed/merged markers. New tasks added: B13 (Backend), Q27a (Testing). F33 elevated to CRITICAL. L6 counted as CRITICAL.
+
+---
+
+## Execution Order Summary
+
+1. **Immediately:** Research (R1-R12) + Types (T1-T6, T8) + Legal (L1-L14) + Legacy cleanup (C1-C6) + Port Python tests (Q16) + Operations (Ops1, Ops2) + **S10 (RSC enforcement must complete before any F-stream analysis components begin)**
+2. **After research completes:** Data refactor (D1-D7)
+3. **After data + types:** Engine refactor (E1-E23) + Backend (B1-B13, B4 removed)
+4. **After engine + legal text ready:** Frontend (F1-F48, excluding removed F41) + Security (S1-S9)
+5. **After engine + synthetic data:** Testing (Q1-Q1a, Q2-Q15, Q17-Q27a, Q9a)
+6. **After T1 + B1:** Cross-language type sync CI (T7)
+7. **Final:** Integration testing, review pipeline, PR
+8. **Pre-launch:** Internal alpha deployment (Ops3) with synthetic genomes
