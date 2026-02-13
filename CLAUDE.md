@@ -42,6 +42,13 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - Use fire-and-forget Task agents for independent work
 - No separate Dev Team Leader agent — Conductor spawns executors directly
 
+### Before Starting ANY Task (MANDATORY):
+1. **Check the delegation table** in `docs/V3_IMPLEMENTATION_LOG.md` — find the task, confirm whether it's assigned to Gemini or Claude, and verify the tier rating.
+2. **If the task is Gemini-tier (A/A+):** Delegate to Gemini CLI. Do NOT do it yourself.
+3. **If the task is Claude-tier (B/C/D):** Execute directly or via Claude agents.
+4. **If the task is not in the delegation table:** Add it to the table first, assign Gemini/Claude with tier and rationale, get user approval, THEN execute.
+5. **Never start a task without knowing its delegation assignment.** The delegation table is the single source of truth for who does what.
+
 ### Planning (before starting any phase):
 1. **Gemini perspective gathering (Stage 0):** Fire all 10 Gemini planning personas in parallel (`review-personas/planning-*.md` via `GEMINI_SYSTEM_MD`). No stagger needed — paid API has 150+ RPM. Each persona returns: requirements checklist, risks, suggested approach, dependencies.
 2. **Claude synthesis:** Conductor aggregates all 10 Gemini perspectives into a unified plan. Claude makes final architectural decisions (Gemini proposes, Claude decides).
