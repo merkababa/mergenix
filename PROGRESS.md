@@ -31,6 +31,7 @@
 | Review Infrastructure: Dual persona system | Claude | **Done** | rewrite/main | 10 Claude agents (`.claude/agents/`) + 10 Gemini CLI personas (`review-personas/`). Gemini CLI reads local files via `GEMINI_SYSTEM_MD` — no upload needed. Tested: single, persona-switch, parallel (15s stagger). 20 files, +837 lines |
 | V3 Rewrite Phase 8C: E2E Tests | Claude | **Merged** | test/phase-8c-e2e | PR #40 — Playwright E2E test suite. 23 spec files, 153 scenarios across 8 categories (auth, app, marketing, legal, accessibility, performance, security, API). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Dependencies: @axe-core/playwright, otplib. 46 files, +10,965 LOC. |
 | Refactor Plan + Research Alignment | Claude | **Merged** | docs/refactor-plan | PR #45 — Master refactor plan (172 tasks, 48 CRITICAL, 11 streams) + research alignment matrix (144+ decisions). Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 7 A- + 3 B+ Claude (5 rounds, ~73 fixes). |
+| Stream 0: Research Phase | Claude | **11/12 Done** | docs/stream0-research-archive | PR #46 — 11 Gemini tasks + 1 Claude task. Research archive in docs/research/stream0/. R12 partial. |
 
 ---
 
@@ -106,6 +107,7 @@
 | 2026-02-10 | Claude | Review Infrastructure: Dual persona system. 10 Claude agents (`.claude/agents/`, YAML frontmatter, opus model) + 10 Gemini CLI personas (`review-personas/`, pure markdown, `GEMINI_SYSTEM_MD`). Discovered Gemini CLI reads local files directly (no upload). Tested single, persona-switch, parallel (15s stagger). 20 files, +837 lines. | rewrite/main |
 | 2026-02-11 | Claude | V3 Rewrite Phase 8C — E2E Tests: Playwright E2E test suite. 23 spec files, 153 scenarios (P0:25, P1:94, P2:34). 7 POMs, auth fixtures (free/premium/pro/2fa), 6 golden DNA files, test-data from demo-results.ts. Categories: auth(25), app(50), marketing(16), legal(13), accessibility(22), performance(14), security(7), API(6). 7 parallel executor agents. 46 files, +10,965 LOC. | PR #40 |
 | 2026-02-12 | Claude | Refactor Plan + Research Alignment: Master plan for V3 implementation — 172 tasks across 11 streams (R=Research, E=Engine, F=Frontend, B=Backend, S=Security, D=DevOps, L=Legal, Q=QA, T=Type-gen, C=Content, Ops=Operations), 48 CRITICAL items, 144+ architectural decisions. Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 5 Claude review rounds, ~73 fixes. Zero-knowledge encryption (Argon2id+AES-256-GCM), HttpOnly cookies, streaming file parsing, CLT-based PRS, GDPR/GINA compliance, 3-tier pricing (Free/Premium $14.99/Pro $34.99). | PR #45 |
+| 2026-02-13 | Claude | Stream 0 Research: 11/12 Gemini research tasks completed. Chip coverage analysis, ClinVar counts, liftover methodology, CNV diseases (9 to remove), PRS transferability (ancestry-aware), detection rates by ethnicity, carrier panel validation (6 issues), gene-phenotype validity (9 concerns incl. MTHFR), ethnicity frequency gaps (153/2500+), compound het ground truth (10 cases). R6 synthetic genome factory spec. Research archive at docs/research/stream0/. | PR #46 |
 
 ---
 
@@ -123,14 +125,18 @@
 6. ~~Refactor Plan Review~~ → **PR #45 merged** (Gate 1: 10/10 A+ Gemini, Gate 2: 10/10 A- Claude — accepted)
    - 5 Claude review rounds, ~73 fixes applied, 144+ architectural decisions documented
    - Final: 7/10 A- (zero BLOCKs), 3/10 B+ — user accepted, merged
-7. **Begin V3 Implementation** — Execute refactor plan streams ← **NEXT**
-   - Stream 0 (Research) is the blocking prerequisite for all other streams
+7. **Begin V3 Implementation** — Execute refactor plan streams
+   - **Stream 0 (Research): 11/12 COMPLETE** — see `docs/V3_IMPLEMENTATION_LOG.md`
+     - R1-R5, R7-R11: Done (Gemini). R6: Done (Claude). R12: Partial (audit script methodology issue)
+     - Research archive: PR #46 (`docs/research/stream0/`)
+     - Key findings: 9 diseases to remove, 8 gene symbols to update, PRS ancestry-awareness critical, ethnicity data gap (153/2500+)
+   - **Next: Stream D (Data Cleanup)** — fix carrier panel based on research findings ← **NEXT**
 
 ---
 
 ## Active Blockers
 
-*No active blockers — refactor plan merged, ready to begin implementation.*
+*R12 (rsID audit) needs re-run with corrected ClinVar lookup methodology. Non-blocking for Stream D.*
 
 ---
 
