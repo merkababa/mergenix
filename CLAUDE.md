@@ -26,7 +26,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - Background long tasks (Gemini reviews, test runs, builds)
 
 ### You MAY directly edit:
-- `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `CLAUDE.md`
+- `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `docs/V3_IMPLEMENTATION_LOG.md`, `CLAUDE.md`
 - Memory files (`~/.claude/projects/*/memory/*.md`)
 - Git commands (commit, push, branch, PR creation via `gh`)
 
@@ -63,7 +63,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 3. Push both to `main`
 
 ## Git Workflow
-- **Never push code to `main`** — only PROGRESS.md and CLAUDE.md
+- **Never push code to `main`** — only PROGRESS.md, CLAUDE.md, and docs/V3_IMPLEMENTATION_LOG.md
 - Feature branches: `feature/`, `fix/`, `refactor/`, `docs/`, `test/`
 - Conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
 - Squash merge; delete branch after merge
@@ -105,6 +105,18 @@ gemini -p "prompt" --model gemini-3-pro-preview 2>&1
 - Always use `run_in_background: true` and append `2>&1`
 - For reviews: include FULL source files (not just diffs) — Gemini has 1M context
 - Before delegating: read `docs/GEMINI_DELEGATION_GUIDE.md` for the task tier matrix and 8 rules
+
+## V3 Implementation Log (`docs/V3_IMPLEMENTATION_LOG.md`)
+- **Append-only** — never delete or overwrite previous entries, always concatenate to the end
+- Pushable directly to `main` (same as PROGRESS.md)
+- Log ALL of the following as they happen:
+  - Gemini delegation plans (which tasks go to Gemini vs Claude, with tier ratings)
+  - Research results (tables, findings, data from Gemini and Claude agents)
+  - Architectural decisions and rationale
+  - Review grades and fix summaries
+  - Session summaries and status updates
+- Every session that does V3 implementation work MUST append to this file
+- Format: `## Session: YYYY-MM-DD — [Topic]` headers, then content underneath
 
 ## PROGRESS.md
 - Pushable directly to `main`
