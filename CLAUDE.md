@@ -95,7 +95,11 @@ cd apps/api && ruff check . && pytest tests/ -v
 ## Code Review (MANDATORY before every PR)
 Run `/review-pipeline` for the full three-layer review process (Static → Gemini → Claude).
 
-**10 Reviewers:** Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics — all must reach A+.
+**10 Reviewers:** Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics.
+
+**Reviewer Selection:** Only summon reviewers relevant to the task. Conductor decides which reviewers to include based on what changed. Skip reviewers with zero relevance (e.g., Scientist for pure frontend UX changes).
+
+**Pass Threshold:** A reviewer passes when they give **A or A+**. Once a reviewer reaches A or A+, they do NOT need to be re-reviewed in subsequent rounds — they are done. Only re-review reviewers that scored below A.
 
 **Resources:**
 - Gemini review personas: `review-personas/{role}.md` (10 files)
