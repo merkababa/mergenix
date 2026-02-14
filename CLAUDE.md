@@ -95,6 +95,35 @@ pnpm db:migrate    # alembic upgrade head
 cd apps/api && ruff check . && pytest tests/ -v
 ```
 
+## Testing Philosophy — Testing Trophy + TDD
+
+We follow the **Testing Trophy** (Kent C. Dodds): heavy on integration tests, light on unit tests. We practice **TDD** — tests are written FIRST, before implementation.
+
+### TDD Workflow (MANDATORY for all new features)
+1. **Red:** Write failing integration tests that describe the desired user behavior
+2. **Green:** Implement the minimum code to make tests pass
+3. **Refactor:** Clean up while keeping tests green
+4. Tests are the acceptance criteria — if the tests pass, the feature is done
+
+### What to Test (Integration > Unit)
+- **Integration tests (80%):** Render the full tab/page with realistic fixtures. Assert what the user sees and can interact with. These are the primary tests.
+- **Unit tests (20%):** Only for pure functions, utilities, type guards, and complex business logic (e.g., genetics calculations, risk formulas). Never for React components in isolation.
+- **Never test:** Implementation details, component names, internal state, specific CSS classes, mock return values, or anything that would break on a refactor without behavior change.
+
+### Testing Rules
+- **Query by accessibility:** Use `getByRole`, `getByText`, `getByLabelText` — avoid `getByTestId` unless no semantic alternative exists
+- **Test user behavior, not code structure:** "user sees coverage info" not "CoverageMeter renders with aria-valuenow=75"
+- **Tests must survive refactors:** If you rename a component, extract a subcomponent, or restructure JSX — tests should NOT need changes unless behavior changed
+- **Realistic fixtures:** Use data that resembles real API responses, not minimal stubs
+- **One integration test > five unit tests:** A single test that renders `CarrierTab` and asserts the full user flow replaces 5 isolated component tests
+- **Agents must follow TDD:** When an executor receives a feature task, it writes tests FIRST. Conductor enforces this by including "write tests first" in every executor prompt.
+
+### Coverage Expectations
+- Every new feature/component must have at least one integration test covering the happy path
+- Edge cases (empty state, error state, loading state) tested at the integration level
+- Pure utility functions get unit tests with boundary values
+- No test should assert on implementation details that would break during refactoring
+
 ### Pre-existing TypeScript Issues (suppress, not blocking)
 - `apps/web/lib/api/client.ts:157` — type comparison issue (`"HEAD"` vs method union)
 - `apps/web/lib/data/demo-results.ts:268` — type literal mismatch (inheritance model union)
