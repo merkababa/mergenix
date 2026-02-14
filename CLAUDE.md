@@ -34,7 +34,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - A full review pipeline (Gate 1 + Gate 2) should NEVER cause context compaction
 
 ### You MAY directly edit:
-- `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `docs/V3_IMPLEMENTATION_LOG.md`, `CLAUDE.md`
+- `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `CLAUDE.md`
 - Memory files (`~/.claude/projects/*/memory/*.md`)
 - Git commands (commit, push, branch, PR creation via `gh`)
 
@@ -51,11 +51,10 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - No separate Dev Team Leader agent — Conductor spawns executors directly
 
 ### Before Starting ANY Task (MANDATORY):
-1. **Check the delegation table** in `docs/V3_IMPLEMENTATION_LOG.md` — find the task, confirm whether it's assigned to Gemini or Claude, and verify the tier rating.
-2. **If the task is Gemini-tier (A/A+):** Delegate to Gemini CLI. Do NOT do it yourself.
-3. **If the task is Claude-tier (B/C/D):** Execute directly or via Claude agents.
-4. **If the task is not in the delegation table:** Add it to the table first, assign Gemini/Claude with tier and rationale, get user approval, THEN execute.
-5. **Never start a task without knowing its delegation assignment.** The delegation table is the single source of truth for who does what.
+1. **Decide delegation** — is this task best for Gemini (simple/repetitive, A-tier) or Claude (complex/architectural, B/C/D-tier)?
+2. **If Gemini-tier:** Delegate to Gemini CLI. Do NOT do it yourself.
+3. **If Claude-tier:** Execute directly or via Claude agents.
+4. **Show delegation plan to user** before executing — table of task → assignee → rationale.
 
 ### Planning (before starting any phase):
 1. **Gemini perspective gathering (Stage 0):** Fire all 10 Gemini planning personas in parallel (`review-personas/planning-*.md` via `GEMINI_SYSTEM_MD`). No stagger needed — paid API has 150+ RPM. Each persona returns: requirements checklist, risks, suggested approach, dependencies.
@@ -78,7 +77,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 3. Push both to `main`
 
 ## Git Workflow
-- **Never push code to `main`** — only PROGRESS.md, CLAUDE.md, and docs/V3_IMPLEMENTATION_LOG.md
+- **Never push code to `main`** — only PROGRESS.md and CLAUDE.md
 - Feature branches: `feature/`, `fix/`, `refactor/`, `docs/`, `test/`
 - Conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
 - Squash merge; delete branch after merge
@@ -124,60 +123,6 @@ gemini -p "prompt" --model gemini-3-pro-preview 2>&1
 - Always use `run_in_background: true` and append `2>&1`
 - For reviews: include FULL source files (not just diffs) — Gemini has 1M context
 - Before delegating: read `docs/GEMINI_DELEGATION_GUIDE.md` for the task tier matrix and 8 rules
-
-## V3 Implementation Log (`docs/V3_IMPLEMENTATION_LOG.md`)
-- **Append-only** — never delete or overwrite previous entries, always concatenate to the end
-- Pushable directly to `main` (same as PROGRESS.md)
-- Log ALL of the following as they happen:
-  - Gemini delegation plans (which tasks go to Gemini vs Claude, with tier ratings)
-  - Research results (tables, findings, data from Gemini and Claude agents)
-  - Architectural decisions and rationale
-  - Review grades and fix summaries
-  - Session summaries and status updates
-- Every session that does V3 implementation work MUST append to this file
-- Format: `## Session: YYYY-MM-DD — [Topic]` headers, then content underneath
-
-## Comprehensive Logging (MANDATORY)
-
-**The user must be able to go back and see what was done, why, and how — for every task, forever.**
-
-### What to Log
-Log EVERYTHING. If in doubt, log it. Specifically:
-1. **Delegation plans** — which tasks go to Gemini vs Claude, tier ratings, rationale
-2. **Prompts sent** — the actual prompt text sent to Gemini CLI or Claude agents
-3. **Full raw results** — complete output from every Gemini/Claude task (tables, analysis, data)
-4. **Decisions made** — what was decided based on results, and WHY
-5. **Action items** — what needs to happen next as a result of findings
-6. **Review grades** — all reviewer grades, fixes applied, iteration history
-7. **Errors and retries** — rate limits, failures, workarounds (but strip noise like stack traces)
-
-### Where to Log
-
-| What | Where | When |
-|------|-------|------|
-| High-level summary, delegation plans, cross-cutting findings | `docs/V3_IMPLEMENTATION_LOG.md` | Append after each phase/stream completes |
-| Full research output (one file per task) | `docs/research/stream{N}/stream{N}-R{X}-{slug}.md` | Immediately when each research task completes |
-| Research index + synthesis | `docs/research/stream{N}/README.md` | After all tasks in a stream complete |
-| Execution/implementation details | `docs/research/stream{N}/` or `docs/implementation/stream{N}/` | As tasks are executed |
-| Current status, sprint table, work log | `PROGRESS.md` | Every session start/end |
-
-### Research Archive Format
-Every research/task log file MUST include:
-- **Task ID, delegation target, date, status**
-- **Objective** — what question was this answering?
-- **Prompt sent** — the actual prompt (or summary if very long)
-- **Key findings** — 3-5 bullet summary
-- **Full results** — complete tables, analysis, data (NEVER truncate)
-- **Action items** — what to do with these findings
-- **Impact on downstream** — which streams/tasks are affected
-
-### Rules
-- **NEVER delete raw output before archiving it** — save first, clean up temp files after
-- **NEVER skip logging a completed task** — every task gets a log file, even partial/failed ones
-- **NEVER truncate tables or data** — the archive is the permanent record
-- **Log files go on feature branches** (via PR), NOT directly to main
-- **Create log files IMMEDIATELY as tasks complete** — don't batch them for later
-- **If a task fails or is partial, log what was obtained** with a clear status note
 
 ## PROGRESS.md
 - Pushable directly to `main`
