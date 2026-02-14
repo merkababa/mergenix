@@ -402,3 +402,55 @@ Two parallel executors:
 | R-ETHNICITY (Euro PRS bias) | Mitigated | E10 coverage threshold (75%) + per-allele normalization |
 | R-STALE (old cached data) | Mitigated | E14 versioned URLs + E17 ENGINE_VERSION stamp |
 
+---
+
+## Session: 2026-02-14 — Stream F Planning
+
+### Planning Phase
+- **Method:** 10 Gemini planning personas (gemini-3-pro-preview --yolo) fired in parallel
+- **All 10 returned successfully** (Legal/Privacy hit one 429 rate limit, auto-retried after 60s)
+- **Full plan written to:** `docs/research/streamF/STREAM_F_PLAN.md`
+- **Research index:** `docs/research/streamF/README.md`
+
+### Gemini Delegation Plan (Stream F Execution)
+| Task | Delegated To | Tier | What |
+|------|-------------|------|------|
+| F6 | Gemini | A+ | Global terminology rename map |
+| F19 | Gemini | A+ | Color contrast audit + semantic tokens |
+| F24 | Gemini | A+ | SEO keyword research + JSON-LD + OG tags |
+| F1 | Gemini→Claude | A | Couple upload card prototype → integration |
+| F4 | Gemini→Claude | A | Virtual Baby card prototype → integration |
+| F22 | Gemini→Claude | A | Virtualization prototype → integration |
+| F42 | Gemini | A | Sample demo report content |
+| F48 | Gemini | A | PDF/UA feasibility spike |
+| All other 39 tasks | Claude | C | Complex interaction, a11y, security-sensitive |
+
+### Cross-Domain Consensus (All 10 Personas)
+1. Build consent gates BEFORE results display
+2. Virtualization mandatory (2,697 entries crash mobile)
+3. Client-side encryption must block raw save
+4. PDF generation in dedicated Web Worker
+5. Legal text placeholders needed (L-stream not started)
+6. Color contrast audit before UI build-out
+7. Tier enforcement in Worker, not just UI
+
+### Sprint Structure (4 PRs)
+1. **Sprint 1: Foundation + Gates** (~15 tasks) — design tokens, virtualization, consent modals, a11y infra
+2. **Sprint 2: Core UX + Tiers** (~10 tasks) — couple upload, sensitive guards, tier logic
+3. **Sprint 3: Results + Visualization** (~13 tasks) — coverage meters, PRS context, disclaimers
+4. **Sprint 4: Output + Compliance** (~9 tasks) — PDF generation, security page, GDPR, stubs
+
+### Blocked Tasks
+- F15 (save) → S6/B3 (encryption)
+- F43 (IndexedDB) → S6
+- F45 (DEK) → B3
+- F47 (GDPR) → B12/L14
+- F2, F26, F25 content → L3/L10 (legal text — use placeholders)
+
+### Key Risks
+- Fake zero-knowledge (raw JSON in saveResult) — HIGH
+- Mobile memory crash (200MB files + PDF) — HIGH
+- Free tier false reassurance — HIGH
+- PRS ancestry mismatch — HIGH
+- Pricing mismatch ($12.90→$14.99) — MEDIUM
+

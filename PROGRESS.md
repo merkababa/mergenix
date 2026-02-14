@@ -140,7 +140,14 @@
      - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
      - 24 files changed in review fix commit, 898 tests across 20 test files
    - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
-   - **Next up:** Stream F (Frontend) or remaining implementation streams
+   - **Stream F (Frontend): PLANNING COMPLETE** — 10 Gemini planning personas fired in parallel (2026-02-14)
+     - Full plan: `docs/research/streamF/STREAM_F_PLAN.md` (47 tasks, 4 sprints)
+     - Sprint 1: Foundation + Gates (15 tasks) — design tokens, virtualization, consent modals
+     - Sprint 2: Core UX + Tiers (10 tasks) — couple upload, sensitive guards, tier logic
+     - Sprint 3: Results + Visualization (13 tasks) — coverage meters, PRS context, a11y
+     - Sprint 4: Output + Compliance (9 tasks) — PDF, security page, GDPR, stubs
+     - 8 Gemini tasks (17%), 39 Claude tasks (83%)
+     - **Next:** User approval, then execute Sprint 1
 
 ---
 
