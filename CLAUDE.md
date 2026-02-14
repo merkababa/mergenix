@@ -25,6 +25,14 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 - Use memory files for decisions/patterns — don't rely on context
 - Background long tasks (Gemini reviews, test runs, builds)
 
+### Context Window Protection (MANDATORY):
+- **Reviewer agents MUST return concise output** — grade + 5-line evidence summary, NOT full 100-line reviews
+- **Run all reviewers as background tasks** — use `run_in_background: true` for Task agents, then read only the grade line from the output file
+- **Never accumulate 10+ agent results in conversation** — after each agent completes, extract the grade into a table row and discard the full output
+- **Summarize as you go** — don't wait for all reviewers to finish before summarizing; update the grades table after each one
+- **Each review round (Gate 1 or Gate 2) should consume <5% of context** — if approaching this, switch to background mode immediately
+- A full review pipeline (Gate 1 + Gate 2) should NEVER cause context compaction
+
 ### You MAY directly edit:
 - `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `docs/V3_IMPLEMENTATION_LOG.md`, `CLAUDE.md`
 - Memory files (`~/.claude/projects/*/memory/*.md`)
