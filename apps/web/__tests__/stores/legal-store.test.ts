@@ -331,6 +331,78 @@ describe('useLegalStore', () => {
     });
   });
 
+  // ── setGeneticDataConsent ────────────────────────────────────────────
+
+  describe('setGeneticDataConsent', () => {
+    it('sets geneticDataConsentGiven to true', () => {
+      useLegalStore.getState().setGeneticDataConsent(true);
+
+      expect(useLegalStore.getState().geneticDataConsentGiven).toBe(true);
+      expect(useLegalStore.getState().error).toBeNull();
+    });
+
+    it('sets geneticDataConsentGiven back to false', () => {
+      useLegalStore.getState().setGeneticDataConsent(true);
+      expect(useLegalStore.getState().geneticDataConsentGiven).toBe(true);
+
+      useLegalStore.getState().setGeneticDataConsent(false);
+      expect(useLegalStore.getState().geneticDataConsentGiven).toBe(false);
+    });
+  });
+
+  // ── setPartnerConsent ──────────────────────────────────────────────
+
+  describe('setPartnerConsent', () => {
+    it('sets partnerConsentGiven to true', () => {
+      useLegalStore.getState().setPartnerConsent(true);
+
+      expect(useLegalStore.getState().partnerConsentGiven).toBe(true);
+      expect(useLegalStore.getState().error).toBeNull();
+    });
+  });
+
+  // ── resetPartnerConsent ────────────────────────────────────────────
+
+  describe('resetPartnerConsent', () => {
+    it('resets partnerConsentGiven to false', () => {
+      useLegalStore.getState().setPartnerConsent(true);
+      expect(useLegalStore.getState().partnerConsentGiven).toBe(true);
+
+      useLegalStore.getState().resetPartnerConsent();
+      expect(useLegalStore.getState().partnerConsentGiven).toBe(false);
+    });
+  });
+
+  // ── setChipLimitationAcknowledged ──────────────────────────────────
+
+  describe('setChipLimitationAcknowledged', () => {
+    it('sets chipLimitationAcknowledged to true and persists to localStorage', () => {
+      useLegalStore.getState().setChipLimitationAcknowledged(true);
+
+      expect(useLegalStore.getState().chipLimitationAcknowledged).toBe(true);
+      expect(useLegalStore.getState().error).toBeNull();
+      expect(Storage.prototype.setItem).toHaveBeenCalledWith(
+        'mergenix_chip_limitation_ack',
+        'true',
+      );
+    });
+
+    it('sets chipLimitationAcknowledged to false without persisting', () => {
+      // First acknowledge, then un-acknowledge
+      useLegalStore.getState().setChipLimitationAcknowledged(true);
+      vi.clearAllMocks(); // Clear the setItem call from above
+
+      useLegalStore.getState().setChipLimitationAcknowledged(false);
+
+      expect(useLegalStore.getState().chipLimitationAcknowledged).toBe(false);
+      // When ack=false, localStorage.setItem should NOT be called (only persists on true)
+      expect(Storage.prototype.setItem).not.toHaveBeenCalledWith(
+        'mergenix_chip_limitation_ack',
+        expect.anything(),
+      );
+    });
+  });
+
   // ── clearError ───────────────────────────────────────────────────────
 
   describe('clearError', () => {

@@ -2,11 +2,15 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { usePaymentStore } from "@/lib/stores/payment-store";
+import { useLegalStore } from "@/lib/stores/legal-store";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { useModalManager } from "@/hooks/use-modal-manager";
 import { getPricingTier } from "@mergenix/shared-types";
 import type { PricingTier } from "@mergenix/shared-types";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ChipDisclosureModal } from "@/components/legal/chip-disclosure-modal";
 import {
   Sparkles,
   ArrowRight,
@@ -71,33 +75,34 @@ export function UpgradeModal({
 }: UpgradeModalProps) {
   const { createCheckout, isCheckoutLoading } = usePaymentStore();
   const [error, setError] = useState<string | null>(null);
+  const [showChipDisclosure, setShowChipDisclosure] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
   const headingId = useId();
   const descriptionId = useId();
+
+  const triggerRef = useRef<Element | null>(null);
 
   // ── Derived data ────────────────────────────────────────────────────
 
   const currentPlan = getPricingTier(currentTier);
   const targetPlan = getPricingTier(targetTier);
 
-  // Safeguard: should never happen if tier IDs are valid.
-  if (!currentPlan || !targetPlan) {
-    return null;
-  }
-
-  const upgradePrice = getUpgradePrice(currentPlan, targetPlan);
-  const isPayingDifference = currentPlan.price > 0;
-  const newFeatures = getNewFeatures(currentPlan, targetPlan);
+  const upgradePrice = currentPlan && targetPlan ? getUpgradePrice(currentPlan, targetPlan) : 0;
+  const isPayingDifference = currentPlan ? currentPlan.price > 0 : false;
+  const newFeatures = currentPlan && targetPlan ? getNewFeatures(currentPlan, targetPlan) : [];
   const displayFeatures = newFeatures.slice(0, MAX_FEATURES_SHOWN);
   const hiddenFeaturesCount = newFeatures.length - displayFeatures.length;
 
   // ── Handlers ────────────────────────────────────────────────────────
 
-  const handleConfirm = useCallback(async () => {
+  const proceedToCheckout = useCallback(async () => {
     setError(null);
     try {
       const { checkoutUrl } = await createCheckout(targetTier);
+      if (!checkoutUrl.startsWith("https://checkout.stripe.com/")) {
+        throw new Error("Invalid checkout URL");
+      }
       window.location.href = checkoutUrl;
     } catch (err) {
       const message =
@@ -106,17 +111,62 @@ export function UpgradeModal({
     }
   }, [createCheckout, targetTier]);
 
+  const handleConfirm = useCallback(async () => {
+    // Gate: require chip limitation acknowledgment before proceeding to payment
+    if (!useLegalStore.getState().chipLimitationAcknowledged) {
+      setShowChipDisclosure(true);
+      return;
+    }
+    await proceedToCheckout();
+  }, [proceedToCheckout]);
+
+  const handleChipDisclosureContinue = useCallback(async () => {
+    setShowChipDisclosure(false);
+    // Acknowledgment was set in the store by ChipDisclosureModal — now proceed
+    await proceedToCheckout();
+  }, [proceedToCheckout]);
+
+  const handleChipDisclosureCancel = useCallback(() => {
+    setShowChipDisclosure(false);
+    // User cancelled — stay on the upgrade modal
+  }, []);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    // Restore focus to the element that triggered the modal
+    if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
+      triggerRef.current.focus();
+    }
+  }, [onClose]);
+
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       // Only close if clicking the backdrop itself, not modal content.
       if (e.target === e.currentTarget) {
-        onClose();
+        handleClose();
       }
     },
-    [onClose],
+    [handleClose],
   );
 
   // ── Effects ─────────────────────────────────────────────────────────
+
+  // Save trigger element when opening (Fix 4: triggerRef for focus restoration).
+  useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement;
+    }
+  }, [isOpen]);
+
+  // Register with modal manager for aria-hidden coordination (Fix 2).
+  useEffect(() => {
+    if (isOpen) {
+      useModalManager.getState().openModal("upgrade-modal");
+    } else {
+      useModalManager.getState().closeModal("upgrade-modal");
+    }
+    return () => useModalManager.getState().closeModal("upgrade-modal");
+  }, [isOpen]);
 
   // Close on Escape key.
   useEffect(() => {
@@ -124,13 +174,13 @@ export function UpgradeModal({
 
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     }
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   // Prevent body scroll when modal is open.
   useEffect(() => {
@@ -144,38 +194,21 @@ export function UpgradeModal({
     };
   }, [isOpen]);
 
-  // Focus trap: cycle Tab/Shift+Tab within the modal.
+  // Focus trap: cycle Tab/Shift+Tab within the modal (Escape allowed).
+  useFocusTrap(modalRef, isOpen, true);
+
+  // Focus first focusable element when modal opens (Fix 3: replaces autoFocus).
   useEffect(() => {
-    if (!isOpen || !modalRef.current) return;
-
-    modalRef.current.focus();
-
-    function handleFocusTrap(e: KeyboardEvent) {
-      if (e.key !== "Tab" || !modalRef.current) return;
-
-      const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+    if (isOpen && modalRef.current) {
+      const firstFocusable = modalRef.current.querySelector<HTMLElement>(
         'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])',
       );
-      if (focusable.length === 0) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
+      if (firstFocusable) {
+        firstFocusable.focus();
       } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+        modalRef.current.focus();
       }
     }
-
-    document.addEventListener("keydown", handleFocusTrap);
-    return () => document.removeEventListener("keydown", handleFocusTrap);
   }, [isOpen]);
 
   // Clear error when modal closes.
@@ -187,7 +220,8 @@ export function UpgradeModal({
 
   // ── Render ──────────────────────────────────────────────────────────
 
-  if (!isOpen) return null;
+  // Safeguard: should never happen if tier IDs are valid (Fix 1: moved after all hooks).
+  if (!isOpen || !currentPlan || !targetPlan) return null;
 
   return (
     <div
@@ -208,7 +242,7 @@ export function UpgradeModal({
           {/* ── Close button ────────────────────────────────────────── */}
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isCheckoutLoading}
             className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] disabled:pointer-events-none disabled:opacity-50"
             aria-label="Close modal"
@@ -219,7 +253,7 @@ export function UpgradeModal({
           {/* ── Header ──────────────────────────────────────────────── */}
           <div className="mb-6 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
-              <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" />
+              <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
             </div>
             <h2
               id={headingId}
@@ -253,7 +287,7 @@ export function UpgradeModal({
             </div>
 
             {/* Arrow */}
-            <ArrowRight className="h-5 w-5 shrink-0 text-[var(--accent-teal)]" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
 
             {/* Target plan */}
             <div className="flex flex-col items-center gap-1.5">
@@ -278,7 +312,7 @@ export function UpgradeModal({
                     key={feature}
                     className="flex items-start gap-2 text-sm text-[var(--text-body)]"
                   >
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -322,7 +356,7 @@ export function UpgradeModal({
               role="alert"
               aria-live="assertive"
             >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#f43f5e]" />
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#f43f5e]" aria-hidden="true" />
               <p className="text-sm text-[#f43f5e]">{error}</p>
             </div>
           )}
@@ -336,7 +370,6 @@ export function UpgradeModal({
               disabled={isCheckoutLoading}
               isLoading={isCheckoutLoading}
               aria-busy={isCheckoutLoading}
-              autoFocus
               className="w-full"
             >
               {isCheckoutLoading ? "Processing..." : "Confirm Upgrade"}
@@ -345,7 +378,7 @@ export function UpgradeModal({
             <Button
               variant="ghost"
               size="md"
-              onClick={onClose}
+              onClick={handleClose}
               disabled={isCheckoutLoading}
               className="w-full"
             >
@@ -355,11 +388,18 @@ export function UpgradeModal({
 
           {/* ── Disclaimer ───────────────────────────────────────────── */}
           <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-[var(--text-muted)]">
-            <Shield className="h-3.5 w-3.5" />
+            <Shield className="h-3.5 w-3.5" aria-hidden="true" />
             You&apos;ll be redirected to Stripe&apos;s secure checkout
           </p>
         </GlassCard>
       </div>
+
+      {/* ── Chip Disclosure Modal (shown before first checkout) ── */}
+      <ChipDisclosureModal
+        isOpen={showChipDisclosure}
+        onContinue={handleChipDisclosureContinue}
+        onCancel={handleChipDisclosureCancel}
+      />
     </div>
   );
 }

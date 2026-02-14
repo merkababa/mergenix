@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   Microscope,
   Dna,
@@ -20,12 +20,17 @@ import { Button } from "@/components/ui/button";
 import { FileDropzone } from "@/components/genetics/file-dropzone";
 import { AnalysisProgress } from "@/components/genetics/analysis-progress";
 import { PopulationSelector } from "@/components/genetics/population-selector";
+import { ConsentModal } from "@/components/legal/consent-modal";
+import { ChipDisclosureModal } from "@/components/legal/chip-disclosure-modal";
+import { PartnerConsentCheckbox } from "@/components/legal/partner-consent-checkbox";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import type { GeneticFileFormat, ResultTab } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { useLegalStore } from "@/lib/stores/legal-store";
 import { useGeneticsWorker } from "@/hooks/use-genetics-worker";
 import { SaveResultDialog } from "@/components/analysis/save-result-dialog";
 import { SavedResultsList } from "@/components/analysis/saved-results-list";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
@@ -62,20 +67,54 @@ const RESULT_TABS: { key: ResultTab; label: string; icon: React.ElementType }[] 
 
 // ─── Tab Content Renderer ───────────────────────────────────────────────────
 
+function TabErrorFallback({ label }: { label: string }) {
+  return (
+    <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center">
+      <p className="text-sm text-[var(--text-muted)]">
+        Failed to load {label}.
+      </p>
+    </div>
+  );
+}
+
 function TabContent({ tab }: { tab: ResultTab }) {
   switch (tab) {
     case "overview":
-      return <OverviewTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="overview results" />}>
+          <OverviewTab />
+        </ErrorBoundary>
+      );
     case "carrier":
-      return <CarrierTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="carrier results" />}>
+          <CarrierTab />
+        </ErrorBoundary>
+      );
     case "traits":
-      return <TraitsTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="trait predictions" />}>
+          <TraitsTab />
+        </ErrorBoundary>
+      );
     case "pgx":
-      return <PgxTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="pharmacogenomic results" />}>
+          <PgxTab />
+        </ErrorBoundary>
+      );
     case "prs":
-      return <PrsTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="polygenic risk scores" />}>
+          <PrsTab />
+        </ErrorBoundary>
+      );
     case "counseling":
-      return <CounselingTab />;
+      return (
+        <ErrorBoundary fallback={<TabErrorFallback label="counseling recommendations" />}>
+          <CounselingTab />
+        </ErrorBoundary>
+      );
   }
 }
 
@@ -101,6 +140,11 @@ export default function AnalysisPage() {
   const user = useAuthStore((s) => s.user);
   const userTier = user?.tier ?? "free";
 
+  // ── Legal consent selectors ──────────────────────────────────────────
+  const partnerConsentGiven = useLegalStore((s) => s.partnerConsentGiven);
+  const [showConsentModal, setShowConsentModal] = useState(false);
+  const [showChipDisclosure, setShowChipDisclosure] = useState(false);
+
   // ── Worker hook ────────────────────────────────────────────────────────
   const { startAnalysis, cancel } = useGeneticsWorker();
 
@@ -123,10 +167,56 @@ export default function AnalysisPage() {
   );
 
   const handleStartAnalysis = useCallback(() => {
+    // Gate: require GDPR genetic data consent before starting
+    if (!useLegalStore.getState().geneticDataConsentGiven) {
+      setShowConsentModal(true);
+      return;
+    }
+    // Gate: require chip limitation acknowledgement before starting
+    if (!useLegalStore.getState().chipLimitationAcknowledged) {
+      setShowChipDisclosure(true);
+      return;
+    }
     const fileA = useAnalysisStore.getState().parentAFile;
     const fileB = useAnalysisStore.getState().parentBFile;
+    // Gate: require partner consent when both files are present (couple mode)
+    if (fileA && fileB && !useLegalStore.getState().partnerConsentGiven) {
+      return;
+    }
     if (fileA && fileB) startAnalysis(fileA, fileB);
   }, [startAnalysis]);
+
+  const handleConsentAccept = useCallback(() => {
+    setShowConsentModal(false);
+    // Consent was set in the store by ConsentModal — now check chip disclosure
+    if (!useLegalStore.getState().chipLimitationAcknowledged) {
+      setShowChipDisclosure(true);
+      return;
+    }
+    const fileA = useAnalysisStore.getState().parentAFile;
+    const fileB = useAnalysisStore.getState().parentBFile;
+    if (fileA && fileB && !useLegalStore.getState().partnerConsentGiven) return;
+    if (fileA && fileB) startAnalysis(fileA, fileB);
+  }, [startAnalysis]);
+
+  const handleConsentDecline = useCallback(() => {
+    setShowConsentModal(false);
+    // User declined — stay on the upload page, do not start analysis
+  }, []);
+
+  const handleChipDisclosureContinue = useCallback(() => {
+    setShowChipDisclosure(false);
+    // Chip limitation was acknowledged in the store by ChipDisclosureModal — proceed
+    const fileA = useAnalysisStore.getState().parentAFile;
+    const fileB = useAnalysisStore.getState().parentBFile;
+    if (fileA && fileB && !useLegalStore.getState().partnerConsentGiven) return;
+    if (fileA && fileB) startAnalysis(fileA, fileB);
+  }, [startAnalysis]);
+
+  const handleChipDisclosureCancel = useCallback(() => {
+    setShowChipDisclosure(false);
+    // User cancelled — stay on the upload page, do not start analysis
+  }, []);
 
   const handleViewDemo = useCallback(async () => {
     try {
@@ -170,6 +260,8 @@ export default function AnalysisPage() {
   const isComplete = currentStep === "complete";
   const isRunning = !isIdle && !isComplete;
   const bothFilesSelected = parentA !== null && parentB !== null;
+  // Partner consent is required when both files are selected (couple analysis)
+  const canStartAnalysis = bothFilesSelected && partnerConsentGiven;
 
   return (
     <section aria-label="Genetic Analysis">
@@ -221,16 +313,27 @@ export default function AnalysisPage() {
       {/* ── File Upload Section ── */}
       {isIdle && (
         <div className="grid gap-6 md:grid-cols-2">
-          <FileDropzone
-            label="Parent A (Mother)"
-            onFileSelect={handleFileSelectA}
-            selectedFile={parentA}
-          />
-          <FileDropzone
-            label="Parent B (Father)"
-            onFileSelect={handleFileSelectB}
-            selectedFile={parentB}
-          />
+          <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load file upload. Please refresh.</div>}>
+            <FileDropzone
+              label="Parent A (Mother)"
+              onFileSelect={handleFileSelectA}
+              selectedFile={parentA}
+            />
+          </ErrorBoundary>
+          <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load file upload. Please refresh.</div>}>
+            <FileDropzone
+              label="Parent B (Father)"
+              onFileSelect={handleFileSelectB}
+              selectedFile={parentB}
+            />
+          </ErrorBoundary>
+        </div>
+      )}
+
+      {/* ── Partner Consent Checkbox (shown when both files selected) ── */}
+      {isIdle && bothFilesSelected && (
+        <div className="mt-6">
+          <PartnerConsentCheckbox filesChanged={parentB?.name} />
         </div>
       )}
 
@@ -247,7 +350,12 @@ export default function AnalysisPage() {
       {/* ── Start Analysis ── */}
       {isIdle && bothFilesSelected && (
         <div className="mt-8 text-center">
-          <Button size="xl" variant="primary" onClick={handleStartAnalysis}>
+          <Button
+            size="xl"
+            variant="primary"
+            onClick={handleStartAnalysis}
+            disabled={!canStartAnalysis}
+          >
             Start Analysis
             <ChevronRight className="h-5 w-5" />
           </Button>
@@ -275,7 +383,9 @@ export default function AnalysisPage() {
       {/* ── Progress + Cancel ── */}
       {isRunning && (
         <div className="mt-8 space-y-4">
-          <AnalysisProgress currentStep={currentStep} />
+          <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load analysis progress.</div>}>
+            <AnalysisProgress currentStep={currentStep} />
+          </ErrorBoundary>
           <div className="text-center">
             <Button variant="ghost" size="sm" onClick={cancel} className="gap-1.5">
               <XCircle className="h-4 w-4" />
@@ -288,6 +398,7 @@ export default function AnalysisPage() {
       {/* ── Error Display ── */}
       {errorMessage && (
         <GlassCard
+          role="alert"
           variant="subtle"
           hover="none"
           className="mt-8 flex items-center gap-3 border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.04)] p-4"
@@ -391,6 +502,18 @@ export default function AnalysisPage() {
           </div>
         </div>
       )}
+      {/* ── GDPR Consent Modal (shown before first analysis) ── */}
+      <ConsentModal
+        isOpen={showConsentModal}
+        onAccept={handleConsentAccept}
+        onDecline={handleConsentDecline}
+      />
+      {/* ── Chip Limitation Disclosure (shown before first analysis for all users) ── */}
+      <ChipDisclosureModal
+        isOpen={showChipDisclosure}
+        onContinue={handleChipDisclosureContinue}
+        onCancel={handleChipDisclosureCancel}
+      />
     </section>
   );
 }

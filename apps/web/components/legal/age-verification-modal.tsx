@@ -7,35 +7,13 @@ import { ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
-import { AGE_VERIFIED_KEY, UNDER_18_KEY } from "../../lib/constants/legal";
+import { useModalManager } from "@/hooks/use-modal-manager";
+import { overlayVariants, modalVariants } from "@/lib/animations/modal-variants";
+import { AGE_VERIFIED_KEY, UNDER_18_KEY } from "@/lib/constants/legal";
 import {
   safeLocalStorageGet,
   safeLocalStorageSet,
-} from "../../lib/utils/safe-storage";
-
-// ── Animation variants (hoisted outside component) ───────────────────────
-
-const overlayVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.3 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-};
-
-const modalVariants = {
-  hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    y: 20,
-    transition: { duration: 0.2, ease: "easeIn" },
-  },
-};
+} from "@/lib/utils/safe-storage";
 
 // ── Under-18 expiry (6 months = 182 days) ────────────────────────────────
 
@@ -62,6 +40,7 @@ export function AgeVerificationModal({
   const [isOpen, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<Element | null>(null);
   const router = useRouter();
 
   const ageVerified = useLegalStore((s) => s.ageVerified);
@@ -75,6 +54,8 @@ export function AgeVerificationModal({
       return;
     }
     if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== "true" && !ageVerified) {
+      // Save the currently focused element so we can restore focus on close
+      triggerRef.current = document.activeElement;
       setIsOpen(true);
     }
   }, [ageVerified, router]);
@@ -89,13 +70,32 @@ export function AgeVerificationModal({
     };
   }, [isOpen]);
 
+  // Register with modal manager for aria-hidden coordination
+  useEffect(() => {
+    if (isOpen) {
+      useModalManager.getState().openModal("age-verification");
+    } else {
+      useModalManager.getState().closeModal("age-verification");
+    }
+    return () => useModalManager.getState().closeModal("age-verification");
+  }, [isOpen]);
+
   // Focus trap — Escape does NOT close (using extracted hook)
   useFocusTrap(modalRef, isOpen, false);
 
-  // Auto-focus modal when opened
+  // Focus first focusable element when opened; restore focus when closed
   useEffect(() => {
     if (isOpen && modalRef.current) {
-      modalRef.current.focus();
+      // Find the first focusable element inside the modal
+      const firstFocusable = modalRef.current.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])',
+      );
+      if (firstFocusable) {
+        firstFocusable.focus();
+      } else {
+        // Fallback: focus the modal container itself
+        modalRef.current.focus();
+      }
     }
   }, [isOpen]);
 
@@ -103,6 +103,10 @@ export function AgeVerificationModal({
     setIsOpen(false);
     verifyAge();
     onVerified?.();
+    // Restore focus to the element that was focused before the modal opened
+    if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
+      triggerRef.current.focus();
+    }
   }, [verifyAge, onVerified]);
 
   const handleCheckboxChange = useCallback(() => {

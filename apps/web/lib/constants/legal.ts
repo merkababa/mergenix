@@ -2,3 +2,5 @@
 export const COOKIE_CONSENT_KEY = "mergenix_cookie_consent";
 export const AGE_VERIFIED_KEY = "mergenix_age_verified";
 export const UNDER_18_KEY = "mergenix_under_18";
+export const GENETIC_DATA_CONSENT_KEY = "mergenix_genetic_data_consent";
+export const CHIP_LIMITATION_ACK_KEY = "mergenix_chip_limitation_ack";

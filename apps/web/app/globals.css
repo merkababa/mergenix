@@ -402,7 +402,15 @@ section,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  html {
     scroll-behavior: auto !important;
+  }
+
+  :root {
+    --glow-teal: transparent;
+    --glow-violet: transparent;
   }
 }
 
@@ -459,3 +467,38 @@ section,
 .stagger-4 { animation-delay: 0.2s; }
 .stagger-5 { animation-delay: 0.25s; }
 .stagger-6 { animation-delay: 0.3s; }
+
+/* ============================================================
+   Touch Target Sizing (WCAG 2.5.5)
+   Ensures all interactive elements meet 44x44px minimum on touch devices
+   ============================================================ */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="checkbox"],
+  [role="radio"],
+  [role="switch"],
+  [role="menuitem"],
+  summary {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  a:not(.skip-to-main) {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 24px;
+    min-width: 24px;
+  }
+
+  /* Ensure spacing between adjacent touch targets */
+  .touch-gap > * + * {
+    margin-top: 8px;
+  }
+}

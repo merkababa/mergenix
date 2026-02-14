@@ -9,7 +9,31 @@ vi.mock('lucide-react', () => ({
   Shield: (props: Record<string, unknown>) => <svg data-testid="icon-shield" {...props} />,
   X: (props: Record<string, unknown>) => <svg data-testid="icon-x" {...props} />,
   AlertCircle: (props: Record<string, unknown>) => <svg data-testid="icon-alert" {...props} />,
+  AlertTriangle: (props: Record<string, unknown>) => <svg data-testid="icon-alert-triangle" {...props} />,
   Check: (props: Record<string, unknown>) => <svg data-testid="icon-check" {...props} />,
+}));
+
+// Mock ChipDisclosureModal (rendered by UpgradeModal for chip limitation gate)
+vi.mock('@/components/legal/chip-disclosure-modal', () => ({
+  ChipDisclosureModal: ({ isOpen, onContinue, onCancel }: { isOpen: boolean; onContinue: () => void; onCancel: () => void }) =>
+    isOpen ? (
+      <div data-testid="chip-disclosure-modal">
+        <button onClick={onContinue}>Continue to Payment</button>
+        <button onClick={onCancel}>Cancel Disclosure</button>
+      </div>
+    ) : null,
+}));
+
+// Mock legal store — chip limitation defaults to acknowledged so existing tests pass unchanged
+const mockLegalStoreState: Record<string, any> = {
+  chipLimitationAcknowledged: true,
+};
+
+vi.mock('@/lib/stores/legal-store', () => ({
+  useLegalStore: Object.assign(
+    (selector: (state: any) => any) => selector(mockLegalStoreState),
+    { getState: () => mockLegalStoreState, setState: vi.fn() },
+  ),
 }));
 
 vi.mock('@/components/ui/glass-card', () => ({
@@ -211,5 +235,69 @@ describe('UpgradeModal', () => {
     });
 
     expect(onClose).toHaveBeenCalled();
+  });
+
+  // ── Chip disclosure gate tests ────────────────────────────────────────
+
+  describe('chip disclosure gate', () => {
+    it('shows ChipDisclosureModal when chipLimitationAcknowledged is false and Confirm is clicked', async () => {
+      // Override the legal store mock to indicate chip limitation is NOT acknowledged
+      mockLegalStoreState.chipLimitationAcknowledged = false;
+
+      render(<UpgradeModal {...defaultProps} />);
+
+      const confirmButton = screen.getByText('Confirm Upgrade');
+
+      await act(async () => {
+        fireEvent.click(confirmButton);
+      });
+
+      // ChipDisclosureModal should now be visible
+      expect(screen.getByTestId('chip-disclosure-modal')).toBeInTheDocument();
+
+      // createCheckout should NOT have been called yet (blocked by disclosure gate)
+      expect(mockCreateCheckout).not.toHaveBeenCalled();
+
+      // Restore default for subsequent tests
+      mockLegalStoreState.chipLimitationAcknowledged = true;
+    });
+
+    it('proceeds to checkout after acknowledging chip limitation', async () => {
+      mockLegalStoreState.chipLimitationAcknowledged = false;
+      mockCreateCheckout.mockResolvedValue({
+        checkoutUrl: 'https://stripe.com/checkout',
+        sessionId: 'sess_1',
+      });
+
+      // Mock window.location.href
+      const locationSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({
+        ...window.location,
+        href: '',
+      } as Location);
+
+      render(<UpgradeModal {...defaultProps} />);
+
+      // Step 1: Click Confirm Upgrade — should show chip disclosure
+      const confirmButton = screen.getByText('Confirm Upgrade');
+      await act(async () => {
+        fireEvent.click(confirmButton);
+      });
+
+      expect(screen.getByTestId('chip-disclosure-modal')).toBeInTheDocument();
+
+      // Step 2: Click "Continue to Payment" in the ChipDisclosureModal mock
+      const continueButton = screen.getByText('Continue to Payment');
+      await act(async () => {
+        fireEvent.click(continueButton);
+      });
+
+      // Checkout should now have been called
+      await waitFor(() => {
+        expect(mockCreateCheckout).toHaveBeenCalledWith('pro');
+      });
+
+      locationSpy.mockRestore();
+      mockLegalStoreState.chipLimitationAcknowledged = true;
+    });
   });
 });

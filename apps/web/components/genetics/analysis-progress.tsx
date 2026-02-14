@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Check, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart, PartyPopper } from "lucide-react";
+import { Check, CheckCircle, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AnalysisStep } from "@/lib/stores/analysis-store";
+import { useAnnouncerStore } from "@/lib/stores/announcer-store";
 
 const STEPS: {
   key: AnalysisStep;
@@ -18,7 +20,7 @@ const STEPS: {
   { key: "polygenic_risk", label: "PRS", description: "Polygenic risk scoring...", icon: BarChart3 },
   { key: "ethnicity_adjustment", label: "Ethnicity", description: "Adjusting for population...", icon: Globe },
   { key: "counseling_triage", label: "Counseling", description: "Triaging counseling needs...", icon: Heart },
-  { key: "complete", label: "Complete", description: "Analysis complete!", icon: PartyPopper },
+  { key: "complete", label: "Complete", description: "Analysis complete!", icon: CheckCircle },
 ];
 
 const STEP_ORDER: AnalysisStep[] = [
@@ -33,6 +35,24 @@ const STEP_ORDER: AnalysisStep[] = [
   "complete",
 ];
 
+/** Human-readable stage descriptions for screen readers. */
+const STAGE_ANNOUNCEMENTS: Partial<Record<AnalysisStep, string>> = {
+  idle: "",
+  initializing: "Initializing analysis engine",
+  decompressing: "Decompressing genetic files",
+  parsing: "Step 1 of 8: Parsing genetic files",
+  strand_harmonization: "Harmonizing DNA strands",
+  build_detection: "Detecting genome build",
+  liftover: "Performing liftover conversion",
+  carrier_analysis: "Step 2 of 8: Analyzing carrier status",
+  trait_prediction: "Step 3 of 8: Predicting traits",
+  pharmacogenomics: "Step 4 of 8: Analyzing drug interactions",
+  polygenic_risk: "Step 5 of 8: Calculating risk scores",
+  ethnicity_adjustment: "Step 6 of 8: Adjusting for population",
+  counseling_triage: "Step 7 of 8: Generating recommendations",
+  complete: "Analysis complete",
+};
+
 interface AnalysisProgressProps {
   currentStep: AnalysisStep;
   className?: string;
@@ -40,9 +60,25 @@ interface AnalysisProgressProps {
 
 export function AnalysisProgress({ currentStep, className }: AnalysisProgressProps) {
   const currentIndex = STEP_ORDER.indexOf(currentStep);
+  const previousStepRef = useRef<AnalysisStep>(currentStep);
+  const announce = useAnnouncerStore((s) => s.announce);
 
   const activeStep = STEPS.find((s) => s.key === currentStep);
   const activeDescription = activeStep?.description || "Preparing...";
+
+  // Track the aria-live announcement text — only updated on stage transitions
+  const stageAnnouncement = STAGE_ANNOUNCEMENTS[currentStep] ?? "";
+
+  // Announce stage transitions to screen readers via the global announcer
+  useEffect(() => {
+    if (previousStepRef.current !== currentStep) {
+      previousStepRef.current = currentStep;
+
+      if (currentStep === "complete") {
+        announce("Analysis complete. Results are ready.", "polite");
+      }
+    }
+  }, [currentStep, announce]);
 
   return (
     <div
@@ -57,6 +93,23 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
       aria-valuemin={0}
       aria-valuemax={STEPS.length}
     >
+      {/* Visually hidden aria-live region for stage transition announcements */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+        }}
+        data-testid="analysis-progress-live"
+      >
+        {stageAnnouncement}
+      </div>
+
       {/* Steps */}
       <div className="flex items-center justify-between gap-1">
         {STEPS.map((step, i) => {
@@ -139,7 +192,6 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         className="mt-4 text-center font-body text-sm text-[var(--text-muted)]"
-        aria-live="polite"
       >
         {activeDescription}
       </motion.p>

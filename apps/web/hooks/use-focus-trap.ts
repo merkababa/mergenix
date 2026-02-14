@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 /**
  * Custom hook that traps keyboard focus within a container element.
@@ -6,6 +6,10 @@ import { useEffect, type RefObject } from "react";
  * When active, Tab/Shift+Tab cycling wraps around the focusable elements
  * inside the container. Useful for modals and dialogs that require
  * keyboard accessibility compliance.
+ *
+ * **Focus restoration:** When the trap activates, the currently focused
+ * element is saved. When the trap deactivates, focus is restored to
+ * that element (unless it was removed from the DOM).
  *
  * @param containerRef - Ref to the container element
  * @param isActive - Whether the focus trap is currently active
@@ -17,8 +21,14 @@ export function useFocusTrap(
   isActive: boolean,
   allowEscape: boolean = true,
 ) {
+  // Store the element that had focus before the trap was activated
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (!isActive || !containerRef.current) return;
+
+    // Save the currently focused element for restoration
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
 
     const container = containerRef.current;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -47,6 +57,16 @@ export function useFocusTrap(
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+
+      // Restore focus to the previously focused element
+      const previous = previousFocusRef.current;
+      if (previous && typeof previous.focus === "function" && document.contains(previous)) {
+        previous.focus();
+      }
+      previousFocusRef.current = null;
+    };
   }, [containerRef, isActive, allowEscape]);
 }

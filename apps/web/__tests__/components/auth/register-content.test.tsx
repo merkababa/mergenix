@@ -9,6 +9,19 @@ vi.mock('next/link', () => ({
   ),
 }));
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/register',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 const mockRegister = vi.fn();
 const mockResendVerification = vi.fn();
 const mockGetGoogleOAuthUrl = vi.fn();
@@ -126,6 +139,11 @@ vi.mock('lucide-react', () => ({
   Mail: () => <span data-testid="icon-mail" />,
   User: () => <span data-testid="icon-user" />,
   CheckCircle2: () => <span data-testid="icon-check" />,
+  ShieldCheck: () => <span data-testid="icon-shield-check" />,
+}));
+
+vi.mock('@/components/legal/age-verification-modal', () => ({
+  AgeVerificationModal: () => <div data-testid="age-verification-modal" />,
 }));
 
 // ── Import under test ────────────────────────────────────────────────────────

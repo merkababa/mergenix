@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
+import { ErrorAnnouncer } from "@/components/a11y/error-announcer";
 import { MotionProvider } from "./(marketing)/_components/motion-provider";
 import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 import "./globals.css";
@@ -68,6 +69,10 @@ export default function RootLayout({
         >
           <AuthProvider>
             <div className="relative z-[1] flex min-h-screen flex-col">
+              <a href="#main-content" className="skip-to-main">
+                Skip to main content
+              </a>
+              <ErrorAnnouncer />
               <Navbar />
               <main id="main-content" className="flex-1">{children}</main>
               <Footer />

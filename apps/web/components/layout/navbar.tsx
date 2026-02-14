@@ -126,9 +126,6 @@ export function Navbar() {
         WebkitBackdropFilter: isScrolled ? "blur(20px)" : "blur(0px)",
       }}
     >
-      <a href="#main-content" className="skip-to-main">
-        Skip to main content
-      </a>
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6"
         aria-label="Main navigation"

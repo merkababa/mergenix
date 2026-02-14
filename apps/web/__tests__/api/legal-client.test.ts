@@ -38,7 +38,7 @@ describe('legal-client', () => {
       expect(mockPost).toHaveBeenCalledWith('/legal/consent', {
         consent_type: 'terms',
         version: '1.0',
-      });
+      }, { signal: undefined });
       expect(result).toEqual({
         id: 'uuid-consent-1',
         consentType: 'terms',
@@ -75,7 +75,7 @@ describe('legal-client', () => {
 
       const result = await listConsents();
 
-      expect(mockGet).toHaveBeenCalledWith('/legal/consent');
+      expect(mockGet).toHaveBeenCalledWith('/legal/consent', { signal: undefined });
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         id: 'uuid-1',
@@ -114,7 +114,7 @@ describe('legal-client', () => {
 
       expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
         analytics: true,
-      });
+      }, { signal: undefined });
       expect(result).toEqual({
         essential: true,
         analytics: true,
@@ -131,7 +131,7 @@ describe('legal-client', () => {
 
       expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
         analytics: false,
-      });
+      }, { signal: undefined });
       expect(result).toEqual({
         essential: true,
         analytics: false,
@@ -150,7 +150,7 @@ describe('legal-client', () => {
 
       const result = await getCookiePreferences();
 
-      expect(mockGet).toHaveBeenCalledWith('/legal/cookies');
+      expect(mockGet).toHaveBeenCalledWith('/legal/cookies', { signal: undefined });
       expect(result).toEqual({
         essential: true,
         analytics: true,
@@ -191,12 +191,17 @@ describe('legal-client', () => {
 
       const result = await exportData();
 
-      expect(mockGet).toHaveBeenCalledWith('/legal/export-data');
+      expect(mockGet).toHaveBeenCalledWith('/legal/export-data', { signal: undefined });
       expect(result).toBeInstanceOf(Blob);
       expect(result.type).toBe('application/json');
 
-      // Verify blob content
-      const text = await result.text();
+      // Verify blob content (use FileReader for jsdom compatibility)
+      const text = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsText(result);
+      });
       const parsed = JSON.parse(text);
       expect(parsed.user_id).toBe('uuid-user');
       expect(parsed.email).toBe('test@example.com');

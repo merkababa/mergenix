@@ -3,7 +3,11 @@
 import { create } from "zustand";
 import type { ConsentRecord } from "@mergenix/shared-types";
 import * as legalClient from "@/lib/api/legal-client";
-import { COOKIE_CONSENT_KEY, AGE_VERIFIED_KEY } from "../constants/legal";
+import {
+  COOKIE_CONSENT_KEY,
+  AGE_VERIFIED_KEY,
+  CHIP_LIMITATION_ACK_KEY,
+} from "../constants/legal";
 import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -14,6 +18,9 @@ interface LegalState {
   cookieConsent: CookieConsentStatus;
   analyticsEnabled: boolean;
   ageVerified: boolean;
+  geneticDataConsentGiven: boolean;
+  partnerConsentGiven: boolean;
+  chipLimitationAcknowledged: boolean;
   consents: ConsentRecord[];
   isLoading: boolean;
   error: string | null;
@@ -24,6 +31,10 @@ interface LegalState {
   updateCookiePrefs: (analytics: boolean) => Promise<void>;
   verifyAge: () => void;
   syncAgeVerification: () => Promise<void>;
+  setGeneticDataConsent: (given: boolean) => void;
+  setPartnerConsent: (given: boolean) => void;
+  setChipLimitationAcknowledged: (ack: boolean) => void;
+  resetPartnerConsent: () => void;
   recordConsent: (type: string, version: string) => Promise<void>;
   loadConsents: () => Promise<void>;
   loadCookiePreferences: () => Promise<void>;
@@ -49,6 +60,10 @@ function getInitialAgeVerified(): boolean {
   return safeLocalStorageGet(AGE_VERIFIED_KEY) === "true";
 }
 
+function getInitialChipLimitationAcknowledged(): boolean {
+  return safeLocalStorageGet(CHIP_LIMITATION_ACK_KEY) === "true";
+}
+
 // ── Store ─────────────────────────────────────────────────────────────────
 
 export const useLegalStore = create<LegalState>()((set) => ({
@@ -56,6 +71,9 @@ export const useLegalStore = create<LegalState>()((set) => ({
   cookieConsent: getInitialCookieConsent(),
   analyticsEnabled: getInitialAnalyticsEnabled(),
   ageVerified: getInitialAgeVerified(),
+  geneticDataConsentGiven: false, // Never persisted — GDPR requires re-consent each session
+  partnerConsentGiven: false, // Never persisted — must re-confirm each session
+  chipLimitationAcknowledged: getInitialChipLimitationAcknowledged(),
   consents: [],
   isLoading: false,
   error: null,
@@ -127,6 +145,27 @@ export const useLegalStore = create<LegalState>()((set) => ({
     }
     // After 3 failed attempts, log but don't crash
     console.warn("Failed to sync age verification after 3 attempts");
+  },
+
+  setGeneticDataConsent: (given: boolean) => {
+    // Not persisted in localStorage — GDPR requires re-consent each session
+    set({ geneticDataConsentGiven: given, error: null });
+  },
+
+  setPartnerConsent: (given: boolean) => {
+    // Not persisted in localStorage — must re-confirm each session
+    set({ partnerConsentGiven: given, error: null });
+  },
+
+  setChipLimitationAcknowledged: (ack: boolean) => {
+    if (ack) {
+      safeLocalStorageSet(CHIP_LIMITATION_ACK_KEY, "true");
+    }
+    set({ chipLimitationAcknowledged: ack, error: null });
+  },
+
+  resetPartnerConsent: () => {
+    set({ partnerConsentGiven: false });
   },
 
   recordConsent: async (type: string, version: string) => {
