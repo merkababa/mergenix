@@ -223,7 +223,7 @@ describe('OverviewTab', () => {
 
     // Free tier metadata -> shows TierUpgradePrompt with upgrade message
     expect(
-      screen.getByText(/Upgrade to Pro for full screening/),
+      screen.getByText(/Upgrade to Premium to unlock disease screening/),
     ).toBeInTheDocument();
   });
 
@@ -258,5 +258,25 @@ describe('OverviewTab', () => {
     expect(
       screen.queryByText('Upgrade Plan'),
     ).not.toBeInTheDocument();
+  });
+
+  it('renders sr-only h3 heading for accessibility hierarchy', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<OverviewTab />);
+
+    const heading = screen.getByText('Results Overview');
+    expect(heading.tagName).toBe('H3');
+    expect(heading.className).toContain('sr-only');
+  });
+
+  it('renders limitations section', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<OverviewTab />);
+
+    expect(
+      screen.getByText(/What Overview Analysis Cannot Tell You/),
+    ).toBeInTheDocument();
   });
 });

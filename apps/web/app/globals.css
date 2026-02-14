@@ -469,6 +469,104 @@ section,
 .stagger-6 { animation-delay: 0.3s; }
 
 /* ============================================================
+   High Contrast Mode (F33)
+   Activated via data-contrast="high" on <html>
+   ============================================================ */
+[data-contrast="high"] {
+  /* Increase border visibility */
+  --border-subtle: rgba(148, 163, 184, 0.35);
+  --glass-border: rgba(148, 163, 184, 0.3);
+  --card-border: rgba(148, 163, 184, 0.4);
+}
+
+[data-contrast="high"][data-theme="light"] {
+  --border-subtle: rgba(15, 23, 42, 0.25);
+  --glass-border: rgba(15, 23, 42, 0.2);
+  --card-border: rgba(15, 23, 42, 0.3);
+}
+
+/* Outlines on interactive elements in high contrast */
+[data-contrast="high"] button,
+[data-contrast="high"] [role="button"],
+[data-contrast="high"] [role="tab"],
+[data-contrast="high"] a:not(.skip-to-main) {
+  outline: 1px solid var(--border-subtle);
+  outline-offset: 1px;
+}
+
+[data-contrast="high"] button:focus-visible,
+[data-contrast="high"] [role="button"]:focus-visible,
+[data-contrast="high"] [role="tab"]:focus-visible,
+[data-contrast="high"] a:focus-visible {
+  outline: 3px solid var(--accent-teal);
+  outline-offset: 2px;
+}
+
+/* Risk level pattern markers — visible only in high contrast mode */
+.risk-pattern-low,
+.risk-pattern-below-avg,
+.risk-pattern-average,
+.risk-pattern-above-avg,
+.risk-pattern-elevated,
+.risk-pattern-high {
+  position: relative;
+}
+
+[data-contrast="high"] .risk-pattern-low::before {
+  content: " [LOW]";
+}
+
+[data-contrast="high"] .risk-pattern-below-avg::before {
+  content: " [BELOW AVG]";
+}
+
+[data-contrast="high"] .risk-pattern-average::before {
+  content: " [AVG]";
+}
+
+[data-contrast="high"] .risk-pattern-above-avg::before {
+  content: " [ABOVE AVG]";
+}
+
+[data-contrast="high"] .risk-pattern-elevated::before {
+  content: " [ELEVATED]";
+}
+
+[data-contrast="high"] .risk-pattern-high::before {
+  content: " [HIGH]";
+}
+
+/* High contrast probability bar patterns — striped backgrounds */
+[data-contrast="high"] [role="progressbar"] > div,
+[data-contrast="high"] [role="meter"] > div {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.15) 2px,
+    rgba(255, 255, 255, 0.15) 4px
+  );
+}
+
+[data-contrast="high"][data-theme="light"] [role="progressbar"] > div,
+[data-contrast="high"][data-theme="light"] [role="meter"] > div {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+}
+
+/* Thicker borders on glass cards in high contrast */
+[data-contrast="high"] .glass,
+[data-contrast="high"] .glass-subtle,
+[data-contrast="high"] .glass-strong {
+  border-width: 2px;
+}
+
+/* ============================================================
    Touch Target Sizing (WCAG 2.5.5)
    Ensures all interactive elements meet 44x44px minimum on touch devices
    ============================================================ */

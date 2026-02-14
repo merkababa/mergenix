@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -9,23 +10,23 @@ interface PrsGaugeProps {
   className?: string;
 }
 
-function getRiskInfo(percentile: number): { color: string; label: string; glowColor: string } {
+function getRiskInfo(percentile: number): { color: string; label: string; glowColor: string; patternClass: string } {
   if (percentile < 20)
-    return { color: "#06d6a0", label: "Low", glowColor: "rgba(6, 214, 160, 0.4)" };
+    return { color: "#06d6a0", label: "Low", glowColor: "rgba(6, 214, 160, 0.4)", patternClass: "risk-pattern-low" };
   if (percentile < 40)
-    return { color: "#14b8a6", label: "Below Average", glowColor: "rgba(20, 184, 166, 0.4)" };
+    return { color: "#14b8a6", label: "Below Average", glowColor: "rgba(20, 184, 166, 0.4)", patternClass: "risk-pattern-below-avg" };
   if (percentile < 60)
-    return { color: "#06b6d4", label: "Average", glowColor: "rgba(6, 182, 212, 0.4)" };
+    return { color: "#06b6d4", label: "Average", glowColor: "rgba(6, 182, 212, 0.4)", patternClass: "risk-pattern-average" };
   if (percentile < 80)
-    return { color: "#f59e0b", label: "Above Average", glowColor: "rgba(245, 158, 11, 0.4)" };
+    return { color: "#f59e0b", label: "Above Average", glowColor: "rgba(245, 158, 11, 0.4)", patternClass: "risk-pattern-above-avg" };
   if (percentile < 95)
-    return { color: "#f97316", label: "Elevated", glowColor: "rgba(249, 115, 22, 0.4)" };
-  return { color: "#f43f5e", label: "High", glowColor: "rgba(244, 63, 94, 0.4)" };
+    return { color: "#f97316", label: "Elevated", glowColor: "rgba(249, 115, 22, 0.4)", patternClass: "risk-pattern-elevated" };
+  return { color: "#f43f5e", label: "High", glowColor: "rgba(244, 63, 94, 0.4)", patternClass: "risk-pattern-high" };
 }
 
-export function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
+export const PrsGauge = memo(function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
   const clamped = Math.min(Math.max(percentile, 0), 100);
-  const { color, label } = getRiskInfo(clamped);
+  const { color, label, patternClass } = getRiskInfo(clamped);
 
   // SVG gauge math
   const radius = 80;
@@ -41,9 +42,18 @@ export function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
   const needleAngle = -180 + (clamped / 100) * 180;
 
   const safeId = condition.replace(/[^a-zA-Z0-9]/g, "-");
+  const valueText = `PRS score: ${Math.round(clamped)} (${Math.round(clamped)}th percentile, ${label} risk level)`;
 
   return (
-    <div className={cn("text-center", className)}>
+    <div
+      className={cn("text-center", className)}
+      role="meter"
+      aria-valuenow={clamped}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuetext={valueText}
+      aria-label={`${condition} polygenic risk score`}
+    >
       <span className="sr-only">
         {condition}: {Math.round(clamped)}th percentile, {label} risk
       </span>
@@ -143,9 +153,10 @@ export function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
       <p className="mt-2 font-heading text-sm font-semibold text-[var(--text-heading)]">
         {condition}
       </p>
-      <p className="text-xs font-medium" style={{ color }}>
+      {/* Risk level with text label and high-contrast pattern marker */}
+      <p className={cn("text-xs font-medium", patternClass)} style={{ color }}>
         {label} Risk
       </p>
     </div>
   );
-}
+});

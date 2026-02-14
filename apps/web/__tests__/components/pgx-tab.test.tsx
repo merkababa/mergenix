@@ -21,6 +21,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
 }));
 
+// Mock shared components from other executors that may not exist yet
+vi.mock('@/components/genetics/results/limitations-section', () => ({
+  LimitationsSection: ({ context }: { context: string }) => (
+    <div data-testid={`limitations-${context}`}>Limitations</div>
+  ),
+}));
+
+vi.mock('@/components/genetics/results/clinical-testing-banner', () => ({
+  ClinicalTestingBanner: () => (
+    <div data-testid="clinical-testing-banner">Clinical Testing Banner</div>
+  ),
+}));
+
 import { PgxTab } from '../../components/genetics/results/pgx-tab';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -397,5 +410,51 @@ describe('PgxTab', () => {
     expect(screen.getByText('Cardiovascular')).toBeInTheDocument();
     // CYP2C19 Omeprazole -> category "Gastrointestinal"
     expect(screen.getByText('Gastrointestinal')).toBeInTheDocument();
+  });
+
+  it('renders ClinicalTestingBanner', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PgxTab />);
+
+    expect(screen.getByTestId('clinical-testing-banner')).toBeInTheDocument();
+  });
+
+  it('renders CYP2D6Warning when CYP2D6 is in results', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PgxTab />);
+
+    // CYP2D6 is in the test fixture -> warning should render
+    expect(
+      screen.getByText(/Array-based testing cannot detect CYP2D6 gene duplications/),
+    ).toBeInTheDocument();
+  });
+
+  it('does not render CYP2D6Warning when CYP2D6 is not in results', () => {
+    const noCyp2d6Results: FullAnalysisResult = {
+      ...mockResults,
+      pgx: {
+        ...mockResults.pgx,
+        results: {
+          CYP2C19: mockResults.pgx.results.CYP2C19,
+        },
+      },
+    };
+    useAnalysisStore.setState({ fullResults: noCyp2d6Results });
+
+    render(<PgxTab />);
+
+    expect(
+      screen.queryByText(/Array-based testing cannot detect CYP2D6 gene duplications/),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders LimitationsSection for pgx category', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PgxTab />);
+
+    expect(screen.getByTestId('limitations-pgx')).toBeInTheDocument();
   });
 });

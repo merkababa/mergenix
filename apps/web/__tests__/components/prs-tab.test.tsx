@@ -21,6 +21,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
 }));
 
+// Mock shared components from other executors that may not exist yet
+vi.mock('@/components/genetics/results/limitations-section', () => ({
+  LimitationsSection: ({ context }: { context: string }) => (
+    <div data-testid={`limitations-${context}`}>Limitations</div>
+  ),
+}));
+
+vi.mock('@/components/genetics/results/clinical-testing-banner', () => ({
+  ClinicalTestingBanner: () => (
+    <div data-testid="clinical-testing-banner">Clinical Testing Banner</div>
+  ),
+}));
+
 import { PrsTab } from '../../components/genetics/results/prs-tab';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -246,11 +259,15 @@ describe('PrsTab', () => {
 
     render(<PrsTab />);
 
+    // Breast Cancer: high confidence -> shows ancestryNote text
     expect(
       screen.getByText(/PRS weights derived primarily from European-ancestry GWAS/),
     ).toBeInTheDocument();
+
+    // Alzheimer's: low confidence (no European keyword) -> shows generic warning instead of ancestryNote
+    // The ancestryNote "APOE status..." is NOT shown; the generic low-confidence message appears instead
     expect(
-      screen.getByText(/APOE status is the strongest single-gene risk factor/),
+      screen.getByText(/Ancestry could not be determined/),
     ).toBeInTheDocument();
   });
 
@@ -314,5 +331,129 @@ describe('PrsTab', () => {
     // Check that the actual percentile data with SNP coverage is rendered
     expect(screen.getByText('96th percentile')).toBeInTheDocument();
     expect(screen.getByText('28th percentile')).toBeInTheDocument();
+  });
+
+  it('renders ClinicalTestingBanner', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PrsTab />);
+
+    expect(screen.getByTestId('clinical-testing-banner')).toBeInTheDocument();
+  });
+
+  it('renders PrsContextDisclaimer with offspring note', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PrsTab />);
+
+    expect(
+      screen.getByText(/Polygenic risk scores reflect statistical probabilities/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Offspring scores are averaged estimates/),
+    ).toBeInTheDocument();
+  });
+
+  it('renders AncestryConfidenceBadge for each condition card', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PrsTab />);
+
+    // Breast Cancer: ancestryNote mentions "European-ancestry GWAS" -> "High Confidence"
+    const highConfidenceBadges = screen.getAllByText('High Confidence');
+    expect(highConfidenceBadges.length).toBe(1);
+
+    // Alzheimer's: ancestryNote mentions APOE, no European keyword -> "Low Confidence"
+    const lowConfidenceBadges = screen.getAllByText('Low Confidence');
+    expect(lowConfidenceBadges.length).toBe(1);
+  });
+
+  it('renders LimitationsSection for prs category', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<PrsTab />);
+
+    expect(screen.getByTestId('limitations-prs')).toBeInTheDocument();
+  });
+
+  it('infers low confidence for non-European ancestry note', () => {
+    const nonEuropeanResults: FullAnalysisResult = {
+      ...mockResults,
+      prs: {
+        ...mockResults.prs,
+        conditions: {
+          test_condition: {
+            name: 'Test Condition',
+            parentA: mockResults.prs.conditions.breast_cancer.parentA,
+            parentB: mockResults.prs.conditions.breast_cancer.parentB,
+            offspring: mockResults.prs.conditions.breast_cancer.offspring,
+            ancestryNote: 'Derived from African-ancestry GWAS studies.',
+            reference: 'Test et al. 2024.',
+          },
+        },
+      },
+    };
+
+    useAnalysisStore.setState({ fullResults: nonEuropeanResults });
+    render(<PrsTab />);
+
+    // No European keyword => low confidence, ancestry label = "African"
+    expect(screen.getByText('Low Confidence')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Accuracy may be reduced for African ancestry/),
+    ).toBeInTheDocument();
+  });
+
+  it('detects "Non-European" as low confidence (not high)', () => {
+    const nonEurResults: FullAnalysisResult = {
+      ...mockResults,
+      prs: {
+        ...mockResults.prs,
+        conditions: {
+          test_condition: {
+            name: 'Test Non-European',
+            parentA: mockResults.prs.conditions.breast_cancer.parentA,
+            parentB: mockResults.prs.conditions.breast_cancer.parentB,
+            offspring: mockResults.prs.conditions.breast_cancer.offspring,
+            ancestryNote: 'Non-European populations have lower accuracy.',
+            reference: 'Test et al. 2024.',
+          },
+        },
+      },
+    };
+
+    useAnalysisStore.setState({ fullResults: nonEurResults });
+    render(<PrsTab />);
+
+    // "Non-European" should NOT trigger high confidence
+    expect(screen.getByText('Low Confidence')).toBeInTheDocument();
+    expect(screen.queryByText('High Confidence')).not.toBeInTheDocument();
+  });
+
+  it('shows "Unknown" ancestry with low confidence when ancestryNote has no recognizable ancestry', () => {
+    const unknownResults: FullAnalysisResult = {
+      ...mockResults,
+      prs: {
+        ...mockResults.prs,
+        conditions: {
+          test_condition: {
+            name: 'Test Unknown',
+            parentA: mockResults.prs.conditions.breast_cancer.parentA,
+            parentB: mockResults.prs.conditions.breast_cancer.parentB,
+            offspring: mockResults.prs.conditions.breast_cancer.offspring,
+            ancestryNote: 'APOE is the strongest genetic risk factor across all populations.',
+            reference: 'Test et al. 2024.',
+          },
+        },
+      },
+    };
+
+    useAnalysisStore.setState({ fullResults: unknownResults });
+    render(<PrsTab />);
+
+    expect(screen.getByText('Low Confidence')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Ancestry could not be determined/),
+    ).toBeInTheDocument();
   });
 });

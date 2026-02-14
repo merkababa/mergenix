@@ -7,6 +7,9 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { SensitiveContentGuard } from "@/components/ui/sensitive-content-guard";
+import { CYP2D6Warning } from "@/components/genetics/results/cyp2d6-warning";
+import { LimitationsSection } from "@/components/genetics/results/limitations-section";
+import { ClinicalTestingBanner } from "@/components/genetics/results/clinical-testing-banner";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { canAccessFeature } from "@mergenix/shared-types";
@@ -74,6 +77,9 @@ export function PgxTab() {
       }}
     >
     <div className="space-y-6">
+      {/* Clinical testing banner */}
+      <ClinicalTestingBanner />
+
       {/* Header */}
       <div className="flex items-center gap-2">
         <Pill className="h-5 w-5 text-[var(--accent-teal)]" />
@@ -81,6 +87,12 @@ export function PgxTab() {
           Pharmacogenomics
         </h3>
       </div>
+
+      {/* CYP2D6 array limitation warning */}
+      <CYP2D6Warning
+        gene="CYP2D6"
+        hasWarning={"CYP2D6" in pgx.results}
+      />
 
       {/* Upgrade prompt for limited tiers */}
       {pgx.isLimited && (
@@ -113,6 +125,9 @@ export function PgxTab() {
           </p>
         </GlassCard>
       )}
+
+      {/* Limitations section */}
+      <LimitationsSection limitations={[]} context="pgx" />
     </div>
     </SensitiveContentGuard>
   );
@@ -137,7 +152,7 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
           <h4 className="flex items-center gap-2 font-heading text-base font-bold text-[#06b6d4]">
             {gene.gene}
             {hasAnyWarning && (
-              <AlertTriangle className="h-4 w-4 text-[#f59e0b]" />
+              <AlertTriangle className="h-4 w-4 text-[#f59e0b]" aria-hidden="true" />
             )}
           </h4>
           <p className="mt-0.5 text-xs text-[var(--text-muted)]">
@@ -186,7 +201,7 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
           <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
             Parent A Drug Recommendations
           </p>
-          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Drug recommendations">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Parent A drug recommendations">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">
@@ -226,7 +241,7 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
           <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
             Parent B Drug Recommendations
           </p>
-          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Drug recommendations">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Parent B drug recommendations">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">

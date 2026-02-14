@@ -4,17 +4,19 @@ import { useState } from "react";
 import {
   Heart,
   AlertTriangle,
-  ChevronRight,
   ExternalLink,
   ChevronDown,
   ChevronUp,
   Lock,
+  Phone,
+  MessageSquare,
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { INHERITANCE_BADGE_MAP, RISK_LABELS } from "@/lib/genetics-constants";
+import { LimitationsSection } from "./limitations-section";
 import type {
   CounselingUrgency,
   CounselorSpecialty,
@@ -81,6 +83,15 @@ export function CounselingTab() {
 
   return (
     <div className="space-y-6">
+      {/* Supportive intro paragraph */}
+      <GlassCard variant="subtle" hover="none" className="p-5">
+        <p className="text-sm leading-relaxed text-[var(--text-body)]">
+          Genetic information can be complex and sometimes unexpected. Whatever
+          your results show, remember that knowledge is a tool that empowers
+          you to make informed decisions for your family&apos;s future.
+        </p>
+      </GlassCard>
+
       {/* Urgency-colored header card */}
       <GlassCard
         variant="medium"
@@ -115,6 +126,12 @@ export function CounselingTab() {
                   screening or trait results.
                 </p>
               </>
+            )}
+            {counseling.urgency === "high" && (
+              <p className="text-sm italic leading-relaxed text-[var(--text-body)]">
+                We understand this information may be concerning. You&apos;re not
+                alone — support is available.
+              </p>
             )}
             <Badge
               variant={
@@ -250,6 +267,7 @@ export function CounselingTab() {
             onClick={() => setReferralExpanded(!referralExpanded)}
             className="flex w-full items-center justify-between text-left"
             aria-expanded={referralExpanded}
+            aria-controls="referral-letter-content"
           >
             <h4 className="font-heading text-sm font-bold text-[var(--text-heading)]">
               View Referral Letter
@@ -262,6 +280,7 @@ export function CounselingTab() {
           </button>
           {referralExpanded && (
             <pre
+              id="referral-letter-content"
               aria-label="Referral letter content"
               className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-lg bg-[var(--bg-elevated)] p-4 font-mono text-xs leading-relaxed text-[var(--text-body)]"
             >
@@ -303,17 +322,61 @@ export function CounselingTab() {
         <TierUpgradePrompt message={counseling.upgradeMessage} />
       )}
 
-      {/* NSGC link */}
-      <a
-        href={counseling.nsgcUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--glass-bg)] px-4 py-2.5 font-heading text-sm font-medium text-[var(--text-body)] transition-colors hover:bg-[var(--bg-elevated)] focus-visible:ring-2 focus-visible:ring-[rgba(6,214,160,0.4)] focus-visible:outline-none"
+      {/* Emotional Support Resources */}
+      <GlassCard
+        variant="medium"
+        hover="none"
+        className="border-[rgba(6,182,212,0.15)] bg-[rgba(6,182,212,0.04)] p-5"
       >
-        <ExternalLink className="h-4 w-4" />
-        Find a Genetic Counselor
-        <ChevronRight className="h-4 w-4" />
-      </a>
+        <h4 className="mb-3 font-heading text-sm font-bold text-[var(--text-heading)]">
+          Emotional Support Resources
+        </h4>
+        <ul className="space-y-3">
+          <li className="flex items-start gap-3">
+            <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <div>
+              <p className="text-sm font-medium text-[var(--text-heading)]">
+                Crisis Text Line
+              </p>
+              <p className="text-xs text-[var(--text-muted)]">
+                Text <span className="font-semibold">HOME</span> to{" "}
+                <span className="font-semibold">741741</span>
+              </p>
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <div>
+              <p className="text-sm font-medium text-[var(--text-heading)]">
+                NSGC (Find a Counselor)
+              </p>
+              <p className="text-xs text-[var(--text-muted)]">
+                <span className="font-semibold">1-800-233-6742</span> — NSGC
+                office for finding a genetic counselor
+              </p>
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <a
+              href={counseling.nsgcUrl ?? "https://findageneticcounselor.com"}
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerPolicy="no-referrer"
+              className="text-sm font-medium text-[#06b6d4] underline-offset-2 hover:underline"
+            >
+              Find a Genetic Counselor (NSGC)
+            </a>
+          </li>
+        </ul>
+        <p className="mt-3 text-xs text-[var(--text-muted)]">
+          These resources are available in the United States. For international
+          support, contact your local genetic counseling service.
+        </p>
+      </GlassCard>
+
+      {/* Limitations */}
+      <LimitationsSection limitations={[]} context="counseling" />
     </div>
   );
 }

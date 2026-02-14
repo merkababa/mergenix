@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ErrorBoundary } from '../../components/error-boundary';
@@ -9,6 +10,10 @@ function ProblemChild({ shouldThrow = true }: { shouldThrow?: boolean }) {
     throw new Error('Test error message');
   }
   return <div>Child rendered successfully</div>;
+}
+
+function CodedProblemChild(): React.ReactNode {
+  throw new Error('[FILE_TOO_LARGE] File exceeds limit');
 }
 
 // Suppress React error boundary console output in tests
@@ -41,7 +46,6 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
     expect(screen.getByText('Try again')).toBeInTheDocument();
     expect(screen.getByText('Copy debug info')).toBeInTheDocument();
   });
@@ -74,7 +78,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
 
     // Fix the issue before resetting
     shouldThrow = false;
@@ -82,7 +86,7 @@ describe('ErrorBoundary', () => {
     fireEvent.click(screen.getByText('Try again'));
 
     expect(screen.getByText('Recovered successfully')).toBeInTheDocument();
-    expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   it('renders custom ReactNode fallback', () => {
@@ -93,7 +97,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Custom fallback content')).toBeInTheDocument();
-    expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   it('renders custom render-prop fallback with error and reset', () => {
@@ -185,6 +189,95 @@ describe('ErrorBoundary', () => {
     });
 
     // Still showing fallback UI (no crash from clipboard failure)
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+  });
+
+  // ─── New Tests: Error Messages Integration ──────────────────────────────
+
+  it('shows aria-invalid on error container', () => {
+    render(
+      <ErrorBoundary>
+        <ProblemChild />
+      </ErrorBoundary>,
+    );
+
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('shows user-friendly title from error-messages for unknown errors', () => {
+    render(
+      <ErrorBoundary>
+        <ProblemChild />
+      </ErrorBoundary>,
+    );
+
+    // Unknown error code maps to "Something Went Wrong"
+    expect(screen.getByText('Something Went Wrong')).toBeInTheDocument();
+  });
+
+  it('shows actionable suggestion text', () => {
+    render(
+      <ErrorBoundary>
+        <ProblemChild />
+      </ErrorBoundary>,
+    );
+
+    // UNKNOWN_ERROR action text
+    expect(
+      screen.getByText(/Try refreshing the page/),
+    ).toBeInTheDocument();
+  });
+
+  it('shows "Copied!" text after successful copy', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, {
+      clipboard: { writeText },
+    });
+
+    render(
+      <ErrorBoundary>
+        <ProblemChild />
+      </ErrorBoundary>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText('Copy debug info'));
+    });
+
+    expect(screen.getByText('Copied!')).toBeInTheDocument();
+  });
+
+  it('includes error code, timestamp, and browser in debug info', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, {
+      clipboard: { writeText },
+    });
+
+    render(
+      <ErrorBoundary>
+        <ProblemChild />
+      </ErrorBoundary>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText('Copy debug info'));
+    });
+
+    const clipboardContent = writeText.mock.calls[0][0] as string;
+    expect(clipboardContent).toContain('Error Code:');
+    expect(clipboardContent).toContain('Timestamp:');
+    expect(clipboardContent).toContain('Browser:');
+  });
+
+  it('extracts error code from [CODE] pattern in message', () => {
+    render(
+      <ErrorBoundary>
+        <CodedProblemChild />
+      </ErrorBoundary>,
+    );
+
+    // Should pick up FILE_TOO_LARGE from the message pattern
+    expect(screen.getByText('File Too Large')).toBeInTheDocument();
   });
 });

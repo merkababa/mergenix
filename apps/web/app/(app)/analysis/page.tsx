@@ -32,6 +32,7 @@ import { SaveResultDialog } from "@/components/analysis/save-result-dialog";
 import { SavedResultsList } from "@/components/analysis/saved-results-list";
 import { SaveOptionsModal } from "@/components/save/save-options-modal";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { HighContrastToggle } from "@/components/a11y/high-contrast-toggle";
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
 
@@ -286,6 +287,9 @@ export default function AnalysisPage() {
     <section aria-label="Genetic Analysis">
       {/* ── Header ── */}
       <div className="mb-8 text-center">
+        <div className="flex items-center justify-end">
+          <HighContrastToggle />
+        </div>
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Genetic Analysis
         </h1>

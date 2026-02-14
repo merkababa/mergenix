@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { LimitationsSection } from "@/components/genetics/results/limitations-section";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import type { TraitResult } from "@mergenix/shared-types";
@@ -152,6 +153,9 @@ export function TraitsTab() {
           </div>
         </GlassCard>
       )}
+
+      {/* Limitations section */}
+      <LimitationsSection limitations={[]} context="trait" />
 
       {/* Trait prediction disclaimer */}
       <MedicalDisclaimer

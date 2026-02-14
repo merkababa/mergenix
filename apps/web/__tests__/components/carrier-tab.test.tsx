@@ -21,6 +21,17 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
 }));
 
+// Mock react-virtuoso — render children directly (no virtualisation in tests)
+vi.mock('react-virtuoso', () => ({
+  Virtuoso: ({ data, itemContent }: { data: unknown[]; itemContent: (index: number, item: unknown) => React.ReactNode }) => (
+    <div data-testid="virtuoso-list">
+      {data.map((item, index) => (
+        <div key={index}>{itemContent(index, item)}</div>
+      ))}
+    </div>
+  ),
+}));
+
 import { CarrierTab } from '../../components/genetics/results/carrier-tab';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -107,6 +118,64 @@ const mockResults: FullAnalysisResult = {
   coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
   chipVersion: null,
   genomeBuild: 'GRCh37',
+};
+
+/** Results with per-disease coverage data for CoverageMeter integration. */
+const resultsWithCoverage: FullAnalysisResult = {
+  ...mockResults,
+  coverageMetrics: {
+    totalDiseases: 3,
+    diseasesWithCoverage: 2,
+    perDisease: {
+      'Cystic Fibrosis': {
+        variantsTested: 8,
+        variantsTotal: 10,
+        coveragePct: 80,
+        isSufficient: true,
+        confidenceLevel: 'high',
+      },
+      'Sickle Cell Disease': {
+        variantsTested: 3,
+        variantsTotal: 5,
+        coveragePct: 60,
+        isSufficient: true,
+        confidenceLevel: 'moderate',
+      },
+    },
+  },
+};
+
+/** Results with a low_risk / normal/normal result for ResidualRiskBadge testing. */
+const resultsWithNotDetected: FullAnalysisResult = {
+  ...resultsWithCoverage,
+  carrier: [
+    ...mockResults.carrier,
+    {
+      condition: 'PKU',
+      gene: 'PAH',
+      severity: 'moderate',
+      description: 'Phenylketonuria.',
+      parentAStatus: 'normal',
+      parentBStatus: 'normal',
+      offspringRisk: { affected: 0, carrier: 0, normal: 100 },
+      riskLevel: 'low_risk',
+      rsid: 'rs_pku',
+      inheritance: 'autosomal_recessive',
+    },
+  ],
+  coverageMetrics: {
+    ...resultsWithCoverage.coverageMetrics,
+    perDisease: {
+      ...resultsWithCoverage.coverageMetrics.perDisease,
+      'PKU': {
+        variantsTested: 4,
+        variantsTotal: 6,
+        coveragePct: 66.7,
+        isSufficient: true,
+        confidenceLevel: 'moderate',
+      },
+    },
+  },
 };
 
 /** A version with no carrier results for empty-state testing. */
@@ -388,5 +457,198 @@ describe('CarrierTab', () => {
     // First condition is Cystic Fibrosis (sorted by severity, both high come first)
     const btn = screen.getByLabelText(/details for Cystic Fibrosis/);
     expect(btn).toBeInTheDocument();
+  });
+
+  // ─── New component integration tests ────────────────────────────────────
+
+  it('renders ClinicalTestingBanner at the top', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<CarrierTab />);
+
+    // ClinicalTestingBanner uses role="alert"
+    const alert = screen.getByRole('alert');
+    expect(alert).toBeInTheDocument();
+    expect(alert.textContent).toContain('NOT a replacement for clinical carrier screening');
+  });
+
+  it('renders CoverageMeter when coverage data is available', () => {
+    useAnalysisStore.setState({ fullResults: resultsWithCoverage });
+
+    render(<CarrierTab />);
+
+    // Coverage meters should be present for diseases with coverage data
+    const meters = screen.getAllByRole('meter');
+    expect(meters.length).toBe(2); // CF and Sickle Cell have coverage
+
+    // Check specific coverage text
+    expect(screen.getByText('Tested 8 of 10 variants')).toBeInTheDocument();
+    expect(screen.getByText('Tested 3 of 5 variants')).toBeInTheDocument();
+  });
+
+  it('does NOT render CoverageMeter when no coverage data', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<CarrierTab />);
+
+    // No meters should be present when perDisease is empty
+    expect(screen.queryByRole('meter')).not.toBeInTheDocument();
+  });
+
+  it('renders ResidualRiskBadge for not-detected results', () => {
+    useAnalysisStore.setState({ fullResults: resultsWithNotDetected });
+
+    render(<CarrierTab />);
+
+    // PKU has low_risk + normal/normal parents + 66.7% coverage → shows "Moderate Residual Risk"
+    const statusBadges = screen.getAllByRole('status');
+    const residualBadge = statusBadges.find((el) =>
+      el.textContent?.includes('Residual Risk'),
+    );
+    expect(residualBadge).toBeDefined();
+    expect(residualBadge?.textContent).toContain('Moderate Residual Risk');
+  });
+
+  it('renders LimitationsSection at the bottom', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    render(<CarrierTab />);
+
+    expect(
+      screen.getByText('What Carrier Analysis Cannot Tell You'),
+    ).toBeInTheDocument();
+  });
+
+  it('hides LimitationsSection when no results shown', () => {
+    useAnalysisStore.setState({ fullResults: emptyResults });
+
+    render(<CarrierTab />);
+
+    expect(
+      screen.queryByText('What Carrier Analysis Cannot Tell You'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('each result card has aria-posinset and aria-setsize', () => {
+    useAnalysisStore.setState({ fullResults: mockResults });
+
+    const { container } = render(<CarrierTab />);
+
+    // Find elements with aria-posinset
+    const items = container.querySelectorAll('[aria-posinset]');
+    expect(items.length).toBe(3);
+
+    // First item
+    expect(items[0]).toHaveAttribute('aria-posinset', '1');
+    expect(items[0]).toHaveAttribute('aria-setsize', '3');
+
+    // Last item
+    expect(items[2]).toHaveAttribute('aria-posinset', '3');
+    expect(items[2]).toHaveAttribute('aria-setsize', '3');
+  });
+
+  // ─── Gap 5: Virtualization threshold (>20 items) ──────────────────────
+
+  describe('virtualization threshold', () => {
+    /** Generate N carrier results for threshold testing. */
+    function generateCarrierResults(count: number) {
+      return Array.from({ length: count }, (_, i) => ({
+        condition: `Disease ${i + 1}`,
+        gene: `GENE${i + 1}`,
+        severity: 'moderate' as const,
+        description: `Description for disease ${i + 1}.`,
+        parentAStatus: 'carrier' as const,
+        parentBStatus: 'normal' as const,
+        offspringRisk: { affected: 0, carrier: 50, normal: 50 },
+        riskLevel: 'carrier_detected' as const,
+        rsid: `rs_gen_${i + 1}`,
+        inheritance: 'autosomal_recessive' as const,
+      }));
+    }
+
+    it('uses regular list when items <= 20 (no virtualization)', () => {
+      const results20: FullAnalysisResult = {
+        ...mockResults,
+        carrier: generateCarrierResults(20),
+      };
+      useAnalysisStore.setState({ fullResults: results20 });
+
+      const { container } = render(<CarrierTab />);
+
+      // Should NOT use Virtuoso (data-testid="virtuoso-list")
+      expect(screen.queryByTestId('virtuoso-list')).not.toBeInTheDocument();
+
+      // Should use regular div with space-y-3 class
+      const regularList = container.querySelector('.space-y-3');
+      expect(regularList).toBeInTheDocument();
+
+      // All 20 disease names should be rendered
+      expect(screen.getByText('Disease 1')).toBeInTheDocument();
+      expect(screen.getByText('Disease 20')).toBeInTheDocument();
+    });
+
+    it('uses Virtuoso when items > 20 (virtualization kicks in)', () => {
+      const results21: FullAnalysisResult = {
+        ...mockResults,
+        carrier: generateCarrierResults(21),
+      };
+      useAnalysisStore.setState({ fullResults: results21 });
+
+      render(<CarrierTab />);
+
+      // Should use Virtuoso (our mock renders data-testid="virtuoso-list")
+      expect(screen.getByTestId('virtuoso-list')).toBeInTheDocument();
+
+      // All 21 disease names should still be rendered (mock renders all items)
+      expect(screen.getByText('Disease 1')).toBeInTheDocument();
+      expect(screen.getByText('Disease 21')).toBeInTheDocument();
+    });
+
+    it('threshold boundary: exactly 20 items uses regular list', () => {
+      const results20: FullAnalysisResult = {
+        ...mockResults,
+        carrier: generateCarrierResults(20),
+      };
+      useAnalysisStore.setState({ fullResults: results20 });
+
+      render(<CarrierTab />);
+
+      // 20 is NOT > 20, so no virtualization
+      expect(screen.queryByTestId('virtuoso-list')).not.toBeInTheDocument();
+    });
+
+    it('threshold boundary: exactly 21 items uses Virtuoso', () => {
+      const results21: FullAnalysisResult = {
+        ...mockResults,
+        carrier: generateCarrierResults(21),
+      };
+      useAnalysisStore.setState({ fullResults: results21 });
+
+      render(<CarrierTab />);
+
+      // 21 > 20, so virtualization kicks in
+      expect(screen.getByTestId('virtuoso-list')).toBeInTheDocument();
+    });
+
+    it('filtering below threshold switches from Virtuoso to regular list', () => {
+      const results25: FullAnalysisResult = {
+        ...mockResults,
+        carrier: generateCarrierResults(25),
+      };
+      useAnalysisStore.setState({ fullResults: results25 });
+
+      render(<CarrierTab />);
+
+      // Initially 25 items → Virtuoso
+      expect(screen.getByTestId('virtuoso-list')).toBeInTheDocument();
+
+      // Search for a specific disease to filter down below threshold
+      const searchInput = screen.getByPlaceholderText(/search by condition or gene/i);
+      fireEvent.change(searchInput, { target: { value: 'Disease 1' } });
+
+      // After filtering, we should have fewer than 20 matching results
+      // "Disease 1" matches: Disease 1, Disease 10-19 = 11 items → regular list
+      expect(screen.queryByTestId('virtuoso-list')).not.toBeInTheDocument();
+    });
   });
 });

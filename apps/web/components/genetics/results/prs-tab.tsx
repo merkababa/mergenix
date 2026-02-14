@@ -9,6 +9,10 @@ import { PrsGauge } from "@/components/genetics/prs-gauge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { SensitiveContentGuard } from "@/components/ui/sensitive-content-guard";
+import { AncestryConfidenceBadge } from "@/components/genetics/results/ancestry-confidence-badge";
+import { PrsContextDisclaimer } from "@/components/genetics/results/prs-context-disclaimer";
+import { LimitationsSection } from "@/components/genetics/results/limitations-section";
+import { ClinicalTestingBanner } from "@/components/genetics/results/clinical-testing-banner";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { PRS_ANCESTRY_WARNING } from "@/lib/constants/disclaimers";
@@ -45,6 +49,64 @@ function riskLabel(category: RiskCategory): string {
   return labels[category];
 }
 
+/**
+ * Known ancestry terms that indicate high PRS confidence (European-derived GWAS).
+ * Includes terms like "caucasian" and "white" that users may self-report;
+ * these are matched for confidence purposes but mapped to geographic labels in output.
+ */
+const HIGH_CONFIDENCE_ANCESTRY_TERMS = [
+  "european",
+  "eur",
+  "caucasian",
+  "white",
+];
+
+/** Pre-compiled regex patterns for HIGH_CONFIDENCE_ANCESTRY_TERMS (avoids recompilation in loops). */
+const HIGH_CONFIDENCE_PATTERNS = HIGH_CONFIDENCE_ANCESTRY_TERMS.map(
+  (term) => new RegExp(`(?<!non[-\\s]?)\\b${term}\\b`, "i"),
+);
+
+/**
+ * Infer ancestry confidence level from a free-text ancestry note.
+ * Uses word-boundary matching against known high-confidence ancestry terms.
+ * Defaults to 'low' if ancestry cannot be determined (safer assumption).
+ */
+function inferAncestryConfidence(
+  ancestryNote: string | undefined,
+): "high" | "medium" | "low" {
+  if (!ancestryNote) return "low";
+
+  const normalized = ancestryNote.toLowerCase();
+
+  for (const pattern of HIGH_CONFIDENCE_PATTERNS) {
+    if (pattern.test(normalized)) return "high";
+  }
+
+  return "low";
+}
+
+/**
+ * Extract a human-readable ancestry label from the ancestry note.
+ * Falls back to "Unknown" if no recognizable ancestry is mentioned.
+ */
+function extractAncestryLabel(ancestryNote: string | undefined): string {
+  if (!ancestryNote) return "Unknown";
+
+  const normalized = ancestryNote.toLowerCase();
+
+  // Check for known ancestry groups — return geographic ancestry labels (ASHG recommended)
+  if (/(?<!non[-\s]?)\beuropean\b/i.test(normalized)) return "European";
+  if (/(?<!non[-\s]?)\b(?:eur)\b/i.test(normalized)) return "European";
+  if (/(?<!non[-\s]?)\bcaucasian\b/i.test(normalized)) return "European";
+  if (/(?<!non[-\s]?)\bwhite\b/i.test(normalized)) return "European";
+  if (/\bafrican\b/i.test(normalized)) return "African";
+  if (/\beast\s*asian\b/i.test(normalized)) return "East Asian";
+  if (/\bsouth\s*asian\b/i.test(normalized)) return "South Asian";
+  if (/\bhispanic\b|\blatino\b|\bamerindian\b/i.test(normalized)) return "Hispanic/Latino";
+
+  return "Unknown";
+}
+
 export function PrsTab() {
   const router = useRouter();
   const fullResults = useAnalysisStore((s) => s.fullResults);
@@ -79,9 +141,15 @@ export function PrsTab() {
         }}
       >
     <div className="space-y-6">
+      {/* Clinical testing banner */}
+      <ClinicalTestingBanner />
+
       <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
         Polygenic Risk Scores
       </h3>
+
+      {/* PRS context disclaimer */}
+      <PrsContextDisclaimer conditionName="Polygenic Risk Scores" isOffspring />
 
       {/* Tier-limited upgrade prompt */}
       {prs.isLimited && (
@@ -120,6 +188,9 @@ export function PrsTab() {
         variant="compact"
         text="Polygenic risk scores are statistical estimates based on population-level data and may not reflect individual risk. Results should be discussed with a healthcare professional."
       />
+
+      {/* Limitations section */}
+      <LimitationsSection limitations={[]} context="prs" />
     </div>
       </SensitiveContentGuard>
     </>
@@ -180,12 +251,14 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
         </div>
       </div>
 
-      {/* Ancestry note */}
-      {ancestryNote && (
-        <p className="mt-3 text-[10px] leading-relaxed text-[var(--text-dim)]">
-          {ancestryNote}
-        </p>
-      )}
+      {/* Ancestry confidence badge */}
+      <div className="mt-3">
+        <AncestryConfidenceBadge
+          ancestry={extractAncestryLabel(ancestryNote)}
+          confidenceLevel={inferAncestryConfidence(ancestryNote)}
+          ancestryNote={ancestryNote}
+        />
+      </div>
     </GlassCard>
   );
 });

@@ -1,5 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+
+// Mock LimitationsSection (owned by Executor A)
+vi.mock('../../components/genetics/results/limitations-section', () => ({
+  LimitationsSection: ({ context }: { context?: string }) => (
+    <div data-testid="limitations-section">{context ?? 'generic'}</div>
+  ),
+}));
 import { CounselingTab } from '../../components/genetics/results/counseling-tab';
 import { useAnalysisStore } from '../../lib/stores/analysis-store';
 import type { FullAnalysisResult } from '@mergenix/shared-types';
@@ -294,12 +301,12 @@ describe('CounselingTab', () => {
     expect(screen.getByText('Upgrade Plan')).toBeInTheDocument();
   });
 
-  it('shows NSGC link button', () => {
+  it('shows NSGC link in Emotional Support Resources', () => {
     useAnalysisStore.setState({ fullResults: highUrgencyResults });
 
     render(<CounselingTab />);
 
-    expect(screen.getByText('Find a Genetic Counselor')).toBeInTheDocument();
+    expect(screen.getByText('Find a Genetic Counselor (NSGC)')).toBeInTheDocument();
   });
 
   it('does not show reasons section when reasons array is empty', () => {
@@ -333,20 +340,123 @@ describe('CounselingTab', () => {
 
     render(<CounselingTab />);
 
-    const nsgcLink = screen.getByText('Find a Genetic Counselor').closest('a')!;
+    const nsgcLink = screen.getByText('Find a Genetic Counselor (NSGC)').closest('a')!;
     expect(nsgcLink).toHaveAttribute(
       'href',
       'https://www.nsgc.org/findageneticcounselor',
     );
   });
 
-  it('NSGC link has target="_blank" and rel="noopener noreferrer"', () => {
+  it('NSGC link has target="_blank", rel="noopener noreferrer", and referrerPolicy', () => {
     useAnalysisStore.setState({ fullResults: highUrgencyResults });
 
     render(<CounselingTab />);
 
-    const nsgcLink = screen.getByText('Find a Genetic Counselor').closest('a')!;
+    const nsgcLink = screen.getByText('Find a Genetic Counselor (NSGC)').closest('a')!;
     expect(nsgcLink).toHaveAttribute('target', '_blank');
     expect(nsgcLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(nsgcLink).toHaveAttribute('referrerPolicy', 'no-referrer');
+  });
+
+  // ─── New Tests: Emotional Support Resources ─────────────────────────────
+
+  it('shows supportive intro paragraph', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(
+      screen.getByText(/knowledge is a tool that empowers you/),
+    ).toBeInTheDocument();
+  });
+
+  it('shows empathetic message when urgency is high', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(
+      screen.getByText(/We understand this information may be concerning/),
+    ).toBeInTheDocument();
+  });
+
+  it('does not show empathetic message when urgency is not high', () => {
+    useAnalysisStore.setState({ fullResults: informationalResults });
+
+    render(<CounselingTab />);
+
+    expect(
+      screen.queryByText(/We understand this information may be concerning/),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows Emotional Support Resources section', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(screen.getByText('Emotional Support Resources')).toBeInTheDocument();
+  });
+
+  it('shows Crisis Text Line information', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(screen.getByText('Crisis Text Line')).toBeInTheDocument();
+    expect(screen.getByText('741741')).toBeInTheDocument();
+  });
+
+  it('shows NSGC (Find a Counselor) with phone number', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(screen.getByText('NSGC (Find a Counselor)')).toBeInTheDocument();
+    expect(screen.getByText('1-800-233-6742', { exact: false })).toBeInTheDocument();
+  });
+
+  it('shows Find a Genetic Counselor link in resources', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(
+      screen.getByText('Find a Genetic Counselor (NSGC)'),
+    ).toBeInTheDocument();
+  });
+
+  it('referral toggle has aria-controls pointing to content id', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    const referralButton = screen.getByText('View Referral Letter').closest('button')!;
+    expect(referralButton).toHaveAttribute('aria-controls', 'referral-letter-content');
+
+    // Expand and verify the content has the matching id
+    fireEvent.click(referralButton);
+    const content = document.getElementById('referral-letter-content');
+    expect(content).toBeInTheDocument();
+    expect(content?.tagName).toBe('PRE');
+  });
+
+  it('shows US-specific resources disclaimer', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(
+      screen.getByText(/These resources are available in the United States/),
+    ).toBeInTheDocument();
+  });
+
+  it('renders LimitationsSection at bottom', () => {
+    useAnalysisStore.setState({ fullResults: highUrgencyResults });
+
+    render(<CounselingTab />);
+
+    expect(screen.getByTestId('limitations-section')).toBeInTheDocument();
+    expect(screen.getByTestId('limitations-section')).toHaveTextContent('counseling');
   });
 });

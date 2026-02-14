@@ -265,4 +265,34 @@ describe('TraitsTab', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Unlock Health Insights')).toBeInTheDocument();
   });
+
+  it('renders heading as h3 for correct hierarchy', () => {
+    useAnalysisStore.setState({ fullResults: baseMockResults });
+
+    render(<TraitsTab />);
+
+    const heading = screen.getByText('Trait Predictions');
+    expect(heading.tagName).toBe('H3');
+  });
+
+  it('renders probability bars with visible percentage text labels', () => {
+    useAnalysisStore.setState({ fullResults: baseMockResults });
+
+    render(<TraitsTab />);
+
+    // Each probability bar has a visible text percentage next to it
+    // Eye Color: Blue 25%, Green/Hazel 50%, Brown 25%
+    const percentLabels = screen.getAllByText(/%/);
+    expect(percentLabels.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('renders limitations section', () => {
+    useAnalysisStore.setState({ fullResults: baseMockResults });
+
+    render(<TraitsTab />);
+
+    expect(
+      screen.getByText(/What Trait Analysis Cannot Tell You/),
+    ).toBeInTheDocument();
+  });
 });

@@ -7,6 +7,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { LimitationsSection } from "@/components/genetics/results/limitations-section";
 import { VirtualBabyCard } from "@/components/genetics/results/virtual-baby-card";
 import type { TraitPrediction } from "@/components/genetics/results/virtual-baby-card";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
@@ -87,6 +88,8 @@ export function OverviewTab() {
 
   return (
     <div className="space-y-6">
+      <h3 className="sr-only">Results Overview</h3>
+
       {/* Demo label */}
       {isDemo && (
         <div className="flex items-center gap-2">
@@ -121,7 +124,7 @@ export function OverviewTab() {
       {/* Tier upgrade prompt for free/premium users */}
       {metadata.tier === "free" && (
         <TierUpgradePrompt
-          message={`You screened ${carrier.length.toLocaleString()} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases and ${traits.length} of 79 traits. Upgrade to Pro for full screening.`}
+          message={`You screened ${carrier.length.toLocaleString()} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases and ${traits.length} of 79 traits. Upgrade to Premium to unlock disease screening.`}
         />
       )}
       {metadata.tier === "premium" && (
@@ -170,6 +173,9 @@ export function OverviewTab() {
           }}
         />
       )}
+
+      {/* Limitations section */}
+      <LimitationsSection limitations={[]} context="overview" />
 
       {/* Medical disclaimer */}
       <MedicalDisclaimer variant="full" />
