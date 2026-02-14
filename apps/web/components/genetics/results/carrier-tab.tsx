@@ -40,6 +40,9 @@ const RISK_OPTIONS = [
   { value: "high_risk", label: "High Risk" },
   { value: "carrier_detected", label: "Carrier Detected" },
   { value: "low_risk", label: "Low Risk" },
+  { value: "potential_risk", label: "Potential Risk" },
+  { value: "coverage_insufficient", label: "Insufficient Coverage" },
+  { value: "not_tested", label: "Not Tested" },
 ];
 
 const SORT_OPTIONS = [

@@ -1,0 +1,10 @@
+{
+  "metadata": {
+    "version": "0.1.0-placeholder",
+    "lastUpdated": "2026-02-13",
+    "source": "To be populated from Ensembl REST API (GRCh37 + GRCh38)",
+    "totalVariants": 0,
+    "description": "PLACEHOLDER — liftover coordinate table to be populated via Ensembl batch query for all ~2,823 panel rsIDs. See R3 research for methodology."
+  },
+  "snps": {}
+}

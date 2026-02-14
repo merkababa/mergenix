@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "version": "0.1.0-placeholder",
+    "lastUpdated": "2026-02-13",
+    "chips": [
+      { "provider": "23andMe", "version": "v3", "totalSnps": 960000, "genomeBuild": "GRCh37", "releaseYear": 2010 },
+      { "provider": "23andMe", "version": "v4", "totalSnps": 570000, "genomeBuild": "GRCh37", "releaseYear": 2013 },
+      { "provider": "23andMe", "version": "v5", "totalSnps": 640000, "genomeBuild": "GRCh37", "releaseYear": 2017 },
+      { "provider": "AncestryDNA", "version": "v1", "totalSnps": 700000, "genomeBuild": "GRCh37", "releaseYear": 2012 },
+      { "provider": "AncestryDNA", "version": "v2", "totalSnps": 650000, "genomeBuild": "GRCh37", "releaseYear": 2016 },
+      { "provider": "MyHeritage", "version": "v1", "totalSnps": 700000, "genomeBuild": "GRCh37", "releaseYear": 2016 },
+      { "provider": "FTDNA", "version": "v1", "totalSnps": 700000, "genomeBuild": "GRCh37", "releaseYear": 2014 }
+    ],
+    "description": "PLACEHOLDER — chip coverage mapping to be populated from actual chip manifests. Currently contains chip definitions only, no per-rsID coverage data."
+  },
+  "coverage": {}
+}

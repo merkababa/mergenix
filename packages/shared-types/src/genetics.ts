@@ -42,15 +42,17 @@ export type InheritancePattern = 'autosomal_recessive' | 'autosomal_dominant' | 
 export type CarrierStatus = 'normal' | 'carrier' | 'affected' | 'unknown';
 
 /**
- * Risk classification for offspring based on parental carrier status.
+ * Risk level classification for offspring genetic conditions.
  *
- * Maps to the Python `_determine_risk_level()` return values:
  * - "high_risk": Non-zero chance of affected offspring
  * - "carrier_detected": At least one parent is a carrier but no affected offspring risk
  * - "low_risk": Neither parent carries the variant
- * - "unknown": Insufficient data
+ * - "not_tested": Variant rsID not present in genotype file (chip does not cover it)
+ * - "potential_risk": Partial coverage — cannot confidently rule out carrier status
+ * - "coverage_insufficient": Too few variants genotyped for meaningful analysis
+ * - "unknown": Insufficient or invalid data for classification
  */
-export type RiskLevel = 'high_risk' | 'carrier_detected' | 'low_risk' | 'unknown';
+export type RiskLevel = 'high_risk' | 'carrier_detected' | 'low_risk' | 'not_tested' | 'potential_risk' | 'coverage_insufficient' | 'unknown';
 
 /** Offspring risk percentages for autosomal inheritance patterns. */
 export interface OffspringRisk {
@@ -483,6 +485,10 @@ export interface DiseaseCoverage {
   coveragePct: number;
   /** Whether coverage is sufficient for meaningful analysis. */
   isSufficient: boolean;
+  /** Total pathogenic variants in ClinVar for this disease. */
+  totalKnownVariants?: number;
+  /** Confidence level based on coverage percentage. */
+  confidenceLevel?: 'high' | 'moderate' | 'low' | 'insufficient';
 }
 
 /**
@@ -513,6 +519,47 @@ export interface ChipVersion {
 
 /** Genome build/assembly. */
 export type GenomeBuild = 'GRCh37' | 'GRCh38' | 'unknown';
+
+/**
+ * Metadata extracted from a parsed genetic data file.
+ *
+ * Summarizes provider, chip, build, SNP count, and detected ancestry
+ * for a single file after parsing and detection.
+ */
+export interface FileMetadata {
+  /** Provider name (e.g., "23andMe", "AncestryDNA"), or null if unknown. */
+  provider: string | null;
+  /** Detected chip/array version, or null if undetected. */
+  chipVersion: ChipVersion | null;
+  /** Detected or assumed genome build. */
+  genomeBuild: GenomeBuild;
+  /** Total number of valid SNPs extracted. */
+  snpCount: number;
+  /** Detected population/ancestry, or null if not determined. */
+  detectedAncestry: Population | null;
+}
+
+// ─── Couple Analysis Types ───────────────────────────────────────────────────
+
+/**
+ * Summary of a couple-mode analysis, grouping both parents' file info
+ * and high-level offspring risk statistics.
+ */
+export interface CoupleAnalysis {
+  /** Parent A file metadata. */
+  parentA: { fileFormat: FileFormat; snpCount: number; genomeBuild: GenomeBuild };
+  /** Parent B file metadata. */
+  parentB: { fileFormat: FileFormat; snpCount: number; genomeBuild: GenomeBuild };
+  /** High-level offspring risk summary. */
+  offspringSummary: {
+    /** Number of conditions classified as high risk. */
+    highRiskConditions: number;
+    /** Number of conditions where at least one parent is a carrier. */
+    carrierRiskConditions: number;
+    /** Total number of conditions evaluated. */
+    totalConditionsAnalyzed: number;
+  };
+}
 
 // ─── Full Analysis Result ───────────────────────────────────────────────────
 
@@ -551,7 +598,37 @@ export interface FullAnalysisResult {
   chipVersion: ChipVersion | null;
   /** Detected or assumed genome build. */
   genomeBuild: GenomeBuild;
+  /** Couple-mode analysis summary (only present when coupleMode is true). */
+  coupleAnalysis?: CoupleAnalysis;
+  /** Parsed file metadata for the primary input file. */
+  fileMetadata?: FileMetadata;
 }
+
+// ─── Error Code Types ────────────────────────────────────────────────────────
+
+/**
+ * Standardized error codes for the genetics engine.
+ *
+ * Used in WorkerResponse error messages to allow programmatic error handling.
+ */
+export type GeneticsErrorCode =
+  | 'MISSING_DATA'
+  | 'PARSE_ERROR'
+  | 'BUILD_MISMATCH'
+  | 'UNSUPPORTED_FORMAT'
+  | 'FILE_TOO_LARGE'
+  | 'INVALID_GENOTYPE'
+  | 'DECOMPRESSION_FAILED'
+  | 'ANALYSIS_CANCELLED'
+  | 'MEMORY_EXCEEDED'
+  | 'UNKNOWN_ERROR'
+  | 'ANALYSIS_ERROR'
+  | 'PARSE_STREAM_ERROR'
+  | 'DECOMPRESS_ERROR'
+  | 'CANCELLED'
+  | 'CANCEL_ACK'
+  | 'UNKNOWN_REQUEST'
+  | 'WORKER_BUSY';
 
 // ─── Web Worker Messages ────────────────────────────────────────────────────
 
@@ -610,7 +687,7 @@ export type WorkerResponse =
   | { type: 'parse_complete'; results: ParseResultSummary[] }
   | { type: 'analysis_progress'; stage: AnalysisStage; progress: number; displayName: string }
   | { type: 'analysis_complete'; results: FullAnalysisResult }
-  | { type: 'error'; message: string; code: string }
+  | { type: 'error'; message: string; code: GeneticsErrorCode }
   | { type: 'stream_progress'; bytesRead: number; totalBytes: number; linesProcessed: number }
   | { type: 'decompress_progress'; bytesIn: number; bytesOut: number; ratio: number }
   | { type: 'decompress_complete'; format: 'zip' | 'gzip' | 'raw'; originalSize: number; decompressedSize: number }

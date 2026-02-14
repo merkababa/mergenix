@@ -68,6 +68,42 @@ export interface CarrierPanelEntry {
   notes: string;
   /** Optional disclaimer for partially-testable genes (e.g., CNV limitations). */
   disclaimer?: string;
+  /**
+   * Coverage tier indicating how well our rsID-based panel covers this gene's
+   * known pathogenic variants.
+   *
+   * - "good": Key pathogenic variants are well-covered by our rsIDs.
+   * - "partial": Some key variants covered, but many are missed.
+   * - "minimal": Less than 5% of known pathogenic variants are covered.
+   * - "untestable": Requires methods beyond SNP genotyping (e.g., repeat expansions, CNV).
+   */
+  coverage_tier?: 'good' | 'partial' | 'minimal' | 'untestable';
+}
+
+/**
+ * Metadata for the carrier panel data file.
+ */
+export interface CarrierPanelMetadata {
+  /** Semantic version of the carrier panel data schema. */
+  version: string;
+  /** ISO 8601 date of the last update (e.g., "2026-02-13"). */
+  lastUpdated: string;
+  /** Total number of entries in the panel. */
+  totalEntries: number;
+  /** Data provenance description (e.g., "ClinVar + OMIM + gnomAD"). */
+  source: string;
+  /** Human-readable description of what this panel covers. */
+  description: string;
+}
+
+/**
+ * Root structure of carrier-panel.json (wrapped format with metadata).
+ */
+export interface CarrierPanelData {
+  /** Panel metadata (version, source, counts). */
+  metadata: CarrierPanelMetadata;
+  /** Array of carrier panel entries. */
+  entries: CarrierPanelEntry[];
 }
 
 /**
@@ -268,6 +304,22 @@ export interface PgxPanel {
 
 // ─── prs_weights.json ───────────────────────────────────────────────────────
 
+/** PRS transferability rating for a specific ancestry. */
+export type PrsTransferability = 'validated' | 'moderate' | 'poor' | 'harmful';
+
+/** UI display recommendation based on ancestry transferability. */
+export type PrsUiRecommendation = 'standard' | 'caution' | 'warning' | 'hide';
+
+/** Ancestry-specific PRS metadata for a condition. */
+export interface PrsAncestryMeta {
+  /** Transferability quality of the PRS in this ancestry group. */
+  transferability: PrsTransferability;
+  /** Recommended UI treatment for displaying PRS results to users of this ancestry. */
+  ui_recommendation: PrsUiRecommendation;
+  /** Human-readable note explaining the transferability assessment. */
+  note: string;
+}
+
 /**
  * A single SNP weight in a PRS model.
  */
@@ -304,6 +356,12 @@ export interface PrsConditionDefinition {
   reference: string;
   /** SNP weights for this condition. */
   snps: PrsSnpWeight[];
+  /**
+   * Ancestry-specific PRS transferability metadata.
+   * Keys are ancestry codes: 'EUR', 'AFR', 'EAS', 'SAS', 'AMR'.
+   * Based on R5 research into cross-population PRS performance.
+   */
+  ancestry_transferability?: Record<string, PrsAncestryMeta>;
 }
 
 /**
@@ -462,4 +520,65 @@ export interface CounselingProviderEntry {
   phone: string;
   /** Additional notes about the provider. */
   notes: string;
+}
+
+// ─── chip_coverage.json ─────────────────────────────────────────────────────
+
+/** Chip/array provider and version identifier. */
+export interface ChipDefinition {
+  /** DTC provider name (e.g., "23andMe", "AncestryDNA", "MyHeritage", "FTDNA"). */
+  provider: string;
+  /** Chip version identifier (e.g., "v3", "v4", "v5"). */
+  version: string;
+  /** Approximate total SNPs on this chip array. */
+  totalSnps: number;
+  /** Genome build used by this chip. */
+  genomeBuild: 'GRCh37' | 'GRCh38';
+  /** Year the chip version was released. */
+  releaseYear: number;
+}
+
+/** Maps each rsID to which chips include it */
+export interface ChipCoverageMap {
+  metadata: {
+    version: string;
+    lastUpdated: string;
+    chips: ChipDefinition[];
+    description: string;
+  };
+  /** Key: rsID, Value: array of chip indices (referencing metadata.chips) */
+  coverage: Record<string, number[]>;
+}
+
+// ─── liftover_coordinates.json ──────────────────────────────────────────────
+
+/** Genomic coordinate for a single build. */
+export interface GenomicCoordinate {
+  /** Chromosome identifier (e.g., "1", "X", "MT"). */
+  chr: string;
+  /** 1-based genomic position. */
+  pos: number;
+  /** Reference allele at this position. */
+  ref: string;
+  /** Alternate (variant) allele. */
+  alt: string;
+}
+
+/** Liftover coordinates for a single variant */
+export interface LiftoverEntry {
+  hg19?: GenomicCoordinate;
+  hg38?: GenomicCoordinate;
+}
+
+/** Full liftover lookup table */
+export interface LiftoverTable {
+  metadata: {
+    version: string;
+    lastUpdated: string;
+    source: string;
+    totalVariants: number;
+    description: string;
+  };
+  /** Key: rsID, Value: coordinates in both builds */
+  snps: Record<string, LiftoverEntry>;
 }

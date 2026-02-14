@@ -7,14 +7,16 @@
  * data (carrier panel, trait SNPs, PGx panel, PRS weights, ethnicity
  * frequencies, glossary, and counseling providers).
  *
- * IMPORTANT: The JSON files in this package are placeholders. Run
- * `pnpm copy-data` (or `bash copy-data.sh`) to copy the actual data
- * from the legacy `data/` directory before building.
+ * NOTE: carrier-panel.json uses a wrapped format { metadata, entries[] }
+ * since v2.0.0. The legacy `data/` directory contains the old flat-array
+ * format — do NOT overwrite these files with legacy data.
  */
 
 // Re-export all data types
 export type {
   CarrierPanelEntry,
+  CarrierPanelMetadata,
+  CarrierPanelData,
   DataSource,
   TraitAlleles,
   PhenotypeMapValue,
@@ -26,6 +28,9 @@ export type {
   PgxGeneDefinition,
   PgxPanelMetadata,
   PgxPanel,
+  PrsTransferability,
+  PrsUiRecommendation,
+  PrsAncestryMeta,
   PrsSnpWeight,
   PrsConditionDefinition,
   PrsWeightsMetadata,
@@ -35,6 +40,11 @@ export type {
   EthnicityFrequenciesData,
   GlossaryEntry,
   CounselingProviderEntry,
+  ChipDefinition,
+  ChipCoverageMap,
+  GenomicCoordinate,
+  LiftoverEntry,
+  LiftoverTable,
 } from './types';
 
 // ─── Data Imports ───────────────────────────────────────────────────────────
@@ -42,6 +52,7 @@ export type {
 // TypeScript resolveJsonModule is enabled in tsconfig.json.
 
 import type {
+  CarrierPanelData,
   CarrierPanelEntry,
   TraitSnpEntry,
   PgxPanel,
@@ -49,6 +60,8 @@ import type {
   EthnicityFrequenciesData,
   GlossaryEntry,
   CounselingProviderEntry,
+  ChipCoverageMap,
+  LiftoverTable,
 } from './types';
 
 import carrierPanelRaw from './carrier-panel.json';
@@ -58,14 +71,23 @@ import prsWeightsRaw from './prs-weights.json';
 import ethnicityFrequenciesRaw from './ethnicity-frequencies.json';
 import glossaryRaw from './glossary.json';
 import counselingProvidersRaw from './counseling-providers.json';
+import chipCoverageRaw from './chip-coverage.json';
+import liftoverCoordinatesRaw from './liftover-coordinates.json';
 
 // ─── Typed Data Exports ─────────────────────────────────────────────────────
 
 /**
- * Carrier disease panel.
- * Source: data/carrier_panel.json
+ * Full carrier panel data including metadata wrapper.
+ * Source: data/carrier_panel.json (wrapped format since v2.0.0)
  */
-export const carrierPanel: CarrierPanelEntry[] = carrierPanelRaw as unknown as CarrierPanelEntry[];
+export const CARRIER_PANEL_DATA: CarrierPanelData = carrierPanelRaw as unknown as CarrierPanelData;
+
+/**
+ * Carrier disease panel entries array.
+ * Backward-compatible export — consumers that imported `carrierPanel` continue to work.
+ * Source: data/carrier_panel.json → entries[]
+ */
+export const carrierPanel: CarrierPanelEntry[] = CARRIER_PANEL_DATA.entries;
 
 /** Total number of diseases in the carrier panel. Derived from actual data. */
 export const CARRIER_PANEL_COUNT: number = carrierPanel.length;
@@ -74,7 +96,7 @@ export const CARRIER_PANEL_COUNT: number = carrierPanel.length;
 export const CARRIER_PANEL_COUNT_DISPLAY: string = CARRIER_PANEL_COUNT.toLocaleString('en-US');
 
 /** Data version for the carrier panel (tracks schema changes). */
-export const CARRIER_PANEL_VERSION = '2.0.0';
+export const CARRIER_PANEL_VERSION = CARRIER_PANEL_DATA.metadata.version;
 
 /**
  * Trait SNP database (79 traits).
@@ -113,6 +135,20 @@ export const glossary: GlossaryEntry[] = glossaryRaw as unknown as GlossaryEntry
  */
 export const counselingProviders: CounselingProviderEntry[] =
   counselingProvidersRaw as unknown as CounselingProviderEntry[];
+
+/**
+ * Chip coverage mapping (D4).
+ * Maps rsIDs to which DTC genotyping chips include them.
+ * PLACEHOLDER — to be populated from actual chip manifests.
+ */
+export const chipCoverage: ChipCoverageMap = chipCoverageRaw as unknown as ChipCoverageMap;
+
+/**
+ * Liftover coordinate table (D5).
+ * Maps rsIDs to genomic coordinates in both GRCh37 (hg19) and GRCh38 (hg38).
+ * PLACEHOLDER — to be populated via Ensembl batch query.
+ */
+export const liftoverCoordinates: LiftoverTable = liftoverCoordinatesRaw as unknown as LiftoverTable;
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 

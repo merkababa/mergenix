@@ -376,6 +376,45 @@ describe('loadAllData', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(6);
   });
 
+  it('should unwrap carrier panel data in wrapped format', async () => {
+    const carrierEntries = [
+      { rsid: 'rs1', gene: 'CFTR', condition: 'CF', inheritance: 'AR', severity: 'severe', pathogenic_allele: 'A', reference_allele: 'G', carrier_frequency: '1/25', notes: 'test' },
+    ];
+    const wrappedCarrierPanel = {
+      metadata: { version: '2.0.0', lastUpdated: '2024-01-01', totalEntries: 1, source: 'test', description: 'test' },
+      entries: carrierEntries,
+    };
+
+    const mockData = {
+      traitSnps: [{ rsid: 'rs2', trait: 'Eye Color' }],
+      pgxPanel: { metadata: {}, genes: {} },
+      prsWeights: { metadata: {}, conditions: {} },
+      ethnicity: { metadata: {}, frequencies: {} },
+      counselingProviders: [{ name: 'Dr. Smith' }],
+    };
+
+    fetchSpy
+      .mockResolvedValueOnce(createMockResponse(wrappedCarrierPanel))
+      .mockResolvedValueOnce(createMockResponse(mockData.traitSnps))
+      .mockResolvedValueOnce(createMockResponse(mockData.pgxPanel))
+      .mockResolvedValueOnce(createMockResponse(mockData.prsWeights))
+      .mockResolvedValueOnce(createMockResponse(mockData.ethnicity))
+      .mockResolvedValueOnce(createMockResponse(mockData.counselingProviders));
+
+    const result = await loadAllData();
+
+    // The wrapped format should be unwrapped: result.carrierPanel should be the entries array, not the wrapper
+    expect(result.carrierPanel).toEqual(carrierEntries);
+    expect(Array.isArray(result.carrierPanel)).toBe(true);
+    expect(result.carrierPanel).toHaveLength(1);
+    expect(result.carrierPanel[0]).toHaveProperty('rsid', 'rs1');
+    // Verify the metadata wrapper is NOT present on the result
+    expect(result.carrierPanel).not.toHaveProperty('metadata');
+    // Verify it's a plain array, not the wrapped object
+    expect((result.carrierPanel as Record<string, unknown>)['metadata']).toBeUndefined();
+    expect(fetchSpy).toHaveBeenCalledTimes(6);
+  });
+
   it('should use default manifest when none provided', async () => {
     const emptyArray: unknown[] = [];
 

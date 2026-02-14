@@ -120,9 +120,12 @@ const ZERO_RISK: OffspringRisk = { affected: 0, carrier: 0, normal: 0 };
 /** Risk level sort priority: lower number = higher priority (shown first). */
 const RISK_PRIORITY: Record<RiskLevel, number> = {
   high_risk: 0,
-  carrier_detected: 1,
-  low_risk: 2,
-  unknown: 3,
+  potential_risk: 1,
+  carrier_detected: 2,
+  low_risk: 3,
+  coverage_insufficient: 4,
+  unknown: 5,
+  not_tested: 6,
 };
 
 /** Genotype patterns that indicate a no-call (present in file but no valid genotype). */

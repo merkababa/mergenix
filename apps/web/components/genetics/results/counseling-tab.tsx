@@ -62,6 +62,9 @@ const RISK_BADGE_MAP: Record<string, string> = {
   carrier_detected: "carrier",
   low_risk: "normal",
   unknown: "default",
+  potential_risk: "moderate",
+  coverage_insufficient: "default",
+  not_tested: "default",
 };
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -178,6 +181,7 @@ export function CounselingTab() {
                         | "high"
                         | "carrier"
                         | "normal"
+                        | "moderate"
                         | "default"
                     }
                   >

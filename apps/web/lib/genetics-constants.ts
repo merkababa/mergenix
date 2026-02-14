@@ -13,4 +13,7 @@ export const RISK_LABELS: Record<string, string> = {
   carrier_detected: "Carrier Detected",
   low_risk: "Low Risk",
   unknown: "Unknown",
+  potential_risk: "Potential Risk",
+  coverage_insufficient: "Insufficient Coverage",
+  not_tested: "Not Tested",
 };
