@@ -92,7 +92,7 @@ function setupPaymentStore(overrides: Record<string, unknown> = {}) {
     paymentHistory: [
       {
         id: 'p1',
-        amount: 1290,
+        amount: 1499,
         currency: 'USD',
         status: 'succeeded',
         tierGranted: 'premium',
@@ -196,8 +196,8 @@ describe('SubscriptionPage', () => {
   it('should show payment history items', () => {
     render(<SubscriptionPage />);
     expect(screen.getByText('Premium Plan Purchase')).toBeInTheDocument();
-    // $12.90 appears in both the current plan price and in payment history
-    const priceElements = screen.getAllByText(/\$12\.90/);
+    // $14.99 appears in both the current plan price and in payment history
+    const priceElements = screen.getAllByText(/\$14\.99/);
     expect(priceElements.length).toBeGreaterThanOrEqual(1);
   });
 

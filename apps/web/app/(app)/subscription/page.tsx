@@ -21,7 +21,7 @@ import { usePaymentStore } from "@/lib/stores/payment-store";
 import { PRICING_TIERS, getPricingTier } from "@mergenix/shared-types";
 import type { Tier, PricingTier } from "@mergenix/shared-types";
 
-/** Format cents to a dollar string, e.g. 1290 -> "12.90" */
+/** Format cents to a dollar string, e.g. 1499 -> "14.99" */
 function formatAmount(cents: number): string {
   return (cents / 100).toFixed(2);
 }

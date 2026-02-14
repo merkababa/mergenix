@@ -1,8 +1,27 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { CarrierTab } from '../../components/genetics/results/carrier-tab';
 import { useAnalysisStore } from '../../lib/stores/analysis-store';
 import type { FullAnalysisResult } from '@mergenix/shared-types';
+
+// ─── Mocks ──────────────────────────────────────────────────────────────────
+
+// Mock SensitiveContentGuard to render children directly (transparent wrapper)
+vi.mock('@/components/ui/sensitive-content-guard', () => ({
+  SensitiveContentGuard: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+// Mock useAuthStore so the component gets a valid user tier
+vi.mock('@/lib/stores/auth-store', () => ({
+  useAuthStore: (selector: (s: { user: { tier: string } | null }) => unknown) =>
+    selector({ user: { tier: 'pro' } }),
+}));
+
+// Mock next/navigation for SPA navigation (useRouter)
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
+}));
+
+import { CarrierTab } from '../../components/genetics/results/carrier-tab';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 

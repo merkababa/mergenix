@@ -39,10 +39,13 @@ vi.mock('../../hooks/use-genetics-worker', () => ({
   }),
 }));
 
-// Mock sub-components that don't need deep rendering
-vi.mock('../../components/genetics/file-dropzone', () => ({
-  FileDropzone: ({ label }: { label: string }) => (
-    <div data-testid={`dropzone-${label}`}>{label}</div>
+// Mock CoupleUploadCard — renders two testable dropzone stubs
+vi.mock('../../components/genetics/couple-upload-card', () => ({
+  CoupleUploadCard: ({ parentAFile, parentBFile }: { parentAFile: File | null; parentBFile: File | null }) => (
+    <div data-testid="couple-upload-card">
+      {!parentAFile && <div data-testid="dropzone-Parent A (Mother)">Parent A (Mother)</div>}
+      {!parentBFile && <div data-testid="dropzone-Parent B (Father)">Parent B (Father)</div>}
+    </div>
   ),
 }));
 
@@ -54,6 +57,33 @@ vi.mock('../../components/genetics/analysis-progress', () => ({
 
 vi.mock('../../components/genetics/population-selector', () => ({
   PopulationSelector: () => <div data-testid="population-selector">PopulationSelector</div>,
+}));
+
+// Mock legal components that the page now imports
+vi.mock('../../components/legal/consent-modal', () => ({
+  ConsentModal: () => null,
+}));
+
+vi.mock('../../components/legal/chip-disclosure-modal', () => ({
+  ChipDisclosureModal: () => null,
+}));
+
+// Mock save-related components
+vi.mock('../../components/analysis/save-result-dialog', () => ({
+  SaveResultDialog: () => null,
+}));
+
+vi.mock('../../components/analysis/saved-results-list', () => ({
+  SavedResultsList: () => null,
+}));
+
+vi.mock('../../components/save/save-options-modal', () => ({
+  SaveOptionsModal: () => null,
+}));
+
+// Mock ErrorBoundary to render children directly
+vi.mock('../../components/error-boundary', () => ({
+  ErrorBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Import the page AFTER mocks are set up

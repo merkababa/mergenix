@@ -26,7 +26,7 @@ export type PaymentProvider = 'stripe';
 export interface PaymentRecord {
   /** Unique payment identifier. */
   id: string;
-  /** Payment amount in cents (e.g., 1290 = $12.90). */
+  /** Payment amount in cents (e.g., 1499 = $14.99). */
   amountCents: number;
   /** ISO 4217 currency code (e.g., "USD"). */
   currency: string;
@@ -43,6 +43,14 @@ export interface PaymentRecord {
 }
 
 /**
+ * Feature categories for tier gating.
+ *
+ * - 'health': Carrier screening, PRS, PGx — requires Premium or higher.
+ * - 'couple': Couple analysis, Virtual Baby, offspring predictions — requires Pro.
+ */
+export type GatedFeature = 'health' | 'couple';
+
+/**
  * Feature limits for a pricing tier.
  *
  * Mirrors TierConfig in tier_config.py with exact field mappings:
@@ -54,10 +62,10 @@ export interface PaymentRecord {
  * - ethnicity_access -> ethnicity
  */
 export interface TierLimits {
-  /** Maximum number of diseases to analyze. null = unlimited. */
+  /** Maximum number of diseases to analyze. 0 = no disease access, null = unlimited. */
   diseases: number | null;
-  /** Maximum number of traits to analyze. */
-  traits: number;
+  /** Maximum number of traits to analyze. 'all' = unlimited. */
+  traits: number | 'all';
   /** Number of pharmacogenomics genes accessible. 0 = no access. */
   pgxGenes: number;
   /** Number of PRS conditions accessible. 0 = no access. */
@@ -72,10 +80,10 @@ export interface TierLimits {
  * Pricing tier definition for display and logic.
  *
  * Mirrors the TIER_CONFIGS dict in tier_config.py.
- * Prices are from the actual tier_config.py values:
- * - Free: $0
- * - Premium: $12.90 (one-time)
- * - Pro: $29.90 (one-time)
+ * Prices (one-time, not subscription):
+ * - Free: $0 — traits only
+ * - Premium: $14.99 — individual health (carrier + PGx + PRS)
+ * - Pro: $34.99 — couple/offspring + Virtual Baby + all Premium features
  */
 export interface PricingTier {
   /** Tier identifier. */
@@ -88,12 +96,18 @@ export interface PricingTier {
   features: string[];
   /** Quantitative tier limits for logic. */
   limits: TierLimits;
+  /** Whether this tier grants access to health features (carrier, PRS, PGx). Premium+. */
+  showHealth: boolean;
+  /** Whether this tier grants access to couple features (couple analysis, Virtual Baby). Pro only. */
+  showCouple: boolean;
 }
 
 /**
  * Complete pricing tier definitions.
  *
- * Values sourced directly from Source/tier_config.py TIER_CONFIGS.
+ * Free: traits-only (no disease/carrier access).
+ * Premium ($14.99): individual health — carrier screening, PGx, PRS.
+ * Pro ($34.99): everything in Premium + couple analysis, Virtual Baby, offspring predictions.
  */
 export const PRICING_TIERS: PricingTier[] = [
   {
@@ -101,28 +115,28 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Free',
     price: 0,
     features: [
-      'Analyze top 25 genetic diseases',
-      'Analyze top 10 genetic traits',
-      'Basic carrier status report',
-      'Disease prevalence data',
+      'Analyze all genetic traits',
+      'Basic trait predictions',
       'Basic counseling recommendations',
     ],
     limits: {
-      diseases: 25,
-      traits: 10,
+      diseases: 0,
+      traits: 'all',
       pgxGenes: 0,
       prsConditions: 0,
       counseling: 'basic',
       ethnicity: false,
     },
+    showHealth: false,
+    showCouple: false,
   },
   {
     id: 'premium',
     name: 'Premium',
-    price: 12.9,
+    price: 14.99,
     features: [
       'Analyze 500+ genetic diseases',
-      'Analyze all 79 genetic traits',
+      'Analyze all genetic traits',
       'Detailed carrier reports',
       'Disease prevalence data with OMIM links',
       'Advanced filtering and search',
@@ -132,20 +146,22 @@ export const PRICING_TIERS: PricingTier[] = [
     ],
     limits: {
       diseases: 500,
-      traits: 79,
+      traits: 'all',
       pgxGenes: 5,
       prsConditions: 3,
       counseling: 'full',
       ethnicity: false,
     },
+    showHealth: true,
+    showCouple: false,
   },
   {
     id: 'pro',
     name: 'Pro',
-    price: 29.9,
+    price: 34.99,
     features: [
       'Analyze all 2700+ genetic diseases',
-      'Analyze all 79 genetic traits',
+      'Analyze all genetic traits',
       'Comprehensive carrier reports',
       'Disease prevalence data with OMIM links',
       'Advanced filtering and search',
@@ -157,15 +173,19 @@ export const PRICING_TIERS: PricingTier[] = [
       'Pharmacogenomics analysis (all 12 genes)',
       'Polygenic risk scores (all 10 conditions)',
       'Full counseling summary with referral letter',
+      'Couple analysis & offspring predictions',
+      'Virtual Baby feature',
     ],
     limits: {
       diseases: CARRIER_PANEL_COUNT,
-      traits: 79,
+      traits: 'all',
       pgxGenes: 12,
       prsConditions: 10,
       counseling: 'full_plus_letter',
       ethnicity: true,
     },
+    showHealth: true,
+    showCouple: true,
   },
 ];
 
@@ -177,4 +197,28 @@ export const PRICING_TIERS: PricingTier[] = [
  */
 export function getPricingTier(tier: Tier): PricingTier | undefined {
   return PRICING_TIERS.find((t) => t.id === tier);
+}
+
+/**
+ * Tier hierarchy for comparison. Higher number = more permissive.
+ */
+const TIER_RANK: Record<Tier, number> = {
+  free: 0,
+  premium: 1,
+  pro: 2,
+};
+
+/**
+ * Check whether a given tier has access to a gated feature category.
+ *
+ * - 'health' (carrier, PRS, PGx): requires 'premium' or higher.
+ * - 'couple' (couple analysis, Virtual Baby): requires 'pro'.
+ *
+ * @param tier - The user's current tier.
+ * @param feature - The feature category to check access for.
+ * @returns `true` if the tier grants access to the feature.
+ */
+export function canAccessFeature(tier: Tier, feature: GatedFeature): boolean {
+  const requiredTier: Tier = feature === 'health' ? 'premium' : 'pro';
+  return TIER_RANK[tier] >= TIER_RANK[requiredTier];
 }

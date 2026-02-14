@@ -1,11 +1,15 @@
 "use client";
 
 import { memo } from "react";
+import { useRouter } from "next/navigation";
 import { Pill, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { SensitiveContentGuard } from "@/components/ui/sensitive-content-guard";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
+import { canAccessFeature } from "@mergenix/shared-types";
 import type { MetabolizerStatus, PgxGeneResult } from "@mergenix/shared-types";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -50,7 +54,10 @@ function isNonNormalMetabolizer(status: MetabolizerStatus): boolean {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function PgxTab() {
+  const router = useRouter();
   const fullResults = useAnalysisStore((s) => s.fullResults);
+  const user = useAuthStore((s) => s.user);
+  const userTier = user?.tier ?? "free";
 
   if (!fullResults) return null;
 
@@ -58,6 +65,14 @@ export function PgxTab() {
   const geneResults = Object.values(pgx.results);
 
   return (
+    <SensitiveContentGuard
+      category="pgx"
+      tier={userTier}
+      requiredTier="premium"
+      onUpgrade={() => {
+        router.push("/subscription");
+      }}
+    >
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2">
@@ -77,7 +92,7 @@ export function PgxTab() {
       {/* Gene results grid */}
       <div className="grid gap-4 sm:grid-cols-2">
         {geneResults.map((gene) => (
-          <GeneCard key={gene.gene} gene={gene} />
+          <GeneCard key={gene.gene} gene={gene} canShowOffspring={canAccessFeature(userTier, "couple")} />
         ))}
       </div>
 
@@ -99,12 +114,13 @@ export function PgxTab() {
         </GlassCard>
       )}
     </div>
+    </SensitiveContentGuard>
   );
 }
 
 // ─── Gene Card Sub-component ────────────────────────────────────────────────
 
-const GeneCard = memo(function GeneCard({ gene }: { gene: PgxGeneResult }) {
+const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxGeneResult; canShowOffspring: boolean }) {
   const hasParentAWarning = isNonNormalMetabolizer(
     gene.parentA.metabolizerStatus.status,
   );
@@ -244,8 +260,8 @@ const GeneCard = memo(function GeneCard({ gene }: { gene: PgxGeneResult }) {
         </div>
       )}
 
-      {/* Offspring predictions */}
-      {gene.offspringPredictions.length > 0 && (
+      {/* Offspring predictions (Pro tier only — couple/offspring data is gated) */}
+      {canShowOffspring && gene.offspringPredictions.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
             Offspring Predictions

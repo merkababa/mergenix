@@ -137,8 +137,8 @@ describe('UpgradeModal', () => {
   it('should show "Pay the difference" for Premium->Pro upgrade', () => {
     render(<UpgradeModal {...defaultProps} />);
     expect(screen.getByText('Pay the difference')).toBeInTheDocument();
-    // Premium is $12.90, Pro is $29.90, difference is $17.00
-    expect(screen.getByText('$17.00')).toBeInTheDocument();
+    // Premium is $14.99, Pro is $34.99, difference is $20.00
+    expect(screen.getByText('$20.00')).toBeInTheDocument();
   });
 
   it('should show full price for Free->Premium upgrade', () => {
@@ -150,8 +150,8 @@ describe('UpgradeModal', () => {
       />,
     );
     expect(screen.getByText('One-time payment')).toBeInTheDocument();
-    // $12.90 appears both in the plan comparison area and in the price display
-    const priceElements = screen.getAllByText('$12.90');
+    // $14.99 appears both in the plan comparison area and in the price display
+    const priceElements = screen.getAllByText('$14.99');
     expect(priceElements.length).toBeGreaterThanOrEqual(1);
   });
 

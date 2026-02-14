@@ -1,12 +1,17 @@
 "use client";
 
 import { memo } from "react";
+import { useRouter } from "next/navigation";
+import { AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { PrsGauge } from "@/components/genetics/prs-gauge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { SensitiveContentGuard } from "@/components/ui/sensitive-content-guard";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
+import { PRS_ANCESTRY_WARNING } from "@/lib/constants/disclaimers";
 import type { RiskCategory, PrsConditionResult } from "@mergenix/shared-types";
 
 /** Map a RiskCategory to the corresponding Badge variant. */
@@ -41,7 +46,10 @@ function riskLabel(category: RiskCategory): string {
 }
 
 export function PrsTab() {
+  const router = useRouter();
   const fullResults = useAnalysisStore((s) => s.fullResults);
+  const user = useAuthStore((s) => s.user);
+  const userTier = user?.tier ?? "free";
 
   if (!fullResults) return null;
 
@@ -49,6 +57,27 @@ export function PrsTab() {
   const conditions = Object.values(prs.conditions);
 
   return (
+    <>
+      {/* PRS ancestry warning — shown above the sensitive content guard */}
+      <GlassCard
+        variant="subtle"
+        hover="none"
+        className="mb-4 flex items-start gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
+      >
+        <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#f59e0b]" aria-hidden="true" />
+        <p className="text-xs leading-relaxed text-[var(--text-body)]">
+          {PRS_ANCESTRY_WARNING}
+        </p>
+      </GlassCard>
+
+      <SensitiveContentGuard
+        category="prs"
+        tier={userTier}
+        requiredTier="premium"
+        onUpgrade={() => {
+          router.push("/subscription");
+        }}
+      >
     <div className="space-y-6">
       <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
         Polygenic Risk Scores
@@ -92,6 +121,8 @@ export function PrsTab() {
         text="Polygenic risk scores are statistical estimates based on population-level data and may not reflect individual risk. Results should be discussed with a healthcare professional."
       />
     </div>
+      </SensitiveContentGuard>
+    </>
   );
 }
 

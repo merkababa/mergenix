@@ -1,0 +1,202 @@
+"use client";
+
+import { AlertTriangle, Lock, Sparkles } from "lucide-react";
+import { GlassCard } from "@/components/ui/glass-card";
+import { Button } from "@/components/ui/button";
+import { VIRTUAL_BABY_DISCLAIMER } from "@/lib/constants/disclaimers";
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+export interface TraitPrediction {
+  /** Trait name (e.g., "Eye Color"). */
+  name: string;
+  /** Predicted phenotype value (e.g., "Brown"). */
+  prediction: string;
+  /** Probability as a fraction (0-1, e.g., 0.78). */
+  probability: number;
+  /** Optional emoji or icon name for the trait. */
+  icon?: string;
+}
+
+interface VirtualBabyCardProps {
+  /** Array of trait predictions to display. */
+  traits: TraitPrediction[];
+  /** Subscription tier — controls which traits are visible. */
+  tier: "free" | "premium" | "pro";
+  /** Callback fired when the user clicks an upgrade button. */
+  onUpgrade?: () => void;
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+/** Convert a 0-1 probability to a rounded whole-number percentage. */
+function toPercent(p: number): number {
+  return Math.round(p * 100);
+}
+
+// ─── Sub-components ─────────────────────────────────────────────────────────
+
+function TraitCard({ trait }: { trait: TraitPrediction }) {
+  const pct = toPercent(trait.probability);
+
+  return (
+    <GlassCard
+      variant="subtle"
+      hover="none"
+      className="p-4"
+      aria-label={`${trait.name}: Likely ${trait.prediction}, approximately ${pct} percent probability`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-heading text-sm font-semibold text-[var(--text-heading)]">
+          {trait.icon && (
+            <span className="mr-1.5" aria-hidden="true">
+              {trait.icon}
+            </span>
+          )}
+          {trait.name}
+        </p>
+      </div>
+
+      <p className="mt-1 text-xs text-[var(--text-body)]">
+        Likely {trait.prediction} (~{pct}% likely)
+      </p>
+
+      {/* Probability bar */}
+      <div className="mt-2">
+        <div
+          role="meter"
+          aria-valuenow={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${trait.name} probability: ${pct} percent`}
+          className="h-2 w-full rounded-full bg-[var(--glass-bg)]"
+        >
+          <div
+            className="h-2 rounded-full bg-[var(--accent-teal)]"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </div>
+    </GlassCard>
+  );
+}
+
+function LockedTraitCard({
+  traitName,
+  onUpgrade,
+}: {
+  traitName: string;
+  onUpgrade?: () => void;
+}) {
+  return (
+    <GlassCard
+      variant="subtle"
+      hover="none"
+      className="relative p-4"
+      aria-label={`${traitName}: Locked. Upgrade to Pro to view.`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-heading text-sm font-semibold text-[var(--text-dim)]">
+          {traitName}
+        </p>
+        <Lock className="h-4 w-4 flex-shrink-0 text-[var(--text-dim)]" aria-hidden="true" />
+      </div>
+
+      {/* Blurred placeholder for locked value */}
+      <div className="mt-1 h-4 w-24 rounded bg-[var(--glass-bg)] blur-sm" aria-hidden="true" />
+
+      {/* Blurred probability bar placeholder */}
+      <div className="mt-2 h-2 w-full rounded-full bg-[var(--glass-bg)] blur-sm" aria-hidden="true" />
+
+      {onUpgrade && (
+        <Button
+          size="sm"
+          variant="outline"
+          className="mt-3 w-full text-xs"
+          onClick={onUpgrade}
+        >
+          Upgrade to Pro
+        </Button>
+      )}
+    </GlassCard>
+  );
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
+/**
+ * Virtual Baby Card — displays probabilistic trait predictions for offspring.
+ *
+ * Tier behaviour:
+ * - **Pro**: Shows full trait list with probability bars.
+ * - **Free/Premium**: Only the first trait (e.g., Eye Color) is visible; rest locked with upgrade CTA.
+ *
+ * Uses neutral, probabilistic language throughout. Never frames any trait
+ * as "good" or "bad", and never uses "will have" phrasing.
+ */
+export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProps) {
+  // Determine visible vs locked traits based on tier
+  const visibleTraits = tier === "pro" ? traits : traits.slice(0, 1);
+  const lockedTraits = tier === "pro" ? [] : traits.slice(1);
+
+  return (
+    <GlassCard variant="medium" hover="none" className="p-6">
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+        <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+          Virtual Baby — Genetic Possibilities
+        </h3>
+      </div>
+
+      {/* MANDATORY disclaimer — non-dismissable, prominent, high-contrast */}
+      <section aria-label="Important disclaimer" className="mt-4">
+        <div className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4">
+          <AlertTriangle
+            className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#f59e0b]"
+            aria-hidden="true"
+          />
+          <p className="text-xs font-medium leading-relaxed text-[var(--text-body)]">
+            {VIRTUAL_BABY_DISCLAIMER}
+          </p>
+        </div>
+      </section>
+
+      {/* Trait grid */}
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        {/* Visible (unlocked) traits */}
+        {visibleTraits.map((trait) => (
+          <TraitCard key={trait.name} trait={trait} />
+        ))}
+
+        {/* Locked traits */}
+        {lockedTraits.map((trait) => (
+          <LockedTraitCard
+            key={trait.name}
+            traitName={trait.name}
+            onUpgrade={onUpgrade}
+          />
+        ))}
+      </div>
+
+      {/* Upgrade CTA for non-pro tiers */}
+      {tier !== "pro" && (
+        <div className="mt-5 flex items-center gap-4 rounded-xl border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] p-4">
+          <Lock className="h-5 w-5 flex-shrink-0 text-[#8b5cf6]" aria-hidden="true" />
+          <p className="flex-1 text-sm text-[var(--text-body)]">
+            {`Showing 1 of ${traits.length} trait predictions. Upgrade to Pro for full access.`}
+          </p>
+          {onUpgrade && (
+            <Button
+              size="sm"
+              className="bg-[rgba(139,92,246,0.15)] border border-[rgba(139,92,246,0.3)] text-[#8b5cf6] hover:bg-[rgba(139,92,246,0.25)]"
+              onClick={onUpgrade}
+            >
+              Upgrade to Pro
+            </Button>
+          )}
+        </div>
+      )}
+    </GlassCard>
+  );
+}

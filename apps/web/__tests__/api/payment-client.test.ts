@@ -271,8 +271,8 @@ describe('payment-client', () => {
       expect(typeof result.checkoutUrl).toBe('string');
       expect(typeof result.sessionId).toBe('string');
       // Verify snake_case keys do NOT exist on the returned object
-      expect((result as Record<string, unknown>)['checkout_url']).toBeUndefined();
-      expect((result as Record<string, unknown>)['session_id']).toBeUndefined();
+      expect((result as unknown as Record<string, unknown>)['checkout_url']).toBeUndefined();
+      expect((result as unknown as Record<string, unknown>)['session_id']).toBeUndefined();
     });
 
     it('should return correctly typed SubscriptionStatus with Tier type', async () => {
@@ -291,8 +291,8 @@ describe('payment-client', () => {
       // Verify tier is a valid Tier value
       expect(['free', 'premium', 'pro']).toContain(result.tier);
       // Verify snake_case keys do NOT exist on the returned object
-      expect((result as Record<string, unknown>)['is_active']).toBeUndefined();
-      expect((result as Record<string, unknown>)['payments_count']).toBeUndefined();
+      expect((result as unknown as Record<string, unknown>)['is_active']).toBeUndefined();
+      expect((result as unknown as Record<string, unknown>)['payments_count']).toBeUndefined();
     });
   });
 });

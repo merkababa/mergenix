@@ -12,8 +12,8 @@
  *
  * Tier pricing (from packages/shared-types/src/payments.ts):
  *   - Free:    $0.00  (free forever)
- *   - Premium: $12.90 (one-time)
- *   - Pro:     $29.90 (one-time)
+ *   - Premium: $14.99 (one-time)
+ *   - Pro:     $34.99 (one-time)
  *
  * @see docs/PHASE_8C_PLAN.md section 3.8
  */
@@ -84,16 +84,16 @@ test.describe('Subscription — P0 Critical', () => {
       page.getByRole('heading', { name: /upgrade to premium/i }),
     ).toBeVisible();
 
-    // Verify Premium price: $12.90
-    await expect(page.getByText('$12.90').first()).toBeVisible();
+    // Verify Premium price: $14.99
+    await expect(page.getByText('$14.99').first()).toBeVisible();
 
     // Pro upgrade card
     await expect(
       page.getByRole('heading', { name: /upgrade to pro/i }),
     ).toBeVisible();
 
-    // Verify Pro price: $29.90
-    await expect(page.getByText('$29.90').first()).toBeVisible();
+    // Verify Pro price: $34.99
+    await expect(page.getByText('$34.99').first()).toBeVisible();
 
     // Verify key feature descriptions
     await expect(page.getByText(/500\+ diseases/i).first()).toBeVisible();
@@ -156,7 +156,7 @@ test.describe('Subscription — P1 Important', () => {
     await mockPaymentHistory(page, [
       {
         id: 'pay-001',
-        amount: 1290,
+        amount: 1499,
         currency: 'usd',
         status: 'succeeded',
         tierGranted: 'premium',
@@ -173,7 +173,7 @@ test.describe('Subscription — P1 Important', () => {
 
     // Current plan should show Premium
     await expect(page.getByText('Premium').first()).toBeVisible();
-    await expect(page.getByText('$12.90').first()).toBeVisible();
+    await expect(page.getByText('$14.99').first()).toBeVisible();
 
     // Only Pro upgrade should be shown (not Premium again)
     await expect(
@@ -183,9 +183,9 @@ test.describe('Subscription — P1 Important', () => {
       page.getByRole('heading', { name: /upgrade to premium/i }),
     ).not.toBeVisible();
 
-    // Prorated display: "Pay $17.00 to upgrade"
-    // Pro ($29.90) - Premium ($12.90) = $17.00
-    await expect(page.getByText(/\$17\.00/)).toBeVisible();
+    // Prorated display: "Pay $20.00 to upgrade"
+    // Pro ($34.99) - Premium ($14.99) = $20.00
+    await expect(page.getByText(/\$20\.00/)).toBeVisible();
   });
 
   test('5. Successful payment redirects to /payment/success page', async ({ page }) => {
@@ -261,7 +261,7 @@ test.describe('Subscription — P1 Important', () => {
     await mockPaymentHistory(page, [
       {
         id: 'pay-001',
-        amount: 1290,
+        amount: 1499,
         currency: 'usd',
         status: 'succeeded',
         tierGranted: 'premium',
@@ -282,8 +282,8 @@ test.describe('Subscription — P1 Important', () => {
     // Active badge should be visible
     await expect(page.getByText('Active').first()).toBeVisible();
 
-    // Price should show $12.90
-    await expect(page.getByText('$12.90').first()).toBeVisible();
+    // Price should show $14.99
+    await expect(page.getByText('$14.99').first()).toBeVisible();
 
     // Description should say "One-time purchase - Lifetime access"
     await expect(
@@ -299,7 +299,7 @@ test.describe('Subscription — P1 Important', () => {
     await mockPaymentHistory(page, [
       {
         id: 'pay-001',
-        amount: 1290,
+        amount: 1499,
         currency: 'usd',
         status: 'succeeded',
         tierGranted: 'premium',
@@ -321,8 +321,8 @@ test.describe('Subscription — P1 Important', () => {
     // Verify payment entry is displayed
     await expect(page.getByText('Premium Plan Purchase')).toBeVisible();
 
-    // Verify the amount ($12.90 displayed from 1290 cents)
-    await expect(page.getByText('$12.90').first()).toBeVisible();
+    // Verify the amount ($14.99 displayed from 1499 cents)
+    await expect(page.getByText('$14.99').first()).toBeVisible();
 
     // Verify the status is shown
     await expect(page.getByText(/succeeded/i).first()).toBeVisible();
@@ -389,7 +389,7 @@ test.describe('Subscription — P1 Important', () => {
     await mockPaymentHistory(page, [
       {
         id: 'pay-001',
-        amount: 2990,
+        amount: 3499,
         currency: 'usd',
         status: 'succeeded',
         tierGranted: 'pro',
@@ -407,8 +407,8 @@ test.describe('Subscription — P1 Important', () => {
     // Current plan should show Pro
     await expect(page.getByText('Pro').first()).toBeVisible();
 
-    // Price should show $29.90
-    await expect(page.getByText('$29.90').first()).toBeVisible();
+    // Price should show $34.99
+    await expect(page.getByText('$34.99').first()).toBeVisible();
 
     // Active badge
     await expect(page.getByText('Active').first()).toBeVisible();

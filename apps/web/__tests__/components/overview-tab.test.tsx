@@ -1,9 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { OverviewTab } from '../../components/genetics/results/overview-tab';
 import { useAnalysisStore } from '../../lib/stores/analysis-store';
 import type { FullAnalysisResult } from '@mergenix/shared-types';
 import { CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
+
+// Mock next/navigation for SPA navigation (useRouter)
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
+}));
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 

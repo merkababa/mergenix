@@ -28,8 +28,8 @@ import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 /* -- Comparison table rows -- */
 const COMPARISON = [
-  { feature: "Disease screening", free: "Top 25", premium: "500+", pro: `All ${CARRIER_PANEL_COUNT_DISPLAY}` },
-  { feature: "Trait predictions", free: "10 traits", premium: "79 traits", pro: "79 traits" },
+  { feature: "Disease screening", free: false, premium: "500+", pro: `All ${CARRIER_PANEL_COUNT_DISPLAY}` },
+  { feature: "Trait predictions", free: "All traits", premium: "All traits", pro: "All traits" },
   { feature: "File formats", free: "23andMe only", premium: "All 4 formats", pro: "All 4 formats" },
   { feature: "Pharmacogenomics", free: false, premium: "5 genes", pro: "All 12 genes" },
   { feature: "Polygenic risk scores", free: false, premium: "3 conditions", pro: "All 10 conditions" },

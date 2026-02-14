@@ -1,11 +1,12 @@
 "use client";
 
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Sparkles } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
 import type { TraitResult } from "@mergenix/shared-types";
 
 /** Map confidence level to Badge variant. */
@@ -20,6 +21,8 @@ function confidenceVariant(confidence: TraitResult["confidence"]) {
 
 export function TraitsTab() {
   const fullResults = useAnalysisStore((s) => s.fullResults);
+  const user = useAuthStore((s) => s.user);
+  const userTier = user?.tier ?? "free";
 
   if (!fullResults) return null;
 
@@ -38,15 +41,35 @@ export function TraitsTab() {
 
   return (
     <div className="space-y-6">
+      {/* Free-tier banner — traits are included free */}
+      {userTier === "free" && (
+        <GlassCard
+          variant="subtle"
+          hover="none"
+          className="flex items-center gap-3 border-[rgba(6,214,160,0.15)] bg-[rgba(6,214,160,0.04)] p-4"
+        >
+          <Sparkles className="h-5 w-5 flex-shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
+          <p className="text-sm text-[var(--text-body)]">
+            Traits are included free. Upgrade to Premium for health insights.
+          </p>
+        </GlassCard>
+      )}
+
       <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
         Trait Predictions
       </h3>
 
-      {/* Tier upgrade prompt for free/premium users */}
-      {(metadata.tier === "free" || metadata.tier === "premium") && (
+      {/* Tier upgrade prompt — upsell health/couple features (traits are free for all tiers) */}
+      {metadata.tier === "free" && (
         <TierUpgradePrompt
-          message={`Showing ${successful.length} of 79+ trait predictions. Upgrade for comprehensive trait analysis.`}
-          buttonText="Unlock All Traits"
+          message="Upgrade to Premium to unlock disease screening, pharmacogenomics, and polygenic risk scores."
+          buttonText="Unlock Health Insights"
+        />
+      )}
+      {metadata.tier === "premium" && (
+        <TierUpgradePrompt
+          message="Upgrade to Pro for couple analysis, offspring predictions, and Virtual Baby."
+          buttonText="Upgrade to Pro"
         />
       )}
 

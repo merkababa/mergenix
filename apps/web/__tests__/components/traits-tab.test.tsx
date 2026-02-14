@@ -259,10 +259,10 @@ describe('TraitsTab', () => {
 
     render(<TraitsTab />);
 
-    // Free tier metadata -> shows TierUpgradePrompt
+    // Free tier metadata -> shows TierUpgradePrompt (upsells health features, not traits)
     expect(
-      screen.getByText(/Upgrade for comprehensive trait analysis/),
+      screen.getByText(/Upgrade to Premium to unlock disease screening/),
     ).toBeInTheDocument();
-    expect(screen.getByText('Unlock All Traits')).toBeInTheDocument();
+    expect(screen.getByText('Unlock Health Insights')).toBeInTheDocument();
   });
 });

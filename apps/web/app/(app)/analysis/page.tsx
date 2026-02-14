@@ -12,26 +12,26 @@ import {
   Lock,
   XCircle,
   Shield,
+  Save,
 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
-import { FileDropzone } from "@/components/genetics/file-dropzone";
+import { CoupleUploadCard } from "@/components/genetics/couple-upload-card";
 import { AnalysisProgress } from "@/components/genetics/analysis-progress";
 import { PopulationSelector } from "@/components/genetics/population-selector";
 import { ConsentModal } from "@/components/legal/consent-modal";
 import { ChipDisclosureModal } from "@/components/legal/chip-disclosure-modal";
-import { PartnerConsentCheckbox } from "@/components/legal/partner-consent-checkbox";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import type { GeneticFileFormat, ResultTab } from "@/lib/stores/analysis-store";
+import type { ResultTab } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useLegalStore } from "@/lib/stores/legal-store";
 import { useGeneticsWorker } from "@/hooks/use-genetics-worker";
 import { SaveResultDialog } from "@/components/analysis/save-result-dialog";
 import { SavedResultsList } from "@/components/analysis/saved-results-list";
+import { SaveOptionsModal } from "@/components/save/save-options-modal";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
 
@@ -124,15 +124,13 @@ export default function AnalysisPage() {
   // ── Store selectors ────────────────────────────────────────────────────
   const parentA = useAnalysisStore((s) => s.parentA);
   const parentB = useAnalysisStore((s) => s.parentB);
+  const parentAFile = useAnalysisStore((s) => s.parentAFile);
+  const parentBFile = useAnalysisStore((s) => s.parentBFile);
   const currentStep = useAnalysisStore((s) => s.currentStep);
   const activeTab = useAnalysisStore((s) => s.activeTab);
   const isDemo = useAnalysisStore((s) => s.isDemo);
   const errorMessage = useAnalysisStore((s) => s.errorMessage);
 
-  const setParentA = useAnalysisStore((s) => s.setParentA);
-  const setParentB = useAnalysisStore((s) => s.setParentB);
-  const setParentAFile = useAnalysisStore((s) => s.setParentAFile);
-  const setParentBFile = useAnalysisStore((s) => s.setParentBFile);
   const setActiveTab = useAnalysisStore((s) => s.setActiveTab);
   const setDemoResults = useAnalysisStore((s) => s.setDemoResults);
   const reset = useAnalysisStore((s) => s.reset);
@@ -144,6 +142,7 @@ export default function AnalysisPage() {
   const partnerConsentGiven = useLegalStore((s) => s.partnerConsentGiven);
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [showChipDisclosure, setShowChipDisclosure] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   // ── Worker hook ────────────────────────────────────────────────────────
   const { startAnalysis, cancel } = useGeneticsWorker();
@@ -151,19 +150,39 @@ export default function AnalysisPage() {
   // ── Handlers (H2: stable useCallback references) ─────────────────────
 
   const handleFileSelectA = useCallback(
-    (file: File, format: GeneticFileFormat) => {
-      setParentA({ name: file.name, format, size: file.size, snpCount: null });
-      setParentAFile(file);
+    (file: File | null) => {
+      useAnalysisStore.getState().setParentAFile(file);
+      if (file) {
+        useAnalysisStore.getState().setParentA({
+          name: file.name,
+          format: "23andme", // Format is detected during parsing
+          size: file.size,
+          snpCount: null,
+        });
+      } else {
+        // Clear parent metadata when file is removed
+        useAnalysisStore.setState({ parentA: null });
+      }
     },
-    [setParentA, setParentAFile],
+    [],
   );
 
   const handleFileSelectB = useCallback(
-    (file: File, format: GeneticFileFormat) => {
-      setParentB({ name: file.name, format, size: file.size, snpCount: null });
-      setParentBFile(file);
+    (file: File | null) => {
+      useAnalysisStore.getState().setParentBFile(file);
+      if (file) {
+        useAnalysisStore.getState().setParentB({
+          name: file.name,
+          format: "23andme", // Format is detected during parsing
+          size: file.size,
+          snpCount: null,
+        });
+      } else {
+        // Clear parent metadata when file is removed
+        useAnalysisStore.setState({ parentB: null });
+      }
     },
-    [setParentB, setParentBFile],
+    [],
   );
 
   const handleStartAnalysis = useCallback(() => {
@@ -294,9 +313,9 @@ export default function AnalysisPage() {
                 </>
               ) : (
                 <>
-                  <span className="font-semibold">Free tier:</span> Top 25 diseases + 10 traits.{" "}
+                  <span className="font-semibold">Free tier:</span> All trait predictions included.{" "}
                   <span className="text-[var(--accent-teal)]">
-                    Upgrade for full {CARRIER_PANEL_COUNT_DISPLAY} disease screening.
+                    Upgrade to Premium for disease screening.
                   </span>
                 </>
               )}
@@ -310,31 +329,17 @@ export default function AnalysisPage() {
         </GlassCard>
       )}
 
-      {/* ── File Upload Section ── */}
+      {/* ── File Upload Section (CoupleUploadCard) ── */}
       {isIdle && (
-        <div className="grid gap-6 md:grid-cols-2">
-          <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load file upload. Please refresh.</div>}>
-            <FileDropzone
-              label="Parent A (Mother)"
-              onFileSelect={handleFileSelectA}
-              selectedFile={parentA}
-            />
-          </ErrorBoundary>
-          <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load file upload. Please refresh.</div>}>
-            <FileDropzone
-              label="Parent B (Father)"
-              onFileSelect={handleFileSelectB}
-              selectedFile={parentB}
-            />
-          </ErrorBoundary>
-        </div>
-      )}
-
-      {/* ── Partner Consent Checkbox (shown when both files selected) ── */}
-      {isIdle && bothFilesSelected && (
-        <div className="mt-6">
-          <PartnerConsentCheckbox filesChanged={parentB?.name} />
-        </div>
+        <ErrorBoundary fallback={<div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">Failed to load file upload. Please refresh.</div>}>
+          <CoupleUploadCard
+            parentAFile={parentAFile}
+            parentBFile={parentBFile}
+            onFileSelectA={handleFileSelectA}
+            onFileSelectB={handleFileSelectB}
+            disabled={isRunning}
+          />
+        </ErrorBoundary>
       )}
 
       {/* ── Population Selector ── */}
@@ -448,7 +453,18 @@ export default function AnalysisPage() {
 
           {/* Action bar: Save + New Analysis */}
           <div className="flex items-center justify-between">
-            <SaveResultDialog />
+            <div className="flex items-center gap-3">
+              <SaveResultDialog />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSaveModal(true)}
+                className="gap-1.5"
+              >
+                <Save className="h-4 w-4" />
+                Save Results
+              </Button>
+            </div>
             <Button variant="outline" size="sm" onClick={handleReset}>
               New Analysis
             </Button>
@@ -513,6 +529,16 @@ export default function AnalysisPage() {
         isOpen={showChipDisclosure}
         onContinue={handleChipDisclosureContinue}
         onCancel={handleChipDisclosureCancel}
+      />
+      {/* ── Save Options Modal (PDF download / cloud save) ── */}
+      <SaveOptionsModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onDownloadPDF={() => {
+          // PDF generation is a future feature; close modal for now
+          setShowSaveModal(false);
+        }}
+        tier={userTier}
       />
     </section>
   );

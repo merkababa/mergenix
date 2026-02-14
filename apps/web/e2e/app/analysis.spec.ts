@@ -257,11 +257,11 @@ baseTest.describe('Analysis — P0 Critical', () => {
     // However, the dynamic tier notice in the page header IS based on auth store
     // tier. For unauthenticated (free) users, the tier notice should show:
     await expect(
-      page.getByText(/free tier/i).or(page.getByText(/top 25 diseases/i)),
+      page.getByText(/free tier/i).or(page.getByText(/all trait predictions/i)),
     ).toBeVisible();
   });
 
-  baseTest('8. Free user limited to top 25 diseases and 10 traits', async ({ page }) => {
+  baseTest('8. Free user sees all traits but no disease screening', async ({ page }) => {
     await page.goto('/analysis');
 
     // Load demo results
@@ -270,11 +270,11 @@ baseTest.describe('Analysis — P0 Critical', () => {
       page.getByRole('heading', { name: /analysis results/i, level: 2 }),
     ).toBeVisible({ timeout: 15000 });
 
-    // The tier notice for free users should mention the caps
-    // "Free tier: Top 25 diseases + 10 traits."
+    // The tier notice for free users should mention all traits and upgrade for disease screening
+    // "Free tier: All trait predictions included. Upgrade to Premium for disease screening."
     await expect(
-      page.getByText(/top 25 diseases/i).or(
-        page.getByText(/upgrade for full/i),
+      page.getByText(/all trait predictions/i).or(
+        page.getByText(/upgrade to premium for disease/i),
       ),
     ).toBeVisible();
   });

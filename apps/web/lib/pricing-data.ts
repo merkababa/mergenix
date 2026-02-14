@@ -8,7 +8,7 @@ import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 export interface PricingTier {
   /** Display name (e.g. "Free", "Premium", "Pro") */
   name: string;
-  /** Formatted price string (e.g. "$12.90") */
+  /** Formatted price string (e.g. "$14.99") */
   price: string;
   /** Price qualifier (e.g. "one-time", "forever") */
   priceNote: string;
@@ -59,7 +59,7 @@ export const PRICING_TIERS: PricingTier[] = [
   },
   {
     name: "Premium",
-    price: "$12.90",
+    price: "$14.99",
     priceNote: "one-time",
     description: "Full screening for serious family planners",
     features: [
@@ -89,7 +89,7 @@ export const PRICING_TIERS: PricingTier[] = [
   },
   {
     name: "Pro",
-    price: "$29.90",
+    price: "$34.99",
     priceNote: "one-time",
     description: "Advanced insights with counselor referrals",
     features: [

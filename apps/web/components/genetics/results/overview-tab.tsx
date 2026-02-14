@@ -1,24 +1,82 @@
 "use client";
 
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { AlertTriangle, HeartPulse } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { VirtualBabyCard } from "@/components/genetics/results/virtual-baby-card";
+import type { TraitPrediction } from "@/components/genetics/results/virtual-baby-card";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
 import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
+/** Emoji icons for common trait names. */
+const TRAIT_ICONS: Record<string, string> = {
+  "Eye Color": "\ud83d\udc41\ufe0f",
+  "Hair Color": "\ud83d\udc87",
+  "Earwax Type": "\ud83d\udc42",
+  "Bitter Taste": "\ud83d\udc45",
+  "Lactose Tolerance": "\ud83e\udd5b",
+  "Muscle Composition": "\ud83d\udcaa",
+  "Freckling": "\u2600\ufe0f",
+  "Cleft Chin": "\ud83e\uddd1",
+  "Widow's Peak": "\ud83e\uddd1",
+  "Asparagus Smell": "\ud83e\udd66",
+};
+
+/**
+ * Convert analysis trait results into VirtualBabyCard TraitPrediction format.
+ *
+ * For each successful trait, picks the most likely offspring phenotype and
+ * converts the percentage to a 0-1 probability fraction.
+ */
+function toVirtualBabyTraits(traits: { trait: string; status: string; offspringProbabilities: Record<string, number> }[]): TraitPrediction[] {
+  return traits
+    .filter((t) => t.status === "success")
+    .map((t) => {
+      // Find the most likely phenotype
+      const entries = Object.entries(t.offspringProbabilities);
+      if (entries.length === 0) {
+        return { name: t.trait, prediction: "Unknown", probability: 0, icon: TRAIT_ICONS[t.trait] };
+      }
+      const best = entries.reduce((a, b) => (b[1] > a[1] ? b : a), entries[0]);
+      return {
+        name: t.trait,
+        prediction: best[0],
+        probability: best[1] / 100,
+        icon: TRAIT_ICONS[t.trait],
+      };
+    });
+}
+
 export function OverviewTab() {
+  const router = useRouter();
   const fullResults = useAnalysisStore((s) => s.fullResults);
   const isDemo = useAnalysisStore((s) => s.isDemo);
   const highRiskCount = useAnalysisStore((s) => s.highRiskCount);
+  const parentA = useAnalysisStore((s) => s.parentA);
+  const parentB = useAnalysisStore((s) => s.parentB);
+  const user = useAuthStore((s) => s.user);
+  const userTier = user?.tier ?? "free";
 
   if (!fullResults) return null;
 
   const { carrier, traits, prs, metadata } = fullResults;
+
+  // Couple analysis = both parents provided (or demo mode which always has both)
+  const isCoupleAnalysis = isDemo || (parentA !== null && parentB !== null);
   const carrierMatches = carrier.filter(
     (c) => c.parentAStatus === "carrier" && c.parentBStatus === "carrier",
   ).length;
+
+  // Build VirtualBabyCard trait predictions from analysis trait results
+  const virtualBabyTraits = useMemo(
+    () => toVirtualBabyTraits(traits),
+    [traits],
+  );
 
   const stats = [
     { label: "Diseases Screened", value: carrier.length.toLocaleString(), color: "#06b6d4", icon: null },
@@ -101,6 +159,17 @@ export function OverviewTab() {
           </div>
         </div>
       </GlassCard>
+
+      {/* Virtual Baby Card (only shown for couple analyses) */}
+      {isCoupleAnalysis && virtualBabyTraits.length > 0 && (
+        <VirtualBabyCard
+          traits={virtualBabyTraits}
+          tier={userTier}
+          onUpgrade={() => {
+            router.push("/subscription");
+          }}
+        />
+      )}
 
       {/* Medical disclaimer */}
       <MedicalDisclaimer variant="full" />

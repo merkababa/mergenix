@@ -1,16 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { SelectFilter } from "@/components/ui/select-filter";
 import { PunnettSquare } from "@/components/genetics/punnett-square";
 import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
+import { SensitiveContentGuard } from "@/components/ui/sensitive-content-guard";
 import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
 import { INHERITANCE_BADGE_MAP, RISK_LABELS } from "@/lib/genetics-constants";
+import { canAccessFeature } from "@mergenix/shared-types";
 import type {
   CarrierResult,
   CarrierStatus,
@@ -80,7 +84,11 @@ function statusToAlleles(status: CarrierStatus): [string, string] {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function CarrierTab() {
+  const router = useRouter();
   const fullResults = useAnalysisStore((s) => s.fullResults);
+  const user = useAuthStore((s) => s.user);
+  const userTier = user?.tier ?? "free";
+  const canShowOffspring = canAccessFeature(userTier, "couple");
 
   // Local filter / sort state
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,6 +97,12 @@ export function CarrierTab() {
   const [riskFilter, setRiskFilter] = useState("");
   const [sortBy, setSortBy] = useState<"severity" | "name" | "risk">("severity");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Check if any carrier result has autosomal dominant inheritance
+  const hasAutosomalDominant = useMemo(
+    () => fullResults?.carrier.some((r) => r.inheritance === "autosomal_dominant") ?? false,
+    [fullResults],
+  );
 
   // Filtered + sorted results
   const filteredResults = useMemo(() => {
@@ -144,6 +158,15 @@ export function CarrierTab() {
   const tier = fullResults.metadata.tier;
 
   return (
+    <SensitiveContentGuard
+      category="carrier"
+      isAutosomalDominant={hasAutosomalDominant}
+      tier={userTier}
+      requiredTier="premium"
+      onUpgrade={() => {
+        router.push("/subscription");
+      }}
+    >
     <div className="space-y-6">
       {/* Header */}
       <h3 className="font-heading text-xl font-bold text-[var(--text-heading)]">
@@ -211,13 +234,7 @@ export function CarrierTab() {
         results
       </p>
 
-      {/* Tier upgrade prompt for free/premium users */}
-      {tier === "free" && (
-        <TierUpgradePrompt
-          message={`Showing ${filteredResults.length} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases. Upgrade to unlock the complete carrier panel.`}
-          buttonText="Unlock Full Screening"
-        />
-      )}
+      {/* Tier upgrade prompt for premium users upselling to pro */}
       {tier === "premium" && (
         <TierUpgradePrompt
           message={`You're screening ${filteredResults.length} diseases on Premium. Upgrade to Pro to unlock all ${CARRIER_PANEL_COUNT_DISPLAY} diseases including rare genetic conditions.`}
@@ -269,41 +286,51 @@ export function CarrierTab() {
                     </div>
                   </div>
                   <div className="text-right">
-                    {xLinked ? (
-                      <div>
-                        <p className="text-xs font-medium text-[var(--text-muted)]">
-                          <span className="font-mono font-semibold text-[#f43f5e]">
-                            {(result.offspringRisk as XLinkedOffspringRisk).sons.affected}%
-                          </span>{" "}
-                          sons
-                        </p>
-                        <p className="text-xs font-medium text-[var(--text-muted)]">
-                          <span className="font-mono font-semibold text-[#06d6a0]">
-                            {(result.offspringRisk as XLinkedOffspringRisk).daughters.affected}%
-                          </span>{" "}
-                          daughters
-                        </p>
-                        <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
-                          Affected Risk
-                        </p>
-                      </div>
+                    {canShowOffspring ? (
+                      xLinked ? (
+                        <div>
+                          <p className="text-xs font-medium text-[var(--text-muted)]">
+                            <span className="font-mono font-semibold text-[#f43f5e]">
+                              {(result.offspringRisk as XLinkedOffspringRisk).sons.affected}%
+                            </span>{" "}
+                            sons
+                          </p>
+                          <p className="text-xs font-medium text-[var(--text-muted)]">
+                            <span className="font-mono font-semibold text-[#06d6a0]">
+                              {(result.offspringRisk as XLinkedOffspringRisk).daughters.affected}%
+                            </span>{" "}
+                            daughters
+                          </p>
+                          <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                            Affected Risk
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <p
+                            className={`font-heading text-2xl font-extrabold ${
+                              result.offspringRisk.affected >= 25
+                                ? "text-[#f43f5e]"
+                                : result.offspringRisk.affected > 0
+                                  ? "text-[#f59e0b]"
+                                  : "text-[#06d6a0]"
+                            }`}
+                          >
+                            {result.offspringRisk.affected}%
+                          </p>
+                          <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                            Offspring Risk
+                          </p>
+                        </>
+                      )
                     ) : (
-                      <>
-                        <p
-                          className={`font-heading text-2xl font-extrabold ${
-                            result.offspringRisk.affected >= 25
-                              ? "text-[#f43f5e]"
-                              : result.offspringRisk.affected > 0
-                                ? "text-[#f59e0b]"
-                                : "text-[#06d6a0]"
-                          }`}
-                        >
-                          {result.offspringRisk.affected}%
-                        </p>
+                      <div className="flex flex-col items-end gap-1" title="Upgrade to Pro for offspring risk predictions">
+                        <Lock className="h-4 w-4 text-[#8b5cf6]" aria-hidden="true" />
+                        <span className="text-xs font-medium text-[#8b5cf6]">Pro</span>
                         <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
                           Offspring Risk
                         </p>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -332,8 +359,8 @@ export function CarrierTab() {
                   </div>
                 </div>
 
-                {/* Punnett square when both parents are carriers */}
-                {bothParentsCarriers(result) && (
+                {/* Punnett square when both parents are carriers (Pro only) */}
+                {bothParentsCarriers(result) && canShowOffspring && (
                   <div className="mt-4">
                     <PunnettSquare
                       parentAAlleles={statusToAlleles(result.parentAStatus)}
@@ -347,7 +374,7 @@ export function CarrierTab() {
                 <button
                   type="button"
                   onClick={() => setExpandedId(isExpanded ? null : result.rsid)}
-                  className="mt-3 flex items-center gap-1 text-xs font-medium text-[var(--accent-teal)] transition-colors hover:text-[var(--text-primary)]"
+                  className="mt-3 flex min-h-[44px] items-center gap-1 py-2 text-xs font-medium text-[var(--accent-teal)] transition-colors hover:text-[var(--text-primary)]"
                   aria-expanded={isExpanded}
                   aria-label={`${isExpanded ? "Hide" : "Show"} details for ${result.condition}`}
                   aria-controls={`carrier-details-${result.rsid}`}
@@ -393,7 +420,8 @@ export function CarrierTab() {
                       </p>
                     )}
 
-                    {/* Full risk breakdown */}
+                    {/* Full risk breakdown (Pro only — offspring predictions are gated) */}
+                    {canShowOffspring ? (
                     <div className="space-y-2">
                       <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
                         Offspring Risk Breakdown
@@ -492,6 +520,19 @@ export function CarrierTab() {
                         </GlassCard>
                       )}
                     </div>
+                    ) : (
+                      <GlassCard
+                        variant="subtle"
+                        hover="none"
+                        className="flex items-center gap-3 border-[rgba(139,92,246,0.15)] bg-[rgba(139,92,246,0.04)] p-3"
+                      >
+                        <Lock className="h-4 w-4 flex-shrink-0 text-[#8b5cf6]" aria-hidden="true" />
+                        <p className="text-xs text-[var(--text-muted)]">
+                          Offspring risk breakdown is available on the{" "}
+                          <span className="font-semibold text-[#8b5cf6]">Pro</span> plan.
+                        </p>
+                      </GlassCard>
+                    )}
                   </div>
                 )}
               </GlassCard>
@@ -500,5 +541,6 @@ export function CarrierTab() {
         </div>
       )}
     </div>
+    </SensitiveContentGuard>
   );
 }
