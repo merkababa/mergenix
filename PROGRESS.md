@@ -112,7 +112,7 @@
 | 2026-02-13 | Claude | Stream D Data Cleanup: Remove 22 CNV-untestable diseases (SMN1, DMD, HBA1/2, FXN, DMPK, CNBP, C9orf72, PLP1, UBE3A, JPH3). Add disclaimers to 46 entries (9 partially-testable genes). Update 8 outdated gene symbols (IKBKAP→ELP1, etc). Add 4 missing variants (HbC, GALT S135L, MEFV V726A, PAH IVS12). Centralize count via CARRIER_PANEL_COUNT (no more magic numbers). 2,697 final entries. Gate 1: 5/5 Gemini passed. | PR #47 |
 | 2026-02-13 | Claude | Stream E Engine Refactor: 25 tasks (E1-E23 + T1+T8), 11 new modules, 898 tests across 20 test files. Streaming parser, build detection, strand harmonization, liftover, carrier analysis, coverage calc, chip detection, PGx, PRS, residual risk, traits, couple combiner, counseling, data loader, device/memory, decompression, progress. Gate 1: 10/10 A+ Gemini. Gate 2: 7/10 Claude completed (all issues fixed). 48 files, +12,250 LOC. | PR #48 |
 | 2026-02-14 | Claude | Stream TD Types & Data Enrichment: Carrier panel restructure (flat→wrapped {metadata,entries[]}), coverage_tier for 2,697 entries, PRS ancestry_transferability (10 conditions × 5 ancestries), RiskLevel expansion (4→7: +not_tested, potential_risk, coverage_insufficient), rsID fixes (HbC rs33950507, FMF V726A rs28940580), encoding fixes (4,490 em-dashes), UI risk constants updated, defensive data-loader format detection. Gate 1: 7A+/3A Gemini. Gate 2: Architect A, Security A-, Code A-, Tech A-, Scientist A-, QA B+. 14 files, 901 tests. | PR #49 |
-| 2026-02-14 | Claude | Stream F Sprint 1 — Foundation + Gates: 15/15 tasks (4 Gemini research + 11 Claude implementation). Consent modal (GDPR Art 9, IntersectionObserver scroll-to-unlock), partner consent checkbox, chip disclosure modal, age verify focus restoration, skip link to layout, modal manager (Zustand), error announcer (dual aria-live regions), aria-live analysis progress, reduced motion, error boundary (class component), touch targets (44px), integration wiring. 35 files, +2890 LOC, 698 tests. | feature/stream-f-sprint-1-foundation |
+| 2026-02-14 | Claude | Stream F Sprint 1 — Foundation + Gates: 15/15 tasks (4 Gemini research + 11 Claude implementation). Consent modal (GDPR Art 9, IntersectionObserver scroll-to-unlock), partner consent checkbox, chip disclosure modal, age verify focus restoration, skip link to layout, modal manager (Zustand), error announcer (dual aria-live regions), aria-live analysis progress, reduced motion, error boundary (class component), touch targets (44px), integration wiring. Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes). 35 files, +2890 LOC, 714 tests. | PR #50 |
 
 ---
 
@@ -141,15 +141,17 @@
      - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
      - 24 files changed in review fix commit, 898 tests across 20 test files
    - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
-   - **Stream F (Frontend): SPRINT 1 COMPLETE** — branch `feature/stream-f-sprint-1-foundation`
+   - **Stream F (Frontend): SPRINT 1 PR #50** — awaiting merge
      - Full plan: `docs/research/streamF/STREAM_F_PLAN.md` (47 tasks, 4 sprints)
-     - Sprint 1: Foundation + Gates (15/15 tasks) — DONE
+     - Sprint 1: Foundation + Gates (15/15 tasks) — PR #50 created
        - 4 Gemini research: F19 contrast audit (SEVERE AA failures), F22 virtualization (react-virtuoso), F48 PDF spike (pdfmake/react-pdf), F6 terminology map (60+ instances)
        - 11 Claude tasks: consent modal (F2), partner consent (F27), chip disclosure (F25), age verify focus (F28), skip link (F44), modal manager (F32), error announcer (F35), aria-live (F16), reduced motion (F34), error boundary (F36), touch targets (F20)
-       - Integration: ConsentModal→analysis, PartnerConsent→couple upload, ChipDisclosure→payment
-       - 35 files changed, 2890 insertions, 698/698 tests passing
+       - Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes applied)
+       - Key fixes: Rules of Hooks violation, partner consent bypass, checkout URL validation, clipboard sanitization, aria-hidden on decorative icons, useModalManager integration, programmatic focus management
+       - 35 files changed, 714/714 tests, lint clean
        - Research archive: `docs/research/streamF/` (4 files)
-       - **Next:** Review pipeline → PR creation
+       - Implementation log: `docs/implementation/streamF/sprint1-foundation.md`
+       - **Next:** Merge PR #50 → Sprint 2 planning
      - Sprint 2: Core UX + Tiers (10 tasks) — pending
      - Sprint 3: Results + Visualization (13 tasks) — pending
      - Sprint 4: Output + Compliance (9 tasks) — pending
