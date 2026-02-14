@@ -113,6 +113,7 @@
 | 2026-02-13 | Claude | Stream E Engine Refactor: 25 tasks (E1-E23 + T1+T8), 11 new modules, 898 tests across 20 test files. Streaming parser, build detection, strand harmonization, liftover, carrier analysis, coverage calc, chip detection, PGx, PRS, residual risk, traits, couple combiner, counseling, data loader, device/memory, decompression, progress. Gate 1: 10/10 A+ Gemini. Gate 2: 7/10 Claude completed (all issues fixed). 48 files, +12,250 LOC. | PR #48 |
 | 2026-02-14 | Claude | Stream TD Types & Data Enrichment: Carrier panel restructure (flat→wrapped {metadata,entries[]}), coverage_tier for 2,697 entries, PRS ancestry_transferability (10 conditions × 5 ancestries), RiskLevel expansion (4→7: +not_tested, potential_risk, coverage_insufficient), rsID fixes (HbC rs33950507, FMF V726A rs28940580), encoding fixes (4,490 em-dashes), UI risk constants updated, defensive data-loader format detection. Gate 1: 7A+/3A Gemini. Gate 2: Architect A, Security A-, Code A-, Tech A-, Scientist A-, QA B+. 14 files, 901 tests. | PR #49 |
 | 2026-02-14 | Claude | Stream F Sprint 1 — Foundation + Gates: 15/15 tasks (4 Gemini research + 11 Claude implementation). Consent modal (GDPR Art 9, IntersectionObserver scroll-to-unlock), partner consent checkbox, chip disclosure modal, age verify focus restoration, skip link to layout, modal manager (Zustand), error announcer (dual aria-live regions), aria-live analysis progress, reduced motion, error boundary (class component), touch targets (44px), integration wiring. Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes). 35 files, +2890 LOC, 714 tests. | PR #50 |
+| 2026-02-14 | Claude | Stream F Sprint 2 — Core UX + Tier Gating: 6 new components (SensitiveContentGuard, CoupleUploadCard, VirtualBabyCard, SaveOptionsModal, DeleteAccountSection, disclaimers), 7 modified result tabs. canAccessFeature() tier gating, pricing aligned $14.99/$34.99, offspring risk Pro-gated, PDF Pro-gated, a11y (focus traps, alertdialog, meter roles, 44px targets). Gate 1: 9/9 A Gemini (3 rounds). Gate 2: 9/9 A-+ Claude (3 rounds, 15 new tests). 34 files, +3753 LOC, 803 tests. | PR #51 |
 
 ---
 
@@ -141,18 +142,20 @@
      - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
      - 24 files changed in review fix commit, 898 tests across 20 test files
    - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
-   - **Stream F (Frontend): SPRINT 1 PR #50** — awaiting merge
+   - **Stream F (Frontend): SPRINT 2 PR #51** — awaiting merge
      - Full plan: `docs/research/streamF/STREAM_F_PLAN.md` (47 tasks, 4 sprints)
-     - Sprint 1: Foundation + Gates (15/15 tasks) — PR #50 created
-       - 4 Gemini research: F19 contrast audit (SEVERE AA failures), F22 virtualization (react-virtuoso), F48 PDF spike (pdfmake/react-pdf), F6 terminology map (60+ instances)
-       - 11 Claude tasks: consent modal (F2), partner consent (F27), chip disclosure (F25), age verify focus (F28), skip link (F44), modal manager (F32), error announcer (F35), aria-live (F16), reduced motion (F34), error boundary (F36), touch targets (F20)
-       - Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes applied)
-       - Key fixes: Rules of Hooks violation, partner consent bypass, checkout URL validation, clipboard sanitization, aria-hidden on decorative icons, useModalManager integration, programmatic focus management
+     - Sprint 1: Foundation + Gates (15/15 tasks) — **PR #50 MERGED**
        - 35 files changed, 714/714 tests, lint clean
-       - Research archive: `docs/research/streamF/` (4 files)
-       - Implementation log: `docs/implementation/streamF/sprint1-foundation.md`
-       - **Next:** Merge PR #50 → Sprint 2 planning
-     - Sprint 2: Core UX + Tiers (10 tasks) — pending
+       - Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes applied)
+     - Sprint 2: Core UX + Tiers — **PR #51 created** (2026-02-14)
+       - 6 new components: SensitiveContentGuard, CoupleUploadCard, VirtualBabyCard, SaveOptionsModal, DeleteAccountSection, disclaimers.ts
+       - 7 modified: analysis/page.tsx, carrier-tab, pgx-tab, prs-tab, traits-tab, overview-tab, products-content
+       - Tier gating: canAccessFeature() in shared-types, enforced across carrier/pgx/save/virtual-baby
+       - Pricing aligned: $14.99 Premium / $34.99 Pro across all sources
+       - Gate 1 (Gemini): 9/9 A (3 rounds — offspring risk gating, traits copy)
+       - Gate 2 (Claude): 9/9 A-+ (3 rounds — 15 new tests, pricing fix, PGx gating, PDF gating, modal fixes)
+       - 34 files changed, +3,753/-173, 803 tests, lint/typecheck/build clean
+       - **Next:** Merge PR #51 → Sprint 3 planning
      - Sprint 3: Results + Visualization (13 tasks) — pending
      - Sprint 4: Output + Compliance (9 tasks) — pending
      - 8 Gemini tasks (17%), 39 Claude tasks (83%)
