@@ -33,7 +33,8 @@
 | Refactor Plan + Research Alignment | Claude | **Merged** | docs/refactor-plan | PR #45 — Master refactor plan (172 tasks, 48 CRITICAL, 11 streams) + research alignment matrix (144+ decisions). Gate 1: 10/10 A+ Gemini (6 rounds). Gate 2: 7 A- + 3 B+ Claude (5 rounds, ~73 fixes). |
 | Stream 0: Research Phase | Claude | **11/12 Done** | docs/stream0-research-archive | PR #46 — 11 Gemini tasks + 1 Claude task. Research archive in docs/research/stream0/. R12 partial. |
 | Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
-| Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **PR Open** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
+| Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **Merged** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
+| Stream F Sprint 4: Output, Compliance & Polish | Claude | **PR Open** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF export (pdfmake), security page, privacy page, sample report, consent management, stale results banner, SEO/JSON-LD, WCAG reflow. 32 files, +5,297 LOC, 67 new tests (1,043 total). Gate 1: 10/10 A+ Gemini (3 rounds). Gate 2: Legal A, Ethics fixed. |
 
 ---
 
