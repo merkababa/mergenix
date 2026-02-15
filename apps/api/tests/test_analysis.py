@@ -1,12 +1,17 @@
 """
-Tests for the analysis result persistence endpoints.
+Tests for the analysis result persistence endpoints (ZKE — Zero-Knowledge Encryption).
 
-Covers saving, listing, loading (decrypted), deleting analysis results,
-tier gating, ownership enforcement, encryption round-trip, and auth checks.
+The server stores opaque EncryptedEnvelope blobs from the client as-is.
+It never encrypts or decrypts result data — the client is responsible for
+all cryptographic operations.
+
+Covers saving, listing, loading, deleting analysis results,
+tier gating, ownership enforcement, opaque round-trip, and auth checks.
 """
 
 from __future__ import annotations
 
+import json
 import uuid
 
 import pytest
@@ -17,12 +22,23 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tests.fixtures import VALID_FULL_ANALYSIS_RESULT
-
 # ── Test Data ────────────────────────────────────────────────────────────
 
-
-SAMPLE_RESULT_DATA = VALID_FULL_ANALYSIS_RESULT
+# A valid EncryptedEnvelope dict matching schemas/encryption.py
+VALID_ENCRYPTED_ENVELOPE: dict = {
+    "iv": "aabbccddeeff00112233aabb",  # 24 hex chars = 12 bytes
+    "ciphertext": "deadbeefcafe1234567890abcdef0123456789abcdef",  # valid hex, even length
+    "salt": "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",  # 64 hex = 32 bytes
+    "kdf_params": {
+        "algorithm": "argon2id",
+        "memory_cost": 65536,
+        "time_cost": 3,
+        "parallelism": 1,
+        "salt_length": 32,
+        "key_length": 32,
+    },
+    "version": "v1:argon2id:aes-gcm",
+}
 
 SAMPLE_SUMMARY = {
     "trait_count": 1,
@@ -39,15 +55,17 @@ def _save_payload(
     result_data: dict | None = None,
     summary: dict | None = None,
     consent_given: bool = True,
+    data_version: str | None = None,
 ) -> dict:
-    """Build a save-analysis request payload."""
+    """Build a save-analysis request payload with an EncryptedEnvelope."""
     return {
         "label": label,
         "parent1_filename": parent1,
         "parent2_filename": parent2,
-        "result_data": result_data or SAMPLE_RESULT_DATA,
+        "result_data": result_data or VALID_ENCRYPTED_ENVELOPE,
         "summary": summary or SAMPLE_SUMMARY,
         "consent_given": consent_given,
+        "data_version": data_version,
     }
 
 
@@ -61,7 +79,7 @@ async def test_save_result_success(
     auth_headers: dict[str, str],
     db_session: AsyncSession,
 ) -> None:
-    """POST /analysis/results should save and encrypt the analysis result."""
+    """POST /analysis/results should save the EncryptedEnvelope as an opaque blob."""
     response = await client.post(
         "/analysis/results",
         headers=auth_headers,
@@ -73,21 +91,42 @@ async def test_save_result_success(
     assert data["label"] == "Our First Analysis"
     assert "created_at" in data
 
-    # Verify encrypted in DB (not plaintext)
+    # Verify stored as JSON-serialized envelope in DB
     result = await db_session.execute(
         select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"]))
     )
     row = result.scalar_one()
     assert row.result_data is not None
     assert isinstance(row.result_data, bytes)
-    assert row.result_nonce is not None
-    assert isinstance(row.result_nonce, bytes)
-    assert len(row.result_nonce) == 12  # AES-GCM nonce is 12 bytes
-    # Verify it's not stored as plaintext
-    assert b"Cystic Fibrosis" not in row.result_data
+    # The stored data should be deserializable back to the envelope
+    stored_envelope = json.loads(row.result_data.decode("utf-8"))
+    assert stored_envelope == VALID_ENCRYPTED_ENVELOPE
     # Verify summary is stored as plaintext
     assert row.summary_json is not None
     assert row.summary_json["trait_count"] == 1
+
+
+@pytest.mark.asyncio
+async def test_save_result_with_data_version(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """POST /analysis/results should store data_version when provided."""
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(data_version="1.2.0"),
+    )
+    assert response.status_code == 201
+    data = response.json()
+
+    result = await db_session.execute(
+        select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"]))
+    )
+    row = result.scalar_one()
+    assert row.data_version == "1.2.0"
 
 
 @pytest.mark.asyncio
@@ -177,6 +216,77 @@ async def test_save_result_empty_label(
     assert response.status_code == 422
 
 
+@pytest.mark.asyncio
+async def test_save_result_invalid_envelope_returns_422(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /analysis/results with invalid EncryptedEnvelope schema should return 422."""
+    # Missing required envelope fields (iv, ciphertext, salt, kdf_params, version)
+    invalid_envelope = {"invalid": "data"}
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(result_data=invalid_envelope),
+    )
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_save_result_invalid_envelope_bad_iv(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /analysis/results with bad IV hex should return 422."""
+    bad_envelope = {**VALID_ENCRYPTED_ENVELOPE, "iv": "not-hex!"}
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(result_data=bad_envelope),
+    )
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_save_result_invalid_envelope_bad_version(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /analysis/results with bad version format should return 422."""
+    bad_envelope = {**VALID_ENCRYPTED_ENVELOPE, "version": "bad-version"}
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(result_data=bad_envelope),
+    )
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_save_result_invalid_envelope_low_memory_cost(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /analysis/results with too-low KDF memory_cost should return 422."""
+    bad_envelope = {
+        **VALID_ENCRYPTED_ENVELOPE,
+        "kdf_params": {
+            **VALID_ENCRYPTED_ENVELOPE["kdf_params"],
+            "memory_cost": 100,  # below 65536 minimum
+        },
+    }
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(result_data=bad_envelope),
+    )
+    assert response.status_code == 422
+
+
 # ── List Results Tests ───────────────────────────────────────────────────
 
 
@@ -198,7 +308,7 @@ async def test_list_results_returns_summaries(
     test_user: User,
     auth_headers: dict[str, str],
 ) -> None:
-    """GET /analysis/results should return summaries without decrypted data."""
+    """GET /analysis/results should return summaries without envelope data."""
     # First save a result
     await client.post(
         "/analysis/results",
@@ -216,7 +326,7 @@ async def test_list_results_returns_summaries(
     assert item["parent2_filename"] == "parent2.vcf"
     assert item["tier_at_time"] == "free"
     assert item["summary"]["trait_count"] == 1
-    assert "result_data" not in item  # Should NOT contain decrypted data
+    assert "result_data" not in item  # Should NOT contain envelope data
 
 
 @pytest.mark.asyncio
@@ -255,16 +365,16 @@ async def test_list_results_unauthenticated(
     assert response.status_code in (401, 403)
 
 
-# ── Get Result (Decrypted) Tests ─────────────────────────────────────────
+# ── Get Result (Opaque Envelope) Tests ──────────────────────────────────
 
 
 @pytest.mark.asyncio
-async def test_get_result_decrypted(
+async def test_get_result_returns_opaque_envelope(
     client: AsyncClient,
     test_user: User,
     auth_headers: dict[str, str],
 ) -> None:
-    """GET /analysis/results/{id} should return decrypted analysis data."""
+    """GET /analysis/results/{id} should return the opaque EncryptedEnvelope as-is."""
     # Save a result
     save_resp = await client.post(
         "/analysis/results",
@@ -282,8 +392,47 @@ async def test_get_result_decrypted(
     data = response.json()
     assert data["id"] == result_id
     assert data["label"] == "Our First Analysis"
-    assert data["result_data"] == SAMPLE_RESULT_DATA
+    # The result_data should be the exact EncryptedEnvelope we sent
+    assert data["result_data"] == VALID_ENCRYPTED_ENVELOPE
     assert data["summary"] == SAMPLE_SUMMARY
+
+
+@pytest.mark.asyncio
+async def test_get_result_round_trip_opaque(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """Round-trip: save an envelope, get it back — should be identical."""
+    envelope = {
+        "iv": "112233445566778899aabbcc",  # 24 hex chars
+        "ciphertext": "aabbccdd11223344aabbccdd11223344",  # valid hex
+        "salt": "aabbccdd11223344aabbccdd11223344aabbccdd11223344aabbccdd11223344",  # 64 hex
+        "kdf_params": {
+            "algorithm": "argon2id",
+            "memory_cost": 131072,
+            "time_cost": 4,
+            "parallelism": 2,
+            "salt_length": 32,
+            "key_length": 32,
+        },
+        "version": "v1:argon2id:aes-gcm",
+    }
+
+    save_resp = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=_save_payload(result_data=envelope),
+    )
+    assert save_resp.status_code == 201
+    result_id = save_resp.json()["id"]
+
+    get_resp = await client.get(
+        f"/analysis/results/{result_id}",
+        headers=auth_headers,
+    )
+    assert get_resp.status_code == 200
+    assert get_resp.json()["result_data"] == envelope
 
 
 @pytest.mark.asyncio
@@ -420,60 +569,6 @@ async def test_delete_result_unauthenticated(
     fake_id = str(uuid.uuid4())
     response = await client.delete(f"/analysis/results/{fake_id}")
     assert response.status_code in (401, 403)
-
-
-# ── Encryption Round-Trip Test ───────────────────────────────────────────
-
-
-@pytest.mark.asyncio
-async def test_encryption_round_trip() -> None:
-    """Encrypt and decrypt should produce identical data."""
-    from app.encryption import decrypt_result, encrypt_result
-
-    test_data = {"key": "value", "nested": {"a": 1, "b": [2, 3]}}
-    user_id = str(uuid.uuid4())
-    secret = "test-secret-for-encryption"
-
-    ciphertext, nonce = await encrypt_result(test_data, user_id, secret)
-
-    assert isinstance(ciphertext, bytes)
-    assert isinstance(nonce, bytes)
-    assert len(nonce) == 12
-
-    decrypted = await decrypt_result(ciphertext, nonce, user_id, secret)
-
-    assert decrypted == test_data
-
-
-@pytest.mark.asyncio
-async def test_encryption_different_users_different_ciphertext() -> None:
-    """Different user IDs should produce different ciphertext for the same data."""
-    from app.encryption import encrypt_result
-
-    test_data = {"key": "value"}
-    secret = "test-secret-for-encryption"
-
-    ct1, _ = await encrypt_result(test_data, str(uuid.uuid4()), secret)
-    ct2, _ = await encrypt_result(test_data, str(uuid.uuid4()), secret)
-
-    assert ct1 != ct2
-
-
-@pytest.mark.asyncio
-async def test_encryption_wrong_user_cannot_decrypt() -> None:
-    """Decrypting with a different user ID should fail."""
-    from app.encryption import decrypt_result, encrypt_result
-    from cryptography.exceptions import InvalidTag
-
-    test_data = {"key": "value"}
-    secret = "test-secret-for-encryption"
-    user_id = str(uuid.uuid4())
-    wrong_user_id = str(uuid.uuid4())
-
-    ciphertext, nonce = await encrypt_result(test_data, user_id, secret)
-
-    with pytest.raises(InvalidTag):
-        await decrypt_result(ciphertext, nonce, wrong_user_id, secret)
 
 
 # ── Delete Frees Tier Slot Test ──────────────────────────────────────────
@@ -668,42 +763,6 @@ async def test_save_result_filenames_too_long(
     assert response.status_code == 422
 
 
-# ── Decryption Error Handling Tests ────────────────────────────────────
-
-
-@pytest.mark.asyncio
-async def test_get_result_corrupted_data_returns_500(
-    client: AsyncClient,
-    test_user: User,
-    auth_headers: dict[str, str],
-    db_session: AsyncSession,
-) -> None:
-    """GET /analysis/results/{id} with corrupted ciphertext should return 500."""
-    # Create a result with intentionally corrupted encrypted data
-    analysis = AnalysisResult(
-        user_id=test_user.id,
-        label="Corrupted Result",
-        parent1_filename="parent1.vcf",
-        parent2_filename="parent2.vcf",
-        result_data=b"corrupted-ciphertext-data",
-        result_nonce=b"\x00" * 12,  # Valid nonce length, but data is corrupted
-        tier_at_time="free",
-        summary_json=SAMPLE_SUMMARY,
-    )
-    db_session.add(analysis)
-    await db_session.commit()
-    await db_session.refresh(analysis)
-
-    response = await client.get(
-        f"/analysis/results/{analysis.id}",
-        headers=auth_headers,
-    )
-    assert response.status_code == 500
-    data = response.json()
-    assert data["detail"]["code"] == "DECRYPTION_FAILED"
-    assert "corrupted" in data["detail"]["error"].lower()
-
-
 # ── Premium Tier Boundary Test ───────────────────────────────────────────
 
 
@@ -737,65 +796,6 @@ async def test_save_result_tier_limit_premium_boundary(
     assert "Premium" in data["detail"]["error"]
 
 
-# ── Encryption Edge Case Tests ───────────────────────────────────────────
-
-
-@pytest.mark.asyncio
-async def test_encryption_unicode_roundtrip() -> None:
-    """Encrypt/decrypt with unicode characters (emoji, non-ASCII) should round-trip."""
-    from app.encryption import decrypt_result, encrypt_result
-
-    test_data = {
-        "emoji": "Hello \U0001f9ec\U0001f600\u2764\ufe0f",
-        "hebrew": "\u05e9\u05dc\u05d5\u05dd \u05e2\u05d5\u05dc\u05dd",
-        "japanese": "\u3053\u3093\u306b\u3061\u306f",
-        "arabic": "\u0645\u0631\u062d\u0628\u0627",
-        "nested": {"key_\u00e9": "valu\u00e9_\u00fc\u00f1"},
-    }
-    user_id = str(uuid.uuid4())
-    secret = "test-secret-for-encryption"
-
-    ciphertext, nonce = await encrypt_result(test_data, user_id, secret)
-    decrypted = await decrypt_result(ciphertext, nonce, user_id, secret)
-
-    assert decrypted == test_data
-
-
-@pytest.mark.asyncio
-async def test_encryption_non_serializable_raises() -> None:
-    """Encrypting a dict with non-JSON-serializable values should raise TypeError."""
-    from datetime import datetime
-
-    from app.encryption import encrypt_result
-
-    test_data = {"timestamp": datetime(2026, 1, 1, 12, 0, 0)}
-    user_id = str(uuid.uuid4())
-    secret = "test-secret-for-encryption"
-
-    with pytest.raises(TypeError):
-        await encrypt_result(test_data, user_id, secret)
-
-
-@pytest.mark.asyncio
-async def test_encryption_empty_dict_roundtrip() -> None:
-    """Encrypt/decrypt of an empty dict should round-trip correctly."""
-    from app.encryption import decrypt_result, encrypt_result
-
-    test_data: dict = {}
-    user_id = str(uuid.uuid4())
-    secret = "test-secret-for-encryption"
-
-    ciphertext, nonce = await encrypt_result(test_data, user_id, secret)
-
-    assert isinstance(ciphertext, bytes)
-    assert isinstance(nonce, bytes)
-    assert len(nonce) == 12
-
-    decrypted = await decrypt_result(ciphertext, nonce, user_id, secret)
-
-    assert decrypted == test_data
-
-
 # ── Summary Whitelist Validator Tests ────────────────────────────────────
 
 
@@ -826,27 +826,6 @@ async def test_save_result_rejects_nested_summary(
     """Summary with nested dict value should be rejected."""
     payload = _save_payload(
         summary={"trait_count": {"nested": "value"}},  # nested dict not allowed
-    )
-    response = await client.post(
-        "/analysis/results",
-        headers=auth_headers,
-        json=payload,
-    )
-    assert response.status_code == 422
-
-
-# ── result_data Validation Rejection Test ────────────────────────────────
-
-
-@pytest.mark.asyncio
-async def test_save_result_rejects_invalid_result_data(
-    client: AsyncClient,
-    test_user: User,
-    auth_headers: dict[str, str],
-) -> None:
-    """Malformed result_data missing required fields should be rejected."""
-    payload = _save_payload(
-        result_data={"invalid": "data"},  # missing carrier, traits, pgx, etc.
     )
     response = await client.post(
         "/analysis/results",

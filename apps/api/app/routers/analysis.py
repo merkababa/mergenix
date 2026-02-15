@@ -1,24 +1,23 @@
 """
-Analysis router — save, list, load, and delete encrypted analysis results.
+Analysis router — save, list, load, and delete ZKE-encrypted analysis results.
 
-Results are encrypted at rest using AES-256-GCM with a per-user key
-derived from the application secret. Tier gating limits how many
-results each user can save: Free=1, Premium=10, Pro=unlimited.
+Results are stored as opaque EncryptedEnvelope blobs — the server never
+decrypts them.  Only plaintext metadata (label, filenames, summary stats)
+is accessible server-side.  Tier gating limits how many results each user
+can save: Free=1, Premium=10, Pro=unlimited.
 """
 
 from __future__ import annotations
 
+import json
 import sys
 import uuid
 
-import structlog
 from fastapi import APIRouter, HTTPException, Request, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import defer
 
-from app.config import get_settings
 from app.database import DbSession
-from app.encryption import decrypt_result, encrypt_result
 from app.middleware.auth import CurrentUser
 from app.middleware.rate_limiter import LIMIT_GENERAL_API, limiter
 from app.models.analysis import AnalysisResult
@@ -33,7 +32,6 @@ from app.schemas.auth import MessageResponse
 from app.services import audit_service
 
 router = APIRouter()
-settings = get_settings()
 
 # ── Tier Limits ──────────────────────────────────────────────────────────
 
@@ -49,16 +47,6 @@ TIER_RESULT_LIMITS: dict[str, int] = {
 
 
 # ── Save Result ──────────────────────────────────────────────────────────
-#
-# ZKE Migration Note (Sprint 1 → Phase 2):
-#   Currently this endpoint accepts plaintext result_data and encrypts it
-#   server-side (SSE) using AES-256-GCM via app.encryption.encrypt_result().
-#   In Phase 2, the client will perform encryption locally and submit an
-#   EncryptedEnvelope (defined in app/schemas/encryption.py) so that the
-#   server never sees plaintext genetic data — achieving true Zero-Knowledge
-#   Encryption (ZKE).  The encryption schema is already defined but is not
-#   yet wired into this endpoint.  This is intentional: Sprint 1 lays the
-#   cryptographic foundation; Phase 2 connects the client-side envelope.
 
 
 @router.post(
@@ -74,24 +62,22 @@ async def save_result(
     user: CurrentUser,
     db: DbSession,
 ) -> SaveAnalysisResponse:
-    """Save an encrypted analysis result.
+    """Save a client-encrypted analysis result (ZKE envelope).
+
+    The EncryptedEnvelope in ``result_data`` is stored as an opaque JSON
+    blob — the server never decrypts it.
 
     Tier gating: Free users can save 1 result, Premium up to 10,
-    Pro unlimited. The full result_data is encrypted at rest;
-    only the summary is stored as plaintext for listing.
+    Pro unlimited.  Only the summary is stored as plaintext for listing.
 
     Note: Request body size limiting is handled at the reverse proxy
     (nginx) level in production. Pydantic field-level validation
     constrains individual field sizes.
     """
-    # Encrypt the result data BEFORE acquiring the database lock.
-    # Encryption is CPU-bound (runs in asyncio.to_thread) and depends
-    # only on the request body and config — not DB state. Moving it
-    # here avoids holding the DB connection open during crypto ops.
-    user_id_str = str(user.id)
-    ciphertext, nonce = await encrypt_result(
-        body.result_data, user_id_str, settings.encryption_secret
-    )
+    # Serialize the EncryptedEnvelope to JSON bytes for LargeBinary storage.
+    envelope_bytes = json.dumps(
+        body.result_data.model_dump(), separators=(",", ":")
+    ).encode("utf-8")
 
     # Lock the User row to serialize save operations for this user.
     # SELECT ... FOR UPDATE on the user row guarantees mutual exclusion
@@ -134,8 +120,7 @@ async def save_result(
         label=body.label.strip(),
         parent1_filename=body.parent1_filename.strip(),
         parent2_filename=body.parent2_filename.strip(),
-        result_data=ciphertext,
-        result_nonce=nonce,
+        result_data=envelope_bytes,
         tier_at_time=user.tier,
         summary_json=body.summary,
         data_version=body.data_version,
@@ -177,14 +162,13 @@ async def list_results(
 ) -> list[AnalysisListItem]:
     """Return all saved analysis results for the current user.
 
-    Only returns summaries and metadata — does NOT decrypt result_data.
-    Ordered by most recently created first.
+    Only returns summaries and metadata — does NOT include the encrypted
+    envelope.  Ordered by most recently created first.
     """
     result = await db.execute(
         select(AnalysisResult)
         .options(
             defer(AnalysisResult.result_data),
-            defer(AnalysisResult.result_nonce),
         )
         .where(AnalysisResult.user_id == user.id)
         .order_by(AnalysisResult.created_at.desc(), AnalysisResult.id.desc())
@@ -212,7 +196,7 @@ async def list_results(
 @router.get(
     "/results/{result_id}",
     response_model=AnalysisDetailResponse,
-    summary="Load a specific analysis result (full decrypted data)",
+    summary="Load a specific analysis result (opaque encrypted envelope)",
 )
 @limiter.limit(LIMIT_GENERAL_API)
 async def get_result(
@@ -221,9 +205,10 @@ async def get_result(
     user: CurrentUser,
     db: DbSession,
 ) -> AnalysisDetailResponse:
-    """Load and decrypt a specific analysis result.
+    """Load a specific analysis result and return the opaque envelope.
 
-    The result must belong to the requesting user.
+    The result must belong to the requesting user.  The server returns the
+    stored EncryptedEnvelope as-is — the client decrypts it locally.
     """
     result = await db.execute(
         select(AnalysisResult).where(
@@ -242,26 +227,17 @@ async def get_result(
             },
         )
 
-    # Decrypt the result data — handle corrupted/tampered ciphertext
+    # Deserialize the opaque envelope from JSON bytes.
+    # Issue 3: Handle legacy result_data that predates the ZKE pivot
+    # and may contain raw encrypted bytes instead of JSON-serialized EncryptedEnvelope.
     try:
-        decrypted = await decrypt_result(
-            analysis.result_data,
-            analysis.result_nonce,
-            str(user.id),
-            settings.encryption_secret,
-        )
-    except Exception:
-        log = structlog.get_logger()
-        log.error(
-            "decryption_failed",
-            analysis_id=str(result_id),
-            user_id=str(user.id),
-        )
+        envelope = json.loads(analysis.result_data.decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_410_GONE,
             detail={
-                "error": "Failed to decrypt analysis result. The data may be corrupted.",
-                "code": "DECRYPTION_FAILED",
+                "error": "Legacy result format — please re-analyze",
+                "code": "LEGACY_FORMAT",
             },
         ) from None
 
@@ -272,7 +248,7 @@ async def get_result(
         parent2_filename=analysis.parent2_filename,
         tier_at_time=analysis.tier_at_time,
         data_version=analysis.data_version,
-        result_data=decrypted,
+        result_data=envelope,
         summary=analysis.summary_json,
         created_at=analysis.created_at,
     )

@@ -32,9 +32,7 @@ from app.middleware.rate_limiter import (
     LIMIT_RESEND_VERIFICATION,
     limiter,
 )
-from app.models.analysis import AnalysisResult
 from app.models.audit import EmailVerification, PasswordReset, Session
-from app.models.payment import Payment
 from app.models.user import User
 from app.schemas.auth import (
     AccessTokenResponse,
@@ -56,6 +54,7 @@ from app.schemas.auth import (
     UserProfile,
 )
 from app.services import audit_service
+from app.services.account_service import delete_user_account
 from app.services.auth_service import (
     create_access_token,
     create_refresh_token,
@@ -75,6 +74,17 @@ from app.services.email_service import (
     send_password_reset_email,
     send_verification_email,
 )
+from app.utils.cookies import (
+    clear_refresh_cookie as _clear_refresh_cookie_shared,
+)
+from app.utils.cookies import (
+    get_refresh_cookie as _get_refresh_cookie_shared,
+)
+from app.utils.cookies import (
+    set_refresh_cookie as _set_refresh_cookie_shared,
+)
+from app.utils.request_helpers import client_ip as _client_ip_shared
+from app.utils.request_helpers import user_agent as _user_agent_shared
 from app.utils.security import constant_time_compare, hash_token
 
 
@@ -96,59 +106,22 @@ def _utcnow() -> datetime:
 router = APIRouter()
 settings = get_settings()
 
-# ── Cookie Configuration ─────────────────────────────────────────────────
-
-_REFRESH_COOKIE_NAME = "refresh_token"
-_REFRESH_COOKIE_MAX_AGE = 7 * 24 * 3600  # 7 days in seconds
-_REFRESH_COOKIE_PATH = "/auth"
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────
 
-
-# TODO(deployment): Use trusted-proxy-aware middleware (e.g., uvicorn --proxy-headers
-# with --forwarded-allow-ips) to prevent IP spoofing via X-Forwarded-For header.
-# Current implementation trusts the first value, which can be attacker-controlled.
-def _client_ip(request: Request) -> str:
-    """Extract the client IP from the request."""
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
+# Issue 9: Cookie helpers are now in app.utils.cookies (shared module).
+# Thin wrappers preserve the existing private API used throughout this file.
+_set_refresh_cookie = _set_refresh_cookie_shared
+_clear_refresh_cookie = _clear_refresh_cookie_shared
+_get_refresh_cookie = _get_refresh_cookie_shared
 
 
-def _user_agent(request: Request) -> str:
-    """Extract the User-Agent header."""
-    return request.headers.get("User-Agent", "")
-
-
-def _set_refresh_cookie(response: Response, refresh_token: str) -> None:
-    """Set the refresh token as an httpOnly cookie on the response."""
-    response.set_cookie(
-        key=_REFRESH_COOKIE_NAME,
-        value=refresh_token,
-        max_age=_REFRESH_COOKIE_MAX_AGE,
-        httponly=True,
-        secure=settings.cookie_secure,
-        samesite="lax",
-        path=_REFRESH_COOKIE_PATH,
-    )
-
-
-def _clear_refresh_cookie(response: Response) -> None:
-    """Delete the refresh token cookie from the response."""
-    response.delete_cookie(
-        key=_REFRESH_COOKIE_NAME,
-        httponly=True,
-        secure=settings.cookie_secure,
-        samesite="lax",
-        path=_REFRESH_COOKIE_PATH,
-    )
-
-
-def _get_refresh_cookie(request: Request) -> str | None:
-    """Read the refresh token from the request cookies."""
-    return request.cookies.get(_REFRESH_COOKIE_NAME)
+# Issue 1 (Gate 2 R1): Use shared request helpers for IP and User-Agent
+# extraction. The shared helpers use request.client.host directly (no
+# X-Forwarded-For parsing) — trusted-proxy handling belongs at the
+# infrastructure level (uvicorn ProxyHeadersMiddleware).
+_client_ip = _client_ip_shared
+_user_agent = _user_agent_shared
 
 
 def _issue_tokens(user: User) -> tuple[str, str, int]:
@@ -217,7 +190,7 @@ async def register(
         await audit_service.log_event(
             db,
             event_type="register_failed",
-            metadata={"reason": "duplicate_email", "email": email},
+            metadata={"reason": "duplicate_email"},
             ip_address=_client_ip(request),
             user_agent=_user_agent(request),
         )
@@ -255,7 +228,7 @@ async def register(
         db,
         user_id=user.id,
         event_type="register",
-        metadata={"name": user.name},
+        metadata={"event": "registration_complete"},
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -301,7 +274,7 @@ async def login(
         await audit_service.log_event(
             db,
             event_type="login_failed",
-            metadata={"reason": "user_not_found", "email": email},
+            metadata={"reason": "user_not_found"},
             ip_address=_client_ip(request),
             user_agent=_user_agent(request),
         )
@@ -1185,23 +1158,13 @@ async def delete_account(
             detail={"error": "Invalid password.", "code": "INVALID_PASSWORD"},
         )
 
-    user_id = user.id
-
-    await audit_service.log_event(
+    # Issue 6: Use shared account deletion service
+    await delete_user_account(
         db,
-        user_id=user_id,
-        event_type="account_deleted",
+        user,
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
-
-    # Explicitly delete related records before removing the user.
-    # The ORM cascade cannot load them because lazy="raise" is set on
-    # the User model's relationships, so a direct SQL DELETE is used.
-    await db.execute(delete(AnalysisResult).where(AnalysisResult.user_id == user_id))
-    await db.execute(delete(Session).where(Session.user_id == user_id))
-    await db.execute(delete(Payment).where(Payment.user_id == user_id))
-    await db.delete(user)
     await db.commit()
 
     _clear_refresh_cookie(response)

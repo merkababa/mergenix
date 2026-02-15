@@ -1,9 +1,10 @@
 """
-Analysis result model — stores encrypted genetic analysis results.
+Analysis result model — stores client-encrypted (ZKE) genetic analysis results.
 
-Each result is AES-256-GCM encrypted at rest. Only the summary
-(counts/stats, no genetic data) is stored as plaintext JSON for
-efficient listing without decryption.
+The server stores the EncryptedEnvelope as an opaque JSON blob in the
+``result_data`` column.  It never decrypts the data — only the client
+holds the decryption key.  Summary counts are stored as plaintext JSON
+for efficient listing without decryption.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ from app.database import Base
 
 
 class AnalysisResult(Base):
-    """Encrypted genetic analysis result owned by a user."""
+    """Client-encrypted (ZKE) genetic analysis result owned by a user."""
 
     __tablename__ = "analysis_results"
 
@@ -45,16 +46,11 @@ class AnalysisResult(Base):
         nullable=False,
     )
 
-    # ── Encrypted result data ────────────────────────────────────────────
+    # ── Encrypted result data (opaque ZKE envelope) ───────────────────────
     result_data: Mapped[bytes] = mapped_column(
         LargeBinary,
         nullable=False,
-        comment="AES-256-GCM encrypted JSON blob of full analysis result",
-    )
-    result_nonce: Mapped[bytes] = mapped_column(
-        LargeBinary,
-        nullable=False,
-        comment="AES-GCM nonce (12 bytes)",
+        comment="JSON-serialized EncryptedEnvelope blob (opaque, never decrypted by server)",
     )
 
     # ── Metadata ─────────────────────────────────────────────────────────

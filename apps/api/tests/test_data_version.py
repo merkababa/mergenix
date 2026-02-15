@@ -1,7 +1,21 @@
 import pytest
 from httpx import AsyncClient
 
-from tests.fixtures import VALID_FULL_ANALYSIS_RESULT
+# A valid EncryptedEnvelope dict matching the ZKE schema
+VALID_ENCRYPTED_ENVELOPE: dict = {
+    "iv": "aabbccddeeff00112233aabb",  # 24 hex chars = 12 bytes
+    "ciphertext": "deadbeefcafe1234567890abcdef0123456789abcdef",
+    "salt": "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+    "kdf_params": {
+        "algorithm": "argon2id",
+        "memory_cost": 65536,
+        "time_cost": 3,
+        "parallelism": 1,
+        "salt_length": 32,
+        "key_length": 32,
+    },
+    "version": "v1:argon2id:aes-gcm",
+}
 
 SAMPLE_SUMMARY = {"trait_count": 5}
 
@@ -12,12 +26,12 @@ def _versioned_payload(
     *,
     include_version: bool = True,
 ) -> dict:
-    """Build a save-analysis request payload with valid result_data."""
+    """Build a save-analysis request payload with a valid EncryptedEnvelope."""
     payload: dict = {
         "label": label,
         "parent1_filename": "p1.txt",
         "parent2_filename": "p2.txt",
-        "result_data": VALID_FULL_ANALYSIS_RESULT,
+        "result_data": VALID_ENCRYPTED_ENVELOPE,
         "summary": SAMPLE_SUMMARY,
         "consent_given": True,
     }

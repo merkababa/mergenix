@@ -24,7 +24,7 @@ from app.config import get_settings
 from app.database import engine
 from app.middleware.auth import CSRFMiddleware
 from app.middleware.rate_limiter import limiter
-from app.routers import analysis, auth, clinvar, health, legal, payments
+from app.routers import analysis, auth, clinvar, gdpr, health, legal, payments
 
 
 def _configure_structlog() -> None:
@@ -141,6 +141,7 @@ def create_app() -> FastAPI:
     app.include_router(analysis.router, prefix="/analysis", tags=["Analysis"])
     app.include_router(clinvar.router, prefix="/clinvar", tags=["ClinVar"])
     app.include_router(legal.router, prefix="/legal", tags=["Legal"])
+    app.include_router(gdpr.router, prefix="/gdpr", tags=["GDPR"])
 
     # ── Exception Handlers ────────────────────────────────────────────────
     @app.exception_handler(ValueError)

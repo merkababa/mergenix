@@ -1,5 +1,9 @@
 """
 Analysis result schemas — request and response models for analysis endpoints.
+
+ZKE (Zero-Knowledge Encryption): The client encrypts genetic data locally
+and submits an opaque EncryptedEnvelope.  The server stores it as-is
+without ever seeing or decrypting the plaintext.
 """
 
 from __future__ import annotations
@@ -8,9 +12,9 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator
 
-from app.schemas.analysis_types import FullAnalysisResult
+from app.schemas.encryption import EncryptedEnvelope
 
 # ── Requests ──────────────────────────────────────────────────────────────
 
@@ -31,7 +35,7 @@ _SUMMARY_MAX_ENTRIES = 20
 
 
 class SaveAnalysisRequest(BaseModel):
-    """Save a new analysis result."""
+    """Save a new analysis result (ZKE — client-encrypted envelope)."""
 
     label: str = Field(
         ...,
@@ -51,9 +55,12 @@ class SaveAnalysisRequest(BaseModel):
         max_length=255,
         description="Original filename of parent 2's genetic data",
     )
-    result_data: dict[str, Any] = Field(
+    result_data: EncryptedEnvelope = Field(
         ...,
-        description="Full analysis result object to be encrypted at rest",
+        description=(
+            "Client-encrypted analysis result envelope. "
+            "The server stores this opaque blob as-is, never decrypting it."
+        ),
     )
     summary: dict[str, Any] = Field(
         ...,
@@ -109,23 +116,6 @@ class SaveAnalysisRequest(BaseModel):
                 )
         return v
 
-    @model_validator(mode='after')
-    def validate_result_data_structure(self) -> SaveAnalysisRequest:
-        """Validate that result_data conforms to the FullAnalysisResult schema.
-
-        The field is typed as ``dict[str, Any]`` because it is stored as JSON,
-        but the contents must be structurally valid according to the strict
-        ``FullAnalysisResult`` model defined in ``analysis_types.py``.
-        """
-        try:
-            FullAnalysisResult.model_validate(self.result_data)
-        except ValidationError as exc:
-            raise ValueError(
-                "result_data does not conform to the FullAnalysisResult schema. "
-                f"Validation errors: {exc.errors()}"
-            ) from exc
-        return self
-
 
 # ── Responses ─────────────────────────────────────────────────────────────
 
@@ -139,7 +129,7 @@ class SaveAnalysisResponse(BaseModel):
 
 
 class AnalysisListItem(BaseModel):
-    """A single analysis result in a listing (no decrypted data).
+    """A single analysis result in a listing (no envelope data).
 
     Privacy note on plaintext summary fields:
         The ``summary`` dict (containing aggregate counts like carrier_count,
@@ -164,7 +154,7 @@ class AnalysisListItem(BaseModel):
 
 
 class AnalysisDetailResponse(BaseModel):
-    """Full analysis result with decrypted data."""
+    """Full analysis result with opaque encrypted envelope."""
 
     id: uuid.UUID
     label: str

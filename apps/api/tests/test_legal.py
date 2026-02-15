@@ -531,8 +531,7 @@ async def test_export_data_no_raw_genetic_data(
         label="Test Analysis",
         parent1_filename="parent1.vcf",
         parent2_filename="parent2.vcf",
-        result_data=b"encrypted-data-blob",
-        result_nonce=b"\x00" * 12,
+        result_data=b'{"iv":"aabb","ciphertext":"ccdd","salt":"eeff","kdf_params":{},"version":"v1:argon2id:aes-gcm"}',
         tier_at_time="free",
         summary_json={"trait_count": 2},
     )
