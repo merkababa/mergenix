@@ -35,7 +35,8 @@
 | Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
 | Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **Merged** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
 | Stream F Sprint 4: Output, Compliance & Polish | Claude | **Merged** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF generation (pdfmake Web Worker), SEO/OG metadata, WCAG reflow (320px), stale results banner, sample report page, security architecture page, GDPR consent UI. 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). |
-| Stream B Sprint 1: Backend Foundation | Claude | **PR Open** | feature/stream-b-sprint-1-foundation | PR #54 — 4 tasks (B11, B3, B1, B2). CSRF middleware (pure ASGI), ZKE encryption schema (Phase 1 — Argon2id+AES-256), strict Pydantic types for genetics data (FullAnalysisResult hierarchy), data versioning, session invalidation, security hardening (CORS, bulk DELETE, shared httpx). 205 backend tests. Gate 1: 2/7 A+ Gemini (5 quota-blocked). Gate 2: 7/7 A Claude (3 rounds). 16 files, +631 LOC. |
+| Stream B Sprint 1: Backend Foundation | Claude | **Merged** | feature/stream-b-sprint-1-foundation | PR #54 — 4 tasks (B11, B3, B1, B2). CSRF middleware (pure ASGI), ZKE encryption schema (Phase 1 — Argon2id+AES-256), strict Pydantic types for genetics data (FullAnalysisResult hierarchy), data versioning, session invalidation, security hardening (CORS, bulk DELETE, shared httpx). 205 backend tests. Gate 1: 2/7 A+ Gemini (5 quota-blocked). Gate 2: 7/7 A Claude (3 rounds). 16 files, +631 LOC. |
+| Stream B Sprint 2: ZKE Pivot + GDPR | Claude | **PR Open** | feature/stream-b-sprint-2-gdpr | PR #55 — 4 tasks (B13, B7, B8, B12). ZKE pivot (delete server encryption, opaque EncryptedEnvelope), GDPR router (DELETE /gdpr/account, GET /gdpr/export, PUT /gdpr/profile), shared account_service + cookie utils, Alembic migration (drop result_nonce). 245 backend tests (40 GDPR + 34 analysis). Gate 1: 6/6 A Gemini (3 rounds). Gate 2: 6/6 A Claude (2 rounds). 15 files, +2,184 LOC. |
 
 ---
 
@@ -153,9 +154,10 @@
      - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
      - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
      - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
-   - **Stream B (Backend): Sprint 1 COMPLETE, Sprint 2 NEXT**
-     - Sprint 1 (Foundation): PR #54 — B11 auth middleware, B3 EncryptedEnvelope schema, B1 strict Pydantic schemas, B2 data versioning. 205 backend tests. Gate 2: 7/7 A Claude.
-     - **Sprint 2 (ZK Pivot + GDPR): NEXT** — B13 remove server encryption, B7 nuclear delete, B8 GDPR export, B12 rectification
+   - **Stream B (Backend): Sprint 2 COMPLETE, Sprint 3 NEXT**
+     - Sprint 1 (Foundation): PR #54 MERGED — B11, B3, B1, B2. 205 backend tests. Gate 2: 7/7 A Claude.
+     - Sprint 2 (ZK Pivot + GDPR): PR #55 — B13 ZKE pivot, B7 nuclear delete, B8 GDPR export, B12 rectification. 245 tests. Gate 1: 6/6 A Gemini. Gate 2: 6/6 A Claude.
+     - **Sprint 3 (Business): NEXT** — B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
      - Sprint 3 (Business): B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
      - Delegation: 6 Claude (B11, B3, B13, B7, B8, B5) + 6 Gemini (B1, B2, B12, B6, B9, B10)
    - **Remaining streams:** S (Security), L (Legal), Q (QA), C (Content), Ops (Operations)
