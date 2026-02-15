@@ -9,6 +9,7 @@ import {
   CHIP_LIMITATION_ACK_KEY,
 } from "../constants/legal";
 import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";
+import { useAnalysisStore } from "./analysis-store";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -21,6 +22,7 @@ interface LegalState {
   geneticDataConsentGiven: boolean;
   partnerConsentGiven: boolean;
   chipLimitationAcknowledged: boolean;
+  consentWithdrawn: boolean;
   consents: ConsentRecord[];
   isLoading: boolean;
   error: string | null;
@@ -35,6 +37,8 @@ interface LegalState {
   setPartnerConsent: (given: boolean) => void;
   setChipLimitationAcknowledged: (ack: boolean) => void;
   resetPartnerConsent: () => void;
+  withdrawGeneticConsent: () => void;
+  reGrantGeneticConsent: () => void;
   recordConsent: (type: string, version: string) => Promise<void>;
   loadConsents: () => Promise<void>;
   loadCookiePreferences: () => Promise<void>;
@@ -73,6 +77,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
   ageVerified: getInitialAgeVerified(),
   geneticDataConsentGiven: false, // Never persisted — GDPR requires re-consent each session
   partnerConsentGiven: false, // Never persisted — must re-confirm each session
+  consentWithdrawn: false, // Tracks whether user has explicitly withdrawn genetic consent
   chipLimitationAcknowledged: getInitialChipLimitationAcknowledged(),
   consents: [],
   isLoading: false,
@@ -166,6 +171,18 @@ export const useLegalStore = create<LegalState>()((set) => ({
 
   resetPartnerConsent: () => {
     set({ partnerConsentGiven: false });
+  },
+
+  withdrawGeneticConsent: () => {
+    // Withdraws genetic data consent — sets consentWithdrawn=true, geneticDataConsentGiven=false
+    // Also clears any locally-stored analysis results (GDPR right to withdrawal)
+    set({ consentWithdrawn: true, geneticDataConsentGiven: false, error: null });
+    useAnalysisStore.getState().reset();
+  },
+
+  reGrantGeneticConsent: () => {
+    // Re-grants genetic data consent after withdrawal
+    set({ consentWithdrawn: false, geneticDataConsentGiven: true, error: null });
   },
 
   recordConsent: async (type: string, version: string) => {

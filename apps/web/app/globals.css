@@ -600,3 +600,100 @@ section,
     margin-top: 8px;
   }
 }
+
+/* ============================================================
+   WCAG 1.4.10 Reflow — 320px viewport support
+   Ensures no horizontal scrolling at 320px wide viewport
+   ============================================================ */
+@media (max-width: 320px) {
+  /* Fluid widths — prevent overflow */
+  body,
+  main,
+  section,
+  article,
+  aside,
+  nav,
+  header,
+  footer,
+  .glass,
+  .glass-subtle,
+  .glass-strong {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Force single-column layouts */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Fluid images and media */
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Stacked tables — linearize table rows */
+  table,
+  thead,
+  tbody,
+  tfoot,
+  tr,
+  th,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Responsive data-label pattern for stacked table cells */
+  td {
+    padding: 0.25rem 0;
+    text-align: right;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    float: left;
+    text-align: left;
+  }
+
+  tr + tr {
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  /* Reduce horizontal padding at 320px */
+  .mx-auto {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Typography scaling for tiny viewports */
+  h1 { font-size: 1.25rem; }
+  h2 { font-size: 1.125rem; }
+  h3 { font-size: 1rem; }
+
+  /* Prevent pre/code overflow */
+  pre,
+  code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}

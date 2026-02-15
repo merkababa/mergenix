@@ -17,3 +17,13 @@ export const RISK_LABELS: Record<string, string> = {
   coverage_insufficient: "Insufficient Coverage",
   not_tested: "Not Tested",
 };
+
+/** Map PRS risk category strings to readable labels. */
+export const RISK_CATEGORY_LABELS: Record<string, string> = {
+  low: "Low",
+  below_average: "Below Average",
+  average: "Average",
+  above_average: "Above Average",
+  elevated: "Elevated",
+  high: "High",
+};

@@ -213,3 +213,7 @@ export {
   getChipNotes,
   ENGINE_VERSION,
 } from './chip-detection';
+
+// ─── Data Version ────────────────────────────────────────────────────────────
+/** Current data version for stale-results detection. */
+export const CURRENT_DATA_VERSION = '2.0.0';

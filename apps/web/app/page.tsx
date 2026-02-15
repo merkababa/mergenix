@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { HomeContent } from "./_components/home-content";
-import { MotionProvider } from "./(marketing)/_components/motion-provider";
+import { MotionProvider } from "@/components/providers/motion-provider";
 
 export const metadata: Metadata = {
   title: "Mergenix — Know Your Genetic Future",

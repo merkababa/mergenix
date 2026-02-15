@@ -33,6 +33,8 @@ import { SavedResultsList } from "@/components/analysis/saved-results-list";
 import { SaveOptionsModal } from "@/components/save/save-options-modal";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { HighContrastToggle } from "@/components/a11y/high-contrast-toggle";
+import { PdfExportButton } from "@/components/genetics/results/pdf-export-button";
+import { StaleResultsBanner } from "@/components/genetics/results/stale-results-banner";
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
 
@@ -131,6 +133,7 @@ export default function AnalysisPage() {
   const activeTab = useAnalysisStore((s) => s.activeTab);
   const isDemo = useAnalysisStore((s) => s.isDemo);
   const errorMessage = useAnalysisStore((s) => s.errorMessage);
+  const fullResults = useAnalysisStore((s) => s.fullResults);
 
   const setActiveTab = useAnalysisStore((s) => s.setActiveTab);
   const setDemoResults = useAnalysisStore((s) => s.setDemoResults);
@@ -455,7 +458,10 @@ export default function AnalysisPage() {
             </GlassCard>
           )}
 
-          {/* Action bar: Save + New Analysis */}
+          {/* Stale results warning (shown when data version mismatch) */}
+          <StaleResultsBanner dataVersion={fullResults?.metadata?.dataVersion} />
+
+          {/* Action bar: Save + PDF Export + New Analysis */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <SaveResultDialog />
@@ -468,6 +474,7 @@ export default function AnalysisPage() {
                 <Save className="h-4 w-4" />
                 Save Results
               </Button>
+              {fullResults && <PdfExportButton result={fullResults} />}
             </div>
             <Button variant="outline" size="sm" onClick={handleReset}>
               New Analysis

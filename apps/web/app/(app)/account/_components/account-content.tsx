@@ -10,6 +10,7 @@ import { ProfileSection } from "./profile-section";
 import { SecuritySection } from "./security-section";
 import { SessionsSection } from "./sessions-section";
 import { DataExportCard } from "@/components/account/data-export-card";
+import { ConsentManagement } from "@/components/account/consent-management";
 import { DangerZone } from "./danger-zone";
 
 function AccountSkeleton() {
@@ -95,6 +96,10 @@ export function AccountContent() {
 
         <motion.div variants={staggerItem}>
           <DataExportCard />
+        </motion.div>
+
+        <motion.div variants={staggerItem}>
+          <ConsentManagement />
         </motion.div>
 
         <motion.div variants={staggerItem}>

@@ -1,4 +1,4 @@
-import { MotionProvider } from "./_components/motion-provider";
+import { MotionProvider } from "@/components/providers/motion-provider";
 
 /**
  * Marketing layout — full-width pages (products, about, legal, diseases, glossary).

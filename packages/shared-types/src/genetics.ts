@@ -589,6 +589,8 @@ export interface FullAnalysisResult {
     analysisTimestamp: string;
     engineVersion: string;
     tier: Tier;
+    /** Data version for stale-results detection. Optional for backwards compat. */
+    dataVersion?: string;
   };
   /** True if analyzing two parents, false for single-parent mode. */
   coupleMode: boolean;
