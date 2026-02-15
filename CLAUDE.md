@@ -15,6 +15,7 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 ### NEVER do directly:
 - Write/edit code files (.ts, .tsx, .py, .css, .json) — delegate to executor agents
 - Read large source files (>50 lines) — delegate to explore agents
+- Explore or research the codebase — ALWAYS delegate to `general-purpose` Task agents, never read/grep/glob directly in conductor context
 - Run tests/builds — delegate to agents
 - Paste code blocks in responses — describe what changed + file path
 
