@@ -34,7 +34,7 @@
 | Stream 0: Research Phase | Claude | **11/12 Done** | docs/stream0-research-archive | PR #46 — 11 Gemini tasks + 1 Claude task. Research archive in docs/research/stream0/. R12 partial. |
 | Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
 | Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **Merged** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
-| Stream F Sprint 4: Output, Compliance & Polish | Claude | **PR Open** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF export (pdfmake), security page, privacy page, sample report, consent management, stale results banner, SEO/JSON-LD, WCAG reflow. 32 files, +5,297 LOC, 67 new tests (1,043 total). Gate 1: 10/10 A+ Gemini (3 rounds). Gate 2: Legal A, Ethics fixed. |
+| Stream F Sprint 4: Output, Compliance & Polish | Claude | **PR Open** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF generation (pdfmake Web Worker), SEO/OG metadata, WCAG reflow (320px), stale results banner, sample report page, security architecture page, GDPR consent UI. 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). |
 
 ---
 
@@ -117,6 +117,7 @@
 | 2026-02-14 | Claude | Stream F Sprint 1 — Foundation + Gates: 15/15 tasks (4 Gemini research + 11 Claude implementation). Consent modal (GDPR Art 9, IntersectionObserver scroll-to-unlock), partner consent checkbox, chip disclosure modal, age verify focus restoration, skip link to layout, modal manager (Zustand), error announcer (dual aria-live regions), aria-live analysis progress, reduced motion, error boundary (class component), touch targets (44px), integration wiring. Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes). 35 files, +2890 LOC, 714 tests. | PR #50 |
 | 2026-02-14 | Claude | Stream F Sprint 2 — Core UX + Tier Gating: 6 new components (SensitiveContentGuard, CoupleUploadCard, VirtualBabyCard, SaveOptionsModal, DeleteAccountSection, disclaimers), 7 modified result tabs. canAccessFeature() tier gating, pricing aligned $14.99/$34.99, offspring risk Pro-gated, PDF Pro-gated, a11y (focus traps, alertdialog, meter roles, 44px targets). Gate 1: 9/9 A Gemini (3 rounds). Gate 2: 9/9 A-+ Claude (3 rounds, 15 new tests). 34 files, +3753 LOC, 803 tests. | PR #51 |
 | 2026-02-14 | Claude | Stream F Sprint 3 — Results + Visualization + Accessibility: 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. 3 commits (implementation, Gate 1 fixes, Gate 2 fixes). Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. | PR #52 |
+| 2026-02-15 | Claude | Stream F Sprint 4 — Output, Compliance & Polish: 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF export (pdfmake Web Worker, PDF/UA, mobile fallback, progress tracking), SEO/OG (JSON-LD, per-page meta), WCAG 1.4.10 reflow (320px), stale results banner (dataVersion), sample report (6 tabs, CTA), security page (zero-knowledge), GDPR consent UI (withdrawal + data clearing). 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). Key fixes: metabolizerStatus object→string, consent withdrawal clears data, PRS ancestry warnings (PDF+web), rs3827760 Hair Thickness, NSGC link, CTA, Privacy Notice title. | PR #53 |
 
 ---
 
@@ -154,16 +155,25 @@
        - 6 new components, 7 modified tabs, tier gating, pricing aligned
        - Gate 1: 9/9 A Gemini. Gate 2: 9/9 A-+ Claude
        - 34 files changed, 803 tests
-     - Sprint 3: Results + Visualization + Accessibility (13 tasks) — **PR #52 created** (2026-02-14)
+     - Sprint 3: Results + Visualization + Accessibility (13 tasks) — **PR #52 MERGED**
        - 13 tasks: F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39
        - 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total)
-       - New dependency: react-virtuoso
-       - 3 commits: implementation, Gate 1 fixes, Gate 2 fixes
-       - Gate 1 (Gemini): 10/10 A+ (all reviewers passed)
-       - Gate 2 (Claude): 10/10 A+ (all reviewers passed)
-       - Branch: `feature/stream-f-sprint-3-results`
-       - **Next:** Merge PR #52 → Sprint 4 planning (remaining Stream F tasks)
-     - Sprint 4: Output + Compliance (remaining tasks) — pending
+       - Gate 1 (Gemini): 10/10 A+. Gate 2 (Claude): 10/10 A+
+     - Sprint 4: Output, Compliance & Polish (7 tasks) — **PR #53 created** (2026-02-15)
+       - 7 tasks: F21, F24, F38, F40, F42, F46, F47
+       - PDF generation (pdfmake Web Worker, PDF/UA, mobile fallback)
+       - SEO/OG metadata (JSON-LD, per-page meta)
+       - WCAG 1.4.10 Reflow (320px viewport, responsive tables)
+       - Stale results banner (dataVersion mismatch detection)
+       - Sample report page (full demo with all 6 tabs, CTA)
+       - Security Architecture page (zero-knowledge explainer)
+       - GDPR consent UI (withdrawal + data clearing, privacy notice)
+       - 103 new tests (1043 web total)
+       - Gate 1 (Gemini): 8/8 A+ (3 rounds — Legal C-→A, Ethics B→A+)
+       - Gate 2 (Claude): 10/10 A+ (2 rounds — Ethics A-→A, Business A-→A)
+       - Key fixes: metabolizerStatus object bug, consent withdrawal clears data, PRS ancestry warnings, rs3827760 attribution, NSGC counselor link
+       - Branch: `feature/stream-f-sprint-4-output`
+       - **Next:** Merge PR #52 → PR #53
      - 8 Gemini tasks (17%), 39 Claude tasks (83%)
 
 ---
