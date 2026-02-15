@@ -35,6 +35,7 @@
 | Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
 | Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **Merged** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
 | Stream F Sprint 4: Output, Compliance & Polish | Claude | **Merged** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF generation (pdfmake Web Worker), SEO/OG metadata, WCAG reflow (320px), stale results banner, sample report page, security architecture page, GDPR consent UI. 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). |
+| Stream B Sprint 1: Backend Foundation | Claude | **PR Open** | feature/stream-b-sprint-1-foundation | PR #54 — 4 tasks (B11, B3, B1, B2). CSRF middleware (pure ASGI), ZKE encryption schema (Phase 1 — Argon2id+AES-256), strict Pydantic types for genetics data (FullAnalysisResult hierarchy), data versioning, session invalidation, security hardening (CORS, bulk DELETE, shared httpx). 205 backend tests. Gate 1: 2/7 A+ Gemini (5 quota-blocked). Gate 2: 7/7 A Claude (3 rounds). 16 files, +631 LOC. |
 
 ---
 
@@ -118,6 +119,7 @@
 | 2026-02-14 | Claude | Stream F Sprint 2 — Core UX + Tier Gating: 6 new components (SensitiveContentGuard, CoupleUploadCard, VirtualBabyCard, SaveOptionsModal, DeleteAccountSection, disclaimers), 7 modified result tabs. canAccessFeature() tier gating, pricing aligned $14.99/$34.99, offspring risk Pro-gated, PDF Pro-gated, a11y (focus traps, alertdialog, meter roles, 44px targets). Gate 1: 9/9 A Gemini (3 rounds). Gate 2: 9/9 A-+ Claude (3 rounds, 15 new tests). 34 files, +3753 LOC, 803 tests. | PR #51 |
 | 2026-02-14 | Claude | Stream F Sprint 3 — Results + Visualization + Accessibility: 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. 3 commits (implementation, Gate 1 fixes, Gate 2 fixes). Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. | PR #52 |
 | 2026-02-15 | Claude | Stream F Sprint 4 — Output, Compliance & Polish: 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF export (pdfmake, dynamic import, low-memory fallback), SEO/OG (JSON-LD, per-page meta), WCAG 1.4.10 reflow (320px, 25 E2E tests), stale results banner (dataVersion), sample report (14 carrier + 14 trait, all rsIDs verified vs carrier-panel.json/trait-snps.json), security page (zero-knowledge), GDPR consent UI (withdrawal + data clearing, focus trap, Escape key, scroll lock). 1070 Vitest + 25 Playwright E2E tests. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A/A+ Claude (5 rounds). 13 commits. | PR #53 |
+| 2026-02-15 | Claude | Stream B Sprint 1 — Backend Foundation: 4 tasks (B11, B3, B1, B2). CSRF middleware (pure ASGI, case-insensitive X-Requested-With), ZKE EncryptedEnvelope schema (Argon2id 64MiB/3iter/AES-256, Phase 1 schema-only), strict Pydantic types (FullAnalysisResult with CarrierResult/TraitResult/PgxResult/PrsResult/CounselingResult + model_validator), data versioning (data_version column + Alembic migration), session invalidation on password change/reset, security hardening (enumerated CORS, bulk DELETE, shared httpx, X-Forwarded-For TODO). 205 backend tests, shared realistic fixture. Gate 1: 2/7 A+ Gemini (5 quota-blocked). Gate 2: 7/7 A Claude (3 rounds, 24→0 issues). 16 files, +631 LOC. | PR #54 |
 
 ---
 
@@ -151,16 +153,11 @@
      - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
      - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
      - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
-   - **Stream B (Backend): PLANNING COMPLETE** — ready for Sprint 1 execution
-     - 11/11 Gemini planning perspectives gathered and synthesized (2026-02-15)
-     - 12 active tasks (B4 removed), 3 sprints planned
-     - Sprint 1 (Foundation): B11 auth middleware, B3 EncryptedEnvelope schema, B1 strict Pydantic schemas, B2 data versioning
-     - Sprint 2 (ZK Pivot + GDPR): B13 remove server encryption, B7 nuclear delete, B8 GDPR export, B12 rectification
+   - **Stream B (Backend): Sprint 1 COMPLETE, Sprint 2 NEXT**
+     - Sprint 1 (Foundation): PR #54 — B11 auth middleware, B3 EncryptedEnvelope schema, B1 strict Pydantic schemas, B2 data versioning. 205 backend tests. Gate 2: 7/7 A Claude.
+     - **Sprint 2 (ZK Pivot + GDPR): NEXT** — B13 remove server encryption, B7 nuclear delete, B8 GDPR export, B12 rectification
      - Sprint 3 (Business): B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
      - Delegation: 6 Claude (B11, B3, B13, B7, B8, B5) + 6 Gemini (B1, B2, B12, B6, B9, B10)
-     - Key decisions: Wipe dev data (no migration), anonymize payments (not delete), include kdf_params in GDPR export
-     - 10 new requirements from Gemini planners (payment anonymization, analytics allowlist, Report Abuse link, etc.)
-     - **Next:** Execute Sprint 1 (B11, B3, B1, B2)
    - **Remaining streams:** S (Security), L (Legal), Q (QA), C (Content), Ops (Operations)
 
 ---
