@@ -17,27 +17,18 @@ from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from tests.fixtures import VALID_FULL_ANALYSIS_RESULT
+
 # ── Test Data ────────────────────────────────────────────────────────────
 
 
-SAMPLE_RESULT_DATA = {
-    "traits": {
-        "eye_color": {"blue": 0.25, "brown": 0.5, "green": 0.25},
-        "hair_color": {"blonde": 0.1, "brown": 0.7, "black": 0.2},
-    },
-    "carrier_status": [
-        {"condition": "Cystic Fibrosis", "rsid": "rs75039117", "status": "carrier"},
-    ],
-    "health_risks": [
-        {"condition": "Type 2 Diabetes", "relative_risk": 1.2},
-    ],
-}
+SAMPLE_RESULT_DATA = VALID_FULL_ANALYSIS_RESULT
 
 SAMPLE_SUMMARY = {
-    "trait_count": 2,
+    "trait_count": 1,
     "carrier_count": 1,
-    "health_risk_count": 1,
-    "total_variants_analyzed": 150,
+    "health_risk_count": 0,
+    "total_variants_analyzed": 500000,
 }
 
 
@@ -93,10 +84,10 @@ async def test_save_result_success(
     assert isinstance(row.result_nonce, bytes)
     assert len(row.result_nonce) == 12  # AES-GCM nonce is 12 bytes
     # Verify it's not stored as plaintext
-    assert b"eye_color" not in row.result_data
+    assert b"Cystic Fibrosis" not in row.result_data
     # Verify summary is stored as plaintext
     assert row.summary_json is not None
-    assert row.summary_json["trait_count"] == 2
+    assert row.summary_json["trait_count"] == 1
 
 
 @pytest.mark.asyncio
@@ -224,7 +215,7 @@ async def test_list_results_returns_summaries(
     assert item["parent1_filename"] == "parent1.vcf"
     assert item["parent2_filename"] == "parent2.vcf"
     assert item["tier_at_time"] == "free"
-    assert item["summary"]["trait_count"] == 2
+    assert item["summary"]["trait_count"] == 1
     assert "result_data" not in item  # Should NOT contain decrypted data
 
 
@@ -803,3 +794,63 @@ async def test_encryption_empty_dict_roundtrip() -> None:
     decrypted = await decrypt_result(ciphertext, nonce, user_id, secret)
 
     assert decrypted == test_data
+
+
+# ── Summary Whitelist Validator Tests ────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_save_result_rejects_disallowed_summary_key(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """Summary with non-whitelisted key should be rejected."""
+    payload = _save_payload(
+        summary={"genotype": "AA"},  # "genotype" is not in the allowed keys
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_save_result_rejects_nested_summary(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """Summary with nested dict value should be rejected."""
+    payload = _save_payload(
+        summary={"trait_count": {"nested": "value"}},  # nested dict not allowed
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 422
+
+
+# ── result_data Validation Rejection Test ────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_save_result_rejects_invalid_result_data(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """Malformed result_data missing required fields should be rejected."""
+    payload = _save_payload(
+        result_data={"invalid": "data"},  # missing carrier, traits, pgx, etc.
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 422

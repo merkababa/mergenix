@@ -37,14 +37,28 @@ settings = get_settings()
 
 # ── Tier Limits ──────────────────────────────────────────────────────────
 
+# Sentinel value representing an unlimited tier limit (pro tier).
+# Uses sys.maxsize so tier-limit comparisons remain integer-based.
+UNLIMITED_TIER_LIMIT: int = sys.maxsize
+
 TIER_RESULT_LIMITS: dict[str, int] = {
     "free": 1,
     "premium": 10,
-    "pro": sys.maxsize,  # effectively unlimited
+    "pro": UNLIMITED_TIER_LIMIT,
 }
 
 
 # ── Save Result ──────────────────────────────────────────────────────────
+#
+# ZKE Migration Note (Sprint 1 → Phase 2):
+#   Currently this endpoint accepts plaintext result_data and encrypts it
+#   server-side (SSE) using AES-256-GCM via app.encryption.encrypt_result().
+#   In Phase 2, the client will perform encryption locally and submit an
+#   EncryptedEnvelope (defined in app/schemas/encryption.py) so that the
+#   server never sees plaintext genetic data — achieving true Zero-Knowledge
+#   Encryption (ZKE).  The encryption schema is already defined but is not
+#   yet wired into this endpoint.  This is intentional: Sprint 1 lays the
+#   cryptographic foundation; Phase 2 connects the client-side envelope.
 
 
 @router.post(
@@ -124,6 +138,7 @@ async def save_result(
         result_nonce=nonce,
         tier_at_time=user.tier,
         summary_json=body.summary,
+        data_version=body.data_version,
     )
     db.add(analysis)
 
@@ -183,6 +198,7 @@ async def list_results(
             parent1_filename=r.parent1_filename,
             parent2_filename=r.parent2_filename,
             tier_at_time=r.tier_at_time,
+            data_version=r.data_version,
             summary=r.summary_json,
             created_at=r.created_at,
         )
@@ -255,6 +271,7 @@ async def get_result(
         parent1_filename=analysis.parent1_filename,
         parent2_filename=analysis.parent2_filename,
         tier_at_time=analysis.tier_at_time,
+        data_version=analysis.data_version,
         result_data=decrypted,
         summary=analysis.summary_json,
         created_at=analysis.created_at,

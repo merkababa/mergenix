@@ -8,7 +8,9 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+
+from app.schemas.analysis_types import FullAnalysisResult
 
 # ── Requests ──────────────────────────────────────────────────────────────
 
@@ -57,6 +59,11 @@ class SaveAnalysisRequest(BaseModel):
         ...,
         description="Summary stats (counts, etc.) stored unencrypted for listing",
     )
+    data_version: str | None = Field(
+        None,
+        max_length=50,
+        description="Version of the analysis engine/data used to generate this result",
+    )
     consent_given: bool = Field(
         ...,
         description=(
@@ -102,6 +109,23 @@ class SaveAnalysisRequest(BaseModel):
                 )
         return v
 
+    @model_validator(mode='after')
+    def validate_result_data_structure(self) -> SaveAnalysisRequest:
+        """Validate that result_data conforms to the FullAnalysisResult schema.
+
+        The field is typed as ``dict[str, Any]`` because it is stored as JSON,
+        but the contents must be structurally valid according to the strict
+        ``FullAnalysisResult`` model defined in ``analysis_types.py``.
+        """
+        try:
+            FullAnalysisResult.model_validate(self.result_data)
+        except ValidationError as exc:
+            raise ValueError(
+                "result_data does not conform to the FullAnalysisResult schema. "
+                f"Validation errors: {exc.errors()}"
+            ) from exc
+        return self
+
 
 # ── Responses ─────────────────────────────────────────────────────────────
 
@@ -115,13 +139,26 @@ class SaveAnalysisResponse(BaseModel):
 
 
 class AnalysisListItem(BaseModel):
-    """A single analysis result in a listing (no decrypted data)."""
+    """A single analysis result in a listing (no decrypted data).
+
+    Privacy note on plaintext summary fields:
+        The ``summary`` dict (containing aggregate counts like carrier_count,
+        high_risk_count, etc.) is stored **unencrypted** intentionally.  These
+        are aggregate statistics needed for list/summary views without requiring
+        decryption of the full encrypted payload.  They do NOT identify specific
+        conditions, genetic variants, or individual genotypes — only numeric
+        totals (e.g., "3 carrier results detected").
+    """
+    # TODO(Sprint 3): Evaluate if summary stats should be encrypted or
+    # replaced with generic labels (e.g., "results available") to further
+    # minimize plaintext metadata exposure.
 
     id: uuid.UUID
     label: str
     parent1_filename: str
     parent2_filename: str
     tier_at_time: str
+    data_version: str | None = None
     summary: dict[str, Any] | None
     created_at: datetime
 
@@ -134,6 +171,7 @@ class AnalysisDetailResponse(BaseModel):
     parent1_filename: str
     parent2_filename: str
     tier_at_time: str
+    data_version: str | None = None
     result_data: dict[str, Any]
     summary: dict[str, Any] | None
     created_at: datetime

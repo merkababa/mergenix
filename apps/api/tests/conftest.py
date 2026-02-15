@@ -143,7 +143,28 @@ async def app(db_session: AsyncSession):
 
 @pytest_asyncio.fixture
 async def client(app) -> AsyncGenerator[AsyncClient, None]:
-    """Yield an async HTTP test client."""
+    """Yield an async HTTP test client.
+
+    Includes the X-Requested-With: XMLHttpRequest header by default to
+    satisfy the CSRF middleware. Tests that specifically verify CSRF
+    rejection should override or omit this header explicitly.
+    """
+    transport = ASGITransport(app=app)
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://testserver",
+        headers={"X-Requested-With": "XMLHttpRequest"},
+    ) as c:
+        yield c
+
+
+@pytest_asyncio.fixture
+async def client_no_csrf(app) -> AsyncGenerator[AsyncClient, None]:
+    """Yield an async HTTP test client WITHOUT the CSRF header.
+
+    Used by tests that specifically verify CSRF middleware rejection
+    behavior — i.e., that requests without X-Requested-With get 403.
+    """
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://testserver") as c:
         yield c

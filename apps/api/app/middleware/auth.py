@@ -1,6 +1,6 @@
 """
 Authentication middleware — FastAPI dependencies for extracting and
-validating JWT tokens from incoming requests.
+validating JWT tokens from incoming requests, plus CSRF protection.
 
 Usage in routers:
     @router.get("/protected")
@@ -14,6 +14,7 @@ Usage in routers:
 
 from __future__ import annotations
 
+import json as _json
 import uuid
 from datetime import UTC, datetime
 from typing import Annotated
@@ -23,6 +24,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.config import get_settings
 from app.database import get_db
@@ -34,14 +36,87 @@ _bearer_scheme = HTTPBearer(auto_error=False)
 
 settings = get_settings()
 
+# TODO(future sprint): Exclude current session from invalidation to avoid
+# logging out the user who just changed their password. Applies to
+# reset_password and change_password in routers/auth.py where all sessions
+# for the user are deleted.
+
 # Tier hierarchy for authorization comparisons
 TIER_RANK = {"free": 0, "premium": 1, "pro": 2}
 
+# HTTP methods that change server state and require CSRF protection
+_STATE_CHANGING_METHODS = frozenset({b"POST", b"PUT", b"DELETE", b"PATCH"})
 
+# Pre-encoded CSRF rejection response body
+_CSRF_REJECTION_BODY = _json.dumps({
+    "detail": {
+        "error": (
+            "Missing or invalid X-Requested-With header. "
+            "State-changing requests must include "
+            "X-Requested-With: XMLHttpRequest."
+        ),
+        "code": "CSRF_HEADER_MISSING",
+    }
+}).encode("utf-8")
+
+
+class CSRFMiddleware:
+    """Pure ASGI middleware that enforces CSRF protection via X-Requested-With.
+
+    State-changing requests (POST, PUT, DELETE, PATCH) must include
+    the ``X-Requested-With: XMLHttpRequest`` header. This works in
+    tandem with SameSite=Lax cookies to prevent cross-site request
+    forgery attacks.
+
+    Safe methods (GET, HEAD, OPTIONS) are exempt because they should
+    never cause side effects.
+
+    Implemented as a pure ASGI middleware (not BaseHTTPMiddleware) to
+    avoid the known issue where BaseHTTPMiddleware breaks
+    asyncio.to_thread() in downstream handlers.
+    """
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        method = scope.get("method", "").encode("utf-8") if isinstance(scope.get("method"), str) else scope.get("method", b"")
+
+        if method in _STATE_CHANGING_METHODS:
+            # Check for X-Requested-With header in the ASGI scope.
+            # Compare case-insensitively — header values may arrive in
+            # any casing depending on the client / proxy chain.
+            headers = dict(scope.get("headers", []))
+            xhr_value = headers.get(b"x-requested-with", b"").decode().lower()
+            if xhr_value != "xmlhttprequest":
+                # Reject with 403 — send the response directly
+                await send({
+                    "type": "http.response.start",
+                    "status": 403,
+                    "headers": [
+                        [b"content-type", b"application/json"],
+                        [b"content-length", str(len(_CSRF_REJECTION_BODY)).encode()],
+                    ],
+                })
+                await send({
+                    "type": "http.response.body",
+                    "body": _CSRF_REJECTION_BODY,
+                })
+                return
+
+        await self.app(scope, receive, send)
+
+
+# TODO(future sprint): Cache user lookup or use JWT claims for read-only
+# operations to reduce DB queries per request.
 async def get_current_user(
     request: Request,
-    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),
-    db: AsyncSession = Depends(get_db),
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),  # noqa: B008
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> User:
     """Extract and validate the JWT from the Authorization header.
 
@@ -113,8 +188,8 @@ async def get_current_user(
 
 
 async def get_optional_user(
-    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),
-    db: AsyncSession = Depends(get_db),
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),  # noqa: B008
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> User | None:
     """Like get_current_user but returns None instead of raising 401.
 
@@ -160,7 +235,7 @@ def require_tier(minimum_tier: str):
     """
     required_rank = TIER_RANK.get(minimum_tier, 0)
 
-    async def _check(user: User = Depends(get_current_user)) -> User:
+    async def _check(user: User = Depends(get_current_user)) -> User:  # noqa: B008
         user_rank = TIER_RANK.get(user.tier, 0)
         if user_rank < required_rank:
             raise HTTPException(
@@ -177,7 +252,7 @@ def require_tier(minimum_tier: str):
 
 async def require_admin(
     request: Request,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),  # noqa: B008
 ) -> User:
     """Dependency that restricts access to admin users.
 
@@ -187,6 +262,7 @@ async def require_admin(
     Raises:
         HTTPException 403: If the admin key is missing or invalid.
     """
+    # TODO(future sprint): Replace static admin API key with RBAC (is_admin column)
     admin_key = request.headers.get("X-Admin-Key", "")
     if not settings.admin_api_key or not constant_time_compare(admin_key, settings.admin_api_key):
         raise HTTPException(

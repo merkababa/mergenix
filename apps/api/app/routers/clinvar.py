@@ -10,6 +10,7 @@ import logging
 from datetime import UTC
 from pathlib import Path
 
+import anyio
 from fastapi import APIRouter, HTTPException, status
 
 from app.config import get_settings
@@ -40,10 +41,11 @@ async def check_clinvar_updates(
     """
     last_sync_date = None
 
-    if _SYNC_META_PATH.exists():
+    _async_path = anyio.Path(_SYNC_META_PATH)
+    if await _async_path.exists():
         try:
-            with open(_SYNC_META_PATH) as f:
-                meta = json.load(f)
+            raw = await _async_path.read_text()
+            meta = json.loads(raw)
             last_sync_date = meta.get("last_sync")
         except (json.JSONDecodeError, OSError):
             logger.warning("Could not read ClinVar sync metadata from %s", _SYNC_META_PATH)
@@ -113,7 +115,8 @@ async def get_sync_status(
 
     Includes timestamp, source URL, and downloaded file size.
     """
-    if not _SYNC_META_PATH.exists():
+    _async_path = anyio.Path(_SYNC_META_PATH)
+    if not await _async_path.exists():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={
@@ -123,8 +126,8 @@ async def get_sync_status(
         )
 
     try:
-        with open(_SYNC_META_PATH) as f:
-            meta = json.load(f)
+        raw = await _async_path.read_text()
+        meta = json.loads(raw)
     except (json.JSONDecodeError, OSError) as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

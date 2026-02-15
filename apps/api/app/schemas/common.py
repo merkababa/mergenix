@@ -4,11 +4,9 @@ Common schemas shared across multiple endpoint groups.
 
 from __future__ import annotations
 
-from typing import Any, Generic, TypeVar
+from typing import Any
 
 from pydantic import BaseModel, Field
-
-T = TypeVar("T")
 
 
 class ErrorResponse(BaseModel):
@@ -27,7 +25,7 @@ class HealthResponse(BaseModel):
     version: str
 
 
-class PaginatedResponse(BaseModel, Generic[T]):
+class PaginatedResponse[T](BaseModel):
     """Generic paginated response wrapper."""
 
     items: list[T]  # type: ignore[valid-type]

@@ -13,19 +13,12 @@ import json
 import secrets as _stdlib_secrets
 import uuid
 from datetime import UTC, datetime, timedelta
-
-
-def _utcnow() -> datetime:
-    """Return current UTC time as a naive datetime (no tzinfo).
-
-    asyncpg requires naive datetimes for TIMESTAMP WITHOUT TIME ZONE columns.
-    """
-    return datetime.now(UTC).replace(tzinfo=None)
 from urllib.parse import urlencode
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from jose import JWTError
 from sqlalchemy import delete, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import DbSession
@@ -84,6 +77,22 @@ from app.services.email_service import (
 )
 from app.utils.security import constant_time_compare, hash_token
 
+
+async def _invalidate_all_user_sessions(db: AsyncSession, user_id: int) -> None:
+    """Delete all sessions for a user, forcing re-login on all devices."""
+    # TODO(future sprint): Exclude current session from invalidation to avoid
+    # logging out the user who just changed their password.
+    await db.execute(delete(Session).where(Session.user_id == user_id))
+
+
+def _utcnow() -> datetime:
+    """Return current UTC time as a naive datetime (no tzinfo).
+
+    asyncpg requires naive datetimes for TIMESTAMP WITHOUT TIME ZONE columns.
+    """
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
 router = APIRouter()
 settings = get_settings()
 
@@ -97,6 +106,9 @@ _REFRESH_COOKIE_PATH = "/auth"
 # ── Helpers ───────────────────────────────────────────────────────────────
 
 
+# TODO(deployment): Use trusted-proxy-aware middleware (e.g., uvicorn --proxy-headers
+# with --forwarded-allow-ips) to prevent IP spoofing via X-Forwarded-For header.
+# Current implementation trusts the first value, which can be attacker-controlled.
 def _client_ip(request: Request) -> str:
     """Extract the client IP from the request."""
     forwarded = request.headers.get("X-Forwarded-For")
@@ -855,6 +867,9 @@ async def reset_password(
     user.locked_until = None
     reset.used_at = _utcnow()
 
+    # Invalidate all existing sessions — forces re-login on all devices
+    await _invalidate_all_user_sessions(db, user.id)
+
     await audit_service.log_event(
         db,
         user_id=user.id,
@@ -948,6 +963,9 @@ async def change_password(
         )
 
     user.password_hash = await hash_password(body.new_password)
+
+    # Invalidate all existing sessions — forces re-login on all devices
+    await _invalidate_all_user_sessions(db, user.id)
 
     await audit_service.log_event(
         db,
@@ -1086,17 +1104,28 @@ async def revoke_all_other_sessions(
     if raw_refresh:
         current_hash = hash_token(raw_refresh)
 
-    # Fetch all sessions for this user
-    result = await db.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
-    all_sessions = result.scalars().all()
+    # Look up the current session so we can identify it by its refresh_token_hash
+    current_session = None
+    if current_hash:
+        result = await db.execute(
+            select(Session).where(
+                Session.user_id == user.id,
+                Session.refresh_token_hash == current_hash,
+            )
+        )
+        current_session = result.scalar_one_or_none()
 
-    for s in all_sessions:
-        # Keep the current session
-        if current_hash and constant_time_compare(s.refresh_token_hash, current_hash):
-            continue
-        await db.delete(s)
+    # Bulk-delete all other sessions in a single query (avoids N+1 deletes)
+    if current_session:
+        await db.execute(
+            delete(Session).where(
+                Session.user_id == user.id,
+                Session.refresh_token_hash != current_session.refresh_token_hash,
+            )
+        )
+    else:
+        # No current session identified — delete all sessions
+        await db.execute(delete(Session).where(Session.user_id == user.id))
 
     await audit_service.log_event(
         db,
@@ -1431,11 +1460,11 @@ async def oauth_google_callback(
     signer = URLSafeTimedSerializer(settings.jwt_secret)
     try:
         expected_state = signer.loads(signed_state, salt="oauth-state", max_age=600)
-    except (BadSignature, SignatureExpired):
+    except (BadSignature, SignatureExpired) as exc:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={"error": "Invalid state parameter", "code": "OAUTH_STATE_INVALID"},
-        )
+        ) from exc
 
     if not constant_time_compare(state, expected_state):
         raise HTTPException(
@@ -1446,7 +1475,7 @@ async def oauth_google_callback(
     # Delete the state cookie after successful validation
     response.delete_cookie(key="oauth_state", httponly=True, secure=True, samesite="lax")
 
-    # Exchange code for tokens
+    # Exchange code for tokens and fetch user info using a shared HTTP client
     async with httpx.AsyncClient() as client:
         token_resp = await client.post(
             "https://oauth2.googleapis.com/token",
@@ -1459,17 +1488,16 @@ async def oauth_google_callback(
             },
         )
 
-    if token_resp.status_code != 200:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": "Failed to exchange OAuth code.", "code": "OAUTH_EXCHANGE_FAILED"},
-        )
+        if token_resp.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={"error": "Failed to exchange OAuth code.", "code": "OAUTH_EXCHANGE_FAILED"},
+            )
 
-    tokens = token_resp.json()
-    access_token = tokens.get("access_token")
+        tokens = token_resp.json()
+        access_token = tokens.get("access_token")
 
-    # Fetch user info from Google
-    async with httpx.AsyncClient() as client:
+        # Fetch user info from Google
         info_resp = await client.get(
             "https://www.googleapis.com/oauth2/v3/userinfo",
             headers={"Authorization": f"Bearer {access_token}"},

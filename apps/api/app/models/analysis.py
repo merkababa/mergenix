@@ -63,6 +63,11 @@ class AnalysisResult(Base):
         nullable=False,
         comment="User tier when analysis was saved (free | premium | pro)",
     )
+    data_version: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True,
+        comment="Version of the analysis engine/data used to generate this result",
+    )
     summary_json: Mapped[dict | None] = mapped_column(
         JSON,
         nullable=True,

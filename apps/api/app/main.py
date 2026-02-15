@@ -22,6 +22,7 @@ from slowapi.errors import RateLimitExceeded
 
 from app.config import get_settings
 from app.database import engine
+from app.middleware.auth import CSRFMiddleware
 from app.middleware.rate_limiter import limiter
 from app.routers import analysis, auth, clinvar, health, legal, payments
 
@@ -113,13 +114,23 @@ def create_app() -> FastAPI:
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+    # ── CSRF Protection ──────────────────────────────────────────────────
+    # Requires X-Requested-With: XMLHttpRequest on state-changing methods
+    # (POST, PUT, DELETE, PATCH). Works with SameSite=Lax cookies to
+    # prevent cross-site request forgery.
+    app.add_middleware(CSRFMiddleware)
+
     # ── CORS ──────────────────────────────────────────────────────────────
+    # Added AFTER CSRF so that CORS is the outermost middleware (Starlette
+    # processes last-added middleware first). This ensures CORS headers are
+    # present on ALL responses, including CSRF 403 rejections — preventing
+    # confusing opaque errors for cross-origin clients.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        allow_headers=["*"],
+        allow_headers=["Authorization", "Content-Type", "X-Requested-With"],
         max_age=86400,
     )
 
