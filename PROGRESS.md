@@ -34,7 +34,7 @@
 | Stream 0: Research Phase | Claude | **11/12 Done** | docs/stream0-research-archive | PR #46 — 11 Gemini tasks + 1 Claude task. Research archive in docs/research/stream0/. R12 partial. |
 | Stream D: Data Cleanup | Claude | **Merged** | feature/stream-d-data-cleanup | PR #47 — Remove 22 CNV-untestable diseases, add disclaimers to 46 entries, update 8 gene symbols, add 4 missing variants, centralize count via CARRIER_PANEL_COUNT. Gate 1: 5/5 Gemini (Scientist A+, QA A-, Code A-, Security A-, Ethics A). 2,697 entries. |
 | Stream F Sprint 3: Results + Visualization + Accessibility | Claude | **Merged** | feature/stream-f-sprint-3-results | PR #52 — 13 tasks (F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39). 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total). New dep: react-virtuoso. Gate 1: 10/10 A+ Gemini. Gate 2: 10/10 A+ Claude. |
-| Stream F Sprint 4: Output, Compliance & Polish | Claude | **PR Open** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF generation (pdfmake Web Worker), SEO/OG metadata, WCAG reflow (320px), stale results banner, sample report page, security architecture page, GDPR consent UI. 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). |
+| Stream F Sprint 4: Output, Compliance & Polish | Claude | **Merged** | feature/stream-f-sprint-4-output | PR #53 — 7 tasks (F21, F24, F38, F40, F42, F46, F47). PDF generation (pdfmake Web Worker), SEO/OG metadata, WCAG reflow (320px), stale results banner, sample report page, security architecture page, GDPR consent UI. 103 new tests (1043 web total). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 10/10 A+ Claude (2 rounds). |
 
 ---
 
@@ -146,44 +146,32 @@
      - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
      - 24 files changed in review fix commit, 898 tests across 20 test files
    - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
-   - **Stream F (Frontend): SPRINT 3 PR #52** — awaiting merge
-     - Full plan: `docs/research/streamF/STREAM_F_PLAN.md` (47 tasks, 4 sprints)
-     - Sprint 1: Foundation + Gates (15/15 tasks) — **PR #50 MERGED**
-       - 35 files changed, 714/714 tests, lint clean
-       - Gate 1: 10/10 A+ Gemini. Gate 2: 2 Claude rounds (15 fixes applied)
-     - Sprint 2: Core UX + Tiers (6 tasks) — **PR #51 MERGED**
-       - 6 new components, 7 modified tabs, tier gating, pricing aligned
-       - Gate 1: 9/9 A Gemini. Gate 2: 9/9 A-+ Claude
-       - 34 files changed, 803 tests
-     - Sprint 3: Results + Visualization + Accessibility (13 tasks) — **PR #52 MERGED**
-       - 13 tasks: F5, F7, F8, F9, F10, F17, F23, F26, F30, F31, F33, F37, F39
-       - 11 new components, 6 modified tabs, 137 new tests (940 web, 1332 total)
-       - Gate 1 (Gemini): 10/10 A+. Gate 2 (Claude): 10/10 A+
-     - Sprint 4: Output, Compliance & Polish (7 tasks) — **PR #53 OPEN** (2026-02-15)
-       - 7 tasks: F21, F24, F38, F40, F42, F46, F47
-       - PDF export (pdfmake, dynamic import, low-memory fallback to window.print())
-       - SEO/OG metadata (JSON-LD, per-page meta)
-       - WCAG 1.4.10 Reflow (320px viewport, 25 Playwright E2E tests)
-       - Stale results banner (dataVersion mismatch detection)
-       - Sample report page (14 carrier + 14 trait fixture, all rsIDs verified)
-       - Security Architecture page (zero-knowledge explainer)
-       - GDPR consent UI (withdrawal + data clearing, focus trap, Escape, scroll lock)
-       - 1070 Vitest + 25 Playwright E2E tests (94 new tests)
-       - Gate 1 (Gemini): 10/10 A+ (3 rounds)
-       - Gate 2 (Claude): 10/10 A/A+ (5 rounds)
-       - Branch: `feature/stream-f-sprint-4-output`
-       - **Next:** Merge PR #53
-     - 8 Gemini tasks (17%), 39 Claude tasks (83%)
+   - **Stream F (Frontend): COMPLETE** — all 4 sprints merged (47 tasks)
+     - Sprint 1: PR #50 MERGED (15 tasks, 714 tests)
+     - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
+     - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
+     - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
+   - **Stream B (Backend): PLANNING COMPLETE** — ready for Sprint 1 execution
+     - 11/11 Gemini planning perspectives gathered and synthesized (2026-02-15)
+     - 12 active tasks (B4 removed), 3 sprints planned
+     - Sprint 1 (Foundation): B11 auth middleware, B3 EncryptedEnvelope schema, B1 strict Pydantic schemas, B2 data versioning
+     - Sprint 2 (ZK Pivot + GDPR): B13 remove server encryption, B7 nuclear delete, B8 GDPR export, B12 rectification
+     - Sprint 3 (Business): B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
+     - Delegation: 6 Claude (B11, B3, B13, B7, B8, B5) + 6 Gemini (B1, B2, B12, B6, B9, B10)
+     - Key decisions: Wipe dev data (no migration), anonymize payments (not delete), include kdf_params in GDPR export
+     - 10 new requirements from Gemini planners (payment anonymization, analytics allowlist, Report Abuse link, etc.)
+     - **Next:** Execute Sprint 1 (B11, B3, B1, B2)
+   - **Remaining streams:** S (Security), L (Legal), Q (QA), C (Content), Ops (Operations)
 
 ---
 
 ## Active Blockers
 
-*R12 (rsID audit) needs re-run with corrected ClinVar lookup methodology. Non-blocking for Stream D.*
+*R12 (rsID audit) needs re-run with corrected ClinVar lookup methodology. Non-blocking.*
 
 ---
 
 ## Notes
 - kukiz works from multiple computers — always pull first!
 - Claude pushes PROGRESS.md directly to main; all other changes go through PRs
-- V3 review process: 10 reviewers (Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics) — all must give A+ (three-layer: Static → Gemini CLI with `GEMINI_SYSTEM_MD` personas → Claude Opus agents)
+- V3 review process: 11 reviewers (Architect, QA, Scientist, Technologist, Business, Marketing, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics) — all must give A+ (three-layer: Static → Gemini CLI with `GEMINI_SYSTEM_MD` personas → Claude Opus agents)

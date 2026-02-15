@@ -77,7 +77,7 @@
 | UI prototyping | **A** | Praised for "vibe coding" and full-project scaffolding | "Prototype a user onboarding flow" | 1, 3, 6 |
 | Scientific accuracy checking | **A** | 91.9% GPQA Diamond (surpasses human experts) | "Are Punnett square calcs genetically sound?" | 1, 2, 4, 7 |
 | Screenshot / visual review | **A** | Native multimodal vision, battle-tested | "What's wrong with this page layout?" | 1, 5, 7 |
-| Planning perspective gathering | **A** | 10 personas in parallel, each gets full context; Claude synthesizes | "Analyze Phase 8C from security perspective" | 1, 3, 5, 7 |
+| Planning perspective gathering | **A** | 11 personas in parallel, each gets full context; Claude synthesizes | "Analyze Phase 8C from security perspective" | 1, 3, 5, 7 |
 
 ### B-Tier: Gemini viable, saves tokens
 
@@ -164,7 +164,7 @@ Ask yourself:
 ## Planning with Gemini
 
 ### When to Use
-Before every phase, use Gemini to gather perspectives from all 10 planning personas in parallel. This is **A-tier** work: each persona does a single-shot analysis of the phase from their domain. Claude then synthesizes all 10 perspectives into the final plan.
+Before every phase, use Gemini to gather perspectives from all 11 planning personas in parallel. This is **A-tier** work: each persona does a single-shot analysis of the phase from their domain. Claude then synthesizes all 11 perspectives into the final plan.
 
 ### Planning Personas
 Located in `review-personas/planning-*.md`, invoked via `GEMINI_SYSTEM_MD`:
@@ -209,7 +209,7 @@ Every Gemini planning call MUST include this context:
 [Checklistable — Rule 7: DEFINE DONE]
 
 ## Constraints
-- Must pass all 10 reviewers at A+ (both Gemini and Claude stages)
+- Must pass all 11 reviewers at A+ (both Gemini and Claude stages)
 - Must follow existing patterns in the codebase
 - [Phase-specific constraints]
 ```

@@ -41,8 +41,8 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 ### Orchestration Layers:
 1. **Conductor (you)** — orchestrator, spawns executors with file ownership
 2. **Executor agents** — code writers, each owns specific files/directories
-3. **Gemini reviewers** — 10 personas in `review-personas/`, called via bash CLI
-4. **Claude reviewers** — 10 agents in `.claude/agents/*-reviewer.md`
+3. **Gemini reviewers** — 11 personas in `review-personas/`, called via bash CLI
+4. **Claude reviewers** — 11 agents in `.claude/agents/*-reviewer.md`
 
 ### Execution Rules:
 - Each executor gets strict file ownership — partition by directory/module
@@ -57,8 +57,8 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 4. **Show delegation plan to user** before executing — table of task → assignee → rationale.
 
 ### Planning (before starting any phase):
-1. **Gemini perspective gathering (Stage 0):** Fire all 10 Gemini planning personas in parallel (`review-personas/planning-*.md` via `GEMINI_SYSTEM_MD`). No stagger needed — paid API has 150+ RPM. Each persona returns: requirements checklist, risks, suggested approach, dependencies.
-2. **Claude synthesis:** Conductor aggregates all 10 Gemini perspectives into a unified plan. Claude makes final architectural decisions (Gemini proposes, Claude decides).
+1. **Gemini perspective gathering (Stage 0):** Fire all 11 Gemini planning personas in parallel (`review-personas/planning-*.md` via `GEMINI_SYSTEM_MD`). No stagger needed — paid API has 150+ RPM. Each persona returns: requirements checklist, risks, suggested approach, dependencies.
+2. **Claude synthesis:** Conductor aggregates all 11 Gemini perspectives into a unified plan. Claude makes final architectural decisions (Gemini proposes, Claude decides).
 3. **User approval:** Present the plan to the user before execution begins.
 - Planning prompt template and context requirements: see `docs/GEMINI_DELEGATION_GUIDE.md` → "Planning with Gemini"
 - Conductor autonomously selects reviewers using phase-type defaults in `/review-pipeline` — better safe than sorry (include when in doubt)
@@ -131,16 +131,16 @@ We follow the **Testing Trophy** (Kent C. Dodds): heavy on integration tests, li
 ## Code Review (MANDATORY before every PR)
 Run `/review-pipeline` for the full three-layer review process (Static → Gemini → Claude).
 
-**10 Reviewers:** Architect, QA, Scientist, Technologist, Business, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics.
+**11 Reviewers:** Architect, QA, Scientist, Technologist, Business, Marketing, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics.
 
 **Reviewer Selection:** Only summon reviewers relevant to the task. Conductor decides which reviewers to include based on what changed. Skip reviewers with zero relevance (e.g., Scientist for pure frontend UX changes).
 
 **Pass Threshold:** A reviewer passes when they give **A or A+**. Once a reviewer reaches A or A+, they do NOT need to be re-reviewed in subsequent rounds — they are done. Only re-review reviewers that scored below A.
 
 **Resources:**
-- Gemini review personas: `review-personas/{role}.md` (10 files)
-- Gemini planning personas: `review-personas/planning-{role}.md` (10 files)
-- Claude review agents: `.claude/agents/*-reviewer.md` (10 files)
+- Gemini review personas: `review-personas/{role}.md` (11 files)
+- Gemini planning personas: `review-personas/planning-{role}.md` (11 files)
+- Claude review agents: `.claude/agents/*-reviewer.md` (11 files)
 - Calibration log: `docs/gemini-calibration.md`
 - Delegation rules: `docs/GEMINI_DELEGATION_GUIDE.md`
 
