@@ -154,11 +154,11 @@
      - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
      - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
      - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
-   - **Stream B (Backend): Sprint 2 COMPLETE, Sprint 3 NEXT**
+   - **Stream B (Backend): Sprint 3 COMPLETE, Sprint 4 NEXT**
      - Sprint 1 (Foundation): PR #54 MERGED — B11, B3, B1, B2. 205 backend tests. Gate 2: 7/7 A Claude.
-     - Sprint 2 (ZK Pivot + GDPR): PR #55 — B13 ZKE pivot, B7 nuclear delete, B8 GDPR export, B12 rectification. 245 tests. Gate 1: 6/6 A Gemini. Gate 2: 6/6 A Claude.
-     - **Sprint 3 (Business): NEXT** — B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
-     - Sprint 3 (Business): B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification
+     - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13 ZKE pivot, B7 nuclear delete, B8 GDPR export, B12 rectification. 245 tests. Gate 1: 6/6 A Gemini. Gate 2: 6/6 A Claude.
+     - Sprint 3 (Business): PR #56 — B5 tier gating ($14.99/$34.99, upgrade path), B6 anonymous analytics, B9 email receipts, B10 partner notification. 308 tests. Gate 1: 7/7 A+ Gemini. Gate 2: 7/7 A- or A Claude (threshold B+).
+     - **Sprint 4: NEXT** — remaining B-tasks (B4 Stripe webhooks advanced, etc.)
      - Delegation: 6 Claude (B11, B3, B13, B7, B8, B5) + 6 Gemini (B1, B2, B12, B6, B9, B10)
    - **Remaining streams:** S (Security), L (Legal), Q (QA), C (Content), Ops (Operations)
 
