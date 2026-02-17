@@ -3,14 +3,21 @@ Email service — sends transactional emails via Resend.
 
 Gracefully degrades (logs a warning) if the Resend API key is not configured,
 so that local development works without an email provider.
+
+HTML email bodies are rendered from Jinja2 templates stored in
+``app/templates/email/``.  Autoescape is enabled globally so that
+user-supplied values (tokens, tier names, etc.) are automatically
+HTML-escaped, preventing XSS in email clients.
 """
 
 from __future__ import annotations
 
 import asyncio
 import logging
+from pathlib import Path
 
 import resend
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import get_settings
 
@@ -18,6 +25,21 @@ logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
+# ---------------------------------------------------------------------------
+# Jinja2 template environment
+# ---------------------------------------------------------------------------
+
+_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates" / "email"
+
+_jinja_env = Environment(
+    loader=FileSystemLoader(str(_TEMPLATE_DIR)),
+    autoescape=select_autoescape(default=True, default_for_string=True),
+)
+
+
+# ---------------------------------------------------------------------------
+# Low-level send helper
+# ---------------------------------------------------------------------------
 
 async def _send(to: str, subject: str, html: str) -> bool:
     """Low-level send via Resend SDK.
@@ -60,6 +82,10 @@ async def _send(to: str, subject: str, html: str) -> bool:
         return False
 
 
+# ---------------------------------------------------------------------------
+# Public email functions
+# ---------------------------------------------------------------------------
+
 async def send_verification_email(email: str, token: str) -> bool:
     """Send an email verification link.
 
@@ -72,35 +98,8 @@ async def send_verification_email(email: str, token: str) -> bool:
     """
     verify_url = f"{settings.frontend_url}/verify-email?token={token}"
 
-    html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
-                    padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-            <h1 style="color: #00e5ff; margin: 0;">Mergenix</h1>
-            <p style="color: #94a3b8; margin: 5px 0 0 0;">Genetic Offspring Analysis Platform</p>
-        </div>
-        <div style="padding: 30px; background: #f8fafc; border: 1px solid #e2e8f0;
-                    border-radius: 0 0 8px 8px;">
-            <h2 style="color: #1e293b;">Verify Your Email Address</h2>
-            <p style="color: #475569;">
-                Thank you for creating a Mergenix account. Please verify your email
-                address by clicking the button below.
-            </p>
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{verify_url}"
-                   style="background: #00e5ff; color: #0a1628; padding: 12px 30px;
-                          text-decoration: none; border-radius: 6px; font-weight: bold;
-                          display: inline-block;">
-                    Verify Email Address
-                </a>
-            </div>
-            <p style="color: #64748b; font-size: 0.9em;">
-                This link expires in 24 hours. If you did not create an account,
-                you can safely ignore this email.
-            </p>
-        </div>
-    </div>
-    """
+    template = _jinja_env.get_template("verification.html")
+    html = template.render(verify_url=verify_url)
 
     return await _send(email, "Verify your Mergenix account", html)
 
@@ -117,37 +116,31 @@ async def send_password_reset_email(email: str, token: str) -> bool:
     """
     reset_url = f"{settings.frontend_url}/reset-password?token={token}"
 
-    html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
-                    padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-            <h1 style="color: #00e5ff; margin: 0;">Mergenix</h1>
-            <p style="color: #94a3b8; margin: 5px 0 0 0;">Genetic Offspring Analysis Platform</p>
-        </div>
-        <div style="padding: 30px; background: #f8fafc; border: 1px solid #e2e8f0;
-                    border-radius: 0 0 8px 8px;">
-            <h2 style="color: #1e293b;">Reset Your Password</h2>
-            <p style="color: #475569;">
-                We received a request to reset your Mergenix password.
-                Click the button below to choose a new password.
-            </p>
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{reset_url}"
-                   style="background: #00e5ff; color: #0a1628; padding: 12px 30px;
-                          text-decoration: none; border-radius: 6px; font-weight: bold;
-                          display: inline-block;">
-                    Reset Password
-                </a>
-            </div>
-            <p style="color: #64748b; font-size: 0.9em;">
-                This link expires in 1 hour. If you did not request a password reset,
-                you can safely ignore this email.
-            </p>
-        </div>
-    </div>
-    """
+    template = _jinja_env.get_template("password_reset.html")
+    html = template.render(reset_url=reset_url)
 
     return await _send(email, "Reset your Mergenix password", html)
+
+
+async def send_deletion_confirmation_email(email: str, token: str) -> bool:
+    """Send an account deletion confirmation link.
+
+    Used for the email-based deletion flow (GDPR Article 17), especially
+    for OAuth-only users who cannot provide a password for verification.
+
+    Args:
+        email: Recipient email address.
+        token: Plaintext deletion confirmation token (included in the URL).
+
+    Returns:
+        True if the email was dispatched successfully.
+    """
+    deletion_url = f"{settings.frontend_url}/confirm-deletion?token={token}"
+
+    template = _jinja_env.get_template("deletion_confirmation.html")
+    html = template.render(deletion_url=deletion_url)
+
+    return await _send(email, "Confirm your Mergenix account deletion", html)
 
 
 async def send_tier_upgrade_email(email: str, tier: str) -> bool:
@@ -161,32 +154,9 @@ async def send_tier_upgrade_email(email: str, tier: str) -> bool:
         True if the email was dispatched successfully.
     """
     tier_display = tier.capitalize()
+    analysis_url = f"{settings.frontend_url}/analysis"
 
-    html = f"""
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
-                    padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-            <h1 style="color: #00e5ff; margin: 0;">Mergenix</h1>
-            <p style="color: #94a3b8; margin: 5px 0 0 0;">Genetic Offspring Analysis Platform</p>
-        </div>
-        <div style="padding: 30px; background: #f8fafc; border: 1px solid #e2e8f0;
-                    border-radius: 0 0 8px 8px;">
-            <h2 style="color: #1e293b;">Welcome to Mergenix {tier_display}!</h2>
-            <p style="color: #475569;">
-                Your account has been upgraded to <strong>{tier_display}</strong>.
-                You now have access to all {tier_display}-tier features including
-                advanced genetic analysis capabilities.
-            </p>
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{settings.frontend_url}/analysis"
-                   style="background: #00e5ff; color: #0a1628; padding: 12px 30px;
-                          text-decoration: none; border-radius: 6px; font-weight: bold;
-                          display: inline-block;">
-                    Start Analyzing
-                </a>
-            </div>
-        </div>
-    </div>
-    """
+    template = _jinja_env.get_template("tier_upgrade.html")
+    html = template.render(tier_display=tier_display, analysis_url=analysis_url)
 
     return await _send(email, f"Welcome to Mergenix {tier_display}!", html)

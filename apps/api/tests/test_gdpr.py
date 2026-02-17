@@ -678,13 +678,13 @@ async def test_rectify_profile_duplicate_email(
 
 
 @pytest.mark.asyncio
-async def test_get_result_legacy_format_returns_410(
+async def test_get_result_legacy_format_returns_422(
     client: AsyncClient,
     test_user: User,
     auth_headers: dict[str, str],
     db_session: AsyncSession,
 ) -> None:
-    """GET /analysis/results/{id} with legacy raw-bytes result_data should return 410."""
+    """GET /analysis/results/{id} with legacy raw-bytes result_data should return 422."""
     # Create an analysis result with non-JSON binary data (legacy format)
     legacy_analysis = AnalysisResult(
         id=uuid.uuid4(),
@@ -704,7 +704,7 @@ async def test_get_result_legacy_format_returns_410(
         f"/analysis/results/{legacy_analysis.id}",
         headers=auth_headers,
     )
-    assert response.status_code == 410
+    assert response.status_code == 422
     data = response.json()
     assert data["detail"]["code"] == "LEGACY_FORMAT"
 

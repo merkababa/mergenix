@@ -76,6 +76,17 @@ class Settings(BaseSettings):
     # ── ClinVar ───────────────────────────────────────────────────────────
     clinvar_ftp_url: str = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
 
+    # ── Rate Limiting ────────────────────────────────────────────────────
+    # Storage backend for slowapi/limits. Defaults to in-memory, which
+    # does NOT share state across workers/processes. For production
+    # multi-worker deployments, set RATE_LIMIT_STORAGE_URI to a Redis
+    # URI, e.g. "redis://host:6379".
+    rate_limit_storage_uri: str = "memory://"
+    # Webhook endpoint rate limit (requests per minute). Default 300/min
+    # to handle Stripe burst scenarios (e.g. mass subscription renewals).
+    # Override via WEBHOOK_RATE_LIMIT env var, e.g. "500/minute".
+    webhook_rate_limit: str = "300/minute"
+
     # ── Admin ─────────────────────────────────────────────────────────────
     admin_api_key: str = ""
 

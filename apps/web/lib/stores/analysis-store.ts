@@ -143,7 +143,7 @@ function buildSummary(results: FullAnalysisResult): Record<string, unknown> {
   return {
     trait_count: results.traits.length,
     carrier_count: results.carrier.length,
-    high_risk_count: countHighRisk(results.carrier),
+    has_results: true,
     total_variants_analyzed: results.metadata.parent1SnpCount + results.metadata.parent2SnpCount,
   };
 }

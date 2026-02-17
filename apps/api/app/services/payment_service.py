@@ -11,11 +11,14 @@ import uuid
 
 import stripe
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
+from app.constants.tiers import TIER_PREMIUM, TIER_PRICES, TIER_PRO
 from app.models.payment import Payment
 from app.models.user import User
+from app.services.email_service import send_tier_upgrade_email
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +26,8 @@ settings = get_settings()
 
 # Price ID mapping for the two paid tiers
 _PRICE_MAP: dict[str, str] = {
-    "premium": settings.stripe_price_premium,
-    "pro": settings.stripe_price_pro,
+    TIER_PREMIUM: settings.stripe_price_premium,
+    TIER_PRO: settings.stripe_price_pro,
 }
 
 
@@ -114,7 +117,7 @@ async def handle_webhook_event(
     if event["type"] == "checkout.session.completed":
         session_obj = event["data"]["object"]
         user_id_str = session_obj.get("client_reference_id") or session_obj.get("metadata", {}).get("user_id")
-        tier = session_obj.get("metadata", {}).get("tier", "premium")
+        tier = session_obj.get("metadata", {}).get("tier", TIER_PREMIUM)
         amount = session_obj.get("amount_total", 0)
         currency = session_obj.get("currency", "usd")
         customer_id = session_obj.get("customer")
@@ -126,8 +129,9 @@ async def handle_webhook_event(
         # Defense-in-depth: validate that the charged amount matches expected
         # pricing for the granted tier. Log a warning on mismatch but still
         # process the payment (taxes or currency conversions may cause drift).
-        _EXPECTED_AMOUNTS = {"premium": 1290, "pro": 2990}
-        expected = _EXPECTED_AMOUNTS.get(tier)
+        # Derived from TIER_PRICES (single source of truth in constants/tiers.py).
+        _expected_amounts = {t: data["monthly"] for t, data in TIER_PRICES.items()}
+        expected = _expected_amounts.get(tier)
         if expected is not None and amount != expected:
             logger.warning(
                 "Price mismatch for tier %s: expected %d cents, got %d cents (user %s)",
@@ -146,21 +150,55 @@ async def handle_webhook_event(
             logger.warning("User %s not found during webhook processing", user_id)
             return
 
-        # Idempotency: skip if a payment with this intent already exists
+        # Determine the idempotency key: prefer payment_intent, fall back to event ID
         payment_intent_id = session_obj.get("payment_intent")
-        if payment_intent_id:
-            existing = await db.execute(
-                select(Payment).where(Payment.stripe_payment_intent == payment_intent_id)
-            )
-            if existing.scalar_one_or_none() is not None:
-                logger.info("Duplicate webhook for payment_intent %s — skipping", payment_intent_id)
-                return
+        event_id = event.get("id")
+        idempotency_key = payment_intent_id or event_id
 
-        # Record the payment
+        if not idempotency_key:
+            logger.warning(
+                "Webhook for user %s has no payment_intent and no event ID — "
+                "rejecting to prevent duplicate payments (no idempotency key)",
+                user_id,
+            )
+            return
+
+        if not payment_intent_id and event_id:
+            logger.warning(
+                "Webhook for user %s has no payment_intent — "
+                "using Stripe event ID %s as idempotency fallback",
+                user_id,
+                event_id,
+            )
+
+        # Idempotency: check if a payment with this key already exists
+        existing_result = await db.execute(
+            select(Payment).where(Payment.stripe_payment_intent == idempotency_key)
+        )
+        existing_payment = existing_result.scalar_one_or_none()
+
+        if existing_payment is not None:
+            # Duplicate webhook — but check if we need to retry the receipt email
+            if not existing_payment.receipt_sent:
+                logger.info(
+                    "Duplicate webhook for %s — retrying unsent receipt email for user %s",
+                    idempotency_key,
+                    user_id,
+                )
+                email_sent = await send_tier_upgrade_email(user.email, tier)
+                if email_sent:
+                    existing_payment.receipt_sent = True
+                    await db.commit()
+            else:
+                logger.info("Duplicate webhook for %s — skipping (receipt already sent)", idempotency_key)
+            return
+
+        # Record the payment (wrapped in IntegrityError handling for race conditions
+        # between concurrent webhook deliveries hitting the unique constraint)
         payment = Payment(
             user_id=user_id,
             stripe_customer_id=customer_id,
-            stripe_payment_intent=session_obj.get("payment_intent"),
+            stripe_payment_intent=idempotency_key,
             amount=amount,
             currency=currency,
             status="succeeded",
@@ -172,7 +210,23 @@ async def handle_webhook_event(
         user.tier = tier
         logger.info("Upgraded user %s to tier %s", user_id, tier)
 
-        await db.commit()
+        try:
+            await db.commit()
+        except IntegrityError:
+            # Race condition: another concurrent webhook already inserted this payment.
+            # Roll back and treat it as a duplicate (the other request handled it).
+            await db.rollback()
+            logger.info(
+                "Concurrent duplicate for %s — another webhook already recorded this payment",
+                idempotency_key,
+            )
+            return
+
+        # Send receipt email AFTER the payment is committed
+        email_sent = await send_tier_upgrade_email(user.email, tier)
+        if email_sent:
+            payment.receipt_sent = True
+            await db.commit()
 
     else:
         logger.info("Ignoring unhandled Stripe event type: %s", event["type"])

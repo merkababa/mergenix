@@ -43,7 +43,7 @@ VALID_ENCRYPTED_ENVELOPE: dict = {
 SAMPLE_SUMMARY = {
     "trait_count": 1,
     "carrier_count": 1,
-    "health_risk_count": 0,
+    "has_results": True,
     "total_variants_analyzed": 500000,
 }
 
@@ -833,3 +833,189 @@ async def test_save_result_rejects_nested_summary(
         json=payload,
     )
     assert response.status_code == 422
+
+
+# ── DI-13: Sensitive Summary Keys Removal Tests ────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_save_result_rejects_high_risk_count(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """high_risk_count is health-sensitive metadata and must be rejected from summary."""
+    payload = _save_payload(
+        summary={"trait_count": 1, "high_risk_count": 5},
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 422
+    # Verify the error message references the disallowed key
+    body = response.json()
+    assert "high_risk_count" in str(body)
+
+
+@pytest.mark.asyncio
+async def test_save_result_rejects_health_risk_count(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """health_risk_count is health-sensitive metadata and must be rejected from summary."""
+    payload = _save_payload(
+        summary={"trait_count": 1, "health_risk_count": 3},
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 422
+    body = response.json()
+    assert "health_risk_count" in str(body)
+
+
+@pytest.mark.asyncio
+async def test_save_result_accepts_has_results(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """has_results is a safe, non-sensitive boolean flag that should be accepted."""
+    payload = _save_payload(
+        summary={"trait_count": 1, "has_results": True},
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 201
+
+
+@pytest.mark.asyncio
+async def test_save_result_has_results_accepts_bool_only(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """has_results must be a simple type (bool is a subclass of int in Python, so bool is valid)."""
+    payload = _save_payload(
+        summary={"has_results": True, "trait_count": 1},
+    )
+    response = await client.post(
+        "/analysis/results",
+        headers=auth_headers,
+        json=payload,
+    )
+    assert response.status_code == 201
+
+
+# ── DI-7: Legacy Data Format Detection Tests ──────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_get_result_legacy_format_returns_422(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """Loading a legacy result (no data_version, invalid JSON) should return 422."""
+    # Insert a legacy record directly into DB with non-JSON bytes and no data_version
+    analysis_id = uuid.uuid4()
+    legacy_record = AnalysisResult(
+        id=analysis_id,
+        user_id=test_user.id,
+        label="Legacy Analysis",
+        parent1_filename="old_parent1.txt",
+        parent2_filename="old_parent2.txt",
+        result_data=b"\x80\x81\x82\x83",  # raw bytes, not valid JSON
+        tier_at_time="free",
+        data_version=None,  # pre-ZKE, no version
+        summary_json={"trait_count": 1},
+    )
+    db_session.add(legacy_record)
+    await db_session.commit()
+
+    response = await client.get(
+        f"/analysis/results/{analysis_id}",
+        headers=auth_headers,
+    )
+    # Should return 422 UNPROCESSABLE_ENTITY, not 410 GONE
+    assert response.status_code == 422
+    data = response.json()
+    assert data["detail"]["code"] == "LEGACY_FORMAT"
+    assert "re-analyze" in data["detail"]["error"].lower()
+
+
+@pytest.mark.asyncio
+async def test_get_result_legacy_format_error_includes_data_version_hint(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """Legacy format error should mention that no data_version was found."""
+    analysis_id = uuid.uuid4()
+    legacy_record = AnalysisResult(
+        id=analysis_id,
+        user_id=test_user.id,
+        label="Old Analysis",
+        parent1_filename="parent1.vcf",
+        parent2_filename="parent2.vcf",
+        result_data=b"not-json-at-all",
+        tier_at_time="free",
+        data_version=None,
+        summary_json=None,
+    )
+    db_session.add(legacy_record)
+    await db_session.commit()
+
+    response = await client.get(
+        f"/analysis/results/{analysis_id}",
+        headers=auth_headers,
+    )
+    assert response.status_code == 422
+    data = response.json()
+    assert data["detail"]["code"] == "LEGACY_FORMAT"
+    # The error should hint about the missing data version
+    assert "data_version" in data["detail"]["error"].lower() or \
+           "version" in data["detail"]["error"].lower()
+
+
+@pytest.mark.asyncio
+async def test_get_result_with_data_version_and_corrupt_data_returns_422(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """Even with data_version set, corrupt data should return 422 with appropriate code."""
+    analysis_id = uuid.uuid4()
+    corrupt_record = AnalysisResult(
+        id=analysis_id,
+        user_id=test_user.id,
+        label="Corrupt Analysis",
+        parent1_filename="parent1.vcf",
+        parent2_filename="parent2.vcf",
+        result_data=b"\xff\xfe",  # corrupt bytes
+        tier_at_time="free",
+        data_version="1.0.0",  # has version but data is corrupt
+        summary_json={"trait_count": 1},
+    )
+    db_session.add(corrupt_record)
+    await db_session.commit()
+
+    response = await client.get(
+        f"/analysis/results/{analysis_id}",
+        headers=auth_headers,
+    )
+    assert response.status_code == 422
+    data = response.json()
+    # Should use a different error code for corruption vs legacy
+    assert data["detail"]["code"] == "CORRUPT_DATA"

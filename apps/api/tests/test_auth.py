@@ -8,7 +8,7 @@ session management, account deletion, and resend verification.
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pyotp
 import pytest
@@ -19,6 +19,9 @@ from app.utils.security import hash_token
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+# Valid adult DOB for registration tests (25 years old)
+_ADULT_DOB = (date.today().replace(year=date.today().year - 25)).isoformat()
 
 # ── Registration ──────────────────────────────────────────────────────────
 
@@ -32,6 +35,7 @@ async def test_register_success(client: AsyncClient, mock_email) -> None:
             "email": "newuser@example.com",
             "password": "SecurePass1",
             "name": "New User",
+            "date_of_birth": _ADULT_DOB,
         },
     )
     assert response.status_code == 201
@@ -53,6 +57,7 @@ async def test_register_duplicate_email(
             "email": test_user.email,
             "password": "SecurePass1",
             "name": "Duplicate User",
+            "date_of_birth": _ADULT_DOB,
         },
     )
     assert response.status_code == 409
@@ -1084,6 +1089,7 @@ async def test_register_stores_verification_with_naive_datetime(
             "email": "naive_dt_test@example.com",
             "password": "SecurePass1",
             "name": "Naive DT Test",
+            "date_of_birth": _ADULT_DOB,
         },
     )
     assert response.status_code == 201

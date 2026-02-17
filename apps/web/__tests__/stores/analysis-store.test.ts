@@ -350,7 +350,7 @@ describe('useAnalysisStore', () => {
         'mom.vcf',
         'dad.23andme',
         expect.any(Object),
-        expect.objectContaining({ trait_count: 0, carrier_count: 3, high_risk_count: 2 }),
+        expect.objectContaining({ trait_count: 0, carrier_count: 3, has_results: true }),
         true,
       );
       expect(mockListResults).toHaveBeenCalled();

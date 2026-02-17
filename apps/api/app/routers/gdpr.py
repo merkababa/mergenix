@@ -2,7 +2,8 @@
 GDPR compliance router — account deletion, data export, and profile rectification.
 
 Implements three GDPR rights:
-- Article 17: Right to erasure (DELETE /gdpr/account)
+- Article 17: Right to erasure (DELETE /gdpr/account, POST /gdpr/request-deletion,
+  POST /gdpr/confirm-deletion)
 - Article 20: Data portability (GET /gdpr/export)
 - Article 16: Right to rectification (PUT /gdpr/profile)
 
@@ -15,7 +16,7 @@ from __future__ import annotations
 import json
 import logging
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, Request, Response, status
 from sqlalchemy import func, select
@@ -33,10 +34,12 @@ from app.middleware.rate_limiter import (
 from app.models.analysis import AnalysisResult
 from app.models.audit import AuditLog
 from app.models.payment import Payment
+from app.models.user import User
 from app.schemas.auth import MessageResponse
 from app.schemas.gdpr import (
     GdprAnalysisExport,
     GdprAuditLogExport,
+    GdprConfirmDeletionRequest,
     GdprDeleteAccountRequest,
     GdprExportResponse,
     GdprPaginationInfo,
@@ -48,9 +51,11 @@ from app.schemas.gdpr import (
 from app.services import audit_service
 from app.services.account_service import delete_user_account
 from app.services.auth_service import verify_password
+from app.services.email_service import send_deletion_confirmation_email
 from app.utils.cookies import clear_refresh_cookie
 from app.utils.request_helpers import client_ip as _client_ip
 from app.utils.request_helpers import user_agent as _user_agent
+from app.utils.security import generate_secure_token, hash_token
 
 logger = logging.getLogger(__name__)
 
@@ -207,7 +212,7 @@ async def delete_account(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={
-                "error": "OAuth-only accounts must contact support to delete.",
+                "error": "OAuth-only accounts must use POST /gdpr/request-deletion for email-based deletion.",
                 "code": "OAUTH_ACCOUNT",
             },
         )
@@ -238,6 +243,117 @@ async def delete_account(
 
     # Issue 9: Use shared cookie helper
     clear_refresh_cookie(response)
+    return MessageResponse(message="Account and all associated data deleted successfully.")
+
+
+# ── POST /gdpr/request-deletion (Email-Based Deletion for OAuth Users) ──
+
+
+# Deletion token expiry: 24 hours
+_DELETION_TOKEN_EXPIRY_HOURS = 24
+
+
+@router.post(
+    "/request-deletion",
+    response_model=MessageResponse,
+    summary="Request email-based account deletion (GDPR Article 17)",
+)
+@limiter.limit(LIMIT_DELETE_ACCOUNT)
+async def request_deletion(
+    request: Request,
+    user: CurrentUser,
+    db: DbSession,
+) -> MessageResponse:
+    """Request account deletion via email confirmation.
+
+    Generates a secure deletion token, stores its hash on the user record,
+    and sends a confirmation email with a deletion link. The token expires
+    in 24 hours.
+
+    This endpoint is available to ALL users (both password and OAuth) and
+    is the ONLY deletion path for OAuth-only users who cannot provide a
+    password. Satisfies GDPR Article 17 — right to erasure must be as
+    easy as signup.
+    """
+    # Generate a secure deletion token
+    token = generate_secure_token(length=32)
+
+    # Store the hashed token and expiry on the user record.
+    # This replaces any previously requested deletion token.
+    user.deletion_token_hash = hash_token(token)
+    user.deletion_token_expires = (
+        datetime.now(UTC).replace(tzinfo=None)
+        + timedelta(hours=_DELETION_TOKEN_EXPIRY_HOURS)
+    )
+
+    await audit_service.log_event(
+        db,
+        user_id=user.id,
+        event_type="deletion_requested",
+        metadata={"method": "email_confirmation"},
+        ip_address=_client_ip(request),
+        user_agent=_user_agent(request),
+    )
+    await db.commit()
+
+    # Send the confirmation email (failure doesn't roll back)
+    await send_deletion_confirmation_email(user.email, token)
+
+    return MessageResponse(
+        message="A confirmation email has been sent. Please check your inbox to confirm account deletion."
+    )
+
+
+@router.post(
+    "/confirm-deletion",
+    response_model=MessageResponse,
+    summary="Confirm account deletion with email token (GDPR Article 17)",
+)
+@limiter.limit(LIMIT_DELETE_ACCOUNT)
+async def confirm_deletion(
+    request: Request,
+    body: GdprConfirmDeletionRequest,
+    db: DbSession,
+) -> MessageResponse:
+    """Confirm and execute account deletion using the token from the email.
+
+    Validates the deletion token, then permanently deletes the user's
+    account and all associated data. No authentication required — the
+    token IS the authentication (similar to password reset flow).
+
+    The token is single-use: once the account is deleted, the token
+    becomes invalid because the user record no longer exists.
+    """
+    token_hashed = hash_token(body.token)
+    now = datetime.now(UTC).replace(tzinfo=None)
+
+    # Look up the user by their deletion token hash
+    result = await db.execute(
+        select(User).where(
+            User.deletion_token_hash == token_hashed,
+            User.deletion_token_expires > now,
+        )
+    )
+    user = result.scalar_one_or_none()
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error": "Invalid or expired deletion token.",
+                "code": "INVALID_TOKEN",
+            },
+        )
+
+    # Perform the account deletion using the shared service
+    await delete_user_account(
+        db,
+        user,
+        ip_address=_client_ip(request),
+        user_agent=_user_agent(request),
+    )
+    await db.commit()
+
     return MessageResponse(message="Account and all associated data deleted successfully.")
 
 
@@ -276,13 +392,14 @@ async def export_data(
     # page_size is already enforced by Query(le=_MAX_PAGE_SIZE) above;
     # no need for a redundant min() clamp here.
 
-    # Build user profile
+    # Build user profile (GDPR Art. 20 — include all personal data)
     user_profile = GdprUserProfile(
         id=str(user.id),
         email=user.email,
         name=user.name,
         tier=user.tier,
         email_verified=user.email_verified,
+        date_of_birth=user.date_of_birth.isoformat() if user.date_of_birth else None,
         created_at=user.created_at.isoformat(),
         updated_at=user.updated_at.isoformat(),
     )

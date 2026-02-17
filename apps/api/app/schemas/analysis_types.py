@@ -28,6 +28,9 @@ FileFormat = Literal['23andme', 'ancestrydna', 'myheritage', 'vcf', 'unknown']
 
 
 # ─── Tier Types ─────────────────────────────────────────────────────────────
+# Canonical tier values live in app.constants.tiers (Tier IntEnum,
+# TIER_FREE/TIER_PREMIUM/TIER_PRO string constants). This Literal alias is
+# kept for Pydantic schema validation where typing.Literal is required.
 
 Tier = Literal['free', 'premium', 'pro']
 

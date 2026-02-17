@@ -26,9 +26,18 @@ _SUMMARY_ALLOWED_KEYS: frozenset[str] = frozenset({
     "pgx_count",
     "risk_count",
     "prs_count",
+    "has_results",
+    "total_variants_analyzed",
+})
+
+# Keys that were previously allowed but removed for ZKE privacy compliance.
+# high_risk_count and health_risk_count store unencrypted health-sensitive
+# metadata (specific risk counts) that contradicts the ZKE design — the
+# server should not know how many high-risk conditions a user has.
+# Replaced with the non-sensitive boolean ``has_results``.
+_SUMMARY_REMOVED_KEYS: frozenset[str] = frozenset({
     "high_risk_count",
     "health_risk_count",
-    "total_variants_analyzed",
 })
 
 _SUMMARY_MAX_ENTRIES = 20
@@ -104,6 +113,11 @@ class SaveAnalysisRequest(BaseModel):
                 f"Summary dict exceeds maximum of {_SUMMARY_MAX_ENTRIES} entries"
             )
         for key in v:
+            if key in _SUMMARY_REMOVED_KEYS:
+                raise ValueError(
+                    f"Summary key '{key}' has been removed for ZKE privacy "
+                    f"compliance. Use 'has_results' (bool) instead."
+                )
             if key not in _SUMMARY_ALLOWED_KEYS:
                 raise ValueError(
                     f"Summary key '{key}' is not allowed. "
@@ -132,16 +146,12 @@ class AnalysisListItem(BaseModel):
     """A single analysis result in a listing (no envelope data).
 
     Privacy note on plaintext summary fields:
-        The ``summary`` dict (containing aggregate counts like carrier_count,
-        high_risk_count, etc.) is stored **unencrypted** intentionally.  These
-        are aggregate statistics needed for list/summary views without requiring
-        decryption of the full encrypted payload.  They do NOT identify specific
-        conditions, genetic variants, or individual genotypes — only numeric
-        totals (e.g., "3 carrier results detected").
+        The ``summary`` dict stores only non-sensitive aggregate counts
+        (e.g., trait_count, carrier_count) and a boolean ``has_results``
+        flag.  Health-sensitive counts like ``high_risk_count`` and
+        ``health_risk_count`` have been removed to comply with ZKE
+        design — the server should not store unencrypted health risk data.
     """
-    # TODO(Sprint 3): Evaluate if summary stats should be encrypted or
-    # replaced with generic labels (e.g., "results available") to further
-    # minimize plaintext metadata exposure.
 
     id: uuid.UUID
     label: str

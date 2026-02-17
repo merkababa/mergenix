@@ -4,10 +4,13 @@ Payment router — Stripe checkout, webhook processing, and payment history.
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, HTTPException, Request, status
 
+from app.constants.tiers import TIER_FREE, TIER_RANK
 from app.database import DbSession
-from app.middleware.auth import TIER_RANK, CurrentUser
+from app.middleware.auth import CurrentUser
 from app.middleware.rate_limiter import LIMIT_WEBHOOK, limiter
 from app.schemas.auth import MessageResponse
 from app.schemas.payment import (
@@ -17,6 +20,8 @@ from app.schemas.payment import (
     TierStatus,
 )
 from app.services import audit_service, payment_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -64,9 +69,10 @@ async def create_checkout(
             tier=body.tier,
         )
     except ValueError as exc:
+        logger.error("Checkout failed for user %s (tier=%s): %s", user.id, body.tier, exc)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": str(exc), "code": "CHECKOUT_FAILED"},
+            detail={"error": "Payment processing failed. Please try again.", "code": "CHECKOUT_FAILED"},
         ) from exc
 
     await audit_service.log_event(
@@ -111,9 +117,10 @@ async def stripe_webhook(
             signature=signature,
         )
     except ValueError as exc:
+        logger.error("Webhook processing failed: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error": str(exc), "code": "WEBHOOK_FAILED"},
+            detail={"error": "Webhook processing failed.", "code": "WEBHOOK_FAILED"},
         ) from exc
 
     return MessageResponse(message="Webhook processed successfully.")
@@ -151,6 +158,6 @@ async def get_tier_status(
 
     return TierStatus(
         tier=user.tier,
-        is_active=user.tier != "free",
+        is_active=user.tier != TIER_FREE,
         payments_count=len(active_payments),
     )

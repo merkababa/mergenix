@@ -12,7 +12,7 @@ import hashlib
 import json
 import secrets as _stdlib_secrets
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from urllib.parse import urlencode
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
@@ -21,6 +21,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
+from app.constants.tiers import TIER_FREE
 from app.database import DbSession
 from app.middleware.auth import CurrentUser
 from app.middleware.rate_limiter import (
@@ -33,9 +34,11 @@ from app.middleware.rate_limiter import (
     limiter,
 )
 from app.models.audit import EmailVerification, PasswordReset, Session
+from app.models.consent import ConsentRecord
 from app.models.user import User
 from app.schemas.auth import (
     AccessTokenResponse,
+    AgeVerificationRequest,
     DeleteAccountRequest,
     EmailVerifyRequest,
     LoginRequest,
@@ -154,6 +157,19 @@ def _parse_device(user_agent_str: str | None) -> str:
     return "Unknown"
 
 
+# ── Age Calculation Helper ────────────────────────────────────────────────
+
+
+def _calculate_age(dob: date) -> int:
+    """Calculate age in complete years from a date of birth.
+
+    Uses the standard birthday calculation: subtract years and adjust
+    down by 1 if the current month/day is before the birth month/day.
+    """
+    today = date.today()
+    return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+
 # ── Registration ──────────────────────────────────────────────────────────
 
 
@@ -173,8 +189,28 @@ async def register(
 
     A verification email is sent upon successful registration.
     The user must verify their email before they can log in.
+    Requires the user to be at least 18 years old (GDPR Art. 8).
     """
     email = body.email.strip().lower()
+
+    # ── Age verification (GDPR Art. 8) ────────────────────────────────
+    age = _calculate_age(body.date_of_birth)
+    if age < 18:
+        await audit_service.log_event(
+            db,
+            event_type="register_failed",
+            metadata={"reason": "age_verification_failed", "age": age},
+            ip_address=_client_ip(request),
+            user_agent=_user_agent(request),
+        )
+        await db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": "You must be at least 18 years old to create an account.",
+                "code": "AGE_VERIFICATION_FAILED",
+            },
+        )
 
     # Validate password strength
     valid, msg = validate_password_strength(body.password)
@@ -209,11 +245,22 @@ async def register(
         email=email,
         password_hash=await hash_password(body.password),
         name=body.name.strip(),
-        tier="free",
+        tier=TIER_FREE,
         email_verified=False,
+        date_of_birth=body.date_of_birth,
     )
     db.add(user)
     await db.flush()
+
+    # ── Auto-record age_verification consent ──────────────────────────
+    consent = ConsentRecord(
+        user_id=user.id,
+        consent_type="age_verification",
+        version="1.0",
+        ip_address=_client_ip(request),
+        user_agent=(_user_agent(request) or "")[:500],
+    )
+    db.add(consent)
 
     # Generate email verification token
     token = generate_email_verification_token()
@@ -228,7 +275,7 @@ async def register(
         db,
         user_id=user.id,
         event_type="register",
-        metadata={"event": "registration_complete"},
+        metadata={"event": "registration_complete", "age_verified": True},
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -1138,7 +1185,10 @@ async def delete_account(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={
-                "error": "OAuth-only accounts must contact support to delete.",
+                "error": (
+                    "OAuth-only accounts must use POST /gdpr/request-deletion "
+                    "for email-based account deletion."
+                ),
                 "code": "OAUTH_ACCOUNT",
             },
         )
@@ -1332,6 +1382,82 @@ async def disable_2fa(
     return MessageResponse(message="Two-factor authentication disabled.")
 
 
+# ── Post-Registration Age Verification ────────────────────────────────────
+
+
+@router.post(
+    "/verify-age",
+    response_model=MessageResponse,
+    summary="Submit date of birth for age verification (required after OAuth signup)",
+)
+async def verify_age(
+    request: Request,
+    body: AgeVerificationRequest,
+    user: CurrentUser,
+    db: DbSession,
+) -> MessageResponse:
+    """Submit date of birth for users who registered via OAuth.
+
+    Google OAuth does not provide date of birth, so new OAuth users
+    must call this endpoint before using analysis features.  This
+    satisfies GDPR Art. 8 age-gating requirements.
+
+    Users who already have a date_of_birth on record (e.g., password-
+    registered users) receive a 400 — their DOB cannot be changed here.
+    """
+    if user.date_of_birth is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error": "Date of birth is already set.",
+                "code": "DOB_ALREADY_SET",
+            },
+        )
+
+    age = _calculate_age(body.date_of_birth)
+    if age < 18:
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="age_verification_failed",
+            metadata={"reason": "underage", "age": age},
+            ip_address=_client_ip(request),
+            user_agent=_user_agent(request),
+        )
+        await db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": "You must be at least 18 years old to use this platform.",
+                "code": "AGE_VERIFICATION_FAILED",
+            },
+        )
+
+    user.date_of_birth = body.date_of_birth
+
+    # Record age_verification consent
+    consent = ConsentRecord(
+        user_id=user.id,
+        consent_type="age_verification",
+        version="1.0",
+        ip_address=_client_ip(request),
+        user_agent=(_user_agent(request) or "")[:500],
+    )
+    db.add(consent)
+
+    await audit_service.log_event(
+        db,
+        user_id=user.id,
+        event_type="age_verified",
+        metadata={"method": "post_oauth", "age": age},
+        ip_address=_client_ip(request),
+        user_agent=_user_agent(request),
+    )
+    await db.commit()
+
+    return MessageResponse(message="Age verification successful.")
+
+
 # ── Google OAuth ──────────────────────────────────────────────────────────
 
 
@@ -1513,7 +1639,7 @@ async def oauth_google_callback(
                 oauth_provider="google",
                 oauth_id=google_id,
                 email_verified=True,
-                tier="free",
+                tier=TIER_FREE,
             )
             db.add(user)
             await db.flush()

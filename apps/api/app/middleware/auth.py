@@ -27,6 +27,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.config import get_settings
+from app.constants.tiers import TIER_RANK
 from app.database import get_db
 from app.models.user import User
 from app.services.auth_service import decode_token
@@ -40,9 +41,6 @@ settings = get_settings()
 # logging out the user who just changed their password. Applies to
 # reset_password and change_password in routers/auth.py where all sessions
 # for the user are deleted.
-
-# Tier hierarchy for authorization comparisons
-TIER_RANK = {"free": 0, "premium": 1, "pro": 2}
 
 # HTTP methods that change server state and require CSRF protection
 _STATE_CHANGING_METHODS = frozenset({b"POST", b"PUT", b"DELETE", b"PATCH"})

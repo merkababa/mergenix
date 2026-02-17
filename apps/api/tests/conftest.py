@@ -88,7 +88,7 @@ _db_module_early.engine = test_engine
 
 import uuid  # noqa: E402
 from collections.abc import AsyncGenerator  # noqa: E402
-from datetime import UTC, datetime, timedelta  # noqa: E402
+from datetime import UTC, date, datetime, timedelta  # noqa: E402
 from unittest.mock import AsyncMock, patch  # noqa: E402
 
 import pyotp  # noqa: E402
@@ -180,6 +180,7 @@ async def test_user(db_session: AsyncSession) -> User:
         name="Test User",
         tier="free",
         email_verified=True,
+        date_of_birth=date(1990, 1, 15),
         created_at=datetime.now(UTC),
         updated_at=datetime.now(UTC),
     )
@@ -199,6 +200,7 @@ async def premium_user(db_session: AsyncSession) -> User:
         name="Premium User",
         tier="premium",
         email_verified=True,
+        date_of_birth=date(1990, 1, 15),
         created_at=datetime.now(UTC),
         updated_at=datetime.now(UTC),
     )
@@ -218,6 +220,7 @@ async def pro_user(db_session: AsyncSession) -> User:
         name="Pro User",
         tier="pro",
         email_verified=True,
+        date_of_birth=date(1990, 1, 15),
         created_at=datetime.now(UTC),
         updated_at=datetime.now(UTC),
     )

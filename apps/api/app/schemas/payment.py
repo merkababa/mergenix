@@ -10,6 +10,10 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+# NOTE: The Literal["premium", "pro"] below must stay as literal strings
+# because Python's typing.Literal does not accept variables. The canonical
+# tier values are defined in app.constants.tiers (TIER_PREMIUM, TIER_PRO).
+
 # ── Requests ──────────────────────────────────────────────────────────────
 
 

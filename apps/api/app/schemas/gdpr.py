@@ -20,6 +20,12 @@ class GdprDeleteAccountRequest(BaseModel):
     password: str = Field(..., min_length=1)
 
 
+class GdprConfirmDeletionRequest(BaseModel):
+    """Confirm account deletion using the token received via email."""
+
+    token: str = Field(..., min_length=1)
+
+
 class RectifyProfileRequest(BaseModel):
     """Update user profile fields for GDPR data rectification (Article 16).
 
@@ -44,6 +50,7 @@ class GdprUserProfile(BaseModel):
     name: str
     tier: str
     email_verified: bool
+    date_of_birth: str | None = None
     created_at: str
     updated_at: str
 

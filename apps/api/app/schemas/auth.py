@@ -5,9 +5,9 @@ Authentication schemas — request and response models for auth endpoints.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # ── Requests ──────────────────────────────────────────────────────────────
 
@@ -28,6 +28,19 @@ class RegisterRequest(BaseModel):
         max_length=255,
         description="User's display name",
     )
+    date_of_birth: date = Field(
+        ...,
+        description="User's date of birth (YYYY-MM-DD). Must be 18+ to register.",
+    )
+
+    @field_validator("date_of_birth")
+    @classmethod
+    def dob_must_not_be_in_future(cls, v: date) -> date:
+        """Reject dates of birth in the future."""
+        if v > date.today():
+            msg = "Date of birth cannot be in the future."
+            raise ValueError(msg)
+        return v
 
 
 class LoginRequest(BaseModel):
@@ -164,6 +177,24 @@ class SessionResponse(BaseModel):
     location: str
     last_active: str
     is_current: bool
+
+
+class AgeVerificationRequest(BaseModel):
+    """Submit date of birth for post-OAuth age verification."""
+
+    date_of_birth: date = Field(
+        ...,
+        description="User's date of birth (YYYY-MM-DD). Must be 18+ to use the platform.",
+    )
+
+    @field_validator("date_of_birth")
+    @classmethod
+    def dob_must_not_be_in_future(cls, v: date) -> date:
+        """Reject dates of birth in the future."""
+        if v > date.today():
+            msg = "Date of birth cannot be in the future."
+            raise ValueError(msg)
+        return v
 
 
 class DeleteAccountRequest(BaseModel):

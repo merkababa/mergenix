@@ -10,13 +10,13 @@ can save: Free=1, Premium=10, Pro=unlimited.
 from __future__ import annotations
 
 import json
-import sys
 import uuid
 
 from fastapi import APIRouter, HTTPException, Request, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import defer
 
+from app.constants.tiers import TIER_RESULT_LIMITS
 from app.database import DbSession
 from app.middleware.auth import CurrentUser
 from app.middleware.rate_limiter import LIMIT_GENERAL_API, limiter
@@ -32,18 +32,6 @@ from app.schemas.auth import MessageResponse
 from app.services import audit_service
 
 router = APIRouter()
-
-# ── Tier Limits ──────────────────────────────────────────────────────────
-
-# Sentinel value representing an unlimited tier limit (pro tier).
-# Uses sys.maxsize so tier-limit comparisons remain integer-based.
-UNLIMITED_TIER_LIMIT: int = sys.maxsize
-
-TIER_RESULT_LIMITS: dict[str, int] = {
-    "free": 1,
-    "premium": 10,
-    "pro": UNLIMITED_TIER_LIMIT,
-}
 
 
 # ── Save Result ──────────────────────────────────────────────────────────
@@ -74,6 +62,22 @@ async def save_result(
     (nginx) level in production. Pydantic field-level validation
     constrains individual field sizes.
     """
+    # ── Age gate: block users who have not verified their date of birth ──
+    # OAuth-registered users may not have date_of_birth set until they
+    # call POST /auth/verify-age.  This check ensures GDPR Art. 8
+    # compliance (18+ requirement) before any analysis data is stored.
+    if user.date_of_birth is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": (
+                    "Age verification is required before saving analysis results. "
+                    "Please submit your date of birth via POST /auth/verify-age."
+                ),
+                "code": "AGE_VERIFICATION_REQUIRED",
+            },
+        )
+
     # Serialize the EncryptedEnvelope to JSON bytes for LargeBinary storage.
     envelope_bytes = json.dumps(
         body.result_data.model_dump(), separators=(",", ":")
@@ -228,18 +232,39 @@ async def get_result(
         )
 
     # Deserialize the opaque envelope from JSON bytes.
-    # Issue 3: Handle legacy result_data that predates the ZKE pivot
-    # and may contain raw encrypted bytes instead of JSON-serialized EncryptedEnvelope.
+    # DI-7: Use data_version to distinguish legacy pre-ZKE records from
+    # corrupt data. Records without data_version predate the ZKE pivot.
     try:
         envelope = json.loads(analysis.result_data.decode("utf-8"))
     except (json.JSONDecodeError, UnicodeDecodeError):
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail={
-                "error": "Legacy result format — please re-analyze",
-                "code": "LEGACY_FORMAT",
-            },
-        ) from None
+        if analysis.data_version is None:
+            # Pre-ZKE legacy record — stored raw encrypted bytes, not a
+            # JSON EncryptedEnvelope. User must re-run the analysis.
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={
+                    "error": (
+                        "Legacy result format (no data_version) — "
+                        "this result predates the current encryption "
+                        "scheme. Please re-analyze to generate a new result."
+                    ),
+                    "code": "LEGACY_FORMAT",
+                },
+            ) from None
+        else:
+            # Has data_version but data is not valid JSON — this is
+            # unexpected corruption, not a legacy format issue.
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={
+                    "error": (
+                        "Result data is corrupt and cannot be decoded. "
+                        f"Data version: {analysis.data_version}. "
+                        "Please re-analyze to generate a new result."
+                    ),
+                    "code": "CORRUPT_DATA",
+                },
+            ) from None
 
     return AnalysisDetailResponse(
         id=analysis.id,

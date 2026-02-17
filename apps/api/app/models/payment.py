@@ -7,7 +7,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, func
+from sqlalchemy import ForeignKey, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -17,6 +17,14 @@ class Payment(Base):
     """Represents a single payment transaction for a tier upgrade."""
 
     __tablename__ = "payments"
+    __table_args__ = (
+        Index(
+            "uq_payments_stripe_payment_intent",
+            "stripe_payment_intent",
+            unique=True,
+            postgresql_where="stripe_payment_intent IS NOT NULL",
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True,
@@ -53,6 +61,11 @@ class Payment(Base):
         String(20),
         nullable=False,
         comment="premium | pro",
+    )
+    receipt_sent: Mapped[bool] = mapped_column(
+        default=False,
+        nullable=False,
+        comment="Whether the tier-upgrade receipt email was sent successfully",
     )
     created_at: Mapped[datetime] = mapped_column(
         default=func.now(),
