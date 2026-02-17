@@ -127,7 +127,7 @@ async def test_delete_account_cascade_deletes_related_data(
         user_id=test_user.id,
         stripe_customer_id="cus_test_gdpr",
         stripe_payment_intent="pi_test_gdpr",
-        amount=2999,
+        amount=1499,
         currency="usd",
         status="succeeded",
         tier_granted="premium",
@@ -370,7 +370,7 @@ async def test_export_data_includes_payments(
     data = response.json()
 
     assert len(data["payments"]) == 1
-    assert data["payments"][0]["amount"] == 2999
+    assert data["payments"][0]["amount"] == 1499
     assert data["payments"][0]["currency"] == "usd"
     assert data["payments"][0]["status"] == "succeeded"
 
@@ -838,7 +838,7 @@ async def test_delete_account_via_auth_endpoint(
         user_id=test_user.id,
         stripe_customer_id="cus_auth_delete",
         stripe_payment_intent="pi_auth_delete",
-        amount=2999,
+        amount=1499,
         currency="usd",
         status="succeeded",
         tier_granted="premium",

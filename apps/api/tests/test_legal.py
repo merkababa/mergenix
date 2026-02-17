@@ -509,7 +509,7 @@ async def test_export_data_includes_payment_count(
 
     # Verify payment appears in the export
     assert len(data["payments"]) == 1
-    assert data["payments"][0]["amount"] == 2999
+    assert data["payments"][0]["amount"] == 1499
     assert data["payments"][0]["currency"] == "usd"
     assert data["payments"][0]["status"] == "succeeded"
 

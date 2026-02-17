@@ -70,6 +70,12 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     cookie_secure: bool = True
 
+    # ── Payment URL Paths ──────────────────────────────────────────────────
+    # Configurable frontend paths for Stripe checkout redirect URLs.
+    # Override via PAYMENT_SUCCESS_PATH / PAYMENT_CANCEL_PATH env vars.
+    payment_success_path: str = "/payment/success"
+    payment_cancel_path: str = "/payment/cancel"
+
     # ── Sentry ────────────────────────────────────────────────────────────
     sentry_dsn: str = ""
 
@@ -89,6 +95,11 @@ class Settings(BaseSettings):
 
     # ── Admin ─────────────────────────────────────────────────────────────
     admin_api_key: str = ""
+
+    # ── Analytics ──────────────────────────────────────────────────────────
+    # Secret API key for the GET /analytics/summary endpoint.
+    # If empty, the endpoint returns 503 (disabled).
+    analytics_api_key: str = ""
 
     @property
     def is_production(self) -> bool:
@@ -117,4 +128,11 @@ def get_settings() -> Settings:
             "JWT_SECRET is not set. Authentication will not work. "
             "Set the JWT_SECRET environment variable."
         )
+    if s.environment != "development":
+        if not s.stripe_price_premium or not s.stripe_price_pro:
+            logger.warning(
+                "STRIPE_PRICE_PREMIUM and/or STRIPE_PRICE_PRO are not set. "
+                "Stripe checkout will fail for missing price IDs. "
+                "Set these environment variables before going to production."
+            )
     return s

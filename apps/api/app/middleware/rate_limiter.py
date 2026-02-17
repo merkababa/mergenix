@@ -50,3 +50,5 @@ LIMIT_DATA_EXPORT = "1/hour"
 # 300/min). Set high to handle Stripe burst scenarios like mass subscription
 # renewals where many webhook events fire in rapid succession.
 LIMIT_WEBHOOK = get_settings().webhook_rate_limit
+LIMIT_TRACK_EVENT = "30/minute"
+LIMIT_ANALYTICS_SUMMARY = "10/minute"

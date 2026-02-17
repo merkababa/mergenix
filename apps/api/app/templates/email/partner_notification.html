@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+        <h2 style="color: #1e293b;">Your Genetic Data Was Analyzed</h2>
+        <p style="color: #475569;">
+            Your genetic data was analyzed by <strong>{{ analyzer_name }}</strong>
+            on Mergenix on <strong>{{ date_formatted }}</strong>.
+        </p>
+        <p style="color: #475569;">
+            This is an informational notification only &mdash; no action is required
+            on your part.
+        </p>
+        <p style="color: #64748b; font-size: 0.9em;">
+            If you have questions about this analysis, please contact
+            the person who ran it. For questions about Mergenix, visit
+            <a href="{{ frontend_url }}" style="color: #00e5ff;">
+                mergenix.com</a>.
+        </p>
+        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+        <p style="color: #94a3b8; font-size: 0.8em;">
+            To learn how Mergenix handles your data or to exercise your privacy
+            rights, visit
+            <a href="{{ frontend_url }}/privacy" style="color: #00e5ff;">
+                mergenix.com/privacy</a>.
+        </p>
+{% endblock %}

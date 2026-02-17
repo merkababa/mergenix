@@ -1169,3 +1169,25 @@ async def test_2fa_challenge_stores_session_with_naive_datetime(
     assert challenge_session.expires_at.tzinfo is None, (
         f"Challenge Session.expires_at should be naive but has tzinfo={challenge_session.expires_at.tzinfo}"
     )
+
+
+# ── Fix 4: httpx connection pooling for OAuth ──────────────────────────
+
+
+def test_oauth_httpx_client_is_module_level() -> None:
+    """The OAuth callback should use a module-level httpx.AsyncClient for connection pooling.
+
+    Creating a new httpx.AsyncClient per request wastes resources and
+    prevents connection reuse. A module-level or app-lifetime client
+    with connection limits should be used instead.
+    """
+    from app.routers import auth as auth_module
+
+    assert hasattr(auth_module, "_oauth_http_client"), (
+        "auth.py should define a module-level _oauth_http_client for connection pooling"
+    )
+
+    import httpx
+    assert isinstance(auth_module._oauth_http_client, httpx.AsyncClient), (
+        "_oauth_http_client should be an httpx.AsyncClient instance"
+    )

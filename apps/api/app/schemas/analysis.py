@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 from app.schemas.encryption import EncryptedEnvelope
 
@@ -87,6 +87,31 @@ class SaveAnalysisRequest(BaseModel):
             "Must be True to proceed."
         ),
     )
+    password_reset_warning_acknowledged: bool = Field(
+        ...,
+        description=(
+            "User must acknowledge that resetting or changing their password will "
+            "permanently delete all saved analysis results (ZKE key invalidation). "
+            "Must be True to proceed."
+        ),
+    )
+    partner_email: EmailStr | None = Field(
+        None,
+        description=(
+            "Optional email address of the analysis partner. "
+            "If provided, a notification email is sent informing the partner "
+            "that their genetic data was analyzed. The partner does NOT need "
+            "a Mergenix account. No genetic results are included in the email."
+        ),
+    )
+    partner_consent_given: bool | None = Field(
+        None,
+        description=(
+            "User must confirm they have their partner's consent to share "
+            "genetic data for analysis. Required (must be True) when "
+            "partner_email is provided."
+        ),
+    )
 
     @field_validator("consent_given")
     @classmethod
@@ -98,6 +123,29 @@ class SaveAnalysisRequest(BaseModel):
                 "Set consent_given to true."
             )
         return v
+
+    @field_validator("password_reset_warning_acknowledged")
+    @classmethod
+    def password_reset_warning_must_be_true(cls, v: bool) -> bool:
+        """Reject requests where password reset data-loss warning is not acknowledged."""
+        if not v:
+            raise ValueError(
+                "You must acknowledge that resetting or changing your password "
+                "will permanently delete all saved analysis results. "
+                "Set password_reset_warning_acknowledged to true."
+            )
+        return v
+
+    @model_validator(mode="after")
+    def partner_email_requires_consent(self) -> SaveAnalysisRequest:
+        """If partner_email is provided, partner_consent_given must be True."""
+        if self.partner_email is not None and self.partner_consent_given is not True:
+            raise ValueError(
+                "Partner consent is required when providing a partner email. "
+                "Set partner_consent_given to true to confirm you have your "
+                "partner's permission to analyze their genetic data."
+            )
+        return self
 
     @field_validator("summary")
     @classmethod
@@ -152,6 +200,10 @@ class AnalysisListItem(BaseModel):
         ``health_risk_count`` have been removed to comply with ZKE
         design — the server should not store unencrypted health risk data.
     """
+    # TODO(Phase 2): Evaluate if summary stats should be encrypted or
+    # replaced with generic labels (e.g., "results available") to further
+    # minimize plaintext metadata exposure. Decision: keep summaries
+    # unencrypted for now — they contain only aggregate counts, no PII.
 
     id: uuid.UUID
     label: str

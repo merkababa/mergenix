@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
 
 from app.constants.tiers import TIER_FREE, TIER_RANK
 from app.database import DbSession
@@ -95,6 +95,7 @@ async def create_checkout(
 async def stripe_webhook(
     request: Request,
     db: DbSession,
+    background_tasks: BackgroundTasks,
 ) -> MessageResponse:
     """Process a Stripe webhook event.
 
@@ -115,6 +116,7 @@ async def stripe_webhook(
             db=db,
             payload=payload,
             signature=signature,
+            background_tasks=background_tasks,
         )
     except ValueError as exc:
         logger.error("Webhook processing failed: %s", exc)
@@ -152,12 +154,12 @@ async def get_tier_status(
     """Return the authenticated user's current tier status (one-time purchase model).
 
     Shows which tier the user has purchased and the count of successful payments.
+    Uses SQL COUNT for efficiency instead of fetching all payment rows.
     """
-    payments = await payment_service.get_payment_history(db=db, user_id=user.id)
-    active_payments = [p for p in payments if p.status == "succeeded"]
+    payments_count = await payment_service.get_succeeded_payment_count(db=db, user_id=user.id)
 
     return TierStatus(
         tier=user.tier,
         is_active=user.tier != TIER_FREE,
-        payments_count=len(active_payments),
+        payments_count=payments_count,
     )

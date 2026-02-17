@@ -8,6 +8,7 @@ routers, exception handlers, structured logging, and Sentry integration.
 from __future__ import annotations
 
 import logging
+import re
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -24,7 +25,8 @@ from app.config import get_settings
 from app.database import engine
 from app.middleware.auth import CSRFMiddleware
 from app.middleware.rate_limiter import limiter
-from app.routers import analysis, auth, clinvar, gdpr, health, legal, payments
+from app.routers import analysis, analytics, auth, clinvar, gdpr, health, legal, payments
+from app.routers.auth import close_oauth_client
 
 
 def _configure_structlog() -> None:
@@ -45,6 +47,44 @@ def _configure_structlog() -> None:
     )
 
 
+# Compiled regex patterns for PII scrubbing (compiled once at module level)
+_EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
+_TOKEN_RE = re.compile(r"eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+")
+_PASSWORD_RE = re.compile(r'password["\s:=]+["\']?[^"\'\s,}{]+', re.IGNORECASE)
+
+
+def _scrub_pii(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any]:
+    """Strip PII (emails, tokens, passwords) from Sentry events.
+
+    Used as the ``before_send`` callback so that stack traces and
+    breadcrumbs never leak sensitive user data to Sentry.
+    """
+
+    def _scrub_string(s: str) -> str:
+        s = _TOKEN_RE.sub("[TOKEN]", s)
+        s = _EMAIL_RE.sub("[EMAIL]", s)
+        s = _PASSWORD_RE.sub("password=[REDACTED]", s)
+        return s
+
+    # Scrub exception values
+    if "exception" in event:
+        for exc_info in event["exception"].get("values", []):
+            if "value" in exc_info and isinstance(exc_info["value"], str):
+                exc_info["value"] = _scrub_string(exc_info["value"])
+
+    # Scrub breadcrumb messages
+    if "breadcrumbs" in event:
+        for breadcrumb in event["breadcrumbs"].get("values", []):
+            if "message" in breadcrumb and isinstance(breadcrumb["message"], str):
+                breadcrumb["message"] = _scrub_string(breadcrumb["message"])
+
+    # Scrub top-level message if present
+    if "message" in event and isinstance(event["message"], str):
+        event["message"] = _scrub_string(event["message"])
+
+    return event
+
+
 def _init_sentry(dsn: str) -> None:
     """Initialize Sentry error tracking if a DSN is configured."""
     if dsn:
@@ -53,6 +93,7 @@ def _init_sentry(dsn: str) -> None:
             traces_sample_rate=0.1,
             profiles_sample_rate=0.1,
             environment=get_settings().environment,
+            before_send=_scrub_pii,
         )
 
 
@@ -77,7 +118,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     yield
 
-    # Shutdown: dispose of the connection pool
+    # Shutdown: close the OAuth HTTP client and dispose of the connection pool
+    await close_oauth_client()
     await engine.dispose()
     log.info("mergenix_api_shutdown")
 
@@ -142,6 +184,7 @@ def create_app() -> FastAPI:
     app.include_router(clinvar.router, prefix="/clinvar", tags=["ClinVar"])
     app.include_router(legal.router, prefix="/legal", tags=["Legal"])
     app.include_router(gdpr.router, prefix="/gdpr", tags=["GDPR"])
+    app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
 
     # ── Exception Handlers ────────────────────────────────────────────────
     @app.exception_handler(ValueError)

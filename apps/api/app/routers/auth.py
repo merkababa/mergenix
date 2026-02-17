@@ -15,6 +15,7 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 from urllib.parse import urlencode
 
+import httpx as _httpx
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from jose import JWTError
 from sqlalchemy import delete, select
@@ -57,7 +58,7 @@ from app.schemas.auth import (
     UserProfile,
 )
 from app.services import audit_service
-from app.services.account_service import delete_user_account
+from app.services.account_service import delete_user_account, wipe_analysis_results
 from app.services.auth_service import (
     create_access_token,
     create_refresh_token,
@@ -108,6 +109,24 @@ def _utcnow() -> datetime:
 
 router = APIRouter()
 settings = get_settings()
+
+# Module-level httpx client for OAuth token exchange / user info requests.
+# Reusing a single client enables HTTP/2 connection pooling and avoids
+# creating a new TCP connection + TLS handshake per OAuth callback.
+_oauth_http_client = _httpx.AsyncClient(
+    limits=_httpx.Limits(max_connections=10, max_keepalive_connections=5),
+    timeout=_httpx.Timeout(10.0, connect=5.0),
+)
+
+
+async def close_oauth_client() -> None:
+    """Close the module-level OAuth HTTP client.
+
+    Call this during application shutdown (from the lifespan handler in
+    main.py) to release the underlying TCP connection pool and avoid
+    resource leaks.
+    """
+    await _oauth_http_client.aclose()
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────
@@ -890,6 +909,16 @@ async def reset_password(
     # Invalidate all existing sessions — forces re-login on all devices
     await _invalidate_all_user_sessions(db, user.id)
 
+    # ZKE consequence: wipe all analysis results — the encryption key derived
+    # from the old password is now lost, making stored results unrecoverable.
+    await wipe_analysis_results(
+        db,
+        user.id,
+        reason="password_reset",
+        ip_address=_client_ip(request),
+        user_agent_str=_user_agent(request),
+    )
+
     await audit_service.log_event(
         db,
         user_id=user.id,
@@ -986,6 +1015,16 @@ async def change_password(
 
     # Invalidate all existing sessions — forces re-login on all devices
     await _invalidate_all_user_sessions(db, user.id)
+
+    # ZKE consequence: wipe all analysis results — the encryption key derived
+    # from the old password is now lost, making stored results unrecoverable.
+    await wipe_analysis_results(
+        db,
+        user.id,
+        reason="password_change",
+        ip_address=_client_ip(request),
+        user_agent_str=_user_agent(request),
+    )
 
     await audit_service.log_event(
         db,
@@ -1529,7 +1568,6 @@ async def oauth_google_callback(
     with Google. Validates the state parameter against the signed cookie
     to prevent CSRF attacks. Refresh token is set as an httpOnly cookie.
     """
-    import httpx
     from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
     if not settings.google_client_id or not settings.google_client_secret:
@@ -1564,33 +1602,33 @@ async def oauth_google_callback(
     # Delete the state cookie after successful validation
     response.delete_cookie(key="oauth_state", httponly=True, secure=True, samesite="lax")
 
-    # Exchange code for tokens and fetch user info using a shared HTTP client
-    async with httpx.AsyncClient() as client:
-        token_resp = await client.post(
-            "https://oauth2.googleapis.com/token",
-            data={
-                "code": code,
-                "client_id": settings.google_client_id,
-                "client_secret": settings.google_client_secret,
-                "redirect_uri": f"{settings.frontend_url}/auth/callback/google",
-                "grant_type": "authorization_code",
-            },
+    # Exchange code for tokens and fetch user info using the shared HTTP client
+    # (_oauth_http_client) for connection pooling — avoids per-request TCP/TLS overhead.
+    token_resp = await _oauth_http_client.post(
+        "https://oauth2.googleapis.com/token",
+        data={
+            "code": code,
+            "client_id": settings.google_client_id,
+            "client_secret": settings.google_client_secret,
+            "redirect_uri": f"{settings.frontend_url}/auth/callback/google",
+            "grant_type": "authorization_code",
+        },
+    )
+
+    if token_resp.status_code != 200:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "Failed to exchange OAuth code.", "code": "OAUTH_EXCHANGE_FAILED"},
         )
 
-        if token_resp.status_code != 200:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail={"error": "Failed to exchange OAuth code.", "code": "OAUTH_EXCHANGE_FAILED"},
-            )
+    tokens = token_resp.json()
+    access_token = tokens.get("access_token")
 
-        tokens = token_resp.json()
-        access_token = tokens.get("access_token")
-
-        # Fetch user info from Google
-        info_resp = await client.get(
-            "https://www.googleapis.com/oauth2/v3/userinfo",
-            headers={"Authorization": f"Bearer {access_token}"},
-        )
+    # Fetch user info from Google
+    info_resp = await _oauth_http_client.get(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
 
     if info_resp.status_code != 200:
         raise HTTPException(

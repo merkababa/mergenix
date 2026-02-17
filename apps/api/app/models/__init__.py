@@ -6,6 +6,7 @@ them via ``from app.models import *`` (or by importing Base.metadata).
 """
 
 from app.models.analysis import AnalysisResult  # noqa: F401
+from app.models.analytics import DailyEventCount  # noqa: F401
 from app.models.audit import AuditLog, EmailVerification, PasswordReset, Session  # noqa: F401
 from app.models.consent import ConsentRecord, CookiePreference  # noqa: F401
 from app.models.payment import Payment  # noqa: F401
@@ -16,6 +17,7 @@ __all__ = [
     "AuditLog",
     "ConsentRecord",
     "CookiePreference",
+    "DailyEventCount",
     "EmailVerification",
     "PasswordReset",
     "Payment",

@@ -23,6 +23,7 @@ os.environ["STRIPE_WEBHOOK_SECRET"] = "whsec_test_fake"
 os.environ["STRIPE_PRICE_PREMIUM"] = "price_test_premium"
 os.environ["STRIPE_PRICE_PRO"] = "price_test_pro"
 os.environ["COOKIE_SECURE"] = "false"
+os.environ["ANALYTICS_API_KEY"] = "test-analytics-key-for-testing"
 
 # Clear any cached settings from previous test runs
 from app.config import get_settings  # noqa: E402
@@ -307,7 +308,7 @@ async def payment_record(db_session: AsyncSession, test_user: User) -> Payment:
         user_id=test_user.id,
         stripe_customer_id="cus_test123",
         stripe_payment_intent="pi_test123",
-        amount=2999,
+        amount=1499,
         currency="usd",
         status="succeeded",
         tier_granted="premium",
@@ -352,6 +353,17 @@ def mock_email():
         mock_verify.return_value = True
         mock_reset.return_value = True
         yield {"verify": mock_verify, "reset": mock_reset}
+
+
+@pytest.fixture
+def mock_receipt_email():
+    """Mock the purchase receipt email to prevent actual email dispatch during webhook tests."""
+    with patch(
+        "app.services.payment_service.send_purchase_receipt_email",
+        new_callable=AsyncMock,
+    ) as mock_receipt:
+        mock_receipt.return_value = True
+        yield mock_receipt
 
 
 @pytest.fixture

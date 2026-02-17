@@ -10,9 +10,11 @@ can save: Free=1, Premium=10, Pro=unlimited.
 from __future__ import annotations
 
 import json
+import logging
 import uuid
+from datetime import datetime
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import defer
 
@@ -30,8 +32,36 @@ from app.schemas.analysis import (
 )
 from app.schemas.auth import MessageResponse
 from app.services import audit_service
+from app.services.email_service import send_partner_notification_email
+from app.utils.masking import mask_email
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+async def _safe_send_partner_notification(
+    to_email: str, analyzer_name: str, analysis_date: datetime
+) -> None:
+    """Send a partner notification email, swallowing any exceptions.
+
+    This is a module-level async function (not a closure) used as a
+    BackgroundTasks callback. It accepts all required parameters
+    explicitly rather than closing over route handler locals.
+
+    Exceptions are caught and logged so a failed email never crashes
+    the background task runner.
+    """
+    try:
+        await send_partner_notification_email(
+            to_email=to_email,
+            analyzer_name=analyzer_name,
+            analysis_date=analysis_date,
+        )
+    except Exception:
+        logger.exception(
+            "Partner notification email failed (to=%s)", mask_email(to_email)
+        )
 
 
 # ── Save Result ──────────────────────────────────────────────────────────
@@ -49,6 +79,7 @@ async def save_result(
     body: SaveAnalysisRequest,
     user: CurrentUser,
     db: DbSession,
+    background_tasks: BackgroundTasks,
 ) -> SaveAnalysisResponse:
     """Save a client-encrypted analysis result (ZKE envelope).
 
@@ -142,6 +173,32 @@ async def save_result(
     )
     await db.commit()
     await db.refresh(analysis)
+
+    # ── Partner Notification (fire-and-forget via BackgroundTasks) ────────
+    # If a partner email is provided, send an informational notification.
+    # This must NOT block the save response and must NOT fail the save
+    # even if the email send raises an exception.
+    if body.partner_email:
+        background_tasks.add_task(
+            _safe_send_partner_notification,
+            to_email=body.partner_email,
+            analyzer_name=user.name,
+            analysis_date=analysis.created_at,
+        )
+
+        # Audit log: record that a partner was notified.
+        # PII minimization: log only the email domain, never the full address.
+        partner_domain = body.partner_email.split("@", 1)[1]
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="partner_notified",
+            metadata={
+                "analysis_id": str(analysis_id),
+                "partner_email_domain": partner_domain,
+            },
+        )
+        await db.commit()
 
     return SaveAnalysisResponse(
         id=analysis.id,

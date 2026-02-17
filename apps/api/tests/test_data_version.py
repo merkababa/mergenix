@@ -34,6 +34,7 @@ def _versioned_payload(
         "result_data": VALID_ENCRYPTED_ENVELOPE,
         "summary": SAMPLE_SUMMARY,
         "consent_given": True,
+        "password_reset_warning_acknowledged": True,
     }
     if include_version:
         payload["data_version"] = data_version
