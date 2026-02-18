@@ -39,6 +39,7 @@
 | Stream B Sprint 2: ZKE Pivot + GDPR | Claude | **Merged** | feature/stream-b-sprint-2-gdpr | PR #55 — 4 tasks (B13, B7, B8, B12). ZKE pivot (delete server encryption, opaque EncryptedEnvelope), GDPR router (DELETE /gdpr/account, GET /gdpr/export, PUT /gdpr/profile), shared account_service + cookie utils, Alembic migration (drop result_nonce). 245 backend tests (40 GDPR + 34 analysis). Gate 1: 6/6 A Gemini (3 rounds). Gate 2: 6/6 A Claude (2 rounds). 15 files, +2,184 LOC. |
 | Stream B Sprint 3: Business Logic | Claude | **Merged** | feature/stream-b-sprint-3-business | PR #56 — B5 tier gating, B6 analytics, B9 email receipts, B10 partner notification. 503 tests. Gate 1: 7/7 A+ Gemini. Gate 2: 7/7 A Claude (3 rounds). 30 files, +4,127 LOC. |
 | Deferred Items: Review Debt | Claude | **Merged** | fix/deferred-items | PR #57 — 12/13 deferred items resolved. Rate limiter Redis, OAuth deletion, Jinja2 templates, tier enum, webhook idempotency, age verification, audit retention, DPIA, consent preservation, privacy scrub. 5 Alembic migrations (006-010), 124 new tests (380 total). Gate 1: 6/6 A+ Gemini. Gate 2: 4/4 A/A+ Claude. 46 files, +4,961 LOC. |
+| Stream S Sprint 2: Data Security | Claude | **Merged** | feature/stream-s-sprint-2-data-security | PR #59 — S3 Worker Memory Clearing (clearSensitiveMemory in finally, wipeGenotypeMap defense-in-depth, clear_memory message), S5 GDPR Audit Logging (4 event types, begin_nested savepoint, fire-and-forget try/except, db.commit for reads), S6 IndexedDB Storage (idb-keyval, schema versioning, ZKE guards, storage audit). Gate 1: 6/6 A+ Gemini (2 rounds). Gate 2: 6/6 A Claude (3 rounds). 16 files, +2,162 LOC, 2,600 total tests. |
 
 ---
 
@@ -126,6 +127,7 @@
 | 2026-02-15 | Claude | Stream B Sprint 1 — Backend Foundation: 4 tasks (B11, B3, B1, B2). CSRF middleware, ZKE schema, strict Pydantic types, data versioning, session invalidation, security hardening. 205 tests. Gate 2: 7/7 A Claude. | PR #54 |
 | 2026-02-15 | Claude | Stream B Sprint 2 — ZKE Pivot + GDPR: 4 tasks (B13, B7, B8, B12). ZKE pivot (opaque envelope), GDPR router (delete/export/rectification), shared account_service. 245 tests. Gate 1: 6/6 A Gemini. Gate 2: 6/6 A Claude. | PR #55 |
 | 2026-02-17 | Claude | Stream B Sprint 3 — Business Logic: 4 tasks (B5, B6, B9, B10). Tier gating (SELECT FOR UPDATE, $14.99/$34.99), anonymous analytics (ON CONFLICT upsert), purchase receipts (Jinja2), partner notification (masked email). Gate 2 fixes: mask_email utils, URL-encoded tokens, httpx shutdown, lazy API keys, SQL COUNT, dialect caching, analytics purge, rate limiting. 503 tests. Gate 1: 7/7 A+ Gemini. Gate 2: 7/7 A Claude (3 rounds). 30 files, +4,127 LOC. | PR #56 |
+| 2026-02-18 | Claude | Stream S Sprint 2 — Data Security: 3 tasks (S3, S5, S6). Worker memory clearing (clearSensitiveMemory in finally, wipeGenotypeMap defense-in-depth, clear_memory message handler). GDPR audit logging (4 event types, begin_nested savepoint, fire-and-forget, db.commit fix for read-only endpoints). IndexedDB storage (idb-keyval, schema versioning, ZKE guards, localStorage audit). 2,600 total tests (915 engine + 1155 web + 530 backend). Gate 1: 6/6 A+ Gemini (2 rounds). Gate 2: 6/6 A Claude (3 rounds). 16 files, +2,162 LOC. | PR #59 |
 
 ---
 
@@ -164,10 +166,10 @@
      - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13, B7, B8, B12. 245 tests. Gate 1: 6/6 A. Gate 2: 6/6 A.
      - Sprint 3 (Business): PR #56 MERGED — B5, B6, B9, B10. 503 tests. Gate 1: 7/7 A+. Gate 2: 7/7 A.
      - Deferred Items: PR #57 MERGED — 12/13 items. 380 tests. Gate 1: 6/6 A+. Gate 2: 4/4 A/A+.
-   - **Stream S (Security): Sprint 1 COMPLETE** — PR #58 merged
-     - Sprint 1 (Containment): S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude. 4 commits (feat + 3 fix rounds).
-     - Sprint 2 (Data): S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage — NEXT
-     - Sprint 3 (Ops): S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting
+   - **Stream S (Security): Sprint 2 COMPLETE** — PR #59 merged
+     - Sprint 1 (Containment): PR #58 MERGED — S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
+     - Sprint 2 (Data): PR #59 MERGED — S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage. 16 files, +2,162 LOC, 2,600 total tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
+     - Sprint 3 (Ops): S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting — NEXT
    - **Remaining streams:** L (Legal), Q (QA), C (Content), Ops (Operations)
 
 ---
