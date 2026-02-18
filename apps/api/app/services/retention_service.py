@@ -51,6 +51,10 @@ SECURITY_EVENTS: frozenset[str] = frozenset({
     "password_change",
     "2fa_enable",
     "2fa_disable",
+    "result_saved",
+    "result_viewed",
+    "result_deleted",
+    "result_listed",
 })
 
 # The following known event types are NOT in SECURITY_EVENTS and therefore

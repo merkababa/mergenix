@@ -303,128 +303,33 @@ describe('useAnalysisStore', () => {
 
   // ── Persistence Actions ─────────────────────────────────────────────────
 
+  // TODO(B3): When encryption layer is implemented, restore full test coverage for:
+  // - saveCurrentResult: happy path, error handling, loading states, label/filename from parents
+  // - loadSavedResult: happy path, error handling, decryption, store hydration
+  // Original tests removed in Sprint S2 when ZKE guards were added.
+
   describe('saveCurrentResult', () => {
-    it('sets saveError when no results to save', async () => {
-      await useAnalysisStore.getState().saveCurrentResult('Test');
-      expect(useAnalysisStore.getState().saveError).toBe('No analysis results to save');
+    it('throws encryption-not-implemented error (ZKE guard)', async () => {
+      // saveCurrentResult is blocked until Stream B3 implements the
+      // Web Crypto encryption layer (Argon2id + AES-256-GCM).
+      // It must always throw regardless of store state.
+      await expect(
+        useAnalysisStore.getState().saveCurrentResult('Test'),
+      ).rejects.toThrow('Encryption layer not yet implemented');
+
+      // Should never call the API client
       expect(mockSaveResult).not.toHaveBeenCalled();
     });
 
-    it('saves current results and refreshes list', async () => {
-      // Setup: set results and parent files
+    it('does not call API even when results are present', async () => {
       useAnalysisStore.getState().setFullResults(mockResults);
-      useAnalysisStore.getState().setParentA({
-        name: 'mom.vcf',
-        format: 'vcf',
-        size: 1024,
-        snpCount: 100,
-      });
-      useAnalysisStore.getState().setParentB({
-        name: 'dad.23andme',
-        format: '23andme',
-        size: 2048,
-        snpCount: 200,
-      });
-
-      mockSaveResult.mockResolvedValue({
-        id: 'new-id',
-        label: 'Test Label',
-        createdAt: '2026-01-01T00:00:00Z',
-      });
-      mockListResults.mockResolvedValue([
-        {
-          id: 'new-id',
-          label: 'Test Label',
-          parent1Filename: 'mom.vcf',
-          parent2Filename: 'dad.23andme',
-          tierAtTime: 'free' as const,
-          summary: { trait_count: 0 },
-          createdAt: '2026-01-01T00:00:00Z',
-        },
-      ]);
-
-      await useAnalysisStore.getState().saveCurrentResult('Test Label');
-
-      expect(mockSaveResult).toHaveBeenCalledWith(
-        'Test Label',
-        'mom.vcf',
-        'dad.23andme',
-        expect.any(Object),
-        expect.objectContaining({ trait_count: 0, carrier_count: 3, has_results: true }),
-        true,
-      );
-      expect(mockListResults).toHaveBeenCalled();
-      expect(useAnalysisStore.getState().savedResults).toHaveLength(1);
-      expect(useAnalysisStore.getState().isSaving).toBe(false);
-    });
-
-    it('sets isSaving to true during save', async () => {
-      useAnalysisStore.getState().setFullResults(mockResults);
-      let capturedisSaving = false;
-      mockSaveResult.mockImplementation(() => {
-        capturedisSaving = useAnalysisStore.getState().isSaving;
-        return Promise.resolve({ id: '1', label: 'x', createdAt: '' });
-      });
-      mockListResults.mockResolvedValue([]);
-
-      await useAnalysisStore.getState().saveCurrentResult('Test');
-      expect(capturedisSaving).toBe(true);
-    });
-
-    it('sets saveError on failure and throws', async () => {
-      useAnalysisStore.getState().setFullResults(mockResults);
-      mockSaveResult.mockRejectedValue(new Error('TIER_LIMIT_REACHED'));
 
       await expect(
         useAnalysisStore.getState().saveCurrentResult('Test'),
-      ).rejects.toThrow('TIER_LIMIT_REACHED');
+      ).rejects.toThrow('Encryption layer not yet implemented');
 
-      expect(useAnalysisStore.getState().saveError).toBe('TIER_LIMIT_REACHED');
-      expect(useAnalysisStore.getState().isSaving).toBe(false);
-    });
-
-    it('resets isSaving to false after success', async () => {
-      useAnalysisStore.getState().setFullResults(mockResults);
-      useAnalysisStore.getState().setParentA({
-        name: 'a.vcf',
-        format: 'vcf',
-        size: 1024,
-        snpCount: 100,
-      });
-      useAnalysisStore.getState().setParentB({
-        name: 'b.vcf',
-        format: 'vcf',
-        size: 2048,
-        snpCount: 200,
-      });
-
-      mockSaveResult.mockResolvedValue({
-        id: 'id-1',
-        label: 'Test',
-        createdAt: '2026-01-01T00:00:00Z',
-      });
-      mockListResults.mockResolvedValue([]);
-
-      await useAnalysisStore.getState().saveCurrentResult('Test');
-      expect(useAnalysisStore.getState().isSaving).toBe(false);
-    });
-
-    it('uses "unknown" for parent filenames when parents are null', async () => {
-      useAnalysisStore.getState().setFullResults(mockResults);
-      // Don't set parentA/parentB — they remain null
-      mockSaveResult.mockResolvedValue({ id: '1', label: 'x', createdAt: '' });
-      mockListResults.mockResolvedValue([]);
-
-      await useAnalysisStore.getState().saveCurrentResult('Test');
-
-      expect(mockSaveResult).toHaveBeenCalledWith(
-        'Test',
-        'unknown',
-        'unknown',
-        expect.any(Object),
-        expect.any(Object),
-        true,
-      );
+      expect(mockSaveResult).not.toHaveBeenCalled();
+      expect(mockListResults).not.toHaveBeenCalled();
     });
   });
 
@@ -460,87 +365,16 @@ describe('useAnalysisStore', () => {
   });
 
   describe('loadSavedResult', () => {
-    it('loads a result and sets it as current with complete step', async () => {
-      const detail = {
-        id: 'id-1',
-        label: 'Loaded',
-        parent1Filename: 'a.vcf',
-        parent2Filename: 'b.vcf',
-        tierAtTime: 'free' as const,
-        resultData: mockResults,
-        summary: null,
-        createdAt: '2026-01-01T00:00:00Z',
-      };
-      mockGetResult.mockResolvedValue(detail);
-
-      await useAnalysisStore.getState().loadSavedResult('id-1');
-
-      const state = useAnalysisStore.getState();
-      expect(state.fullResults).toBe(mockResults);
-      expect(state.currentStep).toBe('complete');
-      expect(state.stepIndex).toBe(8);
-      expect(state.highRiskCount).toBe(2);
-      expect(state.isDemo).toBe(false);
-      expect(state.isSaving).toBe(false);
-      expect(state.activeTab).toBe('overview');
-      expect(mockGetResult).toHaveBeenCalledWith('id-1');
-    });
-
-    it('sets isLoadingResult while loading', async () => {
-      let capturedIsLoadingResult = false;
-      mockGetResult.mockImplementation(() => {
-        capturedIsLoadingResult = useAnalysisStore.getState().isLoadingResult;
-        return Promise.resolve({
-          id: '1',
-          label: 'x',
-          parent1Filename: 'a',
-          parent2Filename: 'b',
-          tierAtTime: 'free',
-          resultData: mockResults,
-          summary: null,
-          createdAt: '',
-        });
-      });
-
-      await useAnalysisStore.getState().loadSavedResult('1');
-      expect(capturedIsLoadingResult).toBe(true);
-    });
-
-    it('sets saveError on failure and throws', async () => {
-      mockGetResult.mockRejectedValue(new Error('RESULT_NOT_FOUND'));
-
+    it('throws encryption-not-implemented error (ZKE guard)', async () => {
+      // loadSavedResult is blocked until Stream B3 implements the
+      // Web Crypto decryption layer (Argon2id + AES-256-GCM).
+      // Without decryption, the EncryptedEnvelope cannot be used.
       await expect(
-        useAnalysisStore.getState().loadSavedResult('nonexistent'),
-      ).rejects.toThrow('RESULT_NOT_FOUND');
+        useAnalysisStore.getState().loadSavedResult('id-1'),
+      ).rejects.toThrow('Encryption layer not yet implemented');
 
-      expect(useAnalysisStore.getState().saveError).toBe('RESULT_NOT_FOUND');
-      expect(useAnalysisStore.getState().isSaving).toBe(false);
-    });
-
-    it('resets isLoadingResult to false after success', async () => {
-      mockGetResult.mockResolvedValue({
-        id: '1',
-        label: 'x',
-        parent1Filename: 'a',
-        parent2Filename: 'b',
-        tierAtTime: 'free',
-        resultData: mockResults,
-        summary: null,
-        createdAt: '',
-      });
-
-      await useAnalysisStore.getState().loadSavedResult('1');
-      expect(useAnalysisStore.getState().isLoadingResult).toBe(false);
-    });
-
-    it('resets isLoadingResult to false on error', async () => {
-      mockGetResult.mockRejectedValue(new Error('LOAD_FAILED'));
-
-      await expect(
-        useAnalysisStore.getState().loadSavedResult('bad-id'),
-      ).rejects.toThrow('LOAD_FAILED');
-
-      expect(useAnalysisStore.getState().isLoadingResult).toBe(false);
+      // Should never call the API client
+      expect(mockGetResult).not.toHaveBeenCalled();
     });
   });
 

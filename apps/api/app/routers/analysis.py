@@ -162,15 +162,17 @@ async def save_result(
     )
     db.add(analysis)
 
-    await audit_service.log_event(
-        db,
-        user_id=user.id,
-        event_type="analysis_saved",
-        metadata={
-            "analysis_id": str(analysis_id),
-            "consent_given": body.consent_given,
-        },
-    )
+    try:
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="result_saved",
+            metadata={"result_id": str(analysis_id)},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+        )
+    except Exception:
+        logger.exception("Audit log failed for result_saved (user_id=%s)", user.id)
     await db.commit()
     await db.refresh(analysis)
 
@@ -236,6 +238,20 @@ async def list_results(
     )
     rows = result.scalars().all()
 
+    # Audit: log the list access with count (GDPR accountability).
+    try:
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="result_listed",
+            metadata={"count": len(rows)},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+        )
+    except Exception:
+        logger.exception("Audit log failed for result_listed (user_id=%s)", user.id)
+    await db.commit()
+
     return [
         AnalysisListItem(
             id=r.id,
@@ -287,6 +303,20 @@ async def get_result(
                 "code": "RESULT_NOT_FOUND",
             },
         )
+
+    # Audit: log the view access (GDPR accountability).
+    try:
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="result_viewed",
+            metadata={"result_id": str(analysis.id)},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+        )
+    except Exception:
+        logger.exception("Audit log failed for result_viewed (user_id=%s)", user.id)
+    await db.commit()
 
     # Deserialize the opaque envelope from JSON bytes.
     # DI-7: Use data_version to distinguish legacy pre-ZKE records from
@@ -372,12 +402,17 @@ async def delete_result(
             },
         )
 
-    await audit_service.log_event(
-        db,
-        user_id=user.id,
-        event_type="analysis_deleted",
-        metadata={"analysis_id": str(analysis.id)},
-    )
+    try:
+        await audit_service.log_event(
+            db,
+            user_id=user.id,
+            event_type="result_deleted",
+            metadata={"result_id": str(analysis.id)},
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+        )
+    except Exception:
+        logger.exception("Audit log failed for result_deleted (user_id=%s)", user.id)
 
     await db.delete(analysis)
     await db.commit()

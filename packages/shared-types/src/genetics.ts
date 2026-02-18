@@ -661,6 +661,7 @@ export type WorkerRequest =
       population?: Population;
     }
   | { type: 'cancel' }
+  | { type: 'clear_memory' }
   | { type: 'parse_stream'; file: { name: string; handle: FileSystemFileHandle | File }; format?: FileFormat }
   | { type: 'decompress'; file: { name: string }; maxSize?: number }
   | { type: 'init'; config?: WorkerConfig };
@@ -694,7 +695,8 @@ export type WorkerResponse =
   | { type: 'decompress_progress'; bytesIn: number; bytesOut: number; ratio: number }
   | { type: 'decompress_complete'; format: 'zip' | 'gzip' | 'raw'; originalSize: number; decompressedSize: number }
   | { type: 'init_complete'; config: WorkerConfig; dataVersions: Record<string, string> }
-  | { type: 'memory_warning'; currentUsage: number; maxAllowed: number; message: string };
+  | { type: 'memory_warning'; currentUsage: number; maxAllowed: number; message: string }
+  | { type: 'memory_cleared' };
 
 /**
  * Summary of a parsed genetic file (returned from worker after parsing).

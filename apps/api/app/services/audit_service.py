@@ -17,6 +17,16 @@ from app.models.audit import AuditLog
 
 logger = logging.getLogger(__name__)
 
+# ── Analysis result audit event type constants ────────────────────────────
+# Used by the analysis router for GDPR accountability logging (Decision #33).
+# Each result-access action produces an audit entry with result_id metadata
+# but NEVER health/genetic data.
+
+RESULT_SAVED = "result_saved"
+RESULT_VIEWED = "result_viewed"
+RESULT_DELETED = "result_deleted"
+RESULT_LISTED = "result_listed"
+
 
 async def log_event(
     db: AsyncSession,
@@ -42,15 +52,16 @@ async def log_event(
         user_agent: Client User-Agent header.
     """
     try:
-        entry = AuditLog(
-            user_id=user_id,
-            event_type=event_type,
-            metadata_json=metadata,
-            ip_address=ip_address,
-            user_agent=user_agent,
-        )
-        db.add(entry)
-        await db.flush()
+        async with db.begin_nested():
+            entry = AuditLog(
+                user_id=user_id,
+                event_type=event_type,
+                metadata_json=metadata,
+                ip_address=ip_address,
+                user_agent=user_agent,
+            )
+            db.add(entry)
+            await db.flush()
     except Exception:
         logger.exception(
             "Failed to write audit log event: %s (user_id=%s)",

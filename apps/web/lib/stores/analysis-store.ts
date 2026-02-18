@@ -9,6 +9,8 @@ import type {
 } from "@mergenix/shared-types";
 import * as analysisClient from "@/lib/api/analysis-client";
 import type { AnalysisListItem } from "@/lib/api/analysis-client";
+import * as indexedDbStore from "@/lib/storage/indexed-db-store";
+import type { StoredResult } from "@/lib/storage/indexed-db-store";
 
 // ─── Exported Types ─────────────────────────────────────────────────────────
 
@@ -106,6 +108,9 @@ interface AnalysisState {
   isLoadingResult: boolean;
   saveError: string | null;
 
+  /* -- Client-side storage (IndexedDB) -- */
+  storageVersionMismatch: boolean;
+
   /* -- Actions -- */
   setParentA: (file: ParentFile) => void;
   setParentB: (file: ParentFile) => void;
@@ -129,6 +134,11 @@ interface AnalysisState {
   loadSavedResult: (id: string) => Promise<void>;
   deleteSavedResult: (id: string) => Promise<void>;
   clearSaveError: () => void;
+
+  /* -- Client-side storage actions (IndexedDB) -- */
+  saveResultToStorage: (resultId: string, encryptedEnvelope: string) => Promise<void>;
+  loadResultFromStorage: (resultId: string) => Promise<StoredResult | null>;
+  deleteResultFromStorage: (resultId: string) => Promise<void>;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -138,15 +148,8 @@ function countHighRisk(carrier: CarrierResult[]): number {
   return carrier.filter((r) => r.riskLevel === "high_risk").length;
 }
 
-/** Build a summary object from the full analysis result. */
-function buildSummary(results: FullAnalysisResult): Record<string, unknown> {
-  return {
-    trait_count: results.traits.length,
-    carrier_count: results.carrier.length,
-    has_results: true,
-    total_variants_analyzed: results.metadata.parent1SnpCount + results.metadata.parent2SnpCount,
-  };
-}
+// TODO(B3): buildSummary() was removed because saveCurrentResult is blocked
+// until the Web Crypto encryption layer is implemented. Re-add when B3 lands.
 
 // ─── Initial State ──────────────────────────────────────────────────────────
 
@@ -170,6 +173,7 @@ const initialState = {
   isSaving: false,
   isLoadingResult: false,
   saveError: null as string | null,
+  storageVersionMismatch: false,
 };
 
 // ─── Store ──────────────────────────────────────────────────────────────────
@@ -229,37 +233,19 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
 
   // ── Persistence Actions ─────────────────────────────────────────────────
 
-  saveCurrentResult: async (label) => {
-    const { fullResults, parentA, parentB } = get();
-    if (!fullResults) {
-      set({ saveError: "No analysis results to save" });
-      return;
-    }
-
-    set({ isSaving: true, saveError: null });
-    try {
-      const parent1Filename = parentA?.name ?? "unknown";
-      const parent2Filename = parentB?.name ?? "unknown";
-      const summary = buildSummary(fullResults);
-
-      await analysisClient.saveResult(
-        label,
-        parent1Filename,
-        parent2Filename,
-        fullResults as unknown as Record<string, unknown>,
-        summary,
-        true, // consent_given — user explicitly triggered save action
-      );
-
-      // Refresh the saved results list after successful save
-      const updated = await analysisClient.listResults();
-      set({ savedResults: updated, isSaving: false });
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to save analysis";
-      set({ isSaving: false, saveError: message });
-      throw error;
-    }
+  saveCurrentResult: async (_label) => {
+    // TODO(B3): This action requires the Web Crypto encryption layer
+    // (Argon2id + AES-256-GCM) before it can safely send results to the
+    // backend API. The server expects an EncryptedEnvelope, not plaintext.
+    // Until Stream B3 implements client-side encryption, this action is
+    // blocked to prevent ZKE (Zero-Knowledge Encryption) violations.
+    void _label;
+    const error = new Error(
+      "Encryption layer not yet implemented — see Stream B3. " +
+        "Use saveResultToStorage() for client-side IndexedDB persistence.",
+    );
+    set({ saveError: error.message, isSaving: false });
+    throw error;
   },
 
   loadSavedResults: async () => {
@@ -274,26 +260,20 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
     }
   },
 
-  loadSavedResult: async (id) => {
-    set({ isLoadingResult: true, saveError: null });
-    try {
-      const detail = await analysisClient.getResult(id);
-      const resultData = detail.resultData as unknown as FullAnalysisResult;
-      set({
-        fullResults: resultData,
-        currentStep: "complete",
-        stepIndex: STEP_ORDER.indexOf("complete"),
-        highRiskCount: countHighRisk(resultData.carrier),
-        isDemo: false,
-        isLoadingResult: false,
-        activeTab: "overview",
-      });
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to load analysis";
-      set({ isLoadingResult: false, saveError: message });
-      throw error;
-    }
+  loadSavedResult: async (_id) => {
+    // TODO(B3): This action requires the Web Crypto decryption layer
+    // (Argon2id + AES-256-GCM) before it can decrypt the EncryptedEnvelope
+    // returned by the backend API. Without decryption, casting the opaque
+    // envelope directly to FullAnalysisResult produces garbage data.
+    // Until Stream B3 implements client-side decryption, this action is
+    // blocked to prevent ZKE (Zero-Knowledge Encryption) violations.
+    void _id;
+    const error = new Error(
+      "Encryption layer not yet implemented — see Stream B3. " +
+        "Use loadResultFromStorage() for client-side IndexedDB persistence.",
+    );
+    set({ saveError: error.message, isLoadingResult: false });
+    throw error;
   },
 
   deleteSavedResult: async (id) => {
@@ -311,4 +291,32 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
   },
 
   clearSaveError: () => set({ saveError: null }),
+
+  // ── Client-Side Storage Actions (IndexedDB) ────────────────────────────
+
+  saveResultToStorage: async (resultId, encryptedEnvelope) => {
+    await indexedDbStore.saveAnalysisResult(
+      resultId,
+      encryptedEnvelope,
+      indexedDbStore.STORAGE_SCHEMA_VERSION,
+    );
+  },
+
+  loadResultFromStorage: async (resultId) => {
+    const result = await indexedDbStore.loadAnalysisResult(resultId);
+
+    if (result === null) {
+      // Check if the entry exists but has a version mismatch
+      const mismatch = await indexedDbStore.hasVersionMismatch(resultId);
+      set({ storageVersionMismatch: mismatch });
+      return null;
+    }
+
+    set({ storageVersionMismatch: false });
+    return result;
+  },
+
+  deleteResultFromStorage: async (resultId) => {
+    await indexedDbStore.deleteAnalysisResult(resultId);
+  },
 }));

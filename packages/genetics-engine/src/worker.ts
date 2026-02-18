@@ -8,12 +8,16 @@
  * results and progress updates back.
  *
  * Message flow:
- * 1. Main thread sends WorkerRequest (parse, analyze, or cancel)
+ * 1. Main thread sends WorkerRequest (parse, analyze, cancel, or clear_memory)
  * 2. Worker processes the request, sending progress updates
  * 3. Worker sends WorkerResponse with results or error
  *
  * The worker supports cancellation: if a "cancel" message arrives during
  * processing, the current operation is aborted and an acknowledgement is sent.
+ *
+ * Security: After analysis completes, all raw DNA data is explicitly cleared
+ * from worker memory via clearSensitiveMemory(). The main thread can also
+ * trigger this explicitly by sending a "clear_memory" message.
  *
  * Usage (from the main thread):
  * ```typescript
@@ -25,6 +29,7 @@
  *     case 'parse_complete': // Show results
  *     case 'analysis_complete': // Display full analysis
  *     case 'error': // Show error message
+ *     case 'memory_cleared': // Sensitive data wiped
  *   }
  * };
  * ```
@@ -123,6 +128,65 @@ function countKeys(obj: Record<string, unknown>): number {
   return Object.keys(obj).length;
 }
 
+// ─── Sensitive Memory Clearing ──────────────────────────────────────────────
+
+/**
+ * Wipe all genotype keys from a GenotypeMap (Record<string, string>).
+ *
+ * Unlike simply reassigning the variable, this explicitly deletes every key
+ * from the object, ensuring that any remaining references to the same object
+ * will see an empty record. This is a defense-in-depth measure — even if a
+ * closure or cached reference holds the old object, the DNA data is gone.
+ *
+ * @param map - The genotype map to wipe
+ */
+function wipeGenotypeMap(map: GenotypeMap): void {
+  const keys = Object.keys(map);
+  for (let i = 0; i < keys.length; i++) {
+    delete map[keys[i]!];
+  }
+}
+
+/**
+ * Clear all sensitive genetic data from worker memory.
+ *
+ * SECURITY: This function must be called after analysis completes, on
+ * cancellation, or when explicitly requested by the main thread. Genetic
+ * data must not linger in worker memory after it is no longer needed.
+ *
+ * The function performs the following:
+ * 1. Wipes all keys from each GenotypeMap in parsedGenotypes (defense-in-depth)
+ * 2. Resets parsedGenotypes to an empty array
+ * 3. Resets parsedFormats to an empty array
+ * 4. Nulls the geneticsData reference (carrier panel, trait SNPs, PGx, PRS)
+ * 5. Resets and nulls the memory governor
+ *
+ * Safe to call multiple times — idempotent by design.
+ */
+export function clearSensitiveMemory(): void {
+  // Wipe each genotype map's keys before releasing the array reference.
+  // This ensures that even if another reference to one of these objects
+  // exists (e.g., in a closure), the raw DNA data has been scrubbed.
+  for (let i = 0; i < parsedGenotypes.length; i++) {
+    wipeGenotypeMap(parsedGenotypes[i]!);
+  }
+  parsedGenotypes = [];
+
+  // Clear parsed file format metadata
+  parsedFormats = [];
+
+  // Null out the loaded genetics reference data (carrier panel, traits,
+  // PGx panel, PRS weights, ethnicity data, counseling providers).
+  // This allows the GC to reclaim potentially large reference datasets.
+  geneticsData = null;
+
+  // Reset and null the memory governor
+  if (governor) {
+    governor.reset();
+    governor = null;
+  }
+}
+
 // ─── Message Handler ────────────────────────────────────────────────────────
 
 /**
@@ -183,6 +247,9 @@ function handleMessage(event: MessageEvent<WorkerRequest>): void {
 
     case 'cancel':
       cancelRequested = true;
+      // Clear sensitive memory immediately on cancel — DNA data should not
+      // linger even if the worker is between operations.
+      clearSensitiveMemory();
       // Only acknowledge if the worker is actively processing a request.
       // Avoids false ack when no operation is in progress.
       if (busy) {
@@ -192,6 +259,11 @@ function handleMessage(event: MessageEvent<WorkerRequest>): void {
           code: 'CANCEL_ACK',
         });
       }
+      break;
+
+    case 'clear_memory':
+      clearSensitiveMemory();
+      postResponse({ type: 'memory_cleared' });
       break;
 
     default:
@@ -315,6 +387,9 @@ async function handleParse(
  *
  * Uses genotypes from the request parameters. Falls back to stored
  * parsed genotypes if request parameters are empty.
+ *
+ * SECURITY: After posting results, clearSensitiveMemory() is called to
+ * wipe all raw DNA data from worker memory.
  *
  * @param parent1Genotypes - Parent 1 genotype map from request
  * @param parent2Genotypes - Parent 2 genotype map from request
@@ -489,14 +564,12 @@ async function handleAnalyze(
     progressReporter.forceReport('complete', 100, 'Analysis complete');
 
     postResponse({ type: 'analysis_complete', results: fullResult });
-
-    // Clear parsed state to free memory after analysis
-    parsedGenotypes = [];
-    parsedFormats = [];
-    if (governor) {
-      governor.reset();
-    }
   } finally {
+    // SECURITY: Clear all sensitive genetic data from worker memory after
+    // analysis completes — whether successfully or due to an error.
+    // clearSensitiveMemory() is idempotent, so this is safe even if
+    // cancellation already triggered it.
+    clearSensitiveMemory();
     busy = false;
   }
 }
@@ -709,9 +782,17 @@ function handleInit(config?: WorkerConfig): void {
 /**
  * Post a typed response back to the main thread.
  *
+ * In test environments (Node.js), this uses the __test__ response capture
+ * mechanism. In production (Web Worker), it calls self.postMessage().
+ *
  * @param response - WorkerResponse to send
  */
 function postResponse(response: WorkerResponse): void {
+  // In test environments, capture responses instead of posting to self
+  if (_testResponseCapture) {
+    _testResponseCapture.push(response);
+    return;
+  }
   // eslint-disable-next-line no-restricted-globals
   self.postMessage(response);
 }
@@ -749,5 +830,110 @@ function yieldToEventLoop(): Promise<void> {
 // ─── Worker Registration ────────────────────────────────────────────────────
 
 // Register the message handler.
+// Guard for test environments where `self` is not defined (Node.js / Vitest).
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('message', handleMessage);
+if (typeof self !== 'undefined' && typeof self.addEventListener === 'function') {
+  // eslint-disable-next-line no-restricted-globals
+  self.addEventListener('message', handleMessage);
+}
+
+// ─── Test Helpers ───────────────────────────────────────────────────────────
+
+/**
+ * Internal response capture array for test environments.
+ * When non-null, postResponse() pushes to this instead of calling self.postMessage().
+ */
+let _testResponseCapture: WorkerResponse[] | null = null;
+
+/**
+ * Detect whether we are in a production environment.
+ *
+ * Uses a `typeof` guard to avoid ReferenceError in Web Worker contexts
+ * where the Node.js `process` global is not defined. Bundlers (Vite,
+ * webpack, esbuild) replace `process.env.NODE_ENV` at build time, making
+ * this a dead-code-elimination target that removes the entire __test__
+ * block in production builds.
+ */
+declare const process: { env: { NODE_ENV?: string } } | undefined;
+const _isProduction: boolean =
+  typeof process !== 'undefined' &&
+  process?.env?.NODE_ENV === 'production';
+
+/**
+ * Test-only helpers for inspecting and manipulating worker module state.
+ *
+ * These helpers are only used in unit tests. They provide controlled access
+ * to the module-level variables that are normally encapsulated.
+ *
+ * Guarded behind NODE_ENV check so this object is `undefined` in production.
+ * Web Workers are separate entry points and may not be tree-shaken by bundlers,
+ * so the explicit guard ensures test helpers never ship to users.
+ *
+ * @internal
+ */
+export const __test__ = !_isProduction ? {
+  /** Get a snapshot of the current worker state. */
+  getState: () => ({
+    parsedGenotypes,
+    parsedFormats,
+    geneticsData,
+    governor,
+    busy,
+    cancelRequested,
+  }),
+
+  /** Set parsedGenotypes to a given array. */
+  setParsedGenotypes: (genotypes: GenotypeMap[]) => {
+    parsedGenotypes = genotypes;
+  },
+
+  /** Set parsedFormats to a given array. */
+  setParsedFormats: (formats: FileFormat[]) => {
+    parsedFormats = formats;
+  },
+
+  /** Set geneticsData to a given value. */
+  setGeneticsData: (data: GeneticsData | null) => {
+    geneticsData = data;
+  },
+
+  /**
+   * Set the governor. If `create` is true, creates a real MemoryGovernor
+   * with a 500MB limit; if false, sets governor to null.
+   */
+  setGovernor: (create: boolean) => {
+    if (create) {
+      governor = new MemoryGovernor(500 * 1024 * 1024);
+    } else {
+      governor = null;
+    }
+  },
+
+  /** Set the busy flag. */
+  setBusy: (value: boolean) => {
+    busy = value;
+  },
+
+  /**
+   * Simulate receiving a message from the main thread.
+   * Calls handleMessage with a synthetic MessageEvent.
+   */
+  simulateMessage: (request: WorkerRequest) => {
+    handleMessage({ data: request } as MessageEvent<WorkerRequest>);
+  },
+
+  /**
+   * Capture responses posted during a callback.
+   * Returns the array of responses that were posted during the callback's execution.
+   */
+  captureResponses: (fn: () => void): WorkerResponse[] => {
+    const captured: WorkerResponse[] = [];
+    _testResponseCapture = captured;
+    try {
+      fn();
+    } finally {
+      _testResponseCapture = null;
+    }
+    return captured;
+  },
+} : undefined;
