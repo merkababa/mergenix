@@ -164,7 +164,11 @@
      - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13, B7, B8, B12. 245 tests. Gate 1: 6/6 A. Gate 2: 6/6 A.
      - Sprint 3 (Business): PR #56 MERGED — B5, B6, B9, B10. 503 tests. Gate 1: 7/7 A+. Gate 2: 7/7 A.
      - Deferred Items: PR #57 MERGED — 12/13 items. 380 tests. Gate 1: 6/6 A+. Gate 2: 4/4 A/A+.
-   - **Remaining streams:** S (Security), L (Legal), Q (QA), C (Content), Ops (Operations)
+   - **Stream S (Security): Sprint 1 COMPLETE** — PR #58 merged
+     - Sprint 1 (Containment): S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude. 4 commits (feat + 3 fix rounds).
+     - Sprint 2 (Data): S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage — NEXT
+     - Sprint 3 (Ops): S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting
+   - **Remaining streams:** L (Legal), Q (QA), C (Content), Ops (Operations)
 
 ---
 
