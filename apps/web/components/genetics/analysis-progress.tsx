@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Check, CheckCircle, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart } from "lucide-react";

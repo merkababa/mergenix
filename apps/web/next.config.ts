@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { getSecurityHeaders } from "./config/security";
+
+const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@mergenix/shared-types", "@mergenix/genetics-engine", "@mergenix/genetics-data"],
@@ -15,6 +18,15 @@ const nextConfig: NextConfig = {
       };
     }
     return config;
+  },
+  async headers() {
+    return [
+      {
+        // Apply security headers to all routes
+        source: "/(.*)",
+        headers: getSecurityHeaders(isDev),
+      },
+    ];
   },
 };
 

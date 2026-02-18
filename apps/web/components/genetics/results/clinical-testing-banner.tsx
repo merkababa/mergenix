@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { memo } from "react";
 import { AlertTriangle } from "lucide-react";
 import { CLINICAL_TESTING_DISCLAIMER } from "@/lib/constants/disclaimers";

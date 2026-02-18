@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useCallback, useRef, useState } from "react";
 import { Upload, File as FileIcon, X, ArrowRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -274,6 +276,7 @@ export function CoupleUploadCard({
       hover="none"
       role="group"
       aria-labelledby="couple-upload-heading"
+      data-privacy-mask="true"
       className="p-6"
     >
       {/* ── Heading ── */}

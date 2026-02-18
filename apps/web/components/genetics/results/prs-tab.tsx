@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { memo } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
@@ -140,7 +142,7 @@ export function PrsTab() {
           router.push("/subscription");
         }}
       >
-    <div className="space-y-6">
+    <div data-privacy-mask="true" className="space-y-6">
       {/* Clinical testing banner */}
       <ClinicalTestingBanner />
 

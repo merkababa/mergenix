@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useCallback, useState } from "react";
 import {
   Microscope,
@@ -287,7 +289,7 @@ export default function AnalysisPage() {
   const canStartAnalysis = bothFilesSelected && partnerConsentGiven;
 
   return (
-    <section aria-label="Genetic Analysis">
+    <section data-privacy-mask="true" aria-label="Genetic Analysis">
       {/* ── Header ── */}
       <div className="mb-8 text-center">
         <div className="flex items-center justify-end">

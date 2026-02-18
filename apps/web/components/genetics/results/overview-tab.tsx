@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, HeartPulse } from "lucide-react";
@@ -87,7 +89,7 @@ export function OverviewTab() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div data-privacy-mask="true" className="space-y-6">
       <h3 className="sr-only">Results Overview</h3>
 
       {/* Demo label */}

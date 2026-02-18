@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { AlertCircle, Sparkles } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +43,7 @@ export function TraitsTab() {
   const missing = traits.filter((t) => t.status === "missing");
 
   return (
-    <div className="space-y-6">
+    <div data-privacy-mask="true" className="space-y-6">
       {/* Free-tier banner — traits are included free */}
       {userTier === "free" && (
         <GlassCard

@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { Shield, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 

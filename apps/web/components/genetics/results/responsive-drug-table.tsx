@@ -1,3 +1,7 @@
+"use client";
+
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { memo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { VariantCard, levelBadgeVariant } from "./variant-card";

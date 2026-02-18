@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import Link from "next/link";
 import { FileDown, AlertCircle, RefreshCw, Lock } from "lucide-react";
 import { usePdfExport } from "@/lib/pdf/use-pdf-export";

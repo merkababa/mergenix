@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { SelectFilter } from "@/components/ui/select-filter";
 import { POPULATIONS } from "@mergenix/genetics-data";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";

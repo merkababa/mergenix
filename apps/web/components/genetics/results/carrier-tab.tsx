@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import React, { useState, useMemo, useCallback, useRef, useEffect, memo } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ChevronDown, ChevronUp, Lock } from "lucide-react";
@@ -563,7 +565,7 @@ export function CarrierTab() {
         router.push("/subscription");
       }}
     >
-    <div className="space-y-6">
+    <div data-privacy-mask="true" className="space-y-6">
       {/* Clinical testing banner — prominent warning at top */}
       <ClinicalTestingBanner variant="carrier" />
 

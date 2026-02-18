@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useState } from "react";
 import { AlertTriangle, X } from "lucide-react";
 import { CURRENT_DATA_VERSION } from "@mergenix/genetics-engine";

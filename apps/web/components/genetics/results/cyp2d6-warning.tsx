@@ -1,3 +1,7 @@
+"use client";
+
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { memo } from "react";
 import { AlertTriangle } from "lucide-react";
 import { CYP2D6_ARRAY_LIMITATION } from "@/lib/constants/disclaimers";

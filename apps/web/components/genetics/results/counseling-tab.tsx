@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { useState } from "react";
 import {
   Heart,
@@ -82,7 +84,7 @@ export function CounselingTab() {
   const urgencyStyle = URGENCY_CONFIG[counseling.urgency];
 
   return (
-    <div className="space-y-6">
+    <div data-privacy-mask="true" className="space-y-6">
       {/* Supportive intro paragraph */}
       <GlassCard variant="subtle" hover="none" className="p-5">
         <p className="text-sm leading-relaxed text-[var(--text-body)]">

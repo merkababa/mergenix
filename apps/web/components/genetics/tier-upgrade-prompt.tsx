@@ -1,5 +1,7 @@
 "use client";
 
+// PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
+
 import { Lock } from "lucide-react";
 import Link from "next/link";
 import { GlassCard } from "@/components/ui/glass-card";
