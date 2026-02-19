@@ -22,7 +22,7 @@ Next.js 15 frontend for the Mergenix Genetic Analysis Platform.
 
 ### Setup
 
-From the **monorepo root** (`C:\Users\t2tec\Tortit`):
+From the **monorepo root** (`<project-root>`):
 
 ```bash
 # Install all dependencies

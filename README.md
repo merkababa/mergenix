@@ -1,134 +1,116 @@
-# Mergenix - Genetic Offspring Analysis Platform
+# Mergenix — Genetic Offspring Analysis Platform
 
-A Streamlit web application that analyzes genetic data from two parents to predict offspring traits and assess carrier risk for recessive diseases using Mendelian genetics.
+A privacy-first platform that analyzes raw DNA data from two parents to predict offspring traits, assess carrier risk, and deliver pharmacogenomics insights — all computed in-browser via Web Workers. No raw DNA ever leaves your device.
 
 ## Features
 
-- **Multi-format support** — Upload 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF (Whole Genome Sequencing) raw data files
-- **Carrier risk screening** — Screen against a panel of 2,700+ genetic diseases with offspring risk calculation
-- **Trait prediction** — Predict 60+ offspring traits across appearance, health, behavior, and more using Punnett square genetics
-- **Single-parent mode** — Individual carrier screening when only one file is uploaded
-- **ClinVar integration** — Optional enrichment with NCBI's clinical variant database
-- **Privacy-first** — All processing happens locally in your browser session. No data is stored or transmitted.
+- **Multi-format parser** — 23andMe, AncestryDNA, MyHeritage, and VCF (Whole Genome Sequencing)
+- **Carrier screening** — panel of 2,697 diseases with Mendelian offspring risk calculation
+- **Trait prediction** — 79 traits across appearance, health, behavior, and ancestry
+- **Pharmacogenomics** — 12 pharmacogenes with drug-response guidance
+- **Polygenic risk scores** — 10 common complex conditions
+- **Genetic counseling** — automated triage and specialist referral suggestions
+- **Ethnicity adjustment** — allele frequency correction across 9 reference populations
+- **Privacy-first** — all analysis runs client-side in Web Workers; the server handles only auth, payments, and GDPR operations
+- **One-time pricing** — Free, Premium, and Pro tiers; no subscriptions
+
+## Architecture
+
+Mergenix is a monorepo with a strict privacy boundary:
+
+- **Client (apps/web):** Next.js 15 + React 19 + Tailwind CSS + Zustand. The genetics engine runs entirely inside Web Workers — raw SNP data never leaves the browser.
+- **Server (apps/api):** FastAPI + SQLAlchemy + Alembic. Handles authentication, Stripe payments, GDPR data requests, and user account management only.
+- **Genetics Engine (packages/genetics-engine):** TypeScript library compiled for Web Workers. Zero network calls during analysis.
+
+Zero raw DNA is sent to the server at any point.
 
 ## Quick Start
 
 ### Prerequisites
+
+- Node.js 20+
+- pnpm 10+
 - Python 3.10+
-- pip
 
-### Installation
+### Install
 
 ```bash
-# Clone the repository
-git clone https://github.com/maayango285/Mergenix.git
-cd Mergenix
+pnpm install
+```
 
-# Create virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or: venv\Scripts\activate  # Windows
+### Run frontend + engine (dev)
 
-# Install dependencies
+```bash
+pnpm dev
+```
+
+### Run backend
+
+```bash
+cd apps/api
 pip install -r requirements.txt
-
-# Install dev dependencies
-pip install ruff pytest pre-commit
-pre-commit install
+alembic upgrade head
+uvicorn app.main:create_app --factory --reload
 ```
 
-### Run the App
-
-```bash
-streamlit run app.py
-```
-
-The app will open at `http://localhost:8501`.
-
-### Run Tests
-
-```bash
-pytest tests/ -v
-```
-
-### Run Linting
-
-```bash
-ruff check Source/ pages/ tests/ app.py
-```
+The web app runs at `http://localhost:3000`. The API runs at `http://localhost:8000`.
 
 ## Project Structure
 
 ```
 Mergenix/
-├── app.py                  # Main Streamlit application
-├── pages/                  # Streamlit multipage apps
-│   ├── 1_Login.py          # Authentication page
-│   ├── 2_Disease_Catalog.py # Disease reference catalog
-│   └── 3_Subscription.py  # Subscription management
-├── Source/                 # Core Python modules
-│   ├── auth/               # Authentication system
-│   ├── payments/           # Payment processing (Stripe, PayPal)
-│   ├── parser.py           # Multi-format genetic file parser
-│   ├── carrier_analysis.py # Disease carrier risk engine
-│   ├── trait_prediction.py # Trait prediction engine
-│   ├── clinvar_client.py   # ClinVar API integration
-│   ├── tier_config.py      # Subscription tier configuration
-├── data/                   # JSON data files
-│   ├── carrier_panel.json  # Disease panel (2,700+ conditions)
-│   └── trait_snps.json     # Trait SNP database (60+ traits)
-├── tests/                  # Test suite
-├── sample_data/            # Sample genetic data files for testing
-├── docs/                   # Documentation, PRDs, research
-├── CLAUDE.md               # AI assistant project rules
-├── PROGRESS.md             # Task tracking & project status
-└── README.md               # This file
+├── apps/
+│   ├── web/                    # Next.js 15 frontend (React 19, Tailwind, Zustand)
+│   └── api/                    # FastAPI backend (auth, payments, GDPR)
+├── packages/
+│   ├── genetics-engine/        # TypeScript genetics engine (Web Workers)
+│   ├── shared-types/           # Shared TypeScript type definitions
+│   └── genetics-data/          # Reference JSON data (diseases, traits, SNPs)
+├── docs/                       # Architecture docs, PRDs, review personas
+├── .github/                    # GitHub Actions CI/CD workflows
+├── CLAUDE.md                   # AI assistant project rules
+├── PROGRESS.md                 # Task tracking and project status
+└── README.md                   # This file
 ```
+
+## Quality Gates
+
+Run these before every commit:
+
+```bash
+# Frontend + engine
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+
+# Backend
+cd apps/api && ruff check . && pytest tests/ -v -n auto
+```
+
+All commands are orchestrated via Turborepo and run from the repo root (except the backend commands).
 
 ## Development Workflow
 
-We use a feature-branch workflow. See [CLAUDE.md](CLAUDE.md) for full rules.
-
-1. **Pull latest**: `git pull origin main`
-2. **Check status**: Read `PROGRESS.md` for current work
-3. **Create branch**: `git checkout -b feature/your-feature`
-4. **Make changes**: Write code, tests, docs
-5. **Quality check**: `ruff check . && pytest tests/ -v`
-6. **Commit**: Use conventional commits (`feat:`, `fix:`, etc.)
-7. **Push & PR**: Push branch, create PR for review
-8. **Update tracking**: Update `PROGRESS.md`
-
-## Configuration
-
-### Optional: NCBI API Key
-For ClinVar cross-reference, get a free API key from [NCBI](https://www.ncbi.nlm.nih.gov/account/) and enter it in the app sidebar.
-
-### Environment Variables
-Copy `.env.example` to `.env` and fill in your values:
-```bash
-cp .env.example .env
-```
+1. Pull latest: `git pull origin main`
+2. Check status: read `PROGRESS.md` for current sprint state
+3. Create branch: `git checkout -b feature/your-feature`
+4. Write tests first (TDD), then implement
+5. Run quality gates (see above)
+6. Commit using conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
+7. Push branch and open a PR for review
+8. Update `PROGRESS.md` at session end
 
 ## Disclaimer
 
-Mergenix is an **educational tool** and does not provide medical advice, diagnosis, or treatment. Genetic predictions are probabilistic and based on simplified Mendelian models. Many traits are polygenic and influenced by environment. Always consult a certified genetic counselor or healthcare professional for clinical interpretation.
+Mergenix is an educational tool and does not provide medical advice, diagnosis, or treatment. Genetic predictions are probabilistic and based on population-level models. Many traits are polygenic and influenced by environment. Always consult a certified genetic counselor or healthcare professional for clinical interpretation of genetic data.
 
 ## Contributors
 
-| Name | Role |
-|------|------|
-| kukiz | Developer |
-| Maayan | Developer / Reviewer |
-| Claude | AI Assistant |
-
-## Quick Reference (Don't Forget!)
-
-- **PROGRESS.md** is the single source of truth — check it at every session start
-- **CLAUDE.md** has all workflow rules — pull on start, feature branches, conventional commits, quality gates
-- **Python on Windows**: Use `py` as the launcher (not `python` or `python3`)
-- **Git config**: Set locally per repo — `git config user.name "Your Name"` and `git config user.email "you@users.noreply.github.com"`
-- **After first clone**, install dev tools: `py -m pip install ruff pytest pre-commit && py -m pre_commit install`
-- **Before every commit**: `py -m ruff check Source/ pages/ tests/ app.py && py -m pytest tests/ -v`
+| Name  | Role           |
+|-------|----------------|
+| kukiz | Developer      |
+| Claude | AI Assistant  |
 
 ## License
 

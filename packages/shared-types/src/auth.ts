@@ -19,7 +19,7 @@ export interface User {
   email: string;
   /** Display name. */
   name: string;
-  /** Current subscription tier. */
+  /** Current pricing tier. */
   tier: Tier;
   /** Whether the email address has been verified. */
   emailVerified: boolean;

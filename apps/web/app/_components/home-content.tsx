@@ -535,7 +535,7 @@ export function HomeContent() {
               Ready to Know?
             </h2>
             <p className="relative mx-auto mt-4 max-w-lg text-[var(--text-muted)]">
-              Start your free analysis today. No account required for basic screening.
+              Create a free account and start your genetic analysis today.
               Your DNA stays on your device — always.
             </p>
 

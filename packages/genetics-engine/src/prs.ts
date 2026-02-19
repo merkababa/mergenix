@@ -615,7 +615,7 @@ export function predictOffspringPrsClt(
  * @param parentASnps - Parent A's genotype map
  * @param parentBSnps - Parent B's genotype map
  * @param prsWeights - Full PRS weights data
- * @param tier - Subscription tier (default: "free")
+ * @param tier - Pricing tier (default: "free")
  * @returns Full PRS analysis result with enhanced fields
  */
 export function analyzePrs(

@@ -13,7 +13,7 @@ export type FileFormat = '23andme' | 'ancestrydna' | 'myheritage' | 'vcf' | 'unk
 
 // ─── Tier Types ─────────────────────────────────────────────────────────────
 
-/** Subscription tier levels. */
+/** Pricing tier levels. */
 export type Tier = 'free' | 'premium' | 'pro';
 
 // ─── Inheritance Pattern Types ──────────────────────────────────────────────
@@ -238,7 +238,7 @@ export interface PgxGeneResult {
 export interface PgxAnalysisResult {
   /** Number of genes analyzed. */
   genesAnalyzed: number;
-  /** Active subscription tier. */
+  /** Active pricing tier. */
   tier: Tier;
   /** Whether the analysis is limited by tier. */
   isLimited: boolean;
@@ -329,7 +329,7 @@ export interface PrsAnalysisResult {
   conditions: Record<string, PrsConditionResult>;
   /** Source metadata from prs_weights.json. */
   metadata: PrsMetadata;
-  /** Active subscription tier. */
+  /** Active pricing tier. */
   tier: Tier;
   /** Number of conditions accessible at this tier. */
   conditionsAvailable: number;

@@ -219,7 +219,7 @@ async def get_optional_user(
 
 
 def require_tier(minimum_tier: str):
-    """Dependency factory that enforces a minimum subscription tier.
+    """Dependency factory that enforces a minimum pricing tier.
 
     Usage:
         @router.get("/pro-feature", dependencies=[Depends(require_tier("pro"))])

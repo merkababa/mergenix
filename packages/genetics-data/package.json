@@ -6,7 +6,6 @@
   "types": "./index.ts",
   "files": ["*.json", "*.ts"],
   "scripts": {
-    "copy-data": "bash copy-data.sh",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

@@ -447,7 +447,7 @@ function normalizeDiplotype(alleleA: string, alleleB: string): string {
  * @param parentASnps - Parent A's genotype map
  * @param parentBSnps - Parent B's genotype map
  * @param pgxPanel - Loaded PGx panel data
- * @param tier - Subscription tier (default: "free")
+ * @param tier - Pricing tier (default: "free")
  * @returns Full PGx analysis result with per-gene details
  */
 export function analyzePgx(

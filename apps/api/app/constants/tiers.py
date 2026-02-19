@@ -4,7 +4,7 @@ from enum import IntEnum
 
 
 class Tier(IntEnum):
-    """User subscription tiers, ordered by capability."""
+    """User pricing tiers, ordered by capability."""
 
     FREE = 0
     PREMIUM = 1

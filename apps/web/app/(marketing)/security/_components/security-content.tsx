@@ -79,7 +79,7 @@ const FAQ_ITEMS = [
   {
     question: "What data do you store on your servers?",
     answer:
-      "We store only your account information (email, subscription status) and encrypted analysis result summaries if you choose to save them. Raw genetic data is never stored server-side.",
+      "We store only your account information (email, tier status) and encrypted analysis result summaries if you choose to save them. Raw genetic data is never stored server-side.",
   },
   {
     question: "How are saved results protected?",

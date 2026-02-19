@@ -98,7 +98,7 @@ export function DangerZone() {
                     <ul className="mt-1 list-inside list-disc space-y-0.5">
                       <li>Your account profile and settings</li>
                       <li>All saved analysis history</li>
-                      <li>Payment records and subscription status</li>
+                      <li>Payment records and tier status</li>
                     </ul>
                     <p className="mt-1.5">
                       Since we never store raw genetic data, no DNA files will be affected.

@@ -50,7 +50,7 @@ jobs:
           print(f"Remote ClinVar date: {remote_date}")
 
           # Check local data freshness marker
-          marker_path = Path("data/clinvar_last_sync.json")
+          marker_path = Path("packages/genetics-data/clinvar_last_sync.json")
           local_date = "never"
           if marker_path.exists():
               with open(marker_path) as f:
@@ -145,7 +145,7 @@ jobs:
               json.dump(report, f, indent=2)
 
           # Update local freshness marker
-          marker_path = Path("data/clinvar_last_sync.json")
+          marker_path = Path("packages/genetics-data/clinvar_last_sync.json")
           marker_path.parent.mkdir(exist_ok=True)
           with open(marker_path, "w") as f:
               json.dump({
@@ -172,7 +172,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$BRANCH"
-          git add data/clinvar_last_sync.json
+          git add packages/genetics-data/clinvar_last_sync.json
           git commit -m "chore: update ClinVar data freshness marker
 
           Remote date: ${{ needs.check-freshness.outputs.clinvar-date }}

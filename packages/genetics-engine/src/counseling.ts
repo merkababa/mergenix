@@ -163,7 +163,7 @@ export function shouldRecommendCounseling(
  * Ported from Source/counseling.py `generate_referral_summary()`.
  *
  * @param carrierResults - Output of analyzeCarrierRisk()
- * @param tier - Subscription tier (default: "free")
+ * @param tier - Pricing tier (default: "free")
  * @param userName - Optional user name for the referral letter (pro only)
  * @returns CounselingResult with tier-appropriate fields populated
  */

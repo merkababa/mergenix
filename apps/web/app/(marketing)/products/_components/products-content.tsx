@@ -226,7 +226,7 @@ export function ProductsContent() {
             Start Your Free Analysis Today
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-[var(--text-muted)]">
-            No account required. Upload your DNA files and get instant results.
+            Sign up free. Upload your DNA files and get instant results.
           </p>
           <div className="mt-6">
             <Link

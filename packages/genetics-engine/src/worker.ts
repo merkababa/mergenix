@@ -393,7 +393,7 @@ async function handleParse(
  *
  * @param parent1Genotypes - Parent 1 genotype map from request
  * @param parent2Genotypes - Parent 2 genotype map from request
- * @param tier - Subscription tier
+ * @param tier - Pricing tier
  * @param _population - Optional population for ethnicity adjustment (passed within carrier if applicable)
  */
 async function handleAnalyze(

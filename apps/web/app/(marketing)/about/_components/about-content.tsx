@@ -412,7 +412,7 @@ export function AboutContent() {
             Ready to Explore Your Genetics?
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-[var(--text-muted)]">
-            Start with a free analysis. No account required.
+            Start with a free account. Begin your analysis in minutes.
           </p>
           <div className="mt-6">
             <Link

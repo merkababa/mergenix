@@ -785,7 +785,7 @@ function isFreeTierDisease(diseaseName: string): boolean {
 }
 
 /**
- * Filter the carrier panel based on subscription tier.
+ * Filter the carrier panel based on pricing tier.
  *
  * - free: Only diseases matching TOP_25_FREE_DISEASES (up to 25)
  * - premium: First 500 diseases from the panel
@@ -794,7 +794,7 @@ function isFreeTierDisease(diseaseName: string): boolean {
  * Mirrors the Python `get_diseases_for_tier()` from tier_config.py.
  *
  * @param panel - Full carrier panel
- * @param tier - Subscription tier
+ * @param tier - Pricing tier
  * @returns Filtered panel entries
  */
 function filterPanelByTier(
@@ -867,7 +867,7 @@ export interface ExtendedCarrierResult extends CarrierResult {
  * @param parentASnps - Parent A's genotype map (rsid -> genotype)
  * @param parentBSnps - Parent B's genotype map (rsid -> genotype)
  * @param panel - Carrier disease panel entries
- * @param tier - Subscription tier for filtering (optional; undefined = all diseases)
+ * @param tier - Pricing tier for filtering (optional; undefined = all diseases)
  * @returns Array of extended carrier results (backward-compatible with CarrierResult[]),
  *   sorted by risk level
  */
@@ -1014,7 +1014,7 @@ export function analyzeCarrierRisk(
  *
  * Mirrors Source/tier_config.py `get_upgrade_message()`.
  *
- * @param tier - Current subscription tier
+ * @param tier - Current pricing tier
  * @returns Upgrade message string, or null for pro tier
  */
 function getUpgradeMessage(tier: Tier): string | null {
@@ -1042,7 +1042,7 @@ function getUpgradeMessage(tier: Tier): string | null {
  * Mirrors Source/carrier_analysis.py `get_analysis_summary()`.
  *
  * @param results - Analysis results from analyzeCarrierRisk()
- * @param tier - User's subscription tier
+ * @param tier - User's pricing tier
  * @returns Summary object with disease counts and tier info
  */
 export function getAnalysisSummary(

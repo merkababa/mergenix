@@ -299,7 +299,7 @@ export function predictTrait(
  * @param parentASnps - Parent A's genotype map
  * @param parentBSnps - Parent B's genotype map
  * @param traitDatabase - Full trait SNP database
- * @param tier - Subscription tier (default: "free")
+ * @param tier - Pricing tier (default: "free")
  * @returns Array of TraitResult objects, one per trait
  */
 export function predictAllTraits(
