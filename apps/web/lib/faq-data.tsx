@@ -63,15 +63,19 @@ export const FAQ_ITEMS: FaqItem[] = [
     question: "Is there a refund policy?",
     answer: (
       <>
-        Yes, we offer a 30-day money-back guarantee. If you&apos;re not
-        satisfied,{" "}
+        Yes, we offer a 30-day money-back guarantee for technical issues,
+        file format incompatibility, or analysis errors. If our platform
+        cannot process your file or produces a processing error, contact{" "}
         <a
-          href="mailto:care@mergenix.com"
-          className="underline text-[var(--accent-teal)] hover:brightness-110"
+          href="mailto:support@mergenix.com"
+          className="underline text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
         >
-          contact us
+          support@mergenix.com
         </a>{" "}
-        for a full refund.
+        within 30 days of purchase for a full refund. Please note: because
+        genetic analysis results are inherently probabilistic estimates,
+        refunds are not available solely on the basis of dissatisfaction
+        with probabilistic outcomes.
       </>
     ),
     tags: ["pricing"],

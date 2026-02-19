@@ -10,6 +10,7 @@ import {
   UserCheck,
   Database,
   Check,
+  FileSearch,
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PageHeader } from "@/components/layout/page-header";
@@ -191,7 +192,35 @@ export function PrivacyContent() {
                   <p className="text-sm leading-relaxed text-[var(--text-muted)]">
                     Processing of account and billing data is necessary for the
                     performance of our service agreement with you, including account
-                    management and subscription billing.
+                    management and payment processing. Payment processing is handled
+                    by Stripe, Inc. We share your billing details and IP address with
+                    Stripe for the purpose of processing your payment. Stripe&apos;s
+                    privacy policy is available at{" "}
+                    <a
+                      href="https://stripe.com/privacy"
+                      className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      stripe.com/privacy
+                    </a>
+                    .
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(245,158,11,0.1)]">
+                  <Shield className="h-5 w-5 text-[var(--accent-amber)]" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    Article 9(2)(a) &mdash; Explicit Consent (Special Category Data)
+                  </h3>
+                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                    Processing of your genetic data requires explicit consent under
+                    GDPR Article 9(2)(a) because genetic data is a special category
+                    of personal data. This consent is obtained via our dedicated
+                    consent modal before any analysis begins.
                   </p>
                 </div>
               </div>
@@ -259,7 +288,8 @@ export function PrivacyContent() {
                 <ul className="space-y-2 text-sm leading-relaxed text-[var(--text-muted)]">
                   <li>
                     <strong>Account data:</strong> Retained for the duration of your account.
-                    Deleted within 30 days of account closure.
+                    Deleted within 30 days of account closure. Accounts inactive for more
+                    than 2 years are automatically scheduled for deletion.
                   </li>
                   <li>
                     <strong>Saved results:</strong> Retained until you delete them
@@ -270,10 +300,226 @@ export function PrivacyContent() {
                     entirely in your browser and discarded after the session.
                   </li>
                   <li>
-                    <strong>Consent records:</strong> Retained for 5 years as required by
-                    GDPR accountability obligations.
+                    <strong>Consent records:</strong> Retained for 7 years as required by
+                    GDPR accountability obligations and applicable tax/compliance requirements.
                   </li>
                 </ul>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── ZKE Architecture ─────────────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="zke-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="zke-heading"
+            title="Zero-Knowledge Encryption"
+            subtitle="How your saved results are protected"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
+                <Lock className="h-6 w-6 text-[var(--accent-cyan)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  Client-Side Encryption (AES-256-GCM)
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  Analysis results, if saved, are encrypted client-side using your
+                  password-derived key (AES-256-GCM) before being transmitted to our
+                  servers. We cannot decrypt your saved results. If you lose your
+                  password without completing recovery, your saved results cannot be
+                  recovered.
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── Data Protection Officer ───────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="dpo-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="dpo-heading"
+            title="Data Protection Officer"
+            subtitle="Our DPO contact and appointment status"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
+                <UserCheck className="h-6 w-6 text-[var(--accent-violet)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  DPO Contact
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  Data Protection Officer:{" "}
+                  <a
+                    href="mailto:privacy@mergenix.com"
+                    className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                  >
+                    privacy@mergenix.com
+                  </a>
+                  . Our DPO appointment is pending formal designation prior to
+                  general availability launch. In the interim, all data protection
+                  inquiries are handled directly by the Mergenix privacy team via
+                  the address above.
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── EU Representative ─────────────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="eu-rep-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="eu-rep-heading"
+            title="EU Representative (Article 27)"
+            subtitle="Our designated representative in the European Union"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
+                <Scale className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  Article 27 Designation
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  Mergenix will designate an EU representative under GDPR Article 27
+                  prior to general availability launch. Until designation, EU data
+                  subjects may direct inquiries to our Data Protection Officer at{" "}
+                  <a
+                    href="mailto:privacy@mergenix.com"
+                    className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                  >
+                    privacy@mergenix.com
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── International Transfers ───────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="transfers-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="transfers-heading"
+            title="International Data Transfers"
+            subtitle="How we safeguard cross-border data transfers"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
+                <Shield className="h-6 w-6 text-[var(--accent-cyan)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  Standard Contractual Clauses
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  Your data may be processed in the United States. We rely on
+                  Standard Contractual Clauses (SCCs) approved by the European
+                  Commission for any transfers of personal data outside the EEA,
+                  ensuring an equivalent level of protection for your data. Our
+                  primary sub-processor, Stripe, Inc. (payment processor), is
+                  certified under the EU-U.S. Data Privacy Framework. We have
+                  conducted a Transfer Impact Assessment (TIA) to evaluate the
+                  legal framework of the destination country and have implemented
+                  supplementary measures, including encryption in transit and at
+                  rest, to ensure an equivalent level of protection.
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── Law Enforcement Requests ──────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="law-enforcement-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="law-enforcement-heading"
+            title="Law Enforcement Requests"
+            subtitle="When we may be required to disclose data"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(245,158,11,0.1)]">
+                <FileText className="h-6 w-6 text-[var(--accent-amber)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  Legal Process Disclosure
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  We may disclose your account data (never raw genetic data, which
+                  we do not possess) if required by valid legal process such as a
+                  court order or subpoena. We will notify you of any such request
+                  unless we are legally prohibited from doing so.
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        </ScrollReveal>
+      </section>
+
+      {/* ── DPIA ──────────────────────────────────────────────────────── */}
+      <section className="mt-16" aria-labelledby="dpia-heading">
+        <ScrollReveal>
+          <SectionHeading
+            id="dpia-heading"
+            title="Data Protection Impact Assessment"
+            subtitle="Our assessment of risks to your genetic data"
+          />
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <GlassCard variant="medium" hover="none" className="mt-8 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
+                <FileSearch className="h-6 w-6 text-[var(--accent-violet)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                  DPIA Status
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  We have conducted a Data Protection Impact Assessment (DPIA) as
+                  required by GDPR Article 35 for large-scale processing of special
+                  category data, including genetic data. Our DPIA evaluates the
+                  necessity and proportionality of processing, assesses risks to
+                  data subjects&apos; rights and freedoms, and documents the technical
+                  and organisational measures we implement to mitigate those risks.
+                  A summary of our DPIA is available upon request by contacting our
+                  Data Protection Officer.
+                </p>
               </div>
             </div>
           </GlassCard>
@@ -306,7 +552,7 @@ export function PrivacyContent() {
                     subject rights, contact us at{" "}
                     <a
                       href="mailto:privacy@mergenix.com"
-                      className="text-[var(--accent-teal)] hover:underline"
+                      className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
                     >
                       privacy@mergenix.com
                     </a>

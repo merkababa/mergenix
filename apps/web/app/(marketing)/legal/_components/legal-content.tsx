@@ -94,7 +94,7 @@ export function LegalContent() {
       </motion.div>
 
       {/* -- Mobile TOC (horizontal pills) -- */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-2 lg:hidden" role="navigation" aria-label="Table of contents">
+      <nav className="mb-6 flex gap-2 overflow-x-auto pb-2 lg:hidden" aria-label="Table of contents">
         {TOC_ITEMS.map((item) => (
           <a
             key={item.id}
@@ -110,7 +110,7 @@ export function LegalContent() {
             {item.label}
           </a>
         ))}
-      </div>
+      </nav>
 
       {/* -- Desktop layout: TOC sidebar + content -- */}
       <div className="flex gap-8">
@@ -199,7 +199,7 @@ export function LegalContent() {
                     <p>
                       Premium and Pro tiers are one-time purchases, not subscriptions.
                       All payments are processed securely through Stripe.
-                      We offer a 30-day money-back guarantee.
+                      We offer a 30-day money-back guarantee for technical issues, file format incompatibility, or analysis processing errors. Refunds are not available solely on the basis of dissatisfaction with probabilistic outcomes.
                     </p>
                   </div>
 
@@ -219,8 +219,10 @@ export function LegalContent() {
                       7. Changes to Terms
                     </h3>
                     <p>
-                      We may update these terms from time to time. Continued use of the
-                      Service after changes constitutes acceptance of the new terms.
+                      We may update these terms from time to time. We will notify you of
+                      material changes via email at least 30 days before they take effect.
+                      Continued use of the Service after the notice period constitutes
+                      acceptance of the new terms.
                     </p>
                   </div>
 
@@ -235,6 +237,78 @@ export function LegalContent() {
                       underrepresented populations may receive less accurate risk estimates.
                       We recommend consulting a genetic counselor for personalized
                       interpretation.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      9. Dispute Resolution &amp; Binding Arbitration
+                    </h3>
+                    <p>
+                      Any disputes arising from your use of Mergenix shall be resolved through
+                      binding arbitration administered under the rules of the American
+                      Arbitration Association. You agree to waive your right to participate
+                      in class-action lawsuits. Small claims court actions are exempt from
+                      this arbitration requirement.
+                    </p>
+                    <p className="mt-3">
+                      This agreement is governed by the laws of the State of Delaware, United
+                      States, without regard to conflict of law principles.
+                    </p>
+                    <p className="mt-3">
+                      This arbitration clause does not apply to consumers located in the
+                      European Economic Area, the United Kingdom, or any jurisdiction where
+                      mandatory arbitration in consumer contracts is prohibited by law. Such
+                      consumers retain the right to bring claims before the courts of their
+                      domicile.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      10. Prohibited Uses
+                    </h3>
+                    <p>
+                      You may not use Mergenix for dating compatibility screening, partner
+                      selection, embryo selection, or any form of reproductive decision-making
+                      beyond educational curiosity. Mergenix results are probabilistic
+                      population-level estimates and must not be used to make clinical,
+                      reproductive, or discriminatory decisions.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      11. Age Restriction
+                    </h3>
+                    <p>
+                      You must be at least 18 years of age to use Mergenix. We do not permit
+                      guardian consent for minors. If we discover a user is under 18, their
+                      account will be terminated and all associated data deleted immediately.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      12. Indemnification
+                    </h3>
+                    <p>
+                      You agree to indemnify Mergenix against any claims arising from your
+                      upload of another person&apos;s genetic data without their informed consent.
+                      You represent that you have obtained verifiable consent from any partner
+                      whose DNA data you upload.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      13. Regulatory Classification
+                    </h3>
+                    <p>
+                      Mergenix is a wellness and educational product, not a medical device or
+                      clinical diagnostic tool. It is not reviewed, approved, or regulated by
+                      the FDA, EMA, or any health authority. Results are for informational
+                      purposes only.
                     </p>
                   </div>
                 </div>
@@ -351,7 +425,7 @@ export function LegalContent() {
                       You may withdraw your consent at any time by contacting{" "}
                       <a
                         href="mailto:privacy@mergenix.com"
-                        className="font-medium text-[var(--accent-teal)] hover:underline"
+                        className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
                       >
                         privacy@mergenix.com
                       </a>{" "}
@@ -379,16 +453,16 @@ export function LegalContent() {
                       <table className="w-full text-sm" aria-labelledby="data-retention-heading">
                         <thead>
                           <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
-                            <th className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
                               <div className="flex items-center gap-2">
                                 <Clock className="h-3.5 w-3.5 text-[var(--accent-teal)]" aria-hidden="true" />
                                 Data Type
                               </div>
                             </th>
-                            <th className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
                               Retention Period
                             </th>
-                            <th className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
                               Deletion Method
                             </th>
                           </tr>
@@ -406,7 +480,7 @@ export function LegalContent() {
                           </tr>
                           <tr>
                             <td className="px-4 py-2.5 text-[var(--text-body)]">Payment records</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">7 years (tax compliance)</td>
+                            <td className="px-4 py-2.5 text-[var(--text-muted)]">7 years (to satisfy the longest applicable tax/financial record-keeping obligation across jurisdictions in which we operate)</td>
                             <td className="px-4 py-2.5 text-[var(--text-muted)]">Automatic purge</td>
                           </tr>
                           <tr>
@@ -468,7 +542,7 @@ export function LegalContent() {
                       To exercise any of these rights, contact us at{" "}
                       <a
                         href="mailto:privacy@mergenix.com"
-                        className="font-medium text-[var(--accent-teal)] hover:underline"
+                        className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
                       >
                         privacy@mergenix.com
                       </a>
@@ -509,6 +583,54 @@ export function LegalContent() {
                         will not discriminate against you for exercising any CCPA rights.
                       </li>
                     </ul>
+                  </div>
+
+                  {/* -- EU Representative -- */}
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      11. EU Representative (Article 27)
+                    </h3>
+                    <p>
+                      Mergenix has not yet designated an EU representative under GDPR
+                      Article 27. This will be updated prior to launch. For full details,
+                      see our{" "}
+                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
+                        Privacy Notice
+                      </Link>
+                      .
+                    </p>
+                  </div>
+
+                  {/* -- International Transfers -- */}
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      12. International Data Transfers
+                    </h3>
+                    <p>
+                      Your data may be processed in the United States. We rely on Standard
+                      Contractual Clauses (SCCs) approved by the European Commission for any
+                      transfers of personal data outside the EEA. See our{" "}
+                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
+                        Privacy Notice
+                      </Link>{" "}
+                      for full details.
+                    </p>
+                  </div>
+
+                  {/* -- Law Enforcement -- */}
+                  <div>
+                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      13. Law Enforcement Requests
+                    </h3>
+                    <p>
+                      We may disclose your account data (never raw genetic data, which we do
+                      not possess) if required by valid legal process such as a court order
+                      or subpoena. We will notify you unless legally prohibited. See our{" "}
+                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
+                        Privacy Notice
+                      </Link>{" "}
+                      for full details.
+                    </p>
                   </div>
                 </div>
               </GlassCard>

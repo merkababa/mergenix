@@ -5,7 +5,7 @@ import { RegisterContent } from "./_components/register-content";
 export const metadata: Metadata = {
   title: "Create Account | Mergenix",
   description:
-    "Create your free Mergenix account to start analyzing genetic compatibility and predicting offspring traits.",
+    "Create your free Mergenix account to start analyzing genetic traits and predicting offspring insights.",
 };
 
 function AuthSkeleton() {

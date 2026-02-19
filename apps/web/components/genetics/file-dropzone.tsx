@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Shield, FileCheck, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GeneticFileFormat } from "@/lib/stores/analysis-store";
+// NOTE: GinaNotice should be rendered once by the parent page, not inside each FileDropzone
 
 interface FileDropzoneProps {
   label: string;

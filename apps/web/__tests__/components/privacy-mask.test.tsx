@@ -110,7 +110,7 @@ vi.mock("lucide-react", () => {
     Pill: Icon, AlertTriangle: Icon, AlertCircle: Icon, Sparkles: Icon,
     Heart: Icon, HeartPulse: Icon, ExternalLink: Icon, Phone: Icon,
     MessageSquare: Icon, BarChart3: Icon, Microscope: Icon, Dna: Icon,
-    Info: Icon, Loader2: Icon,
+    Info: Icon, Loader2: Icon, ShieldCheck: Icon,
   };
 });
 

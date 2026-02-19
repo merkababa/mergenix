@@ -1,21 +1,33 @@
-/** Placeholder legal text for consent gates — final copy pending Stream L. */
+/** Legal text constants for consent gates and disclosures — Stream L finalized. */
 
-export const CONSENT_TEXT_GENETIC_PROCESSING = `[PLACEHOLDER — Final legal text pending Stream L]
+export const CONSENT_TEXT_GENETIC_PROCESSING = `By clicking "I Agree", you give your explicit, freely given, informed consent to the processing of your genetic data for the purpose of generating educational offspring trait predictions, carrier risk estimates, pharmacogenomics insights, and polygenic risk scores. This consent is required under GDPR Article 9(2)(a) because genetic data is a special category of personal data.
 
-By proceeding with this analysis, you consent to the processing of genetic data as defined under GDPR Article 9 (processing of special categories of personal data). This includes:
+How your data is processed: All analysis runs entirely within your browser using Web Workers. Your raw genetic file is never transmitted to our servers. We cannot see, access, or store your DNA data.
 
-1. PARSING AND ANALYSIS: Your uploaded genetic data file will be parsed and analyzed to identify relevant genetic variants. This processing occurs entirely within your browser — no raw genetic data is transmitted to our servers.
+What we may store: If you save your results to an account, we store the computed analysis output (variant interpretations and scores) — not your raw genetic file. This is subject to our Privacy Policy and data retention schedule.
 
-2. DATA RETENTION: Genetic analysis results are stored locally in your browser session. If you create an account, summary results (not raw genetic data) may be stored on our servers subject to our data retention policy.
+Purpose limitation: Your genetic data is used solely to generate the analysis you have requested. It will not be used for research, advertising, or shared with any third party.
 
-3. PURPOSE LIMITATION: Your genetic data will be used solely for the purpose of generating the offspring genetic analysis you have requested. It will not be used for any other purpose, including research, marketing, or sharing with third parties.
+Your rights: You may withdraw this consent at any time via Account Settings → Privacy. Withdrawal will trigger deletion of all saved analysis results associated with your account. Withdrawal does not affect the lawfulness of any processing carried out before you withdrew consent. You also have the right to access your data, request correction or erasure, and lodge a complaint with your national data protection authority.
 
-4. YOUR RIGHTS: Under GDPR, you have the right to withdraw consent at any time, request deletion of your data, access your data, and lodge a complaint with a supervisory authority.
+Important: Results are for educational and informational purposes only. They do not constitute medical advice, a clinical diagnostic test, or genetic counseling. Please consult a certified genetic counselor or healthcare provider before making any medical decisions.
 
-5. LIMITATIONS: This analysis is for informational and educational purposes only. It does not constitute medical advice, genetic counseling, or a clinical diagnostic test. Please consult a certified genetic counselor or healthcare provider for clinical-grade genetic testing.
+Emotional preparation: Some results, such as carrier status for serious genetic conditions, may be unexpected or distressing. We recommend having a supportive person available when reviewing results. The National Society of Genetic Counselors can help you find a counselor at nsgc.org/findageneticcounselor. If you are currently pregnant, we strongly recommend reviewing carrier screening results with a genetic counselor rather than alone.
 
-(This is placeholder text. The final version will include specific GDPR Article 9 language, data retention periods, and your rights regarding genetic data processing.)`;
+Accuracy and limitations: Our analysis relies on genome-wide association studies (GWAS) that have disproportionately studied European-ancestry populations. If you are of non-European ancestry, risk estimates and trait predictions may be less accurate for you.
+
+Gene-environment interactions: Genetic variants are only one factor among many that influence health and traits. Environmental factors, lifestyle, epigenetics, and chance also play significant roles. A genetic risk score does not determine your outcome.
+
+Legal basis: GDPR Article 9(2)(a) — explicit consent.`;
 
 export const CHIP_LIMITATION_TEXT = `Direct-to-consumer genetic tests analyze approximately 600,000 to 700,000 genetic variants — roughly 0.02% of the 3 billion base pairs in the human genome. Our analysis is limited to the variants present in your uploaded file. Results should not be considered a comprehensive genetic assessment. For clinical-grade genetic testing, consult a certified genetic counselor or healthcare provider.`;
 
 export const PARTNER_CONSENT_LABEL = `I confirm that I have obtained explicit, informed consent from the second individual to upload and analyze their genetic data as part of this couple analysis.`;
+
+export const PRE_PAYMENT_DISCLOSURE = `Before purchasing, please understand:
+\u2022 DTC genotyping chips analyze approximately 600,000–700,000 of the most well-studied genetic variants — the positions most relevant to health and trait research. This represents roughly 0.02% of the 3+ billion base pairs in the human genome. Coverage varies by chip manufacturer and version.
+\u2022 Our carrier screening analyzes 2,697 conditions. Not all variants for each condition may be detectable from your chip data.
+\u2022 Trait predictions and polygenic risk scores are probabilistic estimates based on population-level GWAS data. They are not deterministic.
+\u2022 Accuracy of trait predictions and polygenic risk scores varies by ancestral background. Most underlying research (GWAS) has disproportionately studied European-ancestry populations. Users of other ancestral backgrounds may receive less precise estimates.
+\u2022 Results are for educational and informational purposes only — not clinical diagnostics or medical advice.
+\u2022 We offer a 30-day money-back guarantee for technical issues, file format incompatibility, or analysis processing errors. Refunds are not available solely on the basis of dissatisfaction with probabilistic outcomes.`;

@@ -112,7 +112,7 @@ test.describe('Legal Pages', () => {
     // Payment records row
     await expect(tableBody.getByText('Payment records')).toBeVisible();
     await expect(
-      tableBody.getByText(/7 years.*tax compliance/i),
+      tableBody.getByText(/7 years.*record-keeping/i),
     ).toBeVisible();
 
     // Consent records row

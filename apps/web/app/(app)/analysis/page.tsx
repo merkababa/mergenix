@@ -25,6 +25,7 @@ import { AnalysisProgress } from "@/components/genetics/analysis-progress";
 import { PopulationSelector } from "@/components/genetics/population-selector";
 import { ConsentModal } from "@/components/legal/consent-modal";
 import { ChipDisclosureModal } from "@/components/legal/chip-disclosure-modal";
+import { GinaNotice } from "@/components/legal/gina-notice";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import type { ResultTab } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -337,6 +338,9 @@ export default function AnalysisPage() {
           </Link>
         </GlassCard>
       )}
+
+      {/* ── GINA Privacy Rights Notice ── */}
+      <GinaNotice />
 
       {/* ── File Upload Section (CoupleUploadCard) ── */}
       {isIdle && (

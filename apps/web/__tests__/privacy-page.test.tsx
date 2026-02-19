@@ -33,6 +33,7 @@ vi.mock('lucide-react', () => ({
   UserCheck: (props: any) => <svg data-testid="icon-user-check" {...props} />,
   Database: (props: any) => <svg data-testid="icon-database" {...props} />,
   Check: (props: any) => <svg data-testid="icon-check" {...props} />,
+  FileSearch: (props: any) => <svg data-testid="icon-file-search" {...props} />,
 }));
 
 vi.mock('@/components/ui/glass-card', () => ({
@@ -89,7 +90,7 @@ describe('PrivacyPage', () => {
     render(<PrivacyContent />);
 
     expect(screen.getByText(/Data Controller/i)).toBeInTheDocument();
-    expect(screen.getByText(/Mergenix/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Mergenix/).length).toBeGreaterThan(0);
   });
 
   it('lists categories of personal data processed', () => {
@@ -124,8 +125,8 @@ describe('PrivacyPage', () => {
   it('includes contact information for data protection queries', () => {
     render(<PrivacyContent />);
 
-    // Should have a contact email for privacy queries
-    expect(screen.getByText(/privacy@mergenix\.com/)).toBeInTheDocument();
+    // Should have at least one contact email for privacy queries
+    expect(screen.getAllByText(/privacy@mergenix\.com/).length).toBeGreaterThan(0);
   });
 
   it('heading hierarchy is correct', () => {

@@ -62,7 +62,7 @@ function ComparisonCell({ value }: { value: boolean | string }) {
 const trustBadges = [
   { icon: Shield, text: "Your DNA never leaves your device" },
   { icon: Zap, text: "One-time payment, use forever" },
-  { icon: Users, text: "30-day money-back guarantee" },
+  { icon: Users, text: "30-day guarantee for technical issues" },
 ] as const;
 
 export function ProductsContent() {

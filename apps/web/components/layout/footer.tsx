@@ -103,8 +103,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-[var(--text-muted)]">
-              Privacy-first genetic offspring analysis. Know your family&apos;s
-              genetic future with confidence.
+              Privacy-first genetic offspring analysis. Explore your family&apos;s
+              genetic possibilities with confidence.
             </p>
 
             {/* Privacy badge */}
@@ -135,7 +135,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.ariaLabel}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-[var(--accent-teal)] hover:shadow-[0_0_12px_var(--glow-teal)]"
+                  className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-[var(--accent-teal)] hover:shadow-[0_0_12px_var(--glow-teal)]"
                 >
                   <social.icon className="h-4 w-4" aria-hidden="true" />
                 </a>
@@ -158,11 +158,11 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:care@mergenix.com"
+                  href="mailto:support@mergenix.com"
                   className="flex items-center gap-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
                 >
                   <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-                  care@mergenix.com
+                  support@mergenix.com
                 </a>
               </li>
               <li>
@@ -198,21 +198,27 @@ export function Footer() {
                   </span>
                 </div>
               ) : (
-                <form
-                  className="flex w-full max-w-sm items-start gap-2"
-                  onSubmit={handleNewsletterSubmit}
-                >
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    aria-label="Email address for newsletter"
-                    required
-                    className="flex-1"
-                  />
-                  <Button variant="primary" size="md" type="submit">
-                    Subscribe
-                  </Button>
-                </form>
+                <div className="flex w-full max-w-sm flex-col">
+                  <form
+                    className="flex w-full items-start gap-2"
+                    onSubmit={handleNewsletterSubmit}
+                  >
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      aria-label="Email address for newsletter"
+                      required
+                      className="flex-1"
+                    />
+                    <Button variant="primary" size="md" type="submit">
+                      Subscribe
+                    </Button>
+                  </form>
+                  <p className="mt-2 text-xs text-[var(--text-muted)]">
+                    We send product updates only.{" "}
+                    <Link href="/privacy" className="underline hover:text-[var(--text-body)]">Privacy Policy</Link>
+                  </p>
+                </div>
               )}
             </div>
           </GlassCard>

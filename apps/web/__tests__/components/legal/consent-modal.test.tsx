@@ -200,7 +200,7 @@ describe('ConsentModal', () => {
     render(<ConsentModal {...defaultProps} />);
 
     // Consent text should be visible
-    expect(screen.getByText(/By proceeding with this analysis, you consent to the processing of genetic data/)).toBeInTheDocument();
+    expect(screen.getByText(/explicit.*consent to the processing of.*genetic data/i)).toBeInTheDocument();
   });
 
   it('calls onDecline when Escape key is pressed', () => {
