@@ -219,11 +219,11 @@ jobs:
         working-directory: apps/api
         run: |
           pip install -r requirements.txt
-          pip install pytest pytest-asyncio pytest-cov factory-boy aiosqlite
+          pip install pytest pytest-asyncio pytest-cov pytest-xdist factory-boy aiosqlite
 
       - name: Run pytest
         working-directory: apps/api
-        run: pytest tests/ -v --tb=short --cov=app --cov-report=term-missing --cov-report=xml
+        run: pytest tests/ -v --tb=short -n auto --cov=app --cov-report=term-missing --cov-report=xml
         env:
           DATABASE_URL: postgresql+asyncpg://mergenix:mergenix@localhost:5432/mergenix_test
           JWT_SECRET: test-jwt-secret

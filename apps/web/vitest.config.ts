@@ -11,6 +11,13 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['__tests__/**/*.{test,spec}.{ts,tsx}'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: undefined,
+        minForks: 1,
+      },
+    },
   },
   resolve: {
     alias: {
