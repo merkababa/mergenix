@@ -89,12 +89,39 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 ```bash
 pnpm lint          # ESLint via turbo
 pnpm typecheck     # tsc --noEmit via turbo
-pnpm test          # Vitest via turbo
+pnpm test          # Vitest via turbo (forks pool, parallel)
 pnpm build         # Next.js build via turbo
 # Python backend (from repo root):
 pnpm db:migrate    # alembic upgrade head
-cd apps/api && ruff check . && pytest tests/ -v
+cd apps/api && ruff check . && pytest tests/ -v -n auto
 ```
+
+## Fast Testing Rules (MANDATORY for all agents)
+
+Tests are parallelized. **Every agent MUST follow these rules.**
+
+### Vitest (frontend + engine)
+- `pool: 'forks'` is configured — tests run across all CPU cores automatically
+- No special flags needed — just `pnpm test` from repo root
+
+### Pytest (backend) — `-n auto` is MANDATORY
+- Full suite: `py -m pytest tests/ -v -n auto` — uses all CPU cores via xdist
+- **NEVER run `py -m pytest tests/ -v` without `-n auto`** — this is sequential and 8x slower
+- `-n auto` is in `addopts` in pyproject.toml, so bare `py -m pytest tests/` already uses it
+
+### Single test file during TDD (Red/Green phases)
+- For a single file, DISABLE xdist (overhead > benefit for <20 tests):
+  `py -m pytest tests/test_myfile.py -v -o "addopts=-v --tb=short"`
+- The `-o "addopts=..."` override removes `-n auto` for that run only
+- This is the FASTEST way to run a single test file (~2-5 seconds)
+
+### Agent TDD execution pattern
+1. **RED:** Run ONLY your test file: `py -m pytest tests/test_myfile.py -v -o "addopts=-v --tb=short"`
+2. **GREEN:** Run ONLY your test file again after implementing
+3. **FINAL (once):** Run full suite with xdist: `py -m pytest tests/ -v -n auto`
+4. **Ruff:** `ruff check .`
+- **NEVER run the full suite more than ONCE per agent**
+- **NEVER run full suite during Red/Green phases** — only your test file
 
 ## Testing Philosophy — Testing Trophy + TDD
 
@@ -144,6 +171,20 @@ Run `/review-pipeline` for the full three-layer review process (Static → Gemin
 - Claude review agents: `.claude/agents/*-reviewer.md` (11 files)
 - Calibration log: `docs/gemini-calibration.md`
 - Delegation rules: `docs/GEMINI_DELEGATION_GUIDE.md`
+
+## Model Selection Policy
+
+Choose the right model tier for each agent type:
+
+| Agent Type | Model | Rationale |
+|-----------|-------|-----------|
+| **Reviewers** (Gate 1 + Gate 2) | **Opus** | Deep reasoning, cross-file analysis, security judgment |
+| **Executors** (code fixes, feature implementation) | **Sonnet** | Well-specified tasks with explicit instructions — speed > reasoning depth |
+| **Exploration/research agents** | **Sonnet** | File reading and summarizing doesn't need Opus-level reasoning |
+| **Planning synthesis** | **Opus** | Architectural decisions require highest capability |
+| **Gemini personas** | gemini-3-pro-preview | Separate system, called via CLI |
+
+When spawning Task agents, set `model: "sonnet"` for executors and explorers, omit (defaults to Opus) for reviewers and planners.
 
 ## Gemini Delegation
 Call via bash CLI — MCP tools are broken on Windows. No rate limit waits needed (API tokens).
