@@ -167,11 +167,13 @@
      - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13, B7, B8, B12. 245 tests. Gate 1: 6/6 A. Gate 2: 6/6 A.
      - Sprint 3 (Business): PR #56 MERGED — B5, B6, B9, B10. 503 tests. Gate 1: 7/7 A+. Gate 2: 7/7 A.
      - Deferred Items: PR #57 MERGED — 12/13 items. 380 tests. Gate 1: 6/6 A+. Gate 2: 4/4 A/A+.
-   - **Stream S (Security): Sprint 2 COMPLETE** — PR #59 merged
+   - **Stream S (Security): COMPLETE** — all 3 sprints merged
      - Sprint 1 (Containment): PR #58 MERGED — S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
      - Sprint 2 (Data): PR #59 MERGED — S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage. 16 files, +2,162 LOC, 2,600 total tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
-     - Sprint 3 (Ops): S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting — NEXT
-   - **Remaining streams:** L (Legal), Q (QA), C (Content), Ops (Operations)
+     - Sprint 3 (Ops): PR #61 MERGED — S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting. 27 files, +2,723 LOC. Gate 1: 6/6 A/A+ Gemini. Gate 2: 6/6 A Claude.
+   - **Stream C (Legacy Cleanup): COMPLETE** — PR #83 merged. Deleted 142 legacy files (~152K lines), fixed "subscription" terminology, deleted legacy CI workflows, updated README for V3.
+   - **Stream L (Legal): IN PROGRESS** — Sprint 1 on branch `feature/stream-l-sprint-1-legal-content`. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy updates (7yr retention, ZKE, DPO, EU Rep, transfers, law enforcement), ToS sections 9-13 (arbitration, prohibited uses, age 18+, indemnification, regulatory), GDPR Art 9(2)(a) consent text, GINA pre-upload notice, pre-payment disclosure, refund scoping. Gemini Gate 1: Legal A+, Ethics A, Code A+, Designer A, Business A+. Ready for Claude Gate 2.
+   - **Remaining streams:** L (remaining sprints), Q (QA), Ops (Operations)
 
 ---
 
