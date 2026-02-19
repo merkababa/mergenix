@@ -18,12 +18,12 @@ import structlog
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.config import get_settings
 from app.database import engine
 from app.middleware.auth import CSRFMiddleware
+from app.middleware.rate_limit_headers import rate_limit_exceeded_handler
 from app.middleware.rate_limiter import limiter
 from app.routers import analysis, analytics, auth, clinvar, gdpr, health, legal, payments
 from app.routers.auth import close_oauth_client
@@ -154,7 +154,7 @@ def create_app() -> FastAPI:
 
     # ── Rate Limiting ─────────────────────────────────────────────────────
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
     # ── CSRF Protection ──────────────────────────────────────────────────
     # Requires X-Requested-With: XMLHttpRequest on state-changing methods

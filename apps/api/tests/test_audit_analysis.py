@@ -29,7 +29,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests.analysis_fixtures import _save_payload
 
-
 # ── Helper: get all audit entries for a user+event_type ──────────────────
 
 

@@ -6,6 +6,9 @@ uvicorn[standard]==0.32.1
 sqlalchemy[asyncio]==2.0.36
 asyncpg==0.30.0
 alembic==1.14.1
+# TODO(tech-debt): python-jose is unmaintained (stagnant development).
+# No critical CVEs for JWT signing features currently, but the ecosystem
+# is moving to PyJWT. Plan migration in a future technical debt sprint.
 python-jose[cryptography]==3.3.0
 cryptography==44.0.0
 passlib[bcrypt]==1.7.4
@@ -20,5 +23,6 @@ Jinja2>=3.1
 structlog==24.4.0
 sentry-sdk[fastapi]==2.19.2
 slowapi==0.1.9
+redis>=5.0.0
 resend==2.5.1
 qrcode[pil]==8.0

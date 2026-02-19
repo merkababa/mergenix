@@ -28,11 +28,11 @@ from collections.abc import AsyncGenerator  # noqa: E402
 import pytest  # noqa: E402
 import pytest_asyncio  # noqa: E402
 from app.config import get_settings  # noqa: E402
+from app.middleware.rate_limit_headers import rate_limit_exceeded_handler  # noqa: E402
 from app.middleware.rate_limiter import LIMIT_LOGIN, limiter  # noqa: E402
 from fastapi import FastAPI, Request  # noqa: E402
 from fastapi.responses import PlainTextResponse  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
-from slowapi import _rate_limit_exceeded_handler  # noqa: E402
 from slowapi.errors import RateLimitExceeded  # noqa: E402
 
 
@@ -46,7 +46,7 @@ def _create_rate_limit_test_app() -> FastAPI:
     """
     app = FastAPI()
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
     # Use the real limiter's original .limit() method — conftest.py may
     # have replaced it with an identity lambda, but it stashes the real
@@ -69,10 +69,23 @@ async def rate_limited_client() -> AsyncGenerator[AsyncClient, None]:
     Ensures the limiter is enabled and its in-memory counters are reset
     before each test, then restores the disabled state afterwards so
     other test modules are not affected.
+
+    Also clears slowapi's internal route registration dicts to prevent
+    duplicate limit entries from accumulating across fixture invocations
+    (each call to ``_create_rate_limit_test_app`` re-decorates a new
+    ``fake_login`` function, appending to ``_route_limits``).
     """
-    # Enable the limiter for this test
+    # Save original state
+    original_headers_enabled = limiter._headers_enabled
+    original_route_limits = dict(limiter._route_limits)
+    original_marked = dict(limiter._Limiter__marked_for_limiting)
+
+    # Enable the limiter for this test and clear accumulated registrations
     limiter.enabled = True
+    limiter._headers_enabled = True
     limiter.reset()
+    limiter._route_limits.clear()
+    limiter._Limiter__marked_for_limiting.clear()
 
     app = _create_rate_limit_test_app()
 
@@ -83,8 +96,13 @@ async def rate_limited_client() -> AsyncGenerator[AsyncClient, None]:
     ) as client:
         yield client
 
-    # Restore disabled state so other tests are unaffected
+    # Restore original state so other tests are unaffected
     limiter.enabled = False
+    limiter._headers_enabled = original_headers_enabled
+    limiter._route_limits.clear()
+    limiter._route_limits.update(original_route_limits)
+    limiter._Limiter__marked_for_limiting.clear()
+    limiter._Limiter__marked_for_limiting.update(original_marked)
 
 
 class TestRateLimiting:
@@ -156,6 +174,138 @@ class TestRateLimiting:
         resp = await rate_limited_client.post("/test-login")
         assert resp.status_code == 200, (
             f"Expected 200 after reset, got {resp.status_code}"
+        )
+
+
+class TestRateLimitHeaders:
+    """Tests verifying standard rate limit response headers."""
+
+    @pytest.mark.asyncio
+    async def test_response_includes_x_ratelimit_limit_header(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """Every rate-limited response should include X-RateLimit-Limit."""
+        resp = await rate_limited_client.post("/test-login")
+        assert resp.status_code == 200
+
+        assert "x-ratelimit-limit" in resp.headers, (
+            f"Response should include X-RateLimit-Limit header. "
+            f"Headers: {dict(resp.headers)}"
+        )
+        # LIMIT_LOGIN is "5/minute", so the limit should be 5
+        assert resp.headers["x-ratelimit-limit"] == "5", (
+            f"Expected X-RateLimit-Limit=5, got {resp.headers['x-ratelimit-limit']}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_response_includes_x_ratelimit_remaining_header(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """Every rate-limited response should include X-RateLimit-Remaining."""
+        resp = await rate_limited_client.post("/test-login")
+        assert resp.status_code == 200
+
+        assert "x-ratelimit-remaining" in resp.headers, (
+            f"Response should include X-RateLimit-Remaining header. "
+            f"Headers: {dict(resp.headers)}"
+        )
+        # After 1 request out of 5, remaining should be 4
+        remaining = int(resp.headers["x-ratelimit-remaining"])
+        assert remaining == 4, (
+            f"Expected X-RateLimit-Remaining=4, got {remaining}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_response_includes_x_ratelimit_reset_header(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """Every rate-limited response should include X-RateLimit-Reset."""
+        resp = await rate_limited_client.post("/test-login")
+        assert resp.status_code == 200
+
+        assert "x-ratelimit-reset" in resp.headers, (
+            f"Response should include X-RateLimit-Reset header. "
+            f"Headers: {dict(resp.headers)}"
+        )
+        # Reset is a UTC epoch timestamp (may be float or int)
+        reset_value = float(resp.headers["x-ratelimit-reset"])
+        assert reset_value > 0, (
+            f"Expected X-RateLimit-Reset > 0, got {reset_value}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_remaining_decreases_with_multiple_requests(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """X-RateLimit-Remaining should decrease after each request."""
+        # Send 3 requests and track remaining counts
+        remaining_values = []
+        for _ in range(3):
+            resp = await rate_limited_client.post("/test-login")
+            assert resp.status_code == 200
+            remaining_values.append(int(resp.headers["x-ratelimit-remaining"]))
+
+        # Remaining should be 4, 3, 2 (decreasing by 1 each time)
+        assert remaining_values == [4, 3, 2], (
+            f"Expected remaining to decrease [4, 3, 2], got {remaining_values}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_429_response_includes_retry_after_header(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """A 429 response should include a Retry-After header."""
+        # Exhaust the limit
+        for _ in range(5):
+            await rate_limited_client.post("/test-login")
+
+        resp = await rate_limited_client.post("/test-login")
+        assert resp.status_code == 429
+
+        assert "retry-after" in resp.headers, (
+            f"429 response should include Retry-After header. "
+            f"Headers: {dict(resp.headers)}"
+        )
+        # Retry-After should be a positive integer (seconds until reset)
+        retry_after = int(resp.headers["retry-after"])
+        assert retry_after > 0, (
+            f"Expected Retry-After > 0, got {retry_after}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_429_response_includes_all_rate_limit_headers(
+        self,
+        rate_limited_client: AsyncClient,
+    ) -> None:
+        """A 429 response should include all standard rate limit headers."""
+        # Exhaust the limit
+        for _ in range(5):
+            await rate_limited_client.post("/test-login")
+
+        resp = await rate_limited_client.post("/test-login")
+        assert resp.status_code == 429
+
+        required_headers = [
+            "x-ratelimit-limit",
+            "x-ratelimit-remaining",
+            "x-ratelimit-reset",
+            "retry-after",
+        ]
+        for header in required_headers:
+            assert header in resp.headers, (
+                f"429 response missing required header '{header}'. "
+                f"Headers: {dict(resp.headers)}"
+            )
+
+        # Remaining should be 0 when rate limited
+        assert resp.headers["x-ratelimit-remaining"] == "0", (
+            f"Expected X-RateLimit-Remaining=0 on 429, "
+            f"got {resp.headers['x-ratelimit-remaining']}"
         )
 
 

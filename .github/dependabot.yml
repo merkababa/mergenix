@@ -1,0 +1,79 @@
+version: 2
+
+updates:
+  # ─────────────────────────────────────────────
+  # npm ecosystem — monorepo root
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # npm ecosystem — apps/web/
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # npm ecosystem — packages/genetics-engine/
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/packages/genetics-engine"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # npm ecosystem — packages/shared-types/
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/packages/shared-types"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # npm ecosystem — packages/genetics-data/
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/packages/genetics-data"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # pip ecosystem — apps/api/
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "pip"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"
+
+  # ─────────────────────────────────────────────
+  # GitHub Actions ecosystem
+  # ─────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "merkababa"

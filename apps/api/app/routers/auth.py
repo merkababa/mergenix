@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import secrets as _stdlib_secrets
 import uuid
 from datetime import UTC, date, datetime, timedelta
@@ -57,7 +58,7 @@ from app.schemas.auth import (
     TwoFactorVerifyRequest,
     UserProfile,
 )
-from app.services import audit_service
+from app.services import alert_service, audit_service
 from app.services.account_service import delete_user_account, wipe_analysis_results
 from app.services.auth_service import (
     create_access_token,
@@ -90,6 +91,8 @@ from app.utils.cookies import (
 from app.utils.request_helpers import client_ip as _client_ip_shared
 from app.utils.request_helpers import user_agent as _user_agent_shared
 from app.utils.security import constant_time_compare, hash_token
+
+logger = logging.getLogger(__name__)
 
 
 async def _invalidate_all_user_sessions(db: AsyncSession, user_id: int) -> None:
@@ -218,7 +221,7 @@ async def register(
         await audit_service.log_event(
             db,
             event_type="register_failed",
-            metadata={"reason": "age_verification_failed", "age": age},
+            metadata={"reason": "age_verification_failed", "underage": True},
             ip_address=_client_ip(request),
             user_agent=_user_agent(request),
         )
@@ -345,6 +348,7 @@ async def login(
             user_agent=_user_agent(request),
         )
         await db.commit()
+        await alert_service.run_security_checks(db, _client_ip(request))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={"error": "Invalid email or password.", "code": "INVALID_CREDENTIALS"},
@@ -380,6 +384,7 @@ async def login(
             user_agent=_user_agent(request),
         )
         await db.commit()
+        await alert_service.run_security_checks(db, _client_ip(request))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={"error": "Invalid email or password.", "code": "INVALID_CREDENTIALS"},
@@ -399,7 +404,11 @@ async def login(
 
         # Store the mapping so the 2FA verify endpoint can resolve it.
         # We reuse the Session model with a short expiry as a lightweight store.
-        # TODO: Consider a dedicated TwoFactorChallenge table for cleaner separation.
+        # TODO(future refactor): Consider a dedicated TwoFactorChallenge table (or
+        # Redis-based ephemeral storage) for cleaner separation. Currently the Session
+        # table is repurposed to store short-lived 2FA challenge tokens by overloading
+        # the refresh_token_hash column. This conflates long-lived sessions with
+        # short-lived authentication challenges, which works but muddies the data model.
         challenge_session = Session(
             user_id=user.id,
             refresh_token_hash=hash_token(challenge_token),
@@ -515,7 +524,7 @@ async def login_2fa(
     if len(body.code) == 9 and "-" in body.code and user.backup_codes:
         # Attempt backup code verification (SHA-256, constant-time)
         stored_hashes: list[str] = user.backup_codes if isinstance(user.backup_codes, list) else json.loads(user.backup_codes)
-        matched, remaining = verify_and_consume_backup_code(user, body.code, stored_hashes)
+        matched, remaining = verify_and_consume_backup_code(body.code, stored_hashes)
         if matched:
             user.backup_codes = remaining if remaining else None
             code_accepted = True
@@ -585,6 +594,7 @@ async def login_2fa(
     response_model=AccessTokenResponse,
     summary="Refresh access token",
 )
+@limiter.limit("10/minute")
 async def refresh_token(
     request: Request,
     response: Response,
@@ -677,6 +687,7 @@ async def refresh_token(
     response_model=MessageResponse,
     summary="Revoke refresh token and clear cookie",
 )
+@limiter.limit("10/minute")
 async def logout(
     request: Request,
     response: Response,
@@ -718,6 +729,7 @@ async def logout(
     response_model=MessageResponse,
     summary="Verify email with token",
 )
+@limiter.limit("5/minute")
 async def verify_email(
     request: Request,
     body: EmailVerifyRequest,
@@ -862,6 +874,7 @@ async def forgot_password(
     response_model=MessageResponse,
     summary="Reset password with token",
 )
+@limiter.limit("3/minute")
 async def reset_password(
     request: Request,
     body: PasswordResetConfirm,
@@ -949,7 +962,9 @@ async def get_profile(user: CurrentUser) -> UserProfile:
     response_model=UserProfile,
     summary="Update profile",
 )
+@limiter.limit("10/minute")
 async def update_profile(
+    request: Request,
     body: ProfileUpdateRequest,
     user: CurrentUser,
     db: DbSession,
@@ -970,6 +985,7 @@ async def update_profile(
     response_model=MessageResponse,
     summary="Change password (requires old password)",
 )
+@limiter.limit("5/minute")
 async def change_password(
     request: Request,
     body: PasswordChangeRequest,
@@ -1093,6 +1109,7 @@ async def list_sessions(
     response_model=MessageResponse,
     summary="Revoke a specific session",
 )
+@limiter.limit("10/minute")
 async def revoke_session(
     request: Request,
     session_id: str,
@@ -1152,6 +1169,7 @@ async def revoke_session(
     response_model=MessageResponse,
     summary="Revoke all other sessions",
 )
+@limiter.limit("3/minute")
 async def revoke_all_other_sessions(
     request: Request,
     user: CurrentUser,
@@ -1268,6 +1286,7 @@ async def delete_account(
     response_model=TwoFactorSetupResponse,
     summary="Initialize TOTP enrollment",
 )
+@limiter.limit("5/minute")
 async def setup_2fa(
     request: Request,
     user: CurrentUser,
@@ -1310,6 +1329,7 @@ async def setup_2fa(
     response_model=TwoFactorEnabledResponse,
     summary="Verify TOTP and enable 2FA",
 )
+@limiter.limit("5/minute")
 async def verify_2fa(
     request: Request,
     body: TwoFactorVerifyRequest,
@@ -1377,6 +1397,7 @@ async def verify_2fa(
     response_model=MessageResponse,
     summary="Disable 2FA",
 )
+@limiter.limit("5/minute")
 async def disable_2fa(
     request: Request,
     body: TwoFactorVerifyRequest,
@@ -1429,6 +1450,7 @@ async def disable_2fa(
     response_model=MessageResponse,
     summary="Submit date of birth for age verification (required after OAuth signup)",
 )
+@limiter.limit("5/minute")
 async def verify_age(
     request: Request,
     body: AgeVerificationRequest,
@@ -1459,7 +1481,7 @@ async def verify_age(
             db,
             user_id=user.id,
             event_type="age_verification_failed",
-            metadata={"reason": "underage", "age": age},
+            metadata={"reason": "underage", "underage": True},
             ip_address=_client_ip(request),
             user_agent=_user_agent(request),
         )
@@ -1488,7 +1510,7 @@ async def verify_age(
         db,
         user_id=user.id,
         event_type="age_verified",
-        metadata={"method": "post_oauth", "age": age},
+        metadata={"method": "post_oauth", "age_verified": True},
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )

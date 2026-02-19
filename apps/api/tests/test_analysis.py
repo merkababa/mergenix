@@ -24,8 +24,7 @@ from httpx import AsyncClient
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tests.analysis_fixtures import VALID_ENCRYPTED_ENVELOPE, SAMPLE_SUMMARY, _save_payload
-
+from tests.analysis_fixtures import SAMPLE_SUMMARY, VALID_ENCRYPTED_ENVELOPE, _save_payload
 
 # ── Save Result Tests ────────────────────────────────────────────────────
 

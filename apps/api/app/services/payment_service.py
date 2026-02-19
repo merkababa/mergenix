@@ -17,11 +17,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
-from app.constants.tiers import TIER_PREMIUM, TIER_PRICES, TIER_PRO, TIER_RANK as _TIER_RANK
+from app.constants.tiers import TIER_PREMIUM, TIER_PRICES, TIER_PRO
+from app.constants.tiers import TIER_RANK as _TIER_RANK
 from app.models.payment import Payment
 from app.models.user import User
-from app.utils.masking import mask_email
 from app.services.email_service import send_purchase_receipt_email
+from app.utils.masking import mask_email
 
 logger = logging.getLogger(__name__)
 

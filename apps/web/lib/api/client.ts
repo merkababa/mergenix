@@ -7,6 +7,20 @@
  * - Structured error responses via ApiError class
  * - JSON request/response by default
  * - Configurable base URL via NEXT_PUBLIC_API_URL env var
+ * - Default 15-second request timeout via AbortSignal
+ *
+ * Current retry behavior:
+ * - 401 responses trigger a single token refresh attempt via the
+ *   registered unauthorized handler. If refresh succeeds, the original
+ *   request is retried once. Concurrent 401s are deduplicated.
+ * - All other errors (including 429, 5xx) are thrown immediately.
+ *
+ * TODO: Implement full retry policy for transient server errors:
+ * - Max retries: 3
+ * - Backoff: exponential (1s, 2s, 4s)
+ * - Retry on: 429 (rate limited), 502/503/504 (server errors)
+ * - Do NOT retry: 400, 403, 404, 409 (client errors)
+ * - Honor Retry-After header when present
  */
 
 const API_BASE_URL =

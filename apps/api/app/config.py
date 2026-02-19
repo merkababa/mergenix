@@ -34,11 +34,46 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # ── Secret Rotation ────────────────────────────────────────────────────
+    # Previous JWT secret, accepted during rotation window. When rotating
+    # secrets, set JWT_SECRET to the new value and JWT_SECRET_PREVIOUS to
+    # the old value. Tokens signed with either key will be accepted.
+    jwt_secret_previous: str = ""
+    # Key ID for the current JWT secret. Included as `kid` in the JWT
+    # header to identify which key was used for signing.
+    jwt_key_id: str = "v1"
+    # Key ID for the previous JWT secret.
+    jwt_key_id_previous: str = ""
+    # Alert threshold: recommend rotation when key is older than this
+    # many days.
+    secret_rotation_max_age_days: int = 90
+
     # ── Data Encryption ───────────────────────────────────────────────────
     # Separate key for encrypting analysis result data at rest (AES-256-GCM).
     # If not set, falls back to jwt_secret for backward compatibility.
-    # IMPORTANT: Once set, do NOT change — rotating this key makes all
-    # previously encrypted analysis results permanently unrecoverable.
+    #
+    # NON-ROTATABLE BY DESIGN (Zero-Knowledge Encryption Architecture):
+    #   Mergenix uses a Zero-Knowledge Encryption (ZKE) model where
+    #   analysis results are encrypted client-side with a key derived
+    #   from the user's password. The server never has access to the
+    #   plaintext encryption key — it only stores opaque encrypted blobs.
+    #
+    #   This means:
+    #   - The server CANNOT decrypt and re-encrypt data with a new key
+    #     (it never had the plaintext key to begin with).
+    #   - Password changes/resets correctly wipe all analysis results
+    #     (see auth.py reset_password and change_password endpoints)
+    #     because the old key is irrecoverably lost.
+    #   - This is a deliberate security/privacy trade-off, not a bug.
+    #
+    #   If a server-side re-encryption capability is ever needed, it would
+    #   require a fundamental architecture change away from ZKE. A migration
+    #   script (scripts/rotate_data_key.py) would need to:
+    #   1. Have the client re-submit data encrypted with the new key, OR
+    #   2. Abandon ZKE and use server-managed keys instead.
+    #
+    #   See: GDPR Article 32(1)(c) — this design satisfies "confidentiality"
+    #   by ensuring the server never holds plaintext health data.
     data_encryption_key: str = ""
 
     @property
@@ -100,6 +135,20 @@ class Settings(BaseSettings):
     # Secret API key for the GET /analytics/summary endpoint.
     # If empty, the endpoint returns 503 (disabled).
     analytics_api_key: str = ""
+
+    # ── Security Alerting ──────────────────────────────────────────────────
+    # Email address for admin security alerts. If empty, alerting is disabled.
+    admin_alert_email: str = ""
+    # Auth spike: number of failed logins from one IP to trigger alert.
+    alert_auth_spike_threshold: int = 20
+    # Auth spike: time window (minutes) to count failed logins.
+    alert_auth_spike_window_minutes: int = 5
+    # Rate limit breach: number of 429 events from one IP to trigger alert.
+    alert_rate_breach_threshold: int = 50
+    # Rate limit breach: time window (minutes) to count rate limit events.
+    alert_rate_breach_window_minutes: int = 10
+    # Cooldown (minutes) before re-sending the same alert type for the same IP.
+    alert_cooldown_minutes: int = 60
 
     @property
     def is_production(self) -> bool:

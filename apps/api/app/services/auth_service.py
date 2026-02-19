@@ -9,17 +9,20 @@ never touch raw secrets or hashing directly.
 from __future__ import annotations
 
 import asyncio
+import logging
 import uuid
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 import pyotp
-from jose import jwt
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from app.config import get_settings
 from app.utils.security import constant_time_compare, generate_secure_token, hash_token
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 # Bcrypt context — used for password hashing only.
 _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -57,11 +60,60 @@ async def verify_password(password: str, hashed: str) -> bool:
     return await asyncio.to_thread(_pwd_context.verify, password, hashed)
 
 
+# ── JWT Secret Rotation ───────────────────────────────────────────────────
+
+
+def get_jwt_secrets() -> list[tuple[str, str]]:
+    """Return a list of (key_id, secret) pairs for JWT verification.
+
+    The current key is always first. If a previous key is configured
+    (during a rotation window), it is included as the second element.
+
+    Returns:
+        List of (kid, secret) tuples. Always contains at least one entry.
+    """
+    secrets: list[tuple[str, str]] = [(settings.jwt_key_id, settings.jwt_secret)]
+    if settings.jwt_secret_previous and settings.jwt_key_id_previous:
+        secrets.append((settings.jwt_key_id_previous, settings.jwt_secret_previous))
+    return secrets
+
+
+def is_key_rotation_recommended(key_created_at: datetime) -> bool:
+    """Check whether a key is older than the configured rotation threshold.
+
+    Args:
+        key_created_at: When the key was first put into service (UTC).
+
+    Returns:
+        True if the key age meets or exceeds ``secret_rotation_max_age_days``.
+    """
+    age = datetime.now(UTC) - key_created_at
+    return age.days >= settings.secret_rotation_max_age_days
+
+
+def _resolve_secret_for_kid(kid: str) -> str | None:
+    """Look up the JWT secret that corresponds to a given key ID.
+
+    Args:
+        kid: The key ID from the JWT header.
+
+    Returns:
+        The matching secret string, or None if no match is found.
+    """
+    for key_id, secret in get_jwt_secrets():
+        if key_id == kid:
+            return secret
+    return None
+
+
 # ── JWT Tokens ────────────────────────────────────────────────────────────
 
 
 def create_access_token(user_id: uuid.UUID) -> str:
     """Create a short-lived JWT access token.
+
+    The token includes a ``kid`` (key ID) header claim that identifies
+    which signing key was used. This enables seamless secret rotation.
 
     Args:
         user_id: The user's UUID (becomes the ``sub`` claim).
@@ -77,11 +129,19 @@ def create_access_token(user_id: uuid.UUID) -> str:
         "iat": now,
         "exp": expire,
     }
-    return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    return jwt.encode(
+        payload,
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+        headers={"kid": settings.jwt_key_id},
+    )
 
 
 def create_refresh_token(user_id: uuid.UUID) -> str:
     """Create a long-lived JWT refresh token.
+
+    The token includes a ``kid`` (key ID) header claim that identifies
+    which signing key was used. This enables seamless secret rotation.
 
     Args:
         user_id: The user's UUID.
@@ -98,11 +158,23 @@ def create_refresh_token(user_id: uuid.UUID) -> str:
         "iat": now,
         "exp": expire,
     }
-    return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    return jwt.encode(
+        payload,
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+        headers={"kid": settings.jwt_key_id},
+    )
 
 
-def decode_token(token: str) -> dict:
-    """Decode and validate a JWT token.
+def decode_token(token: str) -> dict[str, Any]:
+    """Decode and validate a JWT token with dual-key rotation support.
+
+    Verification strategy:
+    1. Read the ``kid`` from the JWT header (without verification).
+    2. If ``kid`` is present, look up the matching secret and verify.
+    3. If ``kid`` is absent (legacy token), try the current secret first,
+       then fall back to the previous secret if configured.
+    4. If no secret produces a valid signature, raise ``JWTError``.
 
     Args:
         token: The encoded JWT string.
@@ -111,13 +183,39 @@ def decode_token(token: str) -> dict:
         Decoded payload dict.
 
     Raises:
-        JWTError: If the token is invalid, expired, or tampered with.
+        JWTError: If the token is invalid, expired, or tampered with,
+            or if the signing key cannot be identified.
     """
-    return jwt.decode(
-        token,
-        settings.jwt_secret,
-        algorithms=[settings.jwt_algorithm],
-    )
+    algorithms = [settings.jwt_algorithm]
+
+    # Step 1: Extract the header to check for kid
+    header = jwt.get_unverified_header(token)
+
+    kid = header.get("kid")
+
+    if kid is not None:
+        # Step 2: kid is present — look up the matching secret
+        secret = _resolve_secret_for_kid(kid)
+        if secret is None:
+            sanitized_kid = str(kid)[:64].replace(chr(10), "")
+            raise JWTError(
+                f"Token signed with unknown key ID: {sanitized_kid}"
+            )
+        return jwt.decode(token, secret, algorithms=algorithms)
+
+    # Step 3: No kid (legacy token) — try each secret in order
+    secrets = get_jwt_secrets()
+    last_error: JWTError | None = None
+
+    for _key_id, secret in secrets:
+        try:
+            return jwt.decode(token, secret, algorithms=algorithms)
+        except JWTError as exc:
+            last_error = exc
+            continue
+
+    # Step 4: None of the secrets worked
+    raise last_error or JWTError("Token verification failed: no valid secret found")
 
 
 # ── TOTP / 2FA ────────────────────────────────────────────────────────────
@@ -231,7 +329,6 @@ def hash_backup_codes(codes: list[str]) -> list[str]:
 
 
 def verify_and_consume_backup_code(
-    user: object,
     code: str,
     stored_hashes: list[str],
 ) -> tuple[bool, list[str] | None]:
@@ -240,7 +337,6 @@ def verify_and_consume_backup_code(
     Checks ALL codes to prevent timing attacks, then consumes the match.
 
     Args:
-        user: The user object (used for future extensibility).
         code: The plaintext backup code to verify.
         stored_hashes: List of SHA-256 hex hashes of remaining backup codes.
 

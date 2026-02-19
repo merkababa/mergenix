@@ -190,12 +190,6 @@ class TestAnalyticsSummaryRateLimit:
 
     def test_summary_has_rate_limit_decorator(self) -> None:
         """The get_summary source should reference a rate limit constant."""
-        from app.routers.analytics import get_summary
-
-        # In test mode, the limiter is disabled (identity decorator).
-        # We verify via source inspection that the decorator is present.
-        source = inspect.getsource(get_summary)
-        # Check for the rate limit decorator pattern in the module source
         import app.routers.analytics as analytics_mod
 
         mod_source = inspect.getsource(analytics_mod)

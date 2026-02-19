@@ -11,16 +11,51 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON, ForeignKey, String, Text, func
+from sqlalchemy import JSON, ForeignKey, Index, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
 
 class AuditLog(Base):
-    """Immutable audit trail for security-relevant events."""
+    """Immutable audit trail for security-relevant events.
+
+    GDPR COMPLIANCE NOTES:
+    - ip_address is PII under GDPR. It is stored in plaintext for security
+      monitoring (alert_service.py COUNT queries filter by ip_address).
+    - GDPR Article 5(1)(e) (Storage Limitation) requires a retention policy.
+
+    TODO(retention): Implement scheduled cleanup job — see SECRET_ROTATION_RUNBOOK.md
+      for retention guidance.
+      Target: 90-day retention for non-security events, 365 days for security events
+      (GDPR Art 5(1)(e) — Storage Limitation).
+      Implementation plan:
+      1. Run a daily cron/scheduled task that:
+         a. Deletes non-security audit entries older than 90 days.
+         b. Deletes security audit entries (login_failed, rate_limit_exceeded,
+            account_locked, 2fa_*) older than 365 days.
+         c. Alternatively, anonymizes old entries by hashing/nulling ip_address
+            and user_agent fields while preserving event_type for analytics.
+      2. Example: DELETE FROM audit_log WHERE event_type NOT IN ('login_failed', ...)
+         AND created_at < NOW() - INTERVAL '90 days'
+      3. For long-term retention needs, consider hashing IP addresses
+         (SHA-256 with a rotating salt) so they can still be correlated
+         within a window but cannot be reversed to identify individuals.
+    """
 
     __tablename__ = "audit_log"
+
+    # Composite index for alert_service.py COUNT queries that filter by
+    # (event_type, ip_address, created_at). Without this, the queries
+    # degrade under sustained attack load as the table grows.
+    __table_args__ = (
+        Index(
+            "ix_audit_log_event_ip_created",
+            "event_type",
+            "ip_address",
+            "created_at",
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True,

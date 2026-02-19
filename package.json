@@ -13,7 +13,10 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "clean": "turbo clean && rm -rf node_modules",
     "db:migrate": "cd apps/api && alembic upgrade head",
-    "db:rollback": "cd apps/api && alembic downgrade -1"
+    "db:rollback": "cd apps/api && alembic downgrade -1",
+    "audit:npm": "pnpm audit --audit-level=high",
+    "audit:pip": "cd apps/api && pip-audit -r requirements.txt",
+    "audit": "pnpm audit:npm && pnpm audit:pip"
   },
   "devDependencies": {
     "turbo": "^2.4.0",

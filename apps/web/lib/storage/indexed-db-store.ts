@@ -9,7 +9,7 @@
  * the entry is treated as stale (returns null) so the UI can prompt re-upload.
  */
 
-import { get, set, del, keys, clear, createStore, entries } from "idb-keyval";
+import { get, set, del, clear, createStore, entries } from "idb-keyval";
 
 // ── Schema Version ─────────────────────────────────────────────────────────
 

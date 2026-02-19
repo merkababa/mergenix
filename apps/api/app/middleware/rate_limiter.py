@@ -26,10 +26,72 @@ from app.config import get_settings
 # cannot override RATE_LIMIT_STORAGE_URI after this module is imported. To
 # test with a different storage backend, either (a) set the env var BEFORE
 # importing this module, or (b) monkeypatch limiter._storage directly.
+#
+# IMPORTANT — IP Spoofing / Proxy Configuration:
+#   get_remote_address uses request.client.host, which returns the direct
+#   TCP peer address. Behind a load balancer (AWS ALB, Nginx, Cloudflare),
+#   this resolves to the LB's internal IP — effectively rate-limiting ALL
+#   users as a single entity.
+#
+#   Production deployment MUST configure trusted proxy headers:
+#
+#   1. Uvicorn: Run with --proxy-headers --forwarded-allow-ips='<LB_IP>'
+#      This makes request.client.host use the X-Forwarded-For value.
+#
+#      Concrete examples for common deployments:
+#
+#        # Single reverse proxy (Nginx on same host):
+#        uvicorn app.main:create_app --factory \
+#          --proxy-headers \
+#          --forwarded-allow-ips='127.0.0.1'
+#
+#        # AWS ALB (VPC CIDR range — replace with your actual VPC CIDR):
+#        uvicorn app.main:create_app --factory \
+#          --proxy-headers \
+#          --forwarded-allow-ips='10.0.0.0/8'
+#
+#        # Cloudflare + Nginx (trust both Nginx and CF IP ranges):
+#        uvicorn app.main:create_app --factory \
+#          --proxy-headers \
+#          --forwarded-allow-ips='127.0.0.1,173.245.48.0/20,103.21.244.0/22'
+#
+#        # Trust all proxies (ONLY for development / trusted networks):
+#        uvicorn app.main:create_app --factory \
+#          --proxy-headers \
+#          --forwarded-allow-ips='*'
+#
+#      Uvicorn uses ProxyHeadersMiddleware internally when --proxy-headers
+#      is enabled. This middleware rewrites request.client.host using the
+#      X-Forwarded-For header, but ONLY when the direct peer IP matches
+#      the --forwarded-allow-ips whitelist. This is the same middleware
+#      referenced in app/utils/request_helpers.py::client_ip().
+#
+#   2. Alternatively, implement a custom key_func that securely parses
+#      X-Forwarded-For, trusting only the rightmost non-private IP:
+#
+#        def get_real_ip(request: Request) -> str:
+#            forwarded = request.headers.get("X-Forwarded-For", "")
+#            if forwarded:
+#                # Rightmost entry is set by the trusted proxy
+#                return forwarded.split(",")[-1].strip()
+#            return request.client.host if request.client else "unknown"
+#
+#   3. NEVER trust X-Forwarded-For blindly — attackers can inject arbitrary
+#      values. Only the entries added by YOUR infrastructure are trustworthy.
+#      Configure --forwarded-allow-ips to whitelist your LB/proxy IPs.
+#
+#   Cross-references:
+#     - app/utils/request_helpers.py — client_ip() uses request.client.host
+#       and documents why X-Forwarded-For is NOT parsed at the app level.
+#     - app/routers/auth.py — uses the shared client_ip helper.
+#     - Uvicorn docs: https://www.uvicorn.org/settings/#proxy-headers
+#     - Uvicorn ProxyHeadersMiddleware source:
+#       https://github.com/encode/uvicorn/blob/master/uvicorn/middleware/proxy_headers.py
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["60/minute"],
     storage_uri=get_settings().rate_limit_storage_uri,
+    headers_enabled=True,
 )
 
 # ── Per-Endpoint Limit Strings ────────────────────────────────────────────
