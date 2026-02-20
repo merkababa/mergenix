@@ -15,7 +15,7 @@
     "@mergenix/genetics-data": "workspace:*",
     "@mergenix/genetics-engine": "workspace:*",
     "@mergenix/shared-types": "workspace:*",
-    "@tanstack/react-query": "^5.62.0",
+    "@tanstack/react-query": "^5.90.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
