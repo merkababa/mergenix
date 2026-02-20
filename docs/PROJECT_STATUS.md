@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-12
-**Version:** 3.0.0-alpha (V3 Rewrite — Refactor plan approved, ready for implementation)
+**Last Updated:** 2026-02-20
+**Version:** 3.0.0-alpha (V3 Rewrite — Implementation in progress, 9/11 streams complete)
 **Branch:** main
 
 ---
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (869 frontend: 366 engine + 503 web) + pytest (60 backend) = 929 total
+- **Testing:** Vitest (1,201 web + 898 engine) + pytest (624 backend) = 2,723 total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -191,7 +191,18 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 - [x] **Phase 8B: Legal/Privacy** — PR #38 merged (10/10 A+ Gemini + 10/10 A+ Claude)
 - [x] **Phase 8C: E2E Tests** — PR #40 merged (153 scenarios)
 - [x] **Refactor Plan** — PR #45 merged (172 tasks, 11 streams, 144+ decisions)
-- [ ] **V3 Implementation** — Execute refactor plan streams (Stream 0 Research first)
+- [x] **V3 Implementation** — 9/11 streams complete:
+  - [x] Stream 0 (Research) — PR #46
+  - [x] Stream D (Data Cleanup) — PR #47
+  - [x] Stream E (Engine) — PR #48
+  - [x] Stream TD (Types + Data) — PR #49
+  - [x] Stream F (Frontend, 4 sprints) — PRs #50-53
+  - [x] Stream B (Backend, 3 sprints + deferred) — PRs #54-57
+  - [x] Stream S (Security, 3 sprints) — PRs #58, 59, 61
+  - [x] Stream C (Legacy Cleanup) — PR #83
+  - [x] Stream L (Legal, 2 sprints) — PRs #84, 85
+  - [ ] Stream Q (QA — 30 tasks)
+  - [ ] Stream Ops (3 tasks)
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -208,7 +219,7 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 
 ### Legacy Streamlit App (v1/v2)
 
-The original Streamlit app (Source/, pages/, app.py) remains in the repo for reference. PRs #19-#26 contain improvements to the legacy app. The V3 rewrite (apps/web, apps/api, packages/) is the active development target.
+Legacy app (Source/, pages/, app.py) deleted in Stream C (PR #83). V3 rewrite is the sole codebase.
 
 ---
 
@@ -288,22 +299,24 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
-| #45 | Refactor Plan + Research Alignment (172 tasks, 11 streams) | **Merged** |
-| #40 | Phase 8C: E2E Tests (153 scenarios, Playwright) | **Merged** |
-| #38 | Phase 8B: Legal/Privacy (10/10 A+ Gemini + 10/10 A+ Claude) | **Merged** |
-| #37 | Phase 8A: Integration Polish (10/10 A+) | **Merged** |
-| #36 | Phase 7: Backend API (60 tests, 8/8 A+) | **Merged** |
-| #35 | Phase 6: Payment UI (503 tests, 8/8 A+) | **Merged** |
-| #34 | Phase 5: Auth UI (423 tests, 7/7 A+) | **Merged** |
-| #32 | Phase 4: Analysis UI (wire engine + 6 tabs + 148 tests, 6/6 A+) | **Merged** |
-| #31 | Phase 3: Genetics Engine (TypeScript, 366 tests, 6/6 A+) | **Merged** |
-| #30 | Phase 2: Frontend pages (7 pages, design system) | Merged |
-| #28 | Phase 1: Monorepo scaffolding | Merged |
-| #26 | Tier 5: Genetic science (ethnicity, PGx, PRS, ClinVar, counseling) | Open |
-| #25 | Tier 4: Testing & infrastructure (515 new tests) | Open |
-| #24 | Tier 2+3: Performance + frontend/UX (440 tests) | Merged |
-| #23 | Tier 1: Security & data integrity (378 tests) | Merged |
-| #22 | Tier 0: 6 critical bug fixes | Merged |
+| #85 | Stream L Sprint 2: Legal Compliance (cookie consent, data retention, 4 legal docs) | **Open** |
+| #84 | Stream L Sprint 1: Legal Content (ToS, Privacy Policy, GDPR/GINA consent) | **Merged** |
+| #83 | Stream C: Legacy Cleanup (142 files deleted, README V3) | **Merged** |
+| #61 | Stream S Sprint 3: Ops (supply chain, rate limiting, secret rotation, alerting) | **Merged** |
+| #59 | Stream S Sprint 2: Data Security (worker memory, audit logging, IndexedDB) | **Merged** |
+| #57 | Deferred Items: Review Debt (12/13 items, 5 migrations) | **Merged** |
+| #56 | Stream B Sprint 3: Business Logic (tier gating, analytics, receipts) | **Merged** |
+| #55 | Stream B Sprint 2: ZKE Pivot + GDPR (opaque envelope, GDPR router) | **Merged** |
+| #54 | Stream B Sprint 1: Foundation (CSRF, ZKE, Pydantic types) | **Merged** |
+| #53 | Stream F Sprint 4: Output, Compliance & Polish (PDF, SEO, WCAG reflow) | **Merged** |
+| #52 | Stream F Sprint 3: Results + Visualization + Accessibility | **Merged** |
+| #51 | Stream F Sprint 2: Core UX + Tier Gating | **Merged** |
+| #50 | Stream F Sprint 1: Foundation + Gates | **Merged** |
+| #49 | Stream TD: Types & Data Enrichment | **Merged** |
+| #48 | Stream E: Engine Refactor (25 tasks, 898 tests) | **Merged** |
+| #47 | Stream D: Data Cleanup (2,697 entries) | **Merged** |
+| #46 | Stream 0: Research (11/12 tasks) | **Merged** |
+| #45 | Refactor Plan (172 tasks, 11 streams) | **Merged** |
 
 ---
 
@@ -316,7 +329,7 @@ FullAnalysisResult → postMessage → Zustand store
 5. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
 6. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
 7. ~~Refactor Plan~~ → **PR #45 merged** (172 tasks, 11 streams, 144+ decisions)
-8. **V3 Implementation** — Execute refactor plan streams (Stream 0 Research → then parallel streams)
+8. **V3 Implementation** — 9/11 streams complete. Remaining: Q (QA), Ops
 
 ---
 
