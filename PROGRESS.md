@@ -129,6 +129,8 @@
 | 2026-02-15 | Claude | Stream B Sprint 2 — ZKE Pivot + GDPR: 4 tasks (B13, B7, B8, B12). ZKE pivot (opaque envelope), GDPR router (delete/export/rectification), shared account_service. 245 tests. Gate 1: 6/6 A Gemini. Gate 2: 6/6 A Claude. | PR #55 |
 | 2026-02-17 | Claude | Stream B Sprint 3 — Business Logic: 4 tasks (B5, B6, B9, B10). Tier gating (SELECT FOR UPDATE, $14.99/$34.99), anonymous analytics (ON CONFLICT upsert), purchase receipts (Jinja2), partner notification (masked email). Gate 2 fixes: mask_email utils, URL-encoded tokens, httpx shutdown, lazy API keys, SQL COUNT, dialect caching, analytics purge, rate limiting. 503 tests. Gate 1: 7/7 A+ Gemini. Gate 2: 7/7 A Claude (3 rounds). 30 files, +4,127 LOC. | PR #56 |
 | 2026-02-18 | Claude | Stream S Sprint 2 — Data Security: 3 tasks (S3, S5, S6). Worker memory clearing (clearSensitiveMemory in finally, wipeGenotypeMap defense-in-depth, clear_memory message handler). GDPR audit logging (4 event types, begin_nested savepoint, fire-and-forget, db.commit fix for read-only endpoints). IndexedDB storage (idb-keyval, schema versioning, ZKE guards, localStorage audit). 2,600 total tests (915 engine + 1155 web + 530 backend). Gate 1: 6/6 A+ Gemini (2 rounds). Gate 2: 6/6 A Claude (3 rounds). 16 files, +2,162 LOC. | PR #59 |
+| 2026-02-19 | Claude | Stream C — Legacy Cleanup: Deleted 142 legacy files (~152K lines — Source/, pages/, data/, sample_data/, tests/, app.py, pyproject.toml, docker-compose, etc.). Fixed "subscription" terminology, deleted legacy CI workflows, updated README for V3. | PR #83 |
+| 2026-02-19 | Claude | Stream L Sprint 1 — Legal Content: 6 tasks (L1/L8, L2, L3, L4, L9/L10). ToS 9-13, Privacy Policy 11-13, GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds). | PR #84 |
 
 ---
 
@@ -172,8 +174,9 @@
      - Sprint 2 (Data): PR #59 MERGED — S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage. 16 files, +2,162 LOC, 2,600 total tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
      - Sprint 3 (Ops): PR #61 MERGED — S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting. 27 files, +2,723 LOC. Gate 1: 6/6 A/A+ Gemini. Gate 2: 6/6 A Claude.
    - **Stream C (Legacy Cleanup): COMPLETE** — PR #83 merged. Deleted 142 legacy files (~152K lines), fixed "subscription" terminology, deleted legacy CI workflows, updated README for V3.
-   - **Stream L (Legal): IN PROGRESS** — Sprint 1 on branch `feature/stream-l-sprint-1-legal-content`. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy updates (7yr retention, ZKE, DPO, EU Rep, transfers, law enforcement), ToS sections 9-13 (arbitration, prohibited uses, age 18+, indemnification, regulatory), GDPR Art 9(2)(a) consent text, GINA pre-upload notice, pre-payment disclosure, refund scoping. Gemini Gate 1: Legal A+, Ethics A, Code A+, Designer A, Business A+. Ready for Claude Gate 2.
-   - **Remaining streams:** L (remaining sprints), Q (QA), Ops (Operations)
+   - **Stream L (Legal): Sprint 1 COMPLETE** — PR #84 MERGED. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy (7yr retention, ZKE, DPO, EU Rep, transfers), ToS 9-13 (arbitration, prohibited uses, 18+), GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds).
+     - Remaining L tasks: L5 (cookie audit), L6 (data retention enforcement), L7 (DPIA doc), L11 (breach response), L13 (ROPA), L14 (DPO appointment)
+   - **Remaining streams:** L (Sprint 2+), Q (QA — 30 tasks), Ops (3 tasks)
 
 ---
 
