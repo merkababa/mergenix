@@ -159,7 +159,7 @@ jobs:
           PYEOF
 
       - name: Upload sync report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: clinvar-sync-report
           path: clinvar-reports/
