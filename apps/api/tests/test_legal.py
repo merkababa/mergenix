@@ -31,9 +31,9 @@ def _consent_payload(
     }
 
 
-def _cookie_payload(analytics: bool = True) -> dict:
+def _cookie_payload(analytics: bool = True, marketing: bool = False) -> dict:
     """Build an update-cookie-preferences request payload."""
-    return {"analytics": analytics}
+    return {"analytics": analytics, "marketing": marketing}
 
 
 # ── POST /legal/consent Tests ────────────────────────────────────────────
@@ -384,6 +384,89 @@ async def test_update_cookie_preferences_unauthenticated(
     assert response.status_code in (401, 403)
 
 
+@pytest.mark.asyncio
+async def test_update_cookie_preferences_enable_marketing(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /legal/cookies with marketing=true should return marketing=true."""
+    response = await client.post(
+        "/legal/cookies",
+        headers=auth_headers,
+        json=_cookie_payload(analytics=False, marketing=True),
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["essential"] is True
+    assert data["analytics"] is False
+    assert data["marketing"] is True
+
+
+@pytest.mark.asyncio
+async def test_update_cookie_preferences_enable_both(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /legal/cookies with analytics=true, marketing=true should enable both."""
+    response = await client.post(
+        "/legal/cookies",
+        headers=auth_headers,
+        json=_cookie_payload(analytics=True, marketing=True),
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["essential"] is True
+    assert data["analytics"] is True
+    assert data["marketing"] is True
+
+
+@pytest.mark.asyncio
+async def test_update_cookie_preferences_default_marketing_is_false(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """POST /legal/cookies without marketing field should default marketing to false."""
+    # Send only analytics — marketing should default to False
+    response = await client.post(
+        "/legal/cookies",
+        headers=auth_headers,
+        json={"analytics": True},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["marketing"] is False
+
+
+@pytest.mark.asyncio
+async def test_update_cookie_preferences_audit_includes_marketing(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """Updating cookie preferences with marketing=true should log marketing in audit."""
+    response = await client.post(
+        "/legal/cookies",
+        headers=auth_headers,
+        json=_cookie_payload(analytics=True, marketing=True),
+    )
+    assert response.status_code == 200
+
+    audit_result = await db_session.execute(
+        select(AuditLog).where(
+            AuditLog.user_id == test_user.id,
+            AuditLog.event_type == "cookie_preferences_updated",
+        )
+    )
+    audit_entry = audit_result.scalar_one_or_none()
+    assert audit_entry is not None
+    assert audit_entry.metadata_json["analytics"] is True
+    assert audit_entry.metadata_json["marketing"] is True
+
+
 # ── GET /legal/cookies Tests ────────────────────────────────────────────
 
 
@@ -393,12 +476,13 @@ async def test_get_cookie_preferences_default(
     test_user: User,
     auth_headers: dict[str, str],
 ) -> None:
-    """GET /legal/cookies with no preferences set should return analytics=false and essential=true."""
+    """GET /legal/cookies with no preferences set should return analytics=false, marketing=false, essential=true."""
     response = await client.get("/legal/cookies", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
     assert data["essential"] is True
     assert data["analytics"] is False
+    assert data["marketing"] is False
 
 
 @pytest.mark.asyncio
@@ -407,12 +491,12 @@ async def test_get_cookie_preferences_after_set(
     test_user: User,
     auth_headers: dict[str, str],
 ) -> None:
-    """GET /legal/cookies after setting analytics=true should return analytics=true and essential=true."""
-    # Set analytics to true
+    """GET /legal/cookies after setting analytics=true, marketing=true should return both true."""
+    # Set analytics and marketing to true
     resp = await client.post(
         "/legal/cookies",
         headers=auth_headers,
-        json=_cookie_payload(analytics=True),
+        json=_cookie_payload(analytics=True, marketing=True),
     )
     assert resp.status_code == 200
 
@@ -422,6 +506,7 @@ async def test_get_cookie_preferences_after_set(
     data = response.json()
     assert data["essential"] is True
     assert data["analytics"] is True
+    assert data["marketing"] is True
 
 
 @pytest.mark.asyncio

@@ -83,6 +83,12 @@ class CookiePreference(Base):
         default=False,
         nullable=False,
     )
+    marketing_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+        comment="Whether the user has opted in to marketing cookies",
+    )
     updated_at: Mapped[datetime] = mapped_column(
         default=func.now(),
         onupdate=func.now(),
@@ -92,5 +98,5 @@ class CookiePreference(Base):
     def __repr__(self) -> str:
         return (
             f"<CookiePreference id={self.id} user_id={self.user_id} "
-            f"analytics={self.analytics_enabled}>"
+            f"analytics={self.analytics_enabled} marketing={self.marketing_enabled}>"
         )

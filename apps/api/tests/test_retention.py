@@ -8,7 +8,7 @@ TDD: These tests are written FIRST, before the implementation.
 All tests should FAIL until the retention service is created.
 
 Retention Policy:
-- Security events (login, failed_login, password_change, 2fa_enable, 2fa_disable): 2 years
+- Security events (login, failed_login, password_changed, 2fa_enabled, 2fa_disabled): 2 years
 - General events (register, payment, tier_change, logout): 1 year
 - Orphaned records (user_id=NULL, i.e. after user deletion): 90 days
 """
@@ -60,14 +60,20 @@ class TestRetentionPolicyConstants:
     """Verify that retention policy constants are correctly defined."""
 
     def test_security_event_types_are_defined(self) -> None:
-        """Security events should be explicitly listed."""
+        """Security events should be explicitly listed.
+
+        Names must match what auth.py actually logs — verified 2026-02-20:
+          - "password_changed" (not "password_change")
+          - "2fa_enabled"      (not "2fa_enable")
+          - "2fa_disabled"     (not "2fa_disable")
+        """
         from app.services.retention_service import SECURITY_EVENTS
 
         assert "login" in SECURITY_EVENTS
         assert "failed_login" in SECURITY_EVENTS
-        assert "password_change" in SECURITY_EVENTS
-        assert "2fa_enable" in SECURITY_EVENTS
-        assert "2fa_disable" in SECURITY_EVENTS
+        assert "password_changed" in SECURITY_EVENTS
+        assert "2fa_enabled" in SECURITY_EVENTS
+        assert "2fa_disabled" in SECURITY_EVENTS
 
     def test_security_retention_is_two_years(self) -> None:
         """Security events have a 2-year retention period."""
@@ -139,11 +145,14 @@ async def test_purge_respects_security_event_types(
     db_session: AsyncSession,
     test_user: User,
 ) -> None:
-    """All five security event types should use the 2-year retention."""
+    """All five security event types should use the 2-year retention.
+
+    Names must match what auth.py actually logs — verified 2026-02-20.
+    """
     from app.services.retention_service import purge_expired_audit_logs
 
     now = datetime.now(UTC)
-    security_types = ["login", "failed_login", "password_change", "2fa_enable", "2fa_disable"]
+    security_types = ["login", "failed_login", "password_changed", "2fa_enabled", "2fa_disabled"]
 
     # Create one expired entry per security type (2 years + 1 day)
     entries = []
@@ -410,10 +419,10 @@ async def test_purge_mixed_events_deletes_correct_subset(
         event_type="account_deleted",
         created_at=now - timedelta(days=100),
     )
-    # Non-expired security (within 2 years)
+    # Non-expired security (within 2 years) — must use exact name auth.py logs
     live_security = _make_audit_log(
         user_id=test_user.id,
-        event_type="password_change",
+        event_type="password_changed",
         created_at=now - timedelta(days=700),
     )
     # Non-expired general (within 1 year)

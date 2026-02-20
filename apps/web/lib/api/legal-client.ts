@@ -28,6 +28,7 @@ interface RawConsentRecord {
 interface RawCookiePreferences {
   essential: true;
   analytics: boolean;
+  marketing: boolean;
 }
 
 // ── Transformers ────────────────────────────────────────────────────────
@@ -45,6 +46,7 @@ function toCookiePreferences(raw: RawCookiePreferences): CookiePreferences {
   return {
     essential: raw.essential,
     analytics: raw.analytics,
+    marketing: raw.marketing,
   };
 }
 
@@ -90,15 +92,16 @@ export async function listConsents(
 }
 
 /**
- * Update cookie preferences (analytics opt-in/out).
+ * Update cookie preferences (analytics and marketing opt-in/out).
  */
 export async function updateCookiePreferences(
   analytics: boolean,
+  marketing: boolean,
   options?: LegalRequestOptions,
 ): Promise<CookiePreferences> {
   const raw = await post<RawCookiePreferences>(
     "/legal/cookies",
-    { analytics },
+    { analytics, marketing },
     { signal: options?.signal },
   );
   return toCookiePreferences(raw);

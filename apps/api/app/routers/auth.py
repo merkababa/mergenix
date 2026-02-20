@@ -438,6 +438,7 @@ async def login(
     # Success: reset failed attempts and issue tokens
     user.failed_login_attempts = 0
     user.locked_until = None
+    user.last_login_at = _utcnow()
 
     # Issue tokens and set refresh cookie
     access_token, refresh_token, expires_in = _issue_tokens(user)
@@ -556,6 +557,7 @@ async def login_2fa(
     # Reset failed login attempts on successful 2FA
     user.failed_login_attempts = 0
     user.locked_until = None
+    user.last_login_at = _utcnow()
 
     # Issue tokens and set refresh cookie
     access_token, refresh_token, expires_in = _issue_tokens(user)
@@ -669,6 +671,7 @@ async def refresh_token(
         user_agent=_user_agent(request),
     )
     db.add(new_session)
+    user.last_login_at = _utcnow()
     await db.commit()
 
     _set_refresh_cookie(response, new_refresh)
@@ -1714,6 +1717,7 @@ async def oauth_google_callback(
         user_agent=_user_agent(request),
     )
     db.add(session)
+    user.last_login_at = _utcnow()
 
     await audit_service.log_event(
         db,

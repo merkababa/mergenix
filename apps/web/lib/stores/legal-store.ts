@@ -7,6 +7,8 @@ import {
   COOKIE_CONSENT_KEY,
   AGE_VERIFIED_KEY,
   CHIP_LIMITATION_ACK_KEY,
+  ANALYTICS_ENABLED_KEY,
+  MARKETING_ENABLED_KEY,
 } from "../constants/legal";
 import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";
 import { useAnalysisStore } from "./analysis-store";
@@ -18,6 +20,7 @@ type CookieConsentStatus = "pending" | "accepted_all" | "essential_only" | "cust
 interface LegalState {
   cookieConsent: CookieConsentStatus;
   analyticsEnabled: boolean;
+  marketingEnabled: boolean;
   ageVerified: boolean;
   geneticDataConsentGiven: boolean;
   partnerConsentGiven: boolean;
@@ -30,7 +33,7 @@ interface LegalState {
   // Actions
   acceptAllCookies: () => Promise<void>;
   acceptEssentialOnly: () => Promise<void>;
-  updateCookiePrefs: (analytics: boolean) => Promise<void>;
+  updateCookiePrefs: (analytics: boolean, marketing: boolean) => Promise<void>;
   verifyAge: () => void;
   syncAgeVerification: () => Promise<void>;
   setGeneticDataConsent: (given: boolean) => void;
@@ -57,7 +60,20 @@ function getInitialCookieConsent(): CookieConsentStatus {
 
 function getInitialAnalyticsEnabled(): boolean {
   const consent = safeLocalStorageGet(COOKIE_CONSENT_KEY);
-  return consent === "accepted_all" || consent === "custom";
+  if (consent === "accepted_all") return true;
+  if (consent === "custom") {
+    return safeLocalStorageGet(ANALYTICS_ENABLED_KEY) === "true";
+  }
+  return false;
+}
+
+function getInitialMarketingEnabled(): boolean {
+  const consent = safeLocalStorageGet(COOKIE_CONSENT_KEY);
+  if (consent === "accepted_all") return true;
+  if (consent === "custom") {
+    return safeLocalStorageGet(MARKETING_ENABLED_KEY) === "true";
+  }
+  return false;
 }
 
 function getInitialAgeVerified(): boolean {
@@ -74,6 +90,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
   // Initial state — hydrated from localStorage
   cookieConsent: getInitialCookieConsent(),
   analyticsEnabled: getInitialAnalyticsEnabled(),
+  marketingEnabled: getInitialMarketingEnabled(),
   ageVerified: getInitialAgeVerified(),
   geneticDataConsentGiven: false, // Never persisted — GDPR requires re-consent each session
   partnerConsentGiven: false, // Never persisted — must re-confirm each session
@@ -85,13 +102,16 @@ export const useLegalStore = create<LegalState>()((set) => ({
 
   acceptAllCookies: async () => {
     safeLocalStorageSet(COOKIE_CONSENT_KEY, "accepted_all");
+    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, "true");
+    safeLocalStorageSet(MARKETING_ENABLED_KEY, "true");
     set({
       cookieConsent: "accepted_all",
       analyticsEnabled: true,
+      marketingEnabled: true,
       error: null,
     });
     try {
-      await legalClient.updateCookiePreferences(true);
+      await legalClient.updateCookiePreferences(true, true);
     } catch {
       // Cookie preference saved locally — API failure is non-critical
     }
@@ -99,28 +119,35 @@ export const useLegalStore = create<LegalState>()((set) => ({
 
   acceptEssentialOnly: async () => {
     safeLocalStorageSet(COOKIE_CONSENT_KEY, "essential_only");
+    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, "false");
+    safeLocalStorageSet(MARKETING_ENABLED_KEY, "false");
     set({
       cookieConsent: "essential_only",
       analyticsEnabled: false,
+      marketingEnabled: false,
       error: null,
     });
     try {
-      await legalClient.updateCookiePreferences(false);
+      await legalClient.updateCookiePreferences(false, false);
     } catch {
       // Cookie preference saved locally — API failure is non-critical
     }
   },
 
-  updateCookiePrefs: async (analytics: boolean) => {
-    const status: CookieConsentStatus = analytics ? "custom" : "essential_only";
+  updateCookiePrefs: async (analytics: boolean, marketing: boolean) => {
+    const hasCustom = analytics || marketing;
+    const status: CookieConsentStatus = hasCustom ? "custom" : "essential_only";
     safeLocalStorageSet(COOKIE_CONSENT_KEY, status);
+    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, String(analytics));
+    safeLocalStorageSet(MARKETING_ENABLED_KEY, String(marketing));
     set({
       cookieConsent: status,
       analyticsEnabled: analytics,
+      marketingEnabled: marketing,
       error: null,
     });
     try {
-      await legalClient.updateCookiePreferences(analytics);
+      await legalClient.updateCookiePreferences(analytics, marketing);
     } catch {
       // Cookie preference saved locally — API failure is non-critical
     }
@@ -217,11 +244,11 @@ export const useLegalStore = create<LegalState>()((set) => ({
   loadCookiePreferences: async () => {
     try {
       const prefs = await legalClient.getCookiePreferences();
-      const status: CookieConsentStatus = prefs.analytics
-        ? "accepted_all"
-        : "essential_only";
+      const hasCustom = prefs.analytics || prefs.marketing;
+      const status: CookieConsentStatus = hasCustom ? "custom" : "essential_only";
       set({
         analyticsEnabled: prefs.analytics,
+        marketingEnabled: prefs.marketing,
         cookieConsent: status,
       });
     } catch {

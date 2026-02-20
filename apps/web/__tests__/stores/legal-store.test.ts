@@ -42,10 +42,11 @@ import { memoryFallback } from '../../lib/utils/safe-storage';
 
 describe('useLegalStore', () => {
   beforeEach(() => {
-    // Reset store to initial state
+    // Reset store to initial state — include marketingEnabled (L5)
     useLegalStore.setState({
       cookieConsent: 'pending',
       analyticsEnabled: false,
+      marketingEnabled: false,
       ageVerified: false,
       consents: [],
       isLoading: false,
@@ -60,6 +61,7 @@ describe('useLegalStore', () => {
     const state = useLegalStore.getState();
     expect(state.cookieConsent).toBe('pending');
     expect(state.analyticsEnabled).toBe(false);
+    expect(state.marketingEnabled).toBe(false);
     expect(state.ageVerified).toBe(false);
     expect(state.consents).toEqual([]);
     expect(state.isLoading).toBe(false);
@@ -69,19 +71,20 @@ describe('useLegalStore', () => {
   // ── acceptAllCookies ─────────────────────────────────────────────────
 
   describe('acceptAllCookies', () => {
-    it('sets cookieConsent to accepted_all and analyticsEnabled to true', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true });
+    it('sets cookieConsent to accepted_all, analyticsEnabled and marketingEnabled to true', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
 
       await useLegalStore.getState().acceptAllCookies();
 
       const state = useLegalStore.getState();
       expect(state.cookieConsent).toBe('accepted_all');
       expect(state.analyticsEnabled).toBe(true);
+      expect(state.marketingEnabled).toBe(true);
       expect(state.error).toBeNull();
     });
 
     it('saves to localStorage', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true });
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
 
       await useLegalStore.getState().acceptAllCookies();
 
@@ -91,12 +94,12 @@ describe('useLegalStore', () => {
       );
     });
 
-    it('calls API to update cookie preferences', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true });
+    it('calls API to update cookie preferences with both analytics=true and marketing=true', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
 
       await useLegalStore.getState().acceptAllCookies();
 
-      expect(mockUpdateCookiePreferences).toHaveBeenCalledWith(true);
+      expect(mockUpdateCookiePreferences).toHaveBeenCalledWith(true, true);
     });
 
     it('does not revert state on API failure (non-critical)', async () => {
@@ -108,25 +111,27 @@ describe('useLegalStore', () => {
       const state = useLegalStore.getState();
       expect(state.cookieConsent).toBe('accepted_all');
       expect(state.analyticsEnabled).toBe(true);
+      expect(state.marketingEnabled).toBe(true);
     });
   });
 
   // ── acceptEssentialOnly ──────────────────────────────────────────────
 
   describe('acceptEssentialOnly', () => {
-    it('sets cookieConsent to essential_only and analyticsEnabled to false', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false });
+    it('sets cookieConsent to essential_only and both flags to false', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
       const state = useLegalStore.getState();
       expect(state.cookieConsent).toBe('essential_only');
       expect(state.analyticsEnabled).toBe(false);
+      expect(state.marketingEnabled).toBe(false);
       expect(state.error).toBeNull();
     });
 
     it('saves to localStorage', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false });
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
@@ -136,36 +141,49 @@ describe('useLegalStore', () => {
       );
     });
 
-    it('calls API with analytics=false', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false });
+    it('calls API with analytics=false and marketing=false', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
-      expect(mockUpdateCookiePreferences).toHaveBeenCalledWith(false);
+      expect(mockUpdateCookiePreferences).toHaveBeenCalledWith(false, false);
     });
   });
 
   // ── updateCookiePrefs ────────────────────────────────────────────────
 
   describe('updateCookiePrefs', () => {
-    it('with analytics=true sets cookieConsent to custom and analyticsEnabled to true', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true });
+    it('with analytics=true, marketing=false sets cookieConsent to custom', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: false });
 
-      await useLegalStore.getState().updateCookiePrefs(true);
+      await useLegalStore.getState().updateCookiePrefs(true, false);
 
       const state = useLegalStore.getState();
       expect(state.cookieConsent).toBe('custom');
       expect(state.analyticsEnabled).toBe(true);
+      expect(state.marketingEnabled).toBe(false);
     });
 
-    it('with analytics=false sets cookieConsent to essential_only', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false });
+    it('with analytics=false, marketing=true sets cookieConsent to custom', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: true });
 
-      await useLegalStore.getState().updateCookiePrefs(false);
+      await useLegalStore.getState().updateCookiePrefs(false, true);
+
+      const state = useLegalStore.getState();
+      expect(state.cookieConsent).toBe('custom');
+      expect(state.analyticsEnabled).toBe(false);
+      expect(state.marketingEnabled).toBe(true);
+    });
+
+    it('with analytics=false, marketing=false sets cookieConsent to essential_only', async () => {
+      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+
+      await useLegalStore.getState().updateCookiePrefs(false, false);
 
       const state = useLegalStore.getState();
       expect(state.cookieConsent).toBe('essential_only');
       expect(state.analyticsEnabled).toBe(false);
+      expect(state.marketingEnabled).toBe(false);
     });
   });
 
@@ -300,23 +318,25 @@ describe('useLegalStore', () => {
   // ── loadCookiePreferences ────────────────────────────────────────────
 
   describe('loadCookiePreferences', () => {
-    it('fetches preferences from API and updates state (analytics=true)', async () => {
-      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: true });
+    it('fetches preferences from API and updates state (analytics=true, marketing=true)', async () => {
+      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
 
       await useLegalStore.getState().loadCookiePreferences();
 
       const state = useLegalStore.getState();
       expect(state.analyticsEnabled).toBe(true);
-      expect(state.cookieConsent).toBe('accepted_all');
+      expect(state.marketingEnabled).toBe(true);
+      expect(state.cookieConsent).toBe('custom');
     });
 
-    it('fetches preferences from API and updates state (analytics=false)', async () => {
-      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: false });
+    it('fetches preferences from API and updates state (analytics=false, marketing=false)', async () => {
+      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
 
       await useLegalStore.getState().loadCookiePreferences();
 
       const state = useLegalStore.getState();
       expect(state.analyticsEnabled).toBe(false);
+      expect(state.marketingEnabled).toBe(false);
       expect(state.cookieConsent).toBe('essential_only');
     });
 

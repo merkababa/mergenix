@@ -123,14 +123,14 @@ describe('CookieConsentBanner', () => {
     mockLocalStorage({});
     render(<CookieConsentBanner />);
 
-    // Before clicking Customize, analytics toggle should not be visible
+    // Before clicking Customize, toggles should not be visible
     expect(screen.queryByRole('switch')).not.toBeInTheDocument();
 
     const customizeButton = screen.getByText('Customize');
     fireEvent.click(customizeButton);
 
-    // After clicking, analytics toggle should be visible
-    expect(screen.getByRole('switch')).toBeInTheDocument();
+    // After clicking, analytics toggle should be visible (there are now 2 switches)
+    expect(screen.getAllByRole('switch').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByLabelText('Enable analytics cookies')).toBeInTheDocument();
   });
 
@@ -141,7 +141,8 @@ describe('CookieConsentBanner', () => {
     // Open customize panel
     fireEvent.click(screen.getByText('Customize'));
 
-    const toggle = screen.getByRole('switch');
+    // Use specific label to avoid ambiguity with marketing toggle
+    const toggle = screen.getByLabelText('Enable analytics cookies');
     expect(toggle).toHaveAttribute('aria-checked', 'false');
 
     // Click to enable
@@ -207,6 +208,6 @@ describe('CookieConsentBanner', () => {
       fireEvent.click(screen.getByText('Save Preferences'));
     });
 
-    expect(mockUpdateCookiePrefs).toHaveBeenCalledWith(false); // default analytics is false
+    expect(mockUpdateCookiePrefs).toHaveBeenCalledWith(false, false); // default: analytics=false, marketing=false
   });
 });

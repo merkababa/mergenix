@@ -131,6 +131,12 @@ class Settings(BaseSettings):
     # ── Admin ─────────────────────────────────────────────────────────────
     admin_api_key: str = ""
 
+    # ── Cron / Scheduled Tasks ────────────────────────────────────────────
+    # Secret token used to authenticate cron job requests.
+    # Must be passed as X-Cron-Secret header on POST /api/v1/admin/cron/retention.
+    # If not set, the cron endpoint returns 503 (disabled).
+    cron_secret: str = ""
+
     # ── Analytics ──────────────────────────────────────────────────────────
     # Secret API key for the GET /analytics/summary endpoint.
     # If empty, the endpoint returns 503 (disabled).

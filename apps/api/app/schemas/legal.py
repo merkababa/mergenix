@@ -33,6 +33,10 @@ class CookiePreferencesRequest(BaseModel):
         default=False,
         description="Whether analytics cookies are enabled",
     )
+    marketing: bool = Field(
+        default=False,
+        description="Whether marketing cookies are enabled",
+    )
 
 
 # ── Responses ─────────────────────────────────────────────────────────────
@@ -58,6 +62,10 @@ class CookiePreferencesResponse(BaseModel):
         description="Essential cookies are always enabled (read-only)",
     )
     analytics: bool
+    marketing: bool = Field(
+        default=False,
+        description="Whether marketing cookies are enabled",
+    )
 
 
 # ── GDPR Export Sub-Schemas ──────────────────────────────────────────────
@@ -111,6 +119,7 @@ class CookiePreferencesExportSchema(BaseModel):
 
     essential: bool = True
     analytics: bool
+    marketing: bool = False
     updated_at: str
 
 

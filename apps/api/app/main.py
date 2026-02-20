@@ -25,7 +25,7 @@ from app.database import engine
 from app.middleware.auth import CSRFMiddleware
 from app.middleware.rate_limit_headers import rate_limit_exceeded_handler
 from app.middleware.rate_limiter import limiter
-from app.routers import analysis, analytics, auth, clinvar, gdpr, health, legal, payments
+from app.routers import admin, analysis, analytics, auth, clinvar, gdpr, health, legal, payments
 from app.routers.auth import close_oauth_client
 
 
@@ -185,6 +185,7 @@ def create_app() -> FastAPI:
     app.include_router(legal.router, prefix="/legal", tags=["Legal"])
     app.include_router(gdpr.router, prefix="/gdpr", tags=["GDPR"])
     app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
+    app.include_router(admin.router, prefix="/api/v1", tags=["Admin"])
 
     # ── Exception Handlers ────────────────────────────────────────────────
     @app.exception_handler(ValueError)

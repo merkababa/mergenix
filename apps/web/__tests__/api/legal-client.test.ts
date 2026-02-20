@@ -104,37 +104,43 @@ describe('legal-client', () => {
   // ── updateCookiePreferences ────────────────────────────────────────────
 
   describe('updateCookiePreferences', () => {
-    it('should call POST /legal/cookies with analytics=true', async () => {
+    it('should call POST /legal/cookies with analytics=true, marketing=true', async () => {
       mockPost.mockResolvedValue({
         essential: true,
         analytics: true,
+        marketing: true,
       });
 
-      const result = await updateCookiePreferences(true);
+      const result = await updateCookiePreferences(true, true);
 
       expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
         analytics: true,
+        marketing: true,
       }, { signal: undefined });
       expect(result).toEqual({
         essential: true,
         analytics: true,
+        marketing: true,
       });
     });
 
-    it('should call POST /legal/cookies with analytics=false', async () => {
+    it('should call POST /legal/cookies with analytics=false, marketing=false', async () => {
       mockPost.mockResolvedValue({
         essential: true,
         analytics: false,
+        marketing: false,
       });
 
-      const result = await updateCookiePreferences(false);
+      const result = await updateCookiePreferences(false, false);
 
       expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
         analytics: false,
+        marketing: false,
       }, { signal: undefined });
       expect(result).toEqual({
         essential: true,
         analytics: false,
+        marketing: false,
       });
     });
   });
@@ -146,6 +152,7 @@ describe('legal-client', () => {
       mockGet.mockResolvedValue({
         essential: true,
         analytics: true,
+        marketing: false,
       });
 
       const result = await getCookiePreferences();
@@ -154,13 +161,15 @@ describe('legal-client', () => {
       expect(result).toEqual({
         essential: true,
         analytics: true,
+        marketing: false,
       });
     });
 
-    it('should handle default (analytics=false) response', async () => {
+    it('should handle default (analytics=false, marketing=false) response', async () => {
       mockGet.mockResolvedValue({
         essential: true,
         analytics: false,
+        marketing: false,
       });
 
       const result = await getCookiePreferences();
@@ -168,6 +177,7 @@ describe('legal-client', () => {
       expect(result).toEqual({
         essential: true,
         analytics: false,
+        marketing: false,
       });
     });
   });

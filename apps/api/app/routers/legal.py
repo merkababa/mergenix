@@ -166,16 +166,18 @@ async def update_cookie_preferences(
         pref = CookiePreference(
             user_id=user.id,
             analytics_enabled=body.analytics,
+            marketing_enabled=body.marketing,
         )
         db.add(pref)
     else:
         pref.analytics_enabled = body.analytics
+        pref.marketing_enabled = body.marketing
 
     await audit_service.log_event(
         db,
         user_id=user.id,
         event_type="cookie_preferences_updated",
-        metadata={"analytics": body.analytics},
+        metadata={"analytics": body.analytics, "marketing": body.marketing},
         ip_address=_client_ip(request),
         user_agent=_user_agent(request),
     )
@@ -185,6 +187,7 @@ async def update_cookie_preferences(
     return CookiePreferencesResponse(
         essential=True,
         analytics=pref.analytics_enabled,
+        marketing=pref.marketing_enabled,
     )
 
 
@@ -214,6 +217,7 @@ async def get_cookie_preferences(
     return CookiePreferencesResponse(
         essential=True,
         analytics=pref.analytics_enabled if pref else False,
+        marketing=pref.marketing_enabled if pref else False,
     )
 
 
@@ -292,6 +296,7 @@ async def export_data(
         CookiePreferencesExportSchema(
             essential=True,
             analytics=cookie_pref.analytics_enabled,
+            marketing=cookie_pref.marketing_enabled,
             updated_at=cookie_pref.updated_at.isoformat(),
         )
         if cookie_pref

@@ -30,10 +30,12 @@ class Payment(Base):
         primary_key=True,
         default=uuid.uuid4,
     )
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
         index=True,
-        nullable=False,
+        nullable=True,
+        comment="NULL after user account deletion — payment records are retained "
+                "for financial/legal compliance (7-year retention policy).",
     )
     stripe_customer_id: Mapped[str | None] = mapped_column(
         String(255),
@@ -73,7 +75,7 @@ class Payment(Base):
     )
 
     # ── Relationship ──────────────────────────────────────────────────────
-    user: Mapped[User] = relationship(  # type: ignore[name-defined]  # noqa: F821
+    user: Mapped[User | None] = relationship(  # type: ignore[name-defined]  # noqa: F821
         back_populates="payments",
     )
 

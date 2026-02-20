@@ -45,6 +45,15 @@ settings = get_settings()
 # HTTP methods that change server state and require CSRF protection
 _STATE_CHANGING_METHODS = frozenset({b"POST", b"PUT", b"DELETE", b"PATCH"})
 
+# Path prefixes exempt from CSRF protection.
+# Machine-to-machine endpoints authenticated by a shared secret do not use
+# browser sessions or cookies, so the CSRF header requirement is irrelevant.
+# External cron schedulers (Vercel Cron, GitHub Actions, cron.io) cannot
+# inject browser-only headers such as X-Requested-With.
+_CSRF_EXEMPT_PATH_PREFIXES: tuple[str, ...] = (
+    "/api/v1/admin/cron/",
+)
+
 # Pre-encoded CSRF rejection response body
 _CSRF_REJECTION_BODY = _json.dumps({
     "detail": {
@@ -85,6 +94,14 @@ class CSRFMiddleware:
         method = scope.get("method", "").encode("utf-8") if isinstance(scope.get("method"), str) else scope.get("method", b"")
 
         if method in _STATE_CHANGING_METHODS:
+            # Allow machine-to-machine endpoints to bypass CSRF validation.
+            # These paths use shared-secret authentication instead of cookies,
+            # so the browser-based CSRF threat model does not apply.
+            path = scope.get("path", "")
+            if any(path.startswith(prefix) for prefix in _CSRF_EXEMPT_PATH_PREFIXES):
+                await self.app(scope, receive, send)
+                return
+
             # Check for X-Requested-With header in the ASGI scope.
             # Compare case-insensitively — header values may arrive in
             # any casing depending on the client / proxy chain.

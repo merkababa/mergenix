@@ -89,6 +89,14 @@ class User(Base):
         onupdate=func.now(),
         nullable=False,
     )
+    last_login_at: Mapped[datetime | None] = mapped_column(
+        nullable=True,
+        default=None,
+        index=True,
+        comment="UTC timestamp of the most recent successful login or token refresh. "
+                "NULL means the user has never logged in (new account). "
+                "Used by the retention service to determine inactivity for purge eligibility.",
+    )
 
     # ── Relationships ─────────────────────────────────────────────────────
     payments: Mapped[list[Payment]] = relationship(  # type: ignore[name-defined]  # noqa: F821

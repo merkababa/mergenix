@@ -19,6 +19,7 @@ export interface ConsentRecord {
 export interface CookiePreferences {
   essential: true; // always true, read-only
   analytics: boolean;
+  marketing: boolean;
 }
 
 // ── Age Verification ─────────────────────────────────────────────────────
@@ -61,6 +62,7 @@ export interface DataExportResponse {
   cookiePreferences: {
     essential: true;
     analytics: boolean;
+    marketing: boolean;
     updatedAt: string;
   } | null;
   sessions: Array<{

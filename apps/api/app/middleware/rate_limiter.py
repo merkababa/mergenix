@@ -114,3 +114,8 @@ LIMIT_DATA_EXPORT = "1/hour"
 LIMIT_WEBHOOK = get_settings().webhook_rate_limit
 LIMIT_TRACK_EVENT = "30/minute"
 LIMIT_ANALYTICS_SUMMARY = "10/minute"
+# Conservative limit for the cron retention endpoint. Even if the shared
+# secret leaks, an attacker can trigger at most 5 mass-deletion runs per hour.
+# The real defence is infrastructure-level rate limiting (Vercel/Railway/nginx)
+# but this provides an in-process fallback.
+LIMIT_CRON_RETENTION = "5/hour"

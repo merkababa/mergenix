@@ -31,12 +31,64 @@ function hasExistingConsent(): boolean {
   return safeLocalStorageGet(COOKIE_CONSENT_KEY) !== null;
 }
 
+// ── Sub-component: Cookie Category Toggle ────────────────────────────────
+
+interface CategoryToggleProps {
+  label: string;
+  description: string;
+  enabled: boolean;
+  ariaLabel: string;
+  onToggle: () => void;
+}
+
+function CategoryToggle({
+  label,
+  description,
+  enabled,
+  ariaLabel,
+  onToggle,
+}: CategoryToggleProps) {
+  return (
+    /* min-h-[44px] + py-1.5 ensures the touch target meets WCAG 2.5.5 (44×44px minimum) */
+    <div
+      className="flex min-h-[44px] items-center justify-between py-1.5"
+      data-touch-target="true"
+    >
+      <div>
+        <span className="text-sm font-medium text-[var(--text-heading)]">
+          {label}
+        </span>
+        <p className="text-xs text-[var(--text-muted)]">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={enabled}
+        aria-label={ariaLabel}
+        onClick={onToggle}
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 ${
+          enabled
+            ? "bg-[var(--accent-teal)]"
+            : "bg-[var(--border-subtle)]"
+        }`}
+      >
+        <span
+          className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+            enabled ? "translate-x-[22px]" : "translate-x-[3px]"
+          }`}
+        />
+      </button>
+    </div>
+  );
+}
+
 // ── Component ────────────────────────────────────────────────────────────
 
 export function CookieConsentBanner() {
   const [isVisible, setIsVisible] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
   const [analyticsToggle, setAnalyticsToggle] = useState(false);
+  const [marketingToggle, setMarketingToggle] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
 
   const acceptAllCookies = useLegalStore((s) => s.acceptAllCookies);
@@ -78,14 +130,18 @@ export function CookieConsentBanner() {
   const handleSaveCustom = useCallback(async () => {
     setIsVisible(false);
     try {
-      await updateCookiePrefs(analyticsToggle);
+      await updateCookiePrefs(analyticsToggle, marketingToggle);
     } catch {
       // Banner already closed — API failure is non-critical
     }
-  }, [analyticsToggle, updateCookiePrefs]);
+  }, [analyticsToggle, marketingToggle, updateCookiePrefs]);
 
   const handleToggleAnalytics = useCallback(() => {
     setAnalyticsToggle((prev) => !prev);
+  }, []);
+
+  const handleToggleMarketing = useCallback(() => {
+    setMarketingToggle((prev) => !prev);
   }, []);
 
   const handleDismiss = useCallback(async () => {
@@ -131,8 +187,8 @@ export function CookieConsentBanner() {
                   className="mt-1 text-sm text-[var(--text-muted)]"
                 >
                   We use essential cookies for authentication and theme
-                  preferences. You can optionally enable anonymous analytics
-                  to help us improve Mergenix.
+                  preferences. You can optionally enable analytics or marketing
+                  cookies — all non-essential cookies are off by default.
                 </p>
 
                 {/* Customize panel */}
@@ -146,7 +202,7 @@ export function CookieConsentBanner() {
                       className="overflow-hidden"
                     >
                       <div id="cookie-customize-panel" className="mt-4 space-y-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4">
-                        {/* Essential cookies — always on */}
+                        {/* Essential cookies — always on, non-toggleable */}
                         <div className="flex items-center justify-between">
                           <div>
                             <span className="text-sm font-medium text-[var(--text-heading)]">
@@ -161,43 +217,29 @@ export function CookieConsentBanner() {
                           </span>
                         </div>
 
-                        {/* Analytics cookies — toggleable */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-sm font-medium text-[var(--text-heading)]">
-                              Analytics Cookies
-                            </span>
-                            <p className="text-xs text-[var(--text-muted)]">
-                              Anonymous usage data, no genetic info
-                            </p>
-                          </div>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={analyticsToggle}
-                            aria-label="Enable analytics cookies"
-                            onClick={handleToggleAnalytics}
-                            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ${
-                              analyticsToggle
-                                ? "bg-[var(--accent-teal)]"
-                                : "bg-[var(--border-subtle)]"
-                            }`}
-                          >
-                            <span
-                              className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
-                                analyticsToggle
-                                  ? "translate-x-[22px]"
-                                  : "translate-x-[3px]"
-                              }`}
-                            />
-                          </button>
-                        </div>
+                        {/* Analytics cookies — toggleable, default OFF */}
+                        <CategoryToggle
+                          label="Analytics Cookies"
+                          description="Anonymous usage data, no genetic info"
+                          enabled={analyticsToggle}
+                          ariaLabel="Enable analytics cookies"
+                          onToggle={handleToggleAnalytics}
+                        />
+
+                        {/* Marketing cookies — toggleable, default OFF */}
+                        <CategoryToggle
+                          label="Marketing Cookies"
+                          description="Personalized product updates, opt-in only"
+                          enabled={marketingToggle}
+                          ariaLabel="Enable marketing cookies"
+                          onToggle={handleToggleMarketing}
+                        />
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                {/* Action buttons */}
+                {/* Action buttons — equal visual weight, no dark patterns */}
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <Button
                     variant="primary"
@@ -207,7 +249,7 @@ export function CookieConsentBanner() {
                     Accept All
                   </Button>
                   <Button
-                    variant="secondary"
+                    variant="primary"
                     size="sm"
                     onClick={handleEssentialOnly}
                   >
@@ -239,10 +281,10 @@ export function CookieConsentBanner() {
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="shrink-0 rounded-lg p-1 text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--text-primary)]"
+                className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--text-primary)]"
                 aria-label="Dismiss cookie banner"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { Dna, Shield, Heart, Github, Twitter, Mail, CheckCircle } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/ui/glass-card";
+import { CpraSpiModal } from "@/components/legal/cpra-spi-modal";
 
 const PRODUCT_LINKS = [
   { href: "/analysis", label: "Carrier Screening" },
@@ -83,10 +84,19 @@ function FooterColumn({
 
 export function Footer() {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showCpraSpiModal, setShowCpraSpiModal] = useState(false);
 
   const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubscribed(true);
+  };
+
+  const handleOpenCpraSpiModal = () => {
+    setShowCpraSpiModal(true);
+  };
+
+  const handleCloseCpraSpiModal = () => {
+    setShowCpraSpiModal(false);
   };
 
   return (
@@ -229,13 +239,28 @@ export function Footer() {
           <p className="text-xs text-[var(--text-dim)]">
             &copy; {new Date().getFullYear()} Mergenix. All rights reserved.
           </p>
-          <div className="flex items-center gap-1 text-xs text-[var(--text-dim)]">
-            <span>Made with</span>
-            <Heart className="h-3 w-3 text-[var(--accent-rose)]" aria-hidden="true" />
-            <span>for families everywhere</span>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-[var(--text-dim)]">
+            {/* CPRA Sensitive Personal Information link — shown on all pages */}
+            <button
+              type="button"
+              onClick={handleOpenCpraSpiModal}
+              className="text-xs text-[var(--text-dim)] underline-offset-2 hover:text-[var(--text-muted)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+            >
+              Limit the Use of My Sensitive Personal Information
+            </button>
+            <div className="flex items-center gap-1">
+              <span>Made with</span>
+              <Heart className="h-3 w-3 text-[var(--accent-rose)]" aria-hidden="true" />
+              <span>for families everywhere</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* CPRA SPI Modal — portal would be ideal but inline is sufficient for now */}
+      {showCpraSpiModal && (
+        <CpraSpiModal onClose={handleCloseCpraSpiModal} />
+      )}
     </footer>
   );
 }

@@ -24,6 +24,24 @@ export const CHIP_LIMITATION_TEXT = `Direct-to-consumer genetic tests analyze ap
 
 export const PARTNER_CONSENT_LABEL = `I confirm that I have obtained explicit, informed consent from the second individual to upload and analyze their genetic data as part of this couple analysis.`;
 
+export const CPRA_SPI_NOTICE = `California Privacy Rights Act — Limit the Use of My Sensitive Personal Information
+
+Under the California Privacy Rights Act (CPRA), California residents have the right to limit the use and disclosure of their sensitive personal information (SPI).
+
+Your genetic data is classified as sensitive personal information under CPRA. Mergenix already limits the use of your SPI to the minimum necessary by default:
+
+• Client-side processing: Your raw genetic file is analyzed entirely within your browser. It is never transmitted to our servers.
+• Zero-Knowledge Encryption (ZKE): If you save analysis results, they are encrypted in your browser before upload. Mergenix cannot read your results.
+• No sharing: Your genetic data is never shared with third parties, sold, or used for advertising or research beyond the analysis you requested.
+• Purpose limitation: Your data is used solely for the genetic analysis service you requested.
+
+You may further restrict our use of your data by:
+• Choosing "Essential Only" in your cookie preferences to disable analytics tracking.
+• Declining to save analysis results to your account (process everything locally).
+• Deleting your account and all associated data at any time via Account Settings → Danger Zone.
+
+For questions or to exercise your CPRA rights, contact: privacy@mergenix.com`;
+
 export const PRE_PAYMENT_DISCLOSURE = `Before purchasing, please understand:
 \u2022 DTC genotyping chips analyze approximately 600,000–700,000 of the most well-studied genetic variants — the positions most relevant to health and trait research. This represents roughly 0.02% of the 3+ billion base pairs in the human genome. Coverage varies by chip manufacturer and version.
 \u2022 Our carrier screening analyzes 2,697 conditions. Not all variants for each condition may be detectable from your chip data.
