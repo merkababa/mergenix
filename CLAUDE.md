@@ -182,14 +182,14 @@ Choose the right model tier for each agent type:
 | **Executors** (code fixes, feature implementation) | **Sonnet** | Well-specified tasks with explicit instructions — speed > reasoning depth |
 | **Exploration/research agents** | **Sonnet** | File reading and summarizing doesn't need Opus-level reasoning |
 | **Planning synthesis** | **Opus** | Architectural decisions require highest capability |
-| **Gemini personas** | gemini-3-pro-preview | Separate system, called via CLI |
+| **Gemini personas** | gemini-3.1-pro-preview | Separate system, called via CLI |
 
 When spawning Task agents, set `model: "sonnet"` for executors and explorers, omit (defaults to Opus) for reviewers and planners.
 
 ## Gemini Delegation
 Call via bash CLI — MCP tools are broken on Windows. No rate limit waits needed (API tokens).
 ```bash
-gemini -p "prompt" --model gemini-3-pro-preview 2>&1
+gemini -p "prompt" --model gemini-3.1-pro-preview 2>&1
 ```
 - Always use `run_in_background: true` and append `2>&1`
 - For reviews: include FULL source files (not just diffs) — Gemini has 1M context
