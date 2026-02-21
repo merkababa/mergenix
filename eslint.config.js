@@ -38,6 +38,20 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
     },
   },
+  // no-console: ban console.log in production source files.
+  // console.warn and console.error are permitted for legitimate runtime warnings.
+  // Test files and scripts are excluded via the ignores config below.
+  {
+    files: [
+      'apps/web/**/*.{ts,tsx}',
+      'packages/genetics-engine/src/**/*.ts',
+      'packages/genetics-data/**/*.ts',
+      'packages/shared-types/**/*.ts',
+    ],
+    rules: {
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
+  },
   {
     ignores: [
       'node_modules/**',
@@ -46,9 +60,17 @@ export default tseslint.config(
       '*.py',
       'Source/**',
       'pages/**',
-      'tests/**',
+      // Exclude test files from no-console enforcement
+      '**/tests/**',
+      '**/__tests__/**',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
       'data/**',
       'sample_data/**',
+      // Exclude scripts/ — utility scripts may use console intentionally
+      'scripts/**',
     ],
   },
 );

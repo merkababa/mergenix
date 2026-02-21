@@ -10,6 +10,19 @@
  * The lookup table maps rsID -> { chromosome, grch37Position, grch38Position },
  * enabling bidirectional conversion. SNPs not in the table cannot be lifted
  * over and are reported as failures.
+ *
+ * STATIC LOOKUP CONSTRAINT:
+ * This module only works for variants that are pre-catalogued in the DTC carrier
+ * panel lookup table (liftover.json). It is not a general-purpose liftover tool.
+ * Any rsID absent from the table will fail with failureReason: 'not_in_table'.
+ *
+ * This approach does NOT scale to user-uploaded novel positions (arbitrary
+ * coordinates not in our panel). If Mergenix ever needs to lift over arbitrary
+ * genomic positions — for example, VCF uploads containing variants outside our
+ * carrier panel — a chain-file based conversion (e.g., UCSC liftOver chain files
+ * or the Ensembl CrossMap algorithm) would be required. Chain files encode the
+ * full alignment between builds and handle insertions, deletions, and strand
+ * flips that a simple rsID lookup cannot express.
  */
 
 import type { GenomeBuild } from '@mergenix/shared-types';

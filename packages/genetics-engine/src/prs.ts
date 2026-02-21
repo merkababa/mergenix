@@ -468,12 +468,18 @@ export function getPopulationNote(ancestryNote: string): string {
  * Predict the expected PRS range for offspring of two parents.
  *
  * Uses mid-parent regression: the offspring's expected PRS is the average
- * of both parents' z-scores, scaled by a heritability factor (0.5) to
+ * of both parents' z-scores, scaled by the narrow-sense heritability (h²) to
  * account for regression toward the population mean.
  *
- * NOTE: Using a blanket h^2 = 0.5 for all conditions is an approximation.
- * Actual narrow-sense heritability varies: CAD ~0.5-0.6, BMI ~0.3-0.4,
- * Schizophrenia ~0.6-0.8, T2D ~0.25-0.35. Future: per-condition h^2 in prs-weights.json.
+ * Heritability varies significantly by trait — use trait-specific values when
+ * available rather than the generic default:
+ * - Height:              h² ≈ 0.8  (high heritability, less regression to mean)
+ * - BMI:                 h² ≈ 0.4  (moderate)
+ * - Coronary artery disease: h² ≈ 0.5–0.6
+ * - Psychiatric traits (schizophrenia, bipolar): h² ≈ 0.3–0.6
+ * - Type 2 diabetes:     h² ≈ 0.25–0.35
+ * The default of 0.5 is a reasonable population-wide approximation when no
+ * trait-specific value is known.
  *
  * The range reflects biological uncertainty from meiotic recombination
  * (approximately +/- 0.5 SD around the expected value).
@@ -482,18 +488,22 @@ export function getPopulationNote(ancestryNote: string): string {
  *
  * @param parentAZScore - Parent A's z-score
  * @param parentBZScore - Parent B's z-score
+ * @param heritability - Narrow-sense heritability h² for the trait (0–1).
+ *   Defaults to 0.5, a reasonable general approximation. Use trait-specific
+ *   values when available (e.g., 0.8 for height, 0.4 for BMI).
  * @returns Predicted offspring percentile range
  */
 export function predictOffspringPrsRange(
   parentAZScore: number,
   parentBZScore: number,
+  heritability: number = 0.5,
 ): PrsOffspringPrediction {
   // Mid-parent z-score
   const midParent = (parentAZScore + parentBZScore) / 2.0;
 
-  // Regression toward the mean: offspring expected ~50% of mid-parent deviation
-  // heritability factor h^2 = 0.5 (approximation; varies by trait)
-  const heritabilityFactor = 0.5;
+  // Regression toward the mean: offspring expected z = midParent * h²
+  // Higher heritability → less regression (offspring stays closer to parents)
+  const heritabilityFactor = heritability;
   const expectedOffspring = midParent * heritabilityFactor;
 
   // Uncertainty range: approximately +/- 0.5 SD around expected
@@ -524,7 +534,17 @@ export function predictOffspringPrsRange(
  *   Each parent transmits one allele (Bernoulli p=0.5), so per-SNP variance
  *   contribution = w^2 * 0.25 for each parent's heterozygous sites.
  *   For simplicity with unknown phase, we use the heritability-based approach:
- *   SD_offspring ~ popStd * sqrt((1 - h^2) / 2) around the expected mid-parent value.
+ *   SD_offspring ~ popStd * sqrt((1 - h²) / 2) around the expected mid-parent value.
+ *
+ * Heritability varies significantly by trait — use trait-specific values when
+ * available rather than the generic default:
+ * - Height:              h² ≈ 0.8  (high heritability, less regression to mean)
+ * - BMI:                 h² ≈ 0.4  (moderate)
+ * - Coronary artery disease: h² ≈ 0.5–0.6
+ * - Psychiatric traits (schizophrenia, bipolar): h² ≈ 0.3–0.6
+ * - Type 2 diabetes:     h² ≈ 0.25–0.35
+ * The default of 0.5 is a reasonable population-wide approximation when no
+ * trait-specific value is known.
  *
  * The result includes the 25th-75th percentile range (interquartile range).
  *
@@ -533,6 +553,9 @@ export function predictOffspringPrsRange(
  * @param parentAZScore - Parent A's z-score
  * @param parentBZScore - Parent B's z-score
  * @param popStd - Population standard deviation for this condition
+ * @param heritability - Narrow-sense heritability h² for the trait (0–1).
+ *   Defaults to 0.5, a reasonable general approximation. Use trait-specific
+ *   values when available (e.g., 0.8 for height, 0.4 for BMI).
  * @returns CLT-based offspring prediction with IQR
  */
 export function predictOffspringPrsClt(
@@ -541,19 +564,22 @@ export function predictOffspringPrsClt(
   parentAZScore: number,
   parentBZScore: number,
   popStd: number,
+  heritability: number = 0.5,
 ): CltOffspringPrediction {
   // Mean offspring PRS = average of both parents
   const meanPrs = (parentAPrs + parentBPrs) / 2.0;
 
-  // Mid-parent z-score with heritability regression
+  // Mid-parent z-score with heritability regression:
+  // expectedZ = midParentZ * h²
+  // Higher heritability → less regression (offspring stays closer to parents)
   const midParentZ = (parentAZScore + parentBZScore) / 2.0;
-  const heritabilityFactor = 0.5;
+  const heritabilityFactor = heritability;
   const expectedZ = midParentZ * heritabilityFactor;
 
   // Standard deviation of offspring distribution around the expected value.
-  // Under CLT with many SNPs and h^2 = 0.5:
-  // SD_offspring ~ sqrt(1 - h^2) * popStd * sqrt(0.5)
-  // This captures both Mendelian segregation variance and regression to mean.
+  // Under CLT with many SNPs and heritability h²:
+  // SD_offspring ~ sqrt(1 - h²) * sqrt(0.5)
+  // Higher heritability → smaller offspring variance (less environmental noise)
   const offspringStd = popStd > 0
     ? Math.sqrt(1 - heritabilityFactor) * Math.sqrt(0.5) * 1.0
     : 0.5;

@@ -2,6 +2,7 @@
   "name": "mergenix",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -14,6 +15,7 @@
     "clean": "turbo clean && rm -rf node_modules",
     "db:migrate": "cd apps/api && alembic upgrade head",
     "db:rollback": "cd apps/api && alembic downgrade -1",
+    "check:carrier-panel": "node scripts/check-carrier-panel.mjs",
     "audit:npm": "pnpm audit --audit-level=high",
     "audit:pip": "cd apps/api && pip-audit -r requirements.txt",
     "audit": "pnpm audit:npm && pnpm audit:pip"

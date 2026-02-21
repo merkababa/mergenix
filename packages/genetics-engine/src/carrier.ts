@@ -420,7 +420,13 @@ export function calculateOffspringRiskXLinked(
     };
   }
 
-  // For males (XY), "carrier" doesn't exist -- hemizygous means affected
+  // DTC chip convention for hemizygous male X-loci:
+  // Males have only one X chromosome (XY), so they are hemizygous at every X-linked locus.
+  // However, DTC genotyping files always report two alleles — e.g., "GG" means hemizygous G,
+  // not true homozygous. The chip software duplicates the single observed allele to fill the
+  // diploid genotype field. This means a male "carrier" (one pathogenic X allele) is
+  // clinically equivalent to "affected" because there is no second allele to mask the variant.
+  // We therefore map any pathogenic male status (carrier OR affected) to 'affected' here.
   const maleStatus: 'normal' | 'affected' =
     parentBStatus === 'carrier' || parentBStatus === 'affected' ? 'affected' : 'normal';
   const femaleStatus = parentAStatus; // normal, carrier, or affected

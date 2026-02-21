@@ -34,6 +34,10 @@ interface DiseaseVariantInfo {
  * A genotype is considered valid if:
  * - It is a non-empty string
  * - It is not the no-call sentinel "--"
+ * - It is not the no-call sentinel "00" (some DTC formats use "00" to represent
+ *   an uncalled position; carrier.ts rejects it via NO_CALL_PATTERNS — coverage.ts
+ *   must match that behavior so coverage percentages are not inflated by
+ *   uncalled variants)
  * - It is not composed entirely of dashes or whitespace
  *
  * @param genotype - The genotype string to validate
@@ -45,6 +49,12 @@ function isValidGenotype(genotype: string): boolean {
   }
   // Reject no-call sentinels: "--", "---", etc.
   if (/^-+$/.test(genotype.trim())) {
+    return false;
+  }
+  // Reject "00": the no-call sentinel used by some DTC platforms.
+  // carrier.ts uses NO_CALL_PATTERNS = new Set(['--', '00', '']) to reject this;
+  // coverage.ts must be consistent to avoid inflating coverage percentages.
+  if (genotype.trim() === '00') {
     return false;
   }
   return true;

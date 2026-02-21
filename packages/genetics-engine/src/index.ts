@@ -188,11 +188,17 @@ export type { StrandAnalysisResult, ReferenceAllele } from './strand';
 // ─── Coverage Calculator ───────────────────────────────────────────────────
 export { calculateDiseaseCoverage, calculateCoverageMetrics, getCoverageSummary } from './coverage';
 
-// ─── Couple/Offspring Combiner ─────────────────────────────────────────────
+// ─── Offspring Risk (Punnett-Square Arithmetic) ────────────────────────────
+// Direct exports from the extracted offspring-risk.ts module.
+// The same functions are also re-exported from combiner.ts for backward compat.
 export {
   calculateARRisk,
   calculateADRisk,
   calculateXLinkedRisk,
+} from './offspring-risk';
+
+// ─── Couple/Offspring Combiner ─────────────────────────────────────────────
+export {
   combineForCondition,
   combineAllConditions,
 } from './combiner';

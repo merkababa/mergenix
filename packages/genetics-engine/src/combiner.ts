@@ -3,8 +3,9 @@
  *
  * Combines two parents' genotype data to predict offspring genetic outcomes
  * using Mendelian inheritance. This is a higher-level abstraction over the
- * individual risk calculators in carrier.ts — it takes pre-analyzed carrier
- * statuses and produces offspring probability predictions for each condition.
+ * raw Punnett-square arithmetic in offspring-risk.ts — it takes pre-analyzed
+ * carrier statuses and produces offspring probability predictions for each
+ * condition.
  *
  * Supports three inheritance patterns:
  * - Autosomal recessive (AR): Both parents must carry the variant
@@ -22,11 +23,23 @@ import type {
   XLinkedOffspringRisk,
 } from '@mergenix/shared-types';
 
+// ─── Punnett-Square Arithmetic (delegated to offspring-risk.ts) ──────────────
+//
+// offspring-risk.ts is the single source of truth for raw Mendelian risk
+// arithmetic (Item 7 refactor). The functions are re-exported here under the
+// same names so that all existing imports from combiner.ts continue to work
+// without modification.
+export {
+  calculateARRisk,
+  calculateADRisk,
+  calculateXLinkedRisk,
+} from './offspring-risk';
+
 import {
-  calculateOffspringRiskAR,
-  calculateOffspringRiskAD,
-  calculateOffspringRiskXLinked,
-} from './carrier';
+  calculateARRisk,
+  calculateADRisk,
+  calculateXLinkedRisk,
+} from './offspring-risk';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -61,66 +74,6 @@ export interface OffspringPrediction {
   isSexLinked: boolean;
   /** NSGC counseling link (included for AD conditions). */
   counselingUrl?: string;
-}
-
-// ─── Offspring Risk Calculation (delegated to carrier.ts) ────────────────────
-//
-// The Mendelian offspring risk calculation logic (AR, AD, X-linked) lives in
-// carrier.ts as the single source of truth. The combiner re-exports these
-// functions under shorter names for backward compatibility with existing
-// consumers and tests.
-//
-// carrier.ts contains the canonical risk lookup tables and calculation logic
-// for individual carrier analysis. The combiner operates at a higher level,
-// taking pre-analyzed carrier statuses and combining them into offspring
-// predictions. Both modules need the same Mendelian math, so we delegate
-// to carrier.ts to avoid duplication.
-
-/**
- * Calculate offspring risk for autosomal recessive inheritance.
- * Delegates to carrier.ts calculateOffspringRiskAR.
- * @see calculateOffspringRiskAR in carrier.ts
- */
-export const calculateARRisk: (
-  parent1: CarrierStatus,
-  parent2: CarrierStatus,
-) => OffspringRisk = calculateOffspringRiskAR;
-
-/**
- * Calculate offspring risk for autosomal dominant inheritance.
- * Delegates to carrier.ts calculateOffspringRiskAD.
- * @see calculateOffspringRiskAD in carrier.ts
- */
-export const calculateADRisk: (
-  parent1: CarrierStatus,
-  parent2: CarrierStatus,
-) => OffspringRisk = calculateOffspringRiskAD;
-
-/**
- * Calculate offspring risk for X-linked inheritance.
- * Returns sex-stratified risks (sons vs daughters).
- *
- * Wraps carrier.ts calculateOffspringRiskXLinked to add the parent1IsFemale
- * parameter for parent sex swapping. carrier.ts assumes parentA=female,
- * parentB=male. This wrapper remaps arguments when parent1IsFemale=false.
- *
- * @param parent1 - Carrier status of parent 1
- * @param parent2 - Carrier status of parent 2
- * @param parent1IsFemale - Which parent is female. Defaults to true.
- * @returns Sex-stratified offspring risk with sons, daughters, and overall averages
- */
-export function calculateXLinkedRisk(
-  parent1: CarrierStatus,
-  parent2: CarrierStatus,
-  parent1IsFemale: boolean = true,
-): XLinkedOffspringRisk {
-  // carrier.ts assumes parentA=female(XX), parentB=male(XY).
-  // Swap arguments if parent1 is not the female parent.
-  if (parent1IsFemale) {
-    return calculateOffspringRiskXLinked(parent1, parent2);
-  } else {
-    return calculateOffspringRiskXLinked(parent2, parent1);
-  }
 }
 
 // ─── Single Condition Combiner ───────────────────────────────────────────────
