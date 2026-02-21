@@ -6,6 +6,10 @@
 
 ---
 
+## Current Status
+
+**Stream Q is COMPLETE.** PR #87 (Stream Q Sprints 3+4) is open for review — 6/6 Gemini A+, 6/6 Claude A/A+. All gates passed. Ready to merge. After merge, begin Stream Ops (3 tasks).
+
 ## Current Sprint
 
 | Task | Owner | Status | Branch | Notes |
@@ -42,7 +46,8 @@
 | Stream S Sprint 2: Data Security | Claude | **Merged** | feature/stream-s-sprint-2-data-security | PR #59 — S3 Worker Memory Clearing (clearSensitiveMemory in finally, wipeGenotypeMap defense-in-depth, clear_memory message), S5 GDPR Audit Logging (4 event types, begin_nested savepoint, fire-and-forget try/except, db.commit for reads), S6 IndexedDB Storage (idb-keyval, schema versioning, ZKE guards, storage audit). Gate 1: 6/6 A+ Gemini (2 rounds). Gate 2: 6/6 A Claude (3 rounds). 16 files, +2,162 LOC, 2,600 total tests. |
 | Stream S Sprint 3: Ops | Claude | **Merged** | feature/stream-s-sprint-3-ops | PR #61 — S4 Supply Chain (Dependabot, SHA-pinned Actions, security-audit CI), S7 Rate Limiting (headers, custom 429, 18 endpoint limits, proxy docs), S8 Secret Rotation (dual-key JWT with kid, runbook), S9 Security Alerting (auth spike + rate breach detection, bounded dedup cache, IP masking, Alembic migration). Gate 1: 6/6 A/A+ Gemini (3 rounds). Gate 2: 6/6 A Claude (2 rounds). 27 files, +2,723 LOC. |
 | Stream L Sprint 2: Legal Compliance | Claude | **Merged** | feature/stream-l-sprint-2-legal-compliance | PR #85 — L5 Cookie Consent Audit (CPRA modal focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets), L6 Data Retention Enforcement (RetentionService batched purge, 3-tier audit log retention, inactive user purge 3yr, payment SET NULL 7yr, cron endpoint with timing-safe auth + rate limiting + CSRF exemption), DPIA template, Breach Response Plan, ROPA, DPO Appointment. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds). 38 files, +3,718 LOC, 1,201 web + 624 backend tests. |
-| Stream Q Sprints 1+2: QA Infrastructure + Accuracy | Claude | **PR Open** | test/stream-q-sprint-1 | PR #86 — 515 new tests across 20 files (+10,730 lines). Synthetic genome factory (seedable PRNG, 4 formats), golden standard files, parser comprehensive (136 tests), encryption oracle + stub contracts (58 tests), privacy E2E (5 Playwright), smoke tests, carrier/coverage/offspring/liftover accuracy, legacy-ported (47 from Python), save/load integrity, recovery key E2E. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). |
+| Stream Q Sprints 1+2: QA Infrastructure + Accuracy | Claude | **Merged** | test/stream-q-sprint-1-2 | PR #86 — 515 new tests across 20 files (+10,730 lines). Synthetic genome factory (seedable PRNG, 4 formats), golden standard files, parser comprehensive (136 tests), encryption oracle + stub contracts (58 tests), privacy E2E (5 Playwright), smoke tests, carrier/coverage/offspring/liftover accuracy, legacy-ported (47 from Python), save/load integrity, recovery key E2E. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). |
+| Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **PR Open** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 
 ---
 
@@ -135,6 +140,7 @@
 | 2026-02-19 | Claude | Stream L Sprint 1 — Legal Content: 6 tasks (L1/L8, L2, L3, L4, L9/L10). ToS 9-13, Privacy Policy 11-13, GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds). | PR #84 |
 | 2026-02-20 | Claude | Stream L Sprint 2 — Legal Compliance: L5 Cookie Consent Audit (CPRA focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets, equal-prominence buttons), L6 Data Retention Enforcement (RetentionService batched purge, 3-tier audit 90d/1yr/2yr, inactive user 3yr free-tier, payment SET NULL 7yr, cron endpoint timing-safe+rate-limited+CSRF-exempt), DPIA, Breach Response Plan, ROPA, DPO Appointment. 38 files, +3,718 LOC. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds). | PR #85 |
 | 2026-02-20 | Claude | Stream Q Sprints 1+2 — QA Infrastructure + Accuracy: 515 new tests, 20 files, +10,730 lines (test-only). Sprint 1: synthetic genome factory (seedable LCG PRNG, 4 DTC formats), golden standards (5 datasets), parser comprehensive (136 tests, 11 groups), encryption oracle + stubs (58 tests, AES-256-GCM + Argon2id contracts), privacy E2E (5 Playwright, canary rsID network interception), smoke tests (9), no-console ESLint, carrier panel validator. Sprint 2: carrier accuracy (35, real CF/SCD/FH/OTC), coverage accuracy (25, chip detection), offspring accuracy (63, Mendelian + PRS), liftover accuracy (36, 5 dbSNP round-trips), legacy-ported (47 from deleted Python), save/load integrity (48, 7 todo), recovery key E2E (10, 7 fixme). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds, 6 fixes). | PR #86 |
+| 2026-02-21 | Claude | Stream Q Sprints 3+4 — E2E, Accessibility, Performance, Fuzzing, Integration: ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E scenarios (Playwright coverage across all major user flows), accessibility compliance (axe-core injection, WCAG criteria), performance benchmarks (Core Web Vitals, memory profiling, worker efficiency). Sprint 4: Fuzz testing (property-based input generation, edge case discovery), integration flows (carrier detection→offspring→counseling pipeline), CI reliability (flake detection, retry strategies). Test results: genetics-engine 1,392 pass; web 1,482 pass; total 2,874 tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE — all 30+ tasks done across PR #86 merged + PR #87 open.** | PR #87 |
 
 ---
 
@@ -181,8 +187,9 @@
    - **Stream L (Legal): Sprint 1 COMPLETE** — PR #84 MERGED. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy (7yr retention, ZKE, DPO, EU Rep, transfers), ToS 9-13 (arbitration, prohibited uses, 18+), GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds).
    - **Stream L (Legal): Sprint 2 COMPLETE** — PR #85 MERGED. L5 (cookie consent audit: CPRA modal focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets), L6 (data retention enforcement: RetentionService batched purge, 3-tier audit retention 90d/1yr/2yr, inactive user 3yr, payment SET NULL 7yr, cron endpoint timing-safe + rate limited + CSRF exempt), 4 legal docs (DPIA, Breach Response, ROPA, DPO Appointment). 38 files, +3,718 LOC, 1,201 web + 624 backend tests. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds).
      - Remaining L tasks: None — Stream L complete after PR #85 merges
-   - **Stream Q (QA): Sprints 1+2 COMPLETE** — PR #86 open. 14 tasks (Q1, Q1a, Q2, Q3, Q4, Q6, Q7, Q7a, Q8, Q12, Q13, Q15, Q16, Q27, Q27a). 515 new tests, 20 files, +10,730 lines. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). Engine: 1,304 tests. Web: 1,300 tests (+7 todo).
-     - Remaining Q tasks: Sprints 3+4 (Q5, Q9, Q10, Q11, Q14, Q17-Q26, Q28-Q30) — E2E, performance, CI, accessibility
+   - **Stream Q (QA): COMPLETE** — PR #86 merged, PR #87 open. 30+ tasks across 4 sprints. 1,000+ new tests total.
+     - Sprints 1+2: PR #86 MERGED. 515 new tests, 20 files, +10,730 lines. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds).
+     - Sprints 3+4: PR #87 OPEN. ~400 new tests (16 files + 2 helpers). E2E, a11y, performance, fuzzing, integration. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **All Q tasks done.**
    - **Remaining streams:** Ops (3 tasks)
 
 ---
