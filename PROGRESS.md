@@ -9,6 +9,7 @@
 ## Current Status
 
 **Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
+**Coming Soon page:** PR #89 — review-complete (8/8 A+ Gemini + 8/8 A Claude). Ready to merge.
 
 ## Current Sprint
 
@@ -49,6 +50,7 @@
 | Stream Q Sprints 1+2: QA Infrastructure + Accuracy | Claude | **Merged** | test/stream-q-sprint-1-2 | PR #86 — 515 new tests across 20 files (+10,730 lines). Synthetic genome factory (seedable PRNG, 4 formats), golden standard files, parser comprehensive (136 tests), encryption oracle + stub contracts (58 tests), privacy E2E (5 Playwright), smoke tests, carrier/coverage/offspring/liftover accuracy, legacy-ported (47 from Python), save/load integrity, recovery key E2E. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). |
 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **Merged** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
+| Coming Soon Page with Site Lock | Claude | **Review Complete** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). Ready to merge. |
 
 ---
 
