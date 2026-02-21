@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=@mergenix/web",
+  "installCommand": "cd ../.. && corepack enable && pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "regions": ["fra1"]
+}

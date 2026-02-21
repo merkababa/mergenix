@@ -30,7 +30,7 @@
  *   The "present" case for DecompressionStream uses a mock.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import {
   detectWebWorker,
@@ -138,7 +138,7 @@ describe("detectTransferableArrayBuffer", () => {
     // checks `typeof ArrayBuffer !== "undefined"`, so it correctly returns
     // true for these browsers — the postMessage transfer mechanism works
     // without ArrayBuffer.prototype.transfer.
-    const originalTransfer = (ArrayBuffer.prototype as Record<string, unknown>)["transfer"];
+    const originalTransfer = (ArrayBuffer.prototype as unknown as Record<string, unknown>)["transfer"];
     try {
       // Remove the .transfer method from the prototype (simulate older browser)
       Object.defineProperty(ArrayBuffer.prototype, "transfer", {
@@ -160,7 +160,7 @@ describe("detectTransferableArrayBuffer", () => {
       } else {
         // If .transfer was never present in this environment, delete the stub
         try {
-          delete (ArrayBuffer.prototype as Record<string, unknown>)["transfer"];
+          delete (ArrayBuffer.prototype as unknown as Record<string, unknown>)["transfer"];
         } catch {
           // Non-configurable in strict environments — leave as undefined
         }
