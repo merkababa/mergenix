@@ -154,7 +154,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    *   - PUT    /api/analyses/analysis-001 → 200 (re-encrypted envelope)
    */
   test.fixme(
-    'create account → save encrypted analysis → generate recovery key → password reset → recover with key → verify data',
+    'TODO(stream-ops): create account → save encrypted analysis → generate recovery key → password reset → recover with key → verify data',
     async ({ page }) => {
       // ── Step 1: Register ────────────────────────────────────────────────
       // TODO(B3): Mock POST /auth/register + GET /auth/me
@@ -226,7 +226,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
       // await expect(page.getByText(/Cystic Fibrosis/i)).toBeVisible();
 
       // This stub must be removed when B3 is implemented.
-      expect(true).toBe(true); // placeholder — remove when test body is enabled
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 
@@ -262,7 +262,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    *   - The decryption failure happens client-side (no additional mock needed)
    */
   test.fixme(
-    'wrong recovery key returns appropriate error, not garbage data',
+    'TODO(stream-ops): wrong recovery key returns appropriate error, not garbage data',
     async ({ page }) => {
       // ── Mock: analysis endpoint returns a valid encrypted envelope ──────
       // await page.route(`${API_BASE}/api/analyses/analysis-001`, async (route) => {
@@ -303,7 +303,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
       // expect(errorText).not.toMatch(/correct key is/i);
       // expect(errorText).not.toMatch(/[0-9a-f]{64}/); // Must not show the real key
 
-      expect(true).toBe(true); // placeholder — remove when test body is enabled
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 
@@ -344,7 +344,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    *   - apps/web/__tests__/pdf-document-builder.test.ts — PDF content unit tests
    */
   test.fixme(
-    'recovery key PDF download contains the actual recovery key',
+    'TODO(stream-ops): recovery key PDF download contains the actual recovery key',
     async ({ page }) => {
       // ── Navigate to security settings ────────────────────────────────────
       // await page.goto('/account');
@@ -391,7 +391,7 @@ test.describe('Recovery Key — Full E2E Flow', () => {
       //
       // (Tested at unit level in pdf-document-builder.test.ts when implemented)
 
-      expect(true).toBe(true); // placeholder — remove when test body is enabled
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 });
@@ -420,7 +420,7 @@ test.describe('Recovery Key — Security Properties', () => {
    *   which provides cryptographically secure randomness — guaranteed unique per call.
    */
   test.fixme(
-    'newly generated recovery key is different from the previous key',
+    'TODO(stream-ops): newly generated recovery key is different from the previous key',
     async ({ page }) => {
       // await page.goto('/account');
       // await page.getByRole('tab', { name: /security/i }).click();
@@ -438,7 +438,7 @@ test.describe('Recovery Key — Security Properties', () => {
       // expect(key2).toMatch(/^[0-9a-f]{64}$/);
       // expect(key1).not.toBe(key2);
 
-      expect(true).toBe(true);
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 
@@ -459,7 +459,7 @@ test.describe('Recovery Key — Security Properties', () => {
    * a GET request — the implementation must use POST or blob URLs to avoid this.
    */
   test.fixme(
-    'recovery key is never transmitted to the backend server',
+    'TODO(stream-ops): recovery key is never transmitted to the backend server',
     async ({ page }) => {
       // const outgoingBodies: string[] = [];
 
@@ -485,7 +485,7 @@ test.describe('Recovery Key — Security Properties', () => {
       //   expect(body).not.toContain(recoveryKey!);
       // }
 
-      expect(true).toBe(true);
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 
@@ -503,7 +503,7 @@ test.describe('Recovery Key — Security Properties', () => {
    *   4. Assert: recovery key is now visible and matches expected format
    */
   test.fixme(
-    'recovery key is masked by default and requires explicit reveal action',
+    'TODO(stream-ops): recovery key is masked by default and requires explicit reveal action',
     async ({ page }) => {
       // await page.goto('/account');
       // await page.getByRole('tab', { name: /security/i }).click();
@@ -526,7 +526,7 @@ test.describe('Recovery Key — Security Properties', () => {
       // const key = (await revealedDisplay.textContent())?.replace(/\s/g, '');
       // expect(key).toMatch(/^[0-9a-f]{64}$/);
 
-      expect(true).toBe(true);
+      // Placeholder removed — test.fixme() already prevents execution.
     },
   );
 });

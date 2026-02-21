@@ -20,6 +20,25 @@ const TEXT_DARK = '#1a1a2e';
 const TEXT_MUTED = '#6b7280';
 const BORDER_COLOR = '#e5e7eb';
 
+/**
+ * Font sizes for each pdfmake named heading style.
+ *
+ * Exported so that tests can assert the visual heading hierarchy against the
+ * actual production values rather than duplicating magic numbers locally.
+ *
+ *   PDF_HEADING_FONT_SIZES.title       — H1 equivalent (document title)
+ *   PDF_HEADING_FONT_SIZES.sectionTitle — H2 equivalent (major section headings)
+ *   PDF_HEADING_FONT_SIZES.sectionHeader — H3 equivalent (subsection headings)
+ */
+export const PDF_HEADING_FONT_SIZES = {
+  /** H1 equivalent — document title. */
+  title: 22,
+  /** H2 equivalent — major section headings (e.g., "Carrier Screening Results"). */
+  sectionTitle: 16,
+  /** H3 equivalent — subsection headings (e.g., "Report Details"). */
+  sectionHeader: 14,
+} as const;
+
 // ─── Common Table Layout ────────────────────────────────────────────────────
 
 /** Shared table layout used across all data section tables in the PDF. */
@@ -573,7 +592,7 @@ export function buildPdfDocument(result: FullAnalysisResult): TDocumentDefinitio
     },
     styles: {
       title: {
-        fontSize: 22,
+        fontSize: PDF_HEADING_FONT_SIZES.title,
         bold: true,
         color: TEXT_DARK,
       },
@@ -582,12 +601,12 @@ export function buildPdfDocument(result: FullAnalysisResult): TDocumentDefinitio
         color: TEXT_MUTED,
       },
       sectionHeader: {
-        fontSize: 14,
+        fontSize: PDF_HEADING_FONT_SIZES.sectionHeader,
         bold: true,
         color: BRAND_TEAL,
       },
       sectionTitle: {
-        fontSize: 16,
+        fontSize: PDF_HEADING_FONT_SIZES.sectionTitle,
         bold: true,
         color: TEXT_DARK,
       },
