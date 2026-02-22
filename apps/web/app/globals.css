@@ -468,6 +468,105 @@ section,
 .stagger-5 { animation-delay: 0.25s; }
 .stagger-6 { animation-delay: 0.3s; }
 
+/* Coming Soon page animations */
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes biolum-pulse {
+  0%, 100% { filter: drop-shadow(0 0 30px rgba(6, 214, 160, 0.4)); }
+  50%       { filter: drop-shadow(0 0 55px rgba(6, 214, 160, 0.75)); }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes dna-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; transform: scale(1.02); }
+}
+
+@keyframes spin-sm {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.dna-spin {
+  animation:
+    dna-rotate 9s linear infinite,
+    biolum-pulse 3s ease-in-out infinite;
+  transform-origin: center center;
+  display: block;
+}
+
+.headline-gradient {
+  background: linear-gradient(135deg, #06d6a0, #8b5cf6, #06b6d4);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.brand-text {
+  background: linear-gradient(135deg, #06d6a0, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fade-slide-up {
+  animation: fade-slide-up 0.65s ease both;
+}
+
+.input-wrapper {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: rgba(6, 214, 160, 0.35);
+  box-shadow: 0 0 0 1px rgba(6, 214, 160, 0.15), 0 0 24px rgba(6, 214, 160, 0.08);
+}
+
+.input-wrapper:hover {
+  border-color: rgba(6, 214, 160, 0.25);
+}
+
+.input-wrapper.shake {
+  animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.submit-btn {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: #05c090;
+  box-shadow: 0 0 18px rgba(6, 214, 160, 0.45);
+}
+
+.page-fade-out {
+  animation: fade-out 0.5s ease forwards;
+}
+
+.spinner {
+  animation: spin-sm 0.7s linear infinite;
+}
+
 /* ============================================================
    High Contrast Mode (F33)
    Activated via data-contrast="high" on <html>

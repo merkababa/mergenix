@@ -36,9 +36,9 @@ describe('middleware', () => {
     vi.clearAllMocks();
   });
 
-  it('/account without cookie redirects to /login?returnUrl=/account', () => {
+  it('/account without cookie redirects to /login?returnUrl=/account', async () => {
     const req = createMockRequest('/account');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockRedirect).toHaveBeenCalledTimes(1);
     const redirectUrl: URL = mockRedirect.mock.calls[0][0];
@@ -46,17 +46,17 @@ describe('middleware', () => {
     expect(redirectUrl.searchParams.get('returnUrl')).toBe('/account');
   });
 
-  it('/account with cookie passes through', () => {
+  it('/account with cookie passes through', async () => {
     const req = createMockRequest('/account', true);
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('/analysis without cookie redirects to /login?returnUrl=/analysis', () => {
+  it('/analysis without cookie redirects to /login?returnUrl=/analysis', async () => {
     const req = createMockRequest('/analysis');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockRedirect).toHaveBeenCalledTimes(1);
     const redirectUrl: URL = mockRedirect.mock.calls[0][0];
@@ -64,59 +64,59 @@ describe('middleware', () => {
     expect(redirectUrl.searchParams.get('returnUrl')).toBe('/analysis');
   });
 
-  it('/login without cookie passes through', () => {
+  it('/login without cookie passes through', async () => {
     const req = createMockRequest('/login');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('/login with cookie redirects to /account', () => {
+  it('/login with cookie redirects to /account', async () => {
     const req = createMockRequest('/login', true);
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockRedirect).toHaveBeenCalledTimes(1);
     const redirectUrl: URL = mockRedirect.mock.calls[0][0];
     expect(redirectUrl.pathname).toBe('/account');
   });
 
-  it('/register with cookie redirects to /account', () => {
+  it('/register with cookie redirects to /account', async () => {
     const req = createMockRequest('/register', true);
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockRedirect).toHaveBeenCalledTimes(1);
     const redirectUrl: URL = mockRedirect.mock.calls[0][0];
     expect(redirectUrl.pathname).toBe('/account');
   });
 
-  it('/ (public) without cookie passes through', () => {
+  it('/ (public) without cookie passes through', async () => {
     const req = createMockRequest('/');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('/ (public) with cookie passes through', () => {
+  it('/ (public) with cookie passes through', async () => {
     const req = createMockRequest('/', true);
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('/forgot-password without cookie passes through', () => {
+  it('/forgot-password without cookie passes through', async () => {
     const req = createMockRequest('/forgot-password');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('returnUrl preserved in login redirect', () => {
+  it('returnUrl preserved in login redirect', async () => {
     const req = createMockRequest('/subscription/manage');
-    const result = middleware(req);
+    await middleware(req);
 
     expect(mockRedirect).toHaveBeenCalledTimes(1);
     const redirectUrl: URL = mockRedirect.mock.calls[0][0];

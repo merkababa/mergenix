@@ -234,13 +234,16 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
-    expect(screen.getByText('Carrier Screening Results')).toBeInTheDocument();
+    expect(screen.getByText('Raw Genotype Browser')).toBeInTheDocument();
   });
 
   it('shows severity badges', () => {
     useAnalysisStore.setState({ fullResults: mockResults });
 
     render(<CarrierTab />);
+
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
 
     // 2 high severity badges (Cystic Fibrosis + Tay-Sachs)
     const highBadges = screen.getAllByText('high');
@@ -293,6 +296,9 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
+
     // PunnettSquare renders with role="table"
     const tables = screen.getAllByRole('table');
     // Cystic Fibrosis and Tay-Sachs both have both parents as carriers
@@ -303,6 +309,9 @@ describe('CarrierTab', () => {
     useAnalysisStore.setState({ fullResults: mockResults });
 
     render(<CarrierTab />);
+
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
 
     // Cystic Fibrosis has 25% affected risk
     const riskValues = screen.getAllByText('25%');
@@ -362,7 +371,9 @@ describe('CarrierTab', () => {
     fireEvent.click(showButtons[0]);
 
     // After expanding, gene and rsID should be visible
-    expect(screen.getByText('CFTR')).toBeInTheDocument();
+    // In Research Mode, gene is also shown in the card header summary, so we might find multiple
+    const geneElements = screen.getAllByText('CFTR');
+    expect(geneElements.length).toBeGreaterThan(0);
     expect(screen.getByText('rs1')).toBeInTheDocument();
     // Button should now say "Hide Details"
     expect(screen.getByText('Hide Details')).toBeInTheDocument();
@@ -373,6 +384,9 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
+
     // All 3 results are autosomal_recessive, displayed as "autosomal recessive"
     const inheritanceBadges = screen.getAllByText('autosomal recessive');
     expect(inheritanceBadges.length).toBe(3);
@@ -382,6 +396,9 @@ describe('CarrierTab', () => {
     useAnalysisStore.setState({ fullResults: mockResults });
 
     render(<CarrierTab />);
+
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
 
     // 2 high_risk badges + 1 "High Risk" filter option = 3 total matches
     const highRiskMatches = screen.getAllByText('High Risk');
@@ -410,6 +427,9 @@ describe('CarrierTab', () => {
     useAnalysisStore.setState({ fullResults: xLinkedResults });
 
     render(<CarrierTab />);
+
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
 
     // The DMD condition should be rendered
     expect(screen.getByText('Duchenne Muscular Dystrophy')).toBeInTheDocument();
@@ -466,6 +486,9 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
+    // Switch to Clinical Mode (banner is hidden in Research Mode)
+    fireEvent.click(screen.getByText('Clinical'));
+
     // ClinicalTestingBanner uses role="alert"
     const alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
@@ -499,6 +522,9 @@ describe('CarrierTab', () => {
     useAnalysisStore.setState({ fullResults: resultsWithNotDetected });
 
     render(<CarrierTab />);
+
+    // Switch to Clinical Mode
+    fireEvent.click(screen.getByText('Clinical'));
 
     // PKU has low_risk + normal/normal parents + 66.7% coverage → shows "Moderate Residual Risk"
     const statusBadges = screen.getAllByRole('status');

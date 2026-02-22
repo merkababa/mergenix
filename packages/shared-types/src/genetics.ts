@@ -90,6 +90,10 @@ export interface CarrierResult {
   parentAStatus: CarrierStatus;
   /** Carrier status of parent B. */
   parentBStatus: CarrierStatus;
+  /** Raw genotype of parent A (e.g., "CT"). Optional for backward compatibility. */
+  parentAGenotype?: string;
+  /** Raw genotype of parent B (e.g., "CC"). Optional for backward compatibility. */
+  parentBGenotype?: string;
   /** Offspring risk percentages. For X-linked, includes sons/daughters sub-objects. */
   offspringRisk: OffspringRisk | XLinkedOffspringRisk;
   /** Overall risk classification. */

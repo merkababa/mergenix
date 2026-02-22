@@ -10,7 +10,7 @@ Purpose limitation: Your genetic data is used solely to generate the analysis yo
 
 Your rights: You may withdraw this consent at any time via Account Settings → Privacy. Withdrawal will trigger deletion of all saved analysis results associated with your account. Withdrawal does not affect the lawfulness of any processing carried out before you withdrew consent. You also have the right to access your data, request correction or erasure, and lodge a complaint with your national data protection authority.
 
-Important: Results are for educational and informational purposes only. They do not constitute medical advice, a clinical diagnostic test, or genetic counseling. Please consult a certified genetic counselor or healthcare provider before making any medical decisions.
+Important: The platform defaults to a "Research Mode" which displays raw genotype data (e.g., "rs123: C/T"). Any interpretation of this data into health risks or carrier status ("Clinical Mode") is an optional feature that you must explicitly activate. Results are for educational and informational purposes only. They do not constitute medical advice, a clinical diagnostic test, or genetic counseling. Please consult a certified genetic counselor or healthcare provider before making any medical decisions.
 
 Emotional preparation: Some results, such as carrier status for serious genetic conditions, may be unexpected or distressing. We recommend having a supportive person available when reviewing results. The National Society of Genetic Counselors can help you find a counselor at nsgc.org/findageneticcounselor. If you are currently pregnant, we strongly recommend reviewing carrier screening results with a genetic counselor rather than alone.
 
@@ -44,7 +44,8 @@ For questions or to exercise your CPRA rights, contact: privacy@mergenix.com`;
 
 export const PRE_PAYMENT_DISCLOSURE = `Before purchasing, please understand:
 \u2022 DTC genotyping chips analyze approximately 600,000–700,000 of the most well-studied genetic variants — the positions most relevant to health and trait research. This represents roughly 0.02% of the 3+ billion base pairs in the human genome. Coverage varies by chip manufacturer and version.
-\u2022 Our carrier screening analyzes 2,697 conditions. Not all variants for each condition may be detectable from your chip data.
+\u2022 Our carrier screening tool aligns your raw data against a reference panel of 2,697 conditions. Not all variants for each condition may be detectable from your chip data.
+\u2022 The "Premium" and "Pro" tiers purchase access to platform features including secure encrypted storage, PDF report generation, and advanced data filtering tools.
 \u2022 Trait predictions and polygenic risk scores are probabilistic estimates based on population-level GWAS data. They are not deterministic.
 \u2022 Accuracy of trait predictions and polygenic risk scores varies by ancestral background. Most underlying research (GWAS) has disproportionately studied European-ancestry populations. Users of other ancestral backgrounds may receive less precise estimates.
 \u2022 Results are for educational and informational purposes only — not clinical diagnostics or medical advice.

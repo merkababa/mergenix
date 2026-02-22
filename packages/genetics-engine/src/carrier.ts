@@ -974,6 +974,8 @@ export function analyzeCarrierRisk(
       description: disease.description,
       parentAStatus,
       parentBStatus,
+      parentAGenotype,
+      parentBGenotype,
       offspringRisk,
       riskLevel,
       rsid,

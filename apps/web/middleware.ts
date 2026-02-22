@@ -16,6 +16,11 @@
  */
 
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  deriveBypassToken,
+  timingSafeEqual,
+  BYPASS_COOKIE,
+} from "@/lib/coming-soon-crypto";
 
 const INDICATOR_COOKIE = "mergenix_logged_in";
 
@@ -36,8 +41,56 @@ function matchesPrefix(pathname: string, prefixes: string[]): boolean {
   );
 }
 
-export function middleware(request: NextRequest) {
+const COMING_SOON_PATH = "/coming-soon";
+
+/**
+ * Paths that are always allowed through when SITE_COMING_SOON=true.
+ * Each entry is checked with exact match OR exact-prefix match (e.g. /foo/bar
+ * is allowed if /foo is in the list, but /foobar is not).
+ */
+const COMING_SOON_ALLOWED_PATHS = [
+  COMING_SOON_PATH,
+  "/contact",
+  "/privacy",
+  "/api/coming-soon-bypass",
+];
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // ── Coming-soon site lock ───────────────────────────────────────────────────
+  // Check this FIRST, before any auth logic, so locked-out visitors never hit
+  // protected-route redirects that reveal internal route structure.
+  if (process.env.SITE_COMING_SOON === "true") {
+    const bypassSecret = process.env.SITE_BYPASS_SECRET ?? "";
+
+    // Step 1: Always allow through specific whitelisted paths.
+    // matchesPrefix uses exact match OR <path>/<subpath> — never bare startsWith
+    // which would allow /api/coming-soon-bypass-ANYTHING through.
+    if (matchesPrefix(pathname, COMING_SOON_ALLOWED_PATHS)) {
+      return NextResponse.next();
+    }
+
+    // Step 2: Allow requests that carry a valid bypass cookie through.
+    if (bypassSecret) {
+      const cookieBypass = request.cookies.get(BYPASS_COOKIE)?.value ?? "";
+      // Derive the expected HMAC token and compare constant-time.
+      const expectedToken = await deriveBypassToken(bypassSecret);
+      const valid = cookieBypass.length > 0 &&
+        await timingSafeEqual(cookieBypass, expectedToken, bypassSecret);
+      if (valid) {
+        // Valid bypass cookie — fall through to normal auth logic below.
+        // (intentional — do not return here)
+      } else {
+        return NextResponse.redirect(new URL(COMING_SOON_PATH, request.url));
+      }
+    } else {
+      // No secret configured — redirect everyone to the coming-soon page.
+      return NextResponse.redirect(new URL(COMING_SOON_PATH, request.url));
+    }
+  }
+  // ── End coming-soon site lock ───────────────────────────────────────────────
+
   const hasAuthCookie = request.cookies.has(INDICATOR_COOKIE);
 
   // Protected routes: redirect to login if not authenticated
@@ -65,16 +118,22 @@ export function middleware(request: NextRequest) {
 /**
  * Matcher config — only run middleware on pages, not on static assets,
  * API routes, or Next.js internals.
+ *
+ * API routes are excluded because they handle their own authentication
+ * (e.g., the coming-soon bypass route validates its own credentials).
+ * Running auth middleware on API routes is unnecessary overhead and can
+ * interfere with routes that intentionally accept unauthenticated requests.
  */
 export const config = {
   matcher: [
     /*
      * Match all request paths except:
+     * - api/ (API routes handle their own auth)
      * - _next/static (static files)
      * - _next/image (image optimization)
      * - favicon.ico, robots.txt, sitemap.xml
      * - Public asset folders
      */
-    "/((?!_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)",
+    "/((?!api/|_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)",
   ],
 };

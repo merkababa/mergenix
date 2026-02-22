@@ -117,6 +117,7 @@ interface CarrierResultCardProps {
   hasCoverage: boolean;
   coverageVariantsTested: number;
   coverageVariantsTotal: number;
+  isResearchMode: boolean;
 }
 
 const CarrierResultCard = memo(function CarrierResultCard({
@@ -131,6 +132,7 @@ const CarrierResultCard = memo(function CarrierResultCard({
   hasCoverage,
   coverageVariantsTested,
   coverageVariantsTotal,
+  isResearchMode,
 }: CarrierResultCardProps) {
   const xLinked = isXLinkedRisk(result.offspringRisk);
   const isNotDetected =
@@ -158,70 +160,90 @@ const CarrierResultCard = memo(function CarrierResultCard({
             </h4>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant={result.severity}>{result.severity}</Badge>
-              <Badge
-                variant={
-                  INHERITANCE_BADGE_MAP[result.inheritance] as
-                    | "autosomal-recessive"
-                    | "autosomal-dominant"
-                    | "x-linked"
-                }
-              >
-                {result.inheritance.replace(/_/g, " ")}
-              </Badge>
-              <Badge variant="default">
-                {RISK_LABELS[result.riskLevel] ?? result.riskLevel}
-              </Badge>
-              <ResidualRiskBadge
-                coveragePct={coveragePct}
-                diseaseName={result.condition}
-                isNotDetected={isNotDetected}
-              />
+              {!isResearchMode && (
+                <>
+                  <Badge
+                    variant={
+                      INHERITANCE_BADGE_MAP[result.inheritance] as
+                        | "autosomal-recessive"
+                        | "autosomal-dominant"
+                        | "x-linked"
+                    }
+                  >
+                    {result.inheritance.replace(/_/g, " ")}
+                  </Badge>
+                  <Badge variant="default">
+                    {RISK_LABELS[result.riskLevel] ?? result.riskLevel}
+                  </Badge>
+                  <ResidualRiskBadge
+                    coveragePct={coveragePct}
+                    diseaseName={result.condition}
+                    isNotDetected={isNotDetected}
+                  />
+                </>
+              )}
+              {isResearchMode && (
+                <Badge variant="outline" className="font-mono text-xs">
+                  rsID: {result.rsid}
+                </Badge>
+              )}
             </div>
           </div>
           <div className="text-right">
-            {canShowOffspring ? (
-              xLinked ? (
-                <div>
-                  <p className="text-xs font-medium text-[var(--text-muted)]">
-                    <span className="font-mono font-semibold text-[#f43f5e]">
-                      {(result.offspringRisk as XLinkedOffspringRisk).sons.affected}%
-                    </span>{" "}
-                    sons
-                  </p>
-                  <p className="text-xs font-medium text-[var(--text-muted)]">
-                    <span className="font-mono font-semibold text-[#06d6a0]">
-                      {(result.offspringRisk as XLinkedOffspringRisk).daughters.affected}%
-                    </span>{" "}
-                    daughters
-                  </p>
-                  <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
-                    Affected Risk
-                  </p>
-                </div>
+            {!isResearchMode ? (
+              canShowOffspring ? (
+                xLinked ? (
+                  <div>
+                    <p className="text-xs font-medium text-[var(--text-muted)]">
+                      <span className="font-mono font-semibold text-[#f43f5e]">
+                        {(result.offspringRisk as XLinkedOffspringRisk).sons.affected}%
+                      </span>{" "}
+                      sons
+                    </p>
+                    <p className="text-xs font-medium text-[var(--text-muted)]">
+                      <span className="font-mono font-semibold text-[#06d6a0]">
+                        {(result.offspringRisk as XLinkedOffspringRisk).daughters.affected}%
+                      </span>{" "}
+                      daughters
+                    </p>
+                    <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                      Affected Risk
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <p
+                      className={`font-heading text-2xl font-extrabold ${
+                        result.offspringRisk.affected >= 25
+                          ? "text-[#f43f5e]"
+                          : result.offspringRisk.affected > 0
+                            ? "text-[#f59e0b]"
+                            : "text-[#06d6a0]"
+                      }`}
+                    >
+                      {result.offspringRisk.affected}%
+                    </p>
+                    <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                      Offspring Risk
+                    </p>
+                  </>
+                )
               ) : (
-                <>
-                  <p
-                    className={`font-heading text-2xl font-extrabold ${
-                      result.offspringRisk.affected >= 25
-                        ? "text-[#f43f5e]"
-                        : result.offspringRisk.affected > 0
-                          ? "text-[#f59e0b]"
-                          : "text-[#06d6a0]"
-                    }`}
-                  >
-                    {result.offspringRisk.affected}%
-                  </p>
+                <div className="flex flex-col items-end gap-1" title="Upgrade to Pro for offspring risk predictions">
+                  <Lock className="h-4 w-4 text-[#8b5cf6]" aria-hidden="true" />
+                  <span className="text-xs font-medium text-[#8b5cf6]">Pro</span>
                   <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
                     Offspring Risk
                   </p>
-                </>
+                </div>
               )
             ) : (
-              <div className="flex flex-col items-end gap-1" title="Upgrade to Pro for offspring risk predictions">
-                <Lock className="h-4 w-4 text-[#8b5cf6]" aria-hidden="true" />
-                <span className="text-xs font-medium text-[#8b5cf6]">Pro</span>
+              <div className="text-right">
+                <span className="font-mono text-sm text-[var(--text-muted)]">
+                  {result.gene}
+                </span>
                 <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
-                  Offspring Risk
+                  Gene
                 </p>
               </div>
             )}
@@ -245,23 +267,35 @@ const CarrierResultCard = memo(function CarrierResultCard({
         <div className="mt-3 flex flex-wrap gap-4">
           <div className="flex items-center gap-2 text-sm text-[var(--text-body)]">
             <span className="font-medium">Parent A:</span>
-            <Badge
-              variant={
-                result.parentAStatus as "carrier" | "affected" | "normal"
-              }
-            >
-              {result.parentAStatus}
-            </Badge>
+            {isResearchMode ? (
+              <code className="rounded bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-xs">
+                {result.parentAGenotype?.split("").join("/") ?? "--"}
+              </code>
+            ) : (
+              <Badge
+                variant={
+                  result.parentAStatus as "carrier" | "affected" | "normal"
+                }
+              >
+                {result.parentAStatus}
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2 text-sm text-[var(--text-body)]">
             <span className="font-medium">Parent B:</span>
-            <Badge
-              variant={
-                result.parentBStatus as "carrier" | "affected" | "normal"
-              }
-            >
-              {result.parentBStatus}
-            </Badge>
+            {isResearchMode ? (
+              <code className="rounded bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-xs">
+                {result.parentBGenotype?.split("").join("/") ?? "--"}
+              </code>
+            ) : (
+              <Badge
+                variant={
+                  result.parentBStatus as "carrier" | "affected" | "normal"
+                }
+              >
+                {result.parentBStatus}
+              </Badge>
+            )}
           </div>
         </div>
 
@@ -462,6 +496,8 @@ export function CarrierTab() {
   const [riskFilter, setRiskFilter] = useState("");
   const [sortBy, setSortBy] = useState<"severity" | "name" | "risk">("severity");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  // Default to Research Mode (Raw Data) to mitigate regulatory risk
+  const [isResearchMode, setIsResearchMode] = useState(true);
 
   // Check if any carrier result has autosomal dominant inheritance
   const hasAutosomalDominant = useMemo(
@@ -543,10 +579,11 @@ export function CarrierTab() {
           hasCoverage={!!coverage}
           coverageVariantsTested={coverage?.variantsTested ?? 0}
           coverageVariantsTotal={coverage?.variantsTotal ?? 0}
+          isResearchMode={isResearchMode}
         />
       );
     },
-    [expandedId, canShowOffspring, coverageMetrics, handleToggleExpand],
+    [expandedId, canShowOffspring, coverageMetrics, handleToggleExpand, isResearchMode],
   );
 
   if (!fullResults) return null;
@@ -566,13 +603,40 @@ export function CarrierTab() {
       }}
     >
     <div data-privacy-mask="true" className="space-y-6">
-      {/* Clinical testing banner — prominent warning at top */}
-      <ClinicalTestingBanner variant="carrier" />
+      {/* Clinical testing banner — prominent warning at top (hidden in Research Mode) */}
+      {!isResearchMode && <ClinicalTestingBanner variant="carrier" />}
 
-      {/* Header */}
-      <h3 className="font-heading text-xl font-bold text-[var(--text-heading)]">
-        Carrier Screening Results
-      </h3>
+      {/* Header and Toggle */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="font-heading text-xl font-bold text-[var(--text-heading)]">
+          {isResearchMode ? "Raw Genotype Browser" : "Carrier Screening Results"}
+        </h3>
+        <div className="flex items-center gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-2">
+          <span className="text-xs font-medium text-[var(--text-muted)]">Mode:</span>
+          <button
+            type="button"
+            onClick={() => setIsResearchMode(true)}
+            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
+              isResearchMode
+                ? "bg-[var(--accent-teal)] text-white shadow-sm"
+                : "text-[var(--text-body)] hover:bg-[var(--bg-subtle)]"
+            }`}
+          >
+            Raw Data
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsResearchMode(false)}
+            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
+              !isResearchMode
+                ? "bg-[var(--accent-primary)] text-white shadow-sm"
+                : "text-[var(--text-body)] hover:bg-[var(--bg-subtle)]"
+            }`}
+          >
+            Clinical
+          </button>
+        </div>
+      </div>
 
       {/* Filter bar */}
       <div className="flex flex-wrap items-end gap-3">
