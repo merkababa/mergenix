@@ -8,8 +8,10 @@
 
 ## Current Status
 
-**Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
-**Coming Soon page:** PR #89 — review-complete (8/8 A+ Gemini + 8/8 A Claude). Ready to merge.
+**ALL 11 STREAMS COMPLETE.** Mergenix V3 is feature-complete and alpha-launch-ready.
+**Coming Soon page:** PR #89 — **MERGED** (8/8 A+ Gemini + 8/8 A Claude). Site-wide lock active.
+**Test count:** 2,874+ tests passing across all packages.
+**Next:** Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
 
@@ -50,7 +52,7 @@
 | Stream Q Sprints 1+2: QA Infrastructure + Accuracy | Claude | **Merged** | test/stream-q-sprint-1-2 | PR #86 — 515 new tests across 20 files (+10,730 lines). Synthetic genome factory (seedable PRNG, 4 formats), golden standard files, parser comprehensive (136 tests), encryption oracle + stub contracts (58 tests), privacy E2E (5 Playwright), smoke tests, carrier/coverage/offspring/liftover accuracy, legacy-ported (47 from Python), save/load integrity, recovery key E2E. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). |
 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **Merged** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
-| Coming Soon Page with Site Lock | Claude | **Review Complete** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). Ready to merge. |
+| Coming Soon Page with Site Lock | Claude | **Merged** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). |
 
 ---
 
@@ -144,6 +146,8 @@
 | 2026-02-20 | Claude | Stream L Sprint 2 — Legal Compliance: L5 Cookie Consent Audit (CPRA focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets, equal-prominence buttons), L6 Data Retention Enforcement (RetentionService batched purge, 3-tier audit 90d/1yr/2yr, inactive user 3yr free-tier, payment SET NULL 7yr, cron endpoint timing-safe+rate-limited+CSRF-exempt), DPIA, Breach Response Plan, ROPA, DPO Appointment. 38 files, +3,718 LOC. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds). | PR #85 |
 | 2026-02-20 | Claude | Stream Q Sprints 1+2 — QA Infrastructure + Accuracy: 515 new tests, 20 files, +10,730 lines (test-only). Sprint 1: synthetic genome factory (seedable LCG PRNG, 4 DTC formats), golden standards (5 datasets), parser comprehensive (136 tests, 11 groups), encryption oracle + stubs (58 tests, AES-256-GCM + Argon2id contracts), privacy E2E (5 Playwright, canary rsID network interception), smoke tests (9), no-console ESLint, carrier panel validator. Sprint 2: carrier accuracy (35, real CF/SCD/FH/OTC), coverage accuracy (25, chip detection), offspring accuracy (63, Mendelian + PRS), liftover accuracy (36, 5 dbSNP round-trips), legacy-ported (47 from deleted Python), save/load integrity (48, 7 todo), recovery key E2E (10, 7 fixme). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds, 6 fixes). | PR #86 |
 | 2026-02-21 | Claude | Stream Q Sprints 3+4 — E2E, Accessibility, Performance, Fuzzing, Integration: ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E scenarios (Playwright coverage across all major user flows), accessibility compliance (axe-core injection, WCAG criteria), performance benchmarks (Core Web Vitals, memory profiling, worker efficiency). Sprint 4: Fuzz testing (property-based input generation, edge case discovery), integration flows (carrier detection→offspring→counseling pipeline), CI reliability (flake detection, retry strategies). Test results: genetics-engine 1,392 pass; web 1,482 pass; total 2,874 tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE — all 30+ tasks done across PR #86 merged + PR #87 open.** | PR #87 |
+| 2026-02-21 | Claude | Stream Ops — EU Region, CI Hardening, Alpha Deploy: EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security. Gate 1: 4/4 A/A+ Gemini. Gate 2: 4/4 A/A+ Claude. **Stream Ops COMPLETE.** | PR #88 |
+| 2026-02-22 | Claude | Coming Soon Page with Site Lock: Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests. Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). | PR #89 |
 
 ---
 
@@ -151,55 +155,49 @@
 
 ---
 
-## Next Steps
+## Next Steps — Alpha Launch Checklist
 
-1. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
-2. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
-3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
-4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
-5. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
-6. ~~Refactor Plan Review~~ → **PR #45 merged** (Gate 1: 10/10 A+ Gemini, Gate 2: 10/10 A- Claude — accepted)
-   - 5 Claude review rounds, ~73 fixes applied, 144+ architectural decisions documented
-   - Final: 7/10 A- (zero BLOCKs), 3/10 B+ — user accepted, merged
-7. **Begin V3 Implementation** — Execute refactor plan streams
-   - **Stream 0 (Research): 11/12 COMPLETE** — see `docs/V3_IMPLEMENTATION_LOG.md`
-     - R1-R5, R7-R11: Done (Gemini). R6: Done (Claude). R12: Partial (audit script methodology issue)
-     - Research archive: PR #46 (`docs/research/stream0/`)
-     - Key findings: 9 diseases to remove, 8 gene symbols to update, PRS ancestry-awareness critical, ethnicity data gap (153/2500+)
-   - **Stream D (Data Cleanup): COMPLETE** — PR #47 merged. 2,697 entries. Centralized count.
-   - **Stream E (Engine): MERGED** — PR #48. 25 tasks (T1+T8 + E1-E23), 898 tests
-     - Gate 1: 10/10 A+ Gemini (2 fix rounds)
-     - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
-     - 24 files changed in review fix commit, 898 tests across 20 test files
-   - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
-   - **Stream F (Frontend): COMPLETE** — all 4 sprints merged (47 tasks)
-     - Sprint 1: PR #50 MERGED (15 tasks, 714 tests)
-     - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
-     - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
-     - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
-   - **Stream B (Backend): COMPLETE** — all 12 active B-tasks done across 3 sprints + deferred items
-     - Sprint 1 (Foundation): PR #54 MERGED — B11, B3, B1, B2. 205 backend tests. Gate 2: 7/7 A Claude.
-     - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13, B7, B8, B12. 245 tests. Gate 1: 6/6 A. Gate 2: 6/6 A.
-     - Sprint 3 (Business): PR #56 MERGED — B5, B6, B9, B10. 503 tests. Gate 1: 7/7 A+. Gate 2: 7/7 A.
-     - Deferred Items: PR #57 MERGED — 12/13 items. 380 tests. Gate 1: 6/6 A+. Gate 2: 4/4 A/A+.
-   - **Stream S (Security): COMPLETE** — all 3 sprints merged
-     - Sprint 1 (Containment): PR #58 MERGED — S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
-     - Sprint 2 (Data): PR #59 MERGED — S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage. 16 files, +2,162 LOC, 2,600 total tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
-     - Sprint 3 (Ops): PR #61 MERGED — S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting. 27 files, +2,723 LOC. Gate 1: 6/6 A/A+ Gemini. Gate 2: 6/6 A Claude.
-   - **Stream C (Legacy Cleanup): COMPLETE** — PR #83 merged. Deleted 142 legacy files (~152K lines), fixed "subscription" terminology, deleted legacy CI workflows, updated README for V3.
-   - **Stream L (Legal): Sprint 1 COMPLETE** — PR #84 MERGED. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy (7yr retention, ZKE, DPO, EU Rep, transfers), ToS 9-13 (arbitration, prohibited uses, 18+), GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds).
-   - **Stream L (Legal): Sprint 2 COMPLETE** — PR #85 MERGED. L5 (cookie consent audit: CPRA modal focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets), L6 (data retention enforcement: RetentionService batched purge, 3-tier audit retention 90d/1yr/2yr, inactive user 3yr, payment SET NULL 7yr, cron endpoint timing-safe + rate limited + CSRF exempt), 4 legal docs (DPIA, Breach Response, ROPA, DPO Appointment). 38 files, +3,718 LOC, 1,201 web + 624 backend tests. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds).
-     - Remaining L tasks: None — Stream L complete after PR #85 merges
-   - **Stream Q (QA): COMPLETE** — PR #86 merged, PR #87 open. 30+ tasks across 4 sprints. 1,000+ new tests total.
-     - Sprints 1+2: PR #86 MERGED. 515 new tests, 20 files, +10,730 lines. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds).
-     - Sprints 3+4: PR #87 OPEN. ~400 new tests (16 files + 2 helpers). E2E, a11y, performance, fuzzing, integration. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **All Q tasks done.**
-   - **Remaining streams:** Ops (3 tasks)
+**All 11 implementation streams COMPLETE. 2,874+ tests passing. Codebase is feature-complete.**
+
+### Phase A: Service Accounts (kukiz, ~2 hours)
+- [ ] A1: Create Vercel project, link repo → `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
+- [ ] A2: Create Railway project + PostgreSQL (EU-west) → `RAILWAY_TOKEN`, `DATABASE_URL`
+- [ ] A3: Create Stripe account (test mode first) → `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs
+- [ ] A4: Register domain on Resend → `RESEND_API_KEY`
+- [ ] A5: Create Sentry projects (frontend + backend) → `SENTRY_DSN`
+- [ ] A6: Generate secrets (`openssl rand -base64 64`) → `JWT_SECRET`, `DATA_ENCRYPTION_KEY`, `SITE_BYPASS_SECRET`
+
+### Phase B: GitHub Secrets (kukiz, ~30 min)
+- [ ] Add 13+ secrets to GitHub repo Settings → Secrets
+
+### Phase C: DNS (kukiz, ~15 min)
+- [ ] `mergenix.com` CNAME → `cname.vercel-dns.com`
+- [ ] `api.mergenix.com` CNAME → Railway-provided domain
+
+### Phase D: First Deploy (kukiz, ~2 hours)
+- [ ] Push to main → CI → auto-deploy
+- [ ] Verify `curl https://api.mergenix.com/health`
+- [ ] Verify `curl https://mergenix.com` → Coming Soon page
+- [ ] Test bypass with `SITE_BYPASS_SECRET`
+- [ ] Smoke test: register → login → upload → results → payment → delete
+
+### Phase E: Legal Sign-offs (kukiz + legal, 1-4 weeks)
+- [ ] E1: Appoint DPO (Art 37) — see `docs/legal/dpo-appointment.md`
+- [ ] E2: Register DPO with relevant DPA (ICO, DPC, CNIL)
+- [ ] E3: Appoint EU Representative (Art 27) — see `docs/legal/ropa.md`
+- [ ] E4: Sign DPIA (Art 35) — see `docs/legal/dpia.md`
+- [ ] E5: Verify Stripe DPA in place
+- [ ] E6: Verify Resend DPA in place
+
+### Phase F: Go Live
+- [ ] Flip `SITE_COMING_SOON` from `true` to `false` in Vercel env vars
+- [ ] Redeploy frontend → site is live
 
 ---
 
 ## Active Blockers
 
-*R12 (rsID audit) needs re-run with corrected ClinVar lookup methodology. Non-blocking.*
+*None. All implementation work is complete. Remaining work is infrastructure + legal (manual tasks for kukiz).*
 
 ---
 

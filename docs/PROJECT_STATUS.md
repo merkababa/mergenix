@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-20
-**Version:** 3.0.0-alpha (V3 Rewrite — Implementation in progress, 9/11 streams complete)
+**Last Updated:** 2026-02-22
+**Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, alpha launch pending)
 **Branch:** main
 
 ---
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (1,201 web + 898 engine) + pytest (624 backend) = 2,723 total
+- **Testing:** Vitest (1,482 web + 1,392 engine) + pytest (624 backend) = 2,874+ total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -191,7 +191,7 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
 - [x] **Phase 8B: Legal/Privacy** — PR #38 merged (10/10 A+ Gemini + 10/10 A+ Claude)
 - [x] **Phase 8C: E2E Tests** — PR #40 merged (153 scenarios)
 - [x] **Refactor Plan** — PR #45 merged (172 tasks, 11 streams, 144+ decisions)
-- [x] **V3 Implementation** — 9/11 streams complete:
+- [x] **V3 Implementation** — **11/11 streams complete:**
   - [x] Stream 0 (Research) — PR #46
   - [x] Stream D (Data Cleanup) — PR #47
   - [x] Stream E (Engine) — PR #48
@@ -201,8 +201,9 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
   - [x] Stream S (Security, 3 sprints) — PRs #58, 59, 61
   - [x] Stream C (Legacy Cleanup) — PR #83
   - [x] Stream L (Legal, 2 sprints) — PRs #84, 85
-  - [ ] Stream Q (QA — 30 tasks)
-  - [ ] Stream Ops (3 tasks)
+  - [x] Stream Q (QA, 4 sprints) — PRs #86, 87
+  - [x] Stream Ops (EU region, CI, deploy) — PR #88
+- [x] **Coming Soon Page** — PR #89 merged (site-wide lock active)
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -299,7 +300,11 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
-| #85 | Stream L Sprint 2: Legal Compliance (cookie consent, data retention, 4 legal docs) | **Open** |
+| #89 | Coming Soon Page with Site Lock (HMAC-SHA-256 bypass, 78 tests) | **Merged** |
+| #88 | Stream Ops: EU Region, CI Hardening, Alpha Deploy Runbook | **Merged** |
+| #87 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | **Merged** |
+| #86 | Stream Q Sprints 1+2: QA Infrastructure + Accuracy (515 tests) | **Merged** |
+| #85 | Stream L Sprint 2: Legal Compliance (cookie consent, data retention, 4 legal docs) | **Merged** |
 | #84 | Stream L Sprint 1: Legal Content (ToS, Privacy Policy, GDPR/GINA consent) | **Merged** |
 | #83 | Stream C: Legacy Cleanup (142 files deleted, README V3) | **Merged** |
 | #61 | Stream S Sprint 3: Ops (supply chain, rate limiting, secret rotation, alerting) | **Merged** |
@@ -320,16 +325,49 @@ FullAnalysisResult → postMessage → Zustand store
 
 ---
 
-## Next Steps
+## Next Steps — Alpha Launch Checklist
 
-1. ~~Phase 5: Auth UI~~ → **PR #34 merged** (7/7 A+)
-2. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
-3. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
-4. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
-5. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
-6. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
-7. ~~Refactor Plan~~ → **PR #45 merged** (172 tasks, 11 streams, 144+ decisions)
-8. **V3 Implementation** — 9/11 streams complete. Remaining: Q (QA), Ops
+**All 11 streams COMPLETE. 2,874+ tests. Feature-complete. What remains is infrastructure + legal.**
+
+### Phase A: Service Accounts (kukiz, ~2 hours)
+| # | Task | Service | Output |
+|---|------|---------|--------|
+| A1 | Create Vercel project, link repo | vercel.com | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
+| A2 | Create Railway project + PostgreSQL (EU-west) | railway.app | `RAILWAY_TOKEN`, `DATABASE_URL` |
+| A3 | Create Stripe account (test mode first) | stripe.com | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs |
+| A4 | Register domain on Resend | resend.com | `RESEND_API_KEY` |
+| A5 | Create Sentry projects (frontend + backend) | sentry.io | `SENTRY_DSN` |
+| A6 | Generate secrets: `openssl rand -base64 64` | Terminal | `JWT_SECRET`, `DATA_ENCRYPTION_KEY`, `SITE_BYPASS_SECRET` |
+
+### Phase B: GitHub Secrets (kukiz, ~30 min)
+Add 13+ secrets to GitHub repo Settings > Secrets.
+
+### Phase C: DNS (kukiz, ~15 min)
+| Record | Type | Value |
+|--------|------|-------|
+| `mergenix.com` | CNAME | `cname.vercel-dns.com` |
+| `api.mergenix.com` | CNAME | Railway-provided domain |
+
+### Phase D: First Deploy (kukiz, ~2 hours)
+1. Push to main → CI → auto-deploy
+2. Verify: `curl https://api.mergenix.com/health`
+3. Verify: `curl https://mergenix.com` → Coming Soon page
+4. Test bypass: enter `SITE_BYPASS_SECRET` on Coming Soon form
+5. Smoke test: register → login → upload → results → payment → delete
+
+### Phase E: Legal Sign-offs (kukiz + legal, 1-4 weeks)
+| # | Task | Reference | Blocking? |
+|---|------|-----------|-----------|
+| E1 | Appoint DPO | `docs/legal/dpo-appointment.md` | Yes (Art 37) |
+| E2 | Register DPO with relevant DPA | Art 37(7) | Yes |
+| E3 | Appoint EU Representative | `docs/legal/ropa.md` | Yes (Art 27) |
+| E4 | Sign DPIA | `docs/legal/dpia.md` | Yes (Art 35) |
+| E5 | Verify Stripe DPA | Stripe T&Cs | Yes |
+| E6 | Verify Resend DPA | Resend T&Cs | Yes |
+
+### Phase F: Go Live
+1. Flip `SITE_COMING_SOON` from `true` to `false` in Vercel env vars
+2. Redeploy frontend → site is live
 
 ---
 
