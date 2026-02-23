@@ -10,7 +10,8 @@
 
 **ALL 11 STREAMS COMPLETE.** Mergenix V3 is feature-complete and alpha-launch-ready.
 **Coming Soon page:** PR #89 — **MERGED** (8/8 A+ Gemini + 8/8 A Claude). Site-wide lock active.
-**Test count:** 2,874+ tests passing across all packages.
+**Web Polish:** PR #90 — **MERGED** (10/10 A/A+ Claude, 6 review rounds). 104 files, a11y + type safety + tier alignment + test coverage.
+**Test count:** 3,010+ tests passing across all packages (1,407 engine + 1,603 web).
 **Next:** Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
@@ -53,6 +54,7 @@
 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **Merged** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
 | Coming Soon Page with Site Lock | Claude | **Merged** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). |
+| Web Polish: A11y, Type Safety, Tier Alignment | Claude | **Merged** | review/web-polish-r4 | PR #90 — Multi-round Claude review (R1–R6) across 10 reviewer personas. Accessibility (heading hierarchy, ARIA roles, touch targets), type safety (Tier unions, Record types), business logic (aligned TIER_GATING with PRICING_TIERS: free diseases 25→0, traits 10→79, ethnicity all tiers), PGx exclusive bounds, OAuth CSRF validation, consent retry queue, 136+ new tests. 104 files, +2,639/-1,633 lines. Gate 2: 10/10 A/A+ Claude (6 rounds). 3,010 tests total. |
 
 ---
 
@@ -148,6 +150,7 @@
 | 2026-02-21 | Claude | Stream Q Sprints 3+4 — E2E, Accessibility, Performance, Fuzzing, Integration: ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E scenarios (Playwright coverage across all major user flows), accessibility compliance (axe-core injection, WCAG criteria), performance benchmarks (Core Web Vitals, memory profiling, worker efficiency). Sprint 4: Fuzz testing (property-based input generation, edge case discovery), integration flows (carrier detection→offspring→counseling pipeline), CI reliability (flake detection, retry strategies). Test results: genetics-engine 1,392 pass; web 1,482 pass; total 2,874 tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE — all 30+ tasks done across PR #86 merged + PR #87 open.** | PR #87 |
 | 2026-02-21 | Claude | Stream Ops — EU Region, CI Hardening, Alpha Deploy: EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security. Gate 1: 4/4 A/A+ Gemini. Gate 2: 4/4 A/A+ Claude. **Stream Ops COMPLETE.** | PR #88 |
 | 2026-02-22 | Claude | Coming Soon Page with Site Lock: Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests. Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). | PR #89 |
+| 2026-02-23 | Claude | Web Polish — A11y, Type Safety, Tier Alignment, Test Coverage: Multi-round Claude review (R1–R6) across 10 personas. h1 heading hierarchy, role="alert"/role="status", ARIA radiogroup, 44px touch targets, getTierVariant typed Tier, Record<RiskLevel>, TIER_GATING aligned with PRICING_TIERS (free diseases 25→0, traits 10→79, ethnicity all), PGx exclusive upper bounds, OAuth CSRF state validation, consent retry queue (GDPR Art 7), VCF slash genotype tests, haploid parsing tests, PGx boundary tests, flushPendingConsents tests. 104 files, 3,010 tests. 10/10 A/A+ Claude (6 rounds). | PR #90 |
 
 ---
 
@@ -161,7 +164,8 @@
 
 ### Phase A: Service Accounts (kukiz, ~2 hours)
 - [ ] A1: Create Vercel project, link repo → `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
-- [ ] A2: Create Railway project + PostgreSQL (EU-west) → `RAILWAY_TOKEN`, `DATABASE_URL`
+- [ ] A2: Create Railway project + PostgreSQL (US for now — free tier has no EU) → `RAILWAY_TOKEN`, `DATABASE_URL`
+  - **TODO:** Migrate DB to EU-west region when on paid Railway plan (GDPR requirement before public launch)
 - [ ] A3: Create Stripe account (test mode first) → `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs
 - [ ] A4: Register domain on Resend → `RESEND_API_KEY`
 - [ ] A5: Create Sentry projects (frontend + backend) → `SENTRY_DSN`

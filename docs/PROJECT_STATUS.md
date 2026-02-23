@@ -1,6 +1,6 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-22
+**Last Updated:** 2026-02-23
 **Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, alpha launch pending)
 **Branch:** main
 
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (1,482 web + 1,392 engine) + pytest (624 backend) = 2,874+ total
+- **Testing:** Vitest (1,603 web + 1,407 engine) + pytest (624 backend) = 3,634+ total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -204,6 +204,7 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
   - [x] Stream Q (QA, 4 sprints) — PRs #86, 87
   - [x] Stream Ops (EU region, CI, deploy) — PR #88
 - [x] **Coming Soon Page** — PR #89 merged (site-wide lock active)
+- [x] **Web Polish** — PR #90 merged (a11y, type safety, tier alignment, 10/10 A/A+, 3,010 frontend tests)
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -300,6 +301,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #90 | Web Polish: A11y, Type Safety, Tier Alignment, Test Coverage (10/10 A/A+, 104 files) | **Merged** |
 | #89 | Coming Soon Page with Site Lock (HMAC-SHA-256 bypass, 78 tests) | **Merged** |
 | #88 | Stream Ops: EU Region, CI Hardening, Alpha Deploy Runbook | **Merged** |
 | #87 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | **Merged** |
@@ -327,13 +329,13 @@ FullAnalysisResult → postMessage → Zustand store
 
 ## Next Steps — Alpha Launch Checklist
 
-**All 11 streams COMPLETE. 2,874+ tests. Feature-complete. What remains is infrastructure + legal.**
+**All 11 streams COMPLETE. 3,634+ tests. Feature-complete. What remains is infrastructure + legal.**
 
 ### Phase A: Service Accounts (kukiz, ~2 hours)
 | # | Task | Service | Output |
 |---|------|---------|--------|
 | A1 | Create Vercel project, link repo | vercel.com | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
-| A2 | Create Railway project + PostgreSQL (EU-west) | railway.app | `RAILWAY_TOKEN`, `DATABASE_URL` |
+| A2 | Create Railway project + PostgreSQL (US for now — migrate to EU-west on paid plan) | railway.app | `RAILWAY_TOKEN`, `DATABASE_URL` |
 | A3 | Create Stripe account (test mode first) | stripe.com | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs |
 | A4 | Register domain on Resend | resend.com | `RESEND_API_KEY` |
 | A5 | Create Sentry projects (frontend + backend) | sentry.io | `SENTRY_DSN` |
