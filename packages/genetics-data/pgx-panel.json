@@ -20,7 +20,7 @@
         },
         "*2": {
           "defining_variants": [
-            {"rsid": "rs16947", "genotype": "AG"}
+            {"rsid": "rs16947", "genotype": "AA"}
           ],
           "function": "normal",
           "activity_score": 1.0
@@ -56,15 +56,15 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.25],
           "description": "Very slow drug metabolism; medications may accumulate to toxic levels"
         },
         "intermediate_metabolizer": {
-          "activity_score_range": [0.25, 1.0],
+          "activity_score_range": [0.25, 1.25],
           "description": "Below average drug metabolism; may need dose adjustment"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.25, 2.25],
+          "activity_score_range": [1.25, 2.5],
           "description": "Normal drug metabolism; standard dosing expected to be effective"
         },
         "ultra_rapid_metabolizer": {
@@ -202,7 +202,7 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "Very slow CYP2C19 metabolism; clopidogrel is ineffective"
         },
         "intermediate_metabolizer": {
@@ -214,7 +214,7 @@
           "description": "Normal CYP2C19 metabolism; standard drug response expected"
         },
         "rapid_metabolizer": {
-          "activity_score_range": [2.0, 2.5],
+          "activity_score_range": [2.0, 3.0],
           "description": "Increased CYP2C19 metabolism"
         },
         "ultra_rapid_metabolizer": {
@@ -321,7 +321,7 @@
           "description": "Reduced CYP2C9 metabolism; moderate warfarin dose adjustment may be needed"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal CYP2C9 metabolism; standard warfarin dosing"
         }
       },
@@ -389,15 +389,15 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "Non-expressor (CYP3A5*3/*3); requires lower tacrolimus dose"
         },
         "intermediate_metabolizer": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Heterozygous expressor (CYP3A5*1/*3); intermediate tacrolimus metabolism"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Homozygous expressor (CYP3A5*1/*1); standard tacrolimus metabolism"
         }
       },
@@ -439,7 +439,7 @@
           "description": "Slow caffeine metabolism; higher sensitivity to caffeine"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.0, 2.0],
+          "activity_score_range": [1.0, 2.5],
           "description": "Normal caffeine metabolism"
         },
         "rapid_metabolizer": {
@@ -509,7 +509,7 @@
           "description": "Partial DPYD deficiency; fluoropyrimidine dose reduction required"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal DPYD activity; standard fluoropyrimidine dosing"
         }
       },
@@ -572,15 +572,15 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "TPMT deficiency; thiopurines cause life-threatening myelosuppression"
         },
         "intermediate_metabolizer": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Reduced TPMT activity; thiopurine dose reduction required"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal TPMT activity; standard thiopurine dosing"
         }
       },
@@ -638,15 +638,15 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "NUDT15 deficiency; thiopurines cause severe myelosuppression"
         },
         "intermediate_metabolizer": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Reduced NUDT15 activity; thiopurine dose reduction required"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal NUDT15 activity; standard thiopurine dosing"
         }
       },
@@ -701,15 +701,15 @@
       },
       "metabolizer_status": {
         "poor_function": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "Significantly reduced SLCO1B1 transporter function; high myopathy risk with statins"
         },
         "decreased_function": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Moderately reduced SLCO1B1 function; increased myopathy risk"
         },
         "normal_function": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal SLCO1B1 function; standard statin dosing"
         }
       },
@@ -776,15 +776,15 @@
       },
       "metabolizer_status": {
         "low_warfarin_sensitivity": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal VKORC1 expression; standard warfarin dose"
         },
         "intermediate_warfarin_sensitivity": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Reduced VKORC1 expression; lower warfarin dose needed"
         },
         "high_warfarin_sensitivity": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "Very low VKORC1 expression; significantly reduced warfarin dose required"
         }
       },
@@ -836,11 +836,11 @@
       },
       "metabolizer_status": {
         "positive": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "Carrier of high-risk HLA-B allele; risk of severe hypersensitivity reaction"
         },
         "negative": {
-          "activity_score_range": [0.5, 2.0],
+          "activity_score_range": [0.5, 99],
           "description": "No high-risk HLA-B allele detected; standard prescribing"
         }
       },
@@ -902,15 +902,15 @@
       },
       "metabolizer_status": {
         "poor_metabolizer": {
-          "activity_score_range": [0, 0],
+          "activity_score_range": [0, 0.5],
           "description": "UGT1A1 deficiency (Gilbert syndrome genotype); reduced drug glucuronidation"
         },
         "intermediate_metabolizer": {
-          "activity_score_range": [0.5, 1.0],
+          "activity_score_range": [0.5, 1.5],
           "description": "Intermediate UGT1A1 activity; may need dose adjustment for some drugs"
         },
         "normal_metabolizer": {
-          "activity_score_range": [1.5, 2.0],
+          "activity_score_range": [1.5, 99],
           "description": "Normal UGT1A1 activity; standard drug dosing"
         }
       },

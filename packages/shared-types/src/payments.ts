@@ -7,7 +7,7 @@
  */
 
 import type { Tier } from './genetics';
-import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 /**
  * Payment processing status.
@@ -115,8 +115,8 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Free',
     price: 0,
     features: [
-      'Analyze all genetic traits',
-      'Basic trait predictions',
+      'All 79 trait predictions',
+      'All file formats supported',
       'Basic counseling recommendations',
     ],
     limits: {
@@ -125,7 +125,7 @@ export const PRICING_TIERS: PricingTier[] = [
       pgxGenes: 0,
       prsConditions: 0,
       counseling: 'basic',
-      ethnicity: false,
+      ethnicity: true,
     },
     showHealth: false,
     showCouple: false,
@@ -150,7 +150,7 @@ export const PRICING_TIERS: PricingTier[] = [
       pgxGenes: 5,
       prsConditions: 3,
       counseling: 'full',
-      ethnicity: false,
+      ethnicity: true,
     },
     showHealth: true,
     showCouple: false,
@@ -160,7 +160,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Pro',
     price: 34.99,
     features: [
-      'Analyze all 2700+ genetic diseases',
+      `Analyze all ${CARRIER_PANEL_COUNT_DISPLAY}+ genetic diseases`,
       'Analyze all genetic traits',
       'Comprehensive carrier reports',
       'Disease prevalence data with OMIM links',

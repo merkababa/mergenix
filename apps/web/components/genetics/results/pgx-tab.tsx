@@ -135,6 +135,67 @@ export function PgxTab() {
   );
 }
 
+// ─── DrugRecommendationTable Sub-component ──────────────────────────────────
+
+interface DrugRecommendation {
+  drug: string;
+  recommendation: string;
+  strength: string;
+  category: string;
+}
+
+interface DrugRecommendationTableProps {
+  parentLabel: string;
+  recommendations: DrugRecommendation[];
+}
+
+function DrugRecommendationTable({ parentLabel, recommendations }: DrugRecommendationTableProps) {
+  if (recommendations.length === 0) return null;
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+        {parentLabel} Drug Recommendations
+      </p>
+      <div
+        className="overflow-x-auto"
+        tabIndex={0}
+        role="region"
+        aria-label={`${parentLabel} drug recommendations`}
+      >
+        <table className="w-full text-left text-xs">
+          <thead>
+            <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">
+              <th className="pb-1.5 pr-3 font-medium">Drug</th>
+              <th className="pb-1.5 pr-3 font-medium">Recommendation</th>
+              <th className="pb-1.5 pr-3 font-medium">Strength</th>
+              <th className="pb-1.5 font-medium">Category</th>
+            </tr>
+          </thead>
+          <tbody className="text-[var(--text-body)]">
+            {recommendations.map((rec) => (
+              <tr
+                key={rec.drug}
+                className="border-b border-[var(--border-subtle)] last:border-0"
+              >
+                <td className="py-1.5 pr-3 font-medium">{rec.drug}</td>
+                <td className="py-1.5 pr-3">{rec.recommendation}</td>
+                <td className="py-1.5 pr-3">
+                  <Badge
+                    variant={rec.strength === "strong" ? "high" : "moderate"}
+                  >
+                    {rec.strength}
+                  </Badge>
+                </td>
+                <td className="py-1.5">{rec.category}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 // ─── Gene Card Sub-component ────────────────────────────────────────────────
 
 const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxGeneResult; canShowOffspring: boolean }) {
@@ -198,84 +259,16 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
       </div>
 
       {/* Parent A Drug recommendations */}
-      {gene.parentA.drugRecommendations.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
-            Parent A Drug Recommendations
-          </p>
-          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Parent A drug recommendations">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">
-                  <th className="pb-1.5 pr-3 font-medium">Drug</th>
-                  <th className="pb-1.5 pr-3 font-medium">Recommendation</th>
-                  <th className="pb-1.5 pr-3 font-medium">Strength</th>
-                  <th className="pb-1.5 font-medium">Category</th>
-                </tr>
-              </thead>
-              <tbody className="text-[var(--text-body)]">
-                {gene.parentA.drugRecommendations.map((rec) => (
-                  <tr
-                    key={rec.drug}
-                    className="border-b border-[var(--border-subtle)] last:border-0"
-                  >
-                    <td className="py-1.5 pr-3 font-medium">{rec.drug}</td>
-                    <td className="py-1.5 pr-3">{rec.recommendation}</td>
-                    <td className="py-1.5 pr-3">
-                      <Badge
-                        variant={rec.strength === "strong" ? "high" : "moderate"}
-                      >
-                        {rec.strength}
-                      </Badge>
-                    </td>
-                    <td className="py-1.5">{rec.category}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      <DrugRecommendationTable
+        parentLabel="Parent A"
+        recommendations={gene.parentA.drugRecommendations}
+      />
 
       {/* Parent B Drug recommendations */}
-      {gene.parentB.drugRecommendations.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
-            Parent B Drug Recommendations
-          </p>
-          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Parent B drug recommendations">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">
-                  <th className="pb-1.5 pr-3 font-medium">Drug</th>
-                  <th className="pb-1.5 pr-3 font-medium">Recommendation</th>
-                  <th className="pb-1.5 pr-3 font-medium">Strength</th>
-                  <th className="pb-1.5 font-medium">Category</th>
-                </tr>
-              </thead>
-              <tbody className="text-[var(--text-body)]">
-                {gene.parentB.drugRecommendations.map((rec) => (
-                  <tr
-                    key={`b-${rec.drug}`}
-                    className="border-b border-[var(--border-subtle)] last:border-0"
-                  >
-                    <td className="py-1.5 pr-3 font-medium">{rec.drug}</td>
-                    <td className="py-1.5 pr-3">{rec.recommendation}</td>
-                    <td className="py-1.5 pr-3">
-                      <Badge
-                        variant={rec.strength === "strong" ? "high" : "moderate"}
-                      >
-                        {rec.strength}
-                      </Badge>
-                    </td>
-                    <td className="py-1.5">{rec.category}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      <DrugRecommendationTable
+        parentLabel="Parent B"
+        recommendations={gene.parentB.drugRecommendations}
+      />
 
       {/* Offspring predictions (Pro tier only — couple/offspring data is gated) */}
       {canShowOffspring && gene.offspringPredictions.length > 0 && (
@@ -293,7 +286,7 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
                   {pred.diplotype}
                 </code>
                 <span className="text-[var(--text-muted)]">
-                  {(pred.probability * 100).toFixed(0)}%
+                  {pred.probability.toFixed(0)}%
                 </span>
                 <Badge
                   variant={METABOLIZER_BADGE_MAP[pred.metabolizerStatus.status]}

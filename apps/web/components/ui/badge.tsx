@@ -35,6 +35,7 @@ const badgeVariants = cva(
 
         /* Neutral */
         default: "border border-[var(--glass-border)] bg-[rgba(148,163,184,0.06)] text-[var(--text-body)]",
+        outline: "border border-[var(--glass-border)] bg-transparent text-[var(--text-body)]",
       },
     },
     defaultVariants: {

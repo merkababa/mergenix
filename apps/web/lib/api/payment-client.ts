@@ -10,6 +10,7 @@
 
 import { get, post } from "./client";
 import type { Tier } from "@mergenix/shared-types";
+import { parseTier } from "@/lib/utils/parse-tier";
 
 // ── API Response Types (snake_case from backend) ────────────────────────
 
@@ -51,8 +52,8 @@ export interface PaymentHistoryItem {
   currency: string;
   /** Payment status: pending, succeeded, failed, refunded. */
   status: string;
-  /** Tier granted by this payment. */
-  tierGranted: string;
+  /** Tier granted by this payment — validated through parseTier(). */
+  tierGranted: Tier;
   /** ISO 8601 timestamp. */
   createdAt: string;
 }
@@ -78,14 +79,14 @@ function toPaymentHistoryItem(raw: RawPaymentHistoryItem): PaymentHistoryItem {
     amount: raw.amount,
     currency: raw.currency,
     status: raw.status,
-    tierGranted: raw.tier_granted,
+    tierGranted: parseTier(raw.tier_granted),
     createdAt: raw.created_at,
   };
 }
 
 function toSubscriptionStatus(raw: RawSubscriptionStatus): SubscriptionStatus {
   return {
-    tier: raw.tier as Tier,
+    tier: parseTier(raw.tier),
     isActive: raw.is_active,
     paymentsCount: raw.payments_count,
   };

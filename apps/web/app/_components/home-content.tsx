@@ -26,7 +26,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { useCountUp } from "@/hooks/use-count-up";
 import { staggerContainer, staggerItem } from "@/lib/animation-variants";
-import { PRICING_TIERS } from "@/lib/pricing-data";
+import { MARKETING_TIERS } from "@/lib/pricing-data";
 import { HOME_FAQ } from "@/lib/faq-data";
 import { cn } from "@/lib/utils";
 import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
@@ -108,7 +108,7 @@ const STEPS = [
   {
     number: 3,
     icon: HeartPulse,
-    title: "Actionable Results",
+    title: "Clear, Understandable Results",
     description:
       "Get clear, visual results with risk scores, Punnett squares, and genetic counselor referrals.",
   },
@@ -150,7 +150,7 @@ export function HomeContent() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="gradient-text mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-tight md:text-6xl lg:text-7xl"
           >
-            Know Your Genetic Future
+            Explore Your Genetic Possibilities
           </motion.h1>
 
           <motion.p
@@ -324,7 +324,7 @@ export function HomeContent() {
         <div className="relative mx-auto max-w-5xl">
           <SectionHeading
             title="How It Works"
-            subtitle="Three simple steps to understand your family's genetic future"
+            subtitle="Three simple steps to understand your family's genetic health"
             className="mb-12"
           />
 
@@ -461,7 +461,7 @@ export function HomeContent() {
             viewport={{ once: true, margin: "-60px" }}
             className="grid gap-6 sm:grid-cols-2 md:grid-cols-3"
           >
-            {PRICING_TIERS.map((plan) => (
+            {MARKETING_TIERS.map((plan) => (
               <motion.div key={plan.name} variants={staggerItem}>
                 <PricingCard
                   tier={plan.name}

@@ -173,13 +173,13 @@ class TestTierPrices:
     def test_premium_price(self) -> None:
         from app.constants.tiers import TIER_PRICES
 
-        assert TIER_PRICES["premium"]["monthly"] == 14_99
+        assert TIER_PRICES["premium"]["amount"] == 14_99
         assert TIER_PRICES["premium"]["label"] == "Premium"
 
     def test_pro_price(self) -> None:
         from app.constants.tiers import TIER_PRICES
 
-        assert TIER_PRICES["pro"]["monthly"] == 34_99
+        assert TIER_PRICES["pro"]["amount"] == 34_99
         assert TIER_PRICES["pro"]["label"] == "Pro"
 
 

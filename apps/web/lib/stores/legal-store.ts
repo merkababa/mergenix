@@ -9,9 +9,11 @@ import {
   CHIP_LIMITATION_ACK_KEY,
   ANALYTICS_ENABLED_KEY,
   MARKETING_ENABLED_KEY,
+  PENDING_CONSENTS_KEY,
 } from "../constants/legal";
 import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";
 import { useAnalysisStore } from "./analysis-store";
+import { extractErrorMessage } from "../utils/extract-error";
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -43,6 +45,7 @@ interface LegalState {
   withdrawGeneticConsent: () => void;
   reGrantGeneticConsent: () => void;
   recordConsent: (type: string, version: string) => Promise<void>;
+  flushPendingConsents: () => Promise<void>;
   loadConsents: () => Promise<void>;
   loadCookiePreferences: () => Promise<void>;
   clearError: () => void;
@@ -92,7 +95,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
   analyticsEnabled: getInitialAnalyticsEnabled(),
   marketingEnabled: getInitialMarketingEnabled(),
   ageVerified: getInitialAgeVerified(),
-  geneticDataConsentGiven: false, // Never persisted — GDPR requires re-consent each session
+  geneticDataConsentGiven: false, // Never persisted — deliberate design choice: re-consent each session for additional user protection (not a GDPR requirement)
   partnerConsentGiven: false, // Never persisted — must re-confirm each session
   consentWithdrawn: false, // Tracks whether user has explicitly withdrawn genetic consent
   chipLimitationAcknowledged: getInitialChipLimitationAcknowledged(),
@@ -166,6 +169,8 @@ export const useLegalStore = create<LegalState>()((set) => ({
   syncAgeVerification: async () => {
     // Called AFTER successful login to persist the
     // age-verification consent record on the server (audit trail).
+    // Also a good moment to flush any pending consents from previous failures.
+    void useLegalStore.getState().flushPendingConsents();
     if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== "true") return;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
@@ -175,12 +180,11 @@ export const useLegalStore = create<LegalState>()((set) => ({
         if (attempt < 2) await new Promise((r) => setTimeout(r, 1000));
       }
     }
-    // After 3 failed attempts, log but don't crash
-    console.warn("Failed to sync age verification after 3 attempts");
+    // After 3 failed attempts, silently give up — non-critical background sync
   },
 
   setGeneticDataConsent: (given: boolean) => {
-    // Not persisted in localStorage — GDPR requires re-consent each session
+    // Not persisted in localStorage — deliberate design choice: re-consent each session for additional user protection (not a GDPR requirement)
     set({ geneticDataConsentGiven: given, error: null });
   },
 
@@ -221,21 +225,52 @@ export const useLegalStore = create<LegalState>()((set) => ({
         isLoading: false,
       }));
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to record consent";
+      const message = extractErrorMessage(error, "Failed to record consent");
+      // Queue the failed consent record so it can be retried on next opportunity
+      // (GDPR Article 7(1) — proof-of-consent must eventually reach the server)
+      const existing = safeLocalStorageGet(PENDING_CONSENTS_KEY);
+      const queue: Array<{ consentType: string; version: string; timestamp: string }> = existing
+        ? (JSON.parse(existing) as Array<{ consentType: string; version: string; timestamp: string }>)
+        : [];
+      queue.push({ consentType: type, version, timestamp: new Date().toISOString() });
+      safeLocalStorageSet(PENDING_CONSENTS_KEY, JSON.stringify(queue));
       set({ isLoading: false, error: message });
       throw error;
     }
   },
 
+  flushPendingConsents: async () => {
+    const existing = safeLocalStorageGet(PENDING_CONSENTS_KEY);
+    if (!existing) return;
+    const queue: Array<{ consentType: string; version: string; timestamp: string }> = JSON.parse(
+      existing
+    ) as Array<{ consentType: string; version: string; timestamp: string }>;
+    if (queue.length === 0) return;
+    const remaining: typeof queue = [];
+    for (const pending of queue) {
+      try {
+        const record = await legalClient.recordConsent(pending.consentType, pending.version);
+        set((state) => ({ consents: [...state.consents, record] }));
+      } catch {
+        remaining.push(pending);
+      }
+    }
+    if (remaining.length === 0) {
+      safeLocalStorageSet(PENDING_CONSENTS_KEY, "[]");
+    } else {
+      safeLocalStorageSet(PENDING_CONSENTS_KEY, JSON.stringify(remaining));
+    }
+  },
+
   loadConsents: async () => {
+    // Flush any pending consents before loading — server is reachable at this point
+    void useLegalStore.getState().flushPendingConsents();
     set({ isLoading: true, error: null });
     try {
       const consents = await legalClient.listConsents();
       set({ consents, isLoading: false });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to load consents";
+      const message = extractErrorMessage(error, "Failed to load consents");
       set({ isLoading: false, error: message });
       throw error;
     }

@@ -47,6 +47,22 @@ function checkRateLimit(ip: string): boolean {
   return true; // allowed
 }
 
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+/**
+ * Return the first 16 hex chars of the SHA-256 hash of an IP address.
+ * Used exclusively in log messages so that raw IPs are never written to logs.
+ */
+async function hashIp(ip: string): Promise<string> {
+  const encoded = new TextEncoder().encode(ip);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 16);
+}
+
 // ── Route handler ──────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
@@ -63,8 +79,9 @@ export async function POST(request: NextRequest) {
     "unknown";
 
   if (!checkRateLimit(ip)) {
+    const ipHash = await hashIp(ip);
     console.warn(
-      `[coming-soon-bypass] Rate limit exceeded from IP: ${ip} at ${new Date().toISOString()}`,
+      `[coming-soon-bypass] Rate limit exceeded from IP hash: ${ipHash} at ${new Date().toISOString()}`,
     );
     return NextResponse.json(
       { error: "Too many attempts. Try again later." },
@@ -99,8 +116,9 @@ export async function POST(request: NextRequest) {
 
   // ── Validate password (constant-time) ─────────────────────────────────────
   if (!secret || !(await timingSafeEqual(submitted, secret, secret))) {
+    const ipHash = await hashIp(ip);
     console.warn(
-      `[coming-soon-bypass] Failed attempt from IP: ${ip} at ${new Date().toISOString()}`,
+      `[coming-soon-bypass] Failed attempt from IP hash: ${ipHash} at ${new Date().toISOString()}`,
     );
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }

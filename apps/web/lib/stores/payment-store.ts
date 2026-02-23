@@ -7,6 +7,7 @@ import type {
   PaymentHistoryItem,
   SubscriptionStatus,
 } from "@/lib/api/payment-client";
+import { extractErrorMessage } from "@/lib/utils/extract-error";
 
 // ── Payment Store State & Actions ───────────────────────────────────────
 
@@ -57,8 +58,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       set({ isCheckoutLoading: false });
       return response;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Checkout failed";
+      const message = extractErrorMessage(error, "Checkout failed");
       set({ isCheckoutLoading: false, error: message });
       throw error;
     }
@@ -70,10 +70,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       const history = await paymentClient.getPaymentHistory();
       set({ paymentHistory: history, isLoading: false });
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to load payment history";
+      const message = extractErrorMessage(error, "Failed to load payment history");
       set({ isLoading: false, error: message });
       throw error;
     }
@@ -85,10 +82,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       const status = await paymentClient.getSubscriptionStatus();
       set({ subscriptionStatus: status, isLoading: false });
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to load subscription status";
+      const message = extractErrorMessage(error, "Failed to load subscription status");
       set({ isLoading: false, error: message });
       throw error;
     }

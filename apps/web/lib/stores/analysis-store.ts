@@ -1,3 +1,5 @@
+"use client";
+
 import { create } from "zustand";
 import type {
   FullAnalysisResult,
@@ -11,6 +13,7 @@ import * as analysisClient from "@/lib/api/analysis-client";
 import type { AnalysisListItem } from "@/lib/api/analysis-client";
 import * as indexedDbStore from "@/lib/storage/indexed-db-store";
 import type { StoredResult } from "@/lib/storage/indexed-db-store";
+import { extractErrorMessage } from "@/lib/utils/extract-error";
 
 // ─── Exported Types ─────────────────────────────────────────────────────────
 
@@ -36,7 +39,7 @@ export type ResultTab =
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
-const STEP_ORDER: AnalysisStep[] = [
+export const STEP_ORDER: AnalysisStep[] = [
   "idle",
   "parsing",
   "carrier_analysis",
@@ -253,8 +256,7 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
       const results = await analysisClient.listResults();
       set({ savedResults: results });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to load saved analyses";
+      const message = extractErrorMessage(error, "Failed to load saved analyses");
       set({ saveError: message });
       throw error;
     }
@@ -283,8 +285,7 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
       const { savedResults } = get();
       set({ savedResults: savedResults.filter((r) => r.id !== id) });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to delete analysis";
+      const message = extractErrorMessage(error, "Failed to delete analysis");
       set({ saveError: message });
       throw error;
     }

@@ -53,9 +53,15 @@ import { useAnalysisStore } from "../../lib/stores/analysis-store";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-/** Deterministic fake encrypted envelope — opaque string, never plaintext. */
+/** Deterministic fake encrypted envelope — valid JSON with all required fields. */
 const fakeEnvelope = (id: string) =>
-  `enc:AES-256-GCM:${btoa(`encrypted-payload-for-${id}`)}`;
+  JSON.stringify({
+    version: "1",
+    algorithm: "AES-256-GCM",
+    salt: btoa(`salt-${id}`),
+    iv: btoa(`iv-for-${id}`),
+    ciphertext: btoa(`encrypted-payload-for-${id}`),
+  });
 
 // ── Tests ──────────────────────────────────────────────────────────────────
 
@@ -329,7 +335,7 @@ describe("indexed-db-store error handling", () => {
     };
 
     await expect(
-      saveAnalysisResult("err-save", "envelope", STORAGE_SCHEMA_VERSION),
+      saveAnalysisResult("err-save", fakeEnvelope("err-save"), STORAGE_SCHEMA_VERSION),
     ).rejects.toThrow("Quota exceeded");
   });
 
@@ -456,5 +462,47 @@ describe("analysis-store IndexedDB integration", () => {
       .getState()
       .loadResultFromStorage("valid-entry");
     expect(useAnalysisStore.getState().storageVersionMismatch).toBe(false);
+  });
+});
+
+// ── validateEncryptedEnvelope (tested via saveAnalysisResult) ─────────────
+
+describe("indexed-db-store: validateEncryptedEnvelope guard", () => {
+  it("rejects a plaintext string (not valid JSON)", async () => {
+    await expect(
+      saveAnalysisResult("guard-plaintext", "enc:AES-256-GCM:somethingopaque", STORAGE_SCHEMA_VERSION),
+    ).rejects.toThrow(/IndexedDB guard/);
+  });
+
+  it("rejects valid JSON that is not an object (array)", async () => {
+    await expect(
+      saveAnalysisResult("guard-array", JSON.stringify(["version", "algorithm"]), STORAGE_SCHEMA_VERSION),
+    ).rejects.toThrow(/IndexedDB guard/);
+  });
+
+  it("rejects valid JSON that is not an object (null)", async () => {
+    await expect(
+      saveAnalysisResult("guard-null", "null", STORAGE_SCHEMA_VERSION),
+    ).rejects.toThrow(/IndexedDB guard/);
+  });
+
+  it("rejects a JSON object missing required fields", async () => {
+    const incomplete = JSON.stringify({ version: "1", algorithm: "AES-256-GCM" });
+    await expect(
+      saveAnalysisResult("guard-missing-fields", incomplete, STORAGE_SCHEMA_VERSION),
+    ).rejects.toThrow(/IndexedDB guard/);
+  });
+
+  it("accepts a valid JSON envelope with all required fields", async () => {
+    const valid = JSON.stringify({
+      version: "1",
+      algorithm: "AES-256-GCM",
+      salt: btoa("salt"),
+      iv: btoa("iv"),
+      ciphertext: btoa("payload"),
+    });
+    await expect(
+      saveAnalysisResult("guard-valid", valid, STORAGE_SCHEMA_VERSION),
+    ).resolves.toBeUndefined();
   });
 });

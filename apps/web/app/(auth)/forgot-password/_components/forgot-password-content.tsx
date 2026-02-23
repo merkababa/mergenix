@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ChevronRight, ArrowLeft, CheckCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export function ForgotPasswordContent() {
   }
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <motion.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
@@ -180,6 +180,6 @@ export function ForgotPasswordContent() {
       >
         <TrustSignals />
       </motion.div>
-    </MotionConfig>
+    </>
   );
 }

@@ -261,7 +261,7 @@ export function CounselingTab() {
           </GlassCard>
         )}
 
-      {/* Referral letter (pro tier) or locked teaser (non-pro) */}
+      {/* Referral letter (pro tier, or free/premium when urgency is high) or locked teaser */}
       {counseling.referralLetter ? (
         <GlassCard variant="medium" hover="none" className="p-5">
           <button
@@ -290,7 +290,7 @@ export function CounselingTab() {
             </pre>
           )}
         </GlassCard>
-      ) : tier !== "pro" && counseling.recommend ? (
+      ) : tier !== "pro" && counseling.urgency !== "high" && counseling.recommend ? (
         <GlassCard variant="medium" hover="none" className="relative overflow-hidden p-5">
           <div className="pointer-events-none select-none blur-sm" aria-hidden="true">
             <h4 className="font-heading text-sm font-bold text-[var(--text-heading)]">

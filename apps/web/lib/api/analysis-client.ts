@@ -10,6 +10,7 @@
 
 import { get, post, del } from "./client";
 import type { Tier } from "@mergenix/shared-types";
+import { parseTier } from "@/lib/utils/parse-tier";
 
 // ── API Response Types (snake_case from backend) ────────────────────────
 
@@ -95,7 +96,7 @@ function toAnalysisListItem(raw: RawAnalysisListItem): AnalysisListItem {
     label: raw.label,
     parent1Filename: raw.parent1_filename,
     parent2Filename: raw.parent2_filename,
-    tierAtTime: raw.tier_at_time as Tier,
+    tierAtTime: parseTier(raw.tier_at_time),
     summary: raw.summary,
     createdAt: raw.created_at,
   };
@@ -109,7 +110,7 @@ function toAnalysisDetailResponse(
     label: raw.label,
     parent1Filename: raw.parent1_filename,
     parent2Filename: raw.parent2_filename,
-    tierAtTime: raw.tier_at_time as Tier,
+    tierAtTime: parseTier(raw.tier_at_time),
     resultData: raw.result_data,
     summary: raw.summary,
     createdAt: raw.created_at,

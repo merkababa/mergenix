@@ -5,7 +5,7 @@
 import { Lock } from "lucide-react";
 import Link from "next/link";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 interface TierUpgradePromptProps {
   /** Message explaining what the user is missing (from engine's upgradeMessage field) */
@@ -37,13 +37,11 @@ export function TierUpgradePrompt({
         <p className="text-sm text-[var(--text-body)]">{message}</p>
       </div>
 
-      <Link href="/subscription">
-        <Button
-          size="sm"
-          className="bg-[rgba(139,92,246,0.15)] border-[rgba(139,92,246,0.3)] text-[#8b5cf6] hover:bg-[rgba(139,92,246,0.25)]"
-        >
-          {buttonText}
-        </Button>
+      <Link
+        href="/subscription"
+        className={buttonVariants({ size: "sm", className: "bg-[rgba(139,92,246,0.15)] border-[rgba(139,92,246,0.3)] text-[#8b5cf6] hover:bg-[rgba(139,92,246,0.25)]" })}
+      >
+        {buttonText}
       </Link>
     </GlassCard>
   );

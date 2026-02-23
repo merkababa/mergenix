@@ -22,6 +22,13 @@ const STRENGTH_WIDTHS: Record<StrengthLevel, string> = {
   strong: "100%",
 };
 
+const STRENGTH_VALUES: Record<StrengthLevel, number> = {
+  weak: 25,
+  fair: 50,
+  good: 75,
+  strong: 100,
+};
+
 const STRENGTH_LABELS: Record<StrengthLevel, string> = {
   weak: "Weak",
   fair: "Fair",
@@ -38,7 +45,14 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
     <div className="space-y-3">
       {/* Strength bar */}
       <div className="space-y-1.5">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--bg-elevated)]">
+        <div
+          className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--bg-elevated)]"
+          role="meter"
+          aria-valuenow={STRENGTH_VALUES[strength.level]}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Password strength"
+        >
           <motion.div
             className={`h-full rounded-full ${STRENGTH_BAR_COLORS[strength.level]}`}
             initial={{ width: 0 }}
@@ -64,9 +78,9 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
               role="listitem"
             >
               {met ? (
-                <Check className="h-3.5 w-3.5 text-[var(--accent-teal)]" />
+                <Check className="h-3.5 w-3.5 text-[var(--accent-teal)]" aria-hidden="true" />
               ) : (
-                <X className="h-3.5 w-3.5 text-[var(--text-dim)]" />
+                <X className="h-3.5 w-3.5 text-[var(--text-dim)]" aria-hidden="true" />
               )}
               <span className={met ? "text-[var(--accent-teal)]" : "text-[var(--text-dim)]"}>
                 {req.text}

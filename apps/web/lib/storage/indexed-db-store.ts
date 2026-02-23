@@ -53,17 +53,55 @@ export interface StoredResultMeta {
 // ── Public API ─────────────────────────────────────────────────────────────
 
 /**
+ * Validate that the given string looks like a valid encrypted envelope.
+ * An encrypted envelope must be a JSON object containing the fields:
+ * version, algorithm, salt, iv, ciphertext.
+ * This guard prevents plaintext health data from being stored in IndexedDB.
+ */
+function validateEncryptedEnvelope(value: string): void {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    throw new Error(
+      "IndexedDB guard: encryptedEnvelope is not valid JSON — refusing to store plaintext health data.",
+    );
+  }
+
+  if (typeof parsed !== "object" || parsed === null) {
+    throw new Error(
+      "IndexedDB guard: encryptedEnvelope must be a JSON object — refusing to store plaintext health data.",
+    );
+  }
+
+  const requiredFields = ["version", "algorithm", "salt", "iv", "ciphertext"] as const;
+  const obj = parsed as Record<string, unknown>;
+  const missingFields = requiredFields.filter((field) => !(field in obj));
+
+  if (missingFields.length > 0) {
+    throw new Error(
+      `IndexedDB guard: encryptedEnvelope is missing required fields [${missingFields.join(", ")}] — refusing to store plaintext health data.`,
+    );
+  }
+}
+
+/**
  * Save an encrypted analysis result to IndexedDB.
  *
  * @param resultId     Unique identifier for the result
  * @param encryptedEnvelope  Opaque encrypted string — NEVER plaintext health data
  * @param dataVersion  Schema version at time of encryption
+ *
+ * @throws Error if encryptedEnvelope does not look like a valid encrypted envelope.
  */
 export async function saveAnalysisResult(
   resultId: string,
   encryptedEnvelope: string,
   dataVersion: string,
 ): Promise<void> {
+  // Runtime guard: reject any value that doesn't have the expected encrypted structure
+  validateEncryptedEnvelope(encryptedEnvelope);
+
   const entry: StoredEntry = {
     resultId,
     encryptedEnvelope,

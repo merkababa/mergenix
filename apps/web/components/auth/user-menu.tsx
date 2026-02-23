@@ -10,7 +10,7 @@ import { getInitials, getTierVariant } from "@/lib/account-utils";
 
 const MENU_LINKS = [
   { href: "/account", label: "Account Settings", icon: User },
-  { href: "/subscription", label: "Subscription", icon: CreditCard },
+  { href: "/subscription", label: "My Plan", icon: CreditCard },
   { href: "/analysis", label: "Analysis", icon: Activity },
 ] as const;
 
@@ -82,6 +82,7 @@ export function UserMenu() {
           className={`h-3.5 w-3.5 text-[var(--text-dim)] transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
+          aria-hidden="true"
         />
       </button>
 
@@ -99,7 +100,6 @@ export function UserMenu() {
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
             }}
-            role="menu"
             aria-label="User menu"
           >
             {/* User info header */}
@@ -128,9 +128,8 @@ export function UserMenu() {
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
-                  role="menuitem"
                 >
-                  <link.icon className="h-4 w-4" />
+                  <link.icon className="h-4 w-4" aria-hidden="true" />
                   {link.label}
                 </Link>
               ))}
@@ -141,9 +140,8 @@ export function UserMenu() {
               <button
                 onClick={handleLogout}
                 className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-[var(--text-muted)] transition-colors hover:bg-[rgba(244,63,94,0.06)] hover:text-[var(--accent-rose)]"
-                role="menuitem"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-4 w-4" aria-hidden="true" />
                 Sign Out
               </button>
             </div>

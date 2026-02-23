@@ -15,7 +15,6 @@
     "@mergenix/genetics-data": "workspace:*",
     "@mergenix/genetics-engine": "workspace:*",
     "@mergenix/shared-types": "workspace:*",
-    "@tanstack/react-query": "^5.90.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
@@ -28,7 +27,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-virtuoso": "^4.18.1",
-    "recharts": "^2.15.0",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.3"

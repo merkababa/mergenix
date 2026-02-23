@@ -233,7 +233,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "maple-syrup-urine-disease",
     name: "Maple Syrup Urine Disease",
     description:
-      "Branched-chain amino acid metabolism defect causing metabolic crisis and neurological damage if untreated.",
+      "Branched-chain amino acid metabolism alteration causing metabolic crisis and neurological damage if untreated.",
     category: "Metabolic",
     inheritance: "Autosomal Recessive",
     severity: "high",
@@ -336,7 +336,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "hypertrophic-cardiomyopathy",
     name: "Hypertrophic Cardiomyopathy",
     description:
-      "Abnormal thickening of heart muscle causing outflow obstruction, arrhythmia, and sudden cardiac death risk.",
+      "Excessive thickening of heart muscle causing outflow obstruction, arrhythmia, and sudden cardiac death risk.",
     category: "Cardiovascular",
     inheritance: "Autosomal Dominant",
     severity: "high",
@@ -382,7 +382,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "osteogenesis-imperfecta",
     name: "Osteogenesis Imperfecta",
     description:
-      "Brittle bone disease caused by collagen defects, resulting in frequent fractures, blue sclerae, and short stature.",
+      "Brittle bone disease caused by collagen variants, resulting in frequent fractures, blue sclerae, and short stature.",
     category: "Connective Tissue",
     inheritance: "Autosomal Dominant",
     severity: "moderate",
@@ -476,7 +476,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "epidermolysis-bullosa",
     name: "Epidermolysis Bullosa",
     description:
-      "Group of blistering skin disorders caused by defects in proteins anchoring the epidermis to the dermis. Heterogeneous group — simplex forms typically autosomal dominant, junctional and dystrophic forms typically autosomal recessive.",
+      "Group of blistering skin disorders caused by variants in proteins anchoring the epidermis to the dermis. Heterogeneous group — simplex forms typically autosomal dominant, junctional and dystrophic forms typically autosomal recessive.",
     category: "Dermatological",
     inheritance: "Autosomal Recessive",
     severity: "high",
@@ -487,7 +487,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "oculocutaneous-albinism",
     name: "Oculocutaneous Albinism",
     description:
-      "Melanin biosynthesis defect causing hypopigmentation of skin, hair, and eyes with reduced visual acuity.",
+      "Melanin biosynthesis variant causing hypopigmentation of skin, hair, and eyes with reduced visual acuity.",
     category: "Dermatological",
     inheritance: "Autosomal Recessive",
     severity: "moderate",
@@ -579,7 +579,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "alport-syndrome",
     name: "Alport Syndrome",
     description:
-      "Collagen IV deficiency causing progressive nephritis, sensorineural hearing loss, and ocular abnormalities. Most commonly X-linked (COL4A5, ~80%), with autosomal recessive (COL4A3/COL4A4, ~15%) and autosomal dominant (~5%) forms.",
+      "Collagen IV deficiency causing progressive nephritis, sensorineural hearing loss, and ocular involvement. Most commonly X-linked (COL4A5, ~80%), with autosomal recessive (COL4A3/COL4A4, ~15%) and autosomal dominant (~5%) forms.",
     category: "Renal",
     inheritance: "X-Linked",
     severity: "high",
@@ -590,7 +590,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "cystinosis",
     name: "Cystinosis",
     description:
-      "Lysosomal cystine transport defect causing crystal accumulation in cells, primarily affecting the kidneys and eyes.",
+      "Lysosomal cystine transport alteration causing crystal accumulation in cells, primarily affecting the kidneys and eyes.",
     category: "Renal",
     inheritance: "Autosomal Recessive",
     severity: "high",
@@ -658,7 +658,7 @@ export const DISEASES: DiseaseEntry[] = [
     slug: "familial-adenomatous-polyposis",
     name: "Familial Adenomatous Polyposis",
     description:
-      "APC gene mutation causing hundreds of colorectal polyps with near-certain progression to colon cancer.",
+      "APC gene mutation causing hundreds of colorectal polyps; without treatment, progression to colon cancer is highly likely. Preventive interventions exist.",
     category: "Cancer Predisposition",
     inheritance: "Autosomal Dominant",
     severity: "high",
@@ -748,10 +748,10 @@ const DISEASE_DETAILS: Record<string, Omit<DiseaseDetail, keyof DiseaseEntry>> =
       { rsid: "rs121908746", gene: "CFTR", allele: "A>G (N1303K)", source: "OMIM" },
       { rsid: "rs121908747", gene: "CFTR", allele: "G>T (W1282X)", source: "ClinVar" },
     ],
-    carrierFrequency: "1 in 25 (Caucasian)",
+    carrierFrequency: "1 in 25 (European descent)",
     affectedFrequency: "1 in 3,500",
     notes:
-      "Most common lethal genetic disease in Caucasians. Carrier frequency varies significantly by ethnicity. Newborn screening is standard in most countries. CFTR modulator therapies (ivacaftor, lumacaftor/ivacaftor, tezacaftor/ivacaftor, elexacaftor/tezacaftor/ivacaftor) have transformed outcomes for many genotypes.",
+      "Most common lethal genetic disease in individuals of European descent. Carrier frequency varies significantly by ancestry — higher rates are also observed in Ashkenazi Jewish and Hispanic populations due to founder effects. Newborn screening is standard in most countries. CFTR modulator therapies (ivacaftor, lumacaftor/ivacaftor, tezacaftor/ivacaftor, elexacaftor/tezacaftor/ivacaftor) have transformed outcomes for many genotypes.",
     sources: ["ClinVar", "OMIM", "GeneReviews", "CFTR2 Database"],
   },
   "sickle-cell-disease": {

@@ -66,6 +66,8 @@ vi.mock('@/components/ui/button', () => ({
       {children}
     </button>
   ),
+  buttonVariants: ({ variant, size, className }: any) =>
+    [variant, size, className].filter(Boolean).join(' '),
 }));
 
 vi.mock('@/components/ui/input', () => ({

@@ -62,15 +62,15 @@ function makePgxPanel(): PgxPanel {
         },
         metabolizer_status: {
           poor_metabolizer: {
-            activity_score_range: [0.0, 0.0],
+            activity_score_range: [0.0, 0.25],
             description: 'Little to no enzyme activity',
           },
           intermediate_metabolizer: {
-            activity_score_range: [0.25, 1.0],
+            activity_score_range: [0.25, 1.25],
             description: 'Decreased enzyme activity',
           },
           normal_metabolizer: {
-            activity_score_range: [1.25, 2.25],
+            activity_score_range: [1.25, 2.5],
             description: 'Normal enzyme activity',
           },
           ultra_rapid_metabolizer: {
@@ -131,15 +131,15 @@ function makePgxPanel(): PgxPanel {
         },
         metabolizer_status: {
           poor_metabolizer: {
-            activity_score_range: [0.0, 0.0],
+            activity_score_range: [0.0, 0.5],
             description: 'Little to no enzyme activity',
           },
           intermediate_metabolizer: {
-            activity_score_range: [0.5, 1.0],
+            activity_score_range: [0.5, 1.5],
             description: 'Decreased enzyme activity',
           },
           normal_metabolizer: {
-            activity_score_range: [1.5, 2.0],
+            activity_score_range: [1.5, 10.0],
             description: 'Normal enzyme activity',
           },
         },
@@ -437,6 +437,98 @@ describe('analyzePgx', () => {
       expect(pred).toHaveProperty('metabolizerStatus');
       expect(pred).toHaveProperty('drugRecommendations');
     }
+  });
+});
+
+// ─── PGx Boundary-Value Tests ────────────────────────────────────────────────
+//
+// CYP2D6 ranges (from pgx-panel.json, exclusive upper bound except last):
+//   poor_metabolizer:         [0.00, 0.25)
+//   intermediate_metabolizer: [0.25, 1.25)
+//   normal_metabolizer:       [1.25, 2.50)
+//   ultra_rapid_metabolizer:  [2.50, 99]  (last range — inclusive upper)
+//
+// *10 has activity_score 0.25 (decreased function).
+// By combining star alleles we can hit boundary scores precisely:
+//   *10/*4 => 0.25 + 0.00 = 0.25  (boundary between poor and intermediate)
+//   *10/*10 => 0.25 + 0.25 = 0.50 (inside intermediate, just above lower boundary)
+//   *2/*4   => 1.00 + 0.00 = 1.00 (inside intermediate)
+//   *2/*10  => 1.00 + 0.25 = 1.25 (boundary between intermediate and normal)
+//   *1/*1   => 1.00 + 1.00 = 2.00 (inside normal)
+//   *2/*2   => 1.00 + 1.00 = 2.00 (inside normal, same score as *1/*1)
+//
+// We need real star-alleles from the pgx-panel.json that produce these scores.
+// Since the fixture panel (makePgxPanel) does not include *10, we build a
+// custom panel for boundary testing with explicit activity scores.
+
+function makeBoundaryPanel() {
+  // Extend the test panel with a *10 allele (activity_score 0.25) to allow
+  // us to construct diplotypes that hit boundary scores exactly.
+  const panel = makePgxPanel();
+  panel.genes['CYP2D6']!.star_alleles['*10'] = {
+    defining_variants: [{ rsid: 'rs1065852', genotype: 'TT' }],
+    function: 'decreased' as any,
+    activity_score: 0.25,
+  };
+  return panel;
+}
+
+describe('determineMetabolizerStatus — range boundary values (CYP2D6)', () => {
+  it('score exactly at lower boundary of intermediate (0.25) maps to intermediate, not poor', () => {
+    // *10/*4 => 0.25 + 0.00 = 0.25
+    // Range: poor=[0,0.25), intermediate=[0.25,1.25) — 0.25 is EXCLUDED from poor, INCLUDED in intermediate
+    const panel = makeBoundaryPanel();
+    const result = determineMetabolizerStatus('CYP2D6', '*10/*4', panel);
+    expect(result.activityScore).toBe(0.25);
+    expect(result.status).toBe('intermediate_metabolizer');
+  });
+
+  it('score just below intermediate lower boundary (< 0.25) maps to poor metabolizer', () => {
+    // *4/*4 => 0.0 + 0.0 = 0.0 — clearly inside poor [0, 0.25)
+    const panel = makeBoundaryPanel();
+    const result = determineMetabolizerStatus('CYP2D6', '*4/*4', panel);
+    expect(result.activityScore).toBe(0.0);
+    expect(result.status).toBe('poor_metabolizer');
+  });
+
+  it('score exactly at lower boundary of normal (1.25) maps to normal, not intermediate', () => {
+    // *2/*10 => 1.00 + 0.25 = 1.25
+    // Range: intermediate=[0.25,1.25), normal=[1.25,2.5) — 1.25 is EXCLUDED from intermediate, INCLUDED in normal
+    const panel = makeBoundaryPanel();
+    const result = determineMetabolizerStatus('CYP2D6', '*2/*10', panel);
+    expect(result.activityScore).toBe(1.25);
+    expect(result.status).toBe('normal_metabolizer');
+  });
+
+  it('score just below normal lower boundary (< 1.25) maps to intermediate', () => {
+    // *1/*4 => 1.00 + 0.00 = 1.00 — inside intermediate [0.25, 1.25)
+    const panel = makeBoundaryPanel();
+    const result = determineMetabolizerStatus('CYP2D6', '*1/*4', panel);
+    expect(result.activityScore).toBe(1.0);
+    expect(result.status).toBe('intermediate_metabolizer');
+  });
+
+  it('score exactly at lower boundary of ultra_rapid (2.5) maps to ultra_rapid, not normal', () => {
+    // We build a custom diplotype: two alleles each with activity 1.25 to hit exactly 2.5.
+    // Inject a custom star allele for this boundary test.
+    const panel = makeBoundaryPanel();
+    panel.genes['CYP2D6']!.star_alleles['*xULT'] = {
+      defining_variants: [{ rsid: 'rs_fake_ult', genotype: 'TT' }],
+      function: 'increased' as any,
+      activity_score: 1.25,
+    };
+    // *xULT/*xULT => 1.25 + 1.25 = 2.5 — should be ultra_rapid (inclusive lower bound)
+    const result = determineMetabolizerStatus('CYP2D6', '*xULT/*xULT', panel);
+    expect(result.activityScore).toBe(2.5);
+    expect(result.status).toBe('ultra_rapid_metabolizer');
+  });
+
+  it('score inside normal range maps to normal metabolizer', () => {
+    // *1/*1 => 1.0 + 1.0 = 2.0 — inside [1.25, 2.5)
+    const panel = makeBoundaryPanel();
+    const result = determineMetabolizerStatus('CYP2D6', '*1/*1', panel);
+    expect(result.activityScore).toBe(2.0);
+    expect(result.status).toBe('normal_metabolizer');
   });
 });
 

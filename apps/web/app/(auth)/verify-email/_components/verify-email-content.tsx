@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, Mail, ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DnaDots } from "@/components/auth/dna-dots";
 import { TrustSignals } from "@/components/auth/trust-signals";
@@ -75,7 +75,7 @@ export function VerifyEmailContent() {
   }, [resendCooldown, resendEmail, resendVerification]);
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <motion.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
@@ -93,9 +93,9 @@ export function VerifyEmailContent() {
               >
                 {/* DNA helix loading — reusable component (#1), removed Loader2 (#10) */}
                 <DnaDots />
-                <h2 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+                <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">
                   Verifying your email...
-                </h2>
+                </h1>
                 <p className="mt-2 text-sm text-[var(--text-muted)]">
                   This will only take a moment.
                 </p>
@@ -124,18 +124,16 @@ export function VerifyEmailContent() {
                 >
                   <CheckCircle className="h-9 w-9 text-[var(--accent-teal)]" />
                 </motion.div>
-                <h2 className="gradient-text font-heading text-2xl font-extrabold">
+                <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Email Verified!
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   Your email address has been confirmed. You can now sign in to
                   your account.
                 </p>
                 <div className="mt-6">
-                  <Link href="/login">
-                    <Button variant="primary" size="lg" className="w-full">
-                      Continue to Sign In
-                    </Button>
+                  <Link href="/login" className={buttonVariants({ variant: "primary", size: "lg", className: "w-full" })}>
+                    Continue to Sign In
                   </Link>
                 </div>
               </motion.div>
@@ -144,6 +142,7 @@ export function VerifyEmailContent() {
             {state === "error" && (
               <motion.div
                 key="error"
+                role="alert"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
@@ -163,9 +162,9 @@ export function VerifyEmailContent() {
                 >
                   <XCircle className="h-9 w-9 text-[var(--accent-rose)]" />
                 </motion.div>
-                <h2 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
+                <h1 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
                   Verification Failed
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   {errorMessage}
                 </p>
@@ -178,6 +177,7 @@ export function VerifyEmailContent() {
                   <Input
                     type="email"
                     placeholder="you@example.com"
+                    aria-label="Email address"
                     icon={<Mail className="h-4 w-4" />}
                     autoComplete="email"
                     value={resendEmail}
@@ -226,6 +226,6 @@ export function VerifyEmailContent() {
       >
         <TrustSignals />
       </motion.div>
-    </MotionConfig>
+    </>
   );
 }

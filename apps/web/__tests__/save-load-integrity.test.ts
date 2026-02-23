@@ -370,9 +370,15 @@ function createLargeAnalysisResult(): FullAnalysisResult {
   };
 }
 
-// ── Helper: deterministic fake encrypted envelope (never plaintext) ──────────
+// ── Helper: deterministic fake encrypted envelope (valid JSON with all required fields) ──
 const makeFakeEnvelope = (id: string) =>
-  `enc:AES-256-GCM:v1:${btoa(`test-encrypted-payload-for-${id}`)}`;
+  JSON.stringify({
+    version: "1",
+    algorithm: "AES-256-GCM",
+    salt: btoa(`salt-${id}`),
+    iv: btoa(`iv-for-${id}`),
+    ciphertext: btoa(`test-encrypted-payload-for-${id}`),
+  });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION 1: Current State (Stubs)

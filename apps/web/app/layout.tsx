@@ -36,16 +36,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <div className="relative z-[1] flex min-h-screen flex-col">
-              <a href="#main-content" className="skip-to-main">
-                Skip to main content
-              </a>
-              <ErrorAnnouncer />
-              <Navbar />
-              <main id="main-content" className="flex-1">{children}</main>
-              <Footer />
-            </div>
             <MotionProvider>
+              <div className="relative z-[1] flex min-h-screen flex-col">
+                <a href="#main-content" className="skip-to-main">
+                  Skip to main content
+                </a>
+                <ErrorAnnouncer />
+                <Navbar />
+                <main id="main-content" className="flex-1">{children}</main>
+                <Footer />
+              </div>
               <CookieConsentBanner />
             </MotionProvider>
           </AuthProvider>

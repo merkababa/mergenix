@@ -62,7 +62,12 @@ export function AccountContent() {
   }, [isAuthenticated, fetchProfile]);
 
   if (!isAuthenticated || !user) {
-    return <AccountSkeleton />;
+    return (
+      <div role="status" aria-busy="true">
+        <span className="sr-only">Loading account settings...</span>
+        <AccountSkeleton />
+      </div>
+    );
   }
 
   return (

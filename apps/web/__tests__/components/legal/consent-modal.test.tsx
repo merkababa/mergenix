@@ -31,9 +31,11 @@ vi.mock('@/components/ui/button', () => ({
 // ─── Store mock ────────────────────────────────────────────────────────────────
 
 const mockSetGeneticDataConsent = vi.fn();
+const mockRecordConsent = vi.fn().mockResolvedValue({});
 
 const mockStoreState: Record<string, any> = {
   setGeneticDataConsent: mockSetGeneticDataConsent,
+  recordConsent: mockRecordConsent,
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
@@ -182,6 +184,7 @@ describe('ConsentModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /accept/i }));
 
     expect(mockSetGeneticDataConsent).toHaveBeenCalledWith(true);
+    expect(mockRecordConsent).toHaveBeenCalledWith("genetic_data_processing", expect.any(String));
     expect(onAccept).toHaveBeenCalled();
   });
 

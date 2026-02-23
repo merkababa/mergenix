@@ -34,9 +34,9 @@ const DATA_CATEGORIES = [
   },
   {
     icon: Lock,
-    category: "Encrypted analysis results",
+    category: "Analysis results (if saved)",
     description:
-      "If you choose to save results, they are stored encrypted with AES-256-GCM. Raw genetic files are never stored.",
+      "If you choose to save results, they are stored server-side. Client-side AES-256-GCM encryption is planned for a future release. Raw genetic files are never stored.",
   },
 ] as const;
 
@@ -89,6 +89,13 @@ export function PrivacyContent() {
         subtitle="How we process your personal data — in compliance with GDPR Article 13 and Article 14."
         breadcrumbs={[{ label: "Privacy", href: "/privacy" }]}
       />
+
+      {/* ── Effective Date ────────────────────────────────────────────── */}
+      <div className="mt-6 flex flex-wrap gap-4 text-sm text-[var(--text-muted)]">
+        <span><strong>Last updated:</strong> February 2026</span>
+        <span aria-hidden="true">·</span>
+        <span><strong>Effective date:</strong> February 2026</span>
+      </div>
 
       {/* ── Data Controller ──────────────────────────────────────────── */}
       <section className="mt-16" aria-labelledby="data-controller-heading">
@@ -315,8 +322,8 @@ export function PrivacyContent() {
         <ScrollReveal>
           <SectionHeading
             id="zke-heading"
-            title="Zero-Knowledge Encryption"
-            subtitle="How your saved results are protected"
+            title="Zero-Knowledge Encryption (Coming Soon)"
+            subtitle="Planned client-side encryption for saved results"
           />
         </ScrollReveal>
 
@@ -328,14 +335,14 @@ export function PrivacyContent() {
               </div>
               <div>
                 <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
-                  Client-Side Encryption (AES-256-GCM)
+                  Client-Side Encryption — Planned for a Future Release
                 </h3>
                 <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-                  Analysis results, if saved, are encrypted client-side using your
-                  password-derived key (AES-256-GCM) before being transmitted to our
-                  servers. We cannot decrypt your saved results. If you lose your
-                  password without completing recovery, your saved results cannot be
-                  recovered.
+                  We plan to implement client-side AES-256-GCM encryption using
+                  Argon2id-derived keys, so that saved analysis results are encrypted
+                  in your browser before being transmitted to our servers. This feature
+                  is not yet active. Until it is released, saved results are stored
+                  server-side with standard transport and at-rest encryption.
                 </p>
               </div>
             </div>
@@ -371,10 +378,11 @@ export function PrivacyContent() {
                   >
                     privacy@mergenix.com
                   </a>
-                  . Our DPO appointment is pending formal designation prior to
-                  general availability launch. In the interim, all data protection
-                  inquiries are handled directly by the Mergenix privacy team via
-                  the address above.
+                  . A Data Protection Officer will be formally designated prior to
+                  public launch. This designation will be completed before Mergenix
+                  becomes accessible to the general public. In the interim, all data
+                  protection inquiries are handled directly by the Mergenix privacy
+                  team via the address above.
                 </p>
               </div>
             </div>
@@ -403,9 +411,12 @@ export function PrivacyContent() {
                   Article 27 Designation
                 </h3>
                 <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-                  Mergenix will designate an EU representative under GDPR Article 27
-                  prior to general availability launch. Until designation, EU data
-                  subjects may direct inquiries to our Data Protection Officer at{" "}
+                  An EU Representative under GDPR Article 27 will be formally
+                  designated prior to public launch. This designation will be
+                  completed before Mergenix becomes accessible to the general public,
+                  and the representative&apos;s contact details will be published in
+                  this notice at that time. Until formal designation, EU data subjects
+                  may direct inquiries to our Data Protection Officer at{" "}
                   <a
                     href="mailto:privacy@mergenix.com"
                     className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"

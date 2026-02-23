@@ -80,8 +80,8 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs4988235', chromosome: '2', referenceAllele: 'G' },   // MCM6/LCT lactase
 
   // Chromosome 3
-  { rsid: 'rs1800629', chromosome: '3', referenceAllele: 'G' },   // Common tag SNP chr3
-  { rsid: 'rs2187668', chromosome: '3', referenceAllele: 'C' },   // HLA-related tag
+  { rsid: 'rs13078960', chromosome: '3', referenceAllele: 'T' },  // CADM2 gene, chr3 tag SNP
+  { rsid: 'rs2187668', chromosome: '3', referenceAllele: 'C' },   // chr3 tag
 
   // Chromosome 4
   { rsid: 'rs13117307', chromosome: '4', referenceAllele: 'G' },  // chr4 tag SNP
@@ -92,6 +92,7 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs6897932', chromosome: '5', referenceAllele: 'C' },   // IL7R
 
   // Chromosome 6
+  { rsid: 'rs1800629', chromosome: '6', referenceAllele: 'G' },   // TNF promoter 6p21.33
   { rsid: 'rs3129882', chromosome: '6', referenceAllele: 'A' },   // HLA region
   { rsid: 'rs9275596', chromosome: '6', referenceAllele: 'C' },   // HLA-DQB1
 
@@ -105,10 +106,10 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
 
   // Chromosome 9
   { rsid: 'rs10811661', chromosome: '9', referenceAllele: 'C' },  // CDKN2A/B region
-  { rsid: 'rs7903146', chromosome: '9', referenceAllele: 'C' },   // chr9 proxy
+  { rsid: 'rs10511789', chromosome: '9', referenceAllele: 'A' },  // chr9 tag SNP
 
   // Chromosome 10
-  { rsid: 'rs7903146_10', chromosome: '10', referenceAllele: 'C' }, // TCF7L2
+  { rsid: 'rs7903146', chromosome: '10', referenceAllele: 'C' },  // TCF7L2
   { rsid: 'rs11187129', chromosome: '10', referenceAllele: 'G' },   // PTEN region
 
   // Chromosome 11
@@ -128,12 +129,12 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs1950897', chromosome: '14', referenceAllele: 'G' },  // chr14 tag
 
   // Chromosome 15
-  { rsid: 'rs12913832', chromosome: '15', referenceAllele: 'A' }, // HERC2/OCA2 eye color
+  { rsid: 'rs12913832', chromosome: '15', referenceAllele: 'G' }, // HERC2/OCA2 eye color
   { rsid: 'rs1426654', chromosome: '15', referenceAllele: 'A' },  // SLC24A5 skin pigment
 
   // Chromosome 16
   { rsid: 'rs12325489', chromosome: '16', referenceAllele: 'C' }, // FTO region proxy
-  { rsid: 'rs9939609', chromosome: '16', referenceAllele: 'A' },  // FTO tag (A/T — note: this will be filtered as palindromic in practice, included for completeness)
+  { rsid: 'rs12325655', chromosome: '16', referenceAllele: 'C' }, // FTO region, C/T non-palindromic
 
   // Chromosome 17
   { rsid: 'rs1042522', chromosome: '17', referenceAllele: 'G' },  // TP53 Arg72Pro

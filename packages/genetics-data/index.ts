@@ -153,10 +153,10 @@ export const liftoverCoordinates: LiftoverTable = liftoverCoordinatesRaw as unkn
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 /**
- * Top 25 diseases available in the free tier.
- * Sourced from Source/tier_config.py TOP_25_FREE_DISEASES.
+ * Top 21 diseases available in the free tier.
+ * Sourced from Source/tier_config.py TOP_25_FREE_DISEASES (renamed TOP_21_FREE_DISEASES to match actual count of 21).
  */
-export const TOP_25_FREE_DISEASES: string[] = [
+export const TOP_21_FREE_DISEASES: string[] = [
   'Cystic Fibrosis',
   'Sickle Cell Disease',
   'Tay-Sachs Disease',

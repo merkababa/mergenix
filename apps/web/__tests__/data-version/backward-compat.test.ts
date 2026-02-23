@@ -180,9 +180,15 @@ function makeResultWithExtraFields(): Record<string, unknown> {
   };
 }
 
-// ── Helper: opaque encrypted envelope (placeholder — no real encryption yet) ──
+// ── Helper: opaque encrypted envelope (valid JSON with all required fields) ──
 const fakeEnvelope = (id: string) =>
-  `enc:AES-256-GCM:v1:${btoa(`encrypted-${id}`)}`;
+  JSON.stringify({
+    version: "1",
+    algorithm: "AES-256-GCM",
+    salt: btoa(`salt-${id}`),
+    iv: btoa(`iv-for-${id}`),
+    ciphertext: btoa(`encrypted-${id}`),
+  });
 
 // ─── Section 1: Version mismatch detection ────────────────────────────────────
 

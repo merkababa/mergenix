@@ -39,6 +39,6 @@ TIER_RESULT_LIMITS: dict[str, int] = {
 
 # Stripe price mapping (read price IDs from env in production)
 TIER_PRICES: dict[str, dict] = {
-    TIER_PREMIUM: {"monthly": 14_99, "label": "Premium"},
-    TIER_PRO: {"monthly": 34_99, "label": "Pro"},
+    TIER_PREMIUM: {"amount": 14_99, "label": "Premium"},
+    TIER_PRO: {"amount": 34_99, "label": "Pro"},
 }

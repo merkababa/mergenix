@@ -73,7 +73,8 @@ export function UpgradeModal({
   targetTier,
   currentTier,
 }: UpgradeModalProps) {
-  const { createCheckout, isCheckoutLoading } = usePaymentStore();
+  const createCheckout = usePaymentStore((s) => s.createCheckout);
+  const isCheckoutLoading = usePaymentStore((s) => s.isCheckoutLoading);
   const [error, setError] = useState<string | null>(null);
   const [showChipDisclosure, setShowChipDisclosure] = useState(false);
 

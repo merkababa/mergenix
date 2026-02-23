@@ -63,7 +63,7 @@ def _get_price_map() -> dict[str, str]:
 
 # Flat tier → cents map derived from the centralized TIER_PRICES constant.
 # Used for upgrade difference calculations in create_checkout_session.
-_TIER_PRICES: dict[str, int] = {t: data["monthly"] for t, data in TIER_PRICES.items()}
+_TIER_PRICES: dict[str, int] = {t: data["amount"] for t, data in TIER_PRICES.items()}
 
 
 async def create_checkout_session(
@@ -215,7 +215,7 @@ async def handle_webhook_event(
         #
         # For upgrades (e.g. Premium -> Pro), the expected amount is the
         # difference between tiers, not the full target tier price.
-        _expected_amounts = {t: data["monthly"] for t, data in TIER_PRICES.items()}
+        _expected_amounts = {t: data["amount"] for t, data in TIER_PRICES.items()}
         expected = _expected_amounts.get(tier)
 
         if expected is not None and amount != expected:

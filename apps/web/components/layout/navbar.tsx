@@ -285,7 +285,7 @@ export function Navbar() {
                     href="/subscription"
                     className="block rounded-xl px-4 py-3 font-heading text-sm font-medium text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
                   >
-                    Subscription
+                    My Plan
                   </Link>
                 </div>
               ) : (

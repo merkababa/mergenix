@@ -4,16 +4,12 @@ import { useRef, useCallback, useEffect } from "react";
 import type {
   WorkerRequest,
   WorkerResponse,
-  Tier,
   Population,
 } from "@mergenix/shared-types";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
-
-// ─── Constants ─────────────────────────────────────────────────────────────
-
-/** Maximum file size in bytes (200 MB). */
-const MAX_FILE_SIZE = 200 * 1024 * 1024;
+import { MAX_GENETIC_FILE_SIZE } from "@/lib/genetics-constants";
+import { parseTier } from "@/lib/utils/parse-tier";
 
 // ─── Hook ──────────────────────────────────────────────────────────────────
 
@@ -61,8 +57,7 @@ export function useGeneticsWorker() {
           store.setParseResults(data.results);
 
           // Read tier from auth store (outside React tree, so use getState)
-          const tier =
-            (useAuthStore.getState().user?.tier as Tier) ?? "free";
+          const tier = parseTier(useAuthStore.getState().user?.tier);
           const population =
             useAnalysisStore.getState().selectedPopulation;
 
@@ -142,11 +137,11 @@ export function useGeneticsWorker() {
       store.setError(null);
 
       // ── Validate file sizes ──────────────────────────────────────────
-      if (parentAFile.size > MAX_FILE_SIZE) {
+      if (parentAFile.size > MAX_GENETIC_FILE_SIZE) {
         store.setError("File too large (max 200MB)");
         return;
       }
-      if (parentBFile.size > MAX_FILE_SIZE) {
+      if (parentBFile.size > MAX_GENETIC_FILE_SIZE) {
         store.setError("File too large (max 200MB)");
         return;
       }

@@ -238,7 +238,7 @@ describe('OverviewTab', () => {
     render(<OverviewTab />);
 
     expect(
-      screen.getByText(new RegExp(`Upgrade to Pro to unlock full ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`)),
+      screen.getByText(/Upgrade to Pro to unlock all disease screening/),
     ).toBeInTheDocument();
   });
 

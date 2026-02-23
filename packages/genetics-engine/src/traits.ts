@@ -18,7 +18,10 @@ import type {
   Tier,
 } from './types';
 import { TIER_GATING } from './types';
-import { TOP_10_FREE_TRAITS } from '@mergenix/genetics-data';
+// NOTE: TOP_10_FREE_TRAITS (from @mergenix/genetics-data) was previously used to
+// filter free tier traits to a curated 10-item list. Free tier now has traitLimit: 79
+// (all traits), so that import has been removed. The constant is kept in genetics-data
+// for legacy/reference purposes.
 
 // ─── Allele Helpers ─────────────────────────────────────────────────────────
 
@@ -292,7 +295,8 @@ export function predictTrait(
  * Predict offspring phenotype probabilities for all traits in the database.
  *
  * Iterates through all trait entries and calls predictTrait() for each.
- * Free tier is limited to the TOP_10_FREE_TRAITS curated list.
+ * All tiers (free, premium, pro) use the centralized TIER_GATING traitLimit (79).
+ * Disease screening is the paid gating boundary, not trait predictions.
  *
  * Ported from Source/trait_prediction.py `analyze_traits()`.
  *
@@ -308,12 +312,11 @@ export function predictAllTraits(
   traitDatabase: TraitSnpEntry[],
   tier: Tier = 'free',
 ): TraitResult[] {
-  // Apply tier gating: free tier uses the curated top-10 list;
-  // paid tiers use the centralized TIER_GATING limit.
+  // Apply tier gating: all tiers use the centralized TIER_GATING traitLimit.
+  // Free tier now has traitLimit: 79 (all traits — disease screening is the
+  // paid gating boundary, not trait predictions).
   const limit = TIER_GATING[tier].traitLimit;
-  const traitsToAnalyze = tier === 'free'
-    ? traitDatabase.filter(t => TOP_10_FREE_TRAITS.includes(t.trait))
-    : traitDatabase.slice(0, limit);
+  const traitsToAnalyze = traitDatabase.slice(0, limit);
 
   const results: TraitResult[] = [];
 

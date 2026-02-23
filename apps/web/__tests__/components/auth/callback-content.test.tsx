@@ -67,6 +67,8 @@ vi.mock('@/components/ui/button', () => ({
       {children}
     </button>
   ),
+  buttonVariants: ({ variant, size, className }: any) =>
+    [variant, size, className].filter(Boolean).join(' '),
 }));
 
 vi.mock('lucide-react', () => ({
@@ -85,12 +87,28 @@ describe('CallbackContent', () => {
     vi.clearAllMocks();
     mockSearchParams = new URLSearchParams('code=auth-code-123&state=state-token-456');
     mockGoogleCallback.mockReturnValue(new Promise(() => {}));
+    // Set up OAuth state in sessionStorage to pass CSRF validation
+    sessionStorage.setItem('oauth_state', 'state-token-456');
   });
 
-  it('calls googleCallback directly without sessionStorage check', () => {
+  it('calls googleCallback after OAuth state validation passes', () => {
     mockGoogleCallback.mockResolvedValue(undefined);
     render(<CallbackContent />);
     expect(mockGoogleCallback).toHaveBeenCalledWith('auth-code-123', 'state-token-456');
+  });
+
+  it('shows error when OAuth state does not match sessionStorage', () => {
+    sessionStorage.setItem('oauth_state', 'wrong-state');
+    render(<CallbackContent />);
+    expect(screen.getByText(/OAuth state mismatch/)).toBeInTheDocument();
+    expect(mockGoogleCallback).not.toHaveBeenCalled();
+  });
+
+  it('shows error when OAuth state is missing from sessionStorage', () => {
+    sessionStorage.removeItem('oauth_state');
+    render(<CallbackContent />);
+    expect(screen.getByText(/OAuth state mismatch/)).toBeInTheDocument();
+    expect(mockGoogleCallback).not.toHaveBeenCalled();
   });
 
   it('shows error when code is missing', () => {
@@ -147,11 +165,5 @@ describe('CallbackContent', () => {
       const link = screen.getByText('Back to Home');
       expect(link.closest('a')).toHaveAttribute('href', '/');
     });
-  });
-
-  it('googleCallback is called with code and state params', () => {
-    mockGoogleCallback.mockResolvedValue(undefined);
-    render(<CallbackContent />);
-    expect(mockGoogleCallback).toHaveBeenCalledWith('auth-code-123', 'state-token-456');
   });
 });

@@ -266,11 +266,17 @@ export function SampleReportContent() {
         >
           <h2
             id="prs-heading"
-            className="mb-6 flex items-center gap-2 font-heading text-xl font-bold text-[var(--text-heading)]"
+            className="mb-4 flex items-center gap-2 font-heading text-xl font-bold text-[var(--text-heading)]"
           >
             <Activity className="h-5 w-5 text-[var(--accent-amber)]" aria-hidden="true" />
             Polygenic Risk Scores (PRS)
           </h2>
+          <p className="mb-6 text-xs text-[var(--text-muted)] italic">
+            Note: Most GWAS studies underlying these scores have disproportionately
+            studied European-ancestry populations. PRS accuracy may be lower for
+            individuals of non-European ancestry. Interpret these scores with caution
+            and discuss with a genetic counselor if your ancestry differs.
+          </p>
         </motion.div>
 
         <motion.div
@@ -403,7 +409,7 @@ export function SampleReportContent() {
             Ready to Analyze Your Own DNA?
           </h2>
           <p className="mb-6 text-sm text-[var(--text-muted)]">
-            Upload your raw DNA files from 23andMe, AncestryDNA, or MyHeritage and get your personalized genetic analysis.
+            Upload your raw DNA files from 23andMe, AncestryDNA, MyHeritage, or VCF and get your personalized genetic analysis.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
@@ -413,7 +419,7 @@ export function SampleReportContent() {
               Start Free Analysis
             </a>
             <a
-              href="/pricing"
+              href="/products"
               className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-glass)] px-6 py-3 text-sm font-semibold text-[var(--text-heading)] transition-colors hover:border-[var(--accent-teal)]"
             >
               View Pro Plans

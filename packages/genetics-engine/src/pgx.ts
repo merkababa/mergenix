@@ -292,13 +292,32 @@ export function determineMetabolizerStatus(
     }
   }
 
-  // Find matching metabolizer status by activity_score_range
+  // Find matching metabolizer status by activity_score_range.
+  //
+  // Uses exclusive upper bounds (score >= min && score < max) for all ranges
+  // except the last/highest range, which uses an inclusive upper bound
+  // (score <= max). This prevents boundary values from matching two adjacent
+  // ranges simultaneously (e.g., a score of exactly 1.0 cannot belong to
+  // both intermediate [0.5, 1.0) and normal [1.0, 2.0)).
+  const statusEntries = Object.entries(metabolizerDefs);
+  // Identify the entry with the highest upper bound — that is the last range
+  // and gets an inclusive upper bound to ensure the ceiling is catchable.
+  let maxHigh = -Infinity;
+  for (const [, statusInfo] of statusEntries) {
+    const [, high] = statusInfo.activity_score_range;
+    if (high > maxHigh) {
+      maxHigh = high;
+    }
+  }
+
   let matchedStatus: MetabolizerStatus | null = null;
   let matchedDesc = '';
 
-  for (const [statusName, statusInfo] of Object.entries(metabolizerDefs)) {
+  for (const [statusName, statusInfo] of statusEntries) {
     const [low, high] = statusInfo.activity_score_range;
-    if (low <= totalScore && totalScore <= high) {
+    const isLastRange = high === maxHigh;
+    const upperMatches = isLastRange ? totalScore <= high : totalScore < high;
+    if (low <= totalScore && upperMatches) {
       matchedStatus = statusName as MetabolizerStatus;
       matchedDesc = statusInfo.description;
       break;
@@ -306,17 +325,11 @@ export function determineMetabolizerStatus(
   }
 
   if (matchedStatus === null) {
-    // No exact range match; try to find a "normal" status as fallback
-    matchedStatus = 'normal_metabolizer';
-    matchedDesc = 'Activity score does not match defined ranges';
-
-    for (const [statusName, statusInfo] of Object.entries(metabolizerDefs)) {
-      if (statusName.toLowerCase().includes('normal')) {
-        matchedStatus = statusName as MetabolizerStatus;
-        matchedDesc = statusInfo.description;
-        break;
-      }
-    }
+    // No range matched this activity score — return unknown rather than
+    // silently misclassifying as normal_metabolizer, which could lead to
+    // incorrect drug dosing recommendations.
+    matchedStatus = 'unknown';
+    matchedDesc = `Activity score ${totalScore.toFixed(2)} does not match any defined metabolizer range`;
   }
 
   return {

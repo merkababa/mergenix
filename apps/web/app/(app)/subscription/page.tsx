@@ -45,17 +45,15 @@ function Skeleton({ className }: { className?: string }) {
 
 export default function SubscriptionPage() {
   const user = useAuthStore((s) => s.user);
-  const {
-    paymentHistory,
-    subscriptionStatus,
-    isLoading,
-    isCheckoutLoading,
-    error,
-    createCheckout,
-    fetchPaymentHistory,
-    fetchSubscriptionStatus,
-    clearError,
-  } = usePaymentStore();
+  const paymentHistory = usePaymentStore((s) => s.paymentHistory);
+  const subscriptionStatus = usePaymentStore((s) => s.subscriptionStatus);
+  const isLoading = usePaymentStore((s) => s.isLoading);
+  const isCheckoutLoading = usePaymentStore((s) => s.isCheckoutLoading);
+  const error = usePaymentStore((s) => s.error);
+  const createCheckout = usePaymentStore((s) => s.createCheckout);
+  const fetchPaymentHistory = usePaymentStore((s) => s.fetchPaymentHistory);
+  const fetchSubscriptionStatus = usePaymentStore((s) => s.fetchSubscriptionStatus);
+  const clearError = usePaymentStore((s) => s.clearError);
 
   // ── Fetch data on mount ──────────────────────────────────────────────
   useEffect(() => {
@@ -98,6 +96,9 @@ export default function SubscriptionPage() {
     async (tier: "premium" | "pro") => {
       try {
         const response = await createCheckout(tier);
+        if (!response.checkoutUrl.startsWith("https://checkout.stripe.com/")) {
+          throw new Error("Invalid checkout URL");
+        }
         window.location.href = response.checkoutUrl;
       } catch {
         // Error is surfaced via the store's error state
@@ -113,7 +114,7 @@ export default function SubscriptionPage() {
       <>
         <div className="mb-8 text-center">
           <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
-            Subscription
+            My Plan
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
             Manage your plan and view payment history
@@ -125,7 +126,7 @@ export default function SubscriptionPage() {
           aria-busy="true"
           role="status"
         >
-          <span className="sr-only">Loading subscription information...</span>
+          <span className="sr-only">Loading plan information...</span>
           {/* Current plan skeleton */}
           <GlassCard variant="medium" hover="none" className="p-7">
             <Skeleton className="mb-4 h-6 w-32" />
@@ -165,7 +166,7 @@ export default function SubscriptionPage() {
     <>
       <div className="mb-8 text-center">
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
-          Subscription
+          My Plan
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
           Manage your plan and view payment history
@@ -253,8 +254,8 @@ export default function SubscriptionPage() {
                   </div>
                   <p className="mt-2 text-sm text-[var(--text-muted)]">
                     {tier.id === "premium"
-                      ? "Unlock 500+ diseases, 79 traits, pharmacogenomics, and full counseling."
-                      : "Get ethnicity-adjusted frequencies, genetic counselor referrals, ClinVar integration, and PDF exports."}
+                      ? "Unlock 500+ disease screenings, pharmacogenomics, and full counseling."
+                      : "Get all disease screening, automated referral letter, ClinVar integration, and PDF exports."}
                   </p>
                   <ul className="mt-3 space-y-1.5">
                     {tier.features.map((f) => (

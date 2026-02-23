@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Mail, AlertCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -139,7 +139,13 @@ export function LoginContent() {
   const handleGoogleOAuth = useCallback(async () => {
     clearError();
     try {
-      const { authorizationUrl } = await getGoogleOAuthUrl();
+      const { authorizationUrl, state } = await getGoogleOAuthUrl();
+      // Validate URL before redirect — must be a real Google OAuth endpoint
+      if (!authorizationUrl.startsWith("https://accounts.google.com/")) {
+        useAuthStore.setState({ error: "Invalid OAuth provider URL. Please try again." });
+        return;
+      }
+      sessionStorage.setItem('oauth_state', state);
       window.location.href = authorizationUrl;
     } catch {
       // Error is set in the store
@@ -162,7 +168,7 @@ export function LoginContent() {
   );
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       {/* Login Card */}
       <motion.div variants={fadeUp} initial="hidden" animate="visible">
         <GlassCard
@@ -391,6 +397,6 @@ export function LoginContent() {
           ]}
         />
       </motion.div>
-    </MotionConfig>
+    </>
   );
 }

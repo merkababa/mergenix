@@ -8,12 +8,12 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { PartnerConsentCheckbox } from "@/components/legal/partner-consent-checkbox";
 import { cn } from "@/lib/utils";
+import { MAX_GENETIC_FILE_SIZE } from "@/lib/genetics-constants";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const ACCEPTED_EXTENSIONS = [".txt", ".csv", ".vcf", ".gz"];
 const ACCEPT_STRING = ".txt,.csv,.vcf,.gz";
-const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50 MB
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -85,9 +85,9 @@ function UploadZone({
         return;
       }
 
-      if (incoming.size > MAX_FILE_SIZE_BYTES) {
+      if (incoming.size > MAX_GENETIC_FILE_SIZE) {
         setError(
-          `File exceeds 50 MB limit (${formatFileSize(incoming.size)}).`,
+          `File exceeds 200 MB limit (${formatFileSize(incoming.size)}).`,
         );
         return;
       }
@@ -223,7 +223,7 @@ function UploadZone({
             id={formatDescriptionId}
             className="text-xs text-[var(--text-dim)]"
           >
-            .txt, .csv, .vcf, .gz &mdash; max 50 MB
+            .txt, .csv, .vcf, .gz &mdash; max 200 MB
           </p>
 
           <input

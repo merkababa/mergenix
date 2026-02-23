@@ -238,7 +238,7 @@ export function DeleteAccountSection({
                   <ul className="list-inside list-disc space-y-1 ml-1">
                     <li>Your account and profile</li>
                     <li>All saved analysis results</li>
-                    <li>Your subscription</li>
+                    <li>Your plan and tier status</li>
                   </ul>
                   <p className="mt-3 font-semibold text-[var(--accent-rose)]">
                     This cannot be undone.

@@ -11,7 +11,7 @@
  * - getCoverageSummary: human-readable summary statistics
  *
  * The tier filtering (src/carrier.ts filterPanelByTier) provides:
- * - free tier: up to 25 diseases (subset of TOP_25_FREE_DISEASES)
+ * - free tier: 0 diseases (no disease access; disease screening requires Premium or Pro)
  * - premium tier: up to 500 diseases
  * - pro tier: all CARRIER_PANEL_COUNT diseases (2,697)
  *
@@ -195,9 +195,9 @@ describe('Coverage Metrics — Accuracy', () => {
 // ─── Q4: Tier-Specific Coverage ────────────────────────────────────────────
 
 describe('Coverage Metrics — Tier-Specific', () => {
-  it('free tier: analyzeCarrierRisk filters panel to free diseases only', () => {
-    // The free tier uses TOP_25_FREE_DISEASES substring matching.
-    // We build a small panel with one free disease and one non-free disease.
+  it('free tier: analyzeCarrierRisk returns no diseases (diseaseLimit is 0)', () => {
+    // Free tier has diseaseLimit: 0 — disease screening requires Premium or Pro.
+    // All diseases are excluded regardless of what is in the panel.
     const panel: CarrierPanelEntry[] = [
       {
         rsid: 'rs75030207',
@@ -219,12 +219,12 @@ describe('Coverage Metrics — Tier-Specific', () => {
       {
         rsid: 'rs000099',
         gene: 'GENE_ZZZ',
-        condition: 'Extremely Rare Disease Not In Free Tier',
+        condition: 'Some Other Disease',
         inheritance: 'autosomal_recessive',
         carrier_frequency: '1 in 1000',
         pathogenic_allele: 'T',
         reference_allele: 'C',
-        description: 'Some rare disease',
+        description: 'Some disease',
         severity: 'moderate',
         prevalence: '1 in 100000',
         omim_id: '999999',
@@ -239,11 +239,9 @@ describe('Coverage Metrics — Tier-Specific', () => {
     const freeResults = analyzeCarrierRisk(genotypes, genotypes, panel, 'free');
     const allResults = analyzeCarrierRisk(genotypes, genotypes, panel);
 
-    // Free tier should exclude the non-free disease
-    expect(freeResults.length).toBeLessThan(allResults.length);
-    const conditions = freeResults.map((r) => r.condition);
-    expect(conditions).toContain('Cystic Fibrosis (F508del)');
-    expect(conditions).not.toContain('Extremely Rare Disease Not In Free Tier');
+    // Free tier returns no diseases; paid tiers return all
+    expect(freeResults).toHaveLength(0);
+    expect(allResults).toHaveLength(2);
   });
 
   it('premium tier: analyzeCarrierRisk returns up to 500 diseases', () => {
@@ -269,9 +267,10 @@ describe('Coverage Metrics — Tier-Specific', () => {
     expect(results.length).toBeGreaterThan(2500); // sanity check: should be ~2697
   });
 
-  it('free tier coverage: calculateCoverageMetrics on free panel subset', () => {
-    // Use the first 25 entries from a known free disease subset.
-    // Build a genotype map for all rsIDs in that subset.
+  it('coverage: calculateCoverageMetrics on a known disease subset', () => {
+    // Build a coverage map for a manually-filtered subset of well-known diseases.
+    // (Free tier has diseaseLimit: 0; this test exercises coverage metrics directly,
+    // independent of tier gating.)
     const freePanelEntries = carrierPanel.filter((e) => {
       const lower = e.condition.toLowerCase();
       const freeDiseases = [

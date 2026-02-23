@@ -94,6 +94,49 @@ describe('determineCarrierStatus', () => {
   });
 });
 
+// ─── VCF Slash-Separated Genotype Tests ─────────────────────────────────────
+
+describe('determineCarrierStatus — VCF slash-separated genotypes', () => {
+  it('should return "normal" for slash-separated genotype with no pathogenic alleles', () => {
+    // "A/A" with pathogenic "T" — neither allele matches
+    expect(determineCarrierStatus('A/A', 'T', 'A')).toBe('normal');
+  });
+
+  it('should return "carrier" for slash-separated heterozygous genotype', () => {
+    // "A/T" with pathogenic "T" — one allele matches
+    expect(determineCarrierStatus('A/T', 'T', 'A')).toBe('carrier');
+    // Order-reversed form should also be carrier
+    expect(determineCarrierStatus('T/A', 'T', 'A')).toBe('carrier');
+  });
+
+  it('should return "affected" for slash-separated homozygous pathogenic genotype', () => {
+    // "T/T" with pathogenic "T" — both alleles match
+    expect(determineCarrierStatus('T/T', 'T', 'A')).toBe('affected');
+  });
+
+  it('should handle multi-character indel alleles in slash format', () => {
+    // "ATCG/A" with pathogenic "A" — second allele matches, first does not
+    expect(determineCarrierStatus('ATCG/A', 'A', 'ATCG')).toBe('carrier');
+    // "A/A" with pathogenic "ATCG" — neither match
+    expect(determineCarrierStatus('A/A', 'ATCG', 'A')).toBe('normal');
+    // "ATCG/ATCG" with pathogenic "ATCG" — both match
+    expect(determineCarrierStatus('ATCG/ATCG', 'ATCG', 'A')).toBe('affected');
+  });
+
+  it('should return "unknown" for malformed slash genotype with more than 2 parts', () => {
+    // "A/B/C" splits into 3 parts — invalid, expect "unknown"
+    expect(determineCarrierStatus('A/B/C', 'T', 'A')).toBe('unknown');
+  });
+
+  it('should be case-insensitive in slash format', () => {
+    // Lowercase alleles should still match uppercase pathogenic allele
+    expect(determineCarrierStatus('a/t', 'T', 'A')).toBe('carrier');
+    expect(determineCarrierStatus('A/T', 't', 'a')).toBe('carrier');
+    expect(determineCarrierStatus('t/t', 't', 'a')).toBe('affected');
+    expect(determineCarrierStatus('a/a', 'T', 'A')).toBe('normal');
+  });
+});
+
 // ─── Autosomal Recessive Risk ───────────────────────────────────────────────
 
 describe('calculateOffspringRiskAR', () => {
@@ -388,19 +431,20 @@ describe('analyzeCarrierRisk', () => {
   });
 
   it('should filter diseases by tier when specified', () => {
-    // Create a panel with one free-tier disease and one non-free disease
+    // Create a panel with diseases across tiers
     const panel: CarrierPanelEntry[] = [
       makePanelEntry({ rsid: 'rs1', condition: 'Cystic Fibrosis (F508del)' }),
       makePanelEntry({ rsid: 'rs2', condition: 'Non-Free Disease' }),
       makePanelEntry({ rsid: 'rs3', condition: 'Sickle Cell Disease' }),
     ];
 
-    // Free tier: should only include diseases matching TOP_25_FREE_DISEASES
-    const results = analyzeCarrierRisk({}, {}, panel, 'free');
-    const conditions = results.map((r) => r.condition);
-    expect(conditions).toContain('Cystic Fibrosis (F508del)');
-    expect(conditions).toContain('Sickle Cell Disease');
-    expect(conditions).not.toContain('Non-Free Disease');
+    // Free tier: diseaseLimit is 0 — no disease access; requires Premium or Pro
+    const freeResults = analyzeCarrierRisk({}, {}, panel, 'free');
+    expect(freeResults).toHaveLength(0);
+
+    // Premium tier: should include all 3 (panel is well under 500 limit)
+    const premiumResults = analyzeCarrierRisk({}, {}, panel, 'premium');
+    expect(premiumResults).toHaveLength(3);
   });
 
   it('should handle the three inheritance patterns correctly', () => {

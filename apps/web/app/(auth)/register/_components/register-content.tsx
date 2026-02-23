@@ -10,10 +10,10 @@ import {
 import {
   motion,
   AnimatePresence,
-  MotionConfig,
 } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { DnaDots } from "@/components/auth/dna-dots";
 import { OAuthButton } from "@/components/auth/oauth-button";
@@ -195,7 +195,12 @@ export function RegisterContent() {
     setGeneralError(null);
     clearError();
     try {
-      const { authorizationUrl } = await getGoogleOAuthUrl();
+      const { authorizationUrl, state } = await getGoogleOAuthUrl();
+      if (!authorizationUrl.startsWith("https://accounts.google.com/")) {
+        setGeneralError("Invalid OAuth provider URL. Please try again.");
+        return;
+      }
+      sessionStorage.setItem('oauth_state', state);
       window.location.href = authorizationUrl;
     } catch (err) {
       const message =
@@ -220,7 +225,7 @@ export function RegisterContent() {
 
   // ── Render ──
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       {/* Age verification must be completed before registration */}
       <AgeVerificationModal />
 
@@ -535,10 +540,11 @@ export function RegisterContent() {
               </p>
 
               {/* Back to login — touch target padding (#16) */}
-              <Link href="/login">
-                <Button variant="secondary" size="lg" className="w-full">
-                  Back to Sign In
-                </Button>
+              <Link
+                href="/login"
+                className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "w-full")}
+              >
+                Back to Sign In
               </Link>
             </GlassCard>
 
@@ -554,6 +560,6 @@ export function RegisterContent() {
           </motion.div>
         )}
       </AnimatePresence>
-    </MotionConfig>
+    </>
   );
 }

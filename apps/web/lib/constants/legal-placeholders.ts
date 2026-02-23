@@ -1,5 +1,8 @@
 /** Legal text constants for consent gates and disclosures — Stream L finalized. */
 
+/** Current version of the genetic data processing consent form. Bump on any material change. */
+export const GENETIC_CONSENT_VERSION = "1.0";
+
 export const CONSENT_TEXT_GENETIC_PROCESSING = `By clicking "I Agree", you give your explicit, freely given, informed consent to the processing of your genetic data for the purpose of generating educational offspring trait predictions, carrier risk estimates, pharmacogenomics insights, and polygenic risk scores. This consent is required under GDPR Article 9(2)(a) because genetic data is a special category of personal data.
 
 How your data is processed: All analysis runs entirely within your browser using Web Workers. Your raw genetic file is never transmitted to our servers. We cannot see, access, or store your DNA data.
@@ -31,7 +34,7 @@ Under the California Privacy Rights Act (CPRA), California residents have the ri
 Your genetic data is classified as sensitive personal information under CPRA. Mergenix already limits the use of your SPI to the minimum necessary by default:
 
 • Client-side processing: Your raw genetic file is analyzed entirely within your browser. It is never transmitted to our servers.
-• Zero-Knowledge Encryption (ZKE): If you save analysis results, they are encrypted in your browser before upload. Mergenix cannot read your results.
+• Planned encryption: Client-side AES-256-GCM encryption of saved results is planned for a future release and is not yet active. Until that feature launches, saved results are protected with standard server-side encryption.
 • No sharing: Your genetic data is never shared with third parties, sold, or used for advertising or research beyond the analysis you requested.
 • Purpose limitation: Your data is used solely for the genetic analysis service you requested.
 

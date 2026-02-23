@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Check, CheckCircle, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { AnalysisStep } from "@/lib/stores/analysis-store";
+import { STEP_ORDER, type AnalysisStep } from "@/lib/stores/analysis-store";
 import { useAnnouncerStore } from "@/lib/stores/announcer-store";
 
 const STEPS: {
@@ -23,18 +23,6 @@ const STEPS: {
   { key: "ethnicity_adjustment", label: "Ethnicity", description: "Adjusting for population...", icon: Globe },
   { key: "counseling_triage", label: "Counseling", description: "Triaging counseling needs...", icon: Heart },
   { key: "complete", label: "Complete", description: "Analysis complete!", icon: CheckCircle },
-];
-
-const STEP_ORDER: AnalysisStep[] = [
-  "idle",
-  "parsing",
-  "carrier_analysis",
-  "trait_prediction",
-  "pharmacogenomics",
-  "polygenic_risk",
-  "ethnicity_adjustment",
-  "counseling_triage",
-  "complete",
 ];
 
 /** Human-readable stage descriptions for screen readers. */

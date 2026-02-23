@@ -19,7 +19,7 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CoupleUploadCard } from "@/components/genetics/couple-upload-card";
 import { AnalysisProgress } from "@/components/genetics/analysis-progress";
 import { PopulationSelector } from "@/components/genetics/population-selector";
@@ -124,6 +124,29 @@ function TabContent({ tab }: { tab: ResultTab }) {
   }
 }
 
+// ─── File-select helper (module-level, not a hook) ──────────────────────────
+// Shared logic for handleFileSelectA and handleFileSelectB.
+// Using a factory at module scope keeps useCallback calls at the component
+// top level (Rules of Hooks compliant) while eliminating duplicated logic.
+
+function applyFileSelect(side: 'A' | 'B', file: File | null): void {
+  const state = useAnalysisStore.getState();
+  const setFile = side === 'A' ? state.setParentAFile : state.setParentBFile;
+  const setParent = side === 'A' ? state.setParentA : state.setParentB;
+  setFile(file);
+  if (file) {
+    setParent({
+      name: file.name,
+      format: "23andme", // Format is detected during parsing
+      size: file.size,
+      snpCount: null,
+    });
+  } else {
+    // Clear parent metadata when file is removed
+    useAnalysisStore.setState(side === 'A' ? { parentA: null } : { parentB: null });
+  }
+}
+
 // ─── Page Component ─────────────────────────────────────────────────────────
 
 export default function AnalysisPage() {
@@ -157,38 +180,12 @@ export default function AnalysisPage() {
   // ── Handlers (H2: stable useCallback references) ─────────────────────
 
   const handleFileSelectA = useCallback(
-    (file: File | null) => {
-      useAnalysisStore.getState().setParentAFile(file);
-      if (file) {
-        useAnalysisStore.getState().setParentA({
-          name: file.name,
-          format: "23andme", // Format is detected during parsing
-          size: file.size,
-          snpCount: null,
-        });
-      } else {
-        // Clear parent metadata when file is removed
-        useAnalysisStore.setState({ parentA: null });
-      }
-    },
+    (file: File | null) => applyFileSelect('A', file),
     [],
   );
 
   const handleFileSelectB = useCallback(
-    (file: File | null) => {
-      useAnalysisStore.getState().setParentBFile(file);
-      if (file) {
-        useAnalysisStore.getState().setParentB({
-          name: file.name,
-          format: "23andme", // Format is detected during parsing
-          size: file.size,
-          snpCount: null,
-        });
-      } else {
-        // Clear parent metadata when file is removed
-        useAnalysisStore.setState({ parentB: null });
-      }
-    },
+    (file: File | null) => applyFileSelect('B', file),
     [],
   );
 
@@ -331,10 +328,8 @@ export default function AnalysisPage() {
               )}
             </p>
           </div>
-          <Link href="/subscription">
-            <Button variant="outline" size="sm">
-              Upgrade
-            </Button>
+          <Link href="/subscription" className={buttonVariants({ variant: "outline", size: "sm" })}>
+            Upgrade
           </Link>
         </GlassCard>
       )}
@@ -508,7 +503,7 @@ export default function AnalysisPage() {
                     aria-controls={`tabpanel-${tab.key}`}
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => setActiveTab(tab.key)}
-                    className={`flex items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-2.5 font-heading text-sm font-medium transition-all ${
+                    className={`flex items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 font-heading text-sm font-medium transition-all ${
                       isActive
                         ? "bg-gradient-to-r from-[#06d6a0] to-[#059669] font-bold text-[#050810] shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
                         : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"

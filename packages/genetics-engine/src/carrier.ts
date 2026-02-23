@@ -31,7 +31,11 @@ import type {
 } from './types';
 
 import { TIER_GATING } from './types';
-import { TOP_25_FREE_DISEASES, CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
+// NOTE: TOP_21_FREE_DISEASES was previously imported for free-tier curated disease
+// filtering. Free tier now has diseaseLimit: 0 (no disease access), so the curated
+// list and its helper isFreeTierDisease() have been removed. The constant is kept in
+// @mergenix/genetics-data for legacy reference.
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 // ─── Types (internal to carrier module) ─────────────────────────────────────
 
@@ -217,20 +221,40 @@ export function determineCarrierStatus(
   pathogenicAllele: string,
   _referenceAllele: string,
 ): CarrierStatus {
-  // Guard: genotype must be exactly 2 characters
-  if (!genotype || genotype.length !== 2) {
+  if (!genotype) {
     return 'unknown';
   }
 
-  // Normalize all to uppercase for case-insensitive comparison
-  const gt = genotype.toUpperCase();
+  // Normalize pathogenic allele to uppercase for case-insensitive comparison
   const pathAllele = pathogenicAllele.toUpperCase();
 
-  // Count pathogenic alleles in the genotype
   let pathogenicCount = 0;
-  for (let i = 0; i < gt.length; i++) {
-    if (gt[i] === pathAllele) {
-      pathogenicCount++;
+
+  // Handle "/" separated genotypes from VCF indels (e.g., "ATCG/A")
+  if (genotype.includes('/')) {
+    const alleles = genotype.split('/');
+    if (alleles.length !== 2) {
+      return 'unknown';
+    }
+    for (const allele of alleles) {
+      if (allele.toUpperCase() === pathAllele) {
+        pathogenicCount++;
+      }
+    }
+  } else {
+    // Guard: standard 2-character genotype (e.g., "AA", "AG")
+    if (genotype.length !== 2) {
+      return 'unknown';
+    }
+
+    // Normalize to uppercase for case-insensitive comparison
+    const gt = genotype.toUpperCase();
+
+    // Count pathogenic alleles in the genotype
+    for (let i = 0; i < gt.length; i++) {
+      if (gt[i] === pathAllele) {
+        pathogenicCount++;
+      }
     }
   }
 
@@ -775,25 +799,9 @@ export function detectCompoundHet(
 // ─── Panel Filtering ────────────────────────────────────────────────────────
 
 /**
- * Check if a disease name matches any of the free tier disease names.
- *
- * Uses case-insensitive substring matching, mirroring the Python
- * `is_free_disease()` behavior from carrier_analysis.py.
- *
- * @param diseaseName - The condition name from the panel entry
- * @returns True if the disease is in the free tier
- */
-function isFreeTierDisease(diseaseName: string): boolean {
-  const lower = diseaseName.toLowerCase();
-  return TOP_25_FREE_DISEASES.some(
-    (freeName) => lower.includes(freeName.toLowerCase()),
-  );
-}
-
-/**
  * Filter the carrier panel based on pricing tier.
  *
- * - free: Only diseases matching TOP_25_FREE_DISEASES (up to 25)
+ * - free: No diseases (diseaseLimit: 0 — disease screening requires Premium or Pro)
  * - premium: First 500 diseases from the panel
  * - pro: All diseases (full carrier panel)
  *
@@ -812,14 +820,12 @@ function filterPanelByTier(
     return panel;
   }
 
-  const limit = gating.diseaseLimit ?? panel.length;
-
-  if (tier === 'free') {
-    // Free tier: filter to only the top 25 free diseases, then apply limit
-    return panel
-      .filter((entry) => isFreeTierDisease(entry.condition.trim()))
-      .slice(0, limit);
+  // diseaseLimit: 0 means no disease access for this tier (free tier)
+  if (gating.diseaseLimit === 0) {
+    return [];
   }
+
+  const limit = gating.diseaseLimit ?? panel.length;
 
   // Premium and pro: return diseases up to the tier limit
   return panel.slice(0, limit);
@@ -1029,7 +1035,7 @@ function getUpgradeMessage(tier: Tier): string | null {
   switch (tier) {
     case 'free':
       return (
-        `Upgrade to Premium for access to 500+ diseases and all 79 traits, ` +
+        `Upgrade to Premium for access to 500+ disease screenings, ` +
         `or Pro for the complete ${CARRIER_PANEL_COUNT_DISPLAY}+ disease panel.`
       );
     case 'premium':

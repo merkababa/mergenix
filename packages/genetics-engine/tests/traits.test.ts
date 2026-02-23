@@ -15,7 +15,8 @@ import {
   predictAllTraits,
 } from '../src/traits';
 import type { TraitSnpEntry, PhenotypeMapValue } from '../src/types';
-import { TOP_10_FREE_TRAITS } from '@mergenix/genetics-data';
+// TOP_10_FREE_TRAITS import removed — free tier now has traitLimit: 79 (all traits)
+// and the curated list is no longer used for tier filtering.
 
 // ─── Test Fixtures ────────────────────────────────────────────────────────
 
@@ -320,55 +321,62 @@ describe('predictAllTraits', () => {
   });
 
   // ── Free-tier trait filtering ──────────────────────────────────────────
+  // Free tier traitLimit is 79 (all traits). Disease screening is the gating
+  // boundary between tiers, not trait predictions.
+  // TOP_10_FREE_TRAITS is retained as legacy/reference but is no longer used
+  // for tier filtering.
 
-  it('should return only traits in TOP_10_FREE_TRAITS when tier is "free"', () => {
-    // Create traits: some in the free list, some not
+  it('should return all traits for free tier (traitLimit: 79)', () => {
+    // Free tier now has traitLimit: 79 — all traits are available
     const traits: TraitSnpEntry[] = [
-      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),       // in free list
-      makeTraitEntry({ rsid: 'rs2', trait: 'Hair Color' }),      // in free list
-      makeTraitEntry({ rsid: 'rs3', trait: 'Earwax Type' }),     // in free list
-      makeTraitEntry({ rsid: 'rs4', trait: 'Dimples' }),         // NOT in free list
-      makeTraitEntry({ rsid: 'rs5', trait: 'Detached Earlobe' }), // NOT in free list
+      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),
+      makeTraitEntry({ rsid: 'rs2', trait: 'Hair Color' }),
+      makeTraitEntry({ rsid: 'rs3', trait: 'Earwax Type' }),
+      makeTraitEntry({ rsid: 'rs4', trait: 'Dimples' }),
+      makeTraitEntry({ rsid: 'rs5', trait: 'Detached Earlobe' }),
     ];
     const snps = { rs1: 'AG', rs2: 'AG', rs3: 'AG', rs4: 'AG', rs5: 'AG' };
     const results = predictAllTraits(snps, snps, traits, 'free');
 
-    // Should only include the 3 traits that are in TOP_10_FREE_TRAITS
-    expect(results).toHaveLength(3);
+    // All 5 traits are returned — no curated-list filtering
+    expect(results).toHaveLength(5);
     const traitNames = results.map(r => r.trait);
     expect(traitNames).toContain('Eye Color');
     expect(traitNames).toContain('Hair Color');
     expect(traitNames).toContain('Earwax Type');
-    // All returned traits must be in the free list
-    for (const r of results) {
-      expect(TOP_10_FREE_TRAITS).toContain(r.trait);
-    }
+    expect(traitNames).toContain('Dimples');
+    expect(traitNames).toContain('Detached Earlobe');
   });
 
-  it('should exclude traits NOT in TOP_10_FREE_TRAITS when tier is "free"', () => {
+  it('should return same trait set for free and premium tiers (no trait gating difference)', () => {
     const traits: TraitSnpEntry[] = [
-      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),       // in free list
-      makeTraitEntry({ rsid: 'rs4', trait: 'Dimples' }),         // NOT in free list
-      makeTraitEntry({ rsid: 'rs5', trait: 'Detached Earlobe' }), // NOT in free list
+      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),
+      makeTraitEntry({ rsid: 'rs2', trait: 'Dimples' }),
+      makeTraitEntry({ rsid: 'rs3', trait: 'Earwax Type' }),
     ];
-    const snps = { rs1: 'AG', rs4: 'AG', rs5: 'AG' };
-    const results = predictAllTraits(snps, snps, traits, 'free');
+    const snps = { rs1: 'AG', rs2: 'AG', rs3: 'AG' };
 
-    const traitNames = results.map(r => r.trait);
-    expect(traitNames).not.toContain('Dimples');
-    expect(traitNames).not.toContain('Detached Earlobe');
+    const freeResults = predictAllTraits(snps, snps, traits, 'free');
+    const premiumResults = predictAllTraits(snps, snps, traits, 'premium');
+
+    // Both tiers return all 3 traits — same traitLimit (79) for both
+    expect(freeResults).toHaveLength(3);
+    expect(premiumResults).toHaveLength(3);
+    expect(freeResults.map(r => r.trait)).toEqual(premiumResults.map(r => r.trait));
   });
 
   it('should default to free tier when no tier parameter is provided', () => {
     const traits: TraitSnpEntry[] = [
-      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),       // in free list
-      makeTraitEntry({ rsid: 'rs4', trait: 'Dimples' }),         // NOT in free list
+      makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),
+      makeTraitEntry({ rsid: 'rs4', trait: 'Dimples' }),
     ];
     const snps = { rs1: 'AG', rs4: 'AG' };
-    // Call without tier param - should default to 'free'
+    // Call without tier param - should default to 'free' (all traits available)
     const results = predictAllTraits(snps, snps, traits);
 
-    expect(results).toHaveLength(1);
-    expect(results[0]!.trait).toBe('Eye Color');
+    expect(results).toHaveLength(2);
+    const traitNames = results.map(r => r.trait);
+    expect(traitNames).toContain('Eye Color');
+    expect(traitNames).toContain('Dimples');
   });
 });

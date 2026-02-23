@@ -99,7 +99,7 @@ describe('PrivacyPage', () => {
     expect(screen.getByText(/Categories of Personal Data/i)).toBeInTheDocument();
     expect(screen.getByText(/account info/i)).toBeInTheDocument();
     expect(screen.getByText(/payment info/i)).toBeInTheDocument();
-    expect(screen.getByText(/encrypted analysis results/i)).toBeInTheDocument();
+    expect(screen.getByText(/Analysis results \(if saved\)/i)).toBeInTheDocument();
   });
 
   it('explains legal basis for processing', () => {

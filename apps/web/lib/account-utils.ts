@@ -3,6 +3,8 @@
  * Used by ProfileSection, UserMenu, and other account UI.
  */
 
+import type { Tier } from "@mergenix/shared-types";
+
 /** Extract initials from a display name (max 2 chars). */
 export function getInitials(name: string): string {
   return name
@@ -15,9 +17,8 @@ export function getInitials(name: string): string {
 }
 
 /** Map a tier string to the Badge component's tier variant. */
-export function getTierVariant(tier: string): "free" | "premium" | "pro" {
-  const t = tier.toLowerCase();
-  if (t === "premium") return "premium";
-  if (t === "pro") return "pro";
+export function getTierVariant(tier: Tier): "free" | "premium" | "pro" {
+  if (tier === "premium") return "premium";
+  if (tier === "pro") return "pro";
   return "free";
 }

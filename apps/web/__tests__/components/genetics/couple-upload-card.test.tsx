@@ -193,18 +193,18 @@ describe("CoupleUploadCard", () => {
     expect(onFileSelectB).toHaveBeenCalledWith(null);
   });
 
-  // 5. Rejects files over 50MB (shows error)
-  it("shows an error when a file exceeds 50 MB", () => {
+  // 5. Rejects files over 200MB (shows error)
+  it("shows an error when a file exceeds 200 MB", () => {
     const onFileSelectA = vi.fn();
     renderCard({ onFileSelectA });
 
-    const bigFile = createMockFile("huge-genome.txt", 60 * 1024 * 1024); // 60 MB
+    const bigFile = createMockFile("huge-genome.txt", 210 * 1024 * 1024); // 210 MB
 
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fireEvent.change(fileInputs[0], { target: { files: [bigFile] } });
 
     expect(screen.getByRole("alert")).toHaveTextContent(
-      /exceeds 50 MB limit/,
+      /exceeds 200 MB limit/,
     );
     expect(onFileSelectA).not.toHaveBeenCalled();
   });

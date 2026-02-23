@@ -108,12 +108,13 @@ export function OverviewTab() {
             hover="glow"
             rainbow
             className="p-5 text-center"
+            title={stat.label === "High Risk" ? "Based on statistical associations, not clinical diagnoses" : undefined}
           >
             <p
               className="flex items-center justify-center gap-1.5 font-heading text-2xl font-extrabold"
               style={{ color: stat.color }}
             >
-              {stat.icon && <stat.icon className="h-4 w-4" />}
+              {stat.icon && <stat.icon className="h-4 w-4" aria-hidden="true" />}
               {stat.value}
             </p>
             <p className="mt-1 text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
@@ -131,7 +132,7 @@ export function OverviewTab() {
       )}
       {metadata.tier === "premium" && (
         <TierUpgradePrompt
-          message={`Upgrade to Pro to unlock full ${CARRIER_PANEL_COUNT_DISPLAY} disease screening and all 79 traits.`}
+          message="Upgrade to Pro to unlock all disease screening, couple analysis, offspring predictions, and PDF export."
         />
       )}
 

@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { XCircle, ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { DnaDots } from "@/components/auth/dna-dots";
 import { TrustSignals } from "@/components/auth/trust-signals";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -36,6 +36,16 @@ export function CallbackContent() {
     if (!code || !state || hasRun.current) return;
     hasRun.current = true;
 
+    // Validate OAuth state to prevent CSRF attacks
+    const storedState = sessionStorage.getItem('oauth_state');
+    if (!storedState || state !== storedState) {
+      sessionStorage.removeItem('oauth_state');
+      setErrorMessage("OAuth state mismatch. Please try again.");
+      setPageState("error");
+      return;
+    }
+    sessionStorage.removeItem('oauth_state');
+
     googleCallback(code, state)
       .then(() => {
         router.replace("/account");
@@ -51,7 +61,7 @@ export function CallbackContent() {
   }, [code, state, googleCallback, router]);
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <motion.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
@@ -64,12 +74,15 @@ export function CallbackContent() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="py-12 text-center"
+                role="status"
+                aria-live="polite"
               >
                 {/* DNA dots — reusable component (#1), removed Loader2 (#10) */}
+                <span className="sr-only">Completing sign in, please wait.</span>
                 <DnaDots />
-                <h2 className="font-heading text-xl font-bold text-[var(--text-primary)]">
+                <h1 className="font-heading text-xl font-bold text-[var(--text-primary)]">
                   Completing sign in...
-                </h2>
+                </h1>
                 <p className="mt-2 text-sm text-[var(--text-muted)]">
                   Please wait while we verify your account.
                 </p>
@@ -84,6 +97,7 @@ export function CallbackContent() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 className="py-4 text-center"
+                role="alert"
               >
                 <motion.div
                   initial={{ scale: 0 }}
@@ -98,23 +112,21 @@ export function CallbackContent() {
                 >
                   <XCircle className="h-9 w-9 text-[var(--accent-rose)]" />
                 </motion.div>
-                <h2 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
+                <h1 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
                   Sign In Failed
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   {errorMessage}
                 </p>
                 <div className="mt-6 space-y-3">
-                  <Link href="/login">
-                    <Button variant="primary" size="lg" className="w-full">
-                      Try Again
-                    </Button>
+                  <Link href="/login" className={buttonVariants({ variant: "primary", size: "lg", className: "w-full" })}>
+                    Try Again
                   </Link>
                   {/* Touch target padding (#16) */}
                   <div>
                     <Link
                       href="/"
-                      className="inline-flex items-center gap-1 py-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1 py-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)]"
                     >
                       <ArrowLeft className="h-3.5 w-3.5" />
                       Back to Home
@@ -136,6 +148,6 @@ export function CallbackContent() {
       >
         <TrustSignals />
       </motion.div>
-    </MotionConfig>
+    </>
   );
 }

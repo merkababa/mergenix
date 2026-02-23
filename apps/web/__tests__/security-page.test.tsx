@@ -117,8 +117,10 @@ describe('SecurityPage', () => {
   it('renders encryption section mentioning AES-256-GCM', () => {
     render(<SecurityContent />);
 
-    expect(screen.getByText(/Encryption/i)).toBeInTheDocument();
-    expect(screen.getByText(/AES-256-GCM/)).toBeInTheDocument();
+    // Multiple elements contain "Encryption" — use getAllByText to avoid ambiguity
+    expect(screen.getAllByText(/Encryption/i).length).toBeGreaterThanOrEqual(1);
+    // AES-256-GCM is now marked as "Planned" but still present in multiple places
+    expect(screen.getAllByText(/AES-256-GCM/).length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders privacy promises list', () => {

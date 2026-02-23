@@ -1,11 +1,12 @@
 /* ------------------------------------------------------------------ */
-/*  Single source of truth for pricing tier data                      */
+/*  Marketing display data for pricing tiers                          */
 /*  Consumed by home-content.tsx and products-content.tsx              */
+/*  NOTE: Canonical pricing logic lives in @mergenix/shared-types     */
 /* ------------------------------------------------------------------ */
 
 import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
-export interface PricingTier {
+export interface MarketingTier {
   /** Display name (e.g. "Free", "Premium", "Pro") */
   name: string;
   /** Formatted price string (e.g. "$14.99") */
@@ -32,22 +33,22 @@ export interface PricingTier {
   cardClass: string;
 }
 
-export const PRICING_TIERS: PricingTier[] = [
+export const MARKETING_TIERS: MarketingTier[] = [
   {
     name: "Free",
     price: "$0",
     priceNote: "forever",
-    description: "Basic carrier screening to get started",
+    description: "Trait predictions with no disease screening",
     features: [
-      "Top 25 disease screening",
-      "10 basic trait predictions",
-      "23andMe file support",
+      "All 79 trait predictions",
+      "Ethnicity-adjusted frequencies",
+      "All file formats supported",
       "Community support",
     ],
     featuresExtended: [
-      "Top 25 disease screening",
-      "10 basic trait predictions",
-      "23andMe file support",
+      "All 79 trait predictions",
+      "Ethnicity-adjusted carrier frequencies",
+      "All file formats (23andMe, Ancestry, MyHeritage, VCF)",
       "Basic Punnett squares",
       "Community support",
     ],
@@ -61,7 +62,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "Premium",
     price: "$14.99",
     priceNote: "one-time",
-    description: "Full screening for serious family planners",
+    description: "Comprehensive screening for families",
     features: [
       "500+ disease screening",
       "All 79 trait predictions",
@@ -91,12 +92,12 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "Pro",
     price: "$34.99",
     priceNote: "one-time",
-    description: "Advanced insights with counselor referrals",
+    description: "Advanced insights with automated referral letters",
     features: [
       `All ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`,
       "Everything in Premium",
       "Ethnicity-adjusted frequencies",
-      "Genetic counselor referrals",
+      "Automated referral letters",
       "ClinVar data integration",
       "Exportable PDF reports",
       "Dedicated support",
@@ -105,7 +106,7 @@ export const PRICING_TIERS: PricingTier[] = [
       `All ${CARRIER_PANEL_COUNT_DISPLAY} disease screening`,
       "Everything in Premium",
       "Ethnicity-adjusted carrier frequencies",
-      "Genetic counselor referral system",
+      "Automated referral letter system",
       "ClinVar database integration",
       "Exportable PDF reports",
       "Multi-analysis comparison",

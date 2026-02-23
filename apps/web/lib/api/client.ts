@@ -197,7 +197,10 @@ async function executeRequest<T>(options: RequestOptions): Promise<T> {
   const response = await fetch(url, fetchOptions);
 
   if (response.ok) {
-    // 204 No Content
+    // 204 No Content — returns undefined cast to T.
+    // Known type-safety gap: callers that can receive 204 (e.g. del()) should
+    // declare their return type as Promise<T | undefined> or Promise<void>.
+    // TODO(M8): make `del` return Promise<void> so this cast is not needed.
     if (response.status === 204) {
       return undefined as T;
     }

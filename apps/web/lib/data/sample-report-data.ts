@@ -221,7 +221,7 @@ export const SAMPLE_REPORT_DATA: FullAnalysisResult = {
       gene: "POMT1",
       severity: "high",
       description:
-        "Walker-Warburg syndrome is a severe congenital muscular dystrophy with brain and eye abnormalities.",
+        "Walker-Warburg syndrome is a severe congenital muscular dystrophy with brain and eye involvement.",
       parentAStatus: "normal",
       parentBStatus: "normal",
       offspringRisk: { affected: 0, carrier: 0, normal: 100 },

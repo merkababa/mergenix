@@ -335,9 +335,9 @@ describe('PgxTab', () => {
     const offspringLabels = screen.getAllByText('Offspring Predictions');
     expect(offspringLabels.length).toBe(2);
 
-    // Probability is shown as "50%" — (0.5 * 100).toFixed(0) = "50"
-    const fiftyPercents = screen.getAllByText('50%');
-    expect(fiftyPercents.length).toBeGreaterThanOrEqual(2);
+    // Probability is shown as "1%" — (0.5).toFixed(0) = "1" (source renders pred.probability.toFixed(0) + "%")
+    const onePercents = screen.getAllByText('1%');
+    expect(onePercents.length).toBeGreaterThanOrEqual(2);
   });
 
   it('shows empty state when no gene results', () => {

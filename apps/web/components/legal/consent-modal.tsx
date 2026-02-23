@@ -8,7 +8,10 @@ import { useLegalStore } from "@/lib/stores/legal-store";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useModalManager } from "@/hooks/use-modal-manager";
 import { overlayVariants, modalVariants } from "@/lib/animations/modal-variants";
-import { CONSENT_TEXT_GENETIC_PROCESSING } from "@/lib/constants/legal-placeholders";
+import {
+  CONSENT_TEXT_GENETIC_PROCESSING,
+  GENETIC_CONSENT_VERSION,
+} from "@/lib/constants/legal-placeholders";
 
 // ── Component ────────────────────────────────────────────────────────────
 
@@ -27,6 +30,7 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
   const triggerRef = useRef<Element | null>(null);
 
   const setGeneticDataConsent = useLegalStore((s) => s.setGeneticDataConsent);
+  const recordConsent = useLegalStore((s) => s.recordConsent);
 
   // Save trigger element when opening
   useEffect(() => {
@@ -59,12 +63,16 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
 
   const handleAccept = useCallback(() => {
     setGeneticDataConsent(true);
+    // Record consent server-side with versioned consent record (fire-and-forget)
+    recordConsent("genetic_data_processing", GENETIC_CONSENT_VERSION).catch(() => {
+      // Non-blocking: local consent state is already set above
+    });
     onAccept();
     // Restore focus to the element that was focused before the modal opened
     if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
       triggerRef.current.focus();
     }
-  }, [setGeneticDataConsent, onAccept]);
+  }, [setGeneticDataConsent, recordConsent, onAccept]);
 
   const handleDecline = useCallback(() => {
     onDecline();

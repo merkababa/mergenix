@@ -28,8 +28,8 @@ describe('PopulationSelector', () => {
     expect(screen.getByText('Ashkenazi Jewish')).toBeInTheDocument();
   });
 
-  it('shows disabled state and message for free tier', () => {
-    // Free tier: user is null (defaults to free) or explicitly free
+  it('is enabled for free tier (tier gate removed — all users can select population)', () => {
+    // Tier gate was removed: all users including free can now select population
     useAuthStore.setState({
       user: { id: '1', name: 'Test', email: 'test@test.com', tier: 'free' } as never,
     });
@@ -37,11 +37,11 @@ describe('PopulationSelector', () => {
     render(<PopulationSelector />);
 
     const select = screen.getByLabelText('Select ancestral population');
-    expect(select).toBeDisabled();
+    expect(select).not.toBeDisabled();
 
     expect(
-      screen.getByText('Population-adjusted analysis available on Premium and Pro tiers.'),
-    ).toBeInTheDocument();
+      screen.queryByText('Population-adjusted analysis available on Premium and Pro tiers.'),
+    ).not.toBeInTheDocument();
   });
 
   it('is enabled for premium tier', () => {

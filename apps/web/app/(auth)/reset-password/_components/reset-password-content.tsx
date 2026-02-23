@@ -3,7 +3,7 @@
 import { useState, useMemo, type FormEvent } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Lock,
   CheckCircle,
@@ -11,7 +11,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PasswordInput } from "@/components/auth/password-input";
 import { PasswordStrengthDisplay } from "@/components/auth/password-strength-display";
 import { DnaDots } from "@/components/auth/dna-dots";
@@ -74,7 +74,7 @@ export function ResetPasswordContent() {
   }
 
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <motion.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
@@ -183,10 +183,8 @@ export function ResetPasswordContent() {
                   with your new password.
                 </p>
                 <div className="mt-6">
-                  <Link href="/login">
-                    <Button variant="primary" size="lg" className="w-full">
-                      Sign In
-                    </Button>
+                  <Link href="/login" className={buttonVariants({ variant: "primary", size: "lg", className: "w-full" })}>
+                    Sign In
                   </Link>
                 </div>
               </motion.div>
@@ -211,10 +209,8 @@ export function ResetPasswordContent() {
                   {errorMessage}
                 </p>
                 <div className="mt-6 space-y-3">
-                  <Link href="/forgot-password">
-                    <Button variant="primary" size="lg" className="w-full">
-                      Request New Link
-                    </Button>
+                  <Link href="/forgot-password" className={buttonVariants({ variant: "primary", size: "lg", className: "w-full" })}>
+                    Request New Link
                   </Link>
                   {/* Touch target padding (#16) */}
                   <Link
@@ -240,6 +236,6 @@ export function ResetPasswordContent() {
       >
         <TrustSignals />
       </motion.div>
-    </MotionConfig>
+    </>
   );
 }

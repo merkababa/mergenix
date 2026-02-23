@@ -236,7 +236,7 @@ describe('SubscriptionPage', () => {
     render(<SubscriptionPage />);
     // Loading skeleton has aria-busy="true" and role="status"
     expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true');
-    expect(screen.getByText('Loading subscription information...')).toBeInTheDocument();
+    expect(screen.getByText('Loading plan information...')).toBeInTheDocument();
   });
 
   it('should show Compare All Plans link', () => {

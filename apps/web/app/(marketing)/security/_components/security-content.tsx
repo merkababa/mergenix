@@ -84,7 +84,7 @@ const FAQ_ITEMS = [
   {
     question: "How are saved results protected?",
     answer:
-      "Saved analysis results are encrypted with AES-256-GCM using a key derived from your password via Argon2id. Even if our database were compromised, your results would be unreadable without your password.",
+      "Client-side AES-256-GCM encryption with Argon2id key derivation is planned for a future release. Until that feature is live, saved analysis results are protected using standard server-side encryption in transit and at rest.",
   },
   {
     question: "Can I delete all my data?",
@@ -189,8 +189,8 @@ export function SecurityContent() {
         <ScrollReveal>
           <SectionHeading
             id="encryption-heading"
-            title="Encryption"
-            subtitle="Industry-standard cryptography protects any data you choose to save"
+            title="Encryption (Coming Soon)"
+            subtitle="Planned client-side cryptography for any data you choose to save"
           />
         </ScrollReveal>
 
@@ -203,13 +203,13 @@ export function SecurityContent() {
                 </div>
                 <div>
                   <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
-                    AES-256-GCM
+                    AES-256-GCM — Planned
                   </h3>
                   <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-                    Saved analysis results are protected using this authenticated
-                    cipher, the same standard used by governments and financial
-                    institutions worldwide. Each record uses a unique initialization
-                    vector.
+                    We plan to protect saved analysis results using AES-256-GCM
+                    client-side encryption — the same standard used by governments
+                    and financial institutions worldwide. This feature is not yet
+                    active and is planned for a future release.
                   </p>
                 </div>
               </div>
@@ -219,12 +219,13 @@ export function SecurityContent() {
                 </div>
                 <div>
                   <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
-                    Argon2id Key Derivation
+                    Argon2id Key Derivation — Planned
                   </h3>
                   <p className="text-sm leading-relaxed text-[var(--text-muted)]">
-                    Cryptographic keys are derived from your password using Argon2id,
-                    a memory-hard key derivation function that resists brute-force
-                    and side-channel attacks. Your password is never stored.
+                    When client-side encryption launches, cryptographic keys will be
+                    derived from your password using Argon2id, a memory-hard key
+                    derivation function that resists brute-force and side-channel
+                    attacks. Your password will never be stored.
                   </p>
                 </div>
               </div>

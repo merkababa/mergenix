@@ -1,9 +1,9 @@
 "use client";
 
 import { create } from "zustand";
-import type { Tier } from "@mergenix/shared-types";
 import { setTokenAccessor, setUnauthorizedHandler } from "@/lib/api/client";
 import * as authClient from "@/lib/api/auth-client";
+import { extractErrorMessage } from "@/lib/utils/extract-error";
 import { useLegalStore } from "@/lib/stores/legal-store";
 import type {
   LoginResult,
@@ -13,9 +13,6 @@ import type {
   TwoFactorEnabledResponse,
   GoogleOAuthUrlResponse,
 } from "@/lib/api/auth-client";
-
-/** Re-export shared Tier as UserTier for backward compatibility */
-export type UserTier = Tier;
 
 // ── Indicator cookie helpers ─────────────────────────────────────────────
 // The actual refresh token is sent as an httpOnly cookie by the backend.
@@ -200,8 +197,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         });
         return result;
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Login failed";
+        const message = extractErrorMessage(error, "Login failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -221,8 +217,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         // Sync age verification audit trail (fire-and-forget)
         useLegalStore.getState().syncAgeVerification();
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "2FA verification failed";
+        const message = extractErrorMessage(error, "2FA verification failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -234,8 +229,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.register(name, email, password);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Registration failed";
+        const message = extractErrorMessage(error, "Registration failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -273,10 +267,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.forgotPassword(email);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Failed to send reset email";
+        const message = extractErrorMessage(error, "Failed to send reset email");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -288,8 +279,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.resetPassword(token, newPassword);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Password reset failed";
+        const message = extractErrorMessage(error, "Password reset failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -301,10 +291,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.verifyEmail(token);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Email verification failed";
+        const message = extractErrorMessage(error, "Email verification failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -316,8 +303,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         const profile = await authClient.updateProfile(data);
         set({ user: profile, isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Profile update failed";
+        const message = extractErrorMessage(error, "Profile update failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -329,10 +315,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.changePassword(currentPassword, newPassword);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Password change failed";
+        const message = extractErrorMessage(error, "Password change failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -344,8 +327,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.deleteAccount(password);
         clearAuthState();
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Account deletion failed";
+        const message = extractErrorMessage(error, "Account deletion failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -370,10 +352,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         await authClient.resendVerification(email);
         set({ isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Failed to resend verification email";
+        const message = extractErrorMessage(error, "Failed to resend verification email");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -386,8 +365,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         set({ isLoading: false });
         return result;
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "2FA setup failed";
+        const message = extractErrorMessage(error, "2FA setup failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -402,10 +380,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         set({ user: profile, isLoading: false });
         return result;
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "2FA verification failed";
+        const message = extractErrorMessage(error, "2FA verification failed");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -419,8 +394,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         const profile = await authClient.getProfile();
         set({ user: profile, isLoading: false });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Failed to disable 2FA";
+        const message = extractErrorMessage(error, "Failed to disable 2FA");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -433,10 +407,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         set({ isLoading: false });
         return result;
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Failed to get OAuth URL";
+        const message = extractErrorMessage(error, "Failed to get OAuth URL");
         set({ isLoading: false, error: message });
         throw error;
       }
@@ -452,8 +423,7 @@ export const useAuthStore = create<AuthState>()((set, get) => {
         // Sync age verification audit trail (fire-and-forget)
         useLegalStore.getState().syncAgeVerification();
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "OAuth login failed";
+        const message = extractErrorMessage(error, "OAuth login failed");
         set({ isLoading: false, error: message });
         throw error;
       }

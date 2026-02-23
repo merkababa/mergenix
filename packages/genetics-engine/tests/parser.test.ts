@@ -507,6 +507,45 @@ describe('parseVcf', () => {
     const result = parseVcf(content);
     expect(Object.keys(result)).toHaveLength(1);
   });
+
+  it('should handle haploid GT "0" by duplicating to homozygous ref', () => {
+    // Haploid call "0" (single allele index, no separator) should be treated as "0/0"
+    // This produces homozygous reference: REF/REF
+    const content = [
+      '##fileformat=VCFv4.1',
+      '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0',
+    ].join('\n');
+    const result = parseVcf(content);
+    // Haploid "0" duplicated to "0/0" => REF/REF = AA
+    expect(result['rs100']).toBe('AA');
+  });
+
+  it('should handle haploid GT "1" by duplicating to homozygous alt', () => {
+    // Haploid call "1" should be treated as "1/1" → ALT/ALT
+    const content = [
+      '##fileformat=VCFv4.1',
+      '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t1',
+    ].join('\n');
+    const result = parseVcf(content);
+    // Haploid "1" duplicated to "1/1" => ALT/ALT = GG
+    expect(result['rs100']).toBe('GG');
+  });
+
+  it('should skip variants with negative allele index in GT', () => {
+    // Negative index (-1) is invalid and must be rejected (the variant is skipped)
+    const content = [
+      '##fileformat=VCFv4.1',
+      '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t-1/0',
+      '1\t200\trs200\tA\tG\t30\tPASS\t.\tGT\t0/1',
+    ].join('\n');
+    const result = parseVcf(content);
+    // rs100 with negative index is skipped; rs200 is valid
+    expect(result['rs100']).toBeUndefined();
+    expect(result['rs200']).toBe('AG');
+  });
 });
 
 // ─── Universal Parser ───────────────────────────────────────────────────────

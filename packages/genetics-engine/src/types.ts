@@ -99,12 +99,12 @@ export interface TierGating {
  */
 export const TIER_GATING: Record<Tier, TierGating> = {
   free: {
-    diseaseLimit: 25,
-    traitLimit: 10,
+    diseaseLimit: 0,
+    traitLimit: 79,
     pgxGeneLimit: 0,
     prsConditionLimit: 0,
     counselingLevel: 'basic',
-    ethnicityAccess: false,
+    ethnicityAccess: true,
   },
   premium: {
     diseaseLimit: 500,
@@ -112,7 +112,7 @@ export const TIER_GATING: Record<Tier, TierGating> = {
     pgxGeneLimit: 5,
     prsConditionLimit: 3,
     counselingLevel: 'full',
-    ethnicityAccess: false,
+    ethnicityAccess: true,
   },
   pro: {
     diseaseLimit: CARRIER_PANEL_COUNT,

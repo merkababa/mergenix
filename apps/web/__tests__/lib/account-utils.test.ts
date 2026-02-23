@@ -47,16 +47,5 @@ describe('account-utils', () => {
     it('returns "pro" for "pro"', () => {
       expect(getTierVariant('pro')).toBe('pro');
     });
-
-    it('is case-insensitive', () => {
-      expect(getTierVariant('Premium')).toBe('premium');
-      expect(getTierVariant('PRO')).toBe('pro');
-      expect(getTierVariant('FREE')).toBe('free');
-    });
-
-    it('returns "free" for unknown tier', () => {
-      expect(getTierVariant('enterprise')).toBe('free');
-      expect(getTierVariant('unknown')).toBe('free');
-    });
   });
 });

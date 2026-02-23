@@ -342,4 +342,70 @@ describe('HTTP client', () => {
       expect(options.method).toBe('DELETE');
     });
   });
+
+  // ── PATCH method ────────────────────────────────────────────────────
+
+  describe('patch', () => {
+    it('sends PATCH request with body', async () => {
+      mockFetch.mockResolvedValue(mockResponse({ patched: true }));
+
+      await clientModule.patch('/items/1', { field: 'value' });
+
+      const [url, options] = mockFetch.mock.calls[0];
+      expect(url).toBe('http://localhost:8000/items/1');
+      expect(options.method).toBe('PATCH');
+      expect(options.headers['Content-Type']).toBe('application/json');
+      expect(options.body).toBe(JSON.stringify({ field: 'value' }));
+    });
+  });
+
+  // ── Concurrent 401 refresh deduplication ────────────────────────────
+
+  describe('concurrent 401 refresh deduplication', () => {
+    it('calls _onUnauthorized exactly once when 3 concurrent requests all receive 401', async () => {
+      const refreshHandler = vi.fn(async () => {
+        clientModule.setTokenAccessor(() => 'new-token');
+        return true;
+      });
+
+      clientModule.setTokenAccessor(() => 'old-token');
+      clientModule.setUnauthorizedHandler(refreshHandler);
+
+      // Each of the 3 requests gets a 401, then a successful retry
+      // mockFetch call sequence:
+      //   calls 0,1,2 → 401 (first attempts for each concurrent request)
+      //   calls 3,4,5 → 200 (retried attempts after refresh)
+      mockFetch
+        .mockResolvedValueOnce(
+          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+        )
+        .mockResolvedValueOnce(
+          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+        )
+        .mockResolvedValueOnce(
+          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+        )
+        .mockResolvedValueOnce(mockResponse({ data: 'result-1' }))
+        .mockResolvedValueOnce(mockResponse({ data: 'result-2' }))
+        .mockResolvedValueOnce(mockResponse({ data: 'result-3' }));
+
+      // Fire 3 concurrent requests
+      const [r1, r2, r3] = await Promise.all([
+        clientModule.get('/protected/1'),
+        clientModule.get('/protected/2'),
+        clientModule.get('/protected/3'),
+      ]);
+
+      // The refresh handler should have been invoked exactly once (deduplicated)
+      expect(refreshHandler).toHaveBeenCalledTimes(1);
+
+      // All 3 requests should have succeeded after the shared refresh
+      expect(r1).toEqual({ data: 'result-1' });
+      expect(r2).toEqual({ data: 'result-2' });
+      expect(r3).toEqual({ data: 'result-3' });
+
+      // Total fetch calls: 3 initial (all 401) + 3 retries = 6
+      expect(mockFetch).toHaveBeenCalledTimes(6);
+    });
+  });
 });

@@ -18,6 +18,7 @@ import { ClinicalTestingBanner } from "@/components/genetics/results/clinical-te
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { PRS_ANCESTRY_WARNING } from "@/lib/constants/disclaimers";
+import { RISK_CATEGORY_LABELS } from "@/lib/genetics-constants";
 import type { RiskCategory, PrsConditionResult } from "@mergenix/shared-types";
 
 /** Map a RiskCategory to the corresponding Badge variant. */
@@ -36,19 +37,6 @@ function riskBadgeVariant(
     case "high":
       return "high";
   }
-}
-
-/** Human-readable label for a RiskCategory. */
-function riskLabel(category: RiskCategory): string {
-  const labels: Record<RiskCategory, string> = {
-    low: "Low",
-    below_average: "Below Average",
-    average: "Average",
-    above_average: "Above Average",
-    elevated: "Elevated",
-    high: "High",
-  };
-  return labels[category];
 }
 
 /**
@@ -239,7 +227,7 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
             {Math.round(parentA.percentile)}th percentile
           </p>
           <Badge variant={riskBadgeVariant(parentA.riskCategory)}>
-            {riskLabel(parentA.riskCategory)}
+            {RISK_CATEGORY_LABELS[parentA.riskCategory] ?? parentA.riskCategory}
           </Badge>
         </div>
         <div className="space-y-1">
@@ -248,7 +236,7 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
             {Math.round(parentB.percentile)}th percentile
           </p>
           <Badge variant={riskBadgeVariant(parentB.riskCategory)}>
-            {riskLabel(parentB.riskCategory)}
+            {RISK_CATEGORY_LABELS[parentB.riskCategory] ?? parentB.riskCategory}
           </Badge>
         </div>
       </div>

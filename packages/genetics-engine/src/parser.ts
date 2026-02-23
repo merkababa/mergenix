@@ -331,11 +331,19 @@ async function parseStreamingVcf(
 
     const separator = gtValue.includes('|') ? '|' : '/';
     const alleleIndices = gtValue.split(separator);
-    if (alleleIndices.length !== 2) continue;
+
+    // Handle haploid calls (length === 1): duplicate the single allele
+    // to create hemizygous representation (e.g., "G" becomes "GG")
+    if (alleleIndices.length === 1) {
+      alleleIndices.push(alleleIndices[0]!);
+    } else if (alleleIndices.length !== 2) {
+      continue;
+    }
 
     const idxA = parseInt(alleleIndices[0] ?? '', 10);
     const idxB = parseInt(alleleIndices[1] ?? '', 10);
     if (isNaN(idxA) || isNaN(idxB)) continue;
+    if (idxA < 0 || idxB < 0) continue;
     if (idxA >= alleleList.length || idxB >= alleleList.length) continue;
 
     const alleleA = alleleList[idxA];
@@ -1256,7 +1264,11 @@ export function parseVcf(content: string): GenotypeMap {
     const separator = gtValue.includes('|') ? '|' : '/';
     const alleleIndices = gtValue.split(separator);
 
-    if (alleleIndices.length !== 2) {
+    // Handle haploid calls (length === 1): duplicate the single allele
+    // to create hemizygous representation (e.g., "G" becomes "GG")
+    if (alleleIndices.length === 1) {
+      alleleIndices.push(alleleIndices[0]!);
+    } else if (alleleIndices.length !== 2) {
       continue;
     }
 
@@ -1268,6 +1280,10 @@ export function parseVcf(content: string): GenotypeMap {
 
     // Check for NaN (could be '.' in one position -- half-call)
     if (isNaN(idxA) || isNaN(idxB)) {
+      continue;
+    }
+
+    if (idxA < 0 || idxB < 0) {
       continue;
     }
 
