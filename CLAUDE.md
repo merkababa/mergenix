@@ -195,6 +195,31 @@ gemini -p "prompt" --model gemini-3.1-pro-preview 2>&1
 - For reviews: include FULL source files (not just diffs) — Gemini has 1M context
 - Before delegating: read `docs/GEMINI_DELEGATION_GUIDE.md` for the task tier matrix and 8 rules
 
+## Agent Output Logging (MANDATORY)
+
+Agent temp output files (`AppData/Local/Temp/claude/.../*.output`) are wiped to 0 bytes after agent completion. All detailed results only exist in conversation context, which gets compacted. **To prevent data loss:**
+
+### Rules:
+1. **After ANY research/analysis agent completes**, immediately save its full result to a persistent log file at `docs/research/agent-logs/{date}-{task-name}/`
+2. **Log file naming:** `{agent-category}.md` (e.g., `neurological-brain.md`, `cancer-risk.md`)
+3. **What to log:** The FULL agent result (not just a summary). Include all data, tables, findings, references.
+4. **When to log:** As SOON as the agent result arrives in conversation — don't wait until "later" because compaction may erase it.
+5. **Session log index:** At session end, write a `docs/research/agent-logs/{date}-{task-name}/INDEX.md` listing all agents run, their purpose, and their log file paths.
+6. **For code review agents:** Log the full review output, grade, and all issues found.
+7. **For executor agents:** Log a summary of files changed, tests written, and any issues encountered.
+
+### Log directory structure:
+```
+docs/research/agent-logs/
+  {YYYY-MM-DD}-{task-name}/
+    INDEX.md           # Session summary: what agents ran, purpose, results
+    {agent-name}.md    # Full agent output per agent
+```
+
+### Exception:
+- Don't log trivial agents (file lookups, git status checks, single-command agents)
+- DO log any agent that produces research, analysis, review results, or significant code changes
+
 ## PROGRESS.md
 - Pushable directly to `main`
 - Update when: starting a task, finishing a task, hitting a blocker
