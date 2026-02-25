@@ -11,9 +11,9 @@
 **ALL 11 STREAMS COMPLETE.** Mergenix V3 is feature-complete and alpha-launch-ready.
 **Coming Soon page:** PR #89 — **MERGED** (8/8 A+ Gemini + 8/8 A Claude). Site-wide lock active.
 **Web Polish:** PR #90 — **MERGED** (10/10 A/A+ Claude, 6 review rounds). 104 files, a11y + type safety + tier alignment + test coverage.
-**Trait Expansion:** PR #91 — **OPEN** (10/10 A+ Claude, 4 review rounds). 236 traits (was 79), chip coverage, category accordion UI, health consent interstitial, GINA notice, amber health bars.
+**Trait Expansion:** PR #91 — **MERGED** (10/10 A+ Claude, 4 review rounds). 236 traits (was 79), chip coverage, category accordion UI, health consent interstitial, GINA notice, amber health bars.
 **Test count:** 3,047+ tests passing across all packages (1,433 engine + 1,614 web).
-**Next:** Merge PR #91, then Tier 2-4 traits (294→469→613). Infrastructure setup + legal sign-offs → alpha launch.
+**Next:** Tier 2-4 traits (294→469→613). Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
 
@@ -56,7 +56,7 @@
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
 | Coming Soon Page with Site Lock | Claude | **Merged** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). |
 | Web Polish: A11y, Type Safety, Tier Alignment | Claude | **Merged** | review/web-polish-r4 | PR #90 — Multi-round Claude review (R1–R6) across 10 reviewer personas. Accessibility (heading hierarchy, ARIA roles, touch targets), type safety (Tier unions, Record types), business logic (aligned TIER_GATING with PRICING_TIERS: free diseases 25→0, traits 10→79, ethnicity all tiers), PGx exclusive bounds, OAuth CSRF validation, consent retry queue, 136+ new tests. 104 files, +2,639/-1,633 lines. Gate 2: 10/10 A/A+ Claude (6 rounds). 3,010 tests total. |
-| Trait Expansion Phase 1: Tier 1 (236 traits) | Claude | **PR Open** | feature/trait-expansion-phase-1 | PR #91 — 157 new traits (79→236), 15 categories, chip coverage (7 DTC chips), category accordion UI, health consent interstitial (GINA notice), SensitiveContentGuard, amber health bars, consent withdrawal sync. 23 files, +9,886 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
+| Trait Expansion Phase 1: Tier 1 (236 traits) | Claude | **Merged** | feature/trait-expansion-phase-1 | PR #91 — 157 new traits (79→236), 15 categories, chip coverage (7 DTC chips), category accordion UI, health consent interstitial (GINA notice), SensitiveContentGuard, amber health bars, consent withdrawal sync. 23 files, +9,886 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
 
 ---
 
