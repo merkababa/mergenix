@@ -126,6 +126,10 @@ export interface PunnettOutcome {
 export interface TraitResult {
   /** Trait name (e.g., "Eye Color"). */
   trait: string;
+  /** Trait category (e.g., "Physical Appearance", "Behavioral/Personality"). */
+  category?: string;
+  /** Whether the trait SNP is covered by the user's genotyping chip. */
+  chipCoverage?: boolean;
   /** Gene symbol (e.g., "HERC2/OCA2"). */
   gene: string;
   /** SNP identifier. */

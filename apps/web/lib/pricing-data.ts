@@ -4,7 +4,7 @@
 /*  NOTE: Canonical pricing logic lives in @mergenix/shared-types     */
 /* ------------------------------------------------------------------ */
 
-import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 export interface MarketingTier {
   /** Display name (e.g. "Free", "Premium", "Pro") */
@@ -40,13 +40,13 @@ export const MARKETING_TIERS: MarketingTier[] = [
     priceNote: "forever",
     description: "Trait predictions with no disease screening",
     features: [
-      "All 79 trait predictions",
+      `All ${TRAIT_COUNT_DISPLAY} trait predictions`,
       "Ethnicity-adjusted frequencies",
       "All file formats supported",
       "Community support",
     ],
     featuresExtended: [
-      "All 79 trait predictions",
+      `All ${TRAIT_COUNT_DISPLAY} trait predictions`,
       "Ethnicity-adjusted carrier frequencies",
       "All file formats (23andMe, Ancestry, MyHeritage, VCF)",
       "Basic Punnett squares",
@@ -65,7 +65,7 @@ export const MARKETING_TIERS: MarketingTier[] = [
     description: "Comprehensive screening for families",
     features: [
       "500+ disease screening",
-      "All 79 trait predictions",
+      `All ${TRAIT_COUNT_DISPLAY} trait predictions`,
       "All file formats supported",
       "Pharmacogenomics (5 genes)",
       "Polygenic risk scores (3 conditions)",
@@ -73,7 +73,7 @@ export const MARKETING_TIERS: MarketingTier[] = [
     ],
     featuresExtended: [
       "500+ disease screening",
-      "All 79 trait predictions",
+      `All ${TRAIT_COUNT_DISPLAY} trait predictions`,
       "All file formats (23andMe, Ancestry, MyHeritage, VCF)",
       "Pharmacogenomics (5 genes)",
       "Polygenic risk scores (3 conditions)",

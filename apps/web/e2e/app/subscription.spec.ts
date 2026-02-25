@@ -97,7 +97,7 @@ test.describe('Subscription — P0 Critical', () => {
 
     // Verify key feature descriptions
     await expect(page.getByText(/500\+ diseases/i).first()).toBeVisible();
-    await expect(page.getByText(/79 traits/i).first()).toBeVisible();
+    await expect(page.getByText(/\d+ traits/i).first()).toBeVisible();
     await expect(page.getByText(/pharmacogenomics/i).first()).toBeVisible();
 
     // "Compare All Plans" link should be visible

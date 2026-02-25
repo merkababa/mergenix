@@ -81,7 +81,7 @@ export type GenotypeMap = Record<string, string>;
 export interface TierGating {
   /** Maximum diseases to analyze. null = unlimited. */
   diseaseLimit: number | null;
-  /** Maximum traits to analyze. */
+  /** Maximum traits to analyze. Infinity = all traits (disease screening is the paid gate). */
   traitLimit: number;
   /** Number of PGx genes accessible. */
   pgxGeneLimit: number;
@@ -97,10 +97,11 @@ export interface TierGating {
  * Tier gating configuration map.
  * Sourced from Source/tier_config.py TIER_CONFIGS.
  */
+// All traits are available at every tier; disease screening is the paid gate
 export const TIER_GATING: Record<Tier, TierGating> = {
   free: {
     diseaseLimit: 0,
-    traitLimit: 79,
+    traitLimit: Infinity,
     pgxGeneLimit: 0,
     prsConditionLimit: 0,
     counselingLevel: 'basic',
@@ -108,7 +109,7 @@ export const TIER_GATING: Record<Tier, TierGating> = {
   },
   premium: {
     diseaseLimit: 500,
-    traitLimit: 79,
+    traitLimit: Infinity,
     pgxGeneLimit: 5,
     prsConditionLimit: 3,
     counselingLevel: 'full',
@@ -116,7 +117,7 @@ export const TIER_GATING: Record<Tier, TierGating> = {
   },
   pro: {
     diseaseLimit: CARRIER_PANEL_COUNT,
-    traitLimit: 79,
+    traitLimit: Infinity,
     pgxGeneLimit: 12,
     prsConditionLimit: 10,
     counselingLevel: 'full_plus_letter',

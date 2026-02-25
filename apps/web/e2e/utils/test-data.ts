@@ -298,8 +298,8 @@ export const TIER_LIMITS = {
   free: {
     /** Max disease catalog entries visible to free users */
     diseases: 25,
-    /** Max trait predictions visible to free users */
-    traits: 10,
+    /** Max trait predictions visible to free users — all traits available (disease screening is the paid gate) */
+    traits: Infinity,
     /** PGx is not available on free tier */
     pgxAvailable: false,
     /** PRS is not available on free tier */
@@ -312,8 +312,8 @@ export const TIER_LIMITS = {
   premium: {
     /** Max disease catalog entries visible to premium users */
     diseases: 500,
-    /** Max trait predictions visible to premium users */
-    traits: 79,
+    /** Max trait predictions visible to premium users — all traits available (disease screening is the paid gate) */
+    traits: Infinity,
     /** PGx is available on premium tier */
     pgxAvailable: true,
     /** PRS is available on premium tier */

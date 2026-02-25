@@ -26,7 +26,7 @@ import {
   scaleIn,
   createStaggerContainer,
 } from "@/lib/animation-variants";
-import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 const SCIENCE_PRINCIPLES = [
   {
@@ -91,7 +91,7 @@ const HOW_IT_WORKS = [
   {
     step: 2,
     title: "Analyze",
-    desc: `Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict 79 traits, run PGx and polygenic risk scoring \u2014 all client-side.`,
+    desc: `Screen ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predict ${TRAIT_COUNT_DISPLAY} traits, run PGx and polygenic risk scoring \u2014 all client-side.`,
   },
   {
     step: 3,
@@ -103,7 +103,7 @@ const HOW_IT_WORKS = [
 const STATS = [
   { value: CARRIER_PANEL_COUNT_DISPLAY, label: "Diseases Screened", color: "teal" },
   { value: "8,200+", label: "SNPs Analyzed", color: "cyan" },
-  { value: "79", label: "Traits Predicted", color: "violet" },
+  { value: TRAIT_COUNT_DISPLAY, label: "Traits Predicted", color: "violet" },
   { value: "12", label: "PGx Genes", color: "amber" },
 ] as const;
 

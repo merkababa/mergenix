@@ -106,7 +106,7 @@ vi.mock("lucide-react", () => {
   const Icon = (props: Record<string, unknown>) => <svg {...props} />;
   return {
     Upload: Icon, File: Icon, X: Icon, ArrowRight: Icon,
-    Search: Icon, ChevronDown: Icon, ChevronUp: Icon, Lock: Icon,
+    Search: Icon, ChevronDown: Icon, ChevronUp: Icon, ChevronRight: Icon, Lock: Icon,
     Pill: Icon, AlertTriangle: Icon, AlertCircle: Icon, Sparkles: Icon,
     Heart: Icon, HeartPulse: Icon, ExternalLink: Icon, Phone: Icon,
     MessageSquare: Icon, BarChart3: Icon, Microscope: Icon, Dna: Icon,
@@ -241,6 +241,25 @@ vi.mock("@/lib/constants/disclaimers", () => ({
 vi.mock("@mergenix/genetics-data", () => ({
   CARRIER_PANEL_COUNT: 423,
   CARRIER_PANEL_COUNT_DISPLAY: "423",
+  TRAIT_CATEGORIES: [
+    'Physical Appearance',
+    'Behavioral/Personality',
+    'Athletic/Fitness',
+    'Nutrition/Metabolism',
+    'Sensory/Perception/Immune',
+    'Reproductive/Hormonal',
+    'Unusual/Quirky/Fun',
+    'Skin/Aging/Longevity',
+    'Pharmacogenomic',
+    'Cardiovascular/Metabolic',
+    'Neurological/Brain',
+    'Cancer Risk',
+    'Musculoskeletal/Bone',
+    'Eye/Vision/Dental',
+    'Longevity/Aging/Immunity',
+  ],
+  TRAIT_COUNT: 236,
+  TRAIT_COUNT_DISPLAY: "236",
 }));
 
 // ─── Component imports (after mocks) ────────────────────────────────────────

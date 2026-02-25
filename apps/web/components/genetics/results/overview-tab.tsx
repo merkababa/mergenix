@@ -14,7 +14,7 @@ import { VirtualBabyCard } from "@/components/genetics/results/virtual-baby-card
 import type { TraitPrediction } from "@/components/genetics/results/virtual-baby-card";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
-import { CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 /** Emoji icons for common trait names. */
 const TRAIT_ICONS: Record<string, string> = {
@@ -127,7 +127,7 @@ export function OverviewTab() {
       {/* Tier upgrade prompt for free/premium users */}
       {metadata.tier === "free" && (
         <TierUpgradePrompt
-          message={`You screened ${carrier.length.toLocaleString()} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases and ${traits.length} of 79 traits. Upgrade to Premium to unlock disease screening.`}
+          message={`You screened ${carrier.length.toLocaleString()} of ${CARRIER_PANEL_COUNT_DISPLAY} diseases and ${traits.length} of ${TRAIT_COUNT_DISPLAY} traits. Upgrade to Premium to unlock disease screening.`}
         />
       )}
       {metadata.tier === "premium" && (

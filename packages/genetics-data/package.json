@@ -2,6 +2,7 @@
   "name": "@mergenix/genetics-data",
   "version": "0.1.0",
   "private": true,
+  "sideEffects": false,
   "main": "./index.ts",
   "types": "./index.ts",
   "files": ["*.json", "*.ts"],

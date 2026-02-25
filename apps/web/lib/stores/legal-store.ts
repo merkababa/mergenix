@@ -207,6 +207,10 @@ export const useLegalStore = create<LegalState>()((set) => ({
   withdrawGeneticConsent: () => {
     // Withdraws genetic data consent — sets consentWithdrawn=true, geneticDataConsentGiven=false
     // Also clears any locally-stored analysis results (GDPR right to withdrawal)
+    // Clear health consent so the interstitial re-appears if consent is re-granted
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("mergenix_health_trait_consent");
+    }
     set({ consentWithdrawn: true, geneticDataConsentGiven: false, error: null });
     useAnalysisStore.getState().reset();
   },

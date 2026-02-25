@@ -24,7 +24,7 @@ test.describe('Marketing Page Smoke Tests', () => {
 
     // Verify key marketing content is present
     await expect(page.getByText(new RegExp(`${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`, 'i'))).toBeVisible();
-    await expect(page.getByText(/79 Trait Predictions/i)).toBeVisible();
+    await expect(page.getByText(/\d+ Trait Predictions/i)).toBeVisible();
   });
 
   // ── Scenario 2 (P1): About page loads with main content ──

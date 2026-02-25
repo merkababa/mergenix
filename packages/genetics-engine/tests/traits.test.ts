@@ -15,7 +15,7 @@ import {
   predictAllTraits,
 } from '../src/traits';
 import type { TraitSnpEntry, PhenotypeMapValue } from '../src/types';
-// TOP_10_FREE_TRAITS import removed — free tier now has traitLimit: 79 (all traits)
+// TOP_10_FREE_TRAITS import removed — free tier now has traitLimit: Infinity (all 236+ traits)
 // and the curated list is no longer used for tier filtering.
 
 // ─── Test Fixtures ────────────────────────────────────────────────────────
@@ -24,6 +24,7 @@ function makeTraitEntry(overrides: Partial<TraitSnpEntry> = {}): TraitSnpEntry {
   return {
     rsid: 'rs12913832',
     trait: 'Eye Color',
+    category: 'Physical Appearance',
     gene: 'HERC2/OCA2',
     chromosome: '15',
     inheritance: 'codominant',
@@ -283,6 +284,14 @@ describe('predictTrait', () => {
     expect(result.status).toBe('success');
     expect(result.note).toContain('could not be mapped');
   });
+
+  it('should pass category through to result', () => {
+    const parentA = { rs12913832: 'AA' };
+    const parentB = { rs12913832: 'AG' };
+    const entry = makeTraitEntry();
+    const result = predictTrait(parentA, parentB, entry);
+    expect(result.category).toBe('Physical Appearance');
+  });
 });
 
 describe('predictAllTraits', () => {
@@ -321,13 +330,13 @@ describe('predictAllTraits', () => {
   });
 
   // ── Free-tier trait filtering ──────────────────────────────────────────
-  // Free tier traitLimit is 79 (all traits). Disease screening is the gating
+  // Free tier traitLimit is Infinity (all 236+ traits). Disease screening is the gating
   // boundary between tiers, not trait predictions.
   // TOP_10_FREE_TRAITS is retained as legacy/reference but is no longer used
   // for tier filtering.
 
-  it('should return all traits for free tier (traitLimit: 79)', () => {
-    // Free tier now has traitLimit: 79 — all traits are available
+  it('should return all traits for free tier (traitLimit: Infinity)', () => {
+    // Free tier now has traitLimit: Infinity — all traits are available
     const traits: TraitSnpEntry[] = [
       makeTraitEntry({ rsid: 'rs1', trait: 'Eye Color' }),
       makeTraitEntry({ rsid: 'rs2', trait: 'Hair Color' }),
@@ -359,7 +368,7 @@ describe('predictAllTraits', () => {
     const freeResults = predictAllTraits(snps, snps, traits, 'free');
     const premiumResults = predictAllTraits(snps, snps, traits, 'premium');
 
-    // Both tiers return all 3 traits — same traitLimit (79) for both
+    // Both tiers return all 3 traits — same traitLimit (Infinity) for both
     expect(freeResults).toHaveLength(3);
     expect(premiumResults).toHaveLength(3);
     expect(freeResults.map(r => r.trait)).toEqual(premiumResults.map(r => r.trait));

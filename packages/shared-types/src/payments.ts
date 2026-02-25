@@ -7,7 +7,7 @@
  */
 
 import type { Tier } from './genetics';
-import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 /**
  * Payment processing status.
@@ -115,7 +115,7 @@ export const PRICING_TIERS: PricingTier[] = [
     name: 'Free',
     price: 0,
     features: [
-      'All 79 trait predictions',
+      `All ${TRAIT_COUNT_DISPLAY} trait predictions`,
       'All file formats supported',
       'Basic counseling recommendations',
     ],

@@ -99,7 +99,7 @@ export const CARRIER_PANEL_COUNT_DISPLAY: string = CARRIER_PANEL_COUNT.toLocaleS
 export const CARRIER_PANEL_VERSION = CARRIER_PANEL_DATA.metadata.version;
 
 /**
- * Trait SNP database (79 traits).
+ * Trait SNP database (236+ traits).
  * Source: data/trait_snps.json
  */
 export const traitSnps: TraitSnpEntry[] = traitSnpsRaw as unknown as TraitSnpEntry[];
@@ -275,3 +275,30 @@ export const COUNSELING_SPECIALTIES: string[] = [
   'pharmacogenomics',
   'general',
 ];
+
+/** 15 trait categories for the expanded trait catalog */
+export const TRAIT_CATEGORIES = [
+  'Physical Appearance',
+  'Behavioral/Personality',
+  'Athletic/Fitness',
+  'Nutrition/Metabolism',
+  'Sensory/Perception/Immune',
+  'Reproductive/Hormonal',
+  'Unusual/Quirky/Fun',
+  'Skin/Aging/Longevity',
+  'Pharmacogenomic',
+  'Cardiovascular/Metabolic',
+  'Neurological/Brain',
+  'Cancer Risk',
+  'Musculoskeletal/Bone',
+  'Eye/Vision/Dental',
+  'Longevity/Aging/Immunity',
+] as const;
+
+export type TraitCategory = (typeof TRAIT_CATEGORIES)[number];
+
+/** Current number of traits in the database */
+export const TRAIT_COUNT = traitSnps.length;
+
+/** Display-friendly trait count string */
+export const TRAIT_COUNT_DISPLAY = TRAIT_COUNT.toLocaleString('en-US');

@@ -29,7 +29,7 @@ import { staggerContainer, staggerItem } from "@/lib/animation-variants";
 import { MARKETING_TIERS } from "@/lib/pricing-data";
 import { HOME_FAQ } from "@/lib/faq-data";
 import { cn } from "@/lib/utils";
-import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
 
 /* -- Feature data -- */
 const FEATURES = [
@@ -43,7 +43,7 @@ const FEATURES = [
   },
   {
     icon: Dna,
-    title: "79 Trait Predictions",
+    title: `${TRAIT_COUNT_DISPLAY} Trait Predictions`,
     description:
       "From eye color to earwax type, predict physical traits with Punnett square visualization and confidence scoring.",
     badge: "Traits",
@@ -103,7 +103,7 @@ const STEPS = [
     icon: Brain,
     title: "Instant Analysis",
     description:
-      `Our engine screens ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predicts 79 traits, and runs pharmacogenomic analysis in seconds.`,
+      `Our engine screens ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predicts ${TRAIT_COUNT_DISPLAY} traits, and runs pharmacogenomic analysis in seconds.`,
   },
   {
     number: 3,
@@ -121,7 +121,7 @@ function formatNumber(n: number): string {
 
 export function HomeContent() {
   const diseaseCount = useCountUp(CARRIER_PANEL_COUNT, 2200);
-  const traitCount = useCountUp(79, 1800);
+  const traitCount = useCountUp(TRAIT_COUNT, 1800);
 
   return (
     <div className="relative">
