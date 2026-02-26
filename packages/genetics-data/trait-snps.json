@@ -2095,9 +2095,9 @@
     "confidence": "medium",
     "sources": [
       {
-        "name": "Sanchez-Perez et al. (2005) - MUTYH variants and colorectal cancer susceptibility",
-        "pmid": "15888295",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/15888295/"
+        "name": "Kuno T et al. (2012) - Alterations of the base excision repair gene MUTYH in sporadic colorectal cancer",
+        "pmid": "22641385",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22641385/"
       },
       {
         "name": "dbSNP",
@@ -3299,16 +3299,16 @@
     "confidence": "high",
     "sources": [
       {
-        "name": "Allan et al. (2005)",
-        "pmid": "15888295",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/15888295/"
+        "name": "Raptis S et al. (2007) - MLH1 -93G>A promoter polymorphism and microsatellite-unstable colorectal cancer risk",
+        "pmid": "17374836",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17374836/"
       },
       {
         "name": "dbSNP",
         "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800734"
       }
     ],
-    "notes": "MLH1 -93G>A promoter variant reduces transcription factor binding. The A allele is associated with MLH1 promoter methylation and microsatellite instability in tumors. Frequency ~25% in Europeans. Genetic counseling is recommended for carriers."
+    "notes": "MLH1 -93G>A promoter variant reduces transcription factor binding. The A allele is associated with MLH1 promoter methylation and microsatellite instability in tumors. Frequency ~25% in Europeans. Genetic counseling is recommended for carriers. This is a risk factor identified in research, not a clinical diagnosis. Consult a healthcare provider."
   },
   {
     "rsid": "rs63750447",
@@ -3334,7 +3334,7 @@
       },
       "GG": {
         "phenotype": "High Lynch Syndrome Risk",
-        "description": "Homozygous MLH1 pathogenic variant, very high multi-cancer susceptibility",
+        "description": "Homozygous MLH1 pathogenic variant, very high multi-cancer susceptibility. This genotype is extremely rare; confirm with clinical-grade genetic testing.",
         "probability": "high"
       }
     },
@@ -3342,16 +3342,16 @@
     "confidence": "high",
     "sources": [
       {
-        "name": "Allan et al. (2005)",
-        "pmid": "15888295",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/15888295/"
+        "name": "Li S et al. (2017) - Pooling-analysis on hMLH1 polymorphisms and cancer risk",
+        "pmid": "29190978",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29190978/"
       },
       {
         "name": "dbSNP",
         "url": "https://www.ncbi.nlm.nih.gov/snp/rs63750447"
       }
     ],
-    "notes": "Lynch syndrome carriers have ~80% lifetime CRC risk, ~60% endometrial cancer risk, and elevated ovarian, gastric, and urinary tract cancer risk. MSI-high tumors respond to anti-PD-1 immunotherapy. Genetic counseling is recommended for carriers."
+    "notes": "Lynch syndrome carriers have ~80% lifetime CRC risk, ~60% endometrial cancer risk, and elevated ovarian, gastric, and urinary tract cancer risk. MSI-high tumors respond to anti-PD-1 immunotherapy. Genetic counseling is recommended for carriers. This is a risk factor identified in research, not a clinical diagnosis. Consult a healthcare provider. Penetrance estimates are primarily derived from European-ancestry cohorts and may differ in other populations."
   },
   {
     "rsid": "rs1799977",
@@ -3385,16 +3385,16 @@
     "confidence": "high",
     "sources": [
       {
-        "name": "Allan et al. (2005)",
-        "pmid": "15888295",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/15888295/"
+        "name": "Chen H et al. (2015) - Association between MutL homolog 1 polymorphisms and colorectal cancer risk: a meta-analysis",
+        "pmid": "25986311",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25986311/"
       },
       {
         "name": "dbSNP",
         "url": "https://www.ncbi.nlm.nih.gov/snp/rs1799977"
       }
     ],
-    "notes": "MLH1 I219V is a common coding variant. Lynch syndrome carriers have ~80% lifetime colorectal cancer risk. MMR-deficient tumors respond well to immune checkpoint inhibitors (anti-PD-1). Genetic counseling is recommended for carriers."
+    "notes": "MLH1 I219V is a common coding variant. Lynch syndrome carriers have ~80% lifetime colorectal cancer risk. MMR-deficient tumors respond well to immune checkpoint inhibitors (anti-PD-1). Genetic counseling is recommended for carriers. This is a risk factor identified in research, not a clinical diagnosis. Consult a healthcare provider. Penetrance estimates are primarily derived from European-ancestry cohorts and may differ in other populations."
   },
   {
     "rsid": "rs1799966",
@@ -4073,9 +4073,9 @@
     "confidence": "medium",
     "sources": [
       {
-        "name": "Sanchez-Perez et al. (2005) - CDKN1A Ser31Arg variant and cancer susceptibility",
-        "pmid": "15888295",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/15888295/"
+        "name": "Dong Y et al. (2015) - Association between p21 Ser31Arg polymorphism and gastrointestinal tract tumor risk: a meta-analysis",
+        "pmid": "24645745",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24645745/"
       },
       {
         "name": "dbSNP",
