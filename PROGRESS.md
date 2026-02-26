@@ -14,8 +14,9 @@
 **Trait Expansion Tier 1:** PR #91 — **MERGED** (10/10 A+ Claude, 4 review rounds). 236 traits (was 79), chip coverage, category accordion UI, health consent interstitial, GINA notice, amber health bars.
 **Trait Expansion Tier 2:** PR #92 — **MERGED** (4/5 A+ + 1 A Claude, 3 review rounds). 290 traits (was 236), 54 new HIGH-confidence traits, 4 inverted phenotypes fixed, 6 PMIDs corrected, health disclaimers added.
 **Trait Expansion Tier 3:** PR #93 — **MERGED** (5/5 A/A- Claude, 2 review rounds). 412 traits (was 290), 122 new MODERATE-confidence traits, rs1800888 gene/chr fix, 9 psychiatric traits renamed biology-first, 8 PMID corrections, disclaimers added.
+**Trait Expansion Tier 4:** PR #111 — **OPEN** (pending review). 476 traits (was 412), 64 new traits completing the catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. Health disclaimers on 8 sensitive entries.
 **Test count:** 3,047+ tests passing across all packages (1,433 engine + 1,614 web).
-**Next:** Tier 4 traits (412→613). Infrastructure setup + legal sign-offs → alpha launch.
+**Next:** Review + merge Tier 4 PR #111. Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
 
