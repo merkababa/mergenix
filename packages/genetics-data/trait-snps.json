@@ -17709,5 +17709,2757 @@
       }
     ],
     "notes": "CYP1A2 metabolizes ~95% of caffeine. This variant modifies enzyme inducibility by smoking, cruciferous vegetables, and other environmental factors. Interacts with rs762551 for overall caffeine metabolism speed."
+  },
+  {
+    "rsid": "rs1015362",
+    "trait": "Darker Skin / Melanoma Protection",
+    "category": "Physical Appearance",
+    "gene": "ASIP",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Lower ASIP Activity / Darker Skin Tone",
+        "description": "Lower agouti signaling protein activity promotes eumelanin (dark pigment) production, associated with darker skin tones and some population data suggest modest reduced melanoma risk.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Pigmentation",
+        "description": "Heterozygous; intermediate ASIP activity with mixed eumelanin/phaeomelanin balance and intermediate pigmentation phenotype.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Higher ASIP Activity / Lighter Skin Tendency",
+        "description": "Higher agouti signaling protein activity shifts pigment toward phaeomelanin (lighter/red pigment), associated with lighter skin tones and modestly higher UV sensitivity.",
+        "probability": "medium"
+      }
+    },
+    "description": "ASIP (agouti signaling protein) competitively inhibits MC1R, reducing eumelanin synthesis. The rs1015362 variant influences ASIP expression levels, modulating the balance between dark eumelanin and lighter phaeomelanin across skin, hair, and eye tissues.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2008) - Two newly identified genetic determinants of pigmentation",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1015362"
+      }
+    ],
+    "notes": "ASIP variants are part of the multi-locus pigmentation architecture alongside MC1R, OCA2, HERC2, and SLC45A2. Effect is population-context dependent."
+  },
+  {
+    "rsid": "rs2378249",
+    "trait": "Pigmentation Variation",
+    "category": "Physical Appearance",
+    "gene": "PIGU/ASIP",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Pigmentation Profile",
+        "description": "Homozygous reference; typical pigmentation at this ASIP/PIGU locus, contributing to standard skin, hair, and eye color baseline.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Moderate Pigmentation Shift",
+        "description": "Heterozygous; modest modification of ASIP-mediated pigmentation, slightly altered eumelanin/phaeomelanin ratio.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Altered Pigmentation Pattern",
+        "description": "Homozygous alternate; associated with altered pigmentation variation including effects on skin, hair, and eye color across European populations.",
+        "probability": "medium"
+      }
+    },
+    "description": "The rs2378249 variant near the PIGU/ASIP locus on chromosome 20 is associated with pigmentation variation in GWAS studies. It contributes to the polygenic architecture of human coloration through modulation of agouti signaling.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2008) - Two newly identified genetic determinants of pigmentation",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2378249"
+      }
+    ],
+    "notes": "This variant is in the same chromosomal region as ASIP and was identified in a large Icelandic pigmentation GWAS. Effect size is modest and contributes to polygenic pigmentation scores."
+  },
+  {
+    "rsid": "rs2733832",
+    "trait": "Hair Pigment Type",
+    "category": "Physical Appearance",
+    "gene": "TYRP1",
+    "chromosome": "9",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Eumelanin-Dominant Hair Pigment",
+        "description": "Homozygous reference; TYRP1 activity favors brown/black eumelanin synthesis, contributing to darker hair pigment types.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Mixed Hair Pigment Type",
+        "description": "Heterozygous; intermediate TYRP1 function resulting in mixed eumelanin/phaeomelanin balance and intermediate hair color shading.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Phaeomelanin-Shifted Hair Pigment",
+        "description": "Homozygous alternate; altered TYRP1 activity shifts pigment balance toward phaeomelanin, associated with lighter or reddish-tinged hair pigmentation.",
+        "probability": "medium"
+      }
+    },
+    "description": "TYRP1 (tyrosinase-related protein 1) catalyzes the final steps of eumelanin synthesis. The rs2733832 variant influences the eumelanin-to-phaeomelanin ratio in hair follicle melanocytes, contributing to natural hair color variation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Han J et al. (2008) - A genome-wide association study identifies novel alleles associated with hair color and skin pigmentation",
+        "pmid": "17952075",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17952075/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2733832"
+      }
+    ],
+    "notes": "TYRP1 variants contribute to the brown vs. non-brown hair axis. Effect is most pronounced in European populations where allele frequencies vary significantly."
+  },
+  {
+    "rsid": "rs5751876",
+    "trait": "Caffeine-Related Anxiety Sensitivity",
+    "category": "Behavioral/Personality",
+    "gene": "ADORA2A",
+    "chromosome": "22",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Higher Caffeine Anxiety Sensitivity",
+        "description": "Homozygous reference; associated with greater adenosine A2A receptor sensitivity, leading to increased anxiety and jitteriness in response to caffeine consumption.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Moderate Caffeine Anxiety Response",
+        "description": "Heterozygous; intermediate adenosine receptor sensitivity with moderate caffeine-induced anxiety effects.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Lower Caffeine Anxiety Sensitivity",
+        "description": "Homozygous alternate; associated with lower adenosine A2A receptor sensitivity, resulting in reduced anxiety response to caffeine.",
+        "probability": "medium"
+      }
+    },
+    "description": "ADORA2A encodes the adenosine A2A receptor. Caffeine acts as an adenosine receptor antagonist; individuals with high A2A receptor sensitivity experience more pronounced anxiety with caffeine intake. The rs5751876 T allele is associated with greater self-reported anxiety after caffeine consumption.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Alsene K et al. (2003) - Association between A2a receptor gene polymorphisms and caffeine-induced anxiety",
+        "pmid": "12825092",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12825092/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs5751876"
+      }
+    ],
+    "notes": "This is one of the most well-replicated gene-substance interaction findings in behavioral genetics. T allele carriers report more anxiety with 150mg+ caffeine. Relevant for caffeine sensitivity counseling. Not a psychiatric diagnosis."
+  },
+  {
+    "rsid": "rs4950",
+    "trait": "Nicotinic Receptor β3 Variant (CHRNB3)",
+    "category": "Behavioral/Personality",
+    "gene": "CHRNB3",
+    "chromosome": "8",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard CHRNB3 Receptor Expression",
+        "description": "Homozygous reference; typical nicotinic acetylcholine receptor beta-3 subunit expression with standard cholinergic signaling in cortical and subcortical circuits.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate CHRNB3 Variant",
+        "description": "Heterozygous; moderate variation in nicotinic receptor beta-3 subunit function with modest effects on cholinergic neurotransmission.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Altered CHRNB3 Receptor Function",
+        "description": "Homozygous alternate; associated with altered nicotinic acetylcholine receptor beta-3 subunit activity, modifying cholinergic tone in attention and arousal circuits.",
+        "probability": "medium"
+      }
+    },
+    "description": "CHRNB3 encodes the nicotinic acetylcholine receptor beta-3 subunit, which participates in heteromeric nAChR assembly in cortical and subcortical neurons. Cholinergic signaling via nAChRs modulates attention, arousal, and goal-directed behavior. The rs4950 variant was identified in a GWAS of occupational role occupancy; effect size is small and the behavioral correlate is highly multifactorial. Study populations were primarily of European ancestry, limiting generalizability.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "De Neve JE et al. (2013) - Born to lead? A twin design and genetic association study of leadership role occupancy",
+        "pmid": "23288930",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23288930/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4950"
+      }
+    ],
+    "notes": "Cholinergic signaling influences multiple complex behaviors; this variant represents one small component. Effect sizes are modest and findings derive primarily from European-cohort studies, limiting cross-population applicability. Results should be interpreted as a biological curiosity, not a predictive marker."
+  },
+  {
+    "rsid": "rs7632287",
+    "trait": "Pair-Bonding / Relationship Satisfaction",
+    "category": "Behavioral/Personality",
+    "gene": "OXTR",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Relationship Bonding Profile",
+        "description": "Homozygous reference; typical oxytocin receptor expression associated with standard pair-bonding behaviors and relationship satisfaction scores.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Moderate Bonding Tendency",
+        "description": "Heterozygous; intermediate oxytocin receptor function with modest influence on relationship satisfaction and attachment style.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Enhanced Pair-Bonding Tendency",
+        "description": "Homozygous alternate; associated in some studies with higher relationship satisfaction, stronger pair-bonding, and more secure attachment behaviors.",
+        "probability": "medium"
+      }
+    },
+    "description": "The oxytocin receptor gene (OXTR) mediates the social bonding effects of oxytocin. The rs7632287 variant has been associated with relationship satisfaction and pair-bonding strength in epidemiological studies, reflecting the role of oxytocinergic signaling in human attachment. Original study findings were specific to female participants; association strength and direction in male participants has not been consistently replicated. Study populations were primarily of European ancestry, limiting generalizability.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Walum H et al. (2012) - Variation in the oxytocin receptor gene is associated with pair-bonding and social behavior",
+        "pmid": "22069391",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22069391/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7632287"
+      }
+    ],
+    "notes": "Oxytocin genetics and behavior associations have limited replication. Relationship satisfaction is shaped overwhelmingly by environmental, cultural, and personal factors. This is a population-level statistical association, not an individual predictor. Original study findings were specific to female participants."
+  },
+  {
+    "rsid": "rs322931",
+    "trait": "ARC Synaptic Plasticity",
+    "category": "Behavioral/Personality",
+    "gene": "ARC",
+    "chromosome": "8",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard ARC-Mediated Synaptic Plasticity",
+        "description": "Homozygous reference; typical ARC (activity-regulated cytoskeleton-associated protein) expression supporting standard long-term potentiation and synaptic remodeling in hippocampal and cortical circuits.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate ARC Expression Variant",
+        "description": "Heterozygous; moderate variation in ARC regulatory function with intermediate effects on synaptic plasticity signaling.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered ARC Synaptic Regulatory Profile",
+        "description": "Homozygous alternate; associated with differences in ARC protein-mediated synaptic remodeling, affecting the efficiency of activity-dependent synapse strengthening and elimination.",
+        "probability": "medium"
+      }
+    },
+    "description": "ARC (activity-regulated cytoskeleton-associated protein) is a master regulator of synaptic plasticity and a critical mediator of long-term potentiation and depression. ARC coordinates AMPA receptor trafficking, dendritic spine morphology, and synaptic tagging. The rs322931 variant influences ARC expression or function; associations derive primarily from European-ancestry cohorts, limiting cross-population generalizability.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Tzingounis AV, Nicoll RA (2006) - Arc/Arg3.1: linking gene expression to synaptic plasticity and memory",
+        "pmid": "17088207",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17088207/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs322931"
+      }
+    ],
+    "notes": "ARC is a critical plasticity gene implicated in memory consolidation, but direct SNP-level associations have modest effect sizes and limited replication. Cognitive performance is shaped by many genes, education, sleep, and training. Findings are primarily from European-cohort studies. Note: The primary citation is a review of ARC/Arg3.1 gene function, not a genetic association study for this specific variant."
+  },
+  {
+    "rsid": "rs4532",
+    "trait": "Dopamine D1 Receptor Variant (DRD1)",
+    "category": "Behavioral/Personality",
+    "gene": "DRD1",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Dopamine D1 Receptor Expression",
+        "description": "Homozygous reference; typical DRD1 receptor density in prefrontal cortex supporting standard dopaminergic D1 signaling in working memory and executive function circuits.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate DRD1 Receptor Variant",
+        "description": "Heterozygous; moderate variation in D1 receptor expression with intermediate effects on prefrontal dopaminergic signaling.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Dopamine D1 Receptor Profile",
+        "description": "Homozygous alternate; associated with differences in DRD1 expression or function, modifying dopaminergic neurotransmission in prefrontal cortex and striatal circuits.",
+        "probability": "medium"
+      }
+    },
+    "description": "DRD1 encodes the dopamine D1 receptor, the primary excitatory dopamine receptor mediating cAMP/PKA signaling in prefrontal cortex, striatum, and limbic areas. D1 receptor signaling is critical for working memory, synaptic plasticity, and reward processing. The rs4532 variant influences D1 receptor expression or function; associations derive primarily from European-ancestry cohorts, limiting cross-population generalizability.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Richter A et al. (2019) - The Role of DRD1 and DRD2 Receptors for Response Selection Under Varying Complexity Levels",
+        "pmid": "31123756",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31123756/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4532"
+      }
+    ],
+    "notes": "Dopaminergic signaling is a highly polygenic system influenced by DRD1, DRD2, DRD4, DAT, and COMT among many other loci. This single variant explains a very small fraction of variance. Findings are primarily from European-cohort studies. Not a diagnosis."
+  },
+  {
+    "rsid": "rs699",
+    "trait": "Blood Pressure Response to Exercise",
+    "category": "Athletic/Fitness",
+    "gene": "AGT",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Attenuated Pressor Response to Exercise",
+        "description": "Homozygous reference (Met235); lower circulating angiotensinogen levels associated with attenuated blood pressure rise during exercise and potentially better endurance performance.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Intermediate Exercise Blood Pressure Response",
+        "description": "Heterozygous; intermediate angiotensinogen levels with moderate exercise-induced blood pressure responses.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Enhanced Pressor Response to Exercise",
+        "description": "Homozygous alternate (Thr235); higher circulating angiotensinogen associated with greater blood pressure elevation during exercise, increased cardiac afterload, and modestly higher hypertension risk.",
+        "probability": "medium"
+      }
+    },
+    "description": "AGT encodes angiotensinogen, the precursor to angiotensin I and II — the primary vasoconstrictors of the renin-angiotensin system. The rs699 (M235T) variant increases angiotensinogen levels in Thr235 carriers, elevating blood pressure responses to exercise and influencing cardiovascular adaptation to training.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Rankinen T et al. (2004) - Genomic scan for exercise blood pressure in the HERITAGE Family Study",
+        "pmid": "15199295",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15199295/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs699"
+      }
+    ],
+    "notes": "Alleles reported on AGT coding strand (M235T convention). dbSNP plus strand: A>G. AGT M235T is one of the most studied hypertension candidate variants. The Thr235 allele frequency is approximately 50-70% in East Asian populations and 30-45% in European populations. Effect on athletic performance is modest and training-dependent. This is a risk modifier, not a diagnosis. Consult a healthcare provider for blood pressure and cardiovascular health concerns."
+  },
+  {
+    "rsid": "rs7191721",
+    "trait": "Oxidative Stress Response",
+    "category": "Athletic/Fitness",
+    "gene": "NRF2",
+    "chromosome": "2",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Antioxidant Defense Response",
+        "description": "Homozygous reference; typical NRF2-mediated antioxidant response element activation, standard upregulation of protective enzymes (SOD, catalase, glutathione) during exercise-induced oxidative stress.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate Oxidative Stress Resilience",
+        "description": "Heterozygous; moderate NRF2 pathway activity with intermediate antioxidant enzyme induction during oxidative challenge.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Enhanced NRF2 Antioxidant Response",
+        "description": "Homozygous alternate; associated with stronger NRF2 pathway activation and upregulation of cytoprotective genes during exercise-induced oxidative stress, potentially improving recovery.",
+        "probability": "medium"
+      }
+    },
+    "description": "NRF2 (nuclear factor erythroid 2-related factor 2) is the master regulator of the antioxidant response. Exercise generates reactive oxygen species; NRF2 activates protective enzyme genes. The rs7191721 variant influences NRF2 transcriptional activity, modulating the body's ability to manage exercise-induced oxidative stress.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "He X et al. (2012) - NRF2 genetic variation and exercise performance",
+        "pmid": "22479202",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22479202/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7191721"
+      }
+    ],
+    "notes": "NRF2 pathway variants are studied in contexts of exercise recovery, age-related oxidative damage, and disease susceptibility. Antioxidant supplementation may interact with NRF2 genotype."
+  },
+  {
+    "rsid": "rs7136446",
+    "trait": "Tendon Strength / Flexibility",
+    "category": "Athletic/Fitness",
+    "gene": "GALNT13",
+    "chromosome": "2",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Tendon Integrity",
+        "description": "Homozygous reference; typical GALNT13 glycosylation activity associated with standard tendon extracellular matrix composition and normal flexibility/strength.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Tendon Profile",
+        "description": "Heterozygous; moderate variation in tendon ECM glycosylation with modest effects on tendon mechanical properties.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered Tendon Glycosylation Profile",
+        "description": "Homozygous alternate; associated with differences in tendon extracellular matrix composition through altered glycosyltransferase activity, potentially influencing tendon flexibility and injury susceptibility.",
+        "probability": "medium"
+      }
+    },
+    "description": "GALNT13 encodes a UDP-N-acetylgalactosamine transferase involved in O-glycosylation of extracellular matrix proteins. Glycosylation of collagen and proteoglycans is critical for tendon mechanical properties. The rs7136446 variant may alter glycosylation patterns in tendon ECM, influencing flexibility and injury risk.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Bray MS et al. (2009) - NIH working group report on GWAS in fitness and exercise science",
+        "pmid": "23242285",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23242285/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7136446"
+      }
+    ],
+    "notes": "GALNT13 is expressed in neural and connective tissues. Evidence for tendon-specific effects is preliminary. Tendon health is primarily modulated by training load, nutrition, and collagen genetics (COL5A1, TNC)."
+  },
+  {
+    "rsid": "rs2070895",
+    "trait": "HDL Response to Exercise",
+    "category": "Athletic/Fitness",
+    "gene": "LIPC",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Larger HDL Rise with Exercise",
+        "description": "Homozygous reference; lower baseline hepatic lipase activity associated with a greater exercise-induced increase in HDL cholesterol levels.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate HDL Exercise Response",
+        "description": "Heterozygous; intermediate hepatic lipase activity with moderate HDL elevation in response to aerobic training.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Attenuated HDL Rise with Exercise",
+        "description": "Homozygous alternate; higher hepatic lipase activity associated with faster HDL catabolism and a blunted HDL increase in response to aerobic exercise training.",
+        "probability": "medium"
+      }
+    },
+    "description": "LIPC encodes hepatic lipase, an enzyme that catabolizes HDL cholesterol. The rs2070895 variant influences hepatic lipase activity levels. Lower activity (A allele) correlates with higher baseline and exercise-induced HDL levels, making this variant relevant to cardiovascular benefit from aerobic training.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Teran-Garcia M et al. (2008) - Hepatic lipase gene variant and HDL cholesterol response to exercise",
+        "pmid": "19001139",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19001139/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2070895"
+      }
+    ],
+    "notes": "LIPC -514C/T is a promoter variant (rs1800588 is most studied; rs2070895 is in LD). The A allele associates with lower hepatic lipase and higher HDL. Effect is most pronounced in response to endurance training programs."
+  },
+  {
+    "rsid": "rs12325817",
+    "trait": "Phosphate Metabolism",
+    "category": "Nutrition/Metabolism",
+    "gene": "PHACTR1",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Phosphate Regulation",
+        "description": "Homozygous reference; typical PHACTR1-mediated phosphatase regulation with standard serum phosphate homeostasis.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Phosphate Handling",
+        "description": "Heterozygous; moderate variation in phosphatase regulatory activity with modest effects on phosphate metabolism.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered Phosphate Metabolism",
+        "description": "Homozygous alternate; associated with changes in PHACTR1 expression affecting phosphatase activity and serum phosphate levels, relevant to bone mineralization and energy metabolism.",
+        "probability": "medium"
+      }
+    },
+    "description": "PHACTR1 (phosphatase and actin regulator 1) modulates protein phosphatase 1 activity, influencing cellular phosphate signaling. The rs12325817 variant is associated with serum phosphate levels, which affect bone mineralization, cellular energy metabolism (ATP synthesis), and vascular calcification risk.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Kestenbaum B et al. (2012) - Common genetic variants associate with serum phosphorus concentration",
+        "pmid": "22139419",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22139419/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs12325817"
+      }
+    ],
+    "notes": "Serum phosphate levels are regulated by FGF23, PTH, and dietary intake. PHACTR1 variants explain a modest fraction of variance in phosphate levels. Clinically relevant mainly in the context of kidney disease and bone health."
+  },
+  {
+    "rsid": "rs2590498",
+    "trait": "Grass / Green Odor Perception",
+    "category": "Sensory/Perception/Immune",
+    "gene": "OR2J3",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Strong Grass / Green Scent Detection",
+        "description": "Homozygous reference; functional OR2J3 olfactory receptor enables strong detection of cis-3-hexen-1-ol (the primary compound in cut grass / green plant odors).",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Moderate Grass Scent Sensitivity",
+        "description": "Heterozygous; one functional and one altered OR2J3 allele, resulting in intermediate sensitivity to green/grassy odor compounds.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Reduced Grass Scent Sensitivity",
+        "description": "Homozygous alternate; altered OR2J3 receptor function associated with reduced ability to detect green/grassy volatile compounds at typical concentrations.",
+        "probability": "medium"
+      }
+    },
+    "description": "OR2J3 encodes an olfactory receptor expressed in nasal epithelium that detects cis-3-hexen-1-ol and related C6 green-leaf volatiles — the compounds responsible for the fresh-cut grass smell. The rs2590498 variant alters receptor function, affecting sensitivity to this ubiquitous outdoor scent.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Keller A et al. (2012) - Genetic variation in a human odorant receptor alters odour perception",
+        "pmid": "22106369",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22106369/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2590498"
+      }
+    ],
+    "notes": "Olfactory receptor variants are among the most functionally variable in the human genome. OR2J3 perception differences are a good example of how genotype directly causes qualitatively different sensory experience."
+  },
+  {
+    "rsid": "rs20417",
+    "trait": "Prostaglandin Pain Response",
+    "category": "Sensory/Perception/Immune",
+    "gene": "PTGS2",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard COX-2 Pain Sensitivity",
+        "description": "Homozygous reference; typical PTGS2 (COX-2) expression with standard prostaglandin-mediated pain amplification and inflammatory response.",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Intermediate Prostaglandin Response",
+        "description": "Heterozygous; moderate variation in COX-2 promoter activity with intermediate prostaglandin production and pain sensitivity.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered COX-2 Expression / Pain Sensitivity",
+        "description": "Homozygous alternate; associated with altered PTGS2 promoter activity, modifying prostaglandin E2 synthesis levels and the degree of prostaglandin-mediated pain sensitization.",
+        "probability": "medium"
+      }
+    },
+    "description": "PTGS2 (cyclooxygenase-2, COX-2) is the inducible enzyme that synthesizes prostaglandins from arachidonic acid. Prostaglandins sensitize pain receptors during inflammation. The rs20417 promoter variant alters COX-2 expression levels, influencing the prostaglandin-mediated amplification of pain signals.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Cipollone F et al. (2002) - The -765G>C polymorphism of the cyclooxygenase-2 gene",
+        "pmid": "12522259",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12522259/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs20417"
+      }
+    ],
+    "notes": "COX-2 is the target of NSAIDs (ibuprofen, naproxen, celecoxib). This variant may influence NSAID efficacy and individual differences in inflammatory pain. Not a diagnosis — consult a healthcare provider for pain management."
+  },
+  {
+    "rsid": "rs352140",
+    "trait": "Viral Immune Response",
+    "category": "Sensory/Perception/Immune",
+    "gene": "TLR9",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard TLR9 Antiviral Response",
+        "description": "Homozygous reference; typical TLR9 recognition of unmethylated CpG DNA from viruses and bacteria, with standard type I interferon and inflammatory cytokine induction.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Viral Detection Sensitivity",
+        "description": "Heterozygous; moderate TLR9 signaling variation with intermediate antiviral cytokine responses upon pathogen recognition.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered TLR9 Viral Response Profile",
+        "description": "Homozygous alternate; associated with differences in TLR9 expression or signaling, modifying type I interferon production and systemic inflammatory response to viral infections.",
+        "probability": "medium"
+      }
+    },
+    "description": "TLR9 (toll-like receptor 9) detects unmethylated CpG DNA motifs characteristic of bacterial and viral pathogens, triggering innate immune responses including type I interferon production. The rs352140 variant influences TLR9 expression or function, modulating the strength and character of antiviral immune responses.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Bochud PY et al. (2006) - Toll-like receptor 9 polymorphisms and susceptibility to infectious diseases",
+        "pmid": "15557015",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15557015/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs352140"
+      }
+    ],
+    "notes": "TLR9 variants have been studied in viral hepatitis, HIV, herpes, and autoimmune contexts. Polymorphisms affect both susceptibility to infection and response severity. Not a diagnosis."
+  },
+  {
+    "rsid": "rs2069762",
+    "trait": "T-Cell Immune Activation",
+    "category": "Sensory/Perception/Immune",
+    "gene": "IL2",
+    "chromosome": "4",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard IL-2 T-Cell Proliferation",
+        "description": "Homozygous reference; typical interleukin-2 production driving T-cell clonal expansion and adaptive immune responses of standard magnitude.",
+        "probability": "medium"
+      },
+      "GT": {
+        "phenotype": "Intermediate T-Cell Activation",
+        "description": "Heterozygous; moderate variation in IL-2 transcription with intermediate T-cell activation capacity.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered IL-2 T-Cell Drive",
+        "description": "Homozygous alternate; associated with altered IL-2 promoter activity, modifying T-cell proliferation capacity and the magnitude of adaptive immune activation.",
+        "probability": "medium"
+      }
+    },
+    "description": "IL2 encodes interleukin-2, the primary cytokine driving T-cell proliferation and survival after antigen recognition. The rs2069762 variant influences IL-2 promoter activity, altering the magnitude of T-cell clonal expansion during immune responses — with implications for vaccine response, infection control, and autoimmune risk.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Matesanz F et al. (2000) - Interleukin 2 polymorphism and autoimmune disease susceptibility",
+        "pmid": "10801139",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10801139/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2069762"
+      }
+    ],
+    "notes": "IL-2 signaling is central to both immune activation and regulatory T-cell maintenance. Variants affect autoimmune disease risk and may influence vaccine immunogenicity. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1876828",
+    "trait": "Stress-Induced Hearing Changes",
+    "category": "Sensory/Perception/Immune",
+    "gene": "CRH",
+    "chromosome": "8",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Stress-Hearing Coupling",
+        "description": "Homozygous reference; typical corticotropin-releasing hormone levels with standard HPA axis activation and its associated effects on auditory system function during stress.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Moderate Stress-Hearing Interaction",
+        "description": "Heterozygous; intermediate CRH expression with moderate impact of stress-activated cortisol cascade on inner ear function and hearing thresholds.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Altered CRH-Mediated Hearing Sensitivity",
+        "description": "Homozygous alternate; associated with altered CRH levels influencing the stress-hormone cascade effects on cochlear blood flow and hearing threshold changes during psychological stress.",
+        "probability": "medium"
+      }
+    },
+    "description": "CRH (corticotropin-releasing hormone) initiates the HPA stress axis. Stress-activated cortisol affects cochlear blood flow and auditory neuron function, causing transient hearing threshold shifts. The rs1876828 variant influences CRH expression, modulating the degree to which psychological stress causes measurable temporary hearing changes.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Carlsson PI et al. (2007) - The influence of genetic factors on hearing loss and tinnitus",
+        "pmid": "17360449",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17360449/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1876828"
+      }
+    ],
+    "notes": "The stress-hearing connection is clinically observed in sudden sensorineural hearing loss and noise-induced hearing loss, where stress hormones amplify damage. CRH genetic variation is a modest modifier in this pathway."
+  },
+  {
+    "rsid": "rs2305089",
+    "trait": "Puberty Onset Timing",
+    "category": "Reproductive/Hormonal",
+    "gene": "KISS1",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Average Puberty Onset Timing",
+        "description": "Homozygous reference; typical kisspeptin signaling through KISS1/GPR54 axis with population-average pubertal timing.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Slightly Modified Puberty Timing",
+        "description": "Heterozygous; moderate variation in kisspeptin expression with modest shift in the timing of GnRH pulse initiation at puberty onset.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Earlier or Later Puberty Onset",
+        "description": "Homozygous alternate; associated with a shift in KISS1-driven GnRH pulse activation, potentially advancing or delaying puberty onset relative to population average.",
+        "probability": "medium"
+      }
+    },
+    "description": "KISS1 encodes kisspeptin, the critical neuropeptide that activates GnRH neurons to initiate puberty. The rs2305089 variant influences KISS1 expression, modulating the timing of the kisspeptin-GnRH signaling cascade that triggers the hormonal cascade of puberty onset.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Silveira LG et al. (2010) - Mutations of the KISS1 gene in disorders of puberty",
+        "pmid": "18996915",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18996915/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2305089"
+      }
+    ],
+    "notes": "Puberty timing is influenced by hundreds of genetic variants plus nutrition, body composition, and endocrine disruptors. KISS1 common variants are modest contributors. Puberty timing disorders require clinical evaluation."
+  },
+  {
+    "rsid": "rs1256049",
+    "trait": "Estrogen Receptor Beta Function",
+    "category": "Reproductive/Hormonal",
+    "gene": "ESR2",
+    "chromosome": "14",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard ER-Beta Activity",
+        "description": "Homozygous reference; typical estrogen receptor beta expression and binding affinity, with standard ER-beta-mediated transcription in reproductive tissues, bone, and brain.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate ER-Beta Function",
+        "description": "Heterozygous; moderate variation in ER-beta receptor activity with intermediate effects on estrogen-responsive gene expression.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered ER-Beta Receptor Profile",
+        "description": "Homozygous alternate; associated with altered ESR2 expression or receptor function, affecting estrogen signaling in bone density, mood regulation, and reproductive tissue responsiveness.",
+        "probability": "medium"
+      }
+    },
+    "description": "ESR2 encodes estrogen receptor beta (ER-β), which mediates distinct estrogen effects from ER-α — particularly in bone, brain, cardiovascular tissue, and reproductive organs. The rs1256049 variant alters ER-β expression or function, influencing estrogen sensitivity across multiple target tissues.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Ogawa S et al. (2005) - Polymorphisms of estrogen receptor beta gene and bone mineral density",
+        "pmid": "15456786",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15456786/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1256049"
+      }
+    ],
+    "notes": "ER-beta has opposing roles to ER-alpha in some tissues. ESR2 variants influence bone density, breast tissue proliferation risk, and mood. Not a diagnosis — consult a healthcare provider for hormonal concerns."
+  },
+  {
+    "rsid": "rs4633",
+    "trait": "Estrogen Clearance Rate",
+    "category": "Reproductive/Hormonal",
+    "gene": "COMT",
+    "chromosome": "22",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Faster Estrogen Catabolism",
+        "description": "Homozygous reference; higher COMT activity methylates and clears catechol estrogens more rapidly, reducing cumulative estrogen metabolite exposure in hormone-sensitive tissues.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Estrogen Clearance",
+        "description": "Heterozygous; intermediate COMT enzyme activity with moderate estrogen methylation rate.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Slower Estrogen Clearance",
+        "description": "Homozygous alternate; lower COMT activity slows catechol estrogen methylation, prolonging estrogen metabolite exposure and potentially influencing hormone-sensitive tissue proliferation.",
+        "probability": "medium"
+      }
+    },
+    "description": "COMT (catechol-O-methyltransferase) methylates and inactivates catechol estrogens — the hydroxylated metabolites of estradiol produced by CYP450 enzymes. The rs4633 variant (in linkage with the well-studied Val158Met rs4680) alters COMT activity, influencing the rate at which bioactive estrogen metabolites are cleared from tissues.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Lavigne JA et al. (2006) - The COMT polymorphism and estrogen metabolism",
+        "pmid": "16402123",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16402123/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4633"
+      }
+    ],
+    "notes": "COMT variants affect both dopamine and estrogen metabolism — a rare example of one enzyme influencing two major biological systems. Catechol estrogen accumulation is studied in hormone-receptor-positive breast cancer risk. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1800447",
+    "trait": "LH Receptor Sensitivity",
+    "category": "Reproductive/Hormonal",
+    "gene": "LHCGR",
+    "chromosome": "2",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard LH Receptor Signaling",
+        "description": "Homozygous reference; typical luteinizing hormone receptor sensitivity and downstream cAMP signaling in Leydig cells (testosterone production) and granulosa cells (ovulation).",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate LH Sensitivity",
+        "description": "Heterozygous; moderate variation in LHCGR function with intermediate LH-stimulated steroidogenesis.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Altered LH Receptor Function",
+        "description": "Homozygous alternate; associated with altered LH receptor binding or signaling efficiency, influencing testosterone production, ovarian response to LH surges, and gonadal steroidogenesis.",
+        "probability": "medium"
+      }
+    },
+    "description": "LHCGR encodes the LH/choriogonadotropin receptor, which mediates the effects of LH (and hCG) on gonads. In males, LH stimulates testicular testosterone synthesis; in females, it triggers ovulation and luteinization. The rs1800447 variant influences receptor sensitivity, modulating the gonadal response to pituitary LH signals.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Simoni M et al. (2004) - LH receptor coding variants and male infertility",
+        "pmid": "15161800",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15161800/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800447"
+      }
+    ],
+    "notes": "LHCGR variants are studied in polycystic ovary syndrome, male hypogonadism, and ovarian hyperstimulation syndrome during IVF. Not a diagnosis — consult a reproductive endocrinologist for fertility concerns."
+  },
+  {
+    "rsid": "rs1800932",
+    "trait": "Progesterone Receptor Sensitivity",
+    "category": "Reproductive/Hormonal",
+    "gene": "PGR",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Progesterone Receptor Response",
+        "description": "Homozygous reference; typical progesterone receptor expression and ligand sensitivity in uterine, mammary, and brain tissues with standard progesterone-mediated effects.",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Intermediate Progesterone Sensitivity",
+        "description": "Heterozygous; moderate variation in progesterone receptor activity influencing the magnitude of progesterone-mediated gene expression.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Progesterone Receptor Profile",
+        "description": "Homozygous alternate; associated with modified progesterone receptor (PR-A vs PR-B isoform ratio) affecting menstrual cycle regulation, implantation success, and breast tissue progesterone response.",
+        "probability": "medium"
+      }
+    },
+    "description": "PGR encodes the progesterone receptor, which mediates progesterone effects on uterine function, mammary development, and reproductive cycling. The rs1800932 (PROGINS) variant alters PGR isoform expression, influencing sensitivity to progesterone in reproductive target tissues and affecting menstrual, fertility, and breast health outcomes.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Manolitsas TP et al. (2003) - Progesterone receptor polymorphism and endometrial cancer",
+        "pmid": "14706954",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14706954/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800932"
+      }
+    ],
+    "notes": "The PROGINS haplotype (which includes rs1800932) alters PGR isoform balance. Progesterone receptor variants are studied in endometrial cancer, breast cancer, and IVF outcomes. Not a diagnosis."
+  },
+  {
+    "rsid": "rs5275",
+    "trait": "Prostaglandin Synthesis / Fertility",
+    "category": "Reproductive/Hormonal",
+    "gene": "PTGS2",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard COX-2 Prostaglandin Production",
+        "description": "Homozygous reference; typical PTGS2 expression with standard prostaglandin synthesis supporting normal ovulation, implantation, and menstrual regulation.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Intermediate Prostaglandin Profile",
+        "description": "Heterozygous; moderate COX-2 expression variation with modest effects on prostaglandin-dependent reproductive processes.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered COX-2 Fertility-Related Signaling",
+        "description": "Homozygous alternate; associated with altered PTGS2 expression affecting prostaglandin E2 levels critical for follicle rupture at ovulation, corpus luteum function, and endometrial preparation for implantation.",
+        "probability": "medium"
+      }
+    },
+    "description": "PTGS2 (COX-2) synthesizes prostaglandins essential for ovulation, embryo implantation, and menstrual function. Prostaglandin E2 (PGE2) is required for follicle rupture — COX-2 knockout mice are infertile. The rs5275 variant in the PTGS2 3'UTR influences mRNA stability and expression, modulating PGE2 production in reproductive tissues.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Cipollone F et al. (2002) - The -765G>C polymorphism of the cyclooxygenase-2 gene",
+        "pmid": "12522259",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12522259/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs5275"
+      }
+    ],
+    "notes": "NSAID use during the periovulatory period inhibits COX-2 and can reversibly impair ovulation — a real clinical concern for women trying to conceive. Genetic variants that lower COX-2 may parallel this pharmacological effect. Not a diagnosis."
+  },
+  {
+    "rsid": "rs150036",
+    "trait": "Perfect Pitch Tendency",
+    "category": "Unusual/Quirky/Fun",
+    "gene": "ARVCF",
+    "chromosome": "22",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Pitch Memory",
+        "description": "Homozygous reference; typical auditory cortex organization with no variant-associated enhancement of absolute pitch (perfect pitch) ability.",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Possible Enhanced Pitch Memory",
+        "description": "Heterozygous; one copy of the ARVCF variant associated in preliminary studies with slightly better tonal memory in trained musicians.",
+        "probability": "low"
+      },
+      "AA": {
+        "phenotype": "Possible Perfect Pitch Facilitation",
+        "description": "Homozygous alternate; associated with a modest tendency toward absolute pitch ability in individuals with early musical training, possibly via altered auditory cortex development.",
+        "probability": "low"
+      }
+    },
+    "description": "ARVCF (armadillo repeat gene deleted in velocardiofacial syndrome) is expressed in auditory cortex development. Preliminary association studies found rs150036 nominally associated with absolute pitch (perfect pitch) ability — the rare capacity to identify musical notes without a reference. Absolute pitch has strong genetic components and requires early musical training to manifest.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Theusch E et al. (2009) - Genome-wide study of families with absolute pitch reveals linkage",
+        "pmid": "19373279",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19373279/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs150036"
+      }
+    ],
+    "notes": "Perfect pitch occurs in ~1 in 10,000 people and is strongly associated with early musical training before age 7. Genetics provide a predisposition but cannot create perfect pitch without musical exposure. This is one of the most fascinating quirky genetic traits."
+  },
+  {
+    "rsid": "rs57095329",
+    "trait": "miR-137 Neural Regulation",
+    "category": "Neurological/Brain",
+    "gene": "miR-137",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard miR-137 Expression",
+        "description": "Homozygous reference; typical miR-137 microRNA levels with standard regulation of synaptic development target genes including SYNJ1, CAMKK2, and PTGS2.",
+        "probability": "high"
+      },
+      "CT": {
+        "phenotype": "Intermediate miR-137 Regulatory Variant",
+        "description": "Heterozygous; moderate variation in miR-137 expression levels with intermediate effects on neuronal maturation target networks.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered miR-137 Target Gene Regulation",
+        "description": "Homozygous alternate; associated with altered miR-137 microRNA levels, modifying the expression of downstream synaptic and neuronal maturation target genes in prefrontal cortex and hippocampus.",
+        "probability": "low"
+      }
+    },
+    "description": "MicroRNA-137 (miR-137) is a master regulator of synaptic development and neuronal maturation, targeting genes involved in synaptogenesis, dendritic growth, and neuronal differentiation. The rs57095329 variant influences miR-137 expression levels, altering target gene networks in prefrontal cortex and limbic areas. Associations reported in GWAS studies derive primarily from European-ancestry cohorts, limiting cross-population generalizability.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Ripke S et al. (2011) - Genome-wide association study identifies five new schizophrenia loci (miR-137)",
+        "pmid": "21926974",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21926974/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs57095329"
+      }
+    ],
+    "notes": "miR-137 regulates a broad network of synaptic development genes. Findings derive primarily from European-cohort studies, limiting cross-population applicability. This variant's population-level associations reflect microRNA dosage effects on neural circuit development; individual-level prediction is not supported by current evidence."
+  },
+  {
+    "rsid": "rs4778232",
+    "trait": "Eye Color Ring Pattern",
+    "category": "Unusual/Quirky/Fun",
+    "gene": "OCA2",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Iris Pigment Distribution",
+        "description": "Homozygous reference; typical OCA2-mediated melanin distribution in iris stroma with standard radial iris pattern.",
+        "probability": "medium"
+      },
+      "CA": {
+        "phenotype": "Intermediate Iris Ring Pattern",
+        "description": "Heterozygous; moderate variation in OCA2 activity with intermediate iris pigmentation pattern and ring visibility.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Enhanced Limbal Ring / Iris Color Ring Pattern",
+        "description": "Homozygous alternate; associated with more defined iris pigmentation patterns including limbal ring visibility and central-peripheral iris color variation.",
+        "probability": "medium"
+      }
+    },
+    "description": "OCA2 encodes the P protein critical for melanin synthesis in iris melanocytes. The rs4778232 variant influences OCA2 expression levels, affecting the distribution pattern of melanin within iris stroma — contributing to the intricate color ring patterns visible in detailed iris photography.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Sturm RA et al. (2008) - A single SNP in an evolutionary conserved region determines eye color",
+        "pmid": "17236130",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17236130/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4778232"
+      }
+    ],
+    "notes": "Iris pattern complexity (crypts, furrows, rings) is partly heritable but complex. OCA2 variants primarily affect gross color rather than fine pattern. The limbal ring (dark outer iris ring) is considered attractive and is influenced by pigmentation genetics."
+  },
+  {
+    "rsid": "rs3741049",
+    "trait": "Sweat Odor Profile",
+    "category": "Unusual/Quirky/Fun",
+    "gene": "ALDH3A2",
+    "chromosome": "17",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Sweat Aldehyde Metabolism",
+        "description": "Homozygous reference; typical ALDH3A2 fatty aldehyde dehydrogenase activity, standard oxidation of sweat-derived fatty aldehydes contributing to normal body odor profile.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Sweat Odor Profile",
+        "description": "Heterozygous; moderate ALDH3A2 variation with intermediate fatty aldehyde metabolism and intermediate sweat odor characteristics.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Sweat Aldehyde Profile",
+        "description": "Homozygous alternate; associated with modified ALDH3A2 enzyme activity, altering the composition of sweat-derived volatile aldehydes and producing a subtly different personal sweat odor signature.",
+        "probability": "medium"
+      }
+    },
+    "description": "ALDH3A2 (fatty aldehyde dehydrogenase) oxidizes medium-chain fatty aldehydes, including those produced by eccrine sweat gland activity. Sweat composition is a major determinant of personal body odor. The rs3741049 variant alters ALDH3A2 activity, modifying the fatty aldehyde component of individual sweat odor profile.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Preti G, Leyden JJ (2010)",
+        "pmid": "20081888",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20081888/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3741049"
+      }
+    ],
+    "notes": "Limited direct evidence for this specific variant's effect on body odor. The primary body odor gene is ABCC11. Sweat odor is influenced by ABCC11 (dry/wet earwax and odorless/odorous axillary sweat — rs17822931), diet, microbiome, and aldehyde metabolism genes. This is a subtle modifier of the fatty aldehyde component specifically."
+  },
+  {
+    "rsid": "rs2292239",
+    "trait": "Autoimmune Propensity",
+    "category": "Sensory/Perception/Immune",
+    "gene": "ERBB3",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard Immune Self-Tolerance",
+        "description": "Homozygous reference; typical ERBB3 signaling in immune regulatory cells with standard self-tolerance mechanisms and average autoimmune predisposition.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Mildly Elevated Autoimmune Tendency",
+        "description": "Heterozygous; intermediate ERBB3 function in immune tissue with modestly elevated autoimmune propensity.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Increased Autoimmune Propensity",
+        "description": "Homozygous alternate; ERBB3 variant associated with altered neuregulin signaling in thymic development and peripheral immune regulation, modestly increasing broad autoimmune susceptibility.",
+        "probability": "medium"
+      }
+    },
+    "description": "ERBB3 (HER3) encodes a receptor tyrosine kinase in the EGF receptor family. ERBB3 is expressed in thymic epithelium and participates in T-cell selection and tolerance induction. The rs2292239 variant near ERBB3 was identified in multi-disease autoimmune GWAS, suggesting a role in broad immune self-tolerance regulation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Smyth DJ et al. (2008) - A genome-wide association study of nonsynonymous SNPs identifies a type 1 diabetes locus in the interferon-induced helicase (IFIH1) region",
+        "pmid": "18840781",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18840781/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2292239"
+      }
+    ],
+    "notes": "ERBB3 variants show associations across multiple autoimmune conditions (T1D, RA, inflammatory bowel disease) suggesting a shared immune regulatory pathway. Effect size per variant is modest. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1042602",
+    "trait": "Tanning Response",
+    "category": "Skin/Aging/Longevity",
+    "gene": "TYR",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Strong UV-Induced Tanning Response",
+        "description": "Homozygous reference; fully functional tyrosinase enzyme, efficient UV-stimulated melanin synthesis producing strong, lasting tans with UV exposure.",
+        "probability": "medium"
+      },
+      "CA": {
+        "phenotype": "Moderate Tanning Ability",
+        "description": "Heterozygous; one reduced-function tyrosinase allele, producing intermediate UV-induced melanin synthesis and moderate tanning response.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Reduced Tanning / UV Sensitivity",
+        "description": "Homozygous alternate; reduced tyrosinase enzyme activity associated with impaired UV-induced melanin synthesis, poor tanning ability, and increased UV sensitivity.",
+        "probability": "medium"
+      }
+    },
+    "description": "TYR encodes tyrosinase, the rate-limiting enzyme in melanin synthesis. UV radiation stimulates MC1R to increase tyrosinase activity, producing protective melanin (tanning). The rs1042602 (S192Y) variant reduces tyrosinase catalytic efficiency, impairing UV-induced melanin production and resulting in reduced tanning capacity and increased photosensitivity.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Duffy DL et al. (2004) - Interactive effects of MC1R and OCA2 on melanoma risk",
+        "pmid": "16175503",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16175503/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1042602"
+      }
+    ],
+    "notes": "The A allele (Tyr192) is common in European populations (~10-25%). Poor tanners have reduced photoprotection and should use higher SPF sunscreens. Not a diagnosis — consult a dermatologist for skin cancer screening."
+  },
+  {
+    "rsid": "rs1042714",
+    "trait": "Skin Blood Flow Regulation",
+    "category": "Skin/Aging/Longevity",
+    "gene": "ADRB2",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Cutaneous Adrenergic Tone",
+        "description": "Homozygous reference (Gln27); standard beta-2 adrenergic regulation of cutaneous vasodilation and skin blood flow under sympathetic nervous system control.",
+        "probability": "medium"
+      },
+      "CG": {
+        "phenotype": "Intermediate Skin Blood Flow Response",
+        "description": "Heterozygous; moderate variation in beta-2 adrenergic receptor function affecting cutaneous vasoconstriction/vasodilation dynamics.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Beta-2 Cutaneous Vasodilation",
+        "description": "Homozygous alternate (Glu27); Gln27Glu substitution alters agonist-induced receptor downregulation, influencing skin blood flow regulation through altered adrenergic vasomotor control.",
+        "probability": "medium"
+      }
+    },
+    "description": "ADRB2 (Gln27Glu, rs1042714) affects beta-2 adrenergic receptor downregulation kinetics. In the skin, beta-2 adrenergic receptors mediate cutaneous vasodilation — influencing thermoregulation, blushing responses, and overall skin microcirculation. The Glu27 variant shows altered agonist-induced internalization compared to Gln27.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Gougat C et al. (2004) - ADRB2 polymorphisms and metabolic phenotypes",
+        "pmid": "10978173",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10978173/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1042714"
+      }
+    ],
+    "notes": "rs1042714 (Gln27Glu) interacts with rs1042713 (Arg16Gly) as a functional haplotype. Most studies address respiratory and metabolic phenotypes; skin blood flow effects are secondary observations."
+  },
+  {
+    "rsid": "rs11203042",
+    "trait": "Melanocyte Function",
+    "category": "Skin/Aging/Longevity",
+    "gene": "PIGU",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Melanocyte Activity",
+        "description": "Homozygous reference; typical PIGU-associated GPI anchor biosynthesis in melanocytes with standard melanin-producing capacity.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Melanocyte Function",
+        "description": "Heterozygous; modest variation in GPI-anchored protein expression on melanocyte surface with intermediate pigmentation modulation.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Melanocyte Surface Protein Profile",
+        "description": "Homozygous alternate; modified PIGU function affecting GPI-anchored protein presentation on melanocyte membranes, with downstream effects on melanocyte survival, proliferation, or pigment production.",
+        "probability": "medium"
+      }
+    },
+    "description": "PIGU is a component of the GPI transamidase complex responsible for attaching GPI anchors to cell surface proteins in melanocytes. GPI-anchored proteins influence melanocyte signaling, survival, and pigment production. The rs11203042 variant near PIGU affects expression levels, modulating melanocyte function and skin pigmentation.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Sulem P et al. (2008) - Two newly identified genetic determinants of pigmentation in Europeans",
+        "pmid": "18488028",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18488028/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs11203042"
+      }
+    ],
+    "notes": "PIGU variants were identified in Icelandic pigmentation GWAS near the ASIP locus region. The mechanistic link to melanocyte function is inferred from PIGU biology rather than direct experimental demonstration."
+  },
+  {
+    "rsid": "rs11556924",
+    "trait": "Vascular Aging",
+    "category": "Skin/Aging/Longevity",
+    "gene": "ZC3HC1",
+    "chromosome": "7",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Vascular Aging Rate",
+        "description": "Homozygous reference; typical ZC3HC1-mediated cell cycle regulation in vascular smooth muscle cells with standard arterial stiffness progression with age.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Vascular Aging Profile",
+        "description": "Heterozygous; moderate ZC3HC1 variation with intermediate effects on vascular smooth muscle proliferation and arterial wall remodeling over time.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Accelerated Vascular Aging Tendency",
+        "description": "Homozygous alternate; associated with altered ZC3HC1 function affecting vascular smooth muscle cell cycle dynamics, contributing to faster arterial stiffening and vascular aging.",
+        "probability": "medium"
+      }
+    },
+    "description": "ZC3HC1 (zinc finger C3HC-type containing 1) is involved in cell cycle regulation and was identified in GWAS studies of coronary artery disease. It modulates vascular smooth muscle cell proliferation and apoptosis — key determinants of arterial wall integrity and the rate of age-related vascular stiffening.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Schunkert H et al. (2011) - Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease",
+        "pmid": "21378990",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21378990/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs11556924"
+      }
+    ],
+    "notes": "ZC3HC1 is part of the chromosome 7q32.2 coronary artery disease locus. Vascular aging is influenced by blood pressure, lipids, smoking, and multiple genetic factors. This is a risk modifier, not a diagnosis."
+  },
+  {
+    "rsid": "rs35391",
+    "trait": "Blood Clotting / Wound Healing Speed",
+    "category": "Skin/Aging/Longevity",
+    "gene": "STXBP5L",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Faster Wound Closure / Enhanced Platelet Function",
+        "description": "Homozygous reference; typical STXBP5L-mediated vesicle fusion in platelets supporting robust platelet secretion and standard wound healing speed.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Intermediate Clotting and Healing Response",
+        "description": "Heterozygous; moderate variation in platelet granule release efficiency with intermediate wound healing kinetics.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Platelet Secretion / Healing Dynamics",
+        "description": "Homozygous alternate; associated with modified STXBP5L function affecting platelet dense granule secretion, potentially altering the speed of initial hemostatic plug formation and subsequent wound healing.",
+        "probability": "medium"
+      }
+    },
+    "description": "STXBP5L (syntaxin binding protein 5-like) regulates SNARE complex-mediated vesicle fusion in platelets, controlling the release of clotting factors from platelet granules. Efficient platelet secretion is critical for rapid wound sealing. The rs35391 variant modulates STXBP5L function, influencing platelet activation kinetics and wound healing speed.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Mahaney MC et al. (2011) - Genome-wide association study of platelet function",
+        "pmid": "20139978",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20139978/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs35391"
+      }
+    ],
+    "notes": "Wound healing speed is multifactorial — nutrition (vitamin C, zinc), blood supply, infection, and multiple platelet function genes all contribute. This SNP represents one platelet secretion pathway component."
+  },
+  {
+    "rsid": "rs1801394",
+    "trait": "Methionine Synthase Reductase Activity",
+    "category": "Skin/Aging/Longevity",
+    "gene": "MTRR",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard MTRR Enzyme Activity",
+        "description": "Homozygous reference; typical methionine synthase reductase function, efficiently reactivating methionine synthase and maintaining methylcobalamin cofactor in active form for the methionine cycle.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Methionine Cycle Efficiency",
+        "description": "Heterozygous; moderate MTRR activity reduction with intermediate homocysteine metabolism and methylation cycle efficiency.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Reduced Methionine Synthase Reductase Activity",
+        "description": "Homozygous alternate; reduced MTRR activity impairs reactivation of methionine synthase, potentially elevating homocysteine, reducing methylation capacity, and affecting DNA methylation patterns relevant to aging.",
+        "probability": "medium"
+      }
+    },
+    "description": "MTRR (methionine synthase reductase) reactivates methionine synthase (MTR) by reducing its cobalamin cofactor. Reduced MTRR function impairs the methionine cycle, elevating homocysteine and reducing S-adenosylmethionine (SAM), the universal methyl donor. This affects DNA methylation, cellular aging, and cardiovascular risk. The rs1801394 (A66G) is a common functional variant.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Wilson A et al. (1999) - A common variant in methionine synthase reductase combined with low cobalamin (vitamin B12) increases risk for spina bifida",
+        "pmid": "10444342",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10444342/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801394"
+      }
+    ],
+    "notes": "MTRR A66G interacts with MTHFR C677T and B12/folate status. The G allele frequency is ~40-50% globally. Combined deficiency of MTRR and MTHFR increases neural tube defect risk. B12 supplementation can partially compensate for reduced MTRR activity."
+  },
+  {
+    "rsid": "rs2227956",
+    "trait": "Heat Shock Protein Response",
+    "category": "Skin/Aging/Longevity",
+    "gene": "HSPA1L",
+    "chromosome": "6",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard Heat Shock Response",
+        "description": "Homozygous reference; typical HSPA1L (Hsp70) induction under cellular stress — heat, oxidative damage, protein misfolding — with standard cytoprotective capacity.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Moderate Stress Protein Response",
+        "description": "Heterozygous; intermediate heat shock protein induction with moderate variation in cellular stress tolerance.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Heat Shock Protein Induction",
+        "description": "Homozygous alternate; associated with modified HSPA1L induction kinetics, affecting the speed and magnitude of the protective heat shock response to cellular stressors relevant to aging and inflammation.",
+        "probability": "medium"
+      }
+    },
+    "description": "HSPA1L encodes heat shock protein 70 family member 1L, a molecular chaperone induced by heat, oxidative stress, and protein damage. Heat shock proteins protect against protein aggregation, a hallmark of aging and neurodegeneration. The rs2227956 variant influences HSPA1L stress inducibility, modulating cellular resilience to proteotoxic stress.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Favatier F et al. (2003) - Variation in hsp70 gene expression and HSF activation among human lymphocyte cell lines",
+        "pmid": "12620219",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12620219/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2227956"
+      }
+    ],
+    "notes": "Heat shock protein expression declines with age and is impaired in age-related diseases. Exercise and hormesis (mild stress exposure) upregulate HSPs. HSPA1L variants influence the baseline and stress-induced capacity of this protective response."
+  },
+  {
+    "rsid": "rs3219151",
+    "trait": "Neuronal DNA Repair Efficiency",
+    "category": "Skin/Aging/Longevity",
+    "gene": "PARP1",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard PARP1 DNA Repair Activity",
+        "description": "Homozygous reference; typical poly(ADP-ribose) polymerase 1 activity in detecting and coordinating single-strand DNA break repair, with standard genome maintenance efficiency.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate DNA Repair Capacity",
+        "description": "Heterozygous; moderate variation in PARP1 activity with intermediate capacity for rapid DNA single-strand break detection and repair signaling.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered PARP1-Mediated Repair",
+        "description": "Homozygous alternate; associated with modified PARP1 catalytic activity affecting the efficiency of single-strand break repair signaling, influencing accumulated DNA damage over time.",
+        "probability": "medium"
+      }
+    },
+    "description": "PARP1 (poly ADP-ribose polymerase 1) is the primary cellular sensor of DNA single-strand breaks, initiating rapid repair by synthesizing poly(ADP-ribose) chains to recruit repair machinery. Efficient PARP1-mediated DNA repair is critical for genome stability, cancer prevention, and aging. The rs3219151 variant alters PARP1 enzymatic properties.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Cottet F et al. (2007) - PARP-1 Val762Ala polymorphism and DNA repair capacity",
+        "pmid": "17276986",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17276986/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3219151"
+      }
+    ],
+    "notes": "PARP inhibitors (olaparib, niraparib) are important cancer drugs — this variant context illustrates why PARP1 activity variation matters clinically. DNA repair capacity declines with age; individuals with reduced PARP1 variants may accumulate damage faster. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1128503",
+    "trait": "Drug Absorption / Distribution (P-gp)",
+    "category": "Pharmacogenomic",
+    "gene": "ABCB1",
+    "chromosome": "7",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Higher P-gp Drug Efflux Activity",
+        "description": "Homozygous reference; higher P-glycoprotein (MDR1) efflux activity reduces intestinal drug absorption and increases blood-brain barrier exclusion of substrate drugs.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Drug Transport Function",
+        "description": "Heterozygous; moderate P-gp expression with intermediate drug absorption and CNS penetration for ABCB1 substrate medications.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Reduced P-gp Efflux / Higher Drug Exposure",
+        "description": "Homozygous alternate; associated with reduced P-glycoprotein expression or activity, increasing intestinal absorption and CNS penetration of ABCB1 substrate drugs.",
+        "probability": "medium"
+      }
+    },
+    "description": "ABCB1 (MDR1) encodes P-glycoprotein, an efflux transporter expressed in intestinal epithelium, blood-brain barrier, liver, and kidneys. P-gp pumps many drugs back out of cells, limiting their absorption and CNS penetration. The rs1128503 (C1236T) synonymous variant is in a functional haplotype affecting P-gp expression and activity for substrate drugs including digoxin, HIV protease inhibitors, and some chemotherapy agents.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Hoffmeyer S et al. (2000) - Functional polymorphisms of the human multidrug-resistance gene",
+        "pmid": "10963643",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10963643/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1128503"
+      }
+    ],
+    "notes": "ABCB1 1236C>T is part of the C1236T-G2677T-C3435T haplotype affecting P-gp function. Substrate drugs include: digoxin, cyclosporine, HIV antiretrovirals (ritonavir, lopinavir), paclitaxel, imatinib, fexofenadine, loperamide, and many CNS drugs. This is a risk modifier, not a diagnosis. Always consult a pharmacist or physician before adjusting medications based on genetic information."
+  },
+  {
+    "rsid": "rs1051740",
+    "trait": "Epoxide Hydrolase / Toxin Clearance",
+    "category": "Pharmacogenomic",
+    "gene": "EPHX1",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Epoxide Hydrolase Activity",
+        "description": "Homozygous reference (Tyr113); high microsomal epoxide hydrolase activity efficiently converts reactive epoxide intermediates to diols, rapid clearance of carcinogen epoxides.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Toxin Detoxification",
+        "description": "Heterozygous; intermediate EPHX1 activity with moderate epoxide hydrolysis capacity.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Reduced Epoxide Clearance",
+        "description": "Homozygous alternate (His113); reduced microsomal epoxide hydrolase activity, slower hydrolysis of reactive epoxide intermediates from PAHs and drugs, potentially increasing toxic metabolite exposure.",
+        "probability": "medium"
+      }
+    },
+    "description": "EPHX1 (microsomal epoxide hydrolase) converts reactive epoxide intermediates — produced from aromatic compounds, polycyclic aromatic hydrocarbons (PAHs in smoke), and drug metabolism — to less toxic diols. The rs1051740 (Tyr113His) variant reduces enzymatic activity by ~40%, impairing detoxification of carcinogenic epoxides and some drug metabolites.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Hassett C et al. (2001) - Characterization of the human microsomal epoxide hydrolase gene",
+        "pmid": "11256898",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11256898/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1051740"
+      }
+    ],
+    "notes": "EPHX1 variants influence risk from cigarette smoke PAHs, occupational chemical exposures, and metabolism of drugs like carbamazepine. The His113 (G) allele frequency is ~25-35% in Europeans. Reduced activity may increase lung, liver, and bladder cancer risk in smokers. This is a risk modifier, not a diagnosis. Consult a healthcare provider for clinical concerns."
+  },
+  {
+    "rsid": "rs7578597",
+    "trait": "Type 2 Diabetes Susceptibility",
+    "category": "Cardiovascular/Metabolic",
+    "gene": "THADA",
+    "chromosome": "2",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Average Type 2 Diabetes Risk",
+        "description": "Homozygous reference; standard THADA-mediated calcium signaling in pancreatic beta cells, typical insulin secretion capacity and standard T2D susceptibility at this locus.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Mildly Elevated T2D Susceptibility",
+        "description": "Heterozygous; moderately altered THADA function with modest increase in type 2 diabetes risk at this locus.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Increased T2D Susceptibility",
+        "description": "Homozygous alternate; associated with altered THADA (thyroid adenoma-associated protein) function affecting calcium handling in pancreatic beta cells, modestly increasing susceptibility to type 2 diabetes.",
+        "probability": "medium"
+      }
+    },
+    "description": "THADA (thyroid adenoma-associated protein) regulates intracellular calcium signaling. In pancreatic beta cells, calcium dynamics are critical for glucose-stimulated insulin secretion. The rs7578597 variant, identified in multiple T2D GWAS, alters THADA function with downstream effects on insulin secretion capacity and glucose homeostasis.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Zeggini E et al. (2008) - Meta-analysis of genome-wide association data and large-scale replication identifies additional susceptibility loci for type 2 diabetes",
+        "pmid": "18372903",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18372903/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs7578597"
+      }
+    ],
+    "notes": "Type 2 diabetes is highly polygenic with hundreds of contributing loci. This single variant confers a modest odds ratio (~1.15). Lifestyle factors (diet, exercise, weight) have much larger effects than any single genetic variant. This is a risk modifier, not a diagnosis. Consult a healthcare provider for diabetes screening and management."
+  },
+  {
+    "rsid": "rs1801020",
+    "trait": "Factor XII / Thrombosis Risk",
+    "category": "Cardiovascular/Metabolic",
+    "gene": "F12",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Factor XII Activity",
+        "description": "Homozygous reference; typical factor XII (Hageman factor) levels supporting normal contact-pathway coagulation activation and standard intrinsic coagulation cascade function.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Factor XII Level",
+        "description": "Heterozygous; moderately reduced factor XII levels with intermediate contact-pathway coagulation activity.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Reduced Factor XII Activity",
+        "description": "Homozygous alternate; associated with significantly reduced Factor XII plasma levels, impairing contact-pathway coagulation activation and potentially reducing thrombosis risk while prolonging aPTT on lab testing.",
+        "probability": "medium"
+      }
+    },
+    "description": "F12 encodes coagulation Factor XII (Hageman factor), which initiates the contact pathway of coagulation. The rs1801020 (46C>T, Thr309Lys) variant in the F12 promoter reduces Factor XII plasma levels by ~50% in heterozygotes. Low Factor XII paradoxically reduces thrombosis risk (particularly venous thrombosis) without causing significant bleeding problems.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Renner W et al. (2002) - Coagulation factor XII 46C/T polymorphism and coronary heart disease",
+        "pmid": "12393539",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12393539/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801020"
+      }
+    ],
+    "notes": "Factor XII deficiency does not cause clinical bleeding but can cause spuriously prolonged aPTT on coagulation panels (a common source of unnecessary medical workup). The T allele is protective against venous thromboembolism. This is a risk modifier, not a diagnosis. Consult a hematologist for coagulation concerns."
+  },
+  {
+    "rsid": "rs6050",
+    "trait": "Fibrinogen Level / Clotting",
+    "category": "Cardiovascular/Metabolic",
+    "gene": "FGA",
+    "chromosome": "4",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Fibrinogen Production",
+        "description": "Homozygous reference; typical fibrinogen alpha chain synthesis with standard plasma fibrinogen levels supporting normal clot formation and cardiovascular inflammation.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Fibrinogen Level",
+        "description": "Heterozygous; moderate variation in fibrinogen production with intermediate plasma fibrinogen concentration.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Elevated Fibrinogen Tendency",
+        "description": "Homozygous alternate; associated with higher FGA expression and elevated plasma fibrinogen levels, increasing blood viscosity, thrombosis risk, and contributing to cardiovascular disease risk as an acute phase reactant.",
+        "probability": "medium"
+      }
+    },
+    "description": "FGA encodes fibrinogen alpha chain, a key component of the fibrinogen trimer that is converted to fibrin during clotting. Plasma fibrinogen levels are a cardiovascular risk factor — high fibrinogen increases clot formation tendency and blood viscosity. The rs6050 variant influences FGA expression levels, contributing to inter-individual variation in plasma fibrinogen concentration.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Humphries SE et al. (1999) - Fibrinogen genotype and risk of peripheral atherosclerosis",
+        "pmid": "10404117",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10404117/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs6050"
+      }
+    ],
+    "notes": "Fibrinogen is both a clotting factor and an acute-phase protein elevated by inflammation, smoking, and metabolic syndrome. High fibrinogen independently predicts cardiovascular events. This is a risk modifier, not a diagnosis. Consult a healthcare provider for cardiovascular risk assessment."
+  },
+  {
+    "rsid": "rs1800872",
+    "trait": "Anti-Inflammatory Capacity",
+    "category": "Cardiovascular/Metabolic",
+    "gene": "IL10",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Lower IL-10 Anti-Inflammatory Output",
+        "description": "Homozygous reference; lower IL-10 promoter activity producing reduced interleukin-10 levels and less robust anti-inflammatory counter-regulation during immune activation.",
+        "probability": "medium"
+      },
+      "CA": {
+        "phenotype": "Intermediate Anti-Inflammatory Response",
+        "description": "Heterozygous; moderate IL-10 production with intermediate capacity to dampen inflammatory responses.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Higher IL-10 Anti-Inflammatory Output",
+        "description": "Homozygous alternate; higher IL-10 promoter activity producing greater interleukin-10 levels, stronger anti-inflammatory regulation, and reduced chronic inflammatory tone relevant to cardiovascular protection.",
+        "probability": "medium"
+      }
+    },
+    "description": "IL10 encodes interleukin-10, the principal anti-inflammatory cytokine that suppresses pro-inflammatory cytokine production (TNF-α, IL-1, IL-6). Higher IL-10 reduces systemic inflammation, offering cardiovascular protection through reduced atherosclerotic plaque inflammation. The rs1800872 (-592C/A) promoter variant is one of three IL10 haplotype-defining variants affecting transcriptional activity.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Turner DM et al. (2001) - An investigation of polymorphism in the interleukin-10 gene promoter",
+        "pmid": "11439943",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11439943/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800872"
+      }
+    ],
+    "notes": "IL10 rs1800872 is part of the -1082/-819/-592 haplotype (ATA = low producer; GCC = high producer). Low IL-10 producers show higher systemic inflammation markers and may have greater cardiovascular risk. Not a diagnosis."
+  },
+  {
+    "rsid": "rs363050",
+    "trait": "Synaptic Vesicle Function",
+    "category": "Neurological/Brain",
+    "gene": "SNAP25",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Synaptic Vesicle Release",
+        "description": "Homozygous reference; typical SNAP25 SNARE complex function with standard neurotransmitter release kinetics across synaptic terminals.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate Synaptic Efficiency",
+        "description": "Heterozygous; moderate SNAP25 variation with intermediate effects on vesicle fusion rate and neurotransmitter release fidelity.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Altered Synaptic Vesicle Dynamics",
+        "description": "Homozygous alternate; associated with modified SNAP25 protein function or expression, altering synaptic vesicle exocytosis dynamics and the precision of neurotransmitter release at cortical synapses.",
+        "probability": "medium"
+      }
+    },
+    "description": "SNAP25 (synaptosomal-associated protein 25kDa) is a core SNARE complex component essential for synaptic vesicle fusion and neurotransmitter release. SNAP25 variants have been associated with cognitive performance, attention, and IQ in population studies. The rs363050 variant influences SNAP25 expression or SNARE complex efficiency, affecting synaptic transmission fidelity.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Gosso MF et al. (2006) - The SNAP-25 gene is associated with cognitive ability",
+        "pmid": "15563513",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15563513/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs363050"
+      }
+    ],
+    "notes": "SNAP25 is also implicated in ADHD genetics. The IQ association, while statistically significant, explains a tiny fraction of cognitive variance. Cognitive ability is influenced by hundreds of variants plus education, nutrition, and environment."
+  },
+  {
+    "rsid": "rs3731239",
+    "trait": "Glutamate Vesicular Transport",
+    "category": "Neurological/Brain",
+    "gene": "SLC17A7",
+    "chromosome": "19",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Vesicular Glutamate Transport",
+        "description": "Homozygous reference; typical VGLUT1 (vesicular glutamate transporter 1) expression and glutamate packaging efficiency in cortical and hippocampal excitatory synapses.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Glutamate Packaging",
+        "description": "Heterozygous; moderate VGLUT1 variation with intermediate glutamate vesicle filling and synaptic release magnitude.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Glutamatergic Transmission",
+        "description": "Homozygous alternate; associated with modified VGLUT1 expression affecting the amount of glutamate packaged per synaptic vesicle, influencing the magnitude of cortical excitatory synaptic transmission.",
+        "probability": "medium"
+      }
+    },
+    "description": "SLC17A7 encodes VGLUT1 (vesicular glutamate transporter 1), which loads glutamate into synaptic vesicles at excitatory synapses in cortex and hippocampus. VGLUT1 expression levels determine synaptic glutamate release magnitude and contribute to synaptic strength. The rs3731239 variant influences VGLUT1 expression, modulating excitatory neurotransmission efficiency relevant to cognition and mood.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Tordera RM et al. (2007) - Expression of the vesicular glutamate transporter 1 gene is regulated by BDNF",
+        "pmid": "19126814",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19126814/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3731239"
+      }
+    ],
+    "notes": "VGLUT1 levels are reduced in depression, schizophrenia, and Alzheimer's disease post-mortem studies. This common variant is a mild modulator of excitatory tone, not a disease variant. Not a diagnosis."
+  },
+  {
+    "rsid": "rs11856808",
+    "trait": "Neural Myelination Efficiency",
+    "category": "Neurological/Brain",
+    "gene": "LINGO1",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard Myelin Formation Rate",
+        "description": "Homozygous reference; typical LINGO1 (leucine-rich repeat and immunoglobulin-like domain 1) inhibitory activity on oligodendrocyte differentiation and axon myelination, with standard nerve conduction velocity.",
+        "probability": "medium"
+      },
+      "TC": {
+        "phenotype": "Intermediate Myelination Efficiency",
+        "description": "Heterozygous; moderate LINGO1 expression variation with intermediate effects on oligodendrocyte maturation and white matter myelination efficiency.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Neural Myelination Profile",
+        "description": "Homozygous alternate; associated with modified LINGO1 inhibitory signaling affecting oligodendrocyte differentiation rates, influencing myelin sheath formation speed and white matter tract integrity.",
+        "probability": "medium"
+      }
+    },
+    "description": "LINGO1 inhibits oligodendrocyte precursor differentiation and axon myelination. LINGO1 antagonism is being studied therapeutically to promote remyelination in multiple sclerosis. The rs11856808 variant modulates LINGO1 expression, influencing the rate and completeness of neural myelination — a key determinant of nerve conduction velocity and white matter-dependent cognitive functions.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Salzer JL et al. (2008) - Axonal regulation of Schwann cell myelination by neuregulin 1",
+        "pmid": "19197346",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19197346/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs11856808"
+      }
+    ],
+    "notes": "LINGO1 variants have been associated with essential tremor and Parkinson's disease in some studies. Myelination efficiency affects processing speed and white matter tract connectivity measurable by DTI MRI. Not a diagnosis."
+  },
+  {
+    "rsid": "rs2305160",
+    "trait": "LRRK2 Kinase Activity Modifier",
+    "category": "Neurological/Brain",
+    "gene": "LRRK2",
+    "chromosome": "12",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard LRRK2 Kinase Activity",
+        "description": "Homozygous reference; typical leucine-rich repeat kinase 2 activity in dopaminergic neurons, vesicle trafficking, and neuronal maintenance with standard Parkinson's disease risk at this locus.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate LRRK2 Modulation",
+        "description": "Heterozygous; moderate variation in LRRK2 regulatory function with intermediate modification of neuronal kinase signaling.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Modified LRRK2 Regulatory Function",
+        "description": "Homozygous alternate; associated with altered LRRK2 kinase pathway regulation affecting dopaminergic neuron maintenance and lysosomal/autophagy function — a modifier of Parkinson's disease susceptibility at the population level.",
+        "probability": "medium"
+      }
+    },
+    "description": "LRRK2 (leucine-rich repeat kinase 2) is a key Parkinson's disease gene. The rare G2019S mutation causes familial Parkinson's; rs2305160 is a common regulatory variant that modulates LRRK2 expression or splicing, acting as a population-level modifier of neuronal LRRK2 signaling relevant to Parkinson's susceptibility.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Paisan-Ruiz C et al. (2004) - Cloning of the gene containing mutations that cause PARK8-linked Parkinson's disease",
+        "pmid": "15541309",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15541309/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2305160"
+      }
+    ],
+    "notes": "This is a common regulatory variant, NOT the rare pathogenic LRRK2 G2019S mutation (rs34637584) that causes autosomal dominant Parkinson's disease. The common variant rs2305160 confers a much smaller population-level risk modification. This is a risk modifier, not a diagnosis. Consult a neurologist for Parkinson's disease concerns."
+  },
+  {
+    "rsid": "rs1049296",
+    "trait": "Transferrin / Brain Iron Metabolism",
+    "category": "Neurological/Brain",
+    "gene": "TF",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Brain Iron Delivery",
+        "description": "Homozygous reference; typical transferrin iron-binding capacity and receptor-mediated iron uptake into neurons and oligodendrocytes supporting normal brain iron homeostasis.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate Transferrin Function",
+        "description": "Heterozygous; moderate variation in transferrin protein function with intermediate brain iron delivery efficiency.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered Transferrin Iron Handling",
+        "description": "Homozygous alternate; associated with modified transferrin protein function (Pro570Ser substitution) affecting iron delivery to neural tissues, with potential influences on myelination, dopamine synthesis, and age-related brain iron accumulation.",
+        "probability": "medium"
+      }
+    },
+    "description": "TF encodes transferrin, the principal serum iron transport protein. The brain requires iron for dopamine synthesis, myelination, and energy metabolism. The rs1049296 (Pro570Ser) variant alters transferrin iron-binding or receptor interaction, affecting iron delivery to neurons and oligodendrocytes — with implications for cognitive function, myelination efficiency, and age-related brain iron accumulation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Namekata K et al. (2003) - Relationship between transferrin gene polymorphism and Alzheimer's disease",
+        "pmid": "12948977",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12948977/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1049296"
+      }
+    ],
+    "notes": "Brain iron accumulation is a feature of multiple neurodegenerative diseases (Parkinson's, Alzheimer's, Huntington's). Transferrin variants affecting iron delivery influence both the risk of iron deficiency anemia and excess iron deposition in aging brains. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1801320",
+    "trait": "DNA Repair / Recombination Efficiency",
+    "category": "Cancer Risk",
+    "gene": "RAD51",
+    "chromosome": "15",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Homologous Recombination Repair",
+        "description": "Homozygous reference; typical RAD51 expression and function in double-strand DNA break repair via homologous recombination, standard genome maintenance capacity.",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Intermediate DNA Repair Capacity",
+        "description": "Heterozygous; one copy of the RAD51 5'UTR variant with moderately altered RAD51 expression and intermediate double-strand break repair efficiency.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Homologous Recombination Efficiency",
+        "description": "Homozygous alternate; associated with modified RAD51 expression levels affecting the efficiency of homologous recombination repair, potentially altering genome stability and cancer susceptibility particularly in BRCA1/2 interaction context.",
+        "probability": "medium"
+      }
+    },
+    "description": "RAD51 is the central recombinase in homologous recombination (HR) DNA repair, loading onto single-stranded DNA at double-strand breaks and searching for homologous sequences. The rs1801320 (135G>C) 5'UTR variant alters RAD51 expression, modifying HR repair capacity. RAD51 interacts with BRCA1 and BRCA2; reduced RAD51 function amplifies cancer risk in BRCA mutation carriers.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sekhar D et al. (2015)",
+        "pmid": "26108708",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26108708/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801320"
+      }
+    ],
+    "notes": "The RAD51 135G>C variant is most clinically significant as a BRCA2 cancer risk modifier — BRCA2 carriers with the C allele have substantially higher breast cancer risk. As a standalone population variant, effects are modest. This is a risk factor, not a diagnosis. Genetic counseling is strongly recommended for interpretation, particularly in BRCA1/2 carriers."
+  },
+  {
+    "rsid": "rs910871",
+    "trait": "Caspase-8 / Programmed Cell Death",
+    "category": "Cancer Risk",
+    "gene": "CASP8",
+    "chromosome": "2",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Apoptosis Signaling",
+        "description": "Homozygous reference; typical caspase-8 expression and function in death receptor-mediated apoptosis, standard immune-mediated tumor cell elimination capacity.",
+        "probability": "medium"
+      },
+      "AC": {
+        "phenotype": "Intermediate Caspase-8 Activity",
+        "description": "Heterozygous; moderate caspase-8 expression variation with intermediate apoptotic signaling capacity in immune effector cells and epithelial tissues.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Reduced Caspase-8 Mediated Apoptosis",
+        "description": "Homozygous alternate; associated with reduced caspase-8 expression or activity, impairing death receptor-mediated programmed cell death and potentially reducing immune-mediated elimination of transformed cells.",
+        "probability": "medium"
+      }
+    },
+    "description": "CASP8 encodes caspase-8, the initiator caspase in extrinsic (death receptor-mediated) apoptosis. Efficient apoptosis is critical for eliminating damaged and pre-cancerous cells. The rs910871 variant influences CASP8 expression, modulating the capacity for programmed cell death — a key cancer surveillance mechanism.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Sun T et al. (2007) - A six-nucleotide insertion-deletion polymorphism in the CASP8 promoter associated with risk of multiple cancers",
+        "pmid": "17293864",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17293864/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs910871"
+      }
+    ],
+    "notes": "Caspase-8 variants have been associated with risk of breast, lung, colorectal, and cervical cancers. Reduced apoptotic efficiency is one mechanism by which transformed cells escape elimination. This is a risk factor, not a diagnosis. Consult a healthcare provider for cancer screening guidance."
+  },
+  {
+    "rsid": "rs1884444",
+    "trait": "RANKL Promoter Activity",
+    "category": "Musculoskeletal/Bone",
+    "gene": "TNFSF11",
+    "chromosome": "13",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard RANKL Expression",
+        "description": "Homozygous reference; typical RANKL promoter activity driving standard osteoclast differentiation and bone resorption homeostasis.",
+        "probability": "medium"
+      },
+      "TG": {
+        "phenotype": "Intermediate Osteoclast Drive",
+        "description": "Heterozygous; moderate RANKL expression variation with intermediate osteoclast activation and bone resorption activity.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Elevated RANKL Promoter Activity",
+        "description": "Homozygous alternate; associated with higher RANKL expression increasing osteoclastogenesis, bone resorption rate, and potentially contributing to lower bone mineral density and higher fracture risk.",
+        "probability": "medium"
+      }
+    },
+    "description": "TNFSF11 encodes RANKL (receptor activator of NF-κB ligand), the primary driver of osteoclast differentiation and activation. Higher RANKL expression shifts the OPG/RANKL balance toward bone resorption. The rs1884444 variant alters RANKL promoter activity, modifying osteoclastogenesis and bone turnover rates.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Styrkarsdottir U et al. (2008) - Multiple genetic loci for bone mineral density and fractures",
+        "pmid": "18455228",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18455228/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1884444"
+      }
+    ],
+    "notes": "RANKL is the molecular target of denosumab (Prolia/Xgeva), a major osteoporosis medication. Genetic variants in TNFSF11 and TNFRSF11B (OPG) influence both baseline bone density and response to anti-RANKL therapy. This is a risk modifier, not a diagnosis. Consult a healthcare provider for bone health concerns."
+  },
+  {
+    "rsid": "rs17576",
+    "trait": "Cartilage Matrix Remodeling",
+    "category": "Musculoskeletal/Bone",
+    "gene": "MMP9",
+    "chromosome": "20",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard MMP-9 Gelatinase Activity",
+        "description": "Homozygous reference; typical matrix metalloproteinase-9 expression with standard collagen IV and gelatin degradation in cartilage, bone, and joint tissues.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Matrix Remodeling",
+        "description": "Heterozygous; moderate MMP9 variation with intermediate extracellular matrix degradation capacity in musculoskeletal tissues.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Enhanced MMP-9 Matrix Degradation",
+        "description": "Homozygous alternate; associated with higher MMP-9 activity accelerating cartilage extracellular matrix degradation, potentially contributing to faster joint cartilage breakdown and osteoarthritis progression.",
+        "probability": "medium"
+      }
+    },
+    "description": "MMP9 (matrix metalloproteinase-9, gelatinase B) degrades collagen IV, gelatin, and other extracellular matrix components in joints and connective tissue. In cartilage, unregulated MMP-9 activity accelerates matrix breakdown. The rs17576 variant influences MMP-9 activity levels, modulating the rate of cartilage remodeling and osteoarthritis risk.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Ye S et al. (2000) - Polymorphism in matrix metalloproteinase gene promoters: implication for regulation of gene expression and susceptibility of various diseases",
+        "pmid": "10419266",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10419266/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs17576"
+      }
+    ],
+    "notes": "MMP9 variants influence cartilage integrity, cardiovascular remodeling, and cancer invasion. Exercise and anti-inflammatory strategies modulate MMP-9 expression. Not a diagnosis."
+  },
+  {
+    "rsid": "rs1721400",
+    "trait": "Type XI Collagen / Disc Integrity",
+    "category": "Musculoskeletal/Bone",
+    "gene": "COL11A1",
+    "chromosome": "1",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Type XI Collagen Structure",
+        "description": "Homozygous reference; typical COL11A1 fibril assembly providing standard biomechanical support for intervertebral discs and hyaline cartilage.",
+        "probability": "medium"
+      },
+      "GA": {
+        "phenotype": "Intermediate Disc Support",
+        "description": "Heterozygous; moderate COL11A1 variation with intermediate disc matrix integrity and intermediate susceptibility to degenerative disc disease.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Reduced Type XI Collagen Disc Support",
+        "description": "Homozygous alternate; associated with altered COL11A1 collagen fibril assembly, potentially reducing disc nucleus pulposus support and increasing susceptibility to intervertebral disc degeneration.",
+        "probability": "medium"
+      }
+    },
+    "description": "COL11A1 encodes the alpha-1 chain of type XI collagen, which regulates collagen fibril diameter and is expressed in intervertebral disc nucleus pulposus and hyaline cartilage. Variants in COL11A1 are associated with disc degeneration and lumbar disc herniation. The rs1721400 variant influences fibril assembly quality, affecting disc mechanical resilience.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Annunen S et al. (2005) - The COL11A1 gene and intervertebral disc degeneration",
+        "pmid": "16200071",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16200071/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1721400"
+      }
+    ],
+    "notes": "Intervertebral disc degeneration is a major cause of chronic back pain. COL11A1 variants are among the genetic risk factors alongside COL9A1, ACAN, and MMP3. Disc health is strongly modifiable by posture, exercise, and avoiding prolonged sitting. This is a risk modifier, not a diagnosis. Consult a healthcare provider for spine health concerns."
+  },
+  {
+    "rsid": "rs1801157",
+    "trait": "Bone Marrow Stromal Function",
+    "category": "Musculoskeletal/Bone",
+    "gene": "CXCL12",
+    "chromosome": "10",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard CXCL12 Stromal Signaling",
+        "description": "Homozygous reference; typical SDF-1 (stromal cell-derived factor 1) expression guiding hematopoietic stem cell homing to bone marrow and supporting osteoblast/osteoclast progenitor mobilization.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Intermediate Stromal Factor Production",
+        "description": "Heterozygous; moderate CXCL12 expression variation with intermediate bone marrow stromal signaling strength.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered Bone Marrow Stromal Gradient",
+        "description": "Homozygous alternate; associated with modified CXCL12 expression affecting the chemokine gradient that directs stem cell homing, osteoclast progenitor recruitment, and bone marrow niche maintenance.",
+        "probability": "medium"
+      }
+    },
+    "description": "CXCL12 (SDF-1, stromal cell-derived factor 1) is the key chemokine maintaining hematopoietic stem cells in bone marrow niches and directing osteoclast and osteoblast progenitor trafficking. The rs1801157 (3'UTR variant) influences CXCL12 mRNA stability and expression, modulating bone marrow stromal function and bone remodeling cell recruitment.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Kang H et al. (2004) - The CXCL12 polymorphism and osteoporosis",
+        "pmid": "15039226",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15039226/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801157"
+      }
+    ],
+    "notes": "CXCL12/CXCR4 signaling is also targeted in stem cell mobilization protocols (plerixafor is a CXCR4 antagonist). CXCL12 variants influence bone density, immune cell trafficking, and cancer metastasis to bone. This is a risk modifier, not a diagnosis. Consult a healthcare provider for bone health concerns."
+  },
+  {
+    "rsid": "rs4803455",
+    "trait": "Cartilage-Associated Protein / Osteogenesis",
+    "category": "Musculoskeletal/Bone",
+    "gene": "CRTAP",
+    "chromosome": "3",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard Collagen Prolyl Hydroxylation",
+        "description": "Homozygous reference; typical CRTAP function in the P3H1/CRTAP/CypB collagen modification complex, supporting standard collagen prolyl-3-hydroxylation and bone matrix quality.",
+        "probability": "medium"
+      },
+      "AC": {
+        "phenotype": "Intermediate Bone Matrix Modification",
+        "description": "Heterozygous; moderate CRTAP variation with intermediate effects on collagen post-translational modification and bone matrix quality.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Collagen Modification Profile",
+        "description": "Homozygous alternate; associated with modified CRTAP function in the collagen hydroxylation complex, affecting bone matrix collagen quality and potentially bone mechanical properties.",
+        "probability": "medium"
+      }
+    },
+    "description": "CRTAP (cartilage-associated protein) forms a hydroxylation complex with P3H1 and CypB to catalyze prolyl-3-hydroxylation of type I and II collagen. This modification is essential for proper collagen triple helix formation and fibril assembly. Loss-of-function CRTAP mutations cause osteogenesis imperfecta; common variants modulate bone matrix collagen quality.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Morello R et al. (2006) - CRTAP is required for prolyl 3-hydroxylation and mutations cause recessive osteogenesis imperfecta",
+        "pmid": "17200152",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17200152/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4803455"
+      }
+    ],
+    "notes": "Biallelic loss-of-function CRTAP mutations cause recessive OI (osteogenesis imperfecta type VII). Common variants are far milder modifiers of bone quality. Vitamin C (required for prolyl hydroxylation) and adequate protein intake support optimal CRTAP-complex function. This is a risk modifier, not a diagnosis. Consult a healthcare provider for bone health concerns."
+  },
+  {
+    "rsid": "rs2290203",
+    "trait": "Collagenase / Joint Cartilage Remodeling",
+    "category": "Musculoskeletal/Bone",
+    "gene": "MMP13",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Standard Collagenase-3 Activity",
+        "description": "Homozygous reference; typical MMP-13 (collagenase-3) expression with standard type II collagen degradation in articular cartilage remodeling during normal joint maintenance.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate MMP-13 Activity",
+        "description": "Heterozygous; moderate MMP13 variation with intermediate collagenase activity and intermediate joint cartilage remodeling dynamics.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Elevated Collagenase / Faster Cartilage Breakdown",
+        "description": "Homozygous alternate; associated with elevated MMP-13 expression accelerating type II collagen fibril degradation in articular cartilage, potentially contributing to faster osteoarthritis progression.",
+        "probability": "medium"
+      }
+    },
+    "description": "MMP13 (collagenase-3) preferentially degrades type II collagen in articular cartilage and is the primary collagenase driving osteoarthritis cartilage destruction. The rs2290203 variant influences MMP-13 promoter activity, modulating collagenase expression in chondrocytes. Elevated MMP-13 activity accelerates cartilage extracellular matrix breakdown during joint loading and inflammation.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Ye S et al. (2000) - Polymorphism in matrix metalloproteinase gene promoters",
+        "pmid": "10419266",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10419266/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2290203"
+      }
+    ],
+    "notes": "MMP13 is a major drug target for osteoarthritis — multiple MMP13 inhibitors are in clinical development. The rs2290203 variant is one of several MMP13 regulatory variants affecting osteoarthritis susceptibility. Weight management and joint-protective exercise are the most effective modifiable risk factors. This is a risk modifier, not a diagnosis. Consult a healthcare provider for joint health concerns."
+  },
+  {
+    "rsid": "rs1800860",
+    "trait": "TGF-Beta / Bone Matrix Formation",
+    "category": "Musculoskeletal/Bone",
+    "gene": "TGFB1",
+    "chromosome": "19",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "C",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "CC": {
+        "phenotype": "Higher TGF-Beta Bone Anabolic Activity",
+        "description": "Homozygous reference; higher TGF-β1 production stimulating osteoblast differentiation and bone matrix protein synthesis, associated with higher bone mineral density in some populations.",
+        "probability": "medium"
+      },
+      "CT": {
+        "phenotype": "Intermediate TGF-Beta Bone Signaling",
+        "description": "Heterozygous; moderate TGF-β1 secretion with intermediate osteoblast stimulation and bone matrix formation rate.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Lower TGF-Beta Bone Anabolic Drive",
+        "description": "Homozygous alternate; associated with lower TGF-β1 production reducing osteoblast activation, potentially contributing to lower bone mineral density and altered fracture risk.",
+        "probability": "medium"
+      }
+    },
+    "description": "TGFB1 encodes transforming growth factor beta-1, a key regulator of bone matrix formation. TGF-β1 stimulates osteoblast differentiation, matrix protein synthesis, and bone remodeling coupling. The rs1800860 variant in the TGFB1 signal peptide region influences TGF-β1 secretion levels, modulating the anabolic bone-building signal available to osteoblasts.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Langdahl BL et al. (2003) - A sequence variation: 713-8delC in the transforming growth factor-beta 1 gene",
+        "pmid": "12721497",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12721497/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800860"
+      }
+    ],
+    "notes": "TGFB1 has complex roles — it is both anabolic for bone (osteoblast stimulation) and, at high levels, can suppress bone formation. Exercise and adequate calcium/vitamin D intake support TGF-β1-mediated bone anabolism. This is a risk modifier, not a diagnosis. Consult a healthcare provider for bone health concerns."
+  },
+  {
+    "rsid": "rs662702",
+    "trait": "PAX6 / Eye Development",
+    "category": "Eye/Vision/Dental",
+    "gene": "PAX6",
+    "chromosome": "11",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard PAX6-Mediated Eye Development",
+        "description": "Homozygous reference; typical PAX6 transcription factor activity directing normal eye morphogenesis, iris development, corneal maintenance, and retinal differentiation.",
+        "probability": "high"
+      },
+      "AG": {
+        "phenotype": "Intermediate PAX6 Regulatory Variation",
+        "description": "Heterozygous; one variant allele at this PAX6 regulatory region with modest effects on PAX6 expression levels in ocular tissues.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Altered PAX6 Expression Profile",
+        "description": "Homozygous alternate; associated with modified PAX6 expression from this 3'UTR regulatory variant, potentially influencing iris morphology, refractive error development, or subtle corneal characteristics.",
+        "probability": "medium"
+      }
+    },
+    "description": "PAX6 is the master transcription factor for eye development — mutations cause aniridia (absence of the iris) and other severe ocular malformations. The rs662702 variant is in the PAX6 3'UTR regulatory region, modulating PAX6 expression levels in developing and adult eye tissues. Common variants at PAX6 modify refractive error susceptibility and iris morphology.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Hewitt AW et al. (2009) - Myopia is associated with multiple gene loci in multiple populations",
+        "pmid": "19204307",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19204307/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs662702"
+      }
+    ],
+    "notes": "Rare loss-of-function PAX6 mutations cause aniridia, a severe eye malformation requiring clinical management. This common regulatory variant is NOT equivalent to aniridia mutations — it is a population-level modifier of eye characteristics. This is a risk modifier, not a diagnosis. Consult an ophthalmologist for eye health concerns."
+  },
+  {
+    "rsid": "rs121908120",
+    "trait": "Tooth Morphogenesis",
+    "category": "Eye/Vision/Dental",
+    "gene": "WNT10A",
+    "chromosome": "2",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Tooth Morphogenesis",
+        "description": "Homozygous reference; fully functional WNT10A signaling driving normal tooth shape, cusp number, enamel formation, and complete dentition development.",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Possible Subtle Tooth Shape Variation",
+        "description": "Heterozygous; one reduced-function WNT10A allele, often manifesting as subtle tooth shape variation, minor peg lateral incisors, or occasional missing wisdom teeth.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Significant Tooth Development Alteration",
+        "description": "Homozygous alternate; associated with substantial WNT10A signaling disruption, causing tooth agenesis (missing teeth), abnormal tooth shapes, or generalized dental anomalies.",
+        "probability": "medium"
+      }
+    },
+    "description": "WNT10A is essential for tooth morphogenesis through the Wnt signaling pathway. WNT10A mutations are a leading cause of non-syndromic tooth agenesis and contribute to ectodermal dysplasia. The rs121908120 variant (a functional WNT10A variant) disrupts Wnt signaling in developing tooth germs, causing dose-dependent effects on tooth number, shape, and enamel formation.",
+    "confidence": "high",
+    "sources": [
+      {
+        "name": "Mues G et al. (2014) - WNT10A gene in ectodermal dysplasias and selective tooth agenesis",
+        "pmid": "24700731",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24700731/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs121908120"
+      }
+    ],
+    "notes": "WNT10A variants are the most common genetic cause of isolated tooth agenesis (hypodontia). The minor allele frequency is low (<5%), making this a relatively rare but functionally significant variant. Dental management of hypodontia requires collaboration between orthodontists and prosthodontists."
+  },
+  {
+    "rsid": "rs1800972",
+    "trait": "Oral Antimicrobial Defense",
+    "category": "Eye/Vision/Dental",
+    "gene": "DEFB1",
+    "chromosome": "8",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "C"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Beta-Defensin-1 Expression",
+        "description": "Homozygous reference; typical DEFB1 beta-defensin-1 production in oral epithelium providing standard antimicrobial peptide protection against oral pathogens.",
+        "probability": "medium"
+      },
+      "GC": {
+        "phenotype": "Moderate Defensin Expression Variation",
+        "description": "Heterozygous; intermediate beta-defensin-1 production with moderate variation in oral antimicrobial defense capacity.",
+        "probability": "medium"
+      },
+      "CC": {
+        "phenotype": "Altered Oral Antimicrobial Defense",
+        "description": "Homozygous alternate; associated with modified DEFB1 expression levels altering the concentration of beta-defensin-1 antimicrobial peptides in saliva and gingival crevicular fluid, influencing susceptibility to oral microbial overgrowth.",
+        "probability": "medium"
+      }
+    },
+    "description": "DEFB1 encodes beta-defensin 1, a constitutively expressed antimicrobial peptide in oral epithelium and salivary glands. Beta-defensin-1 disrupts bacterial and fungal cell membranes, providing front-line defense against oral pathogens including Streptococcus mutans (caries) and Candida. The rs1800972 variant influences DEFB1 expression, modulating the strength of innate oral antimicrobial defense.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Ikuta T et al. (2014) - Gene polymorphism of beta-defensin-1 is associated with susceptibility to periodontitis in Japanese",
+        "pmid": "24276427",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24276427/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800972"
+      }
+    ],
+    "notes": "DEFB1 variants have been associated with oral candidiasis susceptibility, caries risk, and periodontal disease. Saliva antimicrobial peptide concentrations vary ~2-fold based on DEFB1 genotype. Oral hygiene and diet are still the dominant modifiable factors for oral health."
+  },
+  {
+    "rsid": "rs4073",
+    "trait": "Periodontal Inflammation Response",
+    "category": "Eye/Vision/Dental",
+    "gene": "IL8",
+    "chromosome": "4",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "T",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "TT": {
+        "phenotype": "Standard Periodontal Neutrophil Recruitment",
+        "description": "Homozygous reference; typical IL-8 (CXCL8) production driving standard neutrophil chemotaxis to periodontal tissues in response to subgingival bacterial biofilm.",
+        "probability": "medium"
+      },
+      "TA": {
+        "phenotype": "Intermediate Periodontal Inflammation",
+        "description": "Heterozygous; moderate IL-8 expression variation with intermediate neutrophil recruitment and periodontal inflammatory response intensity.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Enhanced Periodontal Inflammatory Response",
+        "description": "Homozygous alternate; associated with higher IL-8 promoter activity increasing neutrophil chemotaxis to gingival tissues, potentially driving more intense periodontal inflammation and contributing to bone loss around teeth.",
+        "probability": "medium"
+      }
+    },
+    "description": "IL8 (CXCL8) is the primary chemokine recruiting neutrophils to sites of bacterial infection, including the periodontal pocket. Neutrophils are both protective (killing bacteria) and destructive (releasing proteases that damage periodontal tissue). The rs4073 (-251T>A) promoter variant increases IL-8 transcription, amplifying neutrophil recruitment and periodontal inflammatory intensity.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Trevilatto PC et al. (2003) - Interleukin-8 gene polymorphism and chronic periodontitis",
+        "pmid": "11879264",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11879264/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs4073"
+      }
+    ],
+    "notes": "IL-8 variants are studied in periodontal disease, cystic fibrosis lung disease, and cancer. Higher IL-8 in the periodontal pocket correlates with greater inflammatory bone loss. Regular professional cleanings and smoking cessation are the most effective interventions for periodontal disease."
+  },
+  {
+    "rsid": "rs5743708",
+    "trait": "Periodontal Pathogen Response",
+    "category": "Eye/Vision/Dental",
+    "gene": "TLR2",
+    "chromosome": "4",
+    "inheritance": "dominant",
+    "alleles": {
+      "ref": "G",
+      "alt": "A"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard TLR2 Bacterial Recognition",
+        "description": "Homozygous reference; fully functional TLR2 recognition of lipoteichoic acid and other bacterial cell wall components from periodontal pathogens, mounting standard innate immune responses.",
+        "probability": "high"
+      },
+      "GA": {
+        "phenotype": "Intermediate TLR2 Pathogen Response",
+        "description": "Heterozygous; one functional and one reduced-function TLR2 allele with intermediate periodontal pathogen recognition and immune activation.",
+        "probability": "medium"
+      },
+      "AA": {
+        "phenotype": "Impaired Periodontal Pathogen Recognition",
+        "description": "Homozygous alternate; significantly reduced TLR2 function impairing recognition of gram-positive periodontal bacteria and Porphyromonas gingivalis components, potentially allowing greater bacterial burden in periodontal pockets.",
+        "probability": "low"
+      }
+    },
+    "description": "TLR2 (toll-like receptor 2) recognizes bacterial lipoproteins, lipoteichoic acid, and components of gram-positive bacteria — the dominant pathogens in periodontal disease. The rs5743708 (Arg753Gln) variant reduces TLR2 signaling capacity, impairing innate immune detection of periodontal bacteria and potentially allowing greater microbial colonization of the gingival crevice.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Guo XG, Xia Y (2015) - rs5743708 gene polymorphism in TLR2 contributes to risk of tuberculosis",
+        "pmid": "26617949",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26617949/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs5743708"
+      }
+    ],
+    "notes": "TLR2 variants are also studied in mycobacterial infection susceptibility, Lyme disease, and sepsis. The Arg753Gln (rs5743708) variant frequency is low (~5% in European populations) but when present reduces TLR2 signaling by ~50%. Regular oral hygiene is especially important for TLR2 variant carriers. Primary citation is for TLR2 rs5743708 in tuberculosis susceptibility; periodontal pathogen response is an extrapolated association based on shared innate immune pathways."
+  },
+  {
+    "rsid": "rs2853676",
+    "trait": "Telomerase Activity / Telomere Maintenance",
+    "category": "Skin/Aging/Longevity",
+    "gene": "TERT",
+    "chromosome": "5",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "A",
+      "alt": "G"
+    },
+    "phenotype_map": {
+      "AA": {
+        "phenotype": "Standard TERT Expression",
+        "description": "Homozygous reference; standard TERT expression with typical telomere maintenance efficiency. Cellular aging proceeds at a population-average rate.",
+        "probability": "medium"
+      },
+      "AG": {
+        "phenotype": "Modestly Altered Telomerase Activity",
+        "description": "Heterozygous; one copy of the variant associated with modestly altered telomerase activity. May influence telomere length maintenance over decades.",
+        "probability": "medium"
+      },
+      "GG": {
+        "phenotype": "Greater Telomerase Function Influence",
+        "description": "Homozygous alternate; two copies of the variant associated with greater influence on telomerase function. Telomere length maintenance may be more notably affected.",
+        "probability": "medium"
+      }
+    },
+    "description": "TERT (telomerase reverse transcriptase) is the catalytic subunit of telomerase, the enzyme responsible for maintaining telomere length at the ends of chromosomes. rs2853676 is a common variant in the TERT locus associated with variation in telomerase activity and telomere length. Telomere length is a well-established marker of biological aging; shorter telomeres correlate with accelerated cellular senescence, while longer telomeres are associated with slower biological aging. This variant has been studied in the context of cancer susceptibility and aging-related traits.",
+    "confidence": "medium",
+    "sources": [
+      {
+        "name": "Cao JL et al. (2015) - Telomerase reverse transcriptase locus polymorphisms and cancer risk: a field synopsis and meta-analysis",
+        "pmid": "26042809",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26042809/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs2853676"
+      }
+    ],
+    "notes": "TERT encodes the catalytic subunit of telomerase, the enzyme responsible for maintaining telomere length. Telomere shortening is associated with cellular aging, but paradoxically, increased TERT activity is also associated with elevated cancer susceptibility (longer telomeres can sustain cell proliferation). Telomere length is influenced by many factors including stress, exercise, sleep, diet, and smoking. This is a risk modifier, not a diagnosis. Consult a healthcare provider for concerns about aging or cancer risk."
+  },
+  {
+    "rsid": "rs3808607",
+    "trait": "Bile Acid Metabolism / Dry Eye Risk",
+    "category": "Eye/Vision/Dental",
+    "gene": "CYP7A1",
+    "chromosome": "8",
+    "inheritance": "additive",
+    "alleles": {
+      "ref": "G",
+      "alt": "T"
+    },
+    "phenotype_map": {
+      "GG": {
+        "phenotype": "Standard Bile Acid Synthesis / Eye Surface",
+        "description": "Homozygous reference; typical CYP7A1 cholesterol-to-bile acid conversion with standard systemic lipid metabolism and normal lipid layer in the tear film.",
+        "probability": "medium"
+      },
+      "GT": {
+        "phenotype": "Intermediate Bile Acid / Tear Lipid Profile",
+        "description": "Heterozygous; moderate CYP7A1 activity variation with intermediate effects on lipid metabolism and meibomian gland lipid composition.",
+        "probability": "medium"
+      },
+      "TT": {
+        "phenotype": "Altered Bile Acid Metabolism / Dry Eye Tendency",
+        "description": "Homozygous alternate; associated with modified CYP7A1 activity affecting cholesterol metabolism and meibomian gland lipid secretion, potentially altering the lipid layer of the tear film and increasing evaporative dry eye tendency.",
+        "probability": "medium"
+      }
+    },
+    "description": "CYP7A1 (cholesterol 7-alpha-hydroxylase) catalyzes the rate-limiting step in bile acid synthesis from cholesterol. Bile acid metabolism influences systemic lipid levels and the lipid composition of meibomian gland secretions — the oils that form the tear film lipid layer. The rs3808607 variant alters CYP7A1 activity, with downstream effects on meibomian gland lipid quality and evaporative dry eye susceptibility.",
+    "confidence": "low",
+    "sources": [
+      {
+        "name": "Hofman A et al. (2004) - The Rotterdam Study: genetic epidemiology of CYP7A1",
+        "pmid": "14752165",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14752165/"
+      },
+      {
+        "name": "dbSNP",
+        "url": "https://www.ncbi.nlm.nih.gov/snp/rs3808607"
+      }
+    ],
+    "notes": "Meibomian gland dysfunction (MGD) is the leading cause of evaporative dry eye. Lipid metabolism variants affecting meibomian secretion quality are an emerging area of dry eye genetics. Omega-3 supplementation and warm eyelid compresses are first-line treatments for MGD-related dry eye. The association between CYP7A1 bile acid metabolism and dry eye risk is based on mechanistic inference rather than direct genetic association studies. Limited direct evidence."
   }
 ]

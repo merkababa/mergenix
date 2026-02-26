@@ -6,7 +6,7 @@ A privacy-first platform that analyzes raw DNA data from two parents to predict 
 
 - **Multi-format parser** — 23andMe, AncestryDNA, MyHeritage, and VCF (Whole Genome Sequencing)
 - **Carrier screening** — panel of 2,697 diseases with Mendelian offspring risk calculation
-- **Trait prediction** — 412+ traits across appearance, health, behavior, and ancestry
+- **Trait prediction** — 476+ traits across appearance, health, behavior, and ancestry
 - **Pharmacogenomics** — 12 pharmacogenes with drug-response guidance
 - **Polygenic risk scores** — 10 common complex conditions
 - **Genetic counseling** — automated triage and specialist referral suggestions

@@ -99,7 +99,7 @@ export const CARRIER_PANEL_COUNT_DISPLAY: string = CARRIER_PANEL_COUNT.toLocaleS
 export const CARRIER_PANEL_VERSION = CARRIER_PANEL_DATA.metadata.version;
 
 /**
- * Trait SNP database (412+ traits).
+ * Trait SNP database (476+ traits).
  * Source: data/trait_snps.json
  */
 export const traitSnps: TraitSnpEntry[] = traitSnpsRaw as unknown as TraitSnpEntry[];

@@ -155,7 +155,7 @@ export interface PhenotypeMapValue {
  * A single entry in the trait SNP database (trait_snps.json).
  *
  * Each entry represents one rsID + trait combination. The database
- * contains 412+ trait SNPs with rich phenotype mappings.
+ * contains 476+ trait SNPs with rich phenotype mappings.
  *
  * Field sources verified from data/trait_snps.json first entry:
  * ```json

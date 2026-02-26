@@ -258,8 +258,8 @@ vi.mock("@mergenix/genetics-data", () => ({
     'Eye/Vision/Dental',
     'Longevity/Aging/Immunity',
   ],
-  TRAIT_COUNT: 412,
-  TRAIT_COUNT_DISPLAY: "412",
+  TRAIT_COUNT: 476,
+  TRAIT_COUNT_DISPLAY: "476",
 }));
 
 // ─── Component imports (after mocks) ────────────────────────────────────────
