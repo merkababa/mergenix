@@ -16,7 +16,8 @@
 **Trait Expansion Tier 3:** PR #93 — **MERGED** (5/5 A/A- Claude, 2 review rounds). 412 traits (was 290), 122 new MODERATE-confidence traits, rs1800888 gene/chr fix, 9 psychiatric traits renamed biology-first, 8 PMID corrections, disclaimers added.
 **Trait Expansion Tier 4:** PR #111 — **MERGED** (10/10 A+ Claude, 4 review rounds). 476 traits (was 412), 64 new traits completing the catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first, health disclaimers on 8 sensitive entries.
 **Test count:** 3,047+ tests passing across all packages (1,433 engine + 1,614 web).
-**Next:** Infrastructure setup + legal sign-offs → alpha launch. Known issue: PMID 15888295 (parasitology paper) appears in 5 entries from earlier tiers — needs audit.
+**PMID Audit:** PR #112 — **MERGED** (4/4 A+ Claude, 2 review rounds). Fixed 5 entries citing parasitology paper PMID 15888295, added disclaimers + population caveats to 3 MLH1 entries.
+**Next:** Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
 
