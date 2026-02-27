@@ -17,6 +17,8 @@
 **Trait Expansion Tier 4:** PR #111 — **MERGED** (10/10 A+ Claude, 4 review rounds). 476 traits (was 412), 64 new traits completing the catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first, health disclaimers on 8 sensitive entries.
 **Test count:** 3,047+ tests passing across all packages (1,433 engine + 1,614 web).
 **PMID Audit:** PR #112 — **MERGED** (4/4 A+ Claude, 2 review rounds). Fixed 5 entries citing parasitology paper PMID 15888295, added disclaimers + population caveats to 3 MLH1 entries.
+**Full-App Review Fixes:** PR #113 — **MERGED** (10/10 A/A+ Claude, 2 review rounds). 16 findings across 10 reviewer domains: TOTP Fernet encryption, CSRF header, email verification gate, CFTR ΔF508 fix, 4 chromosome corrections, motion→m tree-shaking (42 files), WCAG contrast, loading skeletons, PRS ancestry enforcement, DPIA completion, 30+ new tests. 98 files changed.
+**Test count:** 3,053+ Vitest + 672 Python = 3,725+ tests passing.
 **Next:** Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
@@ -64,6 +66,8 @@
 | Trait Expansion Phase 2: Tier 2 (290 traits) | Claude | **Merged** | feature/trait-expansion-tier-2 | PR #92 — 54 new HIGH-confidence traits (236→290), 13 categories. dbSNP-verified alleles, PMID-backed sources, health disclaimers, chip coverage. 4 files, +8,196 lines. 3 review rounds → **4/5 A+ + 1 A Claude**. 3,047 tests. |
 | Trait Expansion Phase 3: Tier 3 (412 traits) | Claude | **Merged** | feature/trait-expansion-tier-3 | PR #93 — 122 new MODERATE-confidence traits (290→412), 13 categories. rs1800888 gene/chr fix (PAX9→ADRB3), 9 psychiatric traits renamed to biology-first (Bipolar→CACNA1C, Schizophrenia→ZNF804A, etc.), 8 PMID corrections, 4 year fixes, disclaimers added to behavioral/PGx entries, "Orientals" removed. 6 files, +7,028 lines. 2 review rounds → **5/5 A/A- Claude**. 3,047 tests. |
 | Trait Expansion Phase 4: Tier 4 (476 traits) | Claude | **Merged** | feature/trait-expansion-tier-4 | PR #111 — 64 new traits (412→476) completing the master catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first (Leadership→Nicotinic Receptor β3, etc.), rs699 allele strand fix, rs2853676 TERT completely reworked, health disclaimers on 8 entries, population disclaimers on 5 behavioral traits. 6 files, +3,120 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
+| PMID 15888295 Audit | Claude | **Merged** | fix/pmid-15888295-audit | PR #112 — Fixed 5 entries citing parasitology paper. Added disclaimers + population caveats to 3 MLH1 entries. 2 review rounds → **4/4 A+ Claude**. |
+| Full-App Review Fixes | Claude | **Merged** | fix/full-app-review-fixes | PR #113 — 16 findings from 10-reviewer full-app review. TOTP Fernet encryption at rest, CSRF header, email verification gate, CFTR ΔF508 label fix, 4 chromosome corrections, motion→m LazyMotion tree-shaking (42 source + 27 test files), WCAG AA contrast, heading hierarchy, loading skeletons, PRS ancestry enforcement (hide/warning/caution), DPIA completion, consent regex fix, retention 3yr→2yr. 98 files, +1,750/-590 lines, 30+ new tests. 2 review rounds → **10/10 A/A+ Claude** (1 A+, 5 A R1, 4 A R2). 3,725 tests. |
 
 ---
 
