@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { Search, BookOpen } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Input } from "@/components/ui/input";
 import { GLOSSARY_TERMS, RELATED_TERMS } from "@/lib/glossary-data";
@@ -91,7 +91,7 @@ export function GlossaryContent() {
   return (
     <div className="mx-auto w-full max-w-4xl">
       {/* -- Header -- */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -106,7 +106,7 @@ export function GlossaryContent() {
         <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
           Understand the genetic terms used throughout Mergenix
         </p>
-      </motion.div>
+      </m.div>
 
       {/* -- Search -- */}
       <div className="mb-6">
@@ -168,7 +168,7 @@ export function GlossaryContent() {
       <div className="space-y-3">
         <AnimatePresence mode="popLayout">
           {filtered.length === 0 ? (
-            <motion.div
+            <m.div
               key="empty-state"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -182,7 +182,7 @@ export function GlossaryContent() {
               <p className="mt-2 text-sm text-[var(--text-muted)]">
                 Try a different search term or browse by letter
               </p>
-            </motion.div>
+            </m.div>
           ) : (
             filtered.map((term, index) => {
               const related = RELATED_TERMS[term.term];
@@ -192,7 +192,7 @@ export function GlossaryContent() {
               );
 
               return (
-                <motion.div
+                <m.div
                   key={term.term}
                   layout
                   initial={{ opacity: 0, y: 10 }}
@@ -237,7 +237,7 @@ export function GlossaryContent() {
                       </div>
                     )}
                   </GlassCard>
-                </motion.div>
+                </m.div>
               );
             })
           )}

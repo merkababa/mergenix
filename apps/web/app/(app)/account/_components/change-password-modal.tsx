@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { X, Check } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -125,7 +125,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -141,7 +141,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             ref={modalRef}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -167,7 +167,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
               </p>
 
               {success ? (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="py-8 text-center"
@@ -180,7 +180,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   <p className="font-heading text-sm font-semibold text-[var(--accent-teal)]">
                     Password changed successfully
                   </p>
-                </motion.div>
+                </m.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <PasswordInput
@@ -204,7 +204,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   {newPassword && (
                     <div>
                       <div className="h-1.5 overflow-hidden rounded-full bg-[var(--border-subtle)]">
-                        <motion.div
+                        <m.div
                           className="h-full rounded-full"
                           initial={{ width: 0 }}
                           animate={{ width: `${strength.widthPercent}%` }}
@@ -268,7 +268,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
 
                   <AnimatePresence mode="wait">
                     {error && (
-                      <motion.div
+                      <m.div
                         key="error"
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -277,7 +277,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                         role="alert"
                       >
                         {error}
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
 
@@ -307,8 +307,8 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                 </form>
               )}
             </GlassCard>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface Breadcrumb {
   label: string;
@@ -24,7 +24,7 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -70,6 +70,6 @@ export function PageHeader({
           {subtitle}
         </p>
       )}
-    </motion.div>
+    </m.div>
   );
 }

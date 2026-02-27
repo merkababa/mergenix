@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Archive, Trash2, Download, Clock, FileText, Crown } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ const SavedResultItem = memo(function SavedResultItem({
   }, [onDeleteCancel]);
 
   return (
-    <motion.li
+    <m.li
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
@@ -160,7 +160,7 @@ const SavedResultItem = memo(function SavedResultItem({
           )}
         </div>
       </div>
-    </motion.li>
+    </m.li>
   );
 });
 
@@ -276,7 +276,7 @@ export function SavedResultsList() {
       {/* Error state */}
       <AnimatePresence mode="wait">
         {error && !isLoading && (
-          <motion.div
+          <m.div
             key="error"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -285,7 +285,7 @@ export function SavedResultsList() {
             role="alert"
           >
             {error}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

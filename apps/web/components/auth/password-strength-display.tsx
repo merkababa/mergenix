@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Check, X } from "lucide-react";
 import {
   getPasswordStrength,
@@ -53,7 +53,7 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
           aria-valuemax={100}
           aria-label="Password strength"
         >
-          <motion.div
+          <m.div
             className={`h-full rounded-full ${STRENGTH_BAR_COLORS[strength.level]}`}
             initial={{ width: 0 }}
             animate={{ width: STRENGTH_WIDTHS[strength.level] }}
@@ -70,7 +70,7 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
         {PASSWORD_REQUIREMENTS.map((req) => {
           const met = req.check(password);
           return (
-            <motion.div
+            <m.div
               key={req.text}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
@@ -85,7 +85,7 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
               <span className={met ? "text-[var(--accent-teal)]" : "text-[var(--text-dim)]"}>
                 {req.text}
               </span>
-            </motion.div>
+            </m.div>
           );
         })}
       </div>

@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 
 interface PricingCardProps {
@@ -54,7 +54,7 @@ export function PricingCard({
       };
 
   return (
-    <motion.div
+    <m.div
       {...motionProps}
       className={cn("relative flex", className)}
     >
@@ -139,6 +139,6 @@ export function PricingCard({
           {cta}
         </Link>
       </GlassCard>
-    </motion.div>
+    </m.div>
   );
 }

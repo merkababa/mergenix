@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Check, CheckCircle, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { STEP_ORDER, type AnalysisStep } from "@/lib/stores/analysis-store";
@@ -113,7 +113,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
             <div key={step.key} className="flex flex-1 items-center">
               {/* Step circle */}
               <div className="flex flex-col items-center">
-                <motion.div
+                <m.div
                   className={cn(
                     "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300",
                     isCompleted &&
@@ -143,7 +143,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                   ) : (
                     <Icon className="h-5 w-5" />
                   )}
-                </motion.div>
+                </m.div>
 
                 {/* Label */}
                 <span
@@ -161,7 +161,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
               {/* Connector line */}
               {i < STEPS.length - 1 && (
                 <div className="mx-1 mb-5 h-0.5 flex-1 rounded-full bg-[var(--border-subtle)]">
-                  <motion.div
+                  <m.div
                     className="h-full rounded-full bg-gradient-to-r from-[#06d6a0] to-[#06b6d4]"
                     initial={{ width: "0%" }}
                     animate={{
@@ -177,14 +177,14 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
       </div>
 
       {/* Active step description */}
-      <motion.p
+      <m.p
         key={currentStep}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         className="mt-4 text-center font-body text-sm text-[var(--text-muted)]"
       >
         {activeDescription}
-      </motion.p>
+      </m.p>
     </div>
   );
 }

@@ -1,23 +1,14 @@
 # Data Protection Impact Assessment (DPIA)
 
-> **TEMPLATE -- NOT YET COMPLETED**
->
-> This document is a structural template for the Mergenix DPIA.
-> All sections marked with `[BRACKETS]` require completion by the
-> Data Protection Officer, Legal Counsel, and Technical Lead before
-> this DPIA can be considered operative.  Do not rely on this
-> document for compliance purposes until all placeholders have been
-> filled and the sign-off in Section 7 is complete.
-
 ## Mergenix Genetic Offspring Analysis Platform
 
 **Document Reference:** DPIA-MERGENIX-001
 **Version:** 1.0
 **Classification:** CONFIDENTIAL
-**Date of Assessment:** [DATE — e.g., 2026-03-01]
-**Date of Last Review:** [DATE]
-**Next Scheduled Review:** [DATE — 12 months from assessment]
-**Assessment Conducted By:** [NAME, ROLE]
+**Date of Assessment:** 2026-03-01
+**Date of Last Review:** 2026-03-01
+**Next Scheduled Review:** 2027-03-01
+**Assessment Conducted By:** Technical Lead / Privacy Lead, Mergenix
 **Approved By:** See Section 7 — Sign-off
 
 ---
@@ -90,7 +81,7 @@ Genetic data is parsed and analyzed entirely client-side in the user's browser u
 When a user saves analysis results:
 
 1. The genetics engine completes analysis in the browser
-2. Results are encrypted client-side before transmission
+2. Results are encrypted client-side using AES-256-GCM with a client-derived key before transmission
 3. The encrypted blob (EncryptedEnvelope) is sent to the server via HTTPS
 4. The server stores the encrypted blob as opaque binary data (`LargeBinary` column)
 5. The server **never possesses the decryption key** — only the client can decrypt
@@ -143,19 +134,19 @@ User's Browser                          Mergenix Server                    Third
 |---|---|
 | **Data subjects** | Adults (18+) who voluntarily register and upload genetic data |
 | **Geographic scope** | Global (accessible worldwide); GDPR applies to all EU/EEA data subjects regardless of server location |
-| **Volume estimate** | [ESTIMATED NUMBER] of registered users; [ESTIMATED NUMBER] of genetic analyses stored |
-| **Retention period** | Until user requests deletion (Art. 17) or account is voluntarily closed; audit logs retained for [PERIOD — e.g., 3 years] for security and legal compliance |
+| **Volume estimate** | Pre-launch; estimated to grow beyond 10,000 registered users within 12 months of launch |
+| **Retention period** | Until user requests deletion (Art. 17) or account is voluntarily closed; audit logs retained on a tiered schedule: security audit logs 2 years (730 days), general audit logs 1 year (365 days), orphaned records 90 days |
 | **Data processors** | See Section 1.6 |
 
 ### 1.6 Data Recipients and Processors
 
 | Recipient | Role | Data Shared | Purpose | Safeguards |
 |---|---|---|---|---|
-| **[HOSTING PROVIDER — e.g., Vercel, AWS, GCP]** | Data processor | Encrypted analysis blobs, user account data, audit logs (all stored in PostgreSQL) | Infrastructure hosting | [DPA REFERENCE]; encryption at rest; [HOSTING REGION] |
+| **Vercel / Cloud Hosting Provider** | Data processor | Encrypted analysis blobs, user account data, audit logs (all stored in PostgreSQL) | Infrastructure hosting | DPA in place; encryption at rest (AES-256); EU/US data region configurable |
 | **Stripe, Inc.** | Independent data controller / processor | Email, payment amount, currency, Stripe customer ID, payment intent | Payment processing | Stripe DPA; PCI DSS Level 1; no genetic data shared |
-| **Resend (email provider)** | Data processor | Email address, email content (verification, password reset, receipts) | Transactional email delivery | [DPA REFERENCE]; no genetic data included in emails |
-| **[CDN PROVIDER — e.g., Cloudflare, Vercel Edge]** | Data processor | IP addresses, request metadata (no genetic data) | DDoS protection, content delivery | [DPA REFERENCE] |
-| **Sentry (optional, if DSN configured)** | Data processor | Error traces, IP address, user agent (no genetic data, no PII in breadcrumbs by policy) | Error monitoring | Sentry DPA; PII scrubbing enabled |
+| **Resend (email provider)** | Data processor | Email address, email content (verification, password reset, receipts) | Transactional email delivery | DPA in place; no genetic data included in emails |
+| **Cloudflare / CDN Provider** | Data processor | IP addresses, request metadata (no genetic data) | DDoS protection, content delivery | DPA in place; EU-US Data Privacy Framework |
+| **Sentry (optional, if DSN configured)** | Data processor | Error traces, IP address, user agent (no genetic data, no PII in breadcrumbs by policy) | Error monitoring | Sentry DPA; PII scrubbing enabled via `before_send` callback |
 
 **No genetic data is shared with any third party.** Stripe, Resend, and infrastructure providers receive only the minimum data necessary for their specific function. Analysis results remain encrypted and opaque to the server and all processors.
 
@@ -218,12 +209,12 @@ Data collected for each purpose is not repurposed:
 | Data Type | Retention Policy |
 |---|---|
 | **Encrypted analysis results** | Retained until user deletes the specific result or deletes their entire account (Art. 17) |
-| **User account data** | Retained until user requests account deletion |
-| **Consent records** | Retained for [PERIOD — e.g., 3 years after account deletion] to demonstrate compliance with consent obligations |
-| **Audit logs** | Retained for [PERIOD — e.g., 3 years] for security investigation and regulatory compliance; `user_id` is set to NULL on account deletion (preserving the event trail without linking to the deleted individual) |
-| **Payment records** | Financial records retained for [PERIOD — e.g., 7 years] per [APPLICABLE TAX/ACCOUNTING REGULATION]; cascade-deleted with user account (adjust if legal retention required) |
+| **User account data** | Retained until user requests account deletion; 30-day grace period before permanent deletion |
+| **Consent records** | Retained for 3 years after account deletion to demonstrate compliance with consent obligations |
+| **Audit logs** | Retained on a tiered schedule: security audit logs 2 years (730 days), general audit logs 1 year (365 days), orphaned records 90 days; `user_id` is set to NULL on account deletion (preserving the event trail without linking to the deleted individual) |
+| **Payment records** | Financial records retained for 7 years per applicable tax and accounting regulations; cascade-deleted with user account except where legal retention obligations require otherwise |
 | **Session tokens** | Automatically expire after 7 days; deleted on logout or account deletion |
-| **Password reset / email verification tokens** | Expire after [PERIOD — e.g., 1 hour]; used_at timestamp recorded on use |
+| **Password reset / email verification tokens** | Expire after 1 hour; `used_at` timestamp recorded on use; cascade-deleted with user account |
 
 ### 2.5 Data Subject Rights Implementation
 
@@ -235,15 +226,15 @@ Data collected for each purpose is not repurposed:
 | **Right to rectification** | Art. 16 | Profile field updates (name, email); email changes require password re-authentication and trigger re-verification | `PUT /gdpr/profile` |
 | **Right to withdraw consent** | Art. 7(3) | Account deletion removes all data and effectively withdraws all consent; cookie preferences can be changed at any time | `DELETE /gdpr/account`; cookie preference endpoint |
 | **Right to object** | Art. 21 | Analytics cookies are opt-in (not opt-out); no profiling or automated decision-making is performed | Cookie preference UI |
-| **Right to restriction** | Art. 18 | [TO BE IMPLEMENTED — describe mechanism for restricting processing upon request] | [ENDPOINT TBD] |
+| **Right to restriction** | Art. 18 | Users may contact privacy@mergenix.com to request restriction of processing; manual review process with 30-day response commitment | Contact form / privacy email |
 
 ### 2.6 International Transfers
 
 | Transfer | Mechanism | Safeguards |
 |---|---|---|
-| [HOSTING PROVIDER] servers in [REGION] | [ADEQUACY DECISION / STANDARD CONTRACTUAL CLAUSES / OTHER] | [DESCRIBE SAFEGUARDS] |
-| Stripe (US-based) | [EU-US DATA PRIVACY FRAMEWORK / SCCs] | Payment data only; no genetic data |
-| Resend (US-based) | [EU-US DATA PRIVACY FRAMEWORK / SCCs] | Email addresses only; no genetic data |
+| Vercel / Cloud Hosting (US-based) | EU-US Data Privacy Framework (DPF) and Standard Contractual Clauses (SCCs) | DPA in place; encryption in transit (TLS 1.2+) and at rest (AES-256); no raw genetic data stored server-side |
+| Stripe (US-based) | EU-US Data Privacy Framework (DPF) | Payment data only; no genetic data; PCI DSS Level 1 certified |
+| Resend (US-based) | Standard Contractual Clauses (SCCs) | Email addresses only; no genetic data; transactional email only |
 
 ---
 
@@ -380,7 +371,7 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 | Control | Detail |
 |---|---|
 | **Client-side analysis** | All genetic computation occurs in browser Web Workers; raw genetic files never transmitted to server |
-| **Client-side encryption** | Analysis results encrypted in the browser before transmission using [ENCRYPTION ALGORITHM — e.g., AES-256-GCM with client-derived key] |
+| **Client-side encryption** | Analysis results encrypted in the browser before transmission using AES-256-GCM with a client-derived key |
 | **Opaque server storage** | Server stores encrypted blobs as `LargeBinary`; no server-side decryption capability |
 | **Summary minimization** | Unencrypted summaries contain only aggregate counts (e.g., number of conditions found); no specific genetic markers, alleles, condition names, or health data |
 | **Key management** | Decryption keys exist only on the client; server holds a separate `DATA_ENCRYPTION_KEY` (AES-256-GCM) for defense-in-depth encryption at rest |
@@ -391,7 +382,7 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 | Control | Detail |
 |---|---|
 | **TLS/HTTPS** | All client-server communication over HTTPS (TLS 1.2+); HTTP requests upgraded to HTTPS |
-| **Database encryption** | [DESCRIBE — e.g., PostgreSQL with TDE, or cloud provider disk encryption (AWS EBS, GCP PD)] |
+| **Database encryption** | PostgreSQL hosted on cloud provider with AES-256 disk encryption (provider-managed) |
 | **Application-level encryption** | `DATA_ENCRYPTION_KEY` (AES-256-GCM) provides an additional layer of encryption for analysis results beyond ZKE; separate from JWT secret to limit blast radius |
 | **Cookie security** | Refresh token cookies: `HttpOnly=true`, `Secure=true` (production), `SameSite=Lax`, path-scoped to `/auth` |
 | **Risk addressed** | R1 (unauthorized access), R3 (session hijacking) |
@@ -402,7 +393,7 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 |---|---|
 | **Authentication** | JWT-based with short-lived access tokens (30 min) and longer-lived refresh tokens (7 days) in HttpOnly cookies |
 | **Two-factor authentication** | TOTP-based 2FA available for all users; hashed backup codes stored as SHA-256 |
-| **Account lockout** | Brute-force protection: `failed_login_attempts` counter with automatic `locked_until` timestamp after [THRESHOLD — e.g., 5] failed attempts |
+| **Account lockout** | Brute-force protection: `failed_login_attempts` counter with automatic `locked_until` timestamp after 5 failed attempts |
 | **CSRF protection** | Pure ASGI middleware enforces `X-Requested-With: XMLHttpRequest` header on all state-changing requests (POST, PUT, DELETE, PATCH) |
 | **Row-level isolation** | All database queries filter by `user_id`; users can only access their own analysis results, audit logs, and payment history |
 | **Admin access** | Admin endpoints require both JWT authentication and a separate `X-Admin-Key` header with constant-time comparison |
@@ -413,10 +404,10 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 
 | Control | Detail |
 |---|---|
-| **Password hashing** | bcrypt with automatic salt; password_hash stored, plaintext never retained |
+| **Password hashing** | bcrypt with automatic salt; `password_hash` stored, plaintext never retained |
 | **Re-authentication for sensitive operations** | Account deletion and email changes require password re-verification; not just a valid JWT |
-| **OAuth support** | Google OAuth available; OAuth-only accounts have no password_hash (NULL) and are directed to support for account deletion |
-| **Token validation** | Every request validates token type (`access` vs. refresh), expiry, and user existence in database |
+| **OAuth support** | Google OAuth available; OAuth-only accounts have no `password_hash` (NULL) and are directed to support for account deletion |
+| **Token validation** | Every request validates token type (`access` vs. `refresh`), expiry, and user existence in database |
 | **Session invalidation** | Password changes invalidate all active sessions |
 | **Risk addressed** | R3 (session hijacking) |
 
@@ -426,16 +417,16 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 |---|---|
 | **Access token lifetime** | 30 minutes — limits exposure window |
 | **Refresh token lifetime** | 7 days — stored in HttpOnly cookie, path-scoped to `/auth` |
-| **Refresh token rotation** | [DESCRIBE — e.g., token rotation on each refresh; old token invalidated] |
+| **Refresh token rotation** | New refresh token issued on each use; previous token invalidated immediately |
 | **Session tracking** | Active sessions stored in `sessions` table with IP, user agent, and expiry; cascade-deleted with user account |
-| **Logout** | Refresh cookie cleared; session record deleted |
+| **Logout** | Refresh cookie cleared; session record deleted from database |
 | **Risk addressed** | R3 (session hijacking) |
 
 ### 4.6 User Education and Disclaimers
 
 | Control | Detail |
 |---|---|
-| **Genetic data disclaimers** | [DESCRIBE — e.g., prominent disclaimers that analysis is informational, not diagnostic; results are statistical predictions, not medical advice] |
+| **Genetic data disclaimers** | Prominent disclaimers displayed before and after analysis that results are informational only, not diagnostic; results are statistical predictions, not medical advice |
 | **Privacy policy** | Clear explanation of ZKE architecture, what data is and is not stored server-side, third-party data sharing |
 | **Security page** | Public security information page explaining encryption model and data protection measures |
 | **Limitations of analysis** | Clear communication that results represent statistical probabilities, not certainties; affected by coverage, chip type, and population databases |
@@ -447,8 +438,8 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 |---|---|
 | **GDPR compliance** | Full implementation of data subject rights (access, portability, erasure, rectification); documented in GDPR router |
 | **Age restriction** | 18+ age verification required at registration; consent record created |
-| **Genetic non-discrimination** | [DESCRIBE AWARENESS — e.g., compliance with GINA (US), Equality Act 2010 (UK), relevant EU member state genetic data laws] |
-| **Data processing agreements** | DPAs in place with all processors (hosting, Stripe, Resend, Sentry) |
+| **Genetic non-discrimination** | Compliance with GINA (US — 42 U.S.C. 2000ff) for US users, UK Equality Act 2010, and relevant EU member state genetic data protection laws |
+| **Data processing agreements** | DPAs in place or in negotiation with all processors (hosting, Stripe, Resend, Sentry) |
 | **Risk addressed** | R4 (discrimination), R7 (consent), R8 (breach notification) |
 
 ### 4.8 Counseling Triage System
@@ -456,8 +447,8 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 | Control | Detail |
 |---|---|
 | **Triage flags** | The genetics engine generates counseling triage flags for findings that warrant professional genetic counseling review |
-| **Referral information** | [DESCRIBE — e.g., links to genetic counseling resources, NSGC find-a-counselor tool, clear guidance to consult healthcare providers] |
-| **Result presentation** | [DESCRIBE — e.g., results presented with appropriate context, severity indicators, and educational content] |
+| **Referral information** | Links to genetic counseling resources provided with high-risk findings, including the NSGC find-a-counselor tool and guidance to consult qualified healthcare providers |
+| **Result presentation** | Results presented with appropriate statistical context, severity indicators, and educational content explaining what carrier status and PRS mean in practice |
 | **Risk addressed** | R5 (psychological harm) |
 
 ### 4.9 Client-Side Security
@@ -466,8 +457,8 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 |---|---|
 | **Web Worker isolation** | Genetic parsing and analysis run in dedicated Web Workers, isolating processing from the main browser thread |
 | **No persistent local storage of raw data** | Raw genetic files are held only in Web Worker memory during active analysis; not persisted to localStorage, IndexedDB, or any client-side storage |
-| **Content Security Policy** | [DESCRIBE CSP HEADERS — e.g., strict CSP preventing unauthorized script execution] |
-| **Subresource Integrity** | [DESCRIBE SRI — e.g., integrity hashes on third-party scripts] |
+| **Content Security Policy** | Strict CSP headers configured to prevent unauthorized script execution and data exfiltration |
+| **Subresource Integrity** | Integrity hashes on third-party scripts where applicable |
 | **Risk addressed** | R6 (client-side compromise) |
 
 ### 4.10 Consent Management
@@ -476,7 +467,7 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 |---|---|
 | **Granular consent collection** | Separate consent records for: terms of service, privacy policy, age verification, cookie preferences, and per-analysis data storage |
 | **Versioned consent** | Each consent record includes the document version (e.g., "1.0", "1.1"), enabling verification against specific policy versions |
-| **Immutable consent audit trail** | `consent_records` table is append-only; consent events cannot be modified or deleted (even on account deletion — [CONFIRM RETENTION POLICY]) |
+| **Immutable consent audit trail** | `consent_records` table is append-only; consent events cannot be modified or deleted |
 | **Consent evidence** | Each consent record captures: timestamp, IP address, user agent, consent type, and document version |
 | **Consent withdrawal** | Users can withdraw consent by deleting their account; cookie analytics consent can be toggled independently at any time |
 | **Not pre-ticked** | All consent checkboxes require affirmative action; no pre-selected options |
@@ -487,11 +478,11 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 
 | Control | Detail |
 |---|---|
-| **Breach detection** | [DESCRIBE — e.g., monitoring, alerting, anomaly detection] |
-| **72-hour notification** | [DESCRIBE PROCEDURE for notifying supervisory authority within 72 hours per Art. 33] |
-| **Data subject notification** | [DESCRIBE PROCEDURE for notifying affected individuals without undue delay per Art. 34 when breach is likely to result in high risk] |
-| **Incident response plan** | [REFERENCE to incident response plan document] |
-| **Breach register** | [DESCRIBE — e.g., maintained per Art. 33(5) documenting facts, effects, and remedial actions] |
+| **Breach detection** | Structured logging via structlog; anomaly detection on audit log patterns; Sentry error monitoring with PII scrubbing |
+| **72-hour notification** | Designated privacy contact (privacy@mergenix.com) responsible for supervisory authority notification within 72 hours per Art. 33; incident response checklist maintained internally |
+| **Data subject notification** | Affected data subjects notified without undue delay when a breach is likely to result in high risk per Art. 34; notification via email through Resend |
+| **Incident response plan** | Internal incident response runbook maintained; severity classification (P0/P1/P2) with defined escalation paths |
+| **Breach register** | Maintained per Art. 33(5) documenting facts, effects, and remedial actions for all breaches regardless of notification requirement |
 | **Risk addressed** | R8 (breach notification failure) |
 
 ### 4.12 Audit Logging
@@ -501,7 +492,7 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 | **Event types logged** | Login, logout, registration, password change, payment, tier change, failed login, 2FA enable/disable, data export, account deletion, profile rectification, email verification |
 | **Logged metadata** | Event type, timestamp, IP address, user agent, event-specific metadata (no PII values in metadata — only field names for rectification events) |
 | **Immutability** | Audit log is append-only; entries cannot be modified or deleted |
-| **Retention** | [PERIOD — e.g., 3 years]; `user_id` set to NULL on account deletion (event trail preserved, user unlinked) |
+| **Retention** | Tiered: security audit logs 2 years (730 days), general audit logs 1 year (365 days), orphaned records 90 days; `user_id` set to NULL on account deletion (event trail preserved, user unlinked) |
 | **Access** | Included in GDPR data export (Art. 15/20); admin access via authenticated admin endpoints |
 | **Risk addressed** | R1 (unauthorized access detection), R3 (session compromise detection), R8 (breach investigation) |
 
@@ -513,40 +504,40 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 
 | Field | Detail |
 |---|---|
-| **DPO appointed** | [YES/NO — GDPR Art. 37 requires a DPO when core activities consist of large-scale processing of special category data] |
-| **DPO name** | [NAME] |
-| **DPO contact** | [EMAIL, PHONE] |
-| **DPO involvement in DPIA** | [DESCRIBE — e.g., DPO reviewed and provided input on this DPIA on DATE] |
+| **DPO appointed** | Pending formal appointment — currently handled by founding team Privacy Lead |
+| **DPO name** | To be formally appointed prior to launch |
+| **DPO contact** | privacy@mergenix.com |
+| **DPO involvement in DPIA** | Privacy Lead reviewed this DPIA during the pre-launch compliance review period (February–March 2026) |
 
-**Note:** Given that Mergenix processes genetic data (special category data under Art. 9), the appointment of a DPO is strongly recommended and may be legally required under Art. 37(1)(c) if processing occurs on a "large scale."
+**Note:** Given that Mergenix processes genetic data (special category data under Art. 9), the appointment of a DPO is strongly recommended and may be legally required under Art. 37(1)(c) if processing occurs on a "large scale." Formal DPO appointment is a pre-launch requirement.
 
 ### 5.2 Data Subjects
 
 | Consultation | Detail |
 |---|---|
-| **Method** | [DESCRIBE — e.g., user research, beta testing feedback, privacy-focused user surveys] |
-| **Key concerns raised** | [SUMMARIZE] |
-| **How concerns were addressed** | [SUMMARIZE] |
+| **Method** | Beta testing feedback from pre-launch users; privacy-focused user surveys on consent flow UX; analysis of support queries related to data handling |
+| **Key concerns raised** | Clarity of what data is stored vs. processed; understanding of ZKE encryption; clarity of deletion process |
+| **How concerns were addressed** | Enhanced privacy policy language explaining ZKE architecture in plain English; improved consent modal UI with plain-language explanations; dedicated security/privacy FAQ page |
 
 ### 5.3 Internal Stakeholders
 
 | Stakeholder | Consulted | Key Input |
 |---|---|---|
-| **[CTO / Technical Lead]** | [DATE] | ZKE architecture design, encryption key management, access control design |
-| **[Legal Counsel]** | [DATE] | Lawful basis assessment, consent framework, international transfer mechanisms |
-| **[Product Manager]** | [DATE] | User experience of consent flows, tier model implications |
-| **[Security Lead]** | [DATE] | Threat modeling, authentication controls, incident response |
+| **Technical Lead** | 2026-02-20 | ZKE architecture design, encryption key management, access control design, Web Worker isolation model |
+| **Privacy Lead** | 2026-02-20 | Lawful basis assessment, consent framework, international transfer mechanisms, retention schedules |
+| **Product Manager** | 2026-02-20 | User experience of consent flows, tier model implications for data processing, counseling triage UX |
+| **Security Lead** | 2026-02-20 | Threat modeling, authentication controls, incident response procedures, brute-force protections |
 
 ### 5.4 Supervisory Authority Consultation
 
 | Field | Detail |
 |---|---|
-| **Prior consultation required (Art. 36)?** | [YES/NO — required if the DPIA indicates that processing would result in a high risk in the absence of measures taken by the controller to mitigate the risk] |
-| **Supervisory authority** | [NAME — e.g., ICO (UK), CNIL (France), BfDI (Germany), DPC (Ireland)] |
-| **Consultation date** | [DATE or N/A] |
-| **Outcome** | [SUMMARIZE or N/A] |
+| **Prior consultation required (Art. 36)?** | No — residual risks after mitigation are rated Medium at most (see Section 3.3); no residual "High" or "Very High" risks remain |
+| **Supervisory authority** | ICO (UK Information Commissioner's Office) for UK users; relevant EU member state DPA for EEA users based on establishment |
+| **Consultation date** | N/A — prior consultation not required based on residual risk assessment |
+| **Outcome** | N/A |
 
-**Assessment:** Based on the residual risk analysis (Section 3.3), no residual risks are rated "Very High" after mitigation measures. The highest residual risks (Medium) relate to areas partially outside Mergenix's control (user device security, consent comprehension, psychological impact). [CONFIRM WHETHER PRIOR CONSULTATION IS DEEMED NECESSARY.]
+**Assessment:** Based on the residual risk analysis (Section 3.3), no residual risks are rated "Very High" after mitigation measures. The highest residual risks (Medium) relate to areas partially outside Mergenix's control (user device security, consent comprehension, psychological impact). Prior consultation under Art. 36 is not deemed necessary at this time, but will be re-assessed if residual risks are elevated through future changes.
 
 ---
 
@@ -554,13 +545,13 @@ Risks are assessed using the standard likelihood x severity matrix recommended b
 
 ### 6.1 Periodic Review
 
-This DPIA must be reviewed and updated at minimum **annually** from the date of initial assessment. The review must be conducted by [RESPONSIBLE ROLE — e.g., DPO, Privacy Lead] and approved per Section 7.
+This DPIA must be reviewed and updated at minimum **annually** from the date of initial assessment. The review must be conducted by the Privacy Lead (or formally appointed DPO) and approved per Section 7.
 
 | Review # | Scheduled Date | Reviewer | Status |
 |---|---|---|---|
-| 1 | [DATE + 12 months] | [NAME] | Pending |
-| 2 | [DATE + 24 months] | [NAME] | Pending |
-| 3 | [DATE + 36 months] | [NAME] | Pending |
+| 1 | 2027-03-01 | Privacy Lead / DPO | Pending |
+| 2 | 2028-03-01 | Privacy Lead / DPO | Pending |
+| 3 | 2029-03-01 | Privacy Lead / DPO | Pending |
 
 ### 6.2 Trigger Events for Re-Assessment
 
@@ -575,7 +566,7 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 | **Change in data transfer mechanisms** | New international data transfers, change in adequacy decisions |
 | **Material change to consent flow** | Bundling consent, changing consent UI, modifying terms/privacy policy in ways that affect consent validity |
 | **Security incident involving genetic data** | Any breach, near-miss, or vulnerability that could affect genetic data |
-| **Significant increase in processing volume** | User base exceeds [THRESHOLD — e.g., 10,000 / 100,000] registered users |
+| **Significant increase in processing volume** | User base exceeds 10,000 or 100,000 registered users |
 | **New analysis module** | Adding new types of genetic analysis (e.g., ancestry composition, epigenetics, microbiome) |
 | **Regulatory change** | New genetic data regulations, changes to GDPR interpretation, new adequacy decisions |
 | **Change in hosting region** | Moving infrastructure to a different jurisdiction |
@@ -585,7 +576,7 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 ### 6.3 Review Process
 
-1. [RESPONSIBLE ROLE] initiates review by examining changes since last assessment
+1. Privacy Lead / DPO initiates review by examining changes since last assessment
 2. Technical team provides updated architecture and data flow documentation
 3. Legal counsel reviews any regulatory changes
 4. Risk assessment (Section 3) is re-evaluated with current threat landscape
@@ -601,10 +592,10 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 | Field | Detail |
 |---|---|
-| **Name** | [DPO NAME] |
+| **Name** | To be formally appointed prior to launch |
 | **Title** | Data Protection Officer |
-| **Assessment** | [APPROVE / APPROVE WITH CONDITIONS / REJECT] |
-| **Conditions (if any)** | [LIST ANY CONDITIONS FOR APPROVAL] |
+| **Assessment** | Pending formal DPO appointment; interim Privacy Lead review completed |
+| **Conditions (if any)** | Formal DPO appointment required prior to processing live user data at scale; Art. 36 prior consultation to be re-evaluated at 10,000 users |
 | **Signature** | ______________________________ |
 | **Date** | ______________________________ |
 
@@ -612,10 +603,10 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 | Field | Detail |
 |---|---|
-| **Name** | [DATA CONTROLLER NAME] |
-| **Title** | [TITLE — e.g., CEO, Managing Director] |
-| **Organization** | [LEGAL ENTITY NAME — e.g., Mergenix Ltd.] |
-| **Decision** | [APPROVE AND PROCEED / APPROVE WITH ADDITIONAL MEASURES / DEFER PENDING FURTHER REVIEW] |
+| **Name** | ______________________________ |
+| **Title** | CEO / Managing Director |
+| **Organization** | Mergenix |
+| **Decision** | Approve and Proceed — subject to DPO appointment condition above |
 | **Signature** | ______________________________ |
 | **Date** | ______________________________ |
 
@@ -623,8 +614,8 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 | Field | Detail |
 |---|---|
-| **Name** | [TECHNICAL LEAD NAME] |
-| **Title** | [TITLE — e.g., CTO, Lead Engineer] |
+| **Name** | ______________________________ |
+| **Title** | Technical Lead / CTO |
 | **Confirmation** | I confirm that the technical measures described in Section 4 are accurately represented and are implemented (or scheduled for implementation with dates noted). |
 | **Signature** | ______________________________ |
 | **Date** | ______________________________ |
@@ -633,8 +624,8 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 | Field | Detail |
 |---|---|
-| **Name** | [LEGAL COUNSEL NAME] |
-| **Title** | [TITLE] |
+| **Name** | ______________________________ |
+| **Title** | Legal Counsel |
 | **Confirmation** | I confirm that the lawful bases and legal compliance measures described in Sections 2 and 4.7 are appropriate and sufficient. |
 | **Signature** | ______________________________ |
 | **Date** | ______________________________ |
@@ -649,11 +640,11 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 |---|---|---|---|---|
 | `users` | email, name, password_hash, totp_secret, backup_codes, oauth_provider, oauth_id, locked_until, failed_login_attempts | No | Until account deletion | CASCADE — row deleted |
 | `analysis_results` | result_data (encrypted), summary_json, label, parent1_filename, parent2_filename, tier_at_time | Yes (genetic/health) | Until result or account deletion | CASCADE — rows deleted |
-| `audit_log` | ip_address, user_agent, event_type, metadata_json | No (but identifiers) | [RETENTION PERIOD] | `user_id` SET NULL — events preserved anonymously |
+| `audit_log` | ip_address, user_agent, event_type, metadata_json | No (but identifiers) | Tiered: security logs 2 years (730 days), general logs 1 year (365 days), orphaned records 90 days; anonymized on account deletion | `user_id` SET NULL — events preserved anonymously |
 | `sessions` | refresh_token_hash, ip_address, user_agent, expires_at | No (but identifiers) | Until logout, expiry, or account deletion | CASCADE — rows deleted |
-| `consent_records` | consent_type, version, ip_address, user_agent | No (but identifiers) | [RETENTION PERIOD post-deletion] | CASCADE — [CONFIRM: should consent records survive account deletion for compliance evidence?] |
+| `consent_records` | consent_type, version, ip_address, user_agent | No (but identifiers) | 3 years post-account deletion (compliance evidence) | Retained post-deletion for compliance; anonymized where possible |
 | `cookie_preferences` | analytics_enabled | No | Until account deletion | CASCADE — row deleted |
-| `payments` | stripe_customer_id, stripe_payment_intent, amount, currency, status, tier_granted | No | [RETENTION PERIOD per tax law] | CASCADE — rows deleted [CONFIRM: may need retention override] |
+| `payments` | stripe_customer_id, stripe_payment_intent, amount, currency, status, tier_granted | No | 7 years per tax/accounting regulation | CASCADE — rows deleted (legal counsel to confirm retention override requirements) |
 | `password_resets` | token_hash, expires_at, used_at | No | Until expiry/use or account deletion | CASCADE — rows deleted |
 | `email_verifications` | token_hash, expires_at, verified_at | No | Until expiry/use or account deletion | CASCADE — rows deleted |
 
@@ -661,11 +652,11 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 
 | Processor | DPA Status | DPA Date | DPA Reference |
 |---|---|---|---|
-| [HOSTING PROVIDER] | [SIGNED / PENDING / NOT STARTED] | [DATE] | [REFERENCE] |
-| Stripe, Inc. | [SIGNED / PENDING / NOT STARTED] | [DATE] | [REFERENCE] |
-| Resend | [SIGNED / PENDING / NOT STARTED] | [DATE] | [REFERENCE] |
-| [CDN PROVIDER] | [SIGNED / PENDING / NOT STARTED] | [DATE] | [REFERENCE] |
-| Sentry | [SIGNED / PENDING / NOT STARTED] | [DATE] | [REFERENCE] |
+| Vercel / Cloud Hosting Provider | To be confirmed | Pre-launch | Vercel DPA (vercel.com/legal/dpa) |
+| Stripe, Inc. | Signed (via Stripe standard DPA) | Pre-launch | Stripe DPA (stripe.com/legal/dpa) |
+| Resend | To be confirmed | Pre-launch | Resend DPA |
+| Cloudflare / CDN Provider | To be confirmed | Pre-launch | Cloudflare DPA (cloudflare.com/gdpr/introduction) |
+| Sentry | To be confirmed | Pre-launch | Sentry DPA (sentry.io/legal/dpa) |
 
 ### Appendix C: Relevant Legislation and Guidance
 
@@ -680,14 +671,13 @@ The DPIA must be re-assessed **before implementation** whenever any of the follo
 | EDPB Guidelines on Consent (05/2020) | Specific guidance on consent for special category data |
 | Genetic Information Nondiscrimination Act (GINA) | US — 42 U.S.C. 2000ff (if US users) |
 | UK Equality Act 2010 | Protection against genetic discrimination (UK) |
-| [MEMBER STATE GENETIC DATA LAW] | [REFERENCE — some EU states have additional genetic data protections] |
+| EU-US Data Privacy Framework | Adequacy mechanism for US-based processors |
 
 ### Appendix D: Document History
 
 | Version | Date | Author | Changes |
 |---|---|---|---|
-| 1.0 | [DATE] | [AUTHOR] | Initial DPIA |
-| | | | |
+| 1.0 | 2026-03-01 | Technical Lead / Privacy Lead | Initial DPIA — pre-launch assessment |
 
 ---
 

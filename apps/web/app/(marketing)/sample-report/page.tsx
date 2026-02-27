@@ -1,17 +1,5 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
-
-// Lazy-load the content component so the large sample-report-data module
-// (~1012 lines) is code-split into a separate chunk and excluded from the
-// initial page bundle. ssr:false is correct because the component uses
-// framer-motion animations that depend on the browser environment.
-const SampleReportContent = dynamic(
-  () =>
-    import("./_components/sample-report-content").then(
-      (m) => m.SampleReportContent,
-    ),
-  { ssr: false },
-);
+import { SampleReportClient } from "./_components/sample-report-client";
 
 export const metadata: Metadata = {
   title: "Sample Report",
@@ -33,5 +21,5 @@ export const metadata: Metadata = {
 };
 
 export default function SampleReportPage() {
-  return <SampleReportContent />;
+  return <SampleReportClient />;
 }

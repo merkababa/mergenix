@@ -16,7 +16,7 @@ import {
   Brain,
   HeartPulse,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
 import { HelixAnimation } from "@/components/marketing/helix-animation";
@@ -126,7 +126,7 @@ export function HomeContent() {
   return (
     <div className="relative">
       {/* HERO SECTION */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -144,16 +144,16 @@ export function HomeContent() {
           <HelixAnimation dotCount={5} className="mx-auto mb-8 h-6 w-40" />
 
           {/* Headline */}
-          <motion.h1
+          <m.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="gradient-text mx-auto max-w-4xl font-heading text-4xl font-extrabold leading-tight md:text-6xl lg:text-7xl"
           >
             Explore Your Genetic Possibilities
-          </motion.h1>
+          </m.h1>
 
-          <motion.p
+          <m.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
@@ -164,10 +164,10 @@ export function HomeContent() {
             <span className="font-medium text-[var(--accent-teal)]">
               Your DNA never leaves your device.
             </span>
-          </motion.p>
+          </m.p>
 
           {/* Animated stats */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
@@ -197,10 +197,10 @@ export function HomeContent() {
                 Traits Predicted
               </p>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* CTA buttons — use Link styled as button to avoid nested interactive elements */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
@@ -219,10 +219,10 @@ export function HomeContent() {
             >
               Browse {CARRIER_PANEL_COUNT_DISPLAY} Diseases
             </Link>
-          </motion.div>
+          </m.div>
 
           {/* Trust badges */}
-          <motion.ul
+          <m.ul
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
@@ -248,12 +248,12 @@ export function HomeContent() {
                 No Third-Party Sharing
               </span>
             </li>
-          </motion.ul>
+          </m.ul>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* PRIVACY SECTION */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -274,7 +274,7 @@ export function HomeContent() {
             className="mb-12"
           />
 
-          <motion.div
+          <m.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -284,7 +284,7 @@ export function HomeContent() {
             {PRIVACY_FEATURES.map((feature) => {
               const Icon = feature.icon;
               return (
-                <motion.div key={feature.title} variants={staggerItem}>
+                <m.div key={feature.title} variants={staggerItem}>
                   <GlassCard
                     variant="medium"
                     hover="glow"
@@ -300,15 +300,15 @@ export function HomeContent() {
                       {feature.description}
                     </p>
                   </GlassCard>
-                </motion.div>
+                </m.div>
               );
             })}
-          </motion.div>
+          </m.div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* HOW IT WORKS */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -328,7 +328,7 @@ export function HomeContent() {
             className="mb-12"
           />
 
-          <motion.div
+          <m.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -338,7 +338,7 @@ export function HomeContent() {
             {STEPS.map((step) => {
               const Icon = step.icon;
               return (
-                <motion.div key={step.number} variants={staggerItem}>
+                <m.div key={step.number} variants={staggerItem}>
                   <GlassCard
                     variant="medium"
                     hover="glow"
@@ -358,15 +358,15 @@ export function HomeContent() {
                       {step.description}
                     </p>
                   </GlassCard>
-                </motion.div>
+                </m.div>
               );
             })}
-          </motion.div>
+          </m.div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* KEY FEATURES */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -386,7 +386,7 @@ export function HomeContent() {
             className="mb-12"
           />
 
-          <motion.div
+          <m.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -396,7 +396,7 @@ export function HomeContent() {
             {FEATURES.map((feature) => {
               const Icon = feature.icon;
               return (
-                <motion.div key={feature.title} variants={staggerItem}>
+                <m.div key={feature.title} variants={staggerItem}>
                   <GlassCard
                     variant="medium"
                     hover="glow"
@@ -426,15 +426,15 @@ export function HomeContent() {
                       </div>
                     </div>
                   </GlassCard>
-                </motion.div>
+                </m.div>
               );
             })}
-          </motion.div>
+          </m.div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* PRICING PREVIEW */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -454,7 +454,7 @@ export function HomeContent() {
             className="mb-12"
           />
 
-          <motion.div
+          <m.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -462,7 +462,7 @@ export function HomeContent() {
             className="grid gap-6 sm:grid-cols-2 md:grid-cols-3"
           >
             {MARKETING_TIERS.map((plan) => (
-              <motion.div key={plan.name} variants={staggerItem}>
+              <m.div key={plan.name} variants={staggerItem}>
                 <PricingCard
                   tier={plan.name}
                   price={plan.price}
@@ -478,14 +478,14 @@ export function HomeContent() {
                   disableAnimation
                   className="h-full"
                 />
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* FAQ */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -506,10 +506,10 @@ export function HomeContent() {
 
           <Accordion items={HOME_FAQ} />
         </div>
-      </motion.section>
+      </m.section>
 
       {/* FINAL CTA */}
-      <motion.section
+      <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -556,7 +556,7 @@ export function HomeContent() {
             </div>
           </GlassCard>
         </div>
-      </motion.section>
+      </m.section>
     </div>
   );
 }

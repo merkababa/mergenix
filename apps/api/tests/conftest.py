@@ -24,6 +24,9 @@ os.environ["STRIPE_PRICE_PREMIUM"] = "price_test_premium"
 os.environ["STRIPE_PRICE_PRO"] = "price_test_pro"
 os.environ["COOKIE_SECURE"] = "false"
 os.environ["ANALYTICS_API_KEY"] = "test-analytics-key-for-testing"
+# Fixed Fernet key for deterministic test encryption (32 url-safe base64 bytes = 44 chars).
+# Generated with: from cryptography.fernet import Fernet; Fernet.generate_key().decode()
+os.environ["TOTP_ENCRYPTION_KEY"] = "ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg="
 
 # Clear any cached settings from previous test runs
 from app.config import get_settings  # noqa: E402
@@ -105,6 +108,7 @@ from app.services.auth_service import (  # noqa: E402
     create_refresh_token,
     hash_password,
 )
+from app.utils.encryption import encrypt_totp_secret  # noqa: E402
 from app.utils.security import hash_token  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
 
@@ -288,7 +292,7 @@ async def totp_user(db_session: AsyncSession) -> tuple[User, str]:
         name="TOTP User",
         tier="free",
         email_verified=True,
-        totp_secret=secret,
+        totp_secret=encrypt_totp_secret(secret),
         totp_enabled=True,
         backup_codes=hashed_codes,
         created_at=datetime.now(UTC),

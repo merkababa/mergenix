@@ -106,6 +106,43 @@ function makePrsWeights(
   };
 }
 
+/**
+ * Build PrsWeightsData that includes a schizophrenia condition with
+ * ancestry_transferability set to mirror the real prs-weights.json values.
+ * AFR → hide (harmful), EUR → standard (validated), EAS → caution (poor).
+ */
+function makePrsWeightsWithSchizophrenia(
+  overrides: Partial<PrsWeightsData> = {},
+): PrsWeightsData {
+  const base = makePrsWeights();
+  return {
+    ...base,
+    conditions: {
+      ...base.conditions,
+      schizophrenia: {
+        name: 'Schizophrenia',
+        pgs_id: 'PGS000045',
+        description: 'Risk of developing schizophrenia',
+        population_mean: 0.0,
+        population_std: 1.0,
+        ancestry_note: 'Derived primarily from European-ancestry GWAS.',
+        reference: 'Ripke et al. 2014',
+        ancestry_transferability: {
+          EUR: { transferability: 'validated', ui_recommendation: 'standard', note: 'Original GWAS population' },
+          AFR: { transferability: 'harmful', ui_recommendation: 'hide', note: 'HARMFUL — artificial score inflation due to LD differences; DO NOT display' },
+          EAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+          SAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+          AMR: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+        },
+        snps: [
+          { rsid: 'rs9001', effect_allele: 'T', effect_weight: 0.15, chromosome: '1', gene_region: 'MIR137' },
+        ],
+      },
+    },
+    ...overrides,
+  };
+}
+
 // ─── Normal CDF (Critical Mathematical Function) ────────────────────────────
 
 describe('normalCdf', () => {
@@ -884,6 +921,141 @@ describe('analyzePrs', () => {
       expect(offspring.percentile75).toBeDefined();
       expect(offspring.predictionDisclaimer).toBeDefined();
       expect(offspring.percentile25).toBeLessThan(offspring.percentile75);
+    }
+  });
+});
+
+// ─── Ancestry-Based Hide/Caution Enforcement ────────────────────────────────
+
+describe('analyzePrs — ancestry-based hide/caution enforcement', () => {
+  it('should set hidden=true and hiddenReason for schizophrenia when inferredAncestry="AFR"', () => {
+    const weights = makePrsWeightsWithSchizophrenia();
+    // Use 'pro' tier so schizophrenia (index 7 in PRS_CONDITIONS) is accessible
+    const snps = { rs9001: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro', 'AFR');
+
+    const schiz = result.conditions['schizophrenia'];
+    expect(schiz).toBeDefined();
+    if (schiz) {
+      expect(schiz.hidden).toBe(true);
+      expect(schiz.hiddenReason).toBeDefined();
+      expect(schiz.hiddenReason).toContain('HARMFUL');
+      expect(schiz.cautionNote).toBeUndefined();
+    }
+  });
+
+  it('should NOT set hidden for schizophrenia when inferredAncestry="EUR"', () => {
+    const weights = makePrsWeightsWithSchizophrenia();
+    const snps = { rs9001: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro', 'EUR');
+
+    const schiz = result.conditions['schizophrenia'];
+    expect(schiz).toBeDefined();
+    if (schiz) {
+      expect(schiz.hidden).toBeUndefined();
+      expect(schiz.hiddenReason).toBeUndefined();
+      expect(schiz.cautionNote).toBeUndefined();
+    }
+  });
+
+  it('should set cautionNote for schizophrenia when inferredAncestry="EAS"', () => {
+    const weights = makePrsWeightsWithSchizophrenia();
+    const snps = { rs9001: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro', 'EAS');
+
+    const schiz = result.conditions['schizophrenia'];
+    expect(schiz).toBeDefined();
+    if (schiz) {
+      expect(schiz.hidden).toBeUndefined();
+      expect(schiz.cautionNote).toBeDefined();
+      expect(schiz.cautionNote).toContain('Limited data');
+    }
+  });
+
+  it('sets cautionNote when ui_recommendation is "warning"', () => {
+    // Build a weights fixture where prostate_cancer has ui_recommendation="warning" for AFR,
+    // mirroring the real prs-weights.json (prostate_cancer AFR: warning).
+    const base = makePrsWeightsWithSchizophrenia();
+    const weightsWithWarning: PrsWeightsData = {
+      ...base,
+      conditions: {
+        ...base.conditions,
+        prostate_cancer: {
+          name: 'Prostate Cancer',
+          pgs_id: 'PGS000014',
+          description: 'Risk of prostate cancer',
+          population_mean: 0.0,
+          population_std: 1.0,
+          ancestry_note: 'Derived primarily from European-ancestry GWAS.',
+          reference: 'Schumacher et al. 2018',
+          ancestry_transferability: {
+            EUR: { transferability: 'validated', ui_recommendation: 'standard', note: 'Original GWAS population' },
+            AFR: { transferability: 'poor', ui_recommendation: 'warning', note: '8q24 risk variants have elevated frequency; use with extreme caution' },
+            EAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+            SAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+            AMR: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
+          },
+          snps: [
+            { rsid: 'rs9002', effect_allele: 'A', effect_weight: 0.12, chromosome: '8', gene_region: '8q24' },
+          ],
+        },
+      },
+    };
+    const snps = { rs9002: 'AA' };
+    const result = analyzePrs(snps, snps, weightsWithWarning, 'pro', 'AFR');
+
+    const pc = result.conditions['prostate_cancer'];
+    expect(pc).toBeDefined();
+    if (pc) {
+      // "warning" must behave like "caution": set cautionNote, not hidden
+      expect(pc.hidden).toBeUndefined();
+      expect(pc.hiddenReason).toBeUndefined();
+      expect(pc.cautionNote).toBeDefined();
+      expect(pc.cautionNote).toContain('8q24 risk variants have elevated frequency');
+    }
+  });
+
+  it('should apply no hide/caution when inferredAncestry is not provided (backward compatible)', () => {
+    const weights = makePrsWeightsWithSchizophrenia();
+    const snps = { rs9001: 'TT' };
+    // No inferredAncestry argument at all
+    const result = analyzePrs(snps, snps, weights, 'pro');
+
+    const schiz = result.conditions['schizophrenia'];
+    expect(schiz).toBeDefined();
+    if (schiz) {
+      expect(schiz.hidden).toBeUndefined();
+      expect(schiz.hiddenReason).toBeUndefined();
+      expect(schiz.cautionNote).toBeUndefined();
+    }
+  });
+
+  it('should apply no hide/caution when inferredAncestry is null (backward compatible)', () => {
+    const weights = makePrsWeightsWithSchizophrenia();
+    const snps = { rs9001: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro', null);
+
+    const schiz = result.conditions['schizophrenia'];
+    expect(schiz).toBeDefined();
+    if (schiz) {
+      expect(schiz.hidden).toBeUndefined();
+      expect(schiz.hiddenReason).toBeUndefined();
+      expect(schiz.cautionNote).toBeUndefined();
+    }
+  });
+
+  it('should not affect conditions without ancestry_transferability data', () => {
+    const weights = makePrsWeights(); // no ancestry_transferability on any condition
+    const snps = { rs1: 'GG', rs2: 'AA', rs3: 'TT' };
+    const result = analyzePrs(snps, snps, weights, 'pro', 'AFR');
+
+    const cad = result.conditions['coronary_artery_disease'];
+    expect(cad).toBeDefined();
+    if (cad) {
+      // No transferability data → no hide/caution applied
+      expect(cad.hidden).toBeUndefined();
+      expect(cad.hiddenReason).toBeUndefined();
+      expect(cad.cautionNote).toBeUndefined();
     }
   });
 });

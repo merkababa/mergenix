@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { Mail, AlertCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -170,7 +170,7 @@ export function LoginContent() {
   return (
     <>
       {/* Login Card */}
-      <motion.div variants={fadeUp} initial="hidden" animate="visible">
+      <m.div variants={fadeUp} initial="hidden" animate="visible">
         <GlassCard
           variant="strong"
           hover="none"
@@ -192,7 +192,7 @@ export function LoginContent() {
           {/* Error banner */}
           <AnimatePresence mode="wait">
             {error && (
-              <motion.div
+              <m.div
                 key="error-banner"
                 variants={errorBannerVariants}
                 initial="hidden"
@@ -204,13 +204,13 @@ export function LoginContent() {
               >
                 <AlertCircle className="h-4 w-4 shrink-0 text-[var(--accent-rose)]" />
                 <p className="text-sm text-[var(--accent-rose)]">{error}</p>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
           <AnimatePresence mode="wait">
             {!requires2FA ? (
-              <motion.div
+              <m.div
                 key="login-step"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -300,9 +300,9 @@ export function LoginContent() {
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="2fa-step"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -365,7 +365,7 @@ export function LoginContent() {
                     Use a different account
                   </button>
                 </form>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
@@ -380,10 +380,10 @@ export function LoginContent() {
             </Link>
           </p>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* Trust footer — reusable component (#3, #5, #12) */}
-      <motion.div
+      <m.div
         variants={fadeUp}
         initial="hidden"
         animate="visible"
@@ -396,7 +396,7 @@ export function LoginContent() {
             "Free tier — no credit card required.",
           ]}
         />
-      </motion.div>
+      </m.div>
     </>
   );
 }

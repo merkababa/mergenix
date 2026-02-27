@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { X, QrCode, KeyRound, ShieldCheck, Copy, Download, Check, Loader2 } from "lucide-react";
 import QRCodeLib from "qrcode";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -187,7 +187,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -203,7 +203,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             ref={modalRef}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -250,7 +250,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
               {/* Step content with animation */}
               <AnimatePresence mode="wait">
                 {step === 0 && (
-                  <motion.div
+                  <m.div
                     key="step-0"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -321,11 +321,11 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     >
                       Continue
                     </Button>
-                  </motion.div>
+                  </m.div>
                 )}
 
                 {step === 1 && (
-                  <motion.div
+                  <m.div
                     key="step-1"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -381,11 +381,11 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                         Verify
                       </Button>
                     </div>
-                  </motion.div>
+                  </m.div>
                 )}
 
                 {step === 2 && (
-                  <motion.div
+                  <m.div
                     key="step-2"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -443,12 +443,12 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     >
                       I&apos;ve Saved My Codes
                     </Button>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </GlassCard>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useId } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ShieldCheck, ChevronDown, X } from "lucide-react";
 import Link from "next/link";
 import {
@@ -102,14 +102,14 @@ export function GinaNotice() {
               </span>{" "}
               Know your genetic privacy rights (GINA)
             </span>
-            <motion.span
+            <m.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
               className="shrink-0"
               aria-hidden="true"
             >
               <ChevronDown className="h-4 w-4 text-[var(--text-muted)]" />
-            </motion.span>
+            </m.span>
           </button>
         </h3>
 
@@ -126,7 +126,7 @@ export function GinaNotice() {
       {/* ── Expandable body ── */}
       <AnimatePresence initial={false}>
         {expanded && (
-          <motion.div
+          <m.div
             id={panelId}
             variants={prefersReducedMotion ? reducedMotionVariants : expandVariants}
             initial="hidden"
@@ -146,7 +146,7 @@ export function GinaNotice() {
                 <span aria-hidden="true"> →</span>
               </Link>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

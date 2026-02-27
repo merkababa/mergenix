@@ -76,7 +76,7 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs6025', chromosome: '1', referenceAllele: 'C' },      // Factor V Leiden
 
   // Chromosome 2
-  { rsid: 'rs1799963', chromosome: '2', referenceAllele: 'G' },   // Prothrombin G20210A
+  { rsid: 'rs1799963', chromosome: '11', referenceAllele: 'G' },  // Prothrombin G20210A
   { rsid: 'rs4988235', chromosome: '2', referenceAllele: 'G' },   // MCM6/LCT lactase
 
   // Chromosome 3
@@ -101,7 +101,7 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs4728142', chromosome: '7', referenceAllele: 'A' },   // IRF5 region
 
   // Chromosome 8
-  { rsid: 'rs2736100', chromosome: '8', referenceAllele: 'A' },   // TERT region proxy
+  { rsid: 'rs2736100', chromosome: '5', referenceAllele: 'A' },   // TERT region proxy
   { rsid: 'rs7014346', chromosome: '8', referenceAllele: 'A' },   // 8q24 region
 
   // Chromosome 9
@@ -138,7 +138,7 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
 
   // Chromosome 17
   { rsid: 'rs1042522', chromosome: '17', referenceAllele: 'G' },  // TP53 Arg72Pro
-  { rsid: 'rs4680', chromosome: '17', referenceAllele: 'G' },     // COMT Val158Met
+  { rsid: 'rs4680', chromosome: '22', referenceAllele: 'G' },     // COMT Val158Met
 
   // Chromosome 18
   { rsid: 'rs7241918', chromosome: '18', referenceAllele: 'G' },  // chr18 tag SNP
@@ -157,7 +157,7 @@ export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   { rsid: 'rs2830585', chromosome: '21', referenceAllele: 'G' },  // chr21 tag
 
   // Chromosome 22
-  { rsid: 'rs5993883', chromosome: '22', referenceAllele: 'G' },  // UGT1A region
+  { rsid: 'rs5993883', chromosome: '2', referenceAllele: 'G' },   // UGT1A region
   { rsid: 'rs738409', chromosome: '22', referenceAllele: 'C' },   // PNPLA3
 ];
 

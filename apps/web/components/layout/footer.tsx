@@ -63,9 +63,9 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h4 className="mb-4 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+      <h3 className="mb-4 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
         {title}
-      </h4>
+      </h3>
       <ul className="space-y-2.5">
         {links.map((link) => (
           <li key={link.label}>
@@ -134,9 +134,9 @@ export function Footer() {
             <FooterColumn title="Company" links={COMPANY_LINKS} />
 
             {/* Connect / Social */}
-            <h4 className="mb-4 mt-8 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+            <h3 className="mb-4 mt-8 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
               Connect
-            </h4>
+            </h3>
             <div className="flex items-center gap-3">
               {SOCIAL_LINKS.map((social) => (
                 <a
@@ -153,9 +153,9 @@ export function Footer() {
             </div>
 
             {/* Contact emails */}
-            <h4 className="mb-4 mt-8 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+            <h3 className="mb-4 mt-8 font-heading text-sm font-semibold uppercase tracking-wider text-[var(--text-heading)]">
               Contact
-            </h4>
+            </h3>
             <ul className="space-y-2.5">
               <li>
                 <a
@@ -193,9 +193,9 @@ export function Footer() {
           <GlassCard variant="subtle" hover="none" className="p-6 sm:p-8">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
               <div className="text-center sm:text-left">
-                <h4 className="font-heading text-base font-semibold text-[var(--text-heading)]">
+                <h3 className="font-heading text-base font-semibold text-[var(--text-heading)]">
                   Stay in the loop
-                </h4>
+                </h3>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">
                   Get updates on new features, genetic research, and product launches.
                 </p>

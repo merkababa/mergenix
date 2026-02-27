@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { useState, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Shield, FileCheck, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GeneticFileFormat } from "@/lib/stores/analysis-store";
@@ -129,7 +129,7 @@ export function FileDropzone({
 
         <AnimatePresence mode="wait">
           {selectedFile ? (
-            <motion.div
+            <m.div
               key="selected"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -147,9 +147,9 @@ export function FileDropzone({
                   Detected: {selectedFile.format}
                 </p>
               </div>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -161,7 +161,7 @@ export function FileDropzone({
                 <div className="absolute h-20 w-20 rounded-full bg-[var(--glow-teal)] opacity-40 blur-xl group-hover:opacity-60" />
                 <div className="relative flex gap-1.5">
                   {[0, 0.2, 0.4, 0.6, 0.8].map((delay, i) => (
-                    <motion.div
+                    <m.div
                       key={i}
                       className="h-3 w-3 rounded-full"
                       style={{
@@ -215,7 +215,7 @@ export function FileDropzone({
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
@@ -231,7 +231,7 @@ export function FileDropzone({
       {/* Error */}
       <AnimatePresence>
         {error && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
@@ -240,7 +240,7 @@ export function FileDropzone({
           >
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{error}</span>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -37,7 +37,7 @@ export function ThemeToggle() {
       <Sun className="absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--text-dim)]" aria-hidden="true" />
 
       {/* Thumb */}
-      <motion.div
+      <m.div
         layout
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
         className="flex h-5 w-5 items-center justify-center rounded-full shadow-lg"
@@ -53,7 +53,7 @@ export function ThemeToggle() {
       >
         <AnimatePresence mode="wait">
           {isDark ? (
-            <motion.div
+            <m.div
               key="moon"
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
@@ -61,9 +61,9 @@ export function ThemeToggle() {
               transition={{ duration: 0.2 }}
             >
               <Moon className="h-2.5 w-2.5 text-[#050810]" />
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="sun"
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
@@ -71,10 +71,10 @@ export function ThemeToggle() {
               transition={{ duration: 0.2 }}
             >
               <Sun className="h-2.5 w-2.5 text-[#050810]" />
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
     </button>
   );
 }

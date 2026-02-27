@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { FileDown, Lock, Shield, X } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -130,7 +130,7 @@ export function SaveOptionsModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
@@ -139,7 +139,7 @@ export function SaveOptionsModal({
           onClick={handleBackdropClick}
           role="presentation"
         >
-          <motion.div
+          <m.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -270,8 +270,8 @@ export function SaveOptionsModal({
                 </GlassCard>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

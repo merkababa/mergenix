@@ -4,7 +4,7 @@ import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('framer-motion', () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: any) => {
       const {
         initial, animate, exit, transition, variants,

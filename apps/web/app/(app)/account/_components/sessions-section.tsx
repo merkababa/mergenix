@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Monitor, Smartphone, Globe, Clock, Trash2 } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
@@ -144,7 +144,7 @@ export function SessionsSection() {
       {/* Error state */}
       <AnimatePresence mode="wait">
         {error && !isLoading && (
-          <motion.div
+          <m.div
             key="error"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ export function SessionsSection() {
             role="alert"
           >
             {error}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -166,7 +166,7 @@ export function SessionsSection() {
               : Monitor;
 
             return (
-              <motion.div
+              <m.div
                 key={session.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -220,7 +220,7 @@ export function SessionsSection() {
                     </Button>
                   )}
                 </div>
-              </motion.div>
+              </m.div>
             );
           })}
 

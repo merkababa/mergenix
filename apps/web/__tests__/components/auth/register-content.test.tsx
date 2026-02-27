@@ -96,7 +96,7 @@ vi.mock('@/lib/animation-variants', () => ({
 }));
 
 vi.mock('framer-motion', () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: any) => {
       const { variants, initial, animate, exit, transition, ...rest } = props;
       return <div {...rest}>{children}</div>;

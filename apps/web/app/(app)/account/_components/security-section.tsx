@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Shield, Key, Smartphone } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -111,7 +111,7 @@ export function SecuritySection() {
           {/* Inline disable 2FA form with animation */}
           <AnimatePresence>
             {showDisable2FA && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
@@ -146,7 +146,7 @@ export function SecuritySection() {
                     </Button>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

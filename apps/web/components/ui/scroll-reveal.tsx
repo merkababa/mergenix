@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion, type Variants } from "framer-motion";
+import { m, type Variants } from "framer-motion";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ const directionOffsets: Record<
 
 /**
  * Framer Motion wrapper for scroll-triggered reveal animations.
- * Wraps children in a `motion.div` that fades in and slides from
+ * Wraps children in a `m.div` that fades in and slides from
  * the specified direction when the element enters the viewport.
  */
 export function ScrollReveal({
@@ -54,7 +54,7 @@ export function ScrollReveal({
   );
 
   return (
-    <motion.div
+    <m.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: "-50px" }}
@@ -67,6 +67,6 @@ export function ScrollReveal({
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

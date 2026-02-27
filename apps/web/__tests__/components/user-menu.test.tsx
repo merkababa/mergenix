@@ -5,7 +5,7 @@ import { useAuthStore } from '../../lib/stores/auth-store';
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('framer-motion', () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: any) => {
       const {
         initial, animate, exit, transition, variants,

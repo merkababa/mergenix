@@ -11,11 +11,11 @@ from pydantic import BaseModel, Field
 
 
 class RecordConsentRequest(BaseModel):
-    """Record a consent event (terms, privacy, cookies, age_verification)."""
+    """Record a consent event (terms, privacy, cookies, age_verification, genetic_data_processing)."""
 
     consent_type: str = Field(
         ...,
-        pattern=r"^(terms|privacy|cookies|age_verification)$",
+        pattern=r"^(terms|privacy|cookies|age_verification|genetic_data_processing)$",
         description="Type of consent being recorded",
     )
     version: str = Field(

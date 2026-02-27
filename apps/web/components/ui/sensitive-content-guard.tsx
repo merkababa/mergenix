@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -205,7 +205,7 @@ export function SensitiveContentGuard({
       {/* Autosomal Dominant warning modal */}
       <AnimatePresence>
         {showAdWarning && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-50 flex items-center justify-center"
             variants={overlayVariants}
             initial="hidden"
@@ -219,7 +219,7 @@ export function SensitiveContentGuard({
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.6)]" aria-hidden="true" />
 
             {/* Modal panel */}
-            <motion.div
+            <m.div
               ref={modalRef}
               role="alertdialog"
               aria-modal="true"
@@ -267,8 +267,8 @@ export function SensitiveContentGuard({
                   Continue
                 </Button>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

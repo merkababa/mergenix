@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { User, CreditCard, Activity, LogOut, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -89,7 +89,7 @@ export function UserMenu() {
       {/* Dropdown */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             ref={menuRef}
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -145,7 +145,7 @@ export function UserMenu() {
                 Sign Out
               </button>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

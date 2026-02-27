@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Mail, ChevronRight, ArrowLeft, CheckCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -36,12 +36,12 @@ export function ForgotPasswordContent() {
 
   return (
     <>
-      <motion.div variants={fadeUp} initial="hidden" animate="visible">
+      <m.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
           <AnimatePresence mode="wait">
             {!sent ? (
-              <motion.div
+              <m.div
                 key="form"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -68,7 +68,7 @@ export function ForgotPasswordContent() {
                 {/* Error banner (rate-limit only) */}
                 <AnimatePresence mode="wait">
                   {error && (
-                    <motion.div
+                    <m.div
                       key="error"
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ export function ForgotPasswordContent() {
                       role="alert"
                     >
                       {error}
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
 
@@ -115,9 +115,9 @@ export function ForgotPasswordContent() {
                     Back to Login
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="success"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -165,21 +165,21 @@ export function ForgotPasswordContent() {
                     Back to Login
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* Trust footer — reusable component (#3, #5) */}
-      <motion.div
+      <m.div
         variants={fadeUp}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.15 }}
       >
         <TrustSignals />
-      </motion.div>
+      </m.div>
     </>
   );
 }

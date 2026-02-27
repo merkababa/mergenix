@@ -90,6 +90,7 @@ from app.utils.cookies import (
 )
 from app.utils.request_helpers import client_ip as _client_ip_shared
 from app.utils.request_helpers import user_agent as _user_agent_shared
+from app.utils.encryption import decrypt_totp_secret, encrypt_totp_secret
 from app.utils.security import constant_time_compare, hash_token
 
 logger = logging.getLogger(__name__)
@@ -390,6 +391,16 @@ async def login(
             detail={"error": "Invalid email or password.", "code": "INVALID_CREDENTIALS"},
         )
 
+    # ── Email verification gate ──────────────────────────────────────
+    if not user.email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": "Please verify your email address before logging in. Check your inbox for the verification link.",
+                "code": "EMAIL_NOT_VERIFIED",
+            },
+        )
+
     # Check if 2FA is required
     if user.totp_enabled:
         # Generate an opaque challenge token instead of exposing the user UUID.
@@ -533,7 +544,7 @@ async def login_2fa(
 
     # Fall back to TOTP verification if backup code didn't match
     if not code_accepted:
-        if verify_totp(user.totp_secret, body.code):
+        if verify_totp(decrypt_totp_secret(user.totp_secret), body.code):
             code_accepted = True
 
     if not code_accepted:
@@ -1307,7 +1318,7 @@ async def setup_2fa(
         )
 
     secret = generate_totp_secret()
-    user.totp_secret = secret
+    user.totp_secret = encrypt_totp_secret(secret)
 
     await audit_service.log_event(
         db,
@@ -1355,7 +1366,7 @@ async def verify_2fa(
             detail={"error": "Call /auth/2fa/setup first.", "code": "2FA_NOT_SETUP"},
         )
 
-    if not verify_totp(user.totp_secret, body.code):
+    if not verify_totp(decrypt_totp_secret(user.totp_secret), body.code):
         await audit_service.log_event(
             db,
             user_id=user.id,
@@ -1414,7 +1425,7 @@ async def disable_2fa(
             detail={"error": "2FA is not enabled.", "code": "2FA_NOT_ENABLED"},
         )
 
-    if not verify_totp(user.totp_secret, body.code):
+    if not verify_totp(decrypt_totp_secret(user.totp_secret), body.code):
         await audit_service.log_event(
             db,
             user_id=user.id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { fadeUp, fadeIn, createStaggerContainer } from "@/lib/animation-variants";
 import { SAMPLE_REPORT_DATA, SAMPLE_COUPLE } from "@/lib/data/sample-report-data";
@@ -52,7 +52,7 @@ export function SampleReportContent() {
   return (
     <>
       {/* Heading */}
-      <motion.div
+      <m.div
         className="mb-8 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -64,10 +64,10 @@ export function SampleReportContent() {
         <p className="mx-auto mt-3 max-w-2xl font-body text-base text-[var(--text-muted)] md:text-lg">
           {`Fictional analysis for ${SAMPLE_COUPLE.parentA} & ${SAMPLE_COUPLE.parentB}`}
         </p>
-      </motion.div>
+      </m.div>
 
       {/* Disclaimer */}
-      <motion.div
+      <m.div
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
@@ -87,11 +87,11 @@ export function SampleReportContent() {
             for any medical decisions.
           </p>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* ── Carrier Screening Section ── */}
       <section className="mt-8" aria-labelledby="carrier-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -104,9 +104,9 @@ export function SampleReportContent() {
             <Dna className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
             Carrier Screening Results
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="grid gap-3"
           variants={gridStagger}
           initial="hidden"
@@ -114,7 +114,7 @@ export function SampleReportContent() {
           viewport={{ once: true }}
         >
           {data.carrier.map((result) => (
-            <motion.div key={result.rsid} variants={fadeUp}>
+            <m.div key={result.rsid} variants={fadeUp}>
               <GlassCard variant="subtle" hover="none" className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -132,14 +132,14 @@ export function SampleReportContent() {
                   </span>
                 </div>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── Traits Section ── */}
       <section className="mt-16" aria-labelledby="traits-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -152,9 +152,9 @@ export function SampleReportContent() {
             <FlaskConical className="h-5 w-5 text-[var(--accent-violet)]" aria-hidden="true" />
             Trait Predictions
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           variants={gridStagger}
           initial="hidden"
@@ -164,7 +164,7 @@ export function SampleReportContent() {
           {data.traits
             .filter((t) => t.status === "success")
             .map((trait) => (
-              <motion.div key={trait.rsid} variants={fadeUp}>
+              <m.div key={trait.rsid} variants={fadeUp}>
                 <GlassCard variant="subtle" hover="glow" className="h-full p-5">
                   <h3 className="text-sm font-semibold text-[var(--text-heading)]">
                     {trait.trait}
@@ -188,14 +188,14 @@ export function SampleReportContent() {
                     )}
                   </div>
                 </GlassCard>
-              </motion.div>
+              </m.div>
             ))}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── PGx Section ── */}
       <section className="mt-16" aria-labelledby="pgx-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -208,9 +208,9 @@ export function SampleReportContent() {
             <Pill className="h-5 w-5 text-[var(--accent-cyan)]" aria-hidden="true" />
             Pharmacogenomics (PGx)
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           variants={gridStagger}
           initial="hidden"
@@ -218,7 +218,7 @@ export function SampleReportContent() {
           viewport={{ once: true }}
         >
           {Object.values(data.pgx.results).map((gene) => (
-            <motion.div key={gene.gene} variants={fadeUp}>
+            <m.div key={gene.gene} variants={fadeUp}>
               <GlassCard variant="subtle" hover="glow" className="h-full p-5">
                 <h3 className="text-sm font-semibold text-[var(--text-heading)]">
                   {gene.gene}
@@ -251,14 +251,14 @@ export function SampleReportContent() {
                   </div>
                 </div>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── PRS Section ── */}
       <section className="mt-16" aria-labelledby="prs-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -277,9 +277,9 @@ export function SampleReportContent() {
             individuals of non-European ancestry. Interpret these scores with caution
             and discuss with a genetic counselor if your ancestry differs.
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           variants={gridStagger}
           initial="hidden"
@@ -287,7 +287,7 @@ export function SampleReportContent() {
           viewport={{ once: true }}
         >
           {Object.values(data.prs.conditions).map((condition) => (
-            <motion.div key={condition.name} variants={fadeUp}>
+            <m.div key={condition.name} variants={fadeUp}>
               <GlassCard variant="subtle" hover="glow" className="h-full p-5">
                 <h3 className="text-sm font-semibold text-[var(--text-heading)]">
                   {condition.name}
@@ -323,14 +323,14 @@ export function SampleReportContent() {
                   )}
                 </div>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── Counseling Section ── */}
       <section className="mt-16" aria-labelledby="counseling-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -343,9 +343,9 @@ export function SampleReportContent() {
             <Stethoscope className="h-5 w-5 text-[var(--accent-rose)]" aria-hidden="true" />
             Genetic Counseling Recommendation
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -399,7 +399,7 @@ export function SampleReportContent() {
               Find a counselor (NSGC)
             </a>
           </p>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── Call to Action ──────────────────────────────────────────── */}

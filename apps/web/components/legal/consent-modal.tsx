@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { FileSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";
@@ -148,14 +148,14 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
-          <motion.div
+          <m.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -254,8 +254,8 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                 special category (genetic) data.
               </p>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

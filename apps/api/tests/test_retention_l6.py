@@ -4,7 +4,7 @@ Tests for L6 — Data Retention Enforcement (new functionality).
 TDD: tests are written FIRST. All tests should FAIL until implementation is complete.
 
 Covers:
-- RetentionService.purge_inactive_users (3yr+ free-tier inactivity)
+- RetentionService.purge_inactive_users (2yr+ free-tier inactivity)
 - RetentionService.purge_expired_payments (7yr+ payment records)
 - RetentionService.purge_expired_audit_logs (90-day shorthand)
 - RetentionService.run_all_purges (aggregation)
@@ -110,14 +110,14 @@ def _make_audit_log(*, user_id: uuid.UUID | None = None, created_at: datetime) -
 
 
 @pytest.mark.asyncio
-async def test_purge_inactive_user_at_3yr_plus_1day(
+async def test_purge_inactive_user_at_2yr_plus_1day(
     db_session: AsyncSession,
 ) -> None:
-    """Free-tier user with last_login_at 3yr+1day ago should be purged."""
+    """Free-tier user with last_login_at 2yr+1day ago should be purged."""
     from app.services.retention_service import RetentionService
 
     now = datetime.now(UTC)
-    user = _make_user(last_login_at=now - timedelta(days=365 * 3 + 1))
+    user = _make_user(last_login_at=now - timedelta(days=365 * 2 + 1))
     db_session.add(user)
     await db_session.commit()
 
@@ -131,14 +131,14 @@ async def test_purge_inactive_user_at_3yr_plus_1day(
 
 
 @pytest.mark.asyncio
-async def test_purge_inactive_user_at_exactly_3yr_minus_1day_retained(
+async def test_purge_inactive_user_at_exactly_2yr_minus_1day_retained(
     db_session: AsyncSession,
 ) -> None:
-    """Free-tier user with last_login_at 2yr+364days ago should NOT be purged."""
+    """Free-tier user with last_login_at exactly 2yr-1day ago should NOT be purged."""
     from app.services.retention_service import RetentionService
 
     now = datetime.now(UTC)
-    user = _make_user(last_login_at=now - timedelta(days=365 * 3 - 1))
+    user = _make_user(last_login_at=now - timedelta(days=365 * 2 - 1))
     db_session.add(user)
     await db_session.commit()
 
@@ -509,8 +509,8 @@ async def test_run_all_purges_returns_summary_dict(
     )
     db_session.add(old_payment)
 
-    # Inactive free user (3yr+1day)
-    inactive_user = _make_user(last_login_at=now - timedelta(days=365 * 3 + 1))
+    # Inactive free user (2yr+1day)
+    inactive_user = _make_user(last_login_at=now - timedelta(days=365 * 2 + 1))
     db_session.add(inactive_user)
 
     await db_session.commit()

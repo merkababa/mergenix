@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef, useId } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Trash2, AlertTriangle, X } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -177,7 +177,7 @@ export function DeleteAccountSection({
       {/* ── Confirmation Modal ───────────────────────────────────────── */}
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div
+          <m.div
             variants={overlayVariants}
             initial="hidden"
             animate="visible"
@@ -186,7 +186,7 @@ export function DeleteAccountSection({
             onClick={handleBackdropClick}
             role="presentation"
           >
-            <motion.div
+            <m.div
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -269,7 +269,7 @@ export function DeleteAccountSection({
                 {/* ── Error message ─────────────────────────────────── */}
                 <AnimatePresence mode="wait">
                   {error && (
-                    <motion.div
+                    <m.div
                       key="error"
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -279,7 +279,7 @@ export function DeleteAccountSection({
                       aria-live="assertive"
                     >
                       {error}
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
 
@@ -307,8 +307,8 @@ export function DeleteAccountSection({
                   </Button>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

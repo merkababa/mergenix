@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   RotateCcw,
 } from "lucide-react";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -276,7 +276,7 @@ function DiseaseCatalogInner() {
   return (
     <>
       {/* -- Header -- */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -289,10 +289,10 @@ function DiseaseCatalogInner() {
           Browse our comprehensive database of {stats.totalDiseases.toLocaleString()} genetic
           conditions across {stats.categoryCount} clinical categories
         </p>
-      </motion.div>
+      </m.div>
 
       {/* -- Stats -- */}
-      <motion.div
+      <m.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-30px" }}
@@ -300,7 +300,7 @@ function DiseaseCatalogInner() {
         className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4"
       >
         {statItems.map(({ icon: Icon, value, label }) => (
-          <motion.div key={label} variants={catalogCardVariants}>
+          <m.div key={label} variants={catalogCardVariants}>
             <GlassCard
               variant="medium"
               hover="glow"
@@ -313,12 +313,12 @@ function DiseaseCatalogInner() {
                 {label}
               </div>
             </GlassCard>
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* -- Search & Filters -- */}
-      <motion.div
+      <m.div
         initial="hidden"
         animate="visible"
         variants={filterPanelVariants}
@@ -361,7 +361,7 @@ function DiseaseCatalogInner() {
               />
 
               {hasActiveFilters && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2 }}
@@ -376,12 +376,12 @@ function DiseaseCatalogInner() {
                     <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                     Reset
                   </Button>
-                </motion.div>
+                </m.div>
               )}
             </div>
           </div>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* -- Results count -- */}
       <p className="mb-4 text-center text-sm text-[var(--text-muted)]" role="status" aria-live="polite">
@@ -396,7 +396,7 @@ function DiseaseCatalogInner() {
 
       {/* -- Disease Grid or Empty State -- */}
       {paginated.length > 0 ? (
-        <motion.div
+        <m.div
           key={`${category}-${inheritance}-${severity}-${search}-${safePage}`}
           initial="hidden"
           whileInView="visible"
@@ -405,7 +405,7 @@ function DiseaseCatalogInner() {
           className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
         >
           {paginated.map((disease: DiseaseEntry) => (
-            <motion.div key={disease.slug} variants={catalogCardVariants}>
+            <m.div key={disease.slug} variants={catalogCardVariants}>
               <Link
                 href={`/diseases/${disease.slug}`}
                 className="group block h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] rounded-[20px]"
@@ -471,12 +471,12 @@ function DiseaseCatalogInner() {
                   </div>
                 </GlassCard>
               </Link>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       ) : (
         /* -- Empty State -- */
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
@@ -498,7 +498,7 @@ function DiseaseCatalogInner() {
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Reset All Filters
           </Button>
-        </motion.div>
+        </m.div>
       )}
 
       {/* -- Pagination -- */}

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";
@@ -116,14 +116,14 @@ export function AgeVerificationModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
-          <motion.div
+          <m.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -206,8 +206,8 @@ export function AgeVerificationModal({
                 governing genetic health information services.
               </p>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

@@ -3,7 +3,7 @@
 import { useState, useMemo, type FormEvent } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import {
   Lock,
   CheckCircle,
@@ -75,12 +75,12 @@ export function ResetPasswordContent() {
 
   return (
     <>
-      <motion.div variants={fadeUp} initial="hidden" animate="visible">
+      <m.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
           <AnimatePresence mode="wait">
             {pageState === "form" && (
-              <motion.div
+              <m.div
                 key="form"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -160,11 +160,11 @@ export function ResetPasswordContent() {
                     Back to Login
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             )}
 
             {pageState === "success" && (
-              <motion.div
+              <m.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -187,11 +187,11 @@ export function ResetPasswordContent() {
                     Sign In
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             )}
 
             {pageState === "error" && (
-              <motion.div
+              <m.div
                 key="error"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -221,21 +221,21 @@ export function ResetPasswordContent() {
                     Back to Login
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* Trust footer — reusable component */}
-      <motion.div
+      <m.div
         variants={fadeUp}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.15 }}
       >
         <TrustSignals />
-      </motion.div>
+      </m.div>
     </>
   );
 }

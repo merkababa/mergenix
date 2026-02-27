@@ -10,7 +10,7 @@ import {
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock("framer-motion", () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: any) => {
       const {
         initial,

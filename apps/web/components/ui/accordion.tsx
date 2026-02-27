@@ -4,7 +4,7 @@ import { type ReactNode, useState, useCallback, useId } from "react";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 interface AccordionItem {
   question: string;
@@ -56,18 +56,18 @@ export function Accordion({ items, className }: AccordionProps) {
               onClick={() => toggle(index)}
             >
               <span>{item.question}</span>
-              <motion.span
+              <m.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.25, ease: "easeInOut" }}
                 className="shrink-0 text-[var(--text-muted)]"
               >
                 <ChevronDown className="h-5 w-5" aria-hidden="true" />
-              </motion.span>
+              </m.span>
             </button>
 
             <AnimatePresence initial={false}>
               {isOpen && (
-                <motion.div
+                <m.div
                   id={panelId}
                   role="region"
                   aria-labelledby={triggerId}
@@ -80,7 +80,7 @@ export function Accordion({ items, className }: AccordionProps) {
                   <div className="px-6 pb-5 text-sm leading-relaxed text-[var(--text-body)]">
                     {item.answer}
                   </div>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 

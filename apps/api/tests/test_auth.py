@@ -133,6 +133,21 @@ async def test_login_nonexistent_user(client: AsyncClient) -> None:
     assert response.status_code == 401
 
 
+@pytest.mark.asyncio
+async def test_login_unverified_email_returns_403(
+    client: AsyncClient,
+    unverified_user: User,
+) -> None:
+    """Login with correct password but unverified email returns 403."""
+    response = await client.post(
+        "/auth/login",
+        json={"email": unverified_user.email, "password": "UnverPass123"},
+    )
+    assert response.status_code == 403
+    data = response.json()
+    assert data["detail"]["code"] == "EMAIL_NOT_VERIFIED"
+
+
 # ── Cookie-Based Auth ────────────────────────────────────────────────────
 
 

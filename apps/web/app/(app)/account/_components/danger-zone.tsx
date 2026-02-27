@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronDown, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ export function DangerZone() {
   const canDelete = password.trim().length > 0 && confirmed;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
@@ -64,18 +64,18 @@ export function DangerZone() {
           <h2 className="flex-1 font-heading text-lg font-bold text-[var(--accent-rose)]">
             Danger Zone
           </h2>
-          <motion.div
+          <m.div
             animate={{ rotate: isExpanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
             <ChevronDown className="h-5 w-5 text-[var(--text-muted)]" />
-          </motion.div>
+          </m.div>
         </button>
 
         {/* Expandable content */}
         <AnimatePresence>
           {isExpanded && (
-            <motion.div
+            <m.div
               id="danger-zone-content"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -132,7 +132,7 @@ export function DangerZone() {
                 {/* Error message */}
                 <AnimatePresence mode="wait">
                   {error && (
-                    <motion.div
+                    <m.div
                       key="error"
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -141,7 +141,7 @@ export function DangerZone() {
                       role="alert"
                     >
                       {error}
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
 
@@ -157,7 +157,7 @@ export function DangerZone() {
                   Delete My Account Permanently
                 </Button>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
@@ -170,6 +170,6 @@ export function DangerZone() {
           </Link>
         </p>
       </GlassCard>
-    </motion.div>
+    </m.div>
   );
 }

@@ -166,6 +166,7 @@ async function executeRequest<T>(options: RequestOptions): Promise<T> {
 
   const headers: Record<string, string> = {
     Accept: "application/json",
+    "X-Requested-With": "XMLHttpRequest",
     ...extraHeaders,
   };
   if (method !== "GET" && method !== "HEAD") {

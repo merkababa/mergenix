@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Shield, FileText, Cookie, Lock, Scale, Clock } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
@@ -41,7 +41,7 @@ export function LegalContent() {
   return (
     <>
       {/* -- Page header -- */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -64,7 +64,7 @@ export function LegalContent() {
         <p className="mx-auto mt-3 max-w-2xl font-body text-base text-[var(--text-muted)] md:text-lg">
           Our commitment to transparency, privacy, and your rights.
         </p>
-      </motion.div>
+      </m.div>
 
       {/* -- Last Updated -- */}
       <p className="mb-8 text-center text-xs text-[var(--text-dim)]">
@@ -72,7 +72,7 @@ export function LegalContent() {
       </p>
 
       {/* -- Privacy highlight (scale-in) -- */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -91,7 +91,7 @@ export function LegalContent() {
             </p>
           </div>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* -- Mobile TOC (horizontal pills) -- */}
       <nav className="mb-6 flex gap-2 overflow-x-auto pb-2 lg:hidden" aria-label="Table of contents">

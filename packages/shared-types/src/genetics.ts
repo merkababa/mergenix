@@ -327,6 +327,22 @@ export interface PrsConditionResult {
   ancestryNote: string;
   /** Literature reference. */
   reference: string;
+  /**
+   * Whether this condition should be hidden for the inferred ancestry group.
+   * Set to true when ui_recommendation === "hide" in ancestry_transferability.
+   * Only present when inferredAncestry was provided to analyzePrs().
+   */
+  hidden?: boolean;
+  /**
+   * Human-readable explanation of why this condition is hidden.
+   * Populated from the ancestry_transferability note when hidden === true.
+   */
+  hiddenReason?: string;
+  /**
+   * Amber caution note for this condition for the inferred ancestry group.
+   * Populated from the ancestry_transferability note when ui_recommendation === "caution".
+   */
+  cautionNote?: string;
 }
 
 /**

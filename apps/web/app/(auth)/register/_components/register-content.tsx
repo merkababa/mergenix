@@ -8,7 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import {
-  motion,
+  m,
   AnimatePresence,
 } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -232,7 +232,7 @@ export function RegisterContent() {
       <AnimatePresence mode="wait">
         {!registrationSuccess ? (
           /* ────────────────── Registration Form ────────────────── */
-          <motion.div
+          <m.div
             key="register-form"
             variants={formVariants}
             initial="hidden"
@@ -261,7 +261,7 @@ export function RegisterContent() {
               {/* General error banner */}
               <AnimatePresence mode="wait">
                 {generalError && (
-                  <motion.div
+                  <m.div
                     key="error"
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -270,7 +270,7 @@ export function RegisterContent() {
                     role="alert"
                   >
                     {generalError}
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
 
@@ -443,7 +443,7 @@ export function RegisterContent() {
             </GlassCard>
 
             {/* Trust footer — reusable component (#3, #5) */}
-            <motion.div variants={fadeUp} initial="hidden" animate="visible">
+            <m.div variants={fadeUp} initial="hidden" animate="visible">
               <TrustSignals
                 lines={[
                   "Your DNA never leaves your device",
@@ -451,11 +451,11 @@ export function RegisterContent() {
                   "Encrypted in transit. HIPAA-conscious design.",
                 ]}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         ) : (
           /* ────────────────── Success Screen ────────────────── */
-          <motion.div
+          <m.div
             key="register-success"
             variants={successVariants}
             initial="hidden"
@@ -467,17 +467,17 @@ export function RegisterContent() {
               className="p-8 md:p-10 text-center"
             >
               {/* Animated envelope icon */}
-              <motion.div
+              <m.div
                 variants={envelopeVariants}
                 initial="hidden"
                 animate="visible"
                 className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] ring-1 ring-[rgba(6,214,160,0.2)]"
               >
                 <Mail className="h-10 w-10 text-[var(--accent-teal)]" />
-              </motion.div>
+              </m.div>
 
               {/* Animated checkmark */}
-              <motion.div
+              <m.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{
@@ -489,7 +489,7 @@ export function RegisterContent() {
                 className="mx-auto -mt-4 mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-teal)]"
               >
                 <CheckCircle2 className="h-5 w-5 text-[var(--bg-deep)]" />
-              </motion.div>
+              </m.div>
 
               <h2 className="gradient-text mb-2 font-heading text-2xl font-extrabold">
                 Check your email
@@ -549,15 +549,15 @@ export function RegisterContent() {
             </GlassCard>
 
             {/* Trust footer */}
-            <motion.div variants={fadeUp} initial="hidden" animate="visible">
+            <m.div variants={fadeUp} initial="hidden" animate="visible">
               <TrustSignals
                 lines={[
                   "Your DNA never leaves your device",
                   "Encrypted in transit. HIPAA-conscious design.",
                 ]}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

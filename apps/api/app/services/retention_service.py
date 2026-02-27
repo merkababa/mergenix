@@ -3,7 +3,7 @@ Data Retention Service — GDPR Art 5(1)(e) storage limitation enforcement.
 
 Implements TTL-based purge mechanisms for:
   - Audit log records (security, general, and orphaned categories)
-  - Inactive free-tier user accounts (3-year inactivity threshold)
+  - Inactive free-tier user accounts (2-year inactivity threshold)
   - Payment records older than 7 years (financial record retention limit)
 
 All purge operations support dry_run=True to preview counts without deleting.
@@ -18,8 +18,8 @@ Retention Policies:
         - General/unknown events: 1 year
 
     Inactive Users (free tier only):
-        - Free-tier users inactive for 3+ years are purged.
-        - "Inactive" = last_login_at (or created_at if NULL) older than 3 years.
+        - Free-tier users inactive for 2+ years are purged.
+        - "Inactive" = last_login_at (or created_at if NULL) older than 2 years.
         - Paying subscribers (tier != 'free') are NEVER auto-purged.
         - Cascade: deletes their AnalysisResult rows.
         - FK on payments is SET NULL — payment records survive for compliance.
@@ -123,7 +123,7 @@ GENERAL_RETENTION_DAYS: int = 365     # 1 year
 ORPHANED_RETENTION_DAYS: int = 90     # 90 days
 
 # Inactive user purge threshold (free tier only)
-USER_INACTIVITY_DAYS: int = 365 * 3   # 3 years
+USER_INACTIVITY_DAYS: int = 365 * 2   # 2 years
 
 # Payment retention threshold (financial compliance)
 PAYMENT_RETENTION_DAYS: int = 365 * 7  # 7 years
@@ -279,10 +279,10 @@ class RetentionService:
         db: AsyncSession,
         dry_run: bool = False,
     ) -> int:
-        """Delete (or count) free-tier users inactive for 3+ years.
+        """Delete (or count) free-tier users inactive for 2+ years.
 
         A user is considered inactive when:
-          max(last_login_at, created_at) < now - 3 years
+          max(last_login_at, created_at) < now - 2 years
 
         If last_login_at IS NULL, created_at is used as the activity anchor
         (safe fallback for legacy accounts that predate this column).

@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { memo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface PrsGaugeProps {
@@ -89,7 +89,7 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
           />
 
           {/* Filled portion */}
-          <motion.path
+          <m.path
             d={`M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx + radius} ${cy}`}
             fill="none"
             stroke={color}
@@ -102,7 +102,7 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
           />
 
           {/* Needle */}
-          <motion.g
+          <m.g
             initial={{ rotate: -180 }}
             animate={{ rotate: needleAngle }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
@@ -118,7 +118,7 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
               strokeLinecap="round"
             />
             <circle cx={cx} cy={cy} r="4" fill={color} />
-          </motion.g>
+          </m.g>
 
           {/* Scale labels */}
           <text x="16" y="115" className="fill-[var(--text-dim)] text-[9px] font-body">
@@ -134,7 +134,7 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
 
         {/* Center text */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.3 }}
@@ -147,7 +147,7 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
               {Math.round(clamped)}
             </span>
             <span className="ml-0.5 text-xs text-[var(--text-dim)]">th</span>
-          </motion.div>
+          </m.div>
         </div>
       </div>
 

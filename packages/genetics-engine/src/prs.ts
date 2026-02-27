@@ -73,7 +73,8 @@ const EUROPEAN_DERIVED_POPULATION_NOTE =
 // ─── Extended Types ─────────────────────────────────────────────────────────
 
 /**
- * Extended PRS condition result with coverage threshold and population note.
+ * Extended PRS condition result with coverage threshold, population note,
+ * and ancestry-based hide/caution enforcement fields.
  * Extends the base PrsConditionResult from shared-types with additional fields.
  */
 export interface EnhancedPrsConditionResult extends PrsConditionResult {
@@ -89,6 +90,25 @@ export interface EnhancedPrsConditionResult extends PrsConditionResult {
    * are European-derived.
    */
   populationNote: string;
+
+  /**
+   * Whether this condition should be hidden for the inferred ancestry group.
+   * Set to true when ui_recommendation === "hide" in ancestry_transferability.
+   * Only present when inferredAncestry was provided to analyzePrs().
+   */
+  hidden?: boolean;
+
+  /**
+   * Human-readable explanation of why this condition is hidden.
+   * Populated from the ancestry_transferability note when hidden === true.
+   */
+  hiddenReason?: string;
+
+  /**
+   * Amber caution note for this condition for the inferred ancestry group.
+   * Populated from the ancestry_transferability note when ui_recommendation === "caution".
+   */
+  cautionNote?: string;
 }
 
 /**
@@ -635,6 +655,7 @@ export function predictOffspringPrsClt(
  * - Coverage threshold: <75% SNP coverage flags insufficientCoverage
  * - CLT-based offspring prediction with 25th-75th percentile IQR
  * - Population note for European-derived PRS weights
+ * - Ancestry-based hide/caution enforcement via ancestry_transferability
  *
  * Ported from Source/prs.py `analyze_prs()`.
  *
@@ -642,6 +663,11 @@ export function predictOffspringPrsClt(
  * @param parentBSnps - Parent B's genotype map
  * @param prsWeights - Full PRS weights data
  * @param tier - Pricing tier (default: "free")
+ * @param inferredAncestry - Optional inferred ancestry code ("EUR", "AFR", "EAS", "SAS", "AMR").
+ *   When provided, each condition is checked against ancestry_transferability:
+ *   - ui_recommendation === "hide" → hidden: true, hiddenReason set from note
+ *   - ui_recommendation === "caution" → cautionNote set from note
+ *   When omitted (undefined/null), no ancestry filtering is applied (backward-compatible).
  * @returns Full PRS analysis result with enhanced fields
  */
 export function analyzePrs(
@@ -649,6 +675,7 @@ export function analyzePrs(
   parentBSnps: GenotypeMap,
   prsWeights: PrsWeightsData,
   tier: Tier = 'free',
+  inferredAncestry?: string | null,
 ): EnhancedPrsAnalysisResult {
   // Determine condition limit from centralized tier gating config
   const conditionLimit: number = TIER_GATING[tier].prsConditionLimit;
@@ -727,6 +754,23 @@ export function analyzePrs(
     // Generate population note based on ancestry of PRS weights
     const populationNote = getPopulationNote(conditionData.ancestry_note ?? '');
 
+    // Determine ancestry-based hide/caution flags when inferredAncestry is provided
+    let hidden: boolean | undefined;
+    let hiddenReason: string | undefined;
+    let cautionNote: string | undefined;
+
+    if (inferredAncestry) {
+      const ancestryMeta = conditionData.ancestry_transferability?.[inferredAncestry];
+      if (ancestryMeta) {
+        if (ancestryMeta.ui_recommendation === 'hide') {
+          hidden = true;
+          hiddenReason = ancestryMeta.note;
+        } else if (ancestryMeta.ui_recommendation === 'warning' || ancestryMeta.ui_recommendation === 'caution') {
+          cautionNote = ancestryMeta.note;
+        }
+      }
+    }
+
     conditions[condition] = {
       name: conditionData.name,
       parentA,
@@ -736,6 +780,9 @@ export function analyzePrs(
       reference: conditionData.reference ?? '',
       insufficientCoverage,
       populationNote,
+      hidden,
+      hiddenReason,
+      cautionNote,
     };
   }
 

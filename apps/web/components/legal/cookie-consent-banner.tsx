@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";
@@ -156,7 +156,7 @@ export function CookieConsentBanner() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           variants={slideUpVariants}
           initial="hidden"
           animate="visible"
@@ -194,7 +194,7 @@ export function CookieConsentBanner() {
                 {/* Customize panel */}
                 <AnimatePresence>
                   {showCustomize && (
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
@@ -235,7 +235,7 @@ export function CookieConsentBanner() {
                           onToggle={handleToggleMarketing}
                         />
                       </div>
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
 
@@ -288,7 +288,7 @@ export function CookieConsentBanner() {
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

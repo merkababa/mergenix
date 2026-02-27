@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
       // Filter out motion-specific props
       const {

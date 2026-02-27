@@ -8005,21 +8005,21 @@
     "chromosome": "11",
     "inheritance": "additive",
     "alleles": {
-      "ref": "1G",
-      "alt": "2G"
+      "ref": "G",
+      "alt": "GG"
     },
     "phenotype_map": {
-      "1G1G": {
+      "GG": {
         "phenotype": "Lower Collagenase Activity",
         "description": "Homozygous 1G allele associated with lower MMP1 basal expression and reduced collagen I and III degradation in connective tissues.",
         "probability": "high"
       },
-      "1G2G": {
+      "GGG": {
         "phenotype": "Moderate Collagenase Activity",
         "description": "Heterozygous carriers show intermediate MMP1 expression; tissue remodeling is moderately elevated compared to 1G homozygotes.",
         "probability": "medium"
       },
-      "2G2G": {
+      "GGGG": {
         "phenotype": "Elevated Collagenase Activity",
         "description": "Homozygous 2G allele linked to higher MMP1 transcription, increased collagen degradation, and greater susceptibility to tendon and ligament injury.",
         "probability": "medium"
@@ -8038,7 +8038,7 @@
         "url": "https://www.ncbi.nlm.nih.gov/snp/rs1799750"
       }
     ],
-    "notes": "2G allele also studied in cardiovascular and cancer contexts. Collagen integrity depends on vitamin C and dietary protein adequacy. This is a risk factor, not a diagnosis."
+    "notes": "2G allele also studied in cardiovascular and cancer contexts. Collagen integrity depends on vitamin C and dietary protein adequacy. This is a risk factor, not a diagnosis. This variant uses simplified nucleotide notation (G/GG) for the -1607 1G/2G insertion polymorphism in the MMP-1 promoter. Note: This insertion/deletion polymorphism may not produce phenotype results from standard DTC genotyping chips, which typically report indels in I/D format rather than nucleotide sequences."
   },
   {
     "rsid": "rs9340799",
@@ -8693,23 +8693,23 @@
     "chromosome": "11",
     "inheritance": "additive",
     "alleles": {
-      "ref": "5A",
-      "alt": "6A"
+      "ref": "AAAAA",
+      "alt": "AAAAAA"
     },
     "phenotype_map": {
-      "5A5A": {
+      "AAAAAAAAAA": {
         "phenotype": "Higher MMP3 Expression",
-        "description": "Homozygous 5A allele associated with increased MMP3 promoter activity and elevated stromelysin levels, promoting greater matrix degradation.",
+        "description": "Homozygous 5A allele (ref/ref) associated with increased MMP3 promoter activity and elevated stromelysin levels, promoting greater matrix degradation.",
         "probability": "medium"
       },
-      "5A6A": {
+      "AAAAAAAAAAA": {
         "phenotype": "Intermediate MMP3 Activity",
-        "description": "Heterozygous carriers show intermediate MMP3 expression; cartilage turnover is between the two homozygous states.",
+        "description": "Heterozygous carriers (5A/6A) show intermediate MMP3 expression; cartilage turnover is between the two homozygous states.",
         "probability": "medium"
       },
-      "6A6A": {
+      "AAAAAAAAAAAA": {
         "phenotype": "Lower MMP3 Expression",
-        "description": "Homozygous 6A allele associated with reduced MMP3 transcription and slower cartilage matrix degradation under inflammatory conditions.",
+        "description": "Homozygous 6A allele (alt/alt) associated with reduced MMP3 transcription and slower cartilage matrix degradation under inflammatory conditions.",
         "probability": "high"
       }
     },
@@ -8726,7 +8726,7 @@
         "url": "https://www.ncbi.nlm.nih.gov/snp/rs3025058"
       }
     ],
-    "notes": "5A allele is associated with higher MMP3 and possibly faster cartilage wear under load. Anti-inflammatory lifestyle reduces matrix degradation risk. This is a risk factor, not a diagnosis."
+    "notes": "5A allele is associated with higher MMP3 and possibly faster cartilage wear under load. Anti-inflammatory lifestyle reduces matrix degradation risk. This is a risk factor, not a diagnosis. This variant uses simplified nucleotide notation (AAAAA/AAAAAA) for the -1171 5A/6A poly-A insertion polymorphism in the MMP-3 promoter. Note: This insertion/deletion polymorphism may not produce phenotype results from standard DTC genotyping chips, which typically report indels in I/D format rather than nucleotide sequences."
   },
   {
     "rsid": "rs1800629",

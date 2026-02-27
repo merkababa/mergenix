@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { User, Mail } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -111,7 +111,7 @@ export function ProfileSection() {
           </Button>
           <AnimatePresence>
             {saveSuccess && (
-              <motion.span
+              <m.span
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -8 }}
@@ -119,7 +119,7 @@ export function ProfileSection() {
                 className="text-xs font-medium text-[var(--accent-teal)]"
               >
                 Changes saved!
-              </motion.span>
+              </m.span>
             )}
           </AnimatePresence>
         </div>

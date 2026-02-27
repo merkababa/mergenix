@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, Mail, ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -76,12 +76,12 @@ export function VerifyEmailContent() {
 
   return (
     <>
-      <motion.div variants={fadeUp} initial="hidden" animate="visible">
+      <m.div variants={fadeUp} initial="hidden" animate="visible">
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
           <AnimatePresence mode="wait">
             {state === "loading" && (
-              <motion.div
+              <m.div
                 key="loading"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -99,11 +99,11 @@ export function VerifyEmailContent() {
                 <p className="mt-2 text-sm text-[var(--text-muted)]">
                   This will only take a moment.
                 </p>
-              </motion.div>
+              </m.div>
             )}
 
             {state === "success" && (
-              <motion.div
+              <m.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -111,7 +111,7 @@ export function VerifyEmailContent() {
                 transition={{ duration: 0.4 }}
                 className="py-4 text-center"
               >
-                <motion.div
+                <m.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
@@ -123,7 +123,7 @@ export function VerifyEmailContent() {
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]"
                 >
                   <CheckCircle className="h-9 w-9 text-[var(--accent-teal)]" />
-                </motion.div>
+                </m.div>
                 <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Email Verified!
                 </h1>
@@ -136,11 +136,11 @@ export function VerifyEmailContent() {
                     Continue to Sign In
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             )}
 
             {state === "error" && (
-              <motion.div
+              <m.div
                 key="error"
                 role="alert"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -149,7 +149,7 @@ export function VerifyEmailContent() {
                 transition={{ duration: 0.4 }}
                 className="py-4 text-center"
               >
-                <motion.div
+                <m.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
@@ -161,7 +161,7 @@ export function VerifyEmailContent() {
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]"
                 >
                   <XCircle className="h-9 w-9 text-[var(--accent-rose)]" />
-                </motion.div>
+                </m.div>
                 <h1 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
                   Verification Failed
                 </h1>
@@ -211,21 +211,21 @@ export function VerifyEmailContent() {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* Trust footer — reusable component */}
-      <motion.div
+      <m.div
         variants={fadeUp}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.15 }}
       >
         <TrustSignals />
-      </motion.div>
+      </m.div>
     </>
   );
 }

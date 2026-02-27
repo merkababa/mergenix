@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef, type RefObject } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Save, X, Crown, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -295,7 +295,7 @@ export function SaveResultDialog() {
             onClick={handleConsentBackdropClick}
             role="presentation"
           >
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -356,7 +356,7 @@ export function SaveResultDialog() {
                   </div>
                 </GlassCard>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         )}
       </AnimatePresence>
@@ -369,7 +369,7 @@ export function SaveResultDialog() {
             onClick={handleSaveBackdropClick}
             role="presentation"
           >
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -420,7 +420,7 @@ export function SaveResultDialog() {
                   {/* Save error */}
                   <AnimatePresence mode="wait">
                     {saveError && (
-                      <motion.div
+                      <m.div
                         key="save-error"
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -429,7 +429,7 @@ export function SaveResultDialog() {
                         role="alert"
                       >
                         {saveError}
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
 
@@ -456,7 +456,7 @@ export function SaveResultDialog() {
                   </div>
                 </GlassCard>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         )}
       </AnimatePresence>

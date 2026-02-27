@@ -8,7 +8,7 @@ import {
   Zap,
   Users,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PricingCard } from "@/components/marketing/pricing-card";
 import { Accordion } from "@/components/ui/accordion";
@@ -76,7 +76,7 @@ export function ProductsContent() {
       />
 
       {/* -- Tier Cards -- */}
-      <motion.div
+      <m.div
         className="mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3"
         variants={staggerContainer}
         initial="hidden"
@@ -84,7 +84,7 @@ export function ProductsContent() {
         viewport={{ once: true, margin: "-60px" }}
       >
         {MARKETING_TIERS.map((tier) => (
-          <motion.div key={tier.name} variants={staggerItem}>
+          <m.div key={tier.name} variants={staggerItem}>
             <PricingCard
               tier={tier.name}
               price={tier.price}
@@ -100,12 +100,12 @@ export function ProductsContent() {
               disableAnimation
               className="h-full"
             />
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* -- Feature Comparison Table -- */}
-      <motion.div
+      <m.div
         className="mt-20"
         variants={fadeIn}
         initial="hidden"
@@ -175,10 +175,10 @@ export function ProductsContent() {
             </table>
           </div>
         </GlassCard>
-      </motion.div>
+      </m.div>
 
       {/* -- Trust badges -- */}
-      <motion.div
+      <m.div
         className="mt-16 flex flex-wrap items-center justify-center gap-6"
         variants={staggerContainer}
         initial="hidden"
@@ -186,19 +186,19 @@ export function ProductsContent() {
         viewport={{ once: true, margin: "-40px" }}
       >
         {trustBadges.map(({ icon: Icon, text }) => (
-          <motion.div
+          <m.div
             key={text}
             variants={fadeUp}
             className="flex items-center gap-2 text-sm text-[var(--text-muted)]"
           >
             <Icon className="h-4 w-4 text-[var(--accent-teal)]" aria-hidden="true" />
             <span>{text}</span>
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* -- FAQ -- */}
-      <motion.div
+      <m.div
         className="mt-20"
         variants={fadeIn}
         initial="hidden"
@@ -213,10 +213,10 @@ export function ProductsContent() {
         <div className="mx-auto mt-8 max-w-2xl">
           <Accordion items={PRICING_FAQ} />
         </div>
-      </motion.div>
+      </m.div>
 
       {/* -- Bottom CTA -- */}
-      <motion.div
+      <m.div
         className="mt-20 text-center"
         variants={fadeUp}
         initial="hidden"
@@ -239,7 +239,7 @@ export function ProductsContent() {
             </Link>
           </div>
         </GlassCard>
-      </motion.div>
+      </m.div>
     </>
   );
 }

@@ -106,7 +106,9 @@ export function PrsTab() {
   if (!fullResults) return null;
 
   const { prs } = fullResults;
-  const conditions = Object.values(prs.conditions);
+  const allConditions = Object.values(prs.conditions);
+  const conditions = allConditions.filter((c) => !c.hidden);
+  const hiddenCount = allConditions.length - conditions.length;
 
   return (
     <>
@@ -164,6 +166,21 @@ export function PrsTab() {
         ))}
       </div>
 
+      {/* Hidden conditions notice */}
+      {hiddenCount > 0 && (
+        <GlassCard
+          variant="subtle"
+          hover="none"
+          className="flex items-start gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
+        >
+          <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#f59e0b]" aria-hidden="true" />
+          <p className="text-xs leading-relaxed text-[var(--text-body)]">
+            Some conditions were excluded because PRS models have not been validated for your
+            inferred ancestry group. This prevents displaying potentially misleading scores.
+          </p>
+        </GlassCard>
+      )}
+
       {/* PRS disclaimer */}
       {prs.disclaimer && (
         <GlassCard variant="subtle" hover="none" className="p-4">
@@ -194,7 +211,7 @@ interface PrsConditionCardProps {
 }
 
 const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsConditionCardProps) {
-  const { offspring, parentA, parentB, ancestryNote } = condition;
+  const { offspring, parentA, parentB, ancestryNote, cautionNote } = condition;
 
   return (
     <GlassCard variant="medium" hover="glow" className="p-5">
@@ -249,6 +266,14 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
           ancestryNote={ancestryNote}
         />
       </div>
+
+      {/* Caution note for partially-validated ancestry */}
+      {cautionNote && (
+        <div className="mt-2 flex items-start gap-2 rounded-[8px] border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] px-2.5 py-2">
+          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#f59e0b]" aria-hidden="true" />
+          <p className="text-[10px] leading-snug text-[var(--text-body)]">{cautionNote}</p>
+        </div>
+      )}
     </GlassCard>
   );
 });

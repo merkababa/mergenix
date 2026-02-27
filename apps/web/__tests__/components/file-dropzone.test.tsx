@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('framer-motion', () => ({
-  motion: {
+  m: {
     div: ({ children, ...props }: any) => {
       // Strip framer-motion-only props so they don't reach the DOM
       const {

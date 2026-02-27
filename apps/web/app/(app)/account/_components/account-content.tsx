@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { staggerContainer, staggerItem } from "@/lib/animation-variants";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -81,36 +81,36 @@ export function AccountContent() {
         </p>
       </div>
 
-      <motion.div
+      <m.div
         className="mx-auto max-w-2xl space-y-6"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <ProfileSection />
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <SecuritySection />
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <SessionsSection />
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <DataExportCard />
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <ConsentManagement />
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={staggerItem}>
+        <m.div variants={staggerItem}>
           <DangerZone />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </>
   );
 }

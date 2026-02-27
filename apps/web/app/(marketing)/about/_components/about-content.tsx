@@ -12,7 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
 import { PageHeader } from "@/components/layout/page-header";
@@ -150,7 +150,7 @@ export function AboutContent() {
       />
 
       {/* -- Mission -- */}
-      <motion.section
+      <m.section
         id="mission"
         className="mt-12"
         aria-labelledby="mission-heading"
@@ -182,11 +182,11 @@ export function AboutContent() {
             their data absolutely private.
           </p>
         </GlassCard>
-      </motion.section>
+      </m.section>
 
       {/* -- How It Works -- */}
       <section id="how-it-works" className="mt-24" aria-labelledby="how-it-works-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -199,9 +199,9 @@ export function AboutContent() {
             gradient="teal"
             className="[&_h2]:text-[var(--text-heading)]"
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="mt-10 grid gap-6 md:grid-cols-3"
           variants={stepsStagger}
           initial="hidden"
@@ -209,7 +209,7 @@ export function AboutContent() {
           viewport={{ once: true, margin: "-60px" }}
         >
           {HOW_IT_WORKS.map((item) => (
-            <motion.div key={item.step} variants={fadeUp}>
+            <m.div key={item.step} variants={fadeUp}>
               <GlassCard variant="medium" hover="glow" className="p-7 text-center">
                 <div className="mx-auto mb-4">
                   <StepCircle step={item.step} size="lg" />
@@ -221,14 +221,14 @@ export function AboutContent() {
                   {item.desc}
                 </p>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* -- Our Science -- */}
       <section id="science" className="mt-24" aria-labelledby="science-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -241,9 +241,9 @@ export function AboutContent() {
             gradient="teal"
             className="[&_h2]:text-[var(--text-heading)]"
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="mt-10 grid gap-6 md:grid-cols-2"
           variants={gridStagger}
           initial="hidden"
@@ -262,7 +262,7 @@ export function AboutContent() {
               : "text-[var(--accent-cyan)]";
 
             return (
-              <motion.div key={item.title} variants={fadeUp}>
+              <m.div key={item.title} variants={fadeUp}>
                 <GlassCard variant="medium" hover="glow" rainbow className="h-full p-7">
                   <div className="flex items-start gap-4">
                     <div
@@ -280,15 +280,15 @@ export function AboutContent() {
                     </div>
                   </div>
                 </GlassCard>
-              </motion.div>
+              </m.div>
             );
           })}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* -- What We Believe -- */}
       <section id="values" className="mt-24" aria-labelledby="values-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -300,9 +300,9 @@ export function AboutContent() {
             subtitle="The principles that guide every decision we make"
             className="[&_h2]:text-[var(--text-heading)]"
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="mt-10 grid gap-6 md:grid-cols-2"
           variants={gridStagger}
           initial="hidden"
@@ -321,7 +321,7 @@ export function AboutContent() {
               : "text-[var(--accent-amber)]";
 
             return (
-              <motion.div key={item.title} variants={fadeUp}>
+              <m.div key={item.title} variants={fadeUp}>
                 <GlassCard variant="subtle" hover="glow" className="h-full p-7">
                   <div className="flex items-start gap-4">
                     <div
@@ -339,15 +339,15 @@ export function AboutContent() {
                     </div>
                   </div>
                 </GlassCard>
-              </motion.div>
+              </m.div>
             );
           })}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* -- Backed by Science (stats) -- */}
       <section id="stats" className="mt-24" aria-labelledby="stats-heading">
-        <motion.div
+        <m.div
           variants={fadeIn}
           initial="hidden"
           whileInView="visible"
@@ -360,9 +360,9 @@ export function AboutContent() {
             gradient="teal"
             className="[&_h2]:text-[var(--text-heading)]"
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-4"
           variants={gridStagger}
           initial="hidden"
@@ -372,7 +372,7 @@ export function AboutContent() {
           {STATS.map((stat) => {
             const colors = statColorMap[stat.color];
             return (
-              <motion.div key={stat.label} variants={fadeUp}>
+              <m.div key={stat.label} variants={fadeUp}>
                 <GlassCard
                   variant="medium"
                   hover="glow"
@@ -393,14 +393,14 @@ export function AboutContent() {
                     {stat.label}
                   </div>
                 </GlassCard>
-              </motion.div>
+              </m.div>
             );
           })}
-        </motion.div>
+        </m.div>
       </section>
 
       {/* -- CTA -- */}
-      <motion.section
+      <m.section
         className="mt-24 text-center"
         variants={fadeUp}
         initial="hidden"
@@ -424,7 +424,7 @@ export function AboutContent() {
             </Link>
           </div>
         </GlassCard>
-      </motion.section>
+      </m.section>
     </>
   );
 }
