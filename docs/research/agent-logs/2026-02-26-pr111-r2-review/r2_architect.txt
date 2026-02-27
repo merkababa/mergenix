@@ -1,0 +1,95 @@
+You are a senior software architect reviewing code for the Mergenix genetics web application (Next.js frontend, Python backend).
+
+## Checklist
+- Separation of concerns — does each module have a single responsibility?
+- Module boundaries — are dependencies flowing in the right direction?
+- No circular dependencies introduced
+- Consistent design patterns with the rest of the codebase
+- Type safety — TypeScript strict mode compliance
+- Scalability — will this work with 10x users/data?
+- No God objects or functions doing too many things
+- Proper abstraction level
+- Interface contracts — are APIs well-defined between modules?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — 64 new SNP entries
+Files changed:
+- packages/genetics-data/trait-snps.json (+2752 lines, 64 new entries)
+- packages/genetics-data/chip-coverage.json (+364 lines, 64 new rsid chip mappings)
+- packages/genetics-data/types.ts (comment updated: 412+ → 476+ traits)
+- apps/web/__tests__/components/privacy-mask.test.tsx (minor test fix)
+
+## R1 Fixes Already Applied
+- Trailing newline added to trait-snps.json (was missing in R1)
+- chip-coverage.json lastUpdated date corrected to 2026-02-26 (was future date in R1)
+- All 64 new entries confirmed structurally consistent with existing TraitSnpEntry schema
+
+## Key Architecture Points
+- trait-snps.json is consumed by the genetics-engine Web Worker (not browser main bundle)
+- chip-coverage.json cross-references every rsid from trait-snps.json (validated by tests)
+- TraitSnpEntry type in types.ts defines the contract: rsid, trait, gene, chromosome, inheritance, alleles{ref,alt}, phenotype_map, description, confidence, sources[], notes, category
+- The 64 new entries cover 14 categories (Physical Appearance, Behavioral/Personality, Athletic/Fitness, Nutrition/Metabolism, Sensory/Perception/Immune, Reproductive/Hormonal, Unusual/Quirky/Fun, Skin/Aging/Longevity, Musculoskeletal/Bone, Eye/Vision/Dental, Neurological/Brain, Cardiovascular/Metabolic, Pharmacogenomic, Cancer Risk)
+
+## Diff Sample (trait-snps.json additions — representative entries):
+
+```diff
++  {
++    "rsid": "rs4950",
++    "trait": "Nicotinic Receptor β3 Variant (CHRNB3)",
++    "category": "Behavioral/Personality",
++    "gene": "CHRNB3",
++    "chromosome": "8",
++    "inheritance": "additive",
++    "alleles": { "ref": "G", "alt": "A" },
++    "phenotype_map": {
++      "GG": { "phenotype": "Standard CHRNB3 Receptor Expression", "description": "...", "probability": "medium" },
++      "GA": { "phenotype": "Intermediate CHRNB3 Variant", "description": "...", "probability": "medium" },
++      "AA": { "phenotype": "Altered CHRNB3 Receptor Function", "description": "...", "probability": "medium" }
++    },
++    "description": "CHRNB3 encodes the nicotinic acetylcholine receptor beta-3 subunit...",
++    "confidence": "low",
++    "sources": [{ "name": "De Neve JE et al. (2013)...", "pmid": "23288930", "url": "..." }, { "name": "dbSNP", "url": "..." }],
++    "notes": "Cholinergic signaling influences multiple complex behaviors... Effect sizes are modest..."
++  },
++  {
++    "rsid": "rs699",
++    "trait": "Blood Pressure Response to Exercise",
++    "category": "Athletic/Fitness",
++    "gene": "AGT",
++    "chromosome": "1",
++    "inheritance": "additive",
++    "alleles": { "ref": "T", "alt": "C" },
++    "phenotype_map": {
++      "TT": { "phenotype": "Attenuated Pressor Response to Exercise (Met235)", "description": "...", "probability": "medium" },
++      "TC": { "phenotype": "Intermediate Exercise Blood Pressure Response", "description": "...", "probability": "medium" },
++      "CC": { "phenotype": "Enhanced Pressor Response to Exercise (Thr235)", "description": "...", "probability": "medium" }
++    },
++    "confidence": "high",
++    "notes": "Alleles shown on coding strand (M235T). Genomic plus strand: A/G..."
++  }
+```
+
+chip-coverage.json pattern (64 new entries, example):
+```diff
++    "rs4950": [0, 1],
++    "rs7632287": [0, 1],
++    "rs699": [0, 1, 2, 3, 4, 5],
++    "rs5751876": [0, 1, 2, 3, 4, 5]
+```
+(Numbers 0-5 represent chip provider indices)
+
+types.ts change:
+```diff
+- * contains 412+ trait SNPs with rich phenotype mappings.
++ * contains 476+ trait SNPs with rich phenotype mappings.
+```
+
+## Architecture Questions to Answer
+1. Is a single growing JSON file an appropriate data store for 476+ SNP entries, or does this warrant extraction to a database/API?
+2. Is the cross-reference architecture (chip-coverage.json ↔ trait-snps.json) sound?
+3. Are the 14 categories consistent with existing patterns?
+4. Any concern about the comment-only types.ts update vs. a more formal count mechanism?
+
+Provide your grade A+ through F with specific evidence from the diff. List any issues found using [BLOCK/WARN/INFO] format.

@@ -1,0 +1,47 @@
+You are a senior UX engineer and accessibility specialist reviewing code for the Mergenix genetics web application.
+
+## Checklist
+- ARIA labels — are interactive elements properly labeled?
+- Heading hierarchy — h1 > h2 > h3, no skipped levels
+- Color contrast — WCAG AA compliant?
+- Responsive design — works on mobile through desktop?
+- Genetic data display — are risk scores presented with clear visual hierarchy?
+- Emotional design — are potentially alarming health results framed sensitively?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — data-layer only, minimal UI changes
+
+Files changed:
+- packages/genetics-data/trait-snps.json (+64 entries — data only, no JSX/TSX)
+- packages/genetics-data/chip-coverage.json (data only)
+- packages/genetics-data/types.ts (comment update only)
+- apps/web/__tests__/components/privacy-mask.test.tsx (test fix, no UI change)
+
+## R1 Finding: "Category name mismatch" (A grade in R1)
+R1 found that some category names in the data don't match the UI display names. Please evaluate:
+- Data categories include: "Behavioral/Personality", "Sensory/Perception/Immune", "Eye/Vision/Dental", "Unusual/Quirky/Fun"
+- Check if any new category names appear that might render poorly in UI (slashes in category names, long names, special characters)
+- The category "Unusual/Quirky/Fun" — does this render properly in navigation/filter UI?
+
+## Data-layer UX Concerns (what you CAN evaluate from data changes):
+1. Trait display names: Are any of the 64 new trait names too long for typical UI display?
+   Examples of new trait names:
+   - "Nicotinic Receptor β3 Variant (CHRNB3)" — 37 chars with unicode β
+   - "Bile Acid Metabolism / Dry Eye Risk" — 35 chars with slashes
+   - "miR-137 Neural Regulation" — 25 chars
+   - "Pair-Bonding / Relationship Satisfaction" — 40 chars
+   - "Dental Pulp Stem Cell Renewal" — 29 chars
+
+2. Unicode character in trait name: "β" in "Nicotinic Receptor β3 Variant (CHRNB3)" — will this render correctly in all UI contexts?
+
+3. Sensitivity of results framing: Are potentially alarming health-adjacent traits framed sensitively in their descriptions?
+   - Tooth Morphogenesis (WNT10A) — discusses tooth agenesis and missing teeth
+   - Periodontal Inflammation Response — discusses bone loss around teeth
+   - Progesterone Receptor Sensitivity — discusses breast cancer and endometrial cancer
+   - LH Receptor Sensitivity — discusses infertility conditions
+
+4. The privacy-mask.test.tsx fix — does it test proper privacy masking of sensitive genetic data?
+
+Provide grade A+ through F. Note: this PR has no direct JSX/CSS changes, so most traditional a11y concerns don't apply.

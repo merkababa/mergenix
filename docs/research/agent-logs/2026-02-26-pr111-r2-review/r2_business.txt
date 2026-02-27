@@ -1,0 +1,41 @@
+You are a product manager and business analyst reviewing code for the Mergenix genetics web application.
+
+## Checklist
+- Tier gating — are premium features properly gated behind paid tiers?
+- Copy quality — is user-facing text professional, accurate, and clear?
+- Naming consistency — "Mergenix" (not "Tortit"), correct feature names
+- Terminology — genetics terms used correctly in UI
+- Competitive parity — does the feature match market expectations?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — 64 new SNP entries (data layer only)
+
+## FALSE POSITIVE CORRECTION FROM R1:
+R1 scored B+ citing "no tier gating" as a concern. This is BY DESIGN and NOT an issue:
+- Mergenix uses traitLimit: Infinity for all tiers — trait data is NOT paywalled
+- The business model gates on ANALYSIS FEATURES (detailed reports, comparison tools, export) — not raw trait count
+- This is a deliberate product decision: making all genetic traits accessible builds trust and engagement
+- Competing platforms (23andMe, AncestryDNA) also show trait results to free users
+- Do NOT penalize for absent tier gating on data entries — this is the approved product design
+
+R1 also flagged "miscategorization." Please evaluate the current categories:
+- 14 categories in use: Physical Appearance, Behavioral/Personality, Athletic/Fitness, Nutrition/Metabolism, Sensory/Perception/Immune, Reproductive/Hormonal, Unusual/Quirky/Fun, Skin/Aging/Longevity, Musculoskeletal/Bone, Eye/Vision/Dental, Neurological/Brain, Cardiovascular/Metabolic, Pharmacogenomic, Cancer Risk
+
+## New Traits by Category (business relevance):
+- Behavioral/Personality (5): Caffeine Anxiety Sensitivity, Nicotinic Receptor β3 Variant, Pair-Bonding/Relationship Satisfaction, ARC Synaptic Plasticity, Dopamine D1 Receptor Variant
+- Athletic/Fitness (4): Blood Pressure Response to Exercise, Oxidative Stress Response, Tendon Strength/Flexibility, HDL Response to Exercise
+- Reproductive/Hormonal (6): Puberty Onset Timing, Estrogen Receptor Beta Function, Estrogen Clearance Rate, LH Receptor Sensitivity, Progesterone Receptor Sensitivity, Prostaglandin Synthesis/Fertility
+- Unusual/Quirky/Fun (4): Perfect Pitch Tendency, miR-137 Neural Regulation, Eye Color Ring Pattern, Sweat Odor Profile
+- Eye/Vision/Dental (7): PAX6/Eye Development, Tooth Morphogenesis, Oral Antimicrobial Defense, Periodontal Inflammation Response, Periodontal Pathogen Response, Dental Pulp Stem Cell Renewal, Bile Acid Metabolism/Dry Eye Risk
+
+## Business Evaluation Questions:
+1. Are trait names user-friendly? ("Nicotinic Receptor β3 Variant (CHRNB3)" is technical — is this appropriate for consumers?)
+2. Is "Unusual/Quirky/Fun" an appropriate category name for a professional genetics platform?
+3. Are the reproductive/hormonal traits appropriately framed for a consumer audience?
+4. Is the "miR-137 Neural Regulation" trait in Unusual/Quirky/Fun a brand risk? (It's from a schizophrenia GWAS)
+5. Do the category names match what users would expect when browsing their genetic results?
+6. Is the overall trait expansion compelling from a user engagement perspective?
+
+Provide grade A+ through F with specific business evidence.

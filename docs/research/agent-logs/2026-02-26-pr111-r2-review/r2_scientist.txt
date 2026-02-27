@@ -1,0 +1,95 @@
+You are a senior bioinformatician and genetics researcher reviewing code for the Mergenix genetics web application.
+
+## Checklist
+- rsID accuracy — are SNP identifiers correctly referenced?
+- Allele handling — are ref/alt alleles handled correctly for all genotypes?
+- Trait predictions — are genotype-phenotype mappings backed by citations?
+- Data sources — are dbSNP/GWAS Catalog references accurate?
+- Scientific methodology — are statistical methods appropriate?
+- Disclaimers — are results presented with appropriate uncertainty language?
+- Population frequency data — is population-specific allele frequency considered?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — 64 new SNP entries added to trait-snps.json
+
+## R1 Fixes Applied (R1 was C — these specific issues were corrected):
+
+1. **7 incorrect PMIDs corrected** with verified citations:
+   - rs699: now PMID 15199295 (Rankinen 2004, HERITAGE Family Study) — verified matches AGT exercise BP
+   - rs5751876: now PMID 12825092 (Alsene 2003) — caffeine-induced anxiety, ADORA2A
+   - rs7632287: now PMID 22069391 (Walum 2012) — OXTR pair-bonding study
+   - rs4950: now PMID 23288930 (De Neve 2013) — CHRNB3 leadership/occupational role occupancy GWAS
+   - rs322931: now PMID 17088207 (Tzingounis & Nicoll 2006) — ARC/Arg3.1 synaptic plasticity
+   - rs4532: now PMID 31123756 (Richter 2019) — DRD1/DRD2 role in response selection
+   - Additional fixes to other problematic PMIDs from R1
+
+2. **rs2292239 recategorized**: moved from Unusual/Quirky/Fun → Sensory/Perception/Immune
+
+3. **rs699 alleles corrected**:
+   - Was: ref=A, alt=G (protein-level shorthand causing confusion)
+   - Now: ref=T, alt=C (correct genomic plus strand)
+   - Notes updated: "Alleles shown on coding strand (M235T). Genomic plus strand: A/G."
+   - Phenotypes: TT=Met235 (attenuated pressor response), CC=Thr235 (enhanced pressor response)
+   - This is the AGT M235T variant; the C allele (Thr235) increases angiotensinogen
+
+4. **Health disclaimers added** to 8 entries: "This is a risk modifier, not a diagnosis. Consult a healthcare provider."
+
+5. **Population disclaimers added** to 5 behavioral traits: "Study populations were primarily of European ancestry, limiting generalizability."
+
+6. **Sex-specific disclaimer added to rs7632287 (OXTR)**:
+   In both description and notes: "Original study findings were specific to female participants; association strength and direction in male participants has not been consistently replicated."
+
+## Key Entries to Evaluate Scientifically:
+
+**rs5751876 (ADORA2A, Caffeine-Related Anxiety):**
+- confidence: high
+- PMID 12825092 (Alsene 2003) — association between A2a receptor gene polymorphisms and caffeine-induced anxiety
+- T allele = higher anxiety sensitivity to caffeine (antagonist at adenosine A2A receptor)
+- Evaluate: Is ADORA2A rs5751876 the correct SNP for this effect? Is confidence:high appropriate?
+
+**rs699 (AGT, Blood Pressure Response to Exercise):**
+- alleles: ref=T, alt=C; TT=Met235, CC=Thr235
+- PMID 15199295 (Rankinen 2004, HERITAGE)
+- Evaluate: Are T/C correct for rs699 on genomic plus strand? Is Met235=T correct?
+
+**rs4950 (CHRNB3, Nicotinic Receptor β3 Variant):**
+- Renamed from "Leadership Tendency" to biology-first name
+- PMID 23288930 (De Neve 2013)
+- confidence: low — appropriate for behavioral GWAS with modest effect size
+- Evaluate: Is placing a schizophrenia/behavioral GWAS hit in Behavioral/Personality with low confidence appropriate?
+
+**rs7632287 (OXTR, Pair-Bonding):**
+- PMID 22069391 (Walum 2012)
+- confidence: low
+- Sex-specific disclaimer added
+- Evaluate: Is this the correct PMID? Does Walum 2012 study rs7632287 specifically?
+
+**rs57095329 (miR-137, Unusual/Quirky/Fun):**
+- PMID 21926974 (Ripke 2011) — this is a schizophrenia GWAS paper
+- The trait is labeled "miR-137 Neural Regulation" in Unusual/Quirky/Fun
+- confidence: low
+- Evaluate: Is placing a schizophrenia GWAS locus in Unusual/Quirky/Fun appropriate? Are the disclaimers adequate?
+
+**rs2853676 (TERT, Dental Pulp Stem Cell Renewal):**
+- PMID 19412176 — "Burchell JM et al. (2008) - TERT promoter polymorphism and dental pulp stem cell aging"
+- confidence: medium
+- Evaluate: Does PMID 19412176 actually correspond to dental pulp TERT work? (Note: Burchell is primarily known for MUC1 breast cancer work — potential PMID mismatch)
+
+**rs3808607 (CYP7A1, Bile Acid Metabolism / Dry Eye Risk):**
+- PMID 14752165 (Hofman 2004, Rotterdam Study)
+- confidence: medium
+- Mechanistic chain: CYP7A1 → cholesterol metabolism → meibomian gland lipids → tear film → dry eye
+- Evaluate: Is this mechanistic chain scientifically established or speculative?
+
+**rs5743708 (TLR2, Periodontal Pathogen Response):**
+- PMID 26617949 (Guo & Xia 2015) — titled "rs5743708 gene polymorphism in TLR2 contributes to risk of tuberculosis"
+- The trait is "Periodontal Pathogen Response" not tuberculosis
+- Evaluate: Is using a tuberculosis study to support a periodontal claim scientifically defensible? TLR2 rs5743708 (Arg753Gln) reduces TLR2 signaling broadly — is cross-pathogen extrapolation appropriate?
+
+**Population disclaimers:**
+- Behavioral traits (rs4950, rs7632287, rs322931, rs4532, rs57095329) all have: "Study populations were primarily of European ancestry, limiting cross-population generalizability"
+- Evaluate: Are these disclaimers adequate for GWAS-derived behavioral associations?
+
+Provide your grade A+ through F with specific evidence. Call out any remaining PMID misattributions or scientific inaccuracies.

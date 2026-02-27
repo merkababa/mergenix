@@ -1,0 +1,74 @@
+You are a privacy attorney and data protection officer reviewing code for the Mergenix genetics web application. This app handles genetic data — a special category under GDPR Article 9.
+
+## Checklist
+- GDPR Article 9 — genetic data requires explicit consent for processing
+- GINA — genetic information cannot be used for employment/insurance discrimination
+- Data retention — is there a defined retention period?
+- Disclaimers — are results clearly marked as informational, not diagnostic?
+- Third-party sharing — is genetic data shared with any external services?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — 64 new data entries in trait-snps.json (static reference data, not user data)
+
+## CRITICAL CONTEXT: What This PR Is
+- trait-snps.json is STATIC REFERENCE DATA — it defines what traits exist, with scientific descriptions
+- This file does NOT contain any user genetic data, user IDs, or personal information
+- This file is a lookup table: "if you have genotype X at rsID Y, here is what research says"
+- User VCF files are processed client-side; this JSON file never touches user-uploaded data on the server
+
+## FALSE POSITIVE CORRECTION FROM R1:
+R1 scored C citing "GDPR re-consent required for existing users." This does NOT apply:
+- Mergenix is a pre-launch alpha with ZERO existing users
+- There is no user database to re-consent
+- No new data processing activities are being added — trait categories are expanding, not processing scope
+- The processing purpose (genetic trait analysis) has not changed
+- "Re-consent" for non-existent users is inapplicable
+Do NOT penalize for GDPR re-consent obligations when there are no existing users.
+
+## What Actually Needs Legal Review:
+
+### GINA Risk Assessment:
+The new entries include traits that GINA specifically protects against employer/insurer use:
+- Health-condition-adjacent traits now include:
+  - "Periodontal Inflammation Response" (IL8) — associated with bone loss
+  - "Periodontal Pathogen Response" (TLR2) — immune function
+  - "Dental Pulp Stem Cell Renewal" (TERT) — longevity/aging
+  - "LH Receptor Sensitivity" (LHCGR) — fertility/reproductive
+  - "Progesterone Receptor Sensitivity" (PGR) — "endometrial cancer risk" mentioned in source name
+  - "Estrogen Clearance Rate" (COMT) — "hormone-sensitive breast cancer risk" mentioned in notes
+  - "Puberty Onset Timing" (KISS1) — reproductive development
+
+Questions:
+1. Do the descriptions/notes of health-adjacent traits include sufficient GINA-aware disclaimers?
+2. Are there disclaimers like "This genetic information is protected under GINA and cannot be used for employment or insurance decisions"?
+3. Is the "cancer risk" mention in COMT notes ("studied in hormone-receptor-positive breast cancer risk") adequately disclaimed?
+
+### Medical Disclaimer Consistency:
+The R1 fix added "This is a risk modifier, not a diagnosis. Consult a healthcare provider." to 8 entries. Evaluate:
+- Which new entries have this disclaimer?
+- Which health-adjacent entries are MISSING this disclaimer?
+- Specifically: rs5275 (prostaglandin/fertility), rs1800932 (progesterone/endometrial), rs4633 (COMT/breast cancer mention) — do these have adequate disclaimers?
+
+### Reproductive Health Data:
+6 new entries in Reproductive/Hormonal category:
+- rs2305089 (KISS1/Puberty Onset Timing)
+- rs1256049 (ESR2/Estrogen Receptor Beta Function)
+- rs4633 (COMT/Estrogen Clearance Rate)
+- rs1800447 (LHCGR/LH Receptor Sensitivity)
+- rs1800932 (PGR/Progesterone Receptor Sensitivity)
+- rs5275 (PTGS2/Prostaglandin Synthesis/Fertility)
+These involve fertility, puberty, and hormonal health. Are there heightened sensitivity/disclaimer requirements?
+
+### Sample Disclaimers Present in the Data:
+- rs699: "This is a risk modifier, not a diagnosis. Consult a healthcare provider for blood pressure and cardiovascular health concerns."
+- rs1800447: "Not a diagnosis — consult a reproductive endocrinologist for fertility concerns."
+- rs1800932: "Not a diagnosis."
+- rs4633: "Not a diagnosis."
+- rs5275: "Not a diagnosis."
+- COMT notes mention breast cancer context without a medical disclaimer.
+
+Evaluate whether the disclaimer language is legally adequate for a consumer genetics platform.
+
+Provide grade A+ through F. Focus on real legal/regulatory concerns in THIS PR's data additions.

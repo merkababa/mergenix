@@ -1,0 +1,78 @@
+You are a bioethicist and responsible technology advisor reviewing code for the Mergenix genetics web application.
+
+## Checklist
+- Population bias — are genetic risk scores adjusted for ancestry/population?
+- Responsible result framing — are risk scores presented with uncertainty ranges?
+- Emotional harm prevention — are alarming results (disease/disorder) presented with context?
+- Eugenics guardrails — does the app avoid features that could enable selective breeding or ranking?
+- Disclaimers — are results clearly marked as informational, not diagnostic?
+- Genetic determinism — does the UI avoid implying genes are destiny?
+- Stigmatization — are mental health conditions, disabilities presented without stigmatizing language?
+
+## Grading Rubric
+A+ = zero issues | A = 1-2 minor | A- = 3+ minor | B = moderate issues | C = significant issues | D/F = blocking
+
+## PR Summary: Tier 3 Trait Expansion — 64 new SNP entries
+
+## R1 Fixes Applied (R1 was C — eugenics-adjacent naming corrected):
+
+### 4 Traits Renamed from Eugenics-Adjacent to Biology-First:
+1. "Leadership Tendency" → "Nicotinic Receptor β3 Variant (CHRNB3)"
+   - Phenotype labels changed from "natural leader tendency" → "Standard/Intermediate/Altered CHRNB3 Receptor Expression"
+   - Description no longer implies genetic predisposition to leadership
+   - notes: "Effect sizes are modest... Not a diagnosis"
+
+2. "Intellectual Engagement Tendency" → "ARC Synaptic Plasticity"
+   - Renamed to biological mechanism, not behavioral label
+   - Phenotype labels: "Standard/Intermediate/Altered ARC-Mediated Synaptic Plasticity"
+
+3. "Relationship Quality Genetic Tendency" → "Pair-Bonding / Relationship Satisfaction"
+   - More neutral framing; sex-specific disclaimer added
+
+4. [Fourth trait renamed — evaluated from context of original R1 findings]
+
+### Additional Ethics Fixes:
+- rs7632287 (OXTR): Sex-specific disclaimer added: "Original study findings were specific to female participants; association strength and direction in male participants has not been consistently replicated."
+- Population disclaimers added to 5 behavioral traits: "Study populations were primarily of European ancestry, limiting cross-population generalizability."
+- rs2292239 moved from Unusual/Quirky/Fun to Sensory/Perception/Immune (more appropriate)
+
+## New Entries Requiring Ethical Evaluation:
+
+### High-Risk: rs57095329 (miR-137, "Unusual/Quirky/Fun")
+- This SNP comes from a SCHIZOPHRENIA GWAS paper (Ripke 2011, PMID 21926974)
+- The trait is labeled "miR-137 Neural Regulation" in the Unusual/Quirky/Fun category
+- The description avoids mentioning schizophrenia: "ARC coordinates AMPA receptor trafficking, dendritic spine morphology"
+- The notes say: "findings derive primarily from European-cohort studies; individual-level prediction is not supported"
+- Ethical concern: Is placing a schizophrenia risk locus in a "fun/quirky" category ethically appropriate? Does it trivialize serious mental illness? Or is the biology-first approach (miR-137 neural regulation) correct?
+- Counter-argument: The entry focuses on miR-137 biology, not schizophrenia risk. Confidence is "low". No schizophrenia mention.
+
+### Reproductive/Hormonal Traits (6 new entries):
+- rs2305089 (KISS1, Puberty Onset Timing) — discusses puberty in genetic terms
+- rs1800932 (PGR, Progesterone Receptor Sensitivity) — mentions "endometrial cancer risk"
+- rs4633 (COMT, Estrogen Clearance Rate) — mentions "hormone-receptor-positive breast cancer risk"
+- rs5275 (PTGS2, Prostaglandin Synthesis/Fertility) — discusses ovulation, fertility
+
+Ethical questions:
+1. Is presenting fertility-related traits appropriate for a general consumer genetics platform?
+2. Are cancer-risk mentions (endometrial cancer, breast cancer) in notes fields adequately disclaimed?
+3. Should puberty-timing genetics require age-gating of results?
+
+### Behavioral/Personality Traits (5 new entries):
+- rs4950 (CHRNB3, Nicotinic Receptor β3 Variant) — old name was "Leadership Tendency"
+- rs7632287 (OXTR, Pair-Bonding/Relationship Satisfaction)
+- rs322931 (ARC, ARC Synaptic Plasticity) — old name was "Intellectual Engagement Tendency"
+- rs4532 (DRD1, Dopamine D1 Receptor Variant)
+- rs5751876 (ADORA2A, Caffeine-Related Anxiety Sensitivity)
+
+Questions:
+1. Are the renamed behavioral traits now sufficiently de-stigmatized and biology-first?
+2. Does "Pair-Bonding / Relationship Satisfaction" still carry social determinism implications even with low confidence?
+3. Is "Caffeine-Related Anxiety Sensitivity" an ethically sound presentation, or could it cause undue anxiety in users?
+
+### Population Bias Evaluation:
+- 5 behavioral traits now have European ancestry disclaimers
+- Physical appearance traits (rs1015362, rs2378249, rs2733832) cover skin and hair pigmentation
+- Are the pigmentation traits (ASIP, TYRP1) presented in a way that avoids racial hierarchization?
+- rs1015362 description: "Lower ASIP Activity / Darker Skin Tone" with "some population data suggest modest reduced melanoma risk" — is this adequately contextualized?
+
+Provide grade A+ through F. List every remaining ethical concern, even minor ones.
