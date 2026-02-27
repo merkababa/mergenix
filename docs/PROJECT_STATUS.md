@@ -1,6 +1,6 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-02-23
+**Last Updated:** 2026-02-27
 **Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, alpha launch pending)
 **Branch:** main
 
@@ -12,7 +12,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 
 ### Key Capabilities
 - **Disease Screening:** 2,715 genetic diseases across three inheritance models (AR, AD, X-linked)
-- **Trait Prediction:** 79 trait SNPs predicted using Punnett square logic
+- **Trait Prediction:** 476 trait SNPs across 15 categories predicted using Punnett square logic
 - **Pharmacogenomics (PGx):** CPIC-guided analysis across 12 genes with star allele nomenclature
 - **Polygenic Risk Scores (PRS):** 10 complex disease conditions with GWAS effect weights
 - **Genetic Counseling:** Triage logic with urgency levels, specialty inference, referral letters
@@ -27,7 +27,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (1,603 web + 1,407 engine) + pytest (624 backend) = 3,634+ total
+- **Testing:** Vitest (1,614 web + 1,439 engine) + pytest (672 backend) = 3,725+ total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -205,6 +205,9 @@ Comprehensive auth test suite (19 new test files) + placeholder completion (sess
   - [x] Stream Ops (EU region, CI, deploy) — PR #88
 - [x] **Coming Soon Page** — PR #89 merged (site-wide lock active)
 - [x] **Web Polish** — PR #90 merged (a11y, type safety, tier alignment, 10/10 A/A+, 3,010 frontend tests)
+- [x] **Trait Expansion** — PRs #91-93, #111 merged (79→476 traits across 4 tiers, 15 categories, chip coverage)
+- [x] **PMID Audit** — PR #112 merged (fixed 5 parasitology PMID citations)
+- [x] **Full-App Review Fixes** — PR #113 merged (16 findings: TOTP encryption, CSRF, motion→m tree-shaking, PRS ancestry enforcement, WCAG contrast, loading skeletons, DPIA completion, 10/10 A/A+)
 
 ### Performance Optimizations (from Phase 4 reviews)
 
@@ -287,7 +290,7 @@ Parser → {rsid → genotype} map (streaming line iterator)
 ┌─────────────┬──────────┬─────────┬──────────┬──────────┬──────────┐
 │ Carrier      │ Traits   │ PGx     │ PRS      │ Ethnicity│ Counsel. │
 │ AR/AD/X-link │ Punnett  │ CPIC    │ Z-score  │ Bayesian │ Triage   │
-│ 2,715 diseas │ 79 SNPs  │ 12 genes│ 10 conds │ 9 pops   │ referral │
+│ 2,715 diseas │ 476 SNPs │ 12 genes│ 10 conds │ 9 pops   │ referral │
 └─────────────┴──────────┴─────────┴──────────┴──────────┴──────────┘
     ↓
 FullAnalysisResult → postMessage → Zustand store
@@ -301,6 +304,12 @@ FullAnalysisResult → postMessage → Zustand store
 
 | PR | Title | Status |
 |----|-------|--------|
+| #113 | Full-App Review Fixes: 16 findings across 10 domains (TOTP encryption, CSRF, motion→m, PRS ancestry) | **Merged** |
+| #112 | PMID 15888295 Audit: 5 parasitology citations fixed | **Merged** |
+| #111 | Trait Expansion Tier 4: 476 traits (64 new, completing catalog) | **Merged** |
+| #93 | Trait Expansion Tier 3: 412 traits (122 new MODERATE-confidence) | **Merged** |
+| #92 | Trait Expansion Tier 2: 290 traits (54 new HIGH-confidence) | **Merged** |
+| #91 | Trait Expansion Tier 1: 236 traits (157 new, 15 categories, chip coverage) | **Merged** |
 | #90 | Web Polish: A11y, Type Safety, Tier Alignment, Test Coverage (10/10 A/A+, 104 files) | **Merged** |
 | #89 | Coming Soon Page with Site Lock (HMAC-SHA-256 bypass, 78 tests) | **Merged** |
 | #88 | Stream Ops: EU Region, CI Hardening, Alpha Deploy Runbook | **Merged** |
@@ -329,7 +338,7 @@ FullAnalysisResult → postMessage → Zustand store
 
 ## Next Steps — Alpha Launch Checklist
 
-**All 11 streams COMPLETE. 3,634+ tests. Feature-complete. What remains is infrastructure + legal.**
+**All 11 streams COMPLETE. 3,725+ tests. Feature-complete. What remains is infrastructure + legal.**
 
 ### Phase A: Service Accounts (kukiz, ~2 hours)
 | # | Task | Service | Output |
