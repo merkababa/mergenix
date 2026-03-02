@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
 **Last Updated:** 2026-03-02
-**Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, launch readiness fixes done, alpha launch pending)
+**Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, launch readiness + tech debt resolved, alpha launch pending)
 **Branch:** main
 
 ---
