@@ -42,8 +42,8 @@ You are a CONDUCTOR. Your context window is sacred. Long sessions = compaction =
 ### Orchestration Layers:
 1. **Conductor (you)** — orchestrator, spawns executors with file ownership
 2. **Executor agents** — code writers, each owns specific files/directories
-3. **Gemini reviewers** — 11 personas in `review-personas/`, called via bash CLI
-4. **Claude reviewers** — 11 agents in `.claude/agents/*-reviewer.md`
+3. **Reviewers** — 2-4 Claude agents from `.claude/agents/*-reviewer.md`, selected by trigger rules
+4. **Gemini** (optional) — cheap pre-check via `review-personas/`, not required
 
 ### Execution Rules:
 - Each executor gets strict file ownership — partition by directory/module
@@ -157,20 +157,45 @@ We follow the **Testing Trophy** (Kent C. Dodds): heavy on integration tests, li
 - `apps/web/lib/data/demo-results.ts:268` — type literal mismatch (inheritance model union)
 
 ## Code Review (MANDATORY before every PR)
-Run `/review-pipeline` for the full three-layer review process (Static → Gemini → Claude).
+Run `/review-pipeline` for the optimized 3-layer review (Static → Self-Review → External Review).
 
-**11 Reviewers:** Architect, QA, Scientist, Technologist, Business, Marketing, Designer, Security Analyst, Code Reviewer, Legal+Privacy, Ethics/Bioethics.
+### 3-Layer Pipeline
+1. **Layer 0 — Static Analysis:** lint + typecheck + tests + build (automated gate)
+2. **Layer 1 — Self-Review:** Conductor verifies changed files against `docs/EXECUTOR_CHECKLIST.md`. Catches ~80% of review findings mechanically. Fix violations before spawning reviewers.
+3. **Layer 2 — External Review:** 2-4 Claude Opus agents, selected by trigger rules (see below). Max 3 rounds, hard cap. Fix ALL severities (BLOCK+WARN+INFO) in one batch.
 
-**Reviewer Selection:** Only summon reviewers relevant to the task. Conductor decides which reviewers to include based on what changed. Skip reviewers with zero relevance (e.g., Scientist for pure frontend UX changes).
+### Reviewer Trigger Rules (pick 2-4, NOT more)
+| Trigger | Reviewers |
+|---------|-----------|
+| Default (any PR) | Architect + Code Reviewer |
+| New UI screens | + Designer |
+| Backend / API / DB | + Security |
+| Genetics / health data | + Scientist |
+| Privacy / compliance | + Security + Legal |
+| User-facing copy / pricing | + Business |
+| Genetic result display | + Ethics |
 
-**Pass Threshold:** A reviewer passes when they give **A or A+**. Once a reviewer reaches A or A+, they do NOT need to be re-reviewed in subsequent rounds — they are done. Only re-review reviewers that scored below A.
+### Pass Threshold
+- **A grade (no BLOCKs) = pass.** Not A+ — just A.
+- Re-review ONLY reviewers that had BLOCKs. Once a reviewer reaches A, they're done.
+- After Round 3: hard stop, fix remaining BLOCKs, no further review.
 
-**Resources:**
-- Gemini review personas: `review-personas/{role}.md` (11 files)
-- Gemini planning personas: `review-personas/planning-{role}.md` (11 files)
-- Claude review agents: `.claude/agents/*-reviewer.md` (11 files)
-- Calibration log: `docs/gemini-calibration.md`
-- Delegation rules: `docs/GEMINI_DELEGATION_GUIDE.md`
+### Final Cleanup Rule (after all reviewers reach A)
+Triage every remaining WARN/INFO by ownership:
+1. **From code this PR changed** → fix in this PR, no exceptions. We touched it, we own it.
+2. **From pre-existing code** → do NOT fix. Create tech debt items in `PROGRESS.md` or GitHub issues.
+3. **Requiring architectural decisions** → present options to user, defer if needed.
+Use `git diff origin/main...HEAD -- <file>` to determine if flagged lines are ours or pre-existing.
+
+### Executor Checklist (Shift Left)
+Every executor prompt MUST include: `Read and follow ALL items in docs/EXECUTOR_CHECKLIST.md before committing.`
+Reviewers skip checklist-covered items unless violated. This eliminates 80% of review round-trips.
+
+### Resources
+- Executor checklist: `docs/EXECUTOR_CHECKLIST.md` (living document — update after each review cycle)
+- Claude review agents: `.claude/agents/*-reviewer.md`
+- Gemini review personas (optional): `review-personas/{role}.md`
+- Development gotchas: `docs/DEVELOPMENT_GOTCHAS.md`
 
 ## Model Selection Policy
 
@@ -178,13 +203,14 @@ Choose the right model tier for each agent type:
 
 | Agent Type | Model | Rationale |
 |-----------|-------|-----------|
-| **Reviewers** (Gate 1 + Gate 2) | **Opus** | Deep reasoning, cross-file analysis, security judgment |
-| **Executors** (code fixes, feature implementation) | **Sonnet** | Well-specified tasks with explicit instructions — speed > reasoning depth |
-| **Exploration/research agents** | **Sonnet** | File reading and summarizing doesn't need Opus-level reasoning |
+| **Reviewers** (Layer 2) | **Opus** | Deep reasoning, cross-file analysis, security judgment |
+| **Executors** (features, contextual fixes) | **Sonnet** | Well-specified tasks with explicit instructions |
+| **Fix agents** (mechanical — rename, import, typo) | **Haiku** | Simple pattern application, cheapest tier |
+| **Exploration/research agents** | **Sonnet** | File reading and summarizing |
 | **Planning synthesis** | **Opus** | Architectural decisions require highest capability |
-| **Gemini personas** | gemini-3.1-pro-preview | Separate system, called via CLI |
+| **Gemini personas** (optional) | gemini-3.1-pro-preview | Separate system, called via CLI |
 
-When spawning Task agents, set `model: "sonnet"` for executors and explorers, omit (defaults to Opus) for reviewers and planners.
+**Rule**: Default one tier UP if unsure. A wasted minute on mid-tier is cheaper than broken output from cheapest tier that needs re-doing.
 
 ## Gemini Delegation
 Call via bash CLI — MCP tools are broken on Windows. No rate limit waits needed (API tokens).

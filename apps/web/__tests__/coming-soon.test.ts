@@ -540,7 +540,7 @@ describe('middleware — coming-soon gate', () => {
     expect((result as any).type).toBe('next');
   });
 
-  it('allows /contact through without redirect when SITE_COMING_SOON=true', async () => {
+  it('redirects /contact to /coming-soon when SITE_COMING_SOON=true (no page exists)', async () => {
     vi.stubEnv('SITE_COMING_SOON', 'true');
     vi.stubEnv('SITE_BYPASS_SECRET', 'test-secret');
     const { middleware } = await import('@/middleware');
@@ -548,7 +548,7 @@ describe('middleware — coming-soon gate', () => {
     const request = await buildMiddlewareRequest('/contact');
     const result = await middleware(request);
 
-    expect((result as any).type).toBe('next');
+    expect((result as any).type).toBe('redirect');
   });
 
   it('allows /api/coming-soon-bypass through without redirect', async () => {

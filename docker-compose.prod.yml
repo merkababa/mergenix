@@ -1,0 +1,50 @@
+# Production Docker Compose for Mergenix
+# Usage: docker compose -f docker-compose.rewrite.yml -f docker-compose.prod.yml up -d
+#
+# Required environment variables (set in .env or CI/CD secrets):
+#   DATABASE_URL          - PostgreSQL connection string
+#   JWT_SECRET            - App secret key (generate: python -c "import secrets; print(secrets.token_hex(64))")
+#   TOTP_ENCRYPTION_KEY   - 2FA encryption (generate: python -c "import secrets; print(secrets.token_hex(32))")
+#   DATA_ENCRYPTION_KEY   - Data encryption (generate: python -c "import secrets; print(secrets.token_hex(32))")
+#   STRIPE_SECRET_KEY     - Stripe API key
+#   STRIPE_WEBHOOK_SECRET - Stripe webhook signing secret
+#   RESEND_API_KEY        - Email service API key
+#   SENTRY_DSN            - Error tracking DSN
+#   NEXTAUTH_SECRET       - NextAuth secret key
+#   REDIS_PASSWORD        - Redis authentication password (generate: python -c "import secrets; print(secrets.token_hex(32))")
+#
+# All secrets MUST be set explicitly — no fallback defaults in production.
+
+services:
+  db:
+    restart: always
+
+  api:
+    restart: always
+    environment:
+      ENVIRONMENT: production
+      COOKIE_SECURE: "true"
+      # No fallback defaults — fail loudly if not set
+      TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY}
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+
+  web:
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis_data:

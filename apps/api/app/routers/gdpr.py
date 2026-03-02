@@ -19,6 +19,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from sqlalchemy import delete as sa_delete
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -32,7 +33,7 @@ from app.middleware.rate_limiter import (
     limiter,
 )
 from app.models.analysis import AnalysisResult
-from app.models.audit import AuditLog
+from app.models.audit import AuditLog, EmailVerification
 from app.models.payment import Payment
 from app.models.user import User
 from app.schemas.auth import MessageResponse
@@ -50,8 +51,8 @@ from app.schemas.gdpr import (
 )
 from app.services import audit_service
 from app.services.account_service import delete_user_account
-from app.services.auth_service import verify_password
-from app.services.email_service import send_deletion_confirmation_email
+from app.services.auth_service import generate_email_verification_token, verify_password
+from app.services.email_service import send_deletion_confirmation_email, send_verification_email
 from app.utils.cookies import clear_refresh_cookie
 from app.utils.request_helpers import client_ip as _client_ip
 from app.utils.request_helpers import user_agent as _user_agent
@@ -540,9 +541,9 @@ async def rectify_profile(
         user_agent=_user_agent(request),
     )
 
-    # Issue 5: Log email verification requirement when email changes.
-    # TODO: Wire up send_verification_email() when the GDPR router has
-    # access to the email verification token generation flow.
+    # Issue 5: Log email verification requirement when email changes and send
+    # a new verification email so the user can confirm their updated address.
+    verification_token: str | None = None
     if email_changed:
         await audit_service.log_event(
             db,
@@ -552,8 +553,31 @@ async def rectify_profile(
             user_agent=_user_agent(request),
         )
 
+        # Generate a fresh email verification token and persist it.
+        # Invalidate any pending (unverified) email verification tokens for this
+        # user so stale tokens cannot be used after an email address change.
+        await db.execute(
+            sa_delete(EmailVerification).where(
+                EmailVerification.user_id == user.id,
+                EmailVerification.verified_at.is_(None),
+            )
+        )
+        verification_token = generate_email_verification_token()
+        verification = EmailVerification(
+            user_id=user.id,
+            token_hash=hash_token(verification_token),
+            expires_at=datetime.now(UTC).replace(tzinfo=None) + timedelta(hours=24),
+        )
+        db.add(verification)
+
     await db.commit()
     await db.refresh(user)
+
+    # Send verification email AFTER commit so the DB record is durable.
+    # email_service._send() already uses asyncio.to_thread() for the Resend
+    # SDK call, so no additional wrapping is needed here.
+    if email_changed and verification_token is not None:
+        await send_verification_email(user.email, verification_token)
 
     return RectifyProfileResponse(
         id=str(user.id),

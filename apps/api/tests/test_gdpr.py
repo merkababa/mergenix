@@ -13,6 +13,8 @@ import uuid
 from datetime import UTC, datetime
 
 import pytest
+from unittest.mock import AsyncMock, patch
+
 from app.models.analysis import AnalysisResult
 from app.models.audit import AuditLog, Session
 from app.models.payment import Payment
@@ -1166,3 +1168,108 @@ async def test_export_audit_logs_include_user_agent(
     assert len(test_events) >= 1
     assert "user_agent" in test_events[0]
     assert test_events[0]["user_agent"] == "TestBrowser/1.0"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Item 11: Email change → verification email sent + EmailVerification record
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_rectify_email_change_sends_verification_email(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """PUT /gdpr/profile changing email should call send_verification_email with the new address."""
+    with patch(
+        "app.routers.gdpr.send_verification_email",
+        new_callable=AsyncMock,
+        return_value=True,
+    ) as mock_send:
+        response = await client.put(
+            "/gdpr/profile",
+            headers=auth_headers,
+            json={"email": "item11_new@example.com", "password": "TestPass123"},
+        )
+    assert response.status_code == 200
+    mock_send.assert_called_once()
+    call_args = mock_send.call_args
+    # First positional arg is the email address
+    assert call_args[0][0] == "item11_new@example.com"
+
+
+@pytest.mark.asyncio
+async def test_rectify_email_change_creates_email_verification_record(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """PUT /gdpr/profile changing email should persist an EmailVerification record."""
+    from app.models.audit import EmailVerification
+
+    with patch(
+        "app.routers.gdpr.send_verification_email",
+        new_callable=AsyncMock,
+        return_value=True,
+    ):
+        response = await client.put(
+            "/gdpr/profile",
+            headers=auth_headers,
+            json={"email": "item11_verify@example.com", "password": "TestPass123"},
+        )
+    assert response.status_code == 200
+
+    # Verify an EmailVerification record was created for the user
+    result = await db_session.execute(
+        select(EmailVerification).where(EmailVerification.user_id == test_user.id)
+    )
+    verification = result.scalar_one_or_none()
+    assert verification is not None
+    assert verification.verified_at is None  # not yet verified
+    assert verification.expires_at is not None
+
+
+@pytest.mark.asyncio
+async def test_rectify_same_email_does_not_send_verification_email(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+) -> None:
+    """PUT /gdpr/profile with the same email should NOT call send_verification_email."""
+    with patch(
+        "app.routers.gdpr.send_verification_email",
+        new_callable=AsyncMock,
+        return_value=True,
+    ) as mock_send:
+        response = await client.put(
+            "/gdpr/profile",
+            headers=auth_headers,
+            json={"email": test_user.email},
+        )
+    assert response.status_code == 200
+    mock_send.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_rectify_same_email_email_verified_stays_true(
+    client: AsyncClient,
+    test_user: User,
+    auth_headers: dict[str, str],
+    db_session: AsyncSession,
+) -> None:
+    """PUT /gdpr/profile with same email should leave email_verified unchanged (True)."""
+    with patch(
+        "app.routers.gdpr.send_verification_email",
+        new_callable=AsyncMock,
+        return_value=True,
+    ):
+        response = await client.put(
+            "/gdpr/profile",
+            headers=auth_headers,
+            json={"email": test_user.email},
+        )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["email_verified"] is True

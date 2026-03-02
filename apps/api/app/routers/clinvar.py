@@ -12,11 +12,19 @@ from pathlib import Path
 
 import anyio
 from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 
 from app.config import get_settings
 from app.database import DbSession
 from app.middleware.auth import AdminUser
-from app.schemas.auth import MessageResponse
+
+
+class ClinvarSyncResponse(BaseModel):
+    """Response model for the ClinVar sync trigger endpoint."""
+
+    message: str
+    status: str
+
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -72,18 +80,18 @@ async def check_clinvar_updates(
 
 @router.post(
     "/sync",
-    response_model=MessageResponse,
+    response_model=ClinvarSyncResponse,
     summary="Trigger ClinVar sync (admin only)",
 )
 async def trigger_clinvar_sync(
     user: AdminUser,
     db: DbSession,
-) -> MessageResponse:
+) -> ClinvarSyncResponse:
     """Trigger a ClinVar data synchronization.
 
-    Downloads the latest variant_summary.txt.gz from NCBI and
-    compares it against the local carrier panel. This is a
-    potentially long-running operation.
+    ClinVar sync is a known post-launch item. This endpoint returns a stub
+    response. Full implementation (Celery/ARQ background task, NCBI FTP
+    download, carrier panel diff) is planned for Phase 1.
 
     Requires admin authentication (JWT + X-Admin-Key header).
     """
@@ -95,11 +103,12 @@ async def trigger_clinvar_sync(
         user.email,
     )
 
-    return MessageResponse(
+    return ClinvarSyncResponse(
         message=(
             "ClinVar sync has been queued. "
             "This feature will be fully implemented in Phase 1 with background task support."
-        )
+        ),
+        status="not_implemented",
     )
 
 

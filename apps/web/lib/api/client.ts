@@ -4,23 +4,19 @@
  * Features:
  * - Automatic Authorization header injection from the auth store
  * - Automatic 401 handling with one-shot token refresh
+ * - Transient error retry with exponential backoff (429, 502, 503, 504)
  * - Structured error responses via ApiError class
  * - JSON request/response by default
  * - Configurable base URL via NEXT_PUBLIC_API_URL env var
  * - Default 15-second request timeout via AbortSignal
  *
- * Current retry behavior:
- * - 401 responses trigger a single token refresh attempt via the
- *   registered unauthorized handler. If refresh succeeds, the original
- *   request is retried once. Concurrent 401s are deduplicated.
- * - All other errors (including 429, 5xx) are thrown immediately.
- *
- * TODO: Implement full retry policy for transient server errors:
- * - Max retries: 3
- * - Backoff: exponential (1s, 2s, 4s)
- * - Retry on: 429 (rate limited), 502/503/504 (server errors)
- * - Do NOT retry: 400, 403, 404, 409 (client errors)
- * - Honor Retry-After header when present
+ * Retry behavior:
+ * - 401 responses trigger a single token refresh attempt (outer layer).
+ *   If refresh succeeds, the original request is retried once. Concurrent
+ *   401s are deduplicated.
+ * - 429/502/503/504 responses are retried up to 3 times (inner layer) with
+ *   exponential backoff (1s, 2s, 4s). Retry-After header is honoured.
+ * - Non-retryable errors (400, 403, 404, 409, etc.) are thrown immediately.
  */
 
 const API_BASE_URL =
@@ -76,6 +72,52 @@ export function setTokenAccessor(getter: () => string | null): void {
  */
 export function setUnauthorizedHandler(handler: () => Promise<boolean>): void {
   _onUnauthorized = handler;
+}
+
+// ── Transient retry ──────────────────────────────────────────────────────
+
+const RETRYABLE_STATUS_CODES = [429, 502, 503, 504] as const;
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 1000;
+
+/**
+ * Wrap a fetch call with exponential-backoff retry for transient errors.
+ *
+ * Retries on 429 / 502 / 503 / 504. Respects the `Retry-After` response
+ * header (interpreted as seconds). All other status codes are returned
+ * immediately without retry.
+ */
+export async function withTransientRetry(fn: () => Promise<Response>): Promise<Response> {
+  let lastError: Error | undefined;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fn();
+      if (
+        !(RETRYABLE_STATUS_CODES as readonly number[]).includes(response.status) ||
+        attempt === MAX_RETRIES
+      ) {
+        return response;
+      }
+      const retryAfter = response.headers.get('Retry-After');
+      let delay: number;
+      if (retryAfter) {
+        const parsed = parseInt(retryAfter, 10);
+        delay = Number.isFinite(parsed) && parsed > 0
+          ? Math.min(parsed * 1000, 30_000)
+          : BASE_DELAY_MS * Math.pow(2, attempt);
+      } else {
+        delay = BASE_DELAY_MS * Math.pow(2, attempt);
+      }
+      await new Promise<void>((resolve) => setTimeout(resolve, delay));
+    } catch (error) {
+      lastError = error as Error;
+      if (attempt === MAX_RETRIES) throw lastError;
+      await new Promise<void>((resolve) =>
+        setTimeout(resolve, BASE_DELAY_MS * Math.pow(2, attempt)),
+      );
+    }
+  }
+  throw lastError ?? new Error("Retry exhausted");
 }
 
 // ── Request helpers ─────────────────────────────────────────────────────
@@ -195,7 +237,7 @@ async function executeRequest<T>(options: RequestOptions): Promise<T> {
     fetchOptions.body = JSON.stringify(body);
   }
 
-  const response = await fetch(url, fetchOptions);
+  const response = await withTransientRetry(() => fetch(url, fetchOptions));
 
   if (response.ok) {
     // 204 No Content — returns undefined cast to T.

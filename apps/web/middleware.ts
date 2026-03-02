@@ -50,7 +50,6 @@ const COMING_SOON_PATH = "/coming-soon";
  */
 const COMING_SOON_ALLOWED_PATHS = [
   COMING_SOON_PATH,
-  "/contact",
   "/privacy",
   "/api/coming-soon-bypass",
 ];

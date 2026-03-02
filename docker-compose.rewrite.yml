@@ -49,6 +49,12 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       SENTRY_DSN: ${SENTRY_DSN:-}
       ADMIN_API_KEY: ${ADMIN_API_KEY:-}
+      # TOTP 2FA encryption key (generate with: python -c "import secrets; print(secrets.token_hex(32))")
+      TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-}
+      # Data encryption key (generate with: python -c "import secrets; print(secrets.token_hex(32))")
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY:-}
+      # Set to false for localhost development (no HTTPS)
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
     depends_on:
       db:
         condition: service_healthy

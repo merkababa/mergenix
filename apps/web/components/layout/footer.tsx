@@ -19,6 +19,8 @@ const RESOURCE_LINKS = [
   { href: "/diseases", label: "Disease Catalog" },
   { href: "/glossary", label: "Glossary" },
   { href: "/about", label: "How It Works" },
+  { href: "/security", label: "Security" },
+  { href: "/sample-report", label: "Sample Report" },
 ];
 
 const LEGAL_LINKS = [

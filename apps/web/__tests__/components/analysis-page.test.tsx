@@ -39,6 +39,19 @@ vi.mock('../../hooks/use-genetics-worker', () => ({
   }),
 }));
 
+// Mock usePdfExport hook
+const mockGeneratePdf = vi.fn();
+vi.mock('../../lib/pdf/use-pdf-export', () => ({
+  usePdfExport: () => ({
+    generatePdf: mockGeneratePdf,
+    isGenerating: false,
+    progress: 0,
+    error: null,
+    blobUrl: null,
+    reset: vi.fn(),
+  }),
+}));
+
 // Mock CoupleUploadCard — renders two testable dropzone stubs
 vi.mock('../../components/genetics/couple-upload-card', () => ({
   CoupleUploadCard: ({ parentAFile, parentBFile }: { parentAFile: File | null; parentBFile: File | null }) => (
@@ -69,16 +82,36 @@ vi.mock('../../components/legal/chip-disclosure-modal', () => ({
 }));
 
 // Mock save-related components
-vi.mock('../../components/analysis/save-result-dialog', () => ({
-  SaveResultDialog: () => null,
-}));
-
 vi.mock('../../components/analysis/saved-results-list', () => ({
   SavedResultsList: () => null,
 }));
 
+const mockOnDownloadPDF = vi.fn();
 vi.mock('../../components/save/save-options-modal', () => ({
-  SaveOptionsModal: () => null,
+  SaveOptionsModal: ({ onDownloadPDF }: { onDownloadPDF: () => void }) => {
+    mockOnDownloadPDF.mockImplementation(onDownloadPDF);
+    return null;
+  },
+}));
+
+// Mock PdfExportButton to avoid pdfmake import in tests
+vi.mock('../../components/genetics/results/pdf-export-button', () => ({
+  PdfExportButton: () => <div data-testid="pdf-export-button">PDF Export</div>,
+}));
+
+// Mock StaleResultsBanner
+vi.mock('../../components/genetics/results/stale-results-banner', () => ({
+  StaleResultsBanner: () => null,
+}));
+
+// Mock GinaNotice
+vi.mock('../../components/legal/gina-notice', () => ({
+  GinaNotice: () => null,
+}));
+
+// Mock HighContrastToggle
+vi.mock('../../components/a11y/high-contrast-toggle', () => ({
+  HighContrastToggle: () => null,
 }));
 
 // Mock ErrorBoundary to render children directly
@@ -86,8 +119,8 @@ vi.mock('../../components/error-boundary', () => ({
   ErrorBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-// Import the page AFTER mocks are set up
-import AnalysisPage from '../../app/(app)/analysis/page';
+// Import the analysis content component (now extracted from the page)
+import { AnalysisContent as AnalysisPage } from '../../app/(app)/analysis/_components/analysis-content';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -244,5 +277,36 @@ describe('AnalysisPage', () => {
 
     expect(useAnalysisStore.getState().errorMessage).toBeNull();
     expect(useAnalysisStore.getState().currentStep).toBe('idle');
+  });
+
+  it('does NOT render SaveResultDialog when analysis is complete', () => {
+    useAnalysisStore.setState({
+      currentStep: 'complete',
+      fullResults: mockFullResults as never,
+    });
+
+    render(<AnalysisPage />);
+
+    // SaveResultDialog has been removed — its "Save Analysis" button should NOT exist
+    // Only the "Save Results" button (opening the SaveOptionsModal) should be present
+    const saveButtons = screen.getAllByRole('button', { name: /save/i });
+    // "Save Results" opens the modal; there should be no "Save Analysis" dialog trigger
+    expect(saveButtons.every((btn) => btn.textContent?.includes('Save Results') || btn.textContent?.includes('New Analysis'))).toBe(true);
+    // The text "Save Analysis" from SaveResultDialog should not appear
+    expect(screen.queryByText('Save Analysis')).not.toBeInTheDocument();
+  });
+
+  it('onDownloadPDF wires generatePdf when fullResults are available', () => {
+    useAnalysisStore.setState({
+      currentStep: 'complete',
+      fullResults: mockFullResults as never,
+    });
+
+    render(<AnalysisPage />);
+
+    // Call the captured onDownloadPDF handler (wired from page to SaveOptionsModal)
+    mockOnDownloadPDF();
+
+    expect(mockGeneratePdf).toHaveBeenCalledWith(mockFullResults);
   });
 });

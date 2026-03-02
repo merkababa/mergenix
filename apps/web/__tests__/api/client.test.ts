@@ -359,6 +359,83 @@ describe('HTTP client', () => {
     });
   });
 
+  // ── withTransientRetry ───────────────────────────────────────────────
+
+  describe('withTransientRetry', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('retries on 503 twice then succeeds on 200', async () => {
+      mockFetch
+        .mockResolvedValueOnce(mockResponse(null, 503))
+        .mockResolvedValueOnce(mockResponse(null, 503))
+        .mockResolvedValueOnce(mockResponse({ ok: true }, 200));
+
+      const promise = clientModule.withTransientRetry(() => mockFetch('/test'));
+
+      // Advance through the two retry delays (1s + 2s)
+      await vi.advanceTimersByTimeAsync(1000);
+      await vi.advanceTimersByTimeAsync(2000);
+
+      const response = await promise;
+      expect(response.status).toBe(200);
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('respects Retry-After header on 429', async () => {
+      const retryAfterResponse = {
+        ok: false,
+        status: 429,
+        statusText: 'Too Many Requests',
+        json: () => Promise.resolve({}),
+        headers: new Headers({ 'Retry-After': '5' }),
+      } as Response;
+
+      mockFetch
+        .mockResolvedValueOnce(retryAfterResponse)
+        .mockResolvedValueOnce(mockResponse({ ok: true }, 200));
+
+      const promise = clientModule.withTransientRetry(() => mockFetch('/test'));
+
+      // Retry-After: 5 → delay should be 5000ms
+      await vi.advanceTimersByTimeAsync(5000);
+
+      const response = await promise;
+      expect(response.status).toBe(200);
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('exhausts retries after 4 attempts (1 original + 3 retries) on persistent 503', async () => {
+      mockFetch.mockResolvedValue(mockResponse(null, 503));
+
+      const promise = clientModule.withTransientRetry(() => mockFetch('/test'));
+
+      // Advance through all 3 retry delays (1s + 2s + 4s)
+      await vi.advanceTimersByTimeAsync(1000);
+      await vi.advanceTimersByTimeAsync(2000);
+      await vi.advanceTimersByTimeAsync(4000);
+
+      const response = await promise;
+      // Returns the final 503 response (doesn't throw for non-network errors)
+      expect(response.status).toBe(503);
+      expect(mockFetch).toHaveBeenCalledTimes(4);
+    });
+
+    it('does not retry non-retryable 404', async () => {
+      mockFetch.mockResolvedValue(mockResponse({ detail: 'Not found' }, 404));
+
+      const response = await clientModule.withTransientRetry(() => mockFetch('/test'));
+
+      expect(response.status).toBe(404);
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+  });
+
   // ── Concurrent 401 refresh deduplication ────────────────────────────
 
   describe('concurrent 401 refresh deduplication', () => {

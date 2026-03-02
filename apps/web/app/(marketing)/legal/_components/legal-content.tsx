@@ -591,13 +591,9 @@ export function LegalContent() {
                       11. EU Representative (Article 27)
                     </h3>
                     <p>
-                      Mergenix has not yet designated an EU representative under GDPR
-                      Article 27. This will be updated prior to launch. For full details,
-                      see our{" "}
-                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
-                        Privacy Notice
-                      </Link>
-                      .
+                      For inquiries from EU data subjects or supervisory authorities, please
+                      contact us at privacy@mergenix.com. We are establishing our EU Article
+                      27 representation and will publish the details here.
                     </p>
                   </div>
 

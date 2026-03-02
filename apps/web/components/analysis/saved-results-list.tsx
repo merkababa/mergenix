@@ -47,7 +47,6 @@ interface SavedResultItemProps {
 
 const SavedResultItem = memo(function SavedResultItem({
   result,
-  onLoad,
   onDeleteClick,
   onDeleteConfirm,
   onDeleteCancel,
@@ -55,7 +54,6 @@ const SavedResultItem = memo(function SavedResultItem({
   isDeleting,
   isAnyLoading,
   isAnyDeleting,
-  loadingId,
 }: SavedResultItemProps) {
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
@@ -133,17 +131,19 @@ const SavedResultItem = memo(function SavedResultItem({
             </>
           ) : (
             <>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onLoad(result.id)}
-                isLoading={loadingId === result.id}
-                disabled={isAnyLoading || isAnyDeleting}
-                aria-label={`Load analysis: ${result.label}`}
-              >
-                <Download className="h-3.5 w-3.5" />
-                Load
-              </Button>
+              <div className="flex flex-col items-end gap-0.5">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled
+                  aria-disabled="true"
+                  aria-label={`Load analysis: ${result.label} (coming soon)`}
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Load
+                </Button>
+                <span className="text-[10px] text-[var(--text-dim)]">Coming Soon</span>
+              </div>
               <Button
                 ref={deleteButtonRef}
                 variant="ghost"

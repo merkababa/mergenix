@@ -1,84 +1,130 @@
-Execute the full three-layer code review pipeline before creating a PR.
+Execute the optimized 3-layer code review pipeline before creating a PR.
 
 ## Layer 0: Static Analysis Gate
+
 Executors MUST pass all static checks before code goes to reviewers:
 1. `pnpm lint` — ESLint
 2. `pnpm typecheck` — TypeScript (exclude known pre-existing issues in `client.ts:157`, `demo-results.ts:268`)
 3. `pnpm test` — All Vitest tests passing
 4. `pnpm build` — No build errors
-5. For Python backend: `cd apps/api && ruff check . && pytest tests/ -v`
+5. For Python backend: `cd apps/api && ruff check . && pytest tests/ -v -n auto`
 
-Only code that passes Layer 0 proceeds to Stage 1.
+Only code that passes Layer 0 proceeds.
 
-## Review Panel (10 Reviewers)
-| # | Reviewer | Focus Area |
-|---|----------|------------|
-| 1 | Architect | System design, modularity, separation of concerns, scalability, design patterns, type safety |
-| 2 | QA | Test coverage, edge cases, assertions, error handling, regression risk, logging |
-| 3 | Scientist | rsID accuracy, genetics correctness, citations, scientific methodology, data integrity |
-| 4 | Technologist | Performance, React/Next.js patterns, bundle size, memory, async correctness |
-| 5 | Business | Tier gating, conversion funnel, upgrade CTAs, copy quality, naming accuracy |
-| 6 | Designer | Accessibility (ARIA), responsive design, heading hierarchy, keyboard navigation, UX flow |
-| 7 | Security Analyst | OWASP top 10, injection, CSRF, token handling, encoding, secrets, timing attacks |
-| 8 | Code Reviewer | Readability, naming, DRY/SOLID, style consistency, dead code, import hygiene |
-| 9 | Legal + Privacy | GDPR, GINA, data retention, consent, right to deletion, cookie consent, age verification |
-| 10 | Ethics / Bioethics | Population bias, responsible result framing, emotional harm prevention, eugenics guardrails |
+## Layer 1: Self-Review (Shift Left)
 
-Conductor autonomously selects reviewers using the phase-type defaults below. **Policy: better safe than sorry** — when in doubt, include the reviewer. Only skip a role if the PR has absolutely zero relevance to that domain (e.g., Designer for a pure backend config change with no UI impact). Never ask the user which reviewers to include.
+After executors complete and Layer 0 passes, the Conductor reads each changed file and verifies against `docs/EXECUTOR_CHECKLIST.md`. This catches ~80% of what reviewers would find.
 
-### Phase-Type Pre-Selection Defaults
-- **Frontend-only:** Architect, QA, Technologist, Business, Designer, Code Reviewer
-- **Backend-only:** Architect, QA, Technologist, Business, Security, Code Reviewer
-- **Genetics:** Architect, QA, Scientist, Technologist, Code Reviewer
-- **Full-stack / Auth+Payments:** All 10
-- Legal+Privacy and Ethics always included when touching user data or genetic data
+### Process
+1. List changed files: `git diff origin/main...HEAD --name-only`
+2. For each changed file, verify every applicable checklist item
+3. Fix violations immediately (spawn targeted fix agents — Haiku for mechanical, Sonnet for contextual)
+4. Re-run Layer 0
+5. THEN proceed to Layer 2
 
-## Stage 1: Gemini Reviews — ALL Selected MUST BE A+
+**Why this works**: Most review findings are pattern violations (missing ARIA, hardcoded strings, wrong imports, blocking calls). The checklist catches these mechanically. Reviewers should focus on what checklists CAN'T catch: architectural issues, race conditions, logic errors, security flaws.
 
-1. Spawn a **Gemini Review Coordinator** agent (dedicated team member, not a bash script)
-2. Coordinator reads changed files and prepares review prompts
-3. Coordinator calls Gemini separately per reviewer role using personas from `review-personas/*.md`
-   - One Gemini call = one reviewer — never combine reviewers
-   - No need to wait between calls (API tokens, generous rate limits)
-4. Each Gemini reviewer gets **FULL SOURCE FILES** + diff — not just the diff. Include all changed `.ts`/`.tsx`/`.py` files in their entirety + relevant `.json` data/config + test files for QA
-5. Coordinator reports grades table to Conductor
-6. Conductor spawns a **Judge/Synthesis agent** that deduplicates issues across reviewers, resolves conflicts, produces final grade table + fix manifest
-7. Print **Consolidated Issues table** to user: Issue | Flagged By | Severity | Action Item
-8. Fix issues: 6+ → executor team with file ownership; 1-5 → single executor
-9. Re-review only failed roles (below A+)
-10. Repeat until ALL selected Gemini reviewers grade A+
-11. As each Gemini role reaches A+, immediately start the corresponding Claude reviewer (pipeline overlap)
+## Layer 2: External Review (2-4 Specialist Agents)
 
-## Stage 2: Claude Opus Reviews — ALL Selected MUST BE A+
+### Reviewer Selection (pick 2-4, NOT more)
 
-1. Only after ALL Gemini reviewers are A+ — hard prerequisite
-2. Spawn separate Claude Opus agents per reviewer role using `.claude/agents/*-reviewer.md` — all selected, no skipping
-3. Each agent has its own context — fully independent, never combined
-4. Agents read files themselves (they have tool access)
-5. All agents run in parallel
-6. Each grades independently — results not combined
-7. Spawn a **Judge/Synthesis agent** — deduplicates, resolves conflicts, produces final grade table + fix manifest
-8. Print **Consolidated Issues table** to user (same format as Stage 1)
-9. Fix issues: 6+ → executor team; 1-5 → single executor
-10. Re-review only failed roles
-11. Repeat until ALL selected Claude reviewers grade A+
-12. Only after both Stage 1 (A+) AND Stage 2 (A+) may a PR be created
+| Trigger | Reviewers |
+|---------|-----------|
+| **Default (any PR)** | Architect + Code Reviewer (2) |
+| **New UI screens** | + Designer (3) |
+| **Backend / API / DB** | + Security (3) |
+| **Genetics / health data** | + Scientist (3) |
+| **Privacy / compliance** | + Security + Legal (4) |
+| **Performance-sensitive** | + Technologist (3) |
+| **User-facing copy / pricing** | + Business (3) |
+| **Genetic result display** | + Ethics (3) |
 
-## Fix Flow
+**Rule**: More reviewers ≠ better. Overlapping reviewers find the same issues and waste tokens. 2 focused reviewers > 5 generalist reviewers. Only add a reviewer if the PR has clear relevance to their domain.
+
+### Reviewer Prompt Requirements
+
+Each reviewer agent uses `.claude/agents/*-reviewer.md`. Add to every reviewer prompt:
+
+```
+Issues covered by docs/EXECUTOR_CHECKLIST.md are already enforced.
+Only flag checklist items if the checklist was VIOLATED.
+Focus on architectural and logic issues that a checklist cannot catch.
+```
+
+### Severity Classification (required for every finding)
+- **[BLOCK]**: Must fix before merge. Bugs, security issues, data loss risks, incorrect behavior.
+- **[WARN]**: Should fix. Code smell, maintainability concern, minor inconsistency.
+- **[INFO]**: Nice to have. Style preference, future improvement suggestion.
+
+### Grading
+- **A+ (95-100)**: Exemplary — zero issues
+- **A (90-94)**: No BLOCKs, minor WARNs/INFOs only
+- **B+ (85-89)**: 1-2 BLOCKs
+- **B (80-84)**: 3-5 BLOCKs
+- **C or below**: Major structural issues
+
+### Fix & Re-Review (max 3 rounds, HARD CAP)
+
+```
+Round 1: All selected reviewers in parallel → collect ALL findings
+         ↓
+    Fix EVERYTHING (BLOCK + WARN + INFO) in ONE batch
+    Re-run Layer 0
+         ↓
+Round 2: Re-review ONLY reviewers that had BLOCKs in R1
+         If no new BLOCKs → done
+         If new BLOCKs → fix → Round 3
+         ↓
+Round 3: Hard stop. Fix remaining BLOCKs only. No further review.
+```
+
+**Critical rule: Fix ALL severities at once.** The #1 cause of extra rounds is fixing only BLOCKs then discovering WARNs persist. One batch fixes everything.
+
+### Exit Criteria
+
+- **A grade (no BLOCKs) = pass.** WARNs and INFOs are fixed in a final cleanup pass but do NOT trigger additional review rounds.
+- After all reviewers reach A: fix remaining WARN/INFO items per the Final Cleanup Rule below.
+- Not-applicable = A+ with "N/A — no [domain] impact"
+
+### Final Cleanup Rule (after all reviewers reach A)
+
+After the last review round passes, triage every remaining WARN and INFO using this two-tier scope rule:
+
+1. **WARNs/INFOs from code this PR changed** → fix in this PR, no exceptions. We touched it, we own it.
+2. **WARNs/INFOs from pre-existing code** (reviewers flagged code we didn't change) → do NOT fix in this PR. Create tracked tech debt items (add to `PROGRESS.md` deferred items or create GitHub issues). Prevents scope creep.
+3. **WARNs/INFOs requiring architectural decisions** → do NOT silently fix. Present options to the user and let them decide. Add to tech debt if deferred.
+
+**Rationale:** "Acknowledged" WARNs that never get fixed are invisible debt. If we changed the code, we own the quality of what we ship. But pre-existing issues belong in their own PRs to keep scope focused.
+
+To determine ownership, run: `git diff origin/main...HEAD -- <file>` — if the flagged lines are NOT in the diff, the finding is pre-existing.
+
+### Gemini (Optional Pre-Check)
+
+Gemini can optionally run BEFORE Claude reviewers as a cheap broad sweep:
+- Fire selected roles via `review-personas/*.md` using Gemini CLI
+- Use to catch surface-level issues before spending Opus tokens
+- NOT required — skip if PR is small or time-constrained
+- If used, Gemini must reach A before Claude reviewers start
+
+### Grades Table Format
+
+```
+| Reviewer      | R1             | R2  | R3  | Key Fixes              |
+|---------------|----------------|-----|-----|------------------------|
+| Architect     | B+ (2 BLOCKs)  | A   | -   | Added error boundaries |
+| Code Reviewer | A (3 WARNs)    | -   | -   | Fixed in final wave    |
+```
+
+### Fix Flow
 - 6+ issues → executor team with file ownership (one executor per directory/module)
 - 1-5 issues → single executor agent
-- After fixes: re-review ONLY the roles that were below A+
-- **Feedback loop:** After each Claude review cycle, record issues Gemini missed → append to `docs/gemini-calibration.md` → include in next Gemini review prompt
 
-## Grades Table Format
-```
-| Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |
-|----------|-----------|-----------|--------------|-----------|
-| Architect | A- | A+ | A+ | Fixed X |
-```
+### Feedback Loop
+After each review cycle, record issues the self-review (Layer 1) missed → update `docs/EXECUTOR_CHECKLIST.md` with new items. The checklist is a living document that improves over time.
 
 ## Rules
-- Each grade must cite specific evidence from the code — no hand-waving
-- Not-applicable = A+ with "N/A — no [domain] impact" but still explicitly stated
+- Each grade must cite specific `file:line` evidence — no hand-waving
 - Each reviewer = separate agent — never combine multiple reviewers in one agent
 - Review happens BEFORE the PR is created, not after
+- Run all reviewers as background tasks — read only grade + summary from output
+- Never accumulate 4+ full review results in conductor context — summarize as you go

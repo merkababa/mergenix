@@ -270,7 +270,7 @@ class TestClinvarSync:
         admin_token: str,
         patched_admin_key: str,
     ) -> None:
-        """POST /clinvar/sync response contains a 'message' field."""
+        """POST /clinvar/sync response contains a 'message' field and status field."""
         response = await client.post(
             "/clinvar/sync",
             headers=_admin_headers(admin_token),
@@ -280,6 +280,8 @@ class TestClinvarSync:
         assert "message" in data, f"Expected 'message' key in response: {data}"
         assert isinstance(data["message"], str)
         assert len(data["message"]) > 0
+        assert "status" in data, f"Expected 'status' key in response: {data}"
+        assert data["status"] == "not_implemented"
 
     @pytest.mark.asyncio
     async def test_sync_message_mentions_queue(
