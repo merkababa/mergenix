@@ -23,7 +23,8 @@
 **Test count:** 3,090 Vitest + 683 Python = 3,773 tests passing.
 **Analysis Decomposition:** PR #115 — **MERGED** (2/2 A Claude, 1 review round). Decomposed `analysis-content.tsx` (562→~230 lines) into 4 sub-components. 7 review findings fixed. Tech debt resolved.
 **Website Audit Fixes:** PR #116 — **MERGED** (2/2 A Claude, 1 review round). Full website audit (4 parallel agents). Added robots.txt, sitemap, favicon, OG image (Next.js Metadata API). Payment page metadata. Shared SITE_URL env var. saveResult field fix. 13 files, +374/-224 lines.
-**Next:** Infrastructure setup + legal sign-offs → alpha launch.
+**Design Overhaul Review:** 2026-03-02 — Full-site design review (6 parallel agents, 1 completed, 5 rate-limited). Grade: **B**. 20 ranked improvements identified. 4-sprint plan created at `docs/plans/design-overhaul-2026.md`. See below for next steps.
+**Next:** Design overhaul Sprint D1 (foundation) OR infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
 
@@ -75,6 +76,33 @@
 | Launch Readiness Fixes | Claude | **Merged** | fix/launch-readiness | PR #114 — 15 pre-alpha items across 3 sprints. Hide cloud save UI, custom 404/500 pages, remove fake counselors (NSGC CTA), GDPR email verification, API retry (429/5xx exponential backoff), prod docker-compose, Redis auth, EU Art 27, server-side metadata (3 pages), footer links, ClinVar stub. Review pipeline optimized (10→2-4 reviewers, 3-round cap, executor checklist, Final Cleanup Rule). 30 files, +2,397/-1,391 lines. 1 review round → **4/4 A Claude** (Architect, Code, Security, Designer). 3,773 tests. |
 | Analysis Content Decomposition | Claude | **Merged** | refactor/decompose-analysis-content | PR #115 — Decomposed `analysis-content.tsx` (562→~230 lines) into 4 sub-components: upload section, progress section, results section, modals. All props-only (no store access). DRY tab config, simplified props, removed dead code. 5 files, +482/-292 lines. 1 review round → **2/2 A Claude** (Architect, Code Reviewer). 3,773 tests. |
 | Website Audit Fixes | Claude | **Merged** | fix/website-audit-gaps | PR #116 — Full website audit (4 parallel agents: marketing, app, backend, config). Added robots.txt, sitemap (476 disease URLs), favicon, OG image (all programmatic via Next.js Metadata API). Payment success/cancel metadata (server component extraction). Shared SITE_URL env var. saveResult field fix. .env.example updates. 13 files, +374/-224 lines. 1 review round → **2/2 A Claude** (Architect, Code Reviewer). 3,773 tests. |
+| **Design Overhaul Review** | Claude | **Plan Ready** | docs only (main) | Full-site 2026 design review. 6 parallel designer-reviewer agents launched (1 completed comprehensive review, 5 hit API rate limits). Grade: **B**. 20 ranked improvements identified across homepage, about, products, sample report, design system, nav/layout. 4-sprint plan: D1 Foundation → D2 Homepage → D3 Sample Report & Data Viz → D4 Secondary Pages. Plan at `docs/plans/design-overhaul-2026.md`. Review log at `docs/research/agent-logs/2026-03-02-design-review/`. |
+
+---
+
+## Design Overhaul — Incomplete Reviews (Resume on Next PC)
+
+5 of 6 designer-reviewer agents hit API rate limits before completing. The 1 successful agent (Landing & Marketing) provided a **comprehensive full-site review** covering all areas. However, dedicated deep-dives on these 5 sections may surface additional findings:
+
+| Agent | Section | Files to Review | Status |
+|-------|---------|-----------------|--------|
+| Design System & Theming | `globals.css`, `tailwind.config.ts`, all `components/ui/*` | Rate limited — needs re-run |
+| Auth & Account UX | `(auth)/*` pages, `components/auth/*`, `components/account/*` | Rate limited — needs re-run |
+| Analysis & Results UI | `(app)/analysis/*`, `components/genetics/*`, `components/genetics/results/*` | Rate limited — needs re-run |
+| Navigation & Layout | `components/layout/*`, all `layout.tsx` files, `not-found.tsx`, `error.tsx` | Rate limited — needs re-run |
+| Legal & Compliance Pages | `privacy/`, `legal/`, `security/`, `glossary/`, `diseases/`, `components/legal/*` | Rate limited — needs re-run |
+
+**To continue:** Re-run these 5 agents from another PC/session. The full review from the Landing & Marketing agent already covers most findings — the re-runs would add depth, not fundamentally change the plan.
+
+---
+
+## Design Overhaul — Decision Points (User Input Needed)
+
+1. **Hero helix approach:** Three.js 3D (~150KB) vs CSS 3D (0KB) vs Lottie (~50KB)?
+2. **Social proof:** Use real/placeholder testimonial data?
+3. **Team section on About page:** Real photos/bios or skip for now?
+4. **Tier recommender quiz on Products page:** Build now or defer?
+5. **View Transitions API:** Ship (experimental) or wait?
 
 ---
 
@@ -179,6 +207,8 @@
 | 2026-02-21 | Claude | Stream Ops — EU Region, CI Hardening, Alpha Deploy: EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security. Gate 1: 4/4 A/A+ Gemini. Gate 2: 4/4 A/A+ Claude. **Stream Ops COMPLETE.** | PR #88 |
 | 2026-02-22 | Claude | Coming Soon Page with Site Lock: Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests. Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). | PR #89 |
 | 2026-02-23 | Claude | Web Polish — A11y, Type Safety, Tier Alignment, Test Coverage: Multi-round Claude review (R1–R6) across 10 personas. h1 heading hierarchy, role="alert"/role="status", ARIA radiogroup, 44px touch targets, getTierVariant typed Tier, Record<RiskLevel>, TIER_GATING aligned with PRICING_TIERS (free diseases 25→0, traits 10→79, ethnicity all), PGx exclusive upper bounds, OAuth CSRF state validation, consent retry queue (GDPR Art 7), VCF slash genotype tests, haploid parsing tests, PGx boundary tests, flushPendingConsents tests. 104 files, 3,010 tests. 10/10 A/A+ Claude (6 rounds). | PR #90 |
+| 2026-03-02 | Claude | Design Overhaul Review — Full-site 2026 design audit: 6 parallel designer-reviewer agents (Opus). 1 completed comprehensive review (all pages + components + design system), 5 hit API rate limits. Grade: **B**. 20 ranked improvements: interactive 3D DNA helix hero, bento grid features, data viz for sample report (bars/gauges/Punnett), layout variety, scroll animation library, social proof, fluid typography, card evolution, risk color coding, View Transitions. 4-sprint plan (D1-D4, ~15-18 days). Plan: `docs/plans/design-overhaul-2026.md`. Review: `docs/research/agent-logs/2026-03-02-design-review/`. | docs only |
+| 2026-03-02 | Claude | Project Statistics: 292 commits, 111 PRs (74 merged), 686 files, ~280K LOC (69K TS + 37K TSX + 26K Python + 112K JSON), 170 test files (59,880 lines), 989K insertions / 452K deletions total churn, 257/292 commits co-authored by Claude (88%), ~98M combined AI tokens, ~$1,800 estimated API cost. Zero human code lines written. | stats |
 
 ---
 
