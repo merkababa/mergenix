@@ -71,6 +71,14 @@
 
 ---
 
+## Deferred Tech Debt
+
+| Item | Source | Severity | Notes |
+|------|--------|----------|-------|
+| Decompose `analysis-content.tsx` (559 lines, 8 callbacks, 3 stores) | PR #114 Architect review | INFO | Extract `AnalysisUploadSection`, `AnalysisResultsDashboard`, `AnalysisModals` sub-components. Pre-existing God component — was moved, not introduced. |
+
+---
+
 ## Milestones
 
 ### Phase 1: Data Foundation & Analysis Engine
