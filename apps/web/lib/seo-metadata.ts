@@ -8,6 +8,10 @@
 
 import type { Metadata } from "next";
 
+/** Canonical site URL — falls back to production if the env var is not set. */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mergenix.com";
+
 // ─── Keywords ────────────────────────────────────────────────────────────────
 
 /** Core SEO keywords for the Mergenix platform. */
@@ -37,7 +41,7 @@ export const JSON_LD_SCHEMA: Record<string, string> = {
   operatingSystem: "Web",
   description:
     "Privacy-first genetic offspring analysis platform. Compare two parents' DNA to predict offspring disease risk and traits.",
-  url: "https://mergenix.com",
+  url: SITE_URL,
 };
 
 // ─── Default Metadata ───────────────────────────────────────────────────────
@@ -55,7 +59,7 @@ export const DEFAULT_METADATA: Metadata = {
     title: "Mergenix — Know Your Genetic Future",
     description:
       "Privacy-first genetic offspring analysis. Your DNA never leaves your device.",
-    url: "https://mergenix.com",
+    url: SITE_URL,
     siteName: "Mergenix",
     type: "website",
     locale: "en_US",

@@ -54,6 +54,7 @@ describe('analysis-client', () => {
         result_data: { traits: {} },
         summary: { trait_count: 5 },
         consent_given: true,
+        password_reset_warning_acknowledged: true,
       });
     });
 

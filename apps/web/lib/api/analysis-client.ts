@@ -142,6 +142,9 @@ export async function saveResult(
     result_data: resultData,
     summary,
     consent_given: consentGiven,
+    // Required by the backend: the user has already acknowledged this warning
+    // in the consent modal shown before initiating the save flow.
+    password_reset_warning_acknowledged: true,
   });
   return toSaveAnalysisResponse(raw);
 }

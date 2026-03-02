@@ -1,47 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { CancelContent } from "./_components/cancel-content";
 
-import Link from "next/link";
-import { XCircle, ChevronRight } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+export const metadata: Metadata = {
+  title: "Payment Cancelled | Mergenix",
+  description: "Your Mergenix payment was cancelled. No charges were made.",
+};
 
 export default function PaymentCancelPage() {
-  return (
-    <div className="mx-auto max-w-lg text-center">
-      <GlassCard variant="medium" hover="none" className="p-8">
-        <div role="status">
-          <XCircle
-            className="mx-auto h-16 w-16 text-[#ef4444]"
-            aria-hidden="true"
-          />
-
-          <h1 className="gradient-text font-heading mt-6 text-3xl font-extrabold">
-            Payment Cancelled
-          </h1>
-
-          <p className="mt-3 text-[var(--text-muted)]">
-            Your payment was not completed. No charges were made.
-          </p>
-        </div>
-
-        <div className="mt-8 flex flex-col items-center gap-3">
-          <Link
-            href="/products"
-            className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
-          >
-            Try Again
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-
-          <Link
-            href="/analysis"
-            className={cn(buttonVariants({ variant: "ghost", size: "md" }))}
-          >
-            Go to Dashboard
-          </Link>
-        </div>
-      </GlassCard>
-    </div>
-  );
+  return <CancelContent />;
 }
