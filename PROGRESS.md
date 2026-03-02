@@ -19,6 +19,8 @@
 **PMID Audit:** PR #112 — **MERGED** (4/4 A+ Claude, 2 review rounds). Fixed 5 entries citing parasitology paper PMID 15888295, added disclaimers + population caveats to 3 MLH1 entries.
 **Full-App Review Fixes:** PR #113 — **MERGED** (10/10 A/A+ Claude, 2 review rounds). 16 findings across 10 reviewer domains: TOTP Fernet encryption, CSRF header, email verification gate, CFTR ΔF508 fix, 4 chromosome corrections, motion→m tree-shaking (42 files), WCAG contrast, loading skeletons, PRS ancestry enforcement, DPIA completion, 30+ new tests. 98 files changed.
 **Test count:** 3,053+ Vitest + 672 Python = 3,725+ tests passing.
+**Launch Readiness:** PR #114 — **MERGED** (4/4 A Claude, 1 review round). 15 pre-alpha fixes: hide broken cloud save, custom error pages, fake counselor removal, GDPR email verification, API retry, Redis prod compose, EU Article 27, server-side metadata, footer links, ClinVar stub. Also: optimized review pipeline (10→2-4 reviewers, 3 round cap), executor checklist, Final Cleanup Rule. 30 files, +2,397/-1,391 lines, 48 new tests.
+**Test count:** 3,090 Vitest + 683 Python = 3,773 tests passing.
 **Next:** Infrastructure setup + legal sign-offs → alpha launch.
 
 ## Current Sprint
@@ -68,6 +70,7 @@
 | Trait Expansion Phase 4: Tier 4 (476 traits) | Claude | **Merged** | feature/trait-expansion-tier-4 | PR #111 — 64 new traits (412→476) completing the master catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first (Leadership→Nicotinic Receptor β3, etc.), rs699 allele strand fix, rs2853676 TERT completely reworked, health disclaimers on 8 entries, population disclaimers on 5 behavioral traits. 6 files, +3,120 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
 | PMID 15888295 Audit | Claude | **Merged** | fix/pmid-15888295-audit | PR #112 — Fixed 5 entries citing parasitology paper. Added disclaimers + population caveats to 3 MLH1 entries. 2 review rounds → **4/4 A+ Claude**. |
 | Full-App Review Fixes | Claude | **Merged** | fix/full-app-review-fixes | PR #113 — 16 findings from 10-reviewer full-app review. TOTP Fernet encryption at rest, CSRF header, email verification gate, CFTR ΔF508 label fix, 4 chromosome corrections, motion→m LazyMotion tree-shaking (42 source + 27 test files), WCAG AA contrast, heading hierarchy, loading skeletons, PRS ancestry enforcement (hide/warning/caution), DPIA completion, consent regex fix, retention 3yr→2yr. 98 files, +1,750/-590 lines, 30+ new tests. 2 review rounds → **10/10 A/A+ Claude** (1 A+, 5 A R1, 4 A R2). 3,725 tests. |
+| Launch Readiness Fixes | Claude | **Merged** | fix/launch-readiness | PR #114 — 15 pre-alpha items across 3 sprints. Hide cloud save UI, custom 404/500 pages, remove fake counselors (NSGC CTA), GDPR email verification, API retry (429/5xx exponential backoff), prod docker-compose, Redis auth, EU Art 27, server-side metadata (3 pages), footer links, ClinVar stub. Review pipeline optimized (10→2-4 reviewers, 3-round cap, executor checklist, Final Cleanup Rule). 30 files, +2,397/-1,391 lines. 1 review round → **4/4 A Claude** (Architect, Code, Security, Designer). 3,773 tests. |
 
 ---
 
