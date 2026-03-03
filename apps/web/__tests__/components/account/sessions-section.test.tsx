@@ -2,20 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const {
-        initial, animate, exit, transition, variants,
-        whileHover, whileTap, ...htmlProps
-      } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('lucide-react', () => ({
   Monitor: (props: any) => <svg data-testid="icon-monitor" {...props} />,
   Smartphone: (props: any) => <svg data-testid="icon-smartphone" {...props} />,

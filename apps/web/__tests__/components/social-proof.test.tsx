@@ -3,20 +3,6 @@ import { render, screen } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, exit, transition, whileHover, whileTap, ...rest } = props;
-      return <div {...rest}>{children}</div>;
-    },
-    section: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, exit, transition, ...rest } = props;
-      return <section {...rest}>{children}</section>;
-    },
-  },
-  AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-}));
-
 vi.mock('@/components/ui/scroll-reveal', () => ({
   ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className}>{children}</div>

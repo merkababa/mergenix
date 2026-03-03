@@ -152,9 +152,6 @@ We follow the **Testing Trophy** (Kent C. Dodds): heavy on integration tests, li
 - Pure utility functions get unit tests with boundary values
 - No test should assert on implementation details that would break during refactoring
 
-### Pre-existing TypeScript Issues (suppress, not blocking)
-- `apps/web/lib/api/client.ts:157` — type comparison issue (`"HEAD"` vs method union)
-- `apps/web/lib/data/demo-results.ts:268` — type literal mismatch (inheritance model union)
 
 ## Code Review (MANDATORY before every PR)
 Run `/review-pipeline` for the optimized 3-layer review (Static → Self-Review → External Review).

@@ -3,20 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      // Strip framer-motion-only props so they don't reach the DOM
-      const {
-        initial, animate, exit, transition, variants,
-        whileHover, whileTap, layoutId, ...htmlProps
-      } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('lucide-react', () => ({
   Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
   FileCheck: (props: any) => <svg data-testid="icon-file-check" {...props} />,

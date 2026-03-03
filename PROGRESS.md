@@ -32,9 +32,8 @@
 **Tech Debt Sprint (in progress):** Branch `chore/tech-debt-cleanup`. Mock dedup committed (28 test files cleaned, shared __mocks__/framer-motion.tsx, global vi.mock in vitest.setup.ts). 1775 tests, zero type errors. Marketing page tests created (7 files, 48 tests). Pre-existing type errors from client.ts/demo-results.ts were already fixed in earlier PRs.
 **Carrier tab virtualization:** Already implemented in PR #90 (Virtuoso + VIRTUOSO_THRESHOLD=20 + custom ARIA + 33 tests). NO WORK NEEDED.
 **Marketing page polish:** Privacy/security already used design system. Legal/diseases/glossary updated by agents (commit f2fae33). Verify commit survived stash conflict.
-**Remaining:** (1) Verify marketing polish commit survived. (2) Remove type suppression notes from CLAUDE.md. (3) Run `/review-pipeline`. (4) Create PR.
-**BLOCKER NOTE:** TeamCreate poisoned session — all agents auto-joined team mailbox, couldn't execute. Force-deleted team config. Fresh session needed.
-**Next:** Fresh session → verify branch state → review-pipeline → PR → alpha launch.
+**Review pipeline:** Layer 0 pass (3,215 tests, typecheck clean, lint clean, build clean). Layer 1 self-review: 2 WARNs fixed (mock `any` types, severity hex docs). Layer 2: Architect A + Code Reviewer A (0 BLOCKs). 6 WARN/INFO items deferred to tech debt backlog.
+**Status:** PR ready for creation and merge.
 
 ## Current Sprint
 
@@ -120,7 +119,12 @@
 
 | Item | Source | Severity | Notes |
 |------|--------|----------|-------|
-| *(none — all items resolved)* | | | |
+| Marketing test mock dedup (GlassCard, SectionHeading, PageHeader, ScrollReveal, Link) | Tech Debt PR review | WARN | Extract shared `__tests__/marketing/_mocks.ts` — same pattern as framer-motion dedup |
+| `any` types in marketing test mocks | Tech Debt PR review | WARN | Replace `(props: any)` with typed props in 7 test files |
+| IntersectionObserver mock duplication | Tech Debt PR review | INFO | Move to `vitest.setup.ts` like framer-motion mock |
+| Privacy/security test file pairs overlap | Tech Debt PR review | INFO | Consider merging `*-page.test.tsx` + `*-page-design.test.tsx` per page |
+| `useInView` mock missing options param | Tech Debt PR review | INFO | Add `_options?: Record<string, unknown>` second param |
+| `MotionValue.current` stale after `.set()` | Tech Debt PR review | INFO | Use getter: `get current() { return val; }` |
 
 ---
 

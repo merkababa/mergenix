@@ -4,6 +4,9 @@ import { useState, useMemo, useCallback, useRef, useEffect, type ReactNode } fro
 import { Search, BookOpen } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
+import { SectionHeading } from "@/components/marketing/section-heading";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { PageHeader } from "@/components/layout/page-header";
 import { Input } from "@/components/ui/input";
 import { GLOSSARY_TERMS, RELATED_TERMS } from "@/lib/glossary-data";
 
@@ -91,23 +94,14 @@ export function GlossaryContent() {
   return (
     <div className="mx-auto w-full max-w-4xl">
       {/* -- Header -- */}
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8 text-center"
-      >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-          <BookOpen className="h-7 w-7 text-[var(--accent-teal)]" aria-hidden="true" />
-        </div>
-        <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
-          Genetic Glossary
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
-          Understand the genetic terms used throughout Mergenix
-        </p>
-      </m.div>
+      <PageHeader
+        title="Genetic Glossary"
+        subtitle="Understand the genetic terms used throughout Mergenix"
+        breadcrumbs={[{ label: "Glossary", href: "/glossary" }]}
+        className="mb-8"
+      />
 
+      <ScrollReveal>
       {/* -- Search -- */}
       <div className="mb-6">
         <Input
@@ -163,6 +157,13 @@ export function GlossaryContent() {
           );
         })}
       </div>
+
+      {/* -- Section heading for a11y: bridges h1 → h3 in term cards -- */}
+      <SectionHeading
+        title="Glossary Terms"
+        className="sr-only"
+        id="glossary-terms-heading"
+      />
 
       {/* -- Terms -- */}
       <div className="space-y-3">
@@ -247,6 +248,7 @@ export function GlossaryContent() {
       <p className="mt-8 text-center text-xs text-[var(--text-dim)]">
         {GLOSSARY_TERMS.length} terms available. Sourced from glossary.json.
       </p>
+      </ScrollReveal>
     </div>
   );
 }

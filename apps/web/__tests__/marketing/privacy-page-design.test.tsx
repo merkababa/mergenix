@@ -27,7 +27,7 @@ vi.mock('@/components/ui/scroll-reveal', () => ({
 }));
 
 vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle, breadcrumbs }: any) => (
+  PageHeader: ({ title, subtitle }: any) => (
     <div>
       <h1>{title}</h1>
       <p>{subtitle}</p>
@@ -52,63 +52,43 @@ vi.mock('next/link', () => ({
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
-import { PrivacyContent } from '../app/(marketing)/privacy/_components/privacy-content';
+import { PrivacyContent } from '../../app/(marketing)/privacy/_components/privacy-content';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
-describe('PrivacyPage', () => {
-  it('renders privacy notice page with GDPR Article 13/14 information', () => {
+describe('PrivacyPage (design system)', () => {
+  it('uses SectionHeading for Data Controller section', () => {
     render(<PrivacyContent />);
 
-    // The page should reference GDPR Articles 13 and 14
-    expect(screen.getByText(/Article 13/i)).toBeInTheDocument();
-    expect(screen.getByText(/Article 14/i)).toBeInTheDocument();
+    // SectionHeading renders an h2 — verify section headings are present
+    expect(screen.getByRole('heading', { level: 2, name: /Data Controller/i })).toBeInTheDocument();
   });
 
-  it('displays data controller information', () => {
+  it('uses SectionHeading for Your Rights section', () => {
     render(<PrivacyContent />);
 
-    expect(screen.getByText(/Data Controller/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Mergenix/).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { level: 2, name: /Your Rights/i })).toBeInTheDocument();
   });
 
-  it('lists categories of personal data processed', () => {
+  it('uses GlassCard for content blocks', () => {
     render(<PrivacyContent />);
 
-    expect(screen.getByText(/Categories of Personal Data/i)).toBeInTheDocument();
-    expect(screen.getByText(/account info/i)).toBeInTheDocument();
-    expect(screen.getByText(/payment info/i)).toBeInTheDocument();
-    expect(screen.getByText(/Analysis results \(if saved\)/i)).toBeInTheDocument();
+    const cards = screen.getAllByTestId('glass-card');
+    expect(cards.length).toBeGreaterThan(0);
   });
 
-  it('explains legal basis for processing', () => {
+  it('uses ScrollReveal for section entrance animations', () => {
+    // ScrollReveal is mocked as pass-through — content inside should render normally
     render(<PrivacyContent />);
 
-    expect(screen.getByText(/Legal Basis/i)).toBeInTheDocument();
-    // GDPR Art 6(1)(a) — consent
-    expect(screen.getByText(/Art(?:icle)?\s*6\(1\)\(a\)/i)).toBeInTheDocument();
-    // GDPR Art 6(1)(b) — contract
-    expect(screen.getByText(/Art(?:icle)?\s*6\(1\)\(b\)/i)).toBeInTheDocument();
+    // These texts appear inside ScrollReveal-wrapped sections
+    const dataControllerMatches = screen.getAllByText(/Data Controller/i);
+    expect(dataControllerMatches.length).toBeGreaterThan(0);
+    const dpoMatches = screen.getAllByText(/Data Protection Officer/i);
+    expect(dpoMatches.length).toBeGreaterThan(0);
   });
 
-  it('describes data subject rights (access, rectification, erasure, portability)', () => {
-    render(<PrivacyContent />);
-
-    expect(screen.getByText(/Your Rights/i)).toBeInTheDocument();
-    expect(screen.getByText(/Right of Access/i)).toBeInTheDocument();
-    expect(screen.getByText(/Right to Rectification/i)).toBeInTheDocument();
-    expect(screen.getByText(/Right to Erasure/i)).toBeInTheDocument();
-    expect(screen.getByText(/Right to Data Portability/i)).toBeInTheDocument();
-  });
-
-  it('includes contact information for data protection queries', () => {
-    render(<PrivacyContent />);
-
-    // Should have at least one contact email for privacy queries
-    expect(screen.getAllByText(/privacy@mergenix\.com/).length).toBeGreaterThan(0);
-  });
-
-  it('heading hierarchy is correct', () => {
+  it('heading hierarchy has no skipped levels', () => {
     const { container } = render(<PrivacyContent />);
 
     const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -116,11 +96,8 @@ describe('PrivacyPage', () => {
       parseInt(h.tagName.replace('H', ''), 10),
     );
 
-    // Should have at least h1 and h2
     expect(levels).toContain(1);
     expect(levels).toContain(2);
-
-    // No skipped levels
     for (let i = 0; i < levels.length - 1; i++) {
       const current = levels[i];
       const next = levels[i + 1];

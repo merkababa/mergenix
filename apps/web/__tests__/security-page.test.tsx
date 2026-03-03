@@ -2,27 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const {
-        initial, animate, exit, transition, variants,
-        whileHover, whileTap, whileInView, viewport, ...htmlProps
-      } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-    section: ({ children, ...props }: any) => {
-      const {
-        initial, animate, exit, transition, variants,
-        whileHover, whileTap, whileInView, viewport, ...htmlProps
-      } = props;
-      return <section {...htmlProps}>{children}</section>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('lucide-react', () => ({
   Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
   Lock: (props: any) => <svg data-testid="icon-lock" {...props} />,

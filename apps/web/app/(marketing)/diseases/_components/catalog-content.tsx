@@ -15,6 +15,9 @@ import {
 } from "lucide-react";
 import { m, useInView } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { SectionHeading } from "@/components/marketing/section-heading";
+import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -276,20 +279,13 @@ function DiseaseCatalogInner() {
   return (
     <>
       {/* -- Header -- */}
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8 text-center"
-      >
-        <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl lg:text-5xl">
-          Disease Catalog
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-[var(--text-muted)]">
-          Browse our comprehensive database of {stats.totalDiseases.toLocaleString()} genetic
-          conditions across {stats.categoryCount} clinical categories
-        </p>
-      </m.div>
+      <PageHeader
+        title="Disease Catalog"
+        subtitle={`Browse our comprehensive database of ${stats.totalDiseases.toLocaleString()} genetic conditions across ${stats.categoryCount} clinical categories`}
+        breadcrumbs={[{ label: "Disease Catalog", href: "/diseases" }]}
+        className="mb-8"
+      />
+
 
       {/* -- Stats -- */}
       <m.div
@@ -383,6 +379,14 @@ function DiseaseCatalogInner() {
         </GlassCard>
       </m.div>
 
+      <ScrollReveal>
+      {/* -- Section heading for a11y: bridges h1 → h3 in disease cards -- */}
+      <SectionHeading
+        title="Browse Conditions"
+        className="sr-only"
+        id="disease-results-heading"
+      />
+
       {/* -- Results count -- */}
       <p className="mb-4 text-center text-sm text-[var(--text-muted)]" role="status" aria-live="polite">
         Showing {paginated.length} of {filtered.length} diseases
@@ -416,6 +420,13 @@ function DiseaseCatalogInner() {
                   className="relative h-full overflow-hidden p-6 transition-all duration-300 group-hover:border-[rgba(6,214,160,0.25)]"
                 >
                   {/* Severity side bar */}
+                  {/* Gradient hex values are design-system severity colors:
+                      high     → --accent-rose  (#f43f5e → #e11d48)
+                      moderate → --accent-amber (#f59e0b → #d97706)
+                      low      → --accent-teal  (#06d6a0 → #059669)
+                      CSS variables cannot be interpolated inside a gradient string
+                      because each gradient stop needs a resolved color, not a
+                      theme-dependent variable that may differ between the two stops. */}
                   <div
                     className="absolute bottom-0 right-0 top-0 w-[3px] rounded-r-[20px]"
                     aria-hidden="true"
@@ -580,6 +591,7 @@ function DiseaseCatalogInner() {
         our full database of {stats.totalDiseases.toLocaleString()} genetic diseases.
         Each condition is sourced from ClinVar, OMIM, and peer-reviewed literature.
       </p>
+      </ScrollReveal>
     </>
   );
 }

@@ -101,22 +101,6 @@ vi.mock('@/components/auth/password-input', () => ({
 vi.mock('@/lib/animation-variants', () => ({
   fadeUp: { hidden: {}, visible: {} },
 }));
-
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const { variants, initial, animate, exit, transition, ...rest } = props;
-      return <div {...rest}>{children}</div>;
-    },
-    span: ({ children, ...props }: any) => {
-      const { variants, initial, animate, exit, transition, ...rest } = props;
-      return <span {...rest}>{children}</span>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-  MotionConfig: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('@/components/ui/glass-card', () => ({
   GlassCard: ({ children, ...props }: any) => <div data-testid="glass-card">{children}</div>,
 }));

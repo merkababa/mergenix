@@ -4,19 +4,6 @@ import { useAuthStore } from '../../lib/stores/auth-store';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const {
-        initial, animate, exit, transition, variants,
-        whileHover, whileTap, layoutId, ...htmlProps
-      } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('lucide-react', () => ({
   User: (props: any) => <svg data-testid="icon-user" {...props} />,
   CreditCard: (props: any) => <svg data-testid="icon-credit-card" {...props} />,

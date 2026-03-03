@@ -227,7 +227,7 @@ async function executeRequest<T>(options: RequestOptions): Promise<T> {
   const effectiveSignal = signal ?? AbortSignal.timeout(DEFAULT_TIMEOUT_MS);
 
   const fetchOptions: RequestInit = {
-    method,
+    method: method as RequestInit['method'],
     headers,
     credentials: "include", // send cookies (for httpOnly refresh token)
     signal: effectiveSignal,

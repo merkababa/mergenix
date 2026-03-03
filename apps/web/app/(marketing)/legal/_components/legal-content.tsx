@@ -6,6 +6,7 @@ import { Shield, FileText, Cookie, Lock, Scale, Clock } from "lucide-react";
 import { m } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { PageHeader } from "@/components/layout/page-header";
 
 /* -- TOC items -- */
 const TOC_ITEMS = [
@@ -41,30 +42,12 @@ export function LegalContent() {
   return (
     <>
       {/* -- Page header -- */}
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-2 text-center"
-      >
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-4 flex items-center justify-center gap-1 text-sm font-body text-[var(--text-muted)]"
-        >
-          <Link href="/" className="transition-colors hover:text-[var(--accent-teal)]">
-            Home
-          </Link>
-          <span className="mx-1">/</span>
-          <span className="text-[var(--accent-teal)]">Legal</span>
-        </nav>
-
-        <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl lg:text-5xl">
-          Legal
-        </h1>
-        <p className="mx-auto mt-3 max-w-2xl font-body text-base text-[var(--text-muted)] md:text-lg">
-          Our commitment to transparency, privacy, and your rights.
-        </p>
-      </m.div>
+      <PageHeader
+        title="Legal"
+        subtitle="Our commitment to transparency, privacy, and your rights."
+        breadcrumbs={[{ label: "Legal", href: "/legal" }]}
+        className="mb-2"
+      />
 
       {/* -- Last Updated -- */}
       <p className="mb-8 text-center text-xs text-[var(--text-dim)]">

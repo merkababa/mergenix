@@ -2,26 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-
-vi.mock("framer-motion", () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const {
-        initial,
-        animate,
-        exit,
-        transition,
-        variants,
-        whileHover,
-        whileTap,
-        ...htmlProps
-      } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock("@/components/ui/glass-card", () => ({
   GlassCard: ({ children, className, ...props }: any) => (
     <div data-testid="glass-card" className={className} {...props}>

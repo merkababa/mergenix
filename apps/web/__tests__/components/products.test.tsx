@@ -3,34 +3,6 @@ import { render, screen } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, exit, transition, whileHover, whileTap, ...rest } = props;
-      void variants; void initial; void whileInView; void viewport; void animate; void exit; void transition; void whileHover; void whileTap;
-      return <div {...rest}>{children}</div>;
-    },
-    section: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, exit, transition, ...rest } = props;
-      void variants; void initial; void whileInView; void viewport; void animate; void exit; void transition;
-      return <section {...rest}>{children}</section>;
-    },
-    ul: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, ...rest } = props;
-      void variants; void initial; void whileInView; void viewport; void animate;
-      return <ul {...rest}>{children}</ul>;
-    },
-    li: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const { variants, initial, whileInView, viewport, animate, ...rest } = props;
-      void variants; void initial; void whileInView; void viewport; void animate;
-      return <li {...rest}>{children}</li>;
-    },
-  },
-  AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  LazyMotion: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  domAnimation: {},
-}));
-
 vi.mock('@/components/ui/scroll-reveal', () => ({
   ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className}>{children}</div>

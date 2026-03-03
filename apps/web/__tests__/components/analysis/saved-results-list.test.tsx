@@ -4,21 +4,6 @@ import { useAnalysisStore } from "../../../lib/stores/analysis-store";
 import { useAuthStore } from "../../../lib/stores/auth-store";
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-
-vi.mock("framer-motion", () => ({
-  m: {
-    li: ({ children, ...props }: any) => {
-      const { initial, animate, exit, ...htmlProps } = props;
-      return <li {...htmlProps}>{children}</li>;
-    },
-    div: ({ children, ...props }: any) => {
-      const { initial, animate, exit, ...htmlProps } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock("lucide-react", () => ({
   Archive: (props: any) => <svg data-testid="icon-archive" {...props} />,
   Trash2: (props: any) => <svg data-testid="icon-trash" {...props} />,

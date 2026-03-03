@@ -2,48 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 // Mock framer-motion to avoid animation issues in tests
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const {
-        variants, initial, whileInView, viewport, animate, exit, transition,
-        whileHover, whileTap, style, ...rest
-      } = props;
-      void variants; void initial; void whileInView; void viewport;
-      void animate; void exit; void transition; void whileHover; void whileTap; void style;
-      return <div {...rest}>{children}</div>;
-    },
-    section: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const {
-        variants, initial, whileInView, viewport, animate, exit, transition,
-        whileHover, whileTap, style, ...rest
-      } = props;
-      void variants; void initial; void whileInView; void viewport;
-      void animate; void exit; void transition; void whileHover; void whileTap; void style;
-      return <section {...rest}>{children}</section>;
-    },
-    path: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const {
-        variants, initial, whileInView, viewport, animate, exit, transition,
-        whileHover, whileTap, style, ...rest
-      } = props;
-      void variants; void initial; void whileInView; void viewport;
-      void animate; void exit; void transition; void whileHover; void whileTap; void style;
-      return <path {...rest}>{children}</path>;
-    },
-    g: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
-      const {
-        variants, initial, whileInView, viewport, animate, exit, transition,
-        whileHover, whileTap, style, ...rest
-      } = props;
-      void variants; void initial; void whileInView; void viewport;
-      void animate; void exit; void transition; void whileHover; void whileTap; void style;
-      return <g {...rest}>{children}</g>;
-    },
-  },
-  AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  useReducedMotion: () => false,
-}));
 
 // Mock Next.js Link — renders as a plain <a> tag
 vi.mock('next/link', () => ({

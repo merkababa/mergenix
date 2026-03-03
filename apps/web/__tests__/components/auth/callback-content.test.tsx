@@ -45,18 +45,6 @@ vi.mock('@/components/auth/trust-signals', () => ({
 vi.mock('@/lib/animation-variants', () => ({
   fadeUp: { hidden: {}, visible: {} },
 }));
-
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const { variants, initial, animate, exit, transition, ...rest } = props;
-      return <div {...rest}>{children}</div>;
-    },
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-  MotionConfig: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock('@/components/ui/glass-card', () => ({
   GlassCard: ({ children }: any) => <div data-testid="glass-card">{children}</div>,
 }));

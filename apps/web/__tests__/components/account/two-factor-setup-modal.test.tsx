@@ -2,23 +2,6 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
-
-// Mock framer-motion
-vi.mock('framer-motion', () => ({
-  m: {
-    div: ({ children, ...props }: any) => {
-      const { initial, animate, exit, transition, variants, whileHover, whileTap, layout, layoutId, ...htmlProps } = props;
-      return <div {...htmlProps}>{children}</div>;
-    },
-    span: ({ children, ...props }: any) => {
-      const { initial, animate, exit, transition, variants, ...htmlProps } = props;
-      return <span {...htmlProps}>{children}</span>;
-    },
-  },
-  AnimatePresence: ({ children, mode, ...rest }: any) => <>{children}</>,
-  MotionConfig: ({ children }: any) => <>{children}</>,
-}));
-
 // Mock lucide-react icons — explicit named exports (Proxy causes vitest hang)
 vi.mock('lucide-react', () => ({
   X: (props: any) => <svg data-testid="icon-X" {...props} />,
