@@ -13,7 +13,7 @@ const STEPS: {
   key: AnalysisStep;
   label: string;
   description: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
 }[] = [
   { key: "parsing", label: "Parse", description: "Validating files...", icon: FileSearch },
   { key: "carrier_analysis", label: "Carrier", description: "Screening carrier risk...", icon: Microscope },

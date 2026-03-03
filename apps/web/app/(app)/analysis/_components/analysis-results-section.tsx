@@ -33,7 +33,7 @@ const CounselingTab = dynamic(
 
 // ─── Tab Configuration ──────────────────────────────────────────────────────
 
-export const RESULT_TABS: { key: ResultTab; label: string; icon: React.ElementType }[] = [
+export const RESULT_TABS: { key: ResultTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "overview", label: "Overview", icon: BarChart3 },
   { key: "carrier", label: "Carrier Risk", icon: Microscope },
   { key: "traits", label: "Traits", icon: Dna },
