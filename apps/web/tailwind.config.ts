@@ -169,7 +169,17 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    /*
+     * ── D1.1 / D1.4 Utilities ──
+     * globals.css is the single source of truth for:
+     *   .text-fluid-hero, .text-fluid-heading, .text-fluid-body, .text-fluid-stats
+     *   .section-glow-hero, .section-glow-mid, .section-glow-pricing, .section-glow-cta
+     *   .wave-divider
+     * Duplicate Tailwind plugin definitions have been removed to avoid
+     * specificity conflicts. globals.css definitions take precedence.
+     */
+  ],
 };
 
 export default config;

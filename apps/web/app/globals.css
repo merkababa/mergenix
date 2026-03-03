@@ -33,6 +33,23 @@
   --glow-teal: rgba(6, 214, 160, 0.25);
   --glow-violet: rgba(139, 92, 246, 0.20);
 
+  /* ── Fluid Typography Scale ── */
+  --font-size-fluid-hero:    clamp(2.25rem, 5vw + 1rem, 4.5rem);
+  --font-size-fluid-heading: clamp(1.5rem, 3vw + 0.5rem, 2.5rem);
+  --font-size-fluid-body:    clamp(0.875rem, 1vw + 0.5rem, 1.125rem);
+  --font-size-fluid-stats:   clamp(2rem, 4vw + 0.5rem, 3.5rem);
+
+  /* ── Section Glow Orb System ── */
+  /* Orb size and base opacity — upgrade from old inline values */
+  --glow-orb-size:    700px;
+  --glow-orb-opacity: 0.13;
+
+  /* Per-zone accent colors (used by section glow helpers) */
+  --zone-hero-color:    rgba(6, 214, 160, var(--glow-orb-opacity));    /* teal  */
+  --zone-mid-color:     rgba(139, 92, 246, var(--glow-orb-opacity));   /* violet */
+  --zone-pricing-color: rgba(6, 182, 212, var(--glow-orb-opacity));    /* cyan  */
+  --zone-cta-color:     rgba(6, 214, 160, var(--glow-orb-opacity));    /* teal  */
+
   --card-bg: linear-gradient(135deg, #0c1220, #1a2236);
   --card-border: rgba(148, 163, 184, 0.12);
 
@@ -71,6 +88,18 @@
 
   --glow-teal: rgba(5, 150, 105, 0.15);
   --glow-violet: rgba(124, 58, 237, 0.12);
+
+  /* ── Fluid Typography Scale (light mode — same clamps, inherited) ── */
+  /* Custom properties are inherited — no override needed; clamp values stay */
+
+  /* ── Section Glow Orb System (light mode — lower opacity) ── */
+  --glow-orb-opacity: 0.07;
+
+  /* Per-zone accent colors (light mode — muted versions) */
+  --zone-hero-color:    rgba(5, 150, 105, var(--glow-orb-opacity));
+  --zone-mid-color:     rgba(124, 58, 237, var(--glow-orb-opacity));
+  --zone-pricing-color: rgba(8, 145, 178, var(--glow-orb-opacity));
+  --zone-cta-color:     rgba(5, 150, 105, var(--glow-orb-opacity));
 
   --card-bg: linear-gradient(135deg, #ffffff, #f8fafc);
   --card-border: rgba(15, 23, 42, 0.08);
@@ -288,6 +317,125 @@ hr {
   box-shadow: 0 0 30px var(--glow-violet), 0 4px 30px var(--shadow-ambient);
 }
 
+/* ── Fluid Typography Utilities ── */
+/* Apply these classes on individual elements to opt in to fluid sizing.     */
+/* The base h1/h2/h3 rules remain for backwards compatibility.               */
+.text-fluid-hero {
+  font-size: var(--font-size-fluid-hero);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-fluid-heading {
+  font-size: var(--font-size-fluid-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-fluid-body {
+  font-size: var(--font-size-fluid-body);
+  line-height: 1.7;
+}
+
+.text-fluid-stats {
+  font-size: var(--font-size-fluid-stats);
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Section Glow Orb Utilities (D1.4) ── */
+/* Usage: add one of these classes to a section wrapper.                     */
+/* Each class renders a large radial glow orb via ::before pseudo-element.   */
+.section-glow-hero,
+.section-glow-mid,
+.section-glow-pricing,
+.section-glow-cta {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-glow-hero::before,
+.section-glow-mid::before,
+.section-glow-pricing::before,
+.section-glow-cta::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--glow-orb-size);
+  height: var(--glow-orb-size);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  /* animation intentionally omitted — static glow for calm visual rhythm */
+}
+
+.section-glow-hero::before {
+  background: radial-gradient(circle at center, var(--zone-hero-color), transparent 70%);
+}
+
+.section-glow-mid::before {
+  background: radial-gradient(circle at center, var(--zone-mid-color), transparent 70%);
+  top: 10%;
+}
+
+.section-glow-pricing::before {
+  background: radial-gradient(circle at center, var(--zone-pricing-color), transparent 70%);
+}
+
+.section-glow-cta::before {
+  background: radial-gradient(circle at center, var(--zone-cta-color), transparent 70%);
+  top: auto;
+  bottom: -20%;
+}
+
+/* ── Wave Divider Utility (D1.4) ── */
+/* Place a <div class="wave-divider"> between two sections.                  */
+/* Renders a subtle gradient fade that masks the hard section boundary.      */
+.wave-divider {
+  height: 80px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 1px,
+    rgba(6, 214, 160, 0.025) 1px,
+    rgba(6, 214, 160, 0.025) 2px
+  ),
+  linear-gradient(
+    180deg,
+    var(--bg-deep) 0%,
+    transparent 40%,
+    transparent 60%,
+    var(--bg-deep) 100%
+  );
+  pointer-events: none;
+  margin: 0;
+  /* mask the hard edge above and below */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+[data-theme="light"] .wave-divider {
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 1px,
+    rgba(5, 150, 105, 0.04) 1px,
+    rgba(5, 150, 105, 0.04) 2px
+  ),
+  linear-gradient(
+    180deg,
+    var(--bg-deep) 0%,
+    transparent 40%,
+    transparent 60%,
+    var(--bg-deep) 100%
+  );
+}
+
 /* ── Gradient Text ── */
 .gradient-text {
   background: linear-gradient(135deg, #06d6a0, #06b6d4, #8b5cf6);
@@ -467,6 +615,117 @@ section,
 .stagger-4 { animation-delay: 0.2s; }
 .stagger-5 { animation-delay: 0.25s; }
 .stagger-6 { animation-delay: 0.3s; }
+
+/* ── GlassCard micro-interaction keyframes (D1.3) ── */
+/* Canonical color values: teal=#06d6a0, violet=#8b5cf6, cyan=#06b6d4        */
+/* rgba() is required inside keyframes; CSS custom properties cannot be       */
+/* interpolated by the animation engine in all browsers at keyframe level.    */
+
+@keyframes auroraShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes borderSweep {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes iconBounce {
+  0%   { transform: rotate(0deg) scale(1); }
+  30%  { transform: rotate(-12deg) scale(1.15); }
+  60%  { transform: rotate(6deg) scale(1.1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes badgeSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Aurora variant — animated multi-colour gradient background */
+/* Uses rgba() teal/violet/cyan values (canonical: var(--accent-teal/violet/cyan)) */
+.glass-card--aurora::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 214, 160, 0.08) 0%,
+    rgba(139, 92, 246, 0.10) 33%,
+    rgba(6, 182, 212, 0.08) 66%,
+    rgba(6, 214, 160, 0.06) 100%
+  );
+  background-size: 300% 300%;
+  animation: auroraShift 8s ease infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sweep hover — gradient border via pseudo-element mask technique */
+/* Uses rgba() teal/violet/cyan values (canonical: var(--accent-teal/violet/cyan)) */
+.glass-card--sweep::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(6, 214, 160, 0.6),
+    rgba(139, 92, 246, 0.6),
+    rgba(6, 182, 212, 0.6),
+    rgba(6, 214, 160, 0.6)
+  );
+  background-size: 300% 300%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-card--sweep:hover::after {
+  opacity: 1;
+  animation: borderSweep 3s ease infinite;
+}
+
+/* Card icon bounce on parent hover */
+.group:hover .card-icon {
+  animation: iconBounce 0.4s ease forwards;
+}
+
+/* Badge slide-in on parent hover */
+.group:hover .card-badge {
+  animation: badgeSlideIn 0.3s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-card--aurora::before {
+    animation: none;
+    background-position: 0% 50%;
+  }
+  .glass-card--sweep:hover::after {
+    animation: none;
+    background-position: 0% 50%;
+  }
+  .group:hover .card-icon {
+    animation: none;
+  }
+  .group:hover .card-badge {
+    animation: none;
+  }
+}
 
 /* Coming Soon page animations */
 @keyframes fade-slide-up {
