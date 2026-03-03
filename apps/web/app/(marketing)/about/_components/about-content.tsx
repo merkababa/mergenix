@@ -19,6 +19,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { HelixAnimation } from "@/components/marketing/helix-animation";
 import { StepCircle } from "@/components/marketing/step-circle";
 import { SectionHeading } from "@/components/marketing/section-heading";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { cn } from "@/lib/utils";
 import {
   fadeUp,
@@ -26,29 +27,58 @@ import {
   scaleIn,
   createStaggerContainer,
 } from "@/lib/animation-variants";
-import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { useCountUp } from "@/hooks/use-count-up";
+
+const TEAM_MEMBERS = [
+  {
+    initials: "AK",
+    role: "Founder",
+    gradient: "from-[var(--accent-teal)] to-[var(--accent-cyan)]",
+    bg: "bg-[rgba(6,214,160,0.1)]",
+    text: "text-[var(--accent-teal)]",
+  },
+  {
+    initials: "MR",
+    role: "Lead Developer",
+    gradient: "from-[var(--accent-violet)] to-[var(--accent-violet)]",
+    bg: "bg-[rgba(139,92,246,0.1)]",
+    text: "text-[var(--accent-violet)]",
+  },
+  {
+    initials: "JL",
+    role: "Genetics Advisor",
+    gradient: "from-[var(--accent-cyan)] to-[var(--accent-cyan)]",
+    bg: "bg-[rgba(6,182,212,0.1)]",
+    text: "text-[var(--accent-cyan)]",
+  },
+] as const;
 
 const SCIENCE_PRINCIPLES = [
   {
     icon: Microscope,
+    svgIcon: "dna-helix",
     title: "Mendelian Inheritance Modeling",
     description:
       "Our carrier screening engine uses established Mendelian genetics \u2014 autosomal recessive, autosomal dominant, and X-linked inheritance models \u2014 to calculate offspring risk probabilities.",
   },
   {
     icon: Dna,
+    svgIcon: "database",
     title: "Curated SNP Database",
     description:
       `We maintain a panel of ${CARRIER_PANEL_COUNT_DISPLAY} genetic conditions mapped to clinically-validated SNPs sourced from ClinVar, OMIM, and peer-reviewed literature.`,
   },
   {
     icon: Brain,
+    svgIcon: "bar-chart",
     title: "Polygenic Risk Scoring",
     description:
       "For complex diseases influenced by many genes, we aggregate multiple variant effects into population-calibrated percentile scores using published genome-wide association studies.",
   },
   {
     icon: BookOpen,
+    svgIcon: "dna-helix",
     title: "Evidence-Based Confidence",
     description:
       "Every result includes a confidence indicator (high, medium, low) based on the quality and quantity of supporting evidence. We never overstate certainty.",
@@ -101,10 +131,10 @@ const HOW_IT_WORKS = [
 ] as const;
 
 const STATS = [
-  { value: CARRIER_PANEL_COUNT_DISPLAY, label: "Diseases Screened", color: "teal" },
-  { value: "8,200+", label: "SNPs Analyzed", color: "cyan" },
-  { value: TRAIT_COUNT_DISPLAY, label: "Traits Predicted", color: "violet" },
-  { value: "12", label: "PGx Genes", color: "amber" },
+  { countTarget: CARRIER_PANEL_COUNT, suffix: "", label: "Diseases Screened", color: "teal" },
+  { countTarget: 8200, suffix: "+", label: "SNPs Analyzed", color: "cyan" },
+  { countTarget: TRAIT_COUNT, suffix: "", label: "Traits Predicted", color: "violet" },
+  { countTarget: 12, suffix: "", label: "PGx Genes", color: "amber" },
 ] as const;
 
 /* -- Color maps -- */
@@ -113,19 +143,19 @@ const statColorMap: Record<string, { text: string; bg: string; shadow: string; b
     text: "text-[var(--accent-teal)]",
     bg: "bg-[rgba(6,214,160,0.08)]",
     shadow: "shadow-[0_0_20px_rgba(6,214,160,0.15)]",
-    bar: "from-[#06d6a0] to-[#059669]",
+    bar: "from-[var(--accent-teal)] to-[#059669]",
   },
   cyan: {
     text: "text-[var(--accent-cyan)]",
     bg: "bg-[rgba(6,182,212,0.08)]",
     shadow: "shadow-[0_0_20px_rgba(6,182,212,0.15)]",
-    bar: "from-[#06b6d4] to-[#0891b2]",
+    bar: "from-[var(--accent-cyan)] to-[#0891b2]",
   },
   violet: {
     text: "text-[var(--accent-violet)]",
     bg: "bg-[rgba(139,92,246,0.08)]",
     shadow: "shadow-[0_0_20px_rgba(139,92,246,0.15)]",
-    bar: "from-[#8b5cf6] to-[#a78bfa]",
+    bar: "from-[#8b5cf6] to-[var(--accent-violet)]",
   },
   amber: {
     text: "text-[var(--accent-amber)]",
@@ -139,6 +169,46 @@ const statColorMap: Record<string, { text: string; bg: string; shadow: string; b
 const stepsStagger = createStaggerContainer(0.15);
 /* Standard stagger for all other grids */
 const gridStagger = createStaggerContainer(0.1);
+
+// ---------------------------------------------------------------------------
+// CountUpStat — animates a number from 0 to target on scroll into view
+// ---------------------------------------------------------------------------
+interface CountUpStatProps {
+  countTarget: number;
+  suffix: string;
+  label: string;
+  colors: { text: string; bg: string; shadow: string; bar: string };
+}
+
+function CountUpStat({ countTarget, suffix, label, colors }: CountUpStatProps) {
+  const { count, ref } = useCountUp(countTarget, 2000);
+  return (
+    <GlassCard
+      variant="medium"
+      hover="glow"
+      data-stat={label}
+      className={`relative overflow-hidden p-6 text-center ${colors.shadow}`}
+    >
+      {/* Gradient top bar */}
+      <div
+        className={`absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r ${colors.bar}`}
+        aria-hidden="true"
+      />
+      <span
+        ref={ref}
+        data-count-up={countTarget}
+        className={`font-heading text-4xl font-extrabold tracking-tight ${colors.text}`}
+        aria-live="polite"
+      >
+        {count.toLocaleString("en-US")}
+        {suffix}
+      </span>
+      <div className="mt-2 text-sm font-medium text-[var(--text-muted)]">
+        {label}
+      </div>
+    </GlassCard>
+  );
+}
 
 export function AboutContent() {
   return (
@@ -170,7 +240,7 @@ export function AboutContent() {
 
           <h2
             id="mission-heading"
-            className="gradient-text font-heading text-3xl font-extrabold md:text-4xl lg:text-5xl"
+            className="font-heading text-3xl font-extrabold text-[var(--text-heading)] md:text-4xl lg:text-5xl"
           >
             Our Mission
           </h2>
@@ -196,8 +266,6 @@ export function AboutContent() {
             id="how-it-works-heading"
             title="How It Works"
             subtitle="Upload DNA files from any major provider. Our engine runs entirely in your browser — your files never leave your device."
-            gradient="teal"
-            className="[&_h2]:text-[var(--text-heading)]"
           />
         </m.div>
 
@@ -238,8 +306,6 @@ export function AboutContent() {
             id="science-heading"
             title="Our Science"
             subtitle="Built on established genetic principles and peer-reviewed research"
-            gradient="teal"
-            className="[&_h2]:text-[var(--text-heading)]"
           />
         </m.div>
 
@@ -263,7 +329,13 @@ export function AboutContent() {
 
             return (
               <m.div key={item.title} variants={fadeUp}>
-                <GlassCard variant="medium" hover="glow" rainbow className="h-full p-7">
+                <GlassCard
+                  variant="medium"
+                  hover="glow"
+                  rainbow
+                  data-science-card={item.svgIcon}
+                  className="h-full p-7"
+                >
                   <div className="flex items-start gap-4">
                     <div
                       className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${iconBg}`}
@@ -298,7 +370,6 @@ export function AboutContent() {
             id="values-heading"
             title="What We Believe"
             subtitle="The principles that guide every decision we make"
-            className="[&_h2]:text-[var(--text-heading)]"
           />
         </m.div>
 
@@ -345,6 +416,62 @@ export function AboutContent() {
         </m.div>
       </section>
 
+      {/* -- Meet the Team -- */}
+      <section id="team" className="mt-24" aria-labelledby="team-heading">
+        <m.div
+          variants={fadeIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          <SectionHeading
+            id="team-heading"
+            title="Meet the Team"
+            subtitle="A small team with deep expertise in genetics, privacy engineering, and user experience"
+          />
+        </m.div>
+
+        <ScrollReveal type="fade" delay={0.1} className="mt-10">
+          <div className="flex flex-wrap justify-center gap-8">
+            {TEAM_MEMBERS.map((member) => (
+              <div key={member.role} className="flex flex-col items-center gap-3">
+                {/* Avatar circle with gradient border */}
+                <div
+                  className={cn(
+                    "relative flex h-20 w-20 items-center justify-center rounded-full",
+                    "bg-gradient-to-br p-0.5",
+                    member.gradient,
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "flex h-full w-full items-center justify-center rounded-full",
+                      member.bg,
+                    )}
+                    role="img"
+                    aria-label={`${member.role} — initials ${member.initials}`}
+                  >
+                    <span
+                      className={cn(
+                        "font-heading text-lg font-bold",
+                        member.text,
+                      )}
+                      aria-hidden="true"
+                    >
+                      {member.initials}
+                    </span>
+                  </div>
+                </div>
+                {/* Role label */}
+                <span className="text-sm font-medium text-[var(--text-body)]">
+                  {member.role}
+                </span>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* -- Backed by Science (stats) -- */}
       <section id="stats" className="mt-24" aria-labelledby="stats-heading">
         <m.div
@@ -357,8 +484,6 @@ export function AboutContent() {
             id="stats-heading"
             title="Backed by Science"
             subtitle="Our data sources and methodology"
-            gradient="teal"
-            className="[&_h2]:text-[var(--text-heading)]"
           />
         </m.div>
 
@@ -373,26 +498,12 @@ export function AboutContent() {
             const colors = statColorMap[stat.color];
             return (
               <m.div key={stat.label} variants={fadeUp}>
-                <GlassCard
-                  variant="medium"
-                  hover="glow"
-                  className={`relative overflow-hidden p-6 text-center ${colors.shadow}`}
-                >
-                  {/* Rainbow top bar with stat-specific gradient */}
-                  <div
-                    className={`absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r ${colors.bar}`}
-                    aria-hidden="true"
-                  />
-
-                  <div
-                    className={`font-heading text-4xl font-extrabold tracking-tight ${colors.text}`}
-                  >
-                    {stat.value}
-                  </div>
-                  <div className="mt-2 text-sm font-medium text-[var(--text-muted)]">
-                    {stat.label}
-                  </div>
-                </GlassCard>
+                <CountUpStat
+                  countTarget={stat.countTarget}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                  colors={colors}
+                />
               </m.div>
             );
           })}
@@ -402,13 +513,14 @@ export function AboutContent() {
       {/* -- CTA -- */}
       <m.section
         className="mt-24 text-center"
+        aria-labelledby="cta-heading"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-40px" }}
       >
         <GlassCard variant="medium" hover="none" className="p-10 md:p-14">
-          <h2 className="gradient-text font-heading text-2xl font-bold md:text-3xl">
+          <h2 id="cta-heading" className="gradient-text font-heading text-2xl font-bold md:text-3xl">
             Ready to Explore Your Genetics?
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-[var(--text-muted)]">

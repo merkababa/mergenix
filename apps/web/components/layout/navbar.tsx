@@ -114,6 +114,7 @@ export function Navbar() {
   }, []);
 
   return (
+    <>
     <header
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
@@ -140,7 +141,7 @@ export function Navbar() {
             <div className="absolute inset-0 rounded-full bg-[var(--accent-teal)] opacity-20 blur-md" />
             <Dna className="relative h-7 w-7 text-[var(--accent-teal)]" aria-hidden="true" />
           </div>
-          <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-tight">
+          <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em] md:text-2xl">
             Mergenix
           </span>
         </Link>
@@ -206,7 +207,7 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             ref={hamburgerRef}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] md:hidden"
+            className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] md:hidden"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileOpen}
@@ -220,94 +221,114 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <m.div
-            ref={mobileMenuRef}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation menu"
-            className="overflow-hidden border-t border-[var(--border-subtle)] bg-[var(--navbar-bg)] md:hidden"
-            style={{
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-            }}
-          >
-            <div className="space-y-1 px-4 py-4">
-              {/* Close button (first focusable element for accessibility) */}
-              <button
-                type="button"
-                onClick={closeMobileMenu}
-                className="mb-2 flex w-full items-center justify-end gap-1.5 rounded-xl px-4 py-2 font-heading text-sm font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-teal)]"
-                aria-label="Close navigation menu"
-              >
-                <X className="h-4 w-4" aria-hidden="true" />
-                <span>Close</span>
-              </button>
-              {NAV_LINKS.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    aria-current={isActive ? "page" : undefined}
-                    className={cn(
-                      "block rounded-xl px-4 py-3 font-heading text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)] ring-1 ring-[rgba(6,214,160,0.2)]"
-                        : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]",
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-
-              <hr className="my-3 border-[var(--border-subtle)]" />
-
-              {isAuthenticated ? (
-                <div className="space-y-1">
-                  <Link
-                    href="/account"
-                    className="block rounded-xl px-4 py-3 font-heading text-sm font-medium text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
-                  >
-                    Account Settings
-                  </Link>
-                  <Link
-                    href="/subscription"
-                    className="block rounded-xl px-4 py-3 font-heading text-sm font-medium text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
-                  >
-                    My Plan
-                  </Link>
-                </div>
-              ) : (
-                <div className="flex gap-2">
-                  <Link
-                    href="/login"
-                    className="flex-1 rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-2.5 text-center font-heading text-sm font-semibold text-[var(--accent-teal)]"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#06d6a0] to-[#059669] py-2.5 text-center font-heading text-sm font-semibold text-[#050810]"
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              )}
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
     </header>
+
+    {/* Mobile menu — full-screen overlay (outside <header> for proper stacking) */}
+    <AnimatePresence>
+      {isMobileOpen && (
+        <m.div
+          ref={mobileMenuRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation menu"
+          className="fixed inset-0 z-[60] flex flex-col bg-[var(--bg-deep)] md:hidden"
+        >
+          {/* Overlay header row: brand + close button */}
+          <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
+            <Link
+              href="/"
+              onClick={closeMobileMenu}
+              className="flex items-center gap-2 no-underline"
+              aria-label="Mergenix home"
+            >
+              <Dna className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em]">
+                Mergenix
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={closeMobileMenu}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-teal)]"
+              aria-label="Close navigation menu"
+            >
+              <X className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+
+          {/* Nav links — centered, large touch targets */}
+          <nav
+            className="flex flex-1 flex-col items-center justify-center gap-2 px-6"
+            aria-label="Mobile navigation links"
+          >
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMobileMenu}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "block w-full max-w-xs rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold transition-all",
+                    isActive
+                      ? "bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)] ring-1 ring-[rgba(6,214,160,0.2)]"
+                      : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+
+            <hr className="my-3 w-full max-w-xs border-[var(--border-subtle)]" />
+
+            {isAuthenticated ? (
+              <div className="flex w-full max-w-xs flex-col gap-2">
+                <Link
+                  href="/account"
+                  onClick={closeMobileMenu}
+                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-[var(--text-muted)] transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                >
+                  Account Settings
+                </Link>
+                <Link
+                  href="/subscription"
+                  onClick={closeMobileMenu}
+                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-[var(--text-muted)] transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                >
+                  My Plan
+                </Link>
+              </div>
+            ) : (
+              <div className="flex w-full max-w-xs flex-col gap-3">
+                <Link
+                  href="/login"
+                  onClick={closeMobileMenu}
+                  className="w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center font-heading text-base font-semibold text-[var(--accent-teal)] transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={closeMobileMenu}
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#06d6a0] to-[#059669] py-3 text-center font-heading text-base font-semibold text-[#050810] shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)]"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
+          </nav>
+        </m.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }

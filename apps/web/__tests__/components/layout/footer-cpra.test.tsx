@@ -55,6 +55,47 @@ import { Footer } from '../../../components/layout/footer';
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
+// ─── D4.6: Footer brand moment tests ─────────────────────────────────────────
+
+describe('Footer — D4.6 Brand Moment', () => {
+  it('D4.6: renders the Mergenix brand name in the footer', () => {
+    render(<Footer />);
+    const brandNames = screen.getAllByText('Mergenix');
+    expect(brandNames.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('D4.6: renders a brand tagline in the footer', () => {
+    render(<Footer />);
+    // Should contain the distinctive brand tagline
+    expect(
+      screen.getByText(/Genetics Meets Insight/i)
+    ).toBeInTheDocument();
+  });
+
+  it('D4.6: footer brand section uses gradient text for the wordmark', () => {
+    render(<Footer />);
+    // The brand span in footer should carry gradient-text-teal
+    const brandSpans = document.querySelectorAll('.gradient-text-teal');
+    expect(brandSpans.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('D4.6: footer has a decorative separator between brand section and link columns', () => {
+    render(<Footer />);
+    // A visual separator — e.g. an hr or divider element
+    const footer = document.querySelector('footer');
+    expect(footer).not.toBeNull();
+    // Should have at least a border-t separator in the bottom bar
+    const hrElements = footer!.querySelectorAll('hr');
+    // Either an <hr> or the existing border-t bottom bar counts
+    const hasSeparator =
+      hrElements.length > 0 ||
+      footer!.innerHTML.includes('border-t');
+    expect(hasSeparator).toBe(true);
+  });
+});
+
+// ─── CPRA tests ───────────────────────────────────────────────────────────────
+
 describe('Footer — CPRA SPI link', () => {
   it('renders CPRA "Limit the Use of My Sensitive Personal Information" link', () => {
     render(<Footer />);

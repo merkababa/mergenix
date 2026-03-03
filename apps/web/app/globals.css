@@ -1055,3 +1055,18 @@ section,
     word-break: break-word;
   }
 }
+
+/* ==========================================================================
+   View Transitions API — progressive enhancement
+   Browsers that don't support @view-transition will silently ignore this.
+   Provides smooth cross-page transitions for browsers that support it.
+   ========================================================================== */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+}

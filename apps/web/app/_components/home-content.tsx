@@ -74,7 +74,6 @@ export function HomeContent() {
           <SectionHeading
             title="Your DNA Never Leaves Your Device"
             subtitle="Privacy is not a feature — it is our architecture."
-            gradient="teal"
             className="mb-12"
           />
 

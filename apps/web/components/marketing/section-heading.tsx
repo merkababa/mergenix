@@ -6,10 +6,13 @@ const headingGradientVariants = cva("", {
     gradient: {
       default: "gradient-text",
       teal: "gradient-text-teal",
+      none: "text-[var(--text-heading)]",
     },
   },
   defaultVariants: {
-    gradient: "default",
+    // Changed from "default" (gradient) to "none" (solid) to prevent mass gradient
+    // overuse. Gradient must now be opted-in explicitly — one CTA per page max.
+    gradient: "none",
   },
 });
 

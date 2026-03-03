@@ -109,12 +109,24 @@ export function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 no-underline">
-              <Dna className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
-              <span className="gradient-text-teal font-heading text-lg font-extrabold">
+              <div className="relative flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full bg-[var(--accent-teal)] opacity-15 blur-sm" />
+                <Dna className="relative h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              </div>
+              <span className="gradient-text-teal font-heading text-lg font-extrabold tracking-[-0.03em]">
                 Mergenix
               </span>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-[var(--text-muted)]">
+
+            {/* Brand tagline */}
+            <p className="mt-2 font-heading text-xs font-semibold uppercase tracking-widest text-[var(--accent-teal)] opacity-80">
+              Genetics Meets Insight
+            </p>
+
+            {/* Decorative separator */}
+            <div className="my-4 h-px w-12 rounded-full bg-gradient-to-r from-[var(--accent-teal)] to-transparent opacity-40" />
+
+            <p className="text-sm leading-relaxed text-[var(--text-muted)]">
               Privacy-first genetic offspring analysis. Explore your family&apos;s
               genetic possibilities with confidence.
             </p>

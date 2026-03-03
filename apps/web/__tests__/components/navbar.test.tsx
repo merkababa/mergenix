@@ -6,7 +6,7 @@ import { useAuthStore } from '../../lib/stores/auth-store';
 
 vi.mock('framer-motion', () => ({
   m: {
-    div: ({ children, ...props }: any) => {
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => {
       const {
         initial, animate, exit, transition, variants,
         whileHover, whileTap, layoutId, ...htmlProps
@@ -14,21 +14,21 @@ vi.mock('framer-motion', () => ({
       return <div {...htmlProps}>{children}</div>;
     },
   },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
 }));
 
 vi.mock('lucide-react', () => ({
-  Menu: (props: any) => <svg data-testid="icon-menu" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-  Dna: (props: any) => <svg data-testid="icon-dna" {...props} />,
+  Menu: (props: Record<string, unknown>) => <svg data-testid="icon-menu" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  X: (props: Record<string, unknown>) => <svg data-testid="icon-x" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  Dna: (props: Record<string, unknown>) => <svg data-testid="icon-dna" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
   // Icons potentially used transitively
-  User: (props: any) => <svg data-testid="icon-user" {...props} />,
-  CreditCard: (props: any) => <svg data-testid="icon-credit-card" {...props} />,
-  Activity: (props: any) => <svg data-testid="icon-activity" {...props} />,
-  LogOut: (props: any) => <svg data-testid="icon-logout" {...props} />,
-  ChevronDown: (props: any) => <svg data-testid="icon-chevron-down" {...props} />,
-  Sun: (props: any) => <svg data-testid="icon-sun" {...props} />,
-  Moon: (props: any) => <svg data-testid="icon-moon" {...props} />,
+  User: (props: Record<string, unknown>) => <svg data-testid="icon-user" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  CreditCard: (props: Record<string, unknown>) => <svg data-testid="icon-credit-card" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  Activity: (props: Record<string, unknown>) => <svg data-testid="icon-activity" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  LogOut: (props: Record<string, unknown>) => <svg data-testid="icon-logout" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  ChevronDown: (props: Record<string, unknown>) => <svg data-testid="icon-chevron-down" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  Sun: (props: Record<string, unknown>) => <svg data-testid="icon-sun" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
+  Moon: (props: Record<string, unknown>) => <svg data-testid="icon-moon" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
 }));
 
 vi.mock('next/link', () => ({
@@ -55,7 +55,7 @@ vi.mock('@/components/auth/user-menu', () => ({
 }));
 
 vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+  Badge: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <span {...(props as React.HTMLAttributes<HTMLSpanElement>)}>{children}</span>,
 }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────
@@ -71,7 +71,7 @@ describe('Navbar', () => {
     // jsdom does not implement window.scrollTo — suppress the error
     window.scrollTo = vi.fn();
     // Default: unauthenticated
-    useAuthStore.setState({ isAuthenticated: false, user: null } as any);
+    useAuthStore.setState({ isAuthenticated: false, user: null } as unknown as Parameters<typeof useAuthStore.setState>[0]);
   });
 
   // ── Logo ──────────────────────────────────────────────────────────────
@@ -162,7 +162,7 @@ describe('Navbar', () => {
   // ── Authenticated state ────────────────────────────────────────────────
 
   it('shows UserMenu when authenticated', () => {
-    useAuthStore.setState({ isAuthenticated: true } as any);
+    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<typeof useAuthStore.setState>[0]);
 
     render(<Navbar />);
 
@@ -239,7 +239,7 @@ describe('Navbar', () => {
   });
 
   it('mobile menu shows Account Settings and Subscription links when authenticated', () => {
-    useAuthStore.setState({ isAuthenticated: true } as any);
+    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<typeof useAuthStore.setState>[0]);
 
     render(<Navbar />);
 
@@ -292,5 +292,67 @@ describe('Navbar', () => {
 
     // After scroll, header should gain the scrolled background class
     expect(header!.className).toMatch(/bg-\[var\(--navbar-bg\)\]/);
+  });
+
+  // ── D4.5: Brand text logo styling ─────────────────────────────────────
+
+  it('D4.5: brand wordmark "Mergenix" has gradient-text-teal class', () => {
+    render(<Navbar />);
+
+    const wordmark = screen.getByText('Mergenix');
+    expect(wordmark.className).toMatch(/gradient-text-teal/);
+  });
+
+  it('D4.5: brand wordmark uses heading font with extrabold weight', () => {
+    render(<Navbar />);
+
+    const wordmark = screen.getByText('Mergenix');
+    expect(wordmark.className).toMatch(/font-heading/);
+    expect(wordmark.className).toMatch(/font-extrabold/);
+  });
+
+  it('D4.5: brand wordmark has brand-specific letter-spacing class', () => {
+    render(<Navbar />);
+
+    const wordmark = screen.getByText('Mergenix');
+    // Should have tracking-tight or brand-specific spacing
+    expect(wordmark.className).toMatch(/tracking-/);
+  });
+
+  // ── D4.7: Mobile menu full-screen overlay ─────────────────────────────
+
+  it('D4.7: mobile menu overlay uses fixed positioning for full-screen coverage', () => {
+    render(<Navbar />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Open menu/i }));
+
+    const dialog = screen.getByRole('dialog', { name: /Mobile navigation menu/i });
+    // Full-screen overlay uses fixed inset-0
+    expect(dialog.className).toMatch(/fixed/);
+    expect(dialog.className).toMatch(/inset-0/);
+  });
+
+  it('D4.7: mobile menu close button is in the top area of the overlay', () => {
+    render(<Navbar />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Open menu/i }));
+
+    // Close button inside overlay should exist with accessible label
+    const closeBtn = screen.getByRole('button', { name: /Close navigation menu/i });
+    expect(closeBtn).toBeInTheDocument();
+  });
+
+  it('D4.7: mobile menu nav links have large touch targets (min 44px height implied by py-3)', () => {
+    render(<Navbar />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Open menu/i }));
+
+    const dialog = screen.getByRole('dialog', { name: /Mobile navigation menu/i });
+    // Nav links inside dialog nav landmark should use py-3 or similar for touch target height
+    const mobileNav = dialog.querySelector('nav');
+    expect(mobileNav).not.toBeNull();
+    const homeLink = mobileNav!.querySelector('a[href="/"]');
+    expect(homeLink).not.toBeNull();
+    expect(homeLink!.className).toMatch(/py-3/);
   });
 });

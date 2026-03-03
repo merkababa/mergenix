@@ -139,9 +139,15 @@ export function ProductsContent() {
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-4 text-center font-heading text-sm font-semibold text-[#8b5cf6]"
+                    data-highlighted="true"
+                    className="relative px-6 py-4 text-center font-heading text-sm font-semibold text-[var(--accent-violet)]"
                   >
-                    Premium
+                    <span className="relative z-10">Premium</span>
+                    {/* Subtle highlight column background via pseudo via wrapper div */}
+                    <span
+                      className="pointer-events-none absolute inset-0 bg-[rgba(139,92,246,0.06)]"
+                      aria-hidden="true"
+                    />
                   </th>
                   <th
                     scope="col"
@@ -160,13 +166,13 @@ export function ProductsContent() {
                     <td className="px-6 py-3.5 text-sm font-medium text-[var(--text-body)]">
                       {row.feature}
                     </td>
-                    <td className="px-6 py-3.5 text-center">
+                    <td data-label={row.feature} className="px-6 py-3.5 text-center">
                       <ComparisonCell value={row.free} />
                     </td>
-                    <td className="px-6 py-3.5 text-center">
+                    <td data-label={row.feature} className="relative px-6 py-3.5 text-center bg-[rgba(139,92,246,0.04)]">
                       <ComparisonCell value={row.premium} />
                     </td>
-                    <td className="px-6 py-3.5 text-center">
+                    <td data-label={row.feature} className="px-6 py-3.5 text-center">
                       <ComparisonCell value={row.pro} />
                     </td>
                   </tr>

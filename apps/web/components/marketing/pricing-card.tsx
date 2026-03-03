@@ -182,7 +182,15 @@ export function PricingCard({
       };
 
   return (
-    <m.div {...motionProps} className={cn("relative flex", className)}>
+    <m.div
+      {...motionProps}
+      data-popular={popular ? "true" : undefined}
+      className={cn(
+        "relative flex",
+        popular && "lg:scale-[1.03] lg:z-10",
+        className,
+      )}
+    >
       {/* Popular badge — positioned above the card */}
       {popular && (
         <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
@@ -197,12 +205,15 @@ export function PricingCard({
       )}
 
       <GlassCard
-        variant="medium"
+        variant={popular ? "aurora" : "medium"}
         hover="lift"
         microInteractions
         className={cn(
           "flex w-full flex-col p-8",
-          popular && "border-[rgba(139,92,246,0.2)]",
+          popular && [
+            "border-[rgba(139,92,246,0.35)]",
+            "shadow-[0_4px_30px_var(--shadow-ambient),0_0_60px_var(--glow-violet)]",
+          ],
           cardClass,
         )}
       >
