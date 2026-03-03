@@ -30,9 +30,11 @@
 **Design Overhaul Sprint D4:** PR #120 — **MERGED** (Architect A, Code Reviewer A, Designer A- — 3/3 A/A-, 1 review round). Secondary pages & polish: "Most Popular" pricing card (aurora, scale, glow), comparison table highlight, about team section (placeholder avatars), science cards, count-up stats, navbar brand text, footer brand moment ("Genetics Meets Insight"), mobile full-screen overlay (focus trap, 44px targets), View Transitions API (progressive enhancement), gradient text audit (SectionHeading default→solid). 6 review findings fixed. 12 files, +838/-155 lines. 37 new tests (1727 web total).
 **Design overhaul COMPLETE (D1-D4).** All 4 sprints shipped across PRs #117-#120.
 **Tech Debt Sprint (in progress):** Branch `chore/tech-debt-cleanup`. Mock dedup committed (28 test files cleaned, shared __mocks__/framer-motion.tsx, global vi.mock in vitest.setup.ts). 1775 tests, zero type errors. Marketing page tests created (7 files, 48 tests). Pre-existing type errors from client.ts/demo-results.ts were already fixed in earlier PRs.
-**Remaining tech debt items:** (1) Marketing page content polish — update 5 pages to use SectionHeading/ScrollReveal/GlassCard (tests exist, pages not updated). (2) Carrier tab virtualization — replace .map() with react-virtuoso Virtuoso component in carrier-tab.tsx. (3) Remove type suppression notes from CLAUDE.md after verifying.
-**BLOCKER NOTE:** TeamCreate poisoned the session — all agents auto-joined team mailbox and couldn't execute. Force-deleted team config. Fresh session needed to continue.
-**Next:** Complete remaining tech debt items (marketing polish + carrier virtualization), run /review-pipeline, create PR, then alpha launch preparation.
+**Carrier tab virtualization:** Already implemented in PR #90 (Virtuoso + VIRTUOSO_THRESHOLD=20 + custom ARIA + 33 tests). NO WORK NEEDED.
+**Marketing page polish:** Privacy/security already used design system. Legal/diseases/glossary updated by agents (commit f2fae33). Verify commit survived stash conflict.
+**Remaining:** (1) Verify marketing polish commit survived. (2) Remove type suppression notes from CLAUDE.md. (3) Run `/review-pipeline`. (4) Create PR.
+**BLOCKER NOTE:** TeamCreate poisoned session — all agents auto-joined team mailbox, couldn't execute. Force-deleted team config. Fresh session needed.
+**Next:** Fresh session → verify branch state → review-pipeline → PR → alpha launch.
 
 ## Current Sprint
 
