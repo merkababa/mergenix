@@ -130,7 +130,12 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 ## Next Task: TBD
 
-All 28 design review WARNs resolved. Test mock dedup done (PR #124). Remaining tech debt: 3 INFO items.
+**Design overhaul COMPLETE** (D1-D4, PRs #117-#120 all merged). Tech debt sprint done (PR #121). Design WARNs fixed (PR #123). Mock dedup done (PR #124).
+
+**Remaining work:**
+- 17 Dependabot PRs open (some major: zod 3→4, tailwind 3→4, framer-motion 11→12) — need triage
+- 3 INFO-level tech debt items (test file overlap, useInView mock param, Input/Badge mock dedup)
+- Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
 
