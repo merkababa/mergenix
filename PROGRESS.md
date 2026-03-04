@@ -30,6 +30,7 @@
 **Design Overhaul Sprint D4:** PR #120 — **MERGED** (Architect A, Code Reviewer A, Designer A- — 3/3 A/A-, 1 review round). Secondary pages & polish: "Most Popular" pricing card (aurora, scale, glow), comparison table highlight, about team section (placeholder avatars), science cards, count-up stats, navbar brand text, footer brand moment ("Genetics Meets Insight"), mobile full-screen overlay (focus trap, 44px targets), View Transitions API (progressive enhancement), gradient text audit (SectionHeading default→solid). 6 review findings fixed. 12 files, +838/-155 lines. 37 new tests (1727 web total).
 **Design overhaul COMPLETE (D1-D4).** All 4 sprints shipped across PRs #117-#120.
 **Tech Debt Sprint:** PR #121 — **MERGED** (Architect A, Code Reviewer A — 2/2 A, 1 review round). Mock dedup (shared `__mocks__/framer-motion.tsx`, 34 test files cleaned, -608 lines), marketing page tests (7 files, 48 tests), marketing page polish (3 components → design system), type fixes (client.ts, CLAUDE.md suppression notes removed). 49 files, +1,104/-611 lines. 3,215 tests. 6 WARN/INFO items deferred to tech debt backlog.
+**Design Review WARNs:** PR #123 — **OPEN** (Architect A, Code Reviewer A-, Designer A- — 3/3 A, 2 review rounds). 25 design review WARNs fixed: touch targets ≥44px (7 components), ARIA (6 fixes incl. menu keyboard nav), --text-dim→--text-muted alias, light-mode contrast fix, keyframe dedup, badge differentiation, heading hierarchy (3), UX polish (scroll hints, 10px→12px, tab overflow). 35 files, +227/-175 lines. 1,775 tests.
 
 ## Current Sprint
 
@@ -121,20 +122,13 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | Privacy/security test file pairs overlap | Tech Debt PR review | INFO | Consider merging `*-page.test.tsx` + `*-page-design.test.tsx` per page |
 | `useInView` mock missing options param | Tech Debt PR review | INFO | Add `_options?: Record<string, unknown>` second param |
 | `MotionValue.current` stale after `.set()` | Tech Debt PR review | INFO | Use getter: `get current() { return val; }` |
-| **28 design review WARNs (touch targets + ARIA)** | Design review 2026-03-04 | WARN | See `docs/research/agent-logs/2026-03-04-design-review-deep/INDEX.md` for full list. Batch into 1-2 PRs. |
+| ~~28 design review WARNs (touch targets + ARIA)~~ | Design review 2026-03-04 | ~~WARN~~ | **Fixed in PR #123** — 25 actionable WARNs resolved (3 were already fixed/N/A) |
 
 ---
 
-## Next Task: Fix 28 Design Review WARNs
+## Next Task: TBD
 
-Batch the 28 WARNs from the design review deep dive into a single PR. Group by file/component area. Full findings in `docs/research/agent-logs/2026-03-04-design-review-deep/INDEX.md` and agent output logs.
-
-**Categories:**
-- Touch targets <44px (theme toggle, CPRA button, menu items, password toggle, trust signals, radio buttons, stale banner dismiss, glossary "see also", tab buttons)
-- ARIA gaps (hamburger `aria-controls`, breadcrumb `aria-current`, user menu `role="menu"`, FAQ `aria-controls` dead ref, radiogroup keyboard nav, dropzone role, loading `role="status"`)
-- Token/style issues (`--text-muted`/`--text-dim` near-identical, link contrast light mode, duplicate keyframes, `critical`/`high` badge identical)
-- Heading hierarchy (register/reset/forgot success states h2→h1)
-- UX polish ("View details" keyboard-invisible, consent scroll hint, 10px text, tab overflow indicator)
+PR #123 (design review WARNs) is open and ready for merge.
 
 ---
 
