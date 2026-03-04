@@ -85,19 +85,19 @@
 
 ---
 
-## Design Overhaul — Incomplete Reviews (Resume on Next PC)
+## Design Review Deep Dive — COMPLETE (2026-03-04)
 
-5 of 6 designer-reviewer agents hit API rate limits before completing. The 1 successful agent (Landing & Marketing) provided a **comprehensive full-site review** covering all areas. However, dedicated deep-dives on these 5 sections may surface additional findings:
+All 5 designer-reviewer agents that previously hit rate limits have been re-run successfully. Results: **A- across all 5 sections.** 4 BLOCKs, 28 WARNs, 28 INFOs. Full logs at `docs/research/agent-logs/2026-03-04-design-review-deep/`.
 
-| Agent | Section | Files to Review | Status |
-|-------|---------|-----------------|--------|
-| Design System & Theming | `globals.css`, `tailwind.config.ts`, all `components/ui/*` | Rate limited — needs re-run |
-| Auth & Account UX | `(auth)/*` pages, `components/auth/*`, `components/account/*` | Rate limited — needs re-run |
-| Analysis & Results UI | `(app)/analysis/*`, `components/genetics/*`, `components/genetics/results/*` | Rate limited — needs re-run |
-| Navigation & Layout | `components/layout/*`, all `layout.tsx` files, `not-found.tsx`, `error.tsx` | Rate limited — needs re-run |
-| Legal & Compliance Pages | `privacy/`, `legal/`, `security/`, `glossary/`, `diseases/`, `components/legal/*` | Rate limited — needs re-run |
+| Agent | Grade | BLOCKs | WARNs | INFOs |
+|-------|-------|--------|-------|-------|
+| Nav & Layout | A- | 0 | 4 | 4 |
+| Design System & Theming | A- | 2 | 6 | 6 |
+| Auth & Account UX | A- | 0 | 6 | 6 |
+| Analysis & Results UI | A- | 2 | 6 | 6 |
+| Legal & Compliance Pages | A- | 0 | 6 | 6 |
 
-**To continue:** Re-run these 5 agents from another PC/session. The full review from the Landing & Marketing agent already covers most findings — the re-runs would add depth, not fundamentally change the plan.
+**4 BLOCKs to fix:** (1) `--text-secondary` undefined in `sensitive-content-guard.tsx`, (2) Badge contrast fails light mode in `badge.tsx`, (3) HealthConsentInterstitial missing focus trap in `traits-tab.tsx`, (4) Punnett square missing `role="row"` in `punnett-square.tsx`.
 
 ---
 
