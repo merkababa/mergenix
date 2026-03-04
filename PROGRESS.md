@@ -30,7 +30,7 @@
 **Design Overhaul Sprint D4:** PR #120 — **MERGED** (Architect A, Code Reviewer A, Designer A- — 3/3 A/A-, 1 review round). Secondary pages & polish: "Most Popular" pricing card (aurora, scale, glow), comparison table highlight, about team section (placeholder avatars), science cards, count-up stats, navbar brand text, footer brand moment ("Genetics Meets Insight"), mobile full-screen overlay (focus trap, 44px targets), View Transitions API (progressive enhancement), gradient text audit (SectionHeading default→solid). 6 review findings fixed. 12 files, +838/-155 lines. 37 new tests (1727 web total).
 **Design overhaul COMPLETE (D1-D4).** All 4 sprints shipped across PRs #117-#120.
 **Tech Debt Sprint:** PR #121 — **MERGED** (Architect A, Code Reviewer A — 2/2 A, 1 review round). Mock dedup (shared `__mocks__/framer-motion.tsx`, 34 test files cleaned, -608 lines), marketing page tests (7 files, 48 tests), marketing page polish (3 components → design system), type fixes (client.ts, CLAUDE.md suppression notes removed). 49 files, +1,104/-611 lines. 3,215 tests. 6 WARN/INFO items deferred to tech debt backlog.
-**Design Review WARNs:** PR #123 — **OPEN** (Architect A, Code Reviewer A-, Designer A- — 3/3 A, 2 review rounds). 25 design review WARNs fixed: touch targets ≥44px (7 components), ARIA (6 fixes incl. menu keyboard nav), --text-dim→--text-muted alias, light-mode contrast fix, keyframe dedup, badge differentiation, heading hierarchy (3), UX polish (scroll hints, 10px→12px, tab overflow). 35 files, +227/-175 lines. 1,775 tests.
+**Design Review WARNs:** PR #123 — **MERGED** (Architect A, Code Reviewer A-, Designer A- — 3/3 A, 2 review rounds). 25 design review WARNs fixed: touch targets ≥44px (7 components), ARIA (6 fixes incl. menu keyboard nav), --text-dim→--text-muted alias, light-mode contrast fix, keyframe dedup, badge differentiation, heading hierarchy (3), UX polish (scroll hints, 10px→12px, tab overflow). 35 files, +228/-176 lines. 1,775 tests.
 
 ## Current Sprint
 
@@ -128,7 +128,7 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 ## Next Task: TBD
 
-PR #123 (design review WARNs) is open and ready for merge.
+All 28 design review WARNs resolved. Deferred tech debt items remain in table above.
 
 ---
 
@@ -229,6 +229,7 @@ PR #123 (design review WARNs) is open and ready for merge.
 | 2026-03-02 | Claude | Project Statistics: 292 commits, 111 PRs (74 merged), 686 files, ~280K LOC (69K TS + 37K TSX + 26K Python + 112K JSON), 170 test files (59,880 lines), 989K insertions / 452K deletions total churn, 257/292 commits co-authored by Claude (88%), ~98M combined AI tokens, ~$1,800 estimated API cost. Zero human code lines written. | stats |
 | 2026-03-03 | Claude | Design Overhaul Sprint D1 — Foundation: Fluid typography (CSS clamp, 4 sizes), scroll animation library (5 types: fade/blur/clip/scale/rotate + useScrollProgress hook), GlassCard evolution (frosted/aurora variants, spotlight mouse-tracking, noise overlay, gradient border sweep), section color narrative (700px glow orbs, teal→violet→cyan zones, wave dividers), card micro-interactions (icon bounce, badge slide-in, stagger-reveal), semantic pricing icons (18→15 entries via helper). 5 files, +753/-60 lines. Architect A, Designer A, Code Reviewer B→A+ (13 issues fixed R2). | PR #117 |
 | 2026-03-03 | Claude | Design Overhaul Sprint D2 — Homepage & Hero Transformation: 3D DNA helix (React Three Fiber, dynamic import, CSS fallback, GPU dispose, named imports for tree-shaking), cinematic crown hero (full-width helix backdrop, centered text, gradient overlap), bento grid features (asymmetric layout, animated SVG illustrations), scroll timeline (3-step vertical with scroll-driven line), social proof (real CARRIER_PANEL_COUNT, placeholder testimonials), product demo (realistic carrier risk values, perspective transform, floating overlay), pricing badge fix. useFrame stale closure fix (configRef pattern), WCAG AA contrast (text-muted), sr-only screen reader context, role="region" for aria-label. 16 files, +2,185/-621 lines, 4 new test files. 5/5 A Claude (Architect, Code, Designer, Technologist, Business). 15 WARN/INFOs fixed. | PR #118 |
+| 2026-03-04 | Claude | Design Review WARNs — 25 a11y/touch/token fixes: Touch targets ≥44px (7 components), ARIA fixes (hamburger aria-controls, breadcrumb aria-current, user menu role="menu" + APG keyboard nav, radiogroup arrows, dropzone roledescription, loading aria-live), --text-dim→--text-muted alias, light-mode --accent-teal contrast fix (#059669→#047857), 4 keyframe dedup, critical/high badge differentiation, heading h2→h1 (3 auth pages), scroll hints, text-[10px]→text-xs (19 instances), tab overflow indicators, .scrollbar-none utility. 35 files, +228/-176 lines. 3/3 A Claude (Architect, Code, Designer, 2 rounds). | PR #123 |
 
 ---
 
