@@ -97,7 +97,7 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | Analysis & Results UI | A- | 2 | 6 | 6 |
 | Legal & Compliance Pages | A- | 0 | 6 | 6 |
 
-**4 BLOCKs to fix:** (1) `--text-secondary` undefined in `sensitive-content-guard.tsx`, (2) Badge contrast fails light mode in `badge.tsx`, (3) HealthConsentInterstitial missing focus trap in `traits-tab.tsx`, (4) Punnett square missing `role="row"` in `punnett-square.tsx`.
+**4 BLOCKs fixed in PR #122 — MERGED** (Architect A, Code Reviewer A, Designer A — 3/3 A, 1 review round). Fixes: `--text-secondary` undefined, badge light-mode contrast, HealthConsentInterstitial focus trap, Punnett square `role="row"`. 4 files, +109/-80 lines. 28 WARNs + 28 INFOs remain as future polish items.
 
 ---
 
