@@ -120,21 +120,20 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | ~~Marketing test mock dedup~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — shared `__helpers__/` module with typed factories |
 | ~~`any` types in marketing test mocks~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — proper TypeScript interfaces in all helpers |
 | ~~IntersectionObserver mock duplication~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — 3 variants in `__helpers__/mock-intersection-observer.ts` |
-| Privacy/security test file pairs overlap | Tech Debt PR review | INFO | Consider merging `*-page.test.tsx` + `*-page-design.test.tsx` per page |
-| `useInView` mock missing options param | Tech Debt PR review | INFO | Add `_options?: Record<string, unknown>` second param |
+| ~~Privacy/security test file pairs overlap~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #125** — merged into parent files as nested `describe('design system')` blocks |
+| ~~`useInView` mock missing options param~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #125** — returns boolean, added options param, fixed RefObject generic |
 | ~~`MotionValue.current` stale after `.set()`~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — reactive getter |
-| Input/Badge mock dedup (11 files each) | PR #124 Code Review | INFO | Extract `mockInputFactory()` + `mockBadgeFactory()` — slight shape variations across files |
+| ~~Input/Badge mock dedup (11 files each)~~ | ~~PR #124 Code Review~~ | ~~INFO~~ | **Fixed in PR #125** — `mockInputFactory()` + `mockBadgeFactory()` in shared `__helpers__/`, replaced 24 inline mocks |
 | ~~28 design review WARNs (touch targets + ARIA)~~ | Design review 2026-03-04 | ~~WARN~~ | **Fixed in PR #123** — 25 actionable WARNs resolved (3 were already fixed/N/A) |
 
 ---
 
 ## Next Task: TBD
 
-**Design overhaul COMPLETE** (D1-D4, PRs #117-#120 all merged). Tech debt sprint done (PR #121). Design WARNs fixed (PR #123). Mock dedup done (PR #124).
+**Design overhaul COMPLETE** (D1-D4, PRs #117-#120 all merged). Tech debt sprint done (PR #121). Design WARNs fixed (PR #123). Mock dedup done (PRs #124-#125). **Zero tech debt remaining.**
 
 **Remaining work:**
 - 17 Dependabot PRs open (some major: zod 3→4, tailwind 3→4, framer-motion 11→12) — need triage
-- 3 INFO-level tech debt items (test file overlap, useInView mock param, Input/Badge mock dedup)
 - Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
