@@ -134,7 +134,7 @@ export function SensitiveContentGuard({
 
         {/* Upgrade overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-[20px] bg-[rgba(5,8,16,0.7)] p-6 text-center">
-          <p className="text-sm font-medium text-[var(--text-secondary)]">
+          <p className="text-sm font-medium text-[var(--text-body)]">
             {CATEGORY_LABELS[category]} results require{" "}
             {TIER_DISPLAY_NAMES[requiredTier]}
           </p>
@@ -242,7 +242,7 @@ export function SensitiveContentGuard({
 
               <p
                 id={`ad-warning-desc-${uniqueId}`}
-                className="mb-6 text-sm leading-relaxed text-[var(--text-secondary)]"
+                className="mb-6 text-sm leading-relaxed text-[var(--text-body)]"
               >
                 This result relates to an autosomal dominant condition. It has
                 direct medical implications for you. We recommend reviewing with

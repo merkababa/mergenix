@@ -2,7 +2,7 @@
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useState, useMemo, memo, useCallback, useDeferredValue } from "react";
+import { useState, useMemo, memo, useCallback, useDeferredValue, useEffect, useRef } from "react";
 import { AlertCircle, Sparkles, ChevronDown, ChevronRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
 import { LimitationsSection } from "@/components/genetics/results/limitations-section";
 import { useAnalysisStore } from "@/lib/stores/analysis-store";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { TRAIT_CATEGORIES } from "@mergenix/genetics-data";
 import type { TraitResult } from "@mergenix/shared-types";
 
@@ -48,14 +49,59 @@ function HealthConsentInterstitial({
   onAccept: () => void;
   onDecline: () => void;
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Trap focus within the dialog while it is visible
+  useFocusTrap(dialogRef, true);
+
+  // Auto-focus the first interactive element (or the container as fallback) on mount
+  useEffect(() => {
+    if (!dialogRef.current) return;
+    const firstFocusable = dialogRef.current.querySelector<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])',
+    );
+    if (firstFocusable) {
+      firstFocusable.focus();
+    } else {
+      dialogRef.current.focus();
+    }
+  }, []);
+
+  // Body scroll lock while the dialog is mounted
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  // Escape key dismisses the dialog (equivalent to "Not Now")
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onDecline();
+      }
+    },
+    [onDecline],
+  );
+
   return (
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="health-consent-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      onClick={onDecline}
     >
-      <div className="w-full max-w-lg rounded-xl border border-amber-500/30 bg-[var(--glass-bg)] p-6 shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="health-consent-title"
+        tabIndex={-1}
+        className="w-full max-w-lg rounded-xl border border-amber-500/30 bg-[var(--glass-bg)] p-6 shadow-2xl outline-none"
+        onKeyDown={handleKeyDown}
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2
           id="health-consent-title"
           className="font-heading text-lg font-bold text-amber-300"

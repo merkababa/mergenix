@@ -80,69 +80,52 @@ export function PunnettSquare({
       role="table"
       aria-label="Punnett square showing offspring genotype probabilities"
     >
-      <div className="grid grid-cols-3 grid-rows-3 gap-0.5 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
-        {/* Corner */}
-        <div className="bg-transparent" role="cell" />
-
-        {/* Column headers */}
-        <div
-          className="flex items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
-          role="columnheader"
-        >
-          {b1}
-        </div>
-        <div
-          className="flex items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
-          role="columnheader"
-        >
-          {b2}
-        </div>
-
-        {/* Row 1 */}
-        <div
-          className="flex items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
-          role="rowheader"
-        >
-          {a1}
-        </div>
-        {cells.slice(0, 2).map((cell, i) => (
+      <div className="flex flex-col gap-0.5 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
+        {/* Header row: corner + column headers */}
+        <div role="row" className="flex gap-0.5">
+          <div className="w-1/3 bg-transparent" role="cell" />
           <div
-            key={`r1-${i}`}
-            className={cn(
-              "rounded p-2.5 text-center transition-transform hover:scale-[1.04]",
-              CELL_STYLES[cell.type],
-            )}
-            role="cell"
+            className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+            role="columnheader"
           >
-            <div className="font-mono text-base font-bold">{cell.genotype}</div>
-            <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-              {probabilities.get(cell.genotype)}%
-            </div>
-            <div className="mt-0.5 text-[10px] opacity-80">{cell.label}</div>
+            {b1}
           </div>
-        ))}
-
-        {/* Row 2 */}
-        <div
-          className="flex items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
-          role="rowheader"
-        >
-          {a2}
-        </div>
-        {cells.slice(2, 4).map((cell, i) => (
           <div
-            key={`r2-${i}`}
-            className={cn(
-              "rounded p-2.5 text-center transition-transform hover:scale-[1.04]",
-              CELL_STYLES[cell.type],
-            )}
-            role="cell"
+            className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+            role="columnheader"
           >
-            <div className="font-mono text-base font-bold">{cell.genotype}</div>
-            <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-              {probabilities.get(cell.genotype)}%
+            {b2}
+          </div>
+        </div>
+
+        {/* Data rows — one per parent-A allele */}
+        {[
+          { header: a1, rowCells: cells.slice(0, 2), key: "r1" },
+          { header: a2, rowCells: cells.slice(2, 4), key: "r2" },
+        ].map(({ header, rowCells, key }) => (
+          <div key={key} role="row" className="flex gap-0.5">
+            <div
+              className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+              role="rowheader"
+            >
+              {header}
             </div>
-            <div className="mt-0.5 text-[10px] opacity-80">{cell.label}</div>
+            {rowCells.map((cell, i) => (
+              <div
+                key={`${key}-${i}`}
+                className={cn(
+                  "w-1/3 rounded p-2.5 text-center transition-transform hover:scale-[1.04]",
+                  CELL_STYLES[cell.type],
+                )}
+                role="cell"
+              >
+                <div className="font-mono text-base font-bold">{cell.genotype}</div>
+                <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                  {probabilities.get(cell.genotype)}%
+                </div>
+                <div className="mt-0.5 text-[10px] opacity-80">{cell.label}</div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
