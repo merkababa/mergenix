@@ -21,7 +21,7 @@
     "audit": "pnpm audit:npm && pnpm audit:pip"
   },
   "devDependencies": {
-    "turbo": "^2.4.0",
+    "turbo": "^2.8.12",
     "prettier": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "eslint": "^9.18.0",
