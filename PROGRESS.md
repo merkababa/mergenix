@@ -128,12 +128,23 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 ---
 
+## Dependabot Triage (2026-03-04)
+
+**12 safe PRs merged:** #94 (pnpm/action-setup SHA), #95 (download-artifact 6→7), #96 (pdfmake web), #99 (resend 2.23.0), #100 (otplib 13.3.0), #101 (sentry-sdk 2.53.0), #102 (pydantic-settings 2.13.1), #104 (pydantic[email] 2.12.5), #105 (alembic 1.18.4), #107 (pdfmake root), #108 (typescript-eslint 8.56.1), #110 (turbo 2.8.12). Build + 1,767 web tests + engine tests all passing.
+
+**5 PRs remaining (open):**
+| PR | Package | Bump | Decision | Reason |
+|----|---------|------|----------|--------|
+| #109 | zod | 3→4 | **Defer** | Massive API overhaul (string validators, record args, error API, default+optional behavior). Multi-day migration. |
+| #97 | tailwindcss | 3→4 | **Defer** | Architectural rewrite (JS→CSS config). Silent visual regressions (border/ring/cursor defaults). 1-2 day effort. |
+| #98 | framer-motion | 11→12 | **Defer** | Gesture callback arg changed (Element, not Event). Medium effort, ~half day. |
+| #106 | @next/eslint-plugin-next | 15→16 | **Close** | Must not upgrade without Next.js 16. Peer dep mismatch, no lint rule benefit. |
+| #103 | @types/node | 22→25 | **Close** | Runtime mismatch — project runs Node 22 LTS, v25 types non-existent APIs. |
+
 ## Next Task: TBD
 
-**Design overhaul COMPLETE** (D1-D4, PRs #117-#120 all merged). Tech debt sprint done (PR #121). Design WARNs fixed (PR #123). Mock dedup done (PRs #124-#125). **Zero tech debt remaining.**
-
 **Remaining work:**
-- 17 Dependabot PRs open (some major: zod 3→4, tailwind 3→4, framer-motion 11→12) — need triage
+- 5 Dependabot PRs (2 to close, 3 deferred major migrations)
 - Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
