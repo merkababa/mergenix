@@ -6,39 +6,15 @@ import {
   waitFor,
   act,
 } from "@testing-library/react";
+import { mockLucideIcons, mockGlassCardFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock("lucide-react", () => ({
-  Trash2: (props: any) => <svg data-testid="icon-trash" {...props} />,
-  AlertTriangle: (props: any) => (
-    <svg data-testid="icon-alert-triangle" {...props} />
-  ),
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-}));
-
-vi.mock("@/components/ui/glass-card", () => ({
-  GlassCard: ({ children, ...props }: any) => (
-    <div data-testid="glass-card" {...props}>
-      {children}
-    </div>
-  ),
-}));
-
+vi.mock("lucide-react", () => mockLucideIcons('Trash2', 'AlertTriangle', 'X'));
+vi.mock("@/components/ui/glass-card", () => mockGlassCardFactory());
+// Custom Button mock: test inspects data-testid="loader" for loading state
 vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    isLoading,
-    className,
-    ...props
-  }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled || isLoading}
-      className={className}
-      {...props}
-    >
+  Button: ({ children, onClick, disabled, isLoading, className, ...props }: any) => (
+    <button onClick={onClick} disabled={disabled || isLoading} className={className} {...props}>
       {isLoading && <span data-testid="loader">Loading...</span>}
       {children}
     </button>

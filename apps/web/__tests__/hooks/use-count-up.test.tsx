@@ -3,6 +3,7 @@ import { render, act } from '@testing-library/react';
 import React from 'react';
 import { useCountUp } from '../../hooks/use-count-up';
 import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
+import { installImmediateIntersectionObserver } from '../__helpers__';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -37,7 +38,6 @@ function readCount(container: HTMLElement): number {
 describe('useCountUp', () => {
   let originalRAF: typeof requestAnimationFrame;
   let originalCAF: typeof cancelAnimationFrame;
-  let originalIO: typeof IntersectionObserver;
 
   beforeEach(() => {
     rafCallbacks = [];
@@ -45,7 +45,6 @@ describe('useCountUp', () => {
 
     originalRAF = globalThis.requestAnimationFrame;
     originalCAF = globalThis.cancelAnimationFrame;
-    originalIO = globalThis.IntersectionObserver;
 
     // Mock rAF: collect callbacks, flush manually
     globalThis.requestAnimationFrame = vi.fn((cb: FrameRequestCallback) => {
@@ -57,29 +56,13 @@ describe('useCountUp', () => {
     globalThis.cancelAnimationFrame = vi.fn();
 
     // Mock IntersectionObserver: fires immediately with isIntersecting=true
-    globalThis.IntersectionObserver = vi.fn((cb: IntersectionObserverCallback) => ({
-      observe: vi.fn((el: Element) => {
-        // Fire on next microtask so React can finish rendering
-        Promise.resolve().then(() => {
-          cb(
-            [{ isIntersecting: true, target: el } as IntersectionObserverEntry],
-            {} as IntersectionObserver,
-          );
-        });
-      }),
-      unobserve: vi.fn(),
-      disconnect: vi.fn(),
-      root: null,
-      rootMargin: '',
-      thresholds: [0.3],
-      takeRecords: vi.fn(() => []),
-    })) as unknown as typeof IntersectionObserver;
+    installImmediateIntersectionObserver();
   });
 
   afterEach(() => {
     globalThis.requestAnimationFrame = originalRAF;
     globalThis.cancelAnimationFrame = originalCAF;
-    globalThis.IntersectionObserver = originalIO;
+    vi.unstubAllGlobals();
   });
 
   it('starts at 0', async () => {

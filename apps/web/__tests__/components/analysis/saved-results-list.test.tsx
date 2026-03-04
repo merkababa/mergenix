@@ -3,43 +3,12 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { useAnalysisStore } from "../../../lib/stores/analysis-store";
 import { useAuthStore } from "../../../lib/stores/auth-store";
 
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock("lucide-react", () => ({
-  Archive: (props: any) => <svg data-testid="icon-archive" {...props} />,
-  Trash2: (props: any) => <svg data-testid="icon-trash" {...props} />,
-  Download: (props: any) => <svg data-testid="icon-download" {...props} />,
-  Clock: (props: any) => <svg data-testid="icon-clock" {...props} />,
-  FileText: (props: any) => <svg data-testid="icon-file-text" {...props} />,
-  Crown: (props: any) => <svg data-testid="icon-crown" {...props} />,
-}));
-
-vi.mock("@/components/ui/glass-card", () => ({
-  GlassCard: ({ children, ...props }: any) => (
-    <div data-testid="glass-card" {...props}>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    isLoading,
-    className,
-    ...props
-  }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled || isLoading}
-      className={className}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
+vi.mock("lucide-react", () => mockLucideIcons('Archive', 'Trash2', 'Download', 'Clock', 'FileText', 'Crown'));
+vi.mock("@/components/ui/glass-card", () => mockGlassCardFactory());
+vi.mock("@/components/ui/button", () => mockButtonFactory());
 
 // ─── Import after mocks ────────────────────────────────────────────────────────
 

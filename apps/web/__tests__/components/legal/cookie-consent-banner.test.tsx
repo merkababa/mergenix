@@ -1,19 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons, mockButtonFactory } from '../../__helpers__';
 
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Cookie: (props: any) => <svg data-testid="icon-cookie" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled || isLoading} {...props}>
-      {children}
-    </button>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Cookie', 'X'));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Store mock ────────────────────────────────────────────────────────────────
 

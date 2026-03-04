@@ -1,58 +1,22 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  Lock: (props: any) => <svg data-testid="icon-lock" {...props} />,
-  EyeOff: (props: any) => <svg data-testid="icon-eye-off" {...props} />,
-  Server: (props: any) => <svg data-testid="icon-server" {...props} />,
-  ChevronDown: (props: any) => <svg data-testid="icon-chevron-down" {...props} />,
-  Cpu: (props: any) => <svg data-testid="icon-cpu" {...props} />,
-  Globe: (props: any) => <svg data-testid="icon-globe" {...props} />,
-  KeyRound: (props: any) => <svg data-testid="icon-key-round" {...props} />,
-  ShieldCheck: (props: any) => <svg data-testid="icon-shield-check" {...props} />,
-  HardDrive: (props: any) => <svg data-testid="icon-hard-drive" {...props} />,
-  Workflow: (props: any) => <svg data-testid="icon-workflow" {...props} />,
-  XCircle: (props: any) => <svg data-testid="icon-x-circle" {...props} />,
-  ChevronRight: (props: any) => <svg data-testid="icon-chevron-right" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
-
-vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children }: any) => <>{children}</>,
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: any) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: any) => (
-    <div>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Lock', 'Eye', 'EyeOff', 'Server', 'ChevronDown', 'Cpu', 'Globe', 'KeyRound', 'ShieldCheck', 'HardDrive', 'Workflow', 'XCircle', 'ChevronRight', 'Check', 'ArrowRight', 'FileText'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
@@ -85,6 +49,21 @@ describe('SecurityPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders data flow step content', () => {
+    render(<SecurityContent />);
+
+    expect(screen.getByText(/Upload DNA files/i)).toBeInTheDocument();
+    expect(screen.getByText(/Web Worker parses/i)).toBeInTheDocument();
+    expect(screen.getByText(/Analysis runs client-side/i)).toBeInTheDocument();
+  });
+
+  it('renders encryption section mentioning AES-256-GCM', () => {
+    render(<SecurityContent />);
+
+    expect(screen.getAllByText(/Encryption/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/AES-256-GCM/).length).toBeGreaterThanOrEqual(1);
+  });
+
   it('renders privacy promise cards using GlassCard', () => {
     render(<SecurityContent />);
 
@@ -97,6 +76,8 @@ describe('SecurityPage', () => {
 
     expect(screen.getByText(/We never see your DNA data/i)).toBeInTheDocument();
     expect(screen.getByText(/No server-side genetic processing/i)).toBeInTheDocument();
+    expect(screen.getByText(/No data selling or sharing/i)).toBeInTheDocument();
+    expect(screen.getByText(/You control deletion/i)).toBeInTheDocument();
   });
 
   it('renders FAQ section heading', () => {
@@ -134,5 +115,51 @@ describe('SecurityPage', () => {
         expect(next).toBeLessThanOrEqual(current + 1);
       }
     }
+  });
+
+  it('renders FAQ section with expandable answer on click', () => {
+    render(<SecurityContent />);
+
+    const faqButton = screen.getByText(/Can you see my DNA data\?/i);
+    expect(faqButton).toBeInTheDocument();
+
+    // Answer hidden initially
+    expect(screen.queryByText(/processing happens in your browser/i)).not.toBeInTheDocument();
+
+    // Expand FAQ item
+    fireEvent.click(faqButton);
+
+    expect(screen.getByText(/processing happens in your browser/i)).toBeInTheDocument();
+  });
+
+  it("all external links have rel='noopener noreferrer'", () => {
+    const { container } = render(<SecurityContent />);
+
+    const externalLinks = container.querySelectorAll('a[target="_blank"]');
+    externalLinks.forEach((link) => {
+      expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+      expect(link).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+    });
+  });
+
+  it('all external links have referrerPolicy set for privacy', () => {
+    const { container } = render(<SecurityContent />);
+
+    const allLinks = Array.from(container.querySelectorAll('a[href]'));
+    const externalLinks = allLinks.filter((link) => {
+      const href = link.getAttribute('href') ?? '';
+      return href.startsWith('http://') || href.startsWith('https://');
+    });
+
+    externalLinks.forEach((link) => {
+      const policy = link.getAttribute('referrerpolicy');
+      expect(
+        policy === 'no-referrer' || policy === 'strict-origin-when-cross-origin',
+        `External link to "${link.getAttribute('href')}" must have referrerPolicy="no-referrer" or "strict-origin-when-cross-origin", got "${policy}"`,
+      ).toBe(true);
+    });
+
+    // Guard rail: security page currently has zero external links.
+    expect(externalLinks.length).toBe(0);
   });
 });

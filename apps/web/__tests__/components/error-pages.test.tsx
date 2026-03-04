@@ -1,23 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { mockNextLinkFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('next/link', () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-    [key: string]: unknown;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Imports ──────────────────────────────────────────────────────────────────
 

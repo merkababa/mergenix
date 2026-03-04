@@ -3,26 +3,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock("lucide-react", () => ({
-  Upload: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-upload" {...props} />
-  ),
-  File: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-file" {...props} />
-  ),
-  X: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-x" {...props} />
-  ),
-  ArrowRight: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-arrow-right" {...props} />
-  ),
-  Loader2: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-loader" {...props} />
-  ),
-  Info: (props: Record<string, unknown>) => (
-    <svg data-testid="icon-info" {...props} />
-  ),
-}));
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+
+vi.mock("lucide-react", () => mockLucideIcons('Upload', 'File', 'X', 'ArrowRight', 'Loader2', 'Info'));
 
 // Mock PartnerConsentCheckbox to avoid store dependencies
 vi.mock("@/components/legal/partner-consent-checkbox", () => ({
@@ -33,39 +16,8 @@ vi.mock("@/components/legal/partner-consent-checkbox", () => ({
   ),
 }));
 
-// Mock GlassCard to a simple pass-through div
-vi.mock("@/components/ui/glass-card", () => ({
-  GlassCard: ({
-    children,
-    className,
-    ...props
-  }: {
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: unknown;
-  }) => (
-    <div className={className} {...props}>
-      {children}
-    </div>
-  ),
-}));
-
-// Mock Button to a simple button element
-vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    className,
-    ...props
-  }: {
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: unknown;
-  }) => (
-    <button className={className} {...props}>
-      {children}
-    </button>
-  ),
-}));
+vi.mock("@/components/ui/glass-card", () => mockGlassCardFactory());
+vi.mock("@/components/ui/button", () => mockButtonFactory());
 
 // ── Import component after mocks ─────────────────────────────────────────────
 

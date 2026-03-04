@@ -15,13 +15,11 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import { mockLucideIcons } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('X', 'Shield'));
 
 vi.mock('@/lib/constants/legal-placeholders', () => ({
   CPRA_SPI_NOTICE: 'Title\n\nParagraph one text.\n\n• Bullet item one\n• Bullet item two',

@@ -1,18 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import {
+  mockLucideIcons,
+  mockButtonFactory,
+  installStatefulIntersectionObserver,
+} from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  FileSearch: (props: any) => <svg data-testid="icon-file-search" {...props} />,
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, className, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled || isLoading} className={className} {...props}>
-      {children}
-    </button>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('FileSearch'));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Store mock ────────────────────────────────────────────────────────────────
 
@@ -33,27 +29,7 @@ vi.mock('@/lib/stores/legal-store', () => ({
 
 // ─── IntersectionObserver mock ───────────────────────────────────────────────
 
-let intersectionCallback: IntersectionObserverCallback;
-const mockObserve = vi.fn();
-const mockDisconnect = vi.fn();
-
-class MockIntersectionObserver {
-  constructor(callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {
-    intersectionCallback = callback;
-  }
-  observe = mockObserve;
-  disconnect = mockDisconnect;
-  unobserve = vi.fn();
-  takeRecords = vi.fn().mockReturnValue([]);
-  root = null;
-  rootMargin = '';
-  thresholds = [0];
-}
-
-Object.defineProperty(globalThis, 'IntersectionObserver', {
-  value: MockIntersectionObserver,
-  writable: true,
-});
+const { triggerIntersection } = installStatefulIntersectionObserver();
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
@@ -107,10 +83,7 @@ describe('ConsentModal', () => {
 
     // Simulate IntersectionObserver detecting the sentinel
     act(() => {
-      intersectionCallback(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      triggerIntersection([{ isIntersecting: true } as IntersectionObserverEntry]);
     });
 
     const checkbox = screen.getByRole('checkbox');
@@ -122,10 +95,7 @@ describe('ConsentModal', () => {
 
     // Simulate scroll to bottom
     act(() => {
-      intersectionCallback(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      triggerIntersection([{ isIntersecting: true } as IntersectionObserverEntry]);
     });
 
     const acceptButton = screen.getByRole('button', { name: /accept/i });
@@ -157,10 +127,7 @@ describe('ConsentModal', () => {
 
     // Scroll to bottom
     act(() => {
-      intersectionCallback(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      triggerIntersection([{ isIntersecting: true } as IntersectionObserverEntry]);
     });
 
     // Check checkbox
@@ -209,10 +176,7 @@ describe('ConsentModal', () => {
 
     // Scroll to bottom and check checkbox
     act(() => {
-      intersectionCallback(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      triggerIntersection([{ isIntersecting: true } as IntersectionObserverEntry]);
     });
     fireEvent.click(screen.getByRole('checkbox'));
     expect(screen.getByRole('checkbox')).toBeChecked();

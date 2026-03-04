@@ -1,18 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import { mockLucideIcons, mockButtonFactory } from '../../__helpers__';
 
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  ShieldCheck: (props: any) => <svg data-testid="icon-shield-check" {...props} />,
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, className, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled || isLoading} className={className} {...props}>
-      {children}
-    </button>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('ShieldCheck'));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Router mock ──────────────────────────────────────────────────────────────
 

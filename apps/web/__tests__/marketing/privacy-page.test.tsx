@@ -1,56 +1,22 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  Lock: (props: any) => <svg data-testid="icon-lock" {...props} />,
-  FileText: (props: any) => <svg data-testid="icon-file-text" {...props} />,
-  Scale: (props: any) => <svg data-testid="icon-scale" {...props} />,
-  Mail: (props: any) => <svg data-testid="icon-mail" {...props} />,
-  Clock: (props: any) => <svg data-testid="icon-clock" {...props} />,
-  UserCheck: (props: any) => <svg data-testid="icon-user-check" {...props} />,
-  Database: (props: any) => <svg data-testid="icon-database" {...props} />,
-  Check: (props: any) => <svg data-testid="icon-check" {...props} />,
-  FileSearch: (props: any) => <svg data-testid="icon-file-search" {...props} />,
-  ChevronRight: (props: any) => <svg data-testid="icon-chevron-right" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
-
-vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children }: any) => <>{children}</>,
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: any) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: any) => (
-    <div>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Lock', 'FileText', 'Scale', 'Mail', 'Clock', 'UserCheck', 'Database', 'Check', 'FileSearch', 'ChevronRight'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
@@ -98,6 +64,42 @@ describe('PrivacyPage', () => {
     render(<PrivacyContent />);
 
     expect(screen.getByRole('heading', { name: /Data Retention/i })).toBeInTheDocument();
+  });
+
+  it('renders GDPR Article 13/14 reference', () => {
+    render(<PrivacyContent />);
+
+    expect(screen.getByText(/Article 13/i)).toBeInTheDocument();
+    expect(screen.getByText(/Article 14/i)).toBeInTheDocument();
+  });
+
+  it('displays data controller company name', () => {
+    render(<PrivacyContent />);
+
+    expect(screen.getAllByText(/Mergenix/).length).toBeGreaterThan(0);
+  });
+
+  it('lists categories of personal data processed', () => {
+    render(<PrivacyContent />);
+
+    expect(screen.getByText(/account info/i)).toBeInTheDocument();
+    expect(screen.getByText(/payment info/i)).toBeInTheDocument();
+    expect(screen.getByText(/Analysis results \(if saved\)/i)).toBeInTheDocument();
+  });
+
+  it('explains legal basis for processing (Art 6(1)(a) and Art 6(1)(b))', () => {
+    render(<PrivacyContent />);
+
+    expect(screen.getByText(/Legal Basis/i)).toBeInTheDocument();
+    expect(screen.getByText(/Art(?:icle)?\s*6\(1\)\(a\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Art(?:icle)?\s*6\(1\)\(b\)/i)).toBeInTheDocument();
+  });
+
+  it('lists right to rectification and right to data portability', () => {
+    render(<PrivacyContent />);
+
+    expect(screen.getByText(/Right to Rectification/i)).toBeInTheDocument();
+    expect(screen.getByText(/Right to Data Portability/i)).toBeInTheDocument();
   });
 
   it('heading hierarchy has no skipped levels', () => {

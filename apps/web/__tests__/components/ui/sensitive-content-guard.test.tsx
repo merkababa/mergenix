@@ -1,34 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock("@/components/ui/glass-card", () => ({
-  GlassCard: ({ children, className, ...props }: any) => (
-    <div data-testid="glass-card" className={className} {...props}>
-      {children}
-    </div>
-  ),
-}));
+import { mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
 
-vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    isLoading,
-    className,
-    ...props
-  }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled || isLoading}
-      className={className}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
+// ─── Mocks ────────────────────────────────────────────────────────────────────
+vi.mock("@/components/ui/glass-card", () => mockGlassCardFactory());
+vi.mock("@/components/ui/button", () => mockButtonFactory());
 
 // ─── Modal manager mock ───────────────────────────────────────────────────────
 

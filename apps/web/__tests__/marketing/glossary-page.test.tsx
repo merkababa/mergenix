@@ -1,46 +1,22 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockNextLinkFactory,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Search: (props: any) => <svg data-testid="icon-search" {...props} />,
-  BookOpen: (props: any) => <svg data-testid="icon-book-open" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
-
+vi.mock('lucide-react', () => mockLucideIcons('Search', 'BookOpen'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/input', () => ({
   Input: (props: any) => <input placeholder={props.placeholder} aria-label={props['aria-label']} />,
 }));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: any) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: any) => (
-    <div>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 vi.mock('@/lib/glossary-data', () => ({
   GLOSSARY_TERMS: [

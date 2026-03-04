@@ -3,15 +3,9 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Sparkles: (props: Record<string, unknown>) => <svg data-testid="icon-sparkles" {...props} />,
-  ArrowRight: (props: Record<string, unknown>) => <svg data-testid="icon-arrow-right" {...props} />,
-  Shield: (props: Record<string, unknown>) => <svg data-testid="icon-shield" {...props} />,
-  X: (props: Record<string, unknown>) => <svg data-testid="icon-x" {...props} />,
-  AlertCircle: (props: Record<string, unknown>) => <svg data-testid="icon-alert" {...props} />,
-  AlertTriangle: (props: Record<string, unknown>) => <svg data-testid="icon-alert-triangle" {...props} />,
-  Check: (props: Record<string, unknown>) => <svg data-testid="icon-check" {...props} />,
-}));
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+
+vi.mock('lucide-react', () => mockLucideIcons('Sparkles', 'ArrowRight', 'Shield', 'X', 'AlertCircle', 'AlertTriangle', 'Check'));
 
 // Mock ChipDisclosureModal (rendered by UpgradeModal for chip limitation gate)
 vi.mock('@/components/legal/chip-disclosure-modal', () => ({
@@ -36,21 +30,8 @@ vi.mock('@/lib/stores/legal-store', () => ({
   ),
 }));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) => (
-    <div data-testid="glass-card" className={className} {...props}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, ...props }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean; isLoading?: boolean; [key: string]: unknown }) => (
-    <button onClick={onClick} disabled={disabled || isLoading} {...props}>
-      {isLoading && <span data-testid="loading-spinner" />}
-      {children}
-    </button>
-  ),
-  buttonVariants: () => 'mock-button-class',
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, variant, ...props }: { children: React.ReactNode; variant?: string; [key: string]: unknown }) => (

@@ -1,29 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAuthStore } from '../../lib/stores/auth-store';
+import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Menu: (props: Record<string, unknown>) => <svg data-testid="icon-menu" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  X: (props: Record<string, unknown>) => <svg data-testid="icon-x" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  Dna: (props: Record<string, unknown>) => <svg data-testid="icon-dna" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  // Icons potentially used transitively
-  User: (props: Record<string, unknown>) => <svg data-testid="icon-user" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  CreditCard: (props: Record<string, unknown>) => <svg data-testid="icon-credit-card" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  Activity: (props: Record<string, unknown>) => <svg data-testid="icon-activity" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  LogOut: (props: Record<string, unknown>) => <svg data-testid="icon-logout" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  ChevronDown: (props: Record<string, unknown>) => <svg data-testid="icon-chevron-down" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  Sun: (props: Record<string, unknown>) => <svg data-testid="icon-sun" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-  Moon: (props: Record<string, unknown>) => <svg data-testid="icon-moon" {...(props as React.SVGAttributes<SVGSVGElement>)} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Menu', 'X', 'Dna', 'User', 'CreditCard', 'Activity', 'LogOut', 'ChevronDown', 'Sun', 'Moon'));
 
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: any }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // Mock usePathname — default to '/'
 const mockUsePathname = vi.fn(() => '/');

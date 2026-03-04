@@ -1,41 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock("lucide-react", () => ({
-  FileDown: (props: any) => <svg data-testid="icon-file-down" {...props} />,
-  Lock: (props: any) => <svg data-testid="icon-lock" {...props} />,
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-}));
-
-vi.mock("@/components/ui/glass-card", () => ({
-  GlassCard: ({ children, ...props }: any) => (
-    <div data-testid="glass-card" {...props}>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    isLoading,
-    className,
-    ...props
-  }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled || isLoading}
-      className={className}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-}));
+vi.mock("lucide-react", () => mockLucideIcons('FileDown', 'Lock', 'Shield', 'X'));
+vi.mock("@/components/ui/glass-card", () => mockGlassCardFactory());
+vi.mock("@/components/ui/button", () => mockButtonFactory());
 
 vi.mock("@/hooks/use-focus-trap", () => ({
   useFocusTrap: vi.fn(),

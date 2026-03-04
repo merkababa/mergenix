@@ -1,26 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Trash2: (props: any) => <svg data-testid="icon-trash" {...props} />,
-  ChevronDown: (props: any) => <svg data-testid="icon-chevron" {...props} />,
-  AlertTriangle: (props: any) => <svg data-testid="icon-alert" {...props} />,
-  Loader2: (props: any) => <svg data-testid="icon-loader" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => <div data-testid="glass-card" {...props}>{children}</div>,
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, isLoading, disabled, ...props }: any) => (
-    <button disabled={disabled || isLoading} {...props}>
-      {isLoading && <span data-testid="loader">Loading...</span>}
-      {children}
-    </button>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Trash2', 'ChevronDown', 'AlertTriangle', 'Loader2'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 vi.mock('@/components/auth/password-input', () => ({
   PasswordInput: ({ label, value, onChange, error, ...rest }: any) => (
@@ -46,10 +31,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockPush }),
 }));
 
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ children, href, ...props }: any) => <a href={href} {...props}>{children}</a>,
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 const mockStoreState: Record<string, any> = {
   deleteAccount: mockDeleteAccount,

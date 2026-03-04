@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAnalysisStore } from '../../lib/stores/analysis-store';
 import { useAuthStore } from '../../lib/stores/auth-store';
+import { mockNextLinkFactory } from '../__helpers__';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -22,12 +23,7 @@ vi.mock('next/dynamic', () => ({
 }));
 
 // Mock next/link to render a plain anchor
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // Mock useGeneticsWorker hook
 const mockStartAnalysis = vi.fn();

@@ -1,33 +1,21 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockScrollRevealFactory,
+  mockScrollProgressResult,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  useScrollProgress: () => ({
-    scrollYProgress: { get: () => 0 },
-    opacity: 1,
-    y: 0,
-  }),
+  ...mockScrollRevealFactory(),
+  useScrollProgress: () => mockScrollProgressResult(),
 }));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle }: { title: string; subtitle?: string }) => (
-    <div>
-      <h2>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 
 // Mock useCountUp to return stable values — avoids timer/animation complexity in tests
 vi.mock('@/hooks/use-count-up', () => ({

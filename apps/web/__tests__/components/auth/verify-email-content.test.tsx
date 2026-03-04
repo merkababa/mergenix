@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -9,11 +10,7 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => mockSearchParams,
 }));
 
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 const mockVerifyEmail = vi.fn();
 const mockResendVerification = vi.fn();
@@ -44,16 +41,9 @@ vi.mock('@/components/auth/trust-signals', () => ({
 vi.mock('@/lib/animation-variants', () => ({
   fadeUp: { hidden: {}, visible: {} },
 }));
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children }: any) => <div data-testid="glass-card">{children}</div>,
-}));
-
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, isLoading, disabled, ...props }: any) => (
-    <button disabled={disabled || isLoading} {...props}>
-      {children}
-    </button>
-  ),
+  ...mockButtonFactory(),
   buttonVariants: ({ variant, size, className }: any) =>
     [variant, size, className].filter(Boolean).join(' '),
 }));
@@ -71,12 +61,7 @@ vi.mock('@/components/ui/input', () => ({
   },
 }));
 
-vi.mock('lucide-react', () => ({
-  CheckCircle: () => <span data-testid="icon-check-circle" />,
-  XCircle: () => <span data-testid="icon-x-circle" />,
-  Mail: () => <span data-testid="icon-mail" />,
-  ArrowLeft: () => <span data-testid="icon-arrow-left" />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('CheckCircle', 'XCircle', 'Mail', 'ArrowLeft'));
 
 // ── Import under test ────────────────────────────────────────────────────────
 

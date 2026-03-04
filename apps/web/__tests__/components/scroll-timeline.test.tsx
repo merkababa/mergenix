@@ -1,27 +1,20 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockSectionHeadingFactory,
+  mockScrollRevealFactory,
+  mockScrollProgressResult,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  useScrollProgress: () => ({
-    scrollYProgress: { get: () => 0 },
-    opacity: 1,
-    y: 0,
-  }),
+  ...mockScrollRevealFactory(),
+  useScrollProgress: () => mockScrollProgressResult(),
 }));
 
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle }: { title: string; subtitle?: string }) => (
-    <div>
-      <h2>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 
 vi.mock('@/components/marketing/step-circle', () => ({
   StepCircle: ({ step }: { step: number }) => (
@@ -30,11 +23,7 @@ vi.mock('@/components/marketing/step-circle', () => ({
 }));
 
 // Mock lucide-react icons used by ScrollTimeline
-vi.mock('lucide-react', () => ({
-  Upload: (props: Record<string, unknown>) => <svg data-testid="icon-upload" {...props} />,
-  Brain: (props: Record<string, unknown>) => <svg data-testid="icon-brain" {...props} />,
-  HeartPulse: (props: Record<string, unknown>) => <svg data-testid="icon-heartpulse" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Upload', 'Brain', 'HeartPulse'));
 
 // ─── Import under test ────────────────────────────────────────────────────────
 

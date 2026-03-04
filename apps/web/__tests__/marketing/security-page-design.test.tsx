@@ -1,56 +1,21 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  Lock: (props: any) => <svg data-testid="icon-lock" {...props} />,
-  EyeOff: (props: any) => <svg data-testid="icon-eye-off" {...props} />,
-  Server: (props: any) => <svg data-testid="icon-server" {...props} />,
-  ChevronDown: (props: any) => <svg data-testid="icon-chevron-down" {...props} />,
-  Cpu: (props: any) => <svg data-testid="icon-cpu" {...props} />,
-  Globe: (props: any) => <svg data-testid="icon-globe" {...props} />,
-  KeyRound: (props: any) => <svg data-testid="icon-key-round" {...props} />,
-  ShieldCheck: (props: any) => <svg data-testid="icon-shield-check" {...props} />,
-  HardDrive: (props: any) => <svg data-testid="icon-hard-drive" {...props} />,
-  Workflow: (props: any) => <svg data-testid="icon-workflow" {...props} />,
-  XCircle: (props: any) => <svg data-testid="icon-x-circle" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
-
-vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children }: any) => <>{children}</>,
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: any) => (
-    <div>
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-    </div>
-  ),
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: any) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Lock', 'EyeOff', 'Server', 'ChevronDown', 'Cpu', 'Globe', 'KeyRound', 'ShieldCheck', 'HardDrive', 'Workflow', 'XCircle'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 

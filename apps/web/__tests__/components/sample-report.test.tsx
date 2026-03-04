@@ -1,38 +1,14 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
 
 // Mock framer-motion to avoid animation issues in tests
 
 // Mock Next.js Link — renders as a plain <a> tag
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({
-    href,
-    children,
-    className,
-    ...props
-  }: {
-    href: string;
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: unknown;
-  }) => (
-    <a href={href} className={className} {...props}>
-      {children}
-    </a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // Mock lucide-react icons to avoid SVG rendering complexity
-vi.mock('lucide-react', () => ({
-  AlertTriangle: () => <svg />,
-  Dna: () => <svg />,
-  FlaskConical: () => <svg />,
-  Pill: () => <svg />,
-  Activity: () => <svg />,
-  Stethoscope: () => <svg />,
-  Lock: () => <svg />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('AlertTriangle', 'Dna', 'FlaskConical', 'Pill', 'Activity', 'Stethoscope', 'Lock'));
 
 import { SampleReportContent } from '../../app/(marketing)/sample-report/_components/sample-report-content';
 

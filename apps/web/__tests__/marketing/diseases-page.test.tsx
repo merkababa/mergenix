@@ -1,59 +1,35 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockButtonFactory,
+  mockLucideIcons,
+  installSimpleIntersectionObserver,
+} from '../__helpers__';
 
 // jsdom doesn't implement IntersectionObserver — mock it globally
 beforeAll(() => {
-  globalThis.IntersectionObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  } as unknown as typeof IntersectionObserver;
+  installSimpleIntersectionObserver();
 });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Search: (props: any) => <svg data-testid="icon-search" {...props} />,
-  Filter: (props: any) => <svg data-testid="icon-filter" {...props} />,
-  Microscope: (props: any) => <svg data-testid="icon-microscope" {...props} />,
-  Dna: (props: any) => <svg data-testid="icon-dna" {...props} />,
-  Activity: (props: any) => <svg data-testid="icon-activity" {...props} />,
-  ChevronRight: (props: any) => <svg data-testid="icon-chevron-right" {...props} />,
-  ChevronLeft: (props: any) => <svg data-testid="icon-chevron-left" {...props} />,
-  RotateCcw: (props: any) => <svg data-testid="icon-rotate-ccw" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
-
+vi.mock('lucide-react', () => mockLucideIcons('Search', 'Filter', 'Microscope', 'Dna', 'Activity', 'ChevronRight', 'ChevronLeft', 'RotateCcw'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, ...props }: any) => <span {...props}>{children}</span>,
 }));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
-}));
-
 vi.mock('@/components/ui/input', () => ({
   Input: (props: any) => <input aria-label={props['aria-label']} placeholder={props.placeholder} value={props.value} onChange={props.onChange} />,
 }));
-
 vi.mock('@/components/ui/select-filter', () => ({
   SelectFilter: (props: any) => <select aria-label={props.ariaLabel} />,
 }));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: any) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn() }),
   useSearchParams: () => ({
@@ -61,25 +37,9 @@ vi.mock('next/navigation', () => ({
     toString: () => '',
   }),
 }));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: any) => (
-    <div>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children }: any) => <>{children}</>,
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 vi.mock('@/lib/disease-data', () => ({
   DISEASES: [

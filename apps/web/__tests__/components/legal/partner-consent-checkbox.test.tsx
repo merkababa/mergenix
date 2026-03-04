@@ -1,11 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import { mockLucideIcons } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Info: (props: any) => <svg data-testid="icon-info" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Info'));
 
 // ─── Store mock ────────────────────────────────────────────────────────────────
 

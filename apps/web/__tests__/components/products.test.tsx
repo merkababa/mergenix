@@ -1,38 +1,26 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockScrollProgressResult,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  useScrollProgress: () => ({ scrollYProgress: { get: () => 0 }, opacity: 1, y: 0 }),
+  ...mockScrollRevealFactory(),
+  useScrollProgress: () => mockScrollProgressResult(),
 }));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle }: { title: string; subtitle?: string }) => (
-    <div>
-      <h2>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: { title: string; subtitle?: string }) => (
-    <header>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </header>
-  ),
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
 vi.mock('@/components/ui/accordion', () => ({
   Accordion: ({ items }: { items: Array<{ question: string; answer: string }> }) => (
@@ -56,33 +44,11 @@ vi.mock('@/components/ui/button', () => ({
   buttonVariants: () => 'btn',
 }));
 
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
-
+// Check/X icons have custom aria-label — keep inline for semantic correctness
 vi.mock('lucide-react', () => ({
   Check: (props: Record<string, unknown>) => <svg aria-label="Included" {...props} />,
   X: (props: Record<string, unknown>) => <svg aria-label="Not included" {...props} />,
-  Shield: (props: Record<string, unknown>) => <svg {...props} />,
-  Zap: (props: Record<string, unknown>) => <svg {...props} />,
-  Users: (props: Record<string, unknown>) => <svg {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <svg {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => <svg {...props} />,
-  Dna: (props: Record<string, unknown>) => <svg {...props} />,
-  FileType: (props: Record<string, unknown>) => <svg {...props} />,
-  Pill: (props: Record<string, unknown>) => <svg {...props} />,
-  TrendingUp: (props: Record<string, unknown>) => <svg {...props} />,
-  Mail: (props: Record<string, unknown>) => <svg {...props} />,
-  MessageCircle: (props: Record<string, unknown>) => <svg {...props} />,
-  Database: (props: Record<string, unknown>) => <svg {...props} />,
-  FileText: (props: Record<string, unknown>) => <svg {...props} />,
-  Star: (props: Record<string, unknown>) => <svg {...props} />,
-  BarChart2: (props: Record<string, unknown>) => <svg {...props} />,
-  HeartPulse: (props: Record<string, unknown>) => <svg {...props} />,
-  FlaskConical: (props: Record<string, unknown>) => <svg {...props} />,
+  ...mockLucideIcons('Shield', 'Zap', 'Users', 'Sparkles', 'ShieldCheck', 'Dna', 'FileType', 'Pill', 'TrendingUp', 'Mail', 'MessageCircle', 'Database', 'FileText', 'Star', 'BarChart2', 'HeartPulse', 'FlaskConical'),
 }));
 
 // ─── Import under test ────────────────────────────────────────────────────────

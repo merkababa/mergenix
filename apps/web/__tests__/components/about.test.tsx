@@ -1,38 +1,27 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockPageHeaderFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockScrollProgressResult,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  useScrollProgress: () => ({ scrollYProgress: { get: () => 0 }, opacity: 1, y: 0 }),
+  ...mockScrollRevealFactory(),
+  useScrollProgress: () => mockScrollProgressResult(),
 }));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className, ...rest }: { children?: React.ReactNode; className?: string; [key: string]: unknown }) => (
-    <div className={className} {...rest}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle, id }: { title: string; subtitle?: string; id?: string; gradient?: string; className?: string }) => (
-    <div>
-      <h2 id={id}>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('@/components/layout/page-header', () => ({
-  PageHeader: ({ title, subtitle }: { title: string; subtitle?: string; breadcrumbs?: unknown }) => (
-    <header>
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </header>
-  ),
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
+vi.mock('lucide-react', () => mockLucideIcons('Dna', 'Shield', 'Microscope', 'Brain', 'Heart', 'BookOpen', 'Users', 'Lightbulb', 'ChevronRight'));
 
 vi.mock('@/components/marketing/helix-animation', () => ({
   HelixAnimation: () => <div data-testid="helix-animation" aria-hidden="true" />,
@@ -46,25 +35,6 @@ vi.mock('@/components/marketing/step-circle', () => ({
 
 vi.mock('@/components/ui/button', () => ({
   buttonVariants: () => 'btn',
-}));
-
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
-
-vi.mock('lucide-react', () => ({
-  Dna: (props: Record<string, unknown>) => <svg data-testid="icon-dna" {...props} />,
-  Shield: (props: Record<string, unknown>) => <svg data-testid="icon-shield" {...props} />,
-  Microscope: (props: Record<string, unknown>) => <svg data-testid="icon-microscope" {...props} />,
-  Brain: (props: Record<string, unknown>) => <svg data-testid="icon-brain" {...props} />,
-  Heart: (props: Record<string, unknown>) => <svg data-testid="icon-heart" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <svg data-testid="icon-book-open" {...props} />,
-  Users: (props: Record<string, unknown>) => <svg data-testid="icon-users" {...props} />,
-  Lightbulb: (props: Record<string, unknown>) => <svg data-testid="icon-lightbulb" {...props} />,
-  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="icon-chevron-right" {...props} />,
 }));
 
 // Mock useCountUp so count-up tests are deterministic

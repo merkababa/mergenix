@@ -1,23 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAuthStore } from '../../lib/stores/auth-store';
+import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  User: (props: any) => <svg data-testid="icon-user" {...props} />,
-  CreditCard: (props: any) => <svg data-testid="icon-credit-card" {...props} />,
-  Activity: (props: any) => <svg data-testid="icon-activity" {...props} />,
-  LogOut: (props: any) => <svg data-testid="icon-logout" {...props} />,
-  ChevronDown: (props: any) => <svg data-testid="icon-chevron-down" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('User', 'CreditCard', 'Activity', 'LogOut', 'ChevronDown'));
 
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, onClick, role, ...props }: { href: string; children: React.ReactNode; onClick?: any; role?: string; [key: string]: any }) => (
-    <a href={href} onClick={onClick} role={role} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, variant, ...props }: any) => (

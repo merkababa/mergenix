@@ -1,31 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  ShieldOff: (props: any) => <svg data-testid="icon-shield-off" {...props} />,
-  AlertTriangle: (props: any) => <svg data-testid="icon-alert-triangle" {...props} />,
-  Check: (props: any) => <svg data-testid="icon-check" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-  ShieldCheck: (props: any) => <svg data-testid="icon-shield-check" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Shield', 'ShieldOff', 'AlertTriangle', 'Check', 'X', 'ShieldCheck'));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => {
-    const { variant, hover, rainbow, ...htmlProps } = props;
-    return <div data-testid="glass-card" {...htmlProps}>{children}</div>;
-  },
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, className, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled || isLoading} className={className} {...props}>
-      {children}
-    </button>
-  ),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Store mock ────────────────────────────────────────────────────────────────
 

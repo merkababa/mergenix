@@ -3,31 +3,14 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Crown: (props: Record<string, unknown>) => <svg data-testid="icon-crown" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <svg data-testid="icon-sparkles" {...props} />,
-  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="icon-chevron" {...props} />,
-  CreditCard: (props: Record<string, unknown>) => <svg data-testid="icon-credit-card" {...props} />,
-  Clock: (props: Record<string, unknown>) => <svg data-testid="icon-clock" {...props} />,
-  Download: (props: Record<string, unknown>) => <svg data-testid="icon-download" {...props} />,
-  AlertCircle: (props: Record<string, unknown>) => <svg data-testid="icon-alert" {...props} />,
-  Shield: (props: Record<string, unknown>) => <svg data-testid="icon-shield" {...props} />,
-}));
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) => (
-    <div data-testid="glass-card" className={className} {...props}>{children}</div>
-  ),
-}));
-
+vi.mock('lucide-react', () => mockLucideIcons('Crown', 'Sparkles', 'ChevronRight', 'CreditCard', 'Clock', 'Download', 'AlertCircle', 'Shield'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, ...props }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean; isLoading?: boolean; [key: string]: unknown }) => (
-    <button onClick={onClick} disabled={disabled || isLoading} {...props}>
-      {isLoading && <span data-testid="loading-spinner" />}
-      {children}
-    </button>
-  ),
-  buttonVariants: () => 'mock-button-class',
+  ...mockButtonFactory(),
+  buttonVariants: ({ variant, size, className }: any) =>
+    [variant, size, className].filter(Boolean).join(' '),
 }));
 
 vi.mock('@/components/ui/badge', () => ({
@@ -36,11 +19,7 @@ vi.mock('@/components/ui/badge', () => ({
   ),
 }));
 
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Store mocks ──────────────────────────────────────────────────────────────
 

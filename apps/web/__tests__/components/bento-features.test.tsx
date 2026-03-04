@@ -1,45 +1,26 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import {
+  mockGlassCardFactory,
+  mockSectionHeadingFactory,
+  mockScrollRevealFactory,
+  mockNextLinkFactory,
+  mockScrollProgressResult,
+  mockLucideIcons,
+} from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('@/components/ui/scroll-reveal', () => ({
-  ScrollReveal: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-  useScrollProgress: () => ({ scrollYProgress: { get: () => 0 } }),
+  ...mockScrollRevealFactory(),
+  useScrollProgress: () => mockScrollProgressResult(),
 }));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <div className={className}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/marketing/section-heading', () => ({
-  SectionHeading: ({ title, subtitle }: { title: string; subtitle?: string }) => (
-    <div>
-      <h2>{title}</h2>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  ),
-}));
-
-vi.mock('next/link', () => ({
-  __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
-
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 // Mock lucide-react icons used by BentoFeatures
-vi.mock('lucide-react', () => ({
-  Microscope: (props: Record<string, unknown>) => <svg data-testid="icon-microscope" {...props} />,
-  Dna: (props: Record<string, unknown>) => <svg data-testid="icon-dna" {...props} />,
-  Pill: (props: Record<string, unknown>) => <svg data-testid="icon-pill" {...props} />,
-  BarChart3: (props: Record<string, unknown>) => <svg data-testid="icon-barchart3" {...props} />,
-  ArrowRight: (props: Record<string, unknown>) => <svg data-testid="icon-arrow-right" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Microscope', 'Dna', 'Pill', 'BarChart3', 'ArrowRight'));
 
 // ─── Import under test ────────────────────────────────────────────────────────
 

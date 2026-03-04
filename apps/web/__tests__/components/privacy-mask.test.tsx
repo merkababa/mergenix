@@ -9,6 +9,8 @@ import { render } from "@testing-library/react";
 import { useAnalysisStore } from "../../lib/stores/analysis-store";
 import type { FullAnalysisResult } from "@mergenix/shared-types";
 
+import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory } from '../__helpers__';
+
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 // Mock SensitiveContentGuard to render children directly
@@ -34,12 +36,7 @@ vi.mock("next/dynamic", () => ({
   default: () => () => <div>Dynamic Component</div>,
 }));
 
-vi.mock("next/link", () => ({
-  __esModule: true,
-  default: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => (
-    <a {...props}>{children}</a>
-  ),
-}));
+vi.mock("next/link", () => mockNextLinkFactory());
 
 vi.mock("@/components/genetics/couple-upload-card", () => ({
   CoupleUploadCard: () => <div data-privacy-mask="true">CoupleUploadCard</div>,
@@ -102,17 +99,11 @@ vi.mock("next/navigation", () => ({
 }));
 
 // Mock lucide-react icons — explicit mocks to avoid Proxy hangs
-vi.mock("lucide-react", () => {
-  const Icon = (props: Record<string, unknown>) => <svg {...props} />;
-  return {
-    Upload: Icon, File: Icon, X: Icon, ArrowRight: Icon,
-    Search: Icon, ChevronDown: Icon, ChevronUp: Icon, ChevronRight: Icon, Lock: Icon,
-    Pill: Icon, AlertTriangle: Icon, AlertCircle: Icon, Sparkles: Icon,
-    Heart: Icon, HeartPulse: Icon, ExternalLink: Icon, Phone: Icon,
-    MessageSquare: Icon, BarChart3: Icon, Microscope: Icon, Dna: Icon,
-    Info: Icon, Loader2: Icon, ShieldCheck: Icon,
-  };
-});
+vi.mock("lucide-react", () => mockLucideIcons(
+  'Upload', 'File', 'X', 'ArrowRight', 'Search', 'ChevronDown', 'ChevronUp', 'ChevronRight', 'Lock',
+  'Pill', 'AlertTriangle', 'AlertCircle', 'Sparkles', 'Heart', 'HeartPulse', 'ExternalLink', 'Phone',
+  'MessageSquare', 'BarChart3', 'Microscope', 'Dna', 'Info', 'Loader2', 'ShieldCheck',
+));
 
 // Mock GlassCard to pass through all props (including data-privacy-mask)
 vi.mock("@/components/ui/glass-card", () => ({
@@ -131,16 +122,7 @@ vi.mock("@/components/ui/glass-card", () => ({
   ),
 }));
 
-// Mock Button
-vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    ...props
-  }: {
-    children: React.ReactNode;
-    [key: string]: unknown;
-  }) => <button {...props}>{children}</button>,
-}));
+vi.mock("@/components/ui/button", () => mockButtonFactory());
 
 // Mock PartnerConsentCheckbox
 vi.mock("@/components/legal/partner-consent-checkbox", () => ({

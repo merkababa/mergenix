@@ -1,34 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  XCircle: (props: Record<string, unknown>) => <svg data-testid="icon-x-circle" {...props} />,
-  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="icon-chevron" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) => (
-    <div data-testid="glass-card" className={className} {...props}>{children}</div>
-  ),
-}));
-
+vi.mock('lucide-react', () => mockLucideIcons('XCircle', 'ChevronRight'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, ...props }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean; isLoading?: boolean; [key: string]: unknown }) => (
-    <button onClick={onClick} disabled={disabled || isLoading} {...props}>
-      {isLoading && <span data-testid="loading-spinner" />}
-      {children}
-    </button>
-  ),
-  buttonVariants: () => 'mock-button-class',
+  ...mockButtonFactory(),
+  buttonVariants: ({ variant, size, className }: any) =>
+    [variant, size, className].filter(Boolean).join(' '),
 }));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 

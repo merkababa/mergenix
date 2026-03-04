@@ -12,41 +12,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-// ─── Next.js Link mock ───────────────────────────────────────────────────────
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+// ─── Mocks ───────────────────────────────────────────────────────────────────
 
-// ─── Lucide icon mocks ───────────────────────────────────────────────────────
-
-vi.mock('lucide-react', () => ({
-  Dna: (props: any) => <svg data-testid="icon-dna" {...props} />,
-  Shield: (props: any) => <svg data-testid="icon-shield" {...props} />,
-  Heart: (props: any) => <svg data-testid="icon-heart" {...props} />,
-  Github: (props: any) => <svg data-testid="icon-github" {...props} />,
-  Twitter: (props: any) => <svg data-testid="icon-twitter" {...props} />,
-  Mail: (props: any) => <svg data-testid="icon-mail" {...props} />,
-  CheckCircle: (props: any) => <svg data-testid="icon-check" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-}));
-
-// ─── UI component mocks ──────────────────────────────────────────────────────
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>{children}</button>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
+vi.mock('lucide-react', () => mockLucideIcons('Dna', 'Shield', 'Heart', 'Github', 'Twitter', 'Mail', 'CheckCircle', 'X'));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
 vi.mock('@/components/ui/input', () => ({
   Input: (props: any) => <input {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => <div {...props}>{children}</div>,
 }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────

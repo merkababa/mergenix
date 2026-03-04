@@ -1,20 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Heart: (props: Record<string, unknown>) => <svg data-testid="icon-heart" {...props} />,
-  Shield: (props: Record<string, unknown>) => <svg data-testid="icon-shield" {...props} />,
-  ExternalLink: (props: Record<string, unknown>) => <svg data-testid="icon-external-link" {...props} />,
-  ChevronRight: (props: Record<string, unknown>) => <svg data-testid="icon-chevron-right" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Heart', 'Shield', 'ExternalLink', 'ChevronRight'));
 
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="glass-card" className={className}>{children}</div>
-  ),
-}));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
 vi.mock('@/components/ui/button', () => ({
   buttonVariants: () => 'mock-button-class',

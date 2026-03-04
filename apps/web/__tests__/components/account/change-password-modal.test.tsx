@@ -1,28 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
-// ── Mocks ───────────────────────────────────────────────────────────────────
-// Mock lucide-react icons — explicit named exports (Proxy causes vitest hang)
-vi.mock('lucide-react', () => ({
-  X: (props: any) => <svg data-testid="icon-X" {...props} />,
-  Check: (props: any) => <svg data-testid="icon-Check" {...props} />,
-  Eye: (props: any) => <svg data-testid="icon-Eye" {...props} />,
-  EyeOff: (props: any) => <svg data-testid="icon-EyeOff" {...props} />,
-  Loader2: (props: any) => <svg data-testid="icon-Loader2" {...props} />,
-}));
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
 
-// Mock UI components (prevents jsdom hang)
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => <div data-testid="glass-card" {...props}>{children}</div>,
-}));
+// ── Mocks ───────────────────────────────────────────────────────────────────
+vi.mock('lucide-react', () => mockLucideIcons('X', 'Check', 'Eye', 'EyeOff', 'Loader2'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, ...props }: any) => <span data-testid="badge" {...props}>{children}</span>,
 }));
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, isLoading, disabled, ...props }: any) => (
-    <button disabled={disabled || isLoading} {...props}>{isLoading && <span data-testid="loader">Loading...</span>}{children}</button>
-  ),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('@/components/ui/input', () => ({
   Input: ({ label, error, icon, ...props }: any) => (
     <div><label htmlFor={label?.toLowerCase().replace(/\s+/g, '-')}>{label}</label><input id={label?.toLowerCase().replace(/\s+/g, '-')} {...props} />{error && <p role="alert">{error}</p>}</div>

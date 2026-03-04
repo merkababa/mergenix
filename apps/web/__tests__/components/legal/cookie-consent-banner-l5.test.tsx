@@ -14,13 +14,12 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons } from '../../__helpers__';
 
 // ─── Mocks ─────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Cookie: (props: any) => <svg data-testid="icon-cookie" {...props} />,
-  X: (props: any) => <svg data-testid="icon-x" {...props} />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Cookie', 'X'));
 
+// NOTE: data-variant is intentionally preserved here — required by the dark-patterns test (GDPR/EDPB equal prominence check)
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, disabled, variant, ...props }: any) => (
     <button onClick={onClick} disabled={disabled} data-variant={variant} {...props}>

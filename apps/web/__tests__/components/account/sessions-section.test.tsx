@@ -1,32 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => ({
-  Monitor: (props: any) => <svg data-testid="icon-monitor" {...props} />,
-  Smartphone: (props: any) => <svg data-testid="icon-smartphone" {...props} />,
-  Globe: (props: any) => <svg data-testid="icon-globe" {...props} />,
-  Clock: (props: any) => <svg data-testid="icon-clock" {...props} />,
-  Trash2: (props: any) => <svg data-testid="icon-trash" {...props} />,
-  Loader2: (props: any) => <svg data-testid="icon-loader" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => <div data-testid="glass-card" {...props}>{children}</div>,
-}));
-
+vi.mock('lucide-react', () => mockLucideIcons('Monitor', 'Smartphone', 'Globe', 'Clock', 'Trash2', 'Loader2'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/badge', () => ({
   Badge: ({ children, ...props }: any) => <span data-testid="badge" {...props}>{children}</span>,
 }));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, isLoading, ...props }: any) => (
-    <button {...props}>
-      {isLoading && <span data-testid="loader">Loading...</span>}
-      {children}
-    </button>
-  ),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 const mockGetSessions = vi.fn();
 const mockRevokeSession = vi.fn();

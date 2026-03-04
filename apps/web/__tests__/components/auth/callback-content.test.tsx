@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -12,11 +13,7 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => mockSearchParams,
 }));
 
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
-}));
+vi.mock('next/link', () => mockNextLinkFactory());
 
 const mockGoogleCallback = vi.fn();
 
@@ -45,24 +42,13 @@ vi.mock('@/components/auth/trust-signals', () => ({
 vi.mock('@/lib/animation-variants', () => ({
   fadeUp: { hidden: {}, visible: {} },
 }));
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children }: any) => <div data-testid="glass-card">{children}</div>,
-}));
-
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, isLoading, disabled, ...props }: any) => (
-    <button disabled={disabled || isLoading} {...props}>
-      {children}
-    </button>
-  ),
+  ...mockButtonFactory(),
   buttonVariants: ({ variant, size, className }: any) =>
     [variant, size, className].filter(Boolean).join(' '),
 }));
-
-vi.mock('lucide-react', () => ({
-  XCircle: () => <span data-testid="icon-x-circle" />,
-  ArrowLeft: () => <span data-testid="icon-arrow-left" />,
-}));
+vi.mock('lucide-react', () => mockLucideIcons('XCircle', 'ArrowLeft'));
 
 // ── Import under test ────────────────────────────────────────────────────────
 

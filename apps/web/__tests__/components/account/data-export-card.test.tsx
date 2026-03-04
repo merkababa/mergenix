@@ -1,29 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => ({
-  Download: (props: any) => <svg data-testid="icon-download" {...props} />,
-  Loader2: (props: any) => <svg data-testid="icon-loader" {...props} />,
-  CheckCircle2: (props: any) => <svg data-testid="icon-check-circle" {...props} />,
-  AlertTriangle: (props: any) => <svg data-testid="icon-alert-triangle" {...props} />,
-}));
-
-vi.mock('@/components/ui/glass-card', () => ({
-  GlassCard: ({ children, ...props }: any) => (
-    <div data-testid="glass-card" {...props}>{children}</div>
-  ),
-}));
-
-vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, isLoading, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled || isLoading} {...props}>
-      {isLoading && <span data-testid="loading-spinner" />}
-      {children}
-    </button>
-  ),
-}));
+vi.mock('lucide-react', () => mockLucideIcons('Download', 'Loader2', 'CheckCircle2', 'AlertTriangle'));
+vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Mock legal client ──────────────────────────────────────────────────────
 
