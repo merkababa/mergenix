@@ -48,7 +48,7 @@
     "autoprefixer": "^10.4.20",
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^26.0.0",
-    "otplib": "^13.2.1",
+    "otplib": "^13.3.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.7.0",
