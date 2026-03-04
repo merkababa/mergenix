@@ -141,10 +141,16 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | #106 | @next/eslint-plugin-next | 15→16 | **Close** | Must not upgrade without Next.js 16. Peer dep mismatch, no lint rule benefit. |
 | #103 | @types/node | 22→25 | **Close** | Runtime mismatch — project runs Node 22 LTS, v25 types non-existent APIs. |
 
-## Next Task: TBD
+## Next Task: Tailwind CSS 3.4 → 4.2 Migration
+
+**Status:** Plan complete, execution not started.
+**Plan:** `docs/plans/tailwind-v4-migration.md` (full migration plan with 8 phases)
+**Scope:** 132 files, 131 CSS variables, 11 animations, 10 custom components, 1,059-line globals.css
+**Key risks:** Shadow/rounded scale shift (visual), tailwind-merge v4 compat, monorepo content detection
 
 **Remaining work:**
-- 5 Dependabot PRs (2 to close, 3 deferred major migrations)
+- Tailwind CSS 3.4 → 4.2 migration (planned, ~1-2 days)
+- 5 Dependabot PRs (2 to close, 3 deferred major migrations — #97 covered by TW4 migration)
 - Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
