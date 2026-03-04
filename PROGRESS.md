@@ -121,6 +121,20 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | Privacy/security test file pairs overlap | Tech Debt PR review | INFO | Consider merging `*-page.test.tsx` + `*-page-design.test.tsx` per page |
 | `useInView` mock missing options param | Tech Debt PR review | INFO | Add `_options?: Record<string, unknown>` second param |
 | `MotionValue.current` stale after `.set()` | Tech Debt PR review | INFO | Use getter: `get current() { return val; }` |
+| **28 design review WARNs (touch targets + ARIA)** | Design review 2026-03-04 | WARN | See `docs/research/agent-logs/2026-03-04-design-review-deep/INDEX.md` for full list. Batch into 1-2 PRs. |
+
+---
+
+## Next Task: Fix 28 Design Review WARNs
+
+Batch the 28 WARNs from the design review deep dive into a single PR. Group by file/component area. Full findings in `docs/research/agent-logs/2026-03-04-design-review-deep/INDEX.md` and agent output logs.
+
+**Categories:**
+- Touch targets <44px (theme toggle, CPRA button, menu items, password toggle, trust signals, radio buttons, stale banner dismiss, glossary "see also", tab buttons)
+- ARIA gaps (hamburger `aria-controls`, breadcrumb `aria-current`, user menu `role="menu"`, FAQ `aria-controls` dead ref, radiogroup keyboard nav, dropzone role, loading `role="status"`)
+- Token/style issues (`--text-muted`/`--text-dim` near-identical, link contrast light mode, duplicate keyframes, `critical`/`high` badge identical)
+- Heading hierarchy (register/reset/forgot success states h2→h1)
+- UX polish ("View details" keyboard-invisible, consent scroll hint, 10px text, tab overflow indicator)
 
 ---
 
