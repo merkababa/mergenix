@@ -1,20 +1,14 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../../__helpers__';
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('X', 'QrCode', 'KeyRound', 'ShieldCheck', 'Copy', 'Download', 'Check', 'Loader2'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, ...props }: any) => <span data-testid="badge" {...props}>{children}</span>,
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
-vi.mock('@/components/ui/input', () => ({
-  Input: ({ label, error, icon, ...props }: any) => (
-    <div><label htmlFor={label?.toLowerCase().replace(/\s+/g, '-')}>{label}</label><input id={label?.toLowerCase().replace(/\s+/g, '-')} {...props} />{error && <p role="alert">{error}</p>}</div>
-  ),
-}));
+vi.mock('@/components/ui/input', () => mockInputFactory());
 
 // Mock qrcode library
 vi.mock('qrcode', () => ({

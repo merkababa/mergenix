@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockBadgeFactory } from '../../__helpers__';
 
 vi.mock('lucide-react', () => mockLucideIcons('Sparkles', 'ArrowRight', 'Shield', 'X', 'AlertCircle', 'AlertTriangle', 'Check'));
 
@@ -33,11 +33,7 @@ vi.mock('@/lib/stores/legal-store', () => ({
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, variant, ...props }: { children: React.ReactNode; variant?: string; [key: string]: unknown }) => (
-    <span data-testid={`badge-${variant}`} {...props}>{children}</span>
-  ),
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory({ includeVariant: true }));
 
 // ─── Store mock ───────────────────────────────────────────────────────────────
 

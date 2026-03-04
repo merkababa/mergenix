@@ -1,13 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockBadgeFactory } from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('Monitor', 'Smartphone', 'Globe', 'Clock', 'Trash2', 'Loader2'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, ...props }: any) => <span data-testid="badge" {...props}>{children}</span>,
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 const mockGetSessions = vi.fn();

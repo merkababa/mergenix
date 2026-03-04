@@ -9,6 +9,8 @@ import {
   mockButtonFactory,
   mockLucideIcons,
   installSimpleIntersectionObserver,
+  mockInputFactory,
+  mockBadgeFactory,
 } from '../__helpers__';
 
 // jsdom doesn't implement IntersectionObserver — mock it globally
@@ -20,12 +22,8 @@ beforeAll(() => {
 vi.mock('lucide-react', () => mockLucideIcons('Search', 'Filter', 'Microscope', 'Dna', 'Activity', 'ChevronRight', 'ChevronLeft', 'RotateCcw'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-}));
-vi.mock('@/components/ui/input', () => ({
-  Input: (props: any) => <input aria-label={props['aria-label']} placeholder={props.placeholder} value={props.value} onChange={props.onChange} />,
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
+vi.mock('@/components/ui/input', () => mockInputFactory());
 vi.mock('@/components/ui/select-filter', () => ({
   SelectFilter: (props: any) => <select aria-label={props.ariaLabel} />,
 }));

@@ -1,4 +1,4 @@
-import type { ReactNode, HTMLAttributes, ButtonHTMLAttributes } from 'react';
+import type { ReactNode, HTMLAttributes, ButtonHTMLAttributes, InputHTMLAttributes } from 'react';
 
 // ─── GlassCard ────────────────────────────────────────────────────────────────
 
@@ -110,6 +110,49 @@ export function mockNextLinkFactory() {
   return {
     default: ({ children, href, className, ...props }: MockNextLinkProps) => (
       <a href={href} className={className} {...props}>{children}</a>
+    ),
+  };
+}
+
+// ─── Input ────────────────────────────────────────────────────────────────────
+
+interface MockInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  icon?: ReactNode;
+}
+
+export function mockInputFactory() {
+  return {
+    Input: ({ label, error, icon: _icon, ...props }: MockInputProps) => {
+      const inputId = label?.toLowerCase().replace(/\s+/g, '-');
+      return (
+        <div>
+          {label && <label htmlFor={inputId}>{label}</label>}
+          <input id={inputId} aria-label={label} {...props} />
+          {error && <p role="alert">{error}</p>}
+        </div>
+      );
+    },
+  };
+}
+
+// ─── Badge ────────────────────────────────────────────────────────────────────
+
+interface MockBadgeProps extends HTMLAttributes<HTMLSpanElement> {
+  children?: ReactNode;
+  variant?: string;
+}
+
+export function mockBadgeFactory(options?: { includeVariant?: boolean }) {
+  return {
+    Badge: ({ children, variant, ...props }: MockBadgeProps) => (
+      <span
+        data-testid={options?.includeVariant ? `badge-${variant}` : 'badge'}
+        {...props}
+      >
+        {children}
+      </span>
     ),
   };
 }

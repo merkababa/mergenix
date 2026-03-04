@@ -12,7 +12,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
@@ -21,9 +21,7 @@ vi.mock('lucide-react', () => mockLucideIcons('Dna', 'Shield', 'Heart', 'Github'
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
-vi.mock('@/components/ui/input', () => ({
-  Input: (props: any) => <input {...props} />,
-}));
+vi.mock('@/components/ui/input', () => mockInputFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 

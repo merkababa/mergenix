@@ -8,6 +8,7 @@ import {
   mockNextLinkFactory,
   mockScrollProgressResult,
   mockLucideIcons,
+  mockBadgeFactory,
 } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
@@ -34,11 +35,7 @@ vi.mock('@/components/ui/accordion', () => ({
   ),
 }));
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-    <span className={className}>{children}</span>
-  ),
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 
 vi.mock('@/components/ui/button', () => ({
   buttonVariants: () => 'btn',

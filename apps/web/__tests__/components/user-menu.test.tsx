@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAuthStore } from '../../lib/stores/auth-store';
-import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
+import { mockLucideIcons, mockNextLinkFactory, mockBadgeFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -9,11 +9,7 @@ vi.mock('lucide-react', () => mockLucideIcons('User', 'CreditCard', 'Activity', 
 
 vi.mock('next/link', () => mockNextLinkFactory());
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, variant, ...props }: any) => (
-    <span data-testid={`badge-${variant}`} {...props}>{children}</span>
-  ),
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory({ includeVariant: true }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 

@@ -6,14 +6,13 @@ import {
   mockPageHeaderFactory,
   mockNextLinkFactory,
   mockLucideIcons,
+  mockInputFactory,
 } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('Search', 'BookOpen'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/input', () => ({
-  Input: (props: any) => <input placeholder={props.placeholder} aria-label={props['aria-label']} />,
-}));
+vi.mock('@/components/ui/input', () => mockInputFactory());
 vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
 vi.mock('next/link', () => mockNextLinkFactory());

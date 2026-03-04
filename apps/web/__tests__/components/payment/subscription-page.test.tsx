@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockBadgeFactory } from '../../__helpers__';
 
 vi.mock('lucide-react', () => mockLucideIcons('Crown', 'Sparkles', 'ChevronRight', 'CreditCard', 'Clock', 'Download', 'AlertCircle', 'Shield'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
@@ -13,11 +13,7 @@ vi.mock('@/components/ui/button', () => ({
     [variant, size, className].filter(Boolean).join(' '),
 }));
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, variant, ...props }: { children: React.ReactNode; variant?: string; [key: string]: unknown }) => (
-    <span data-testid={`badge-${variant}`} {...props}>{children}</span>
-  ),
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory({ includeVariant: true }));
 
 vi.mock('next/link', () => mockNextLinkFactory());
 

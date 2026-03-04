@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -48,18 +48,7 @@ vi.mock('@/components/ui/button', () => ({
     [variant, size, className].filter(Boolean).join(' '),
 }));
 
-vi.mock('@/components/ui/input', () => ({
-  Input: ({ label, error, icon, ref: _ref, ...props }: any) => {
-    const inputId = label?.toLowerCase().replace(/\s+/g, '-');
-    return (
-      <div>
-        {label && <label htmlFor={inputId}>{label}</label>}
-        <input id={inputId} aria-label={label} {...props} />
-        {error && <p role="alert">{error}</p>}
-      </div>
-    );
-  },
-}));
+vi.mock('@/components/ui/input', () => mockInputFactory());
 
 vi.mock('lucide-react', () => mockLucideIcons('CheckCircle', 'XCircle', 'Mail', 'ArrowLeft'));
 

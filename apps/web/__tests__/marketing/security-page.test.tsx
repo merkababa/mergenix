@@ -99,24 +99,6 @@ describe('SecurityPage', () => {
     expect(screen.getByRole('heading', { name: /Compliance/i })).toBeInTheDocument();
   });
 
-  it('heading hierarchy has no skipped levels', () => {
-    const { container } = render(<SecurityContent />);
-
-    const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    const levels = Array.from(headings).map((h) =>
-      parseInt(h.tagName.replace('H', ''), 10),
-    );
-
-    expect(levels).toContain(1);
-    for (let i = 0; i < levels.length - 1; i++) {
-      const current = levels[i];
-      const next = levels[i + 1];
-      if (next > current) {
-        expect(next).toBeLessThanOrEqual(current + 1);
-      }
-    }
-  });
-
   it('renders FAQ section with expandable answer on click', () => {
     render(<SecurityContent />);
 
@@ -161,5 +143,57 @@ describe('SecurityPage', () => {
 
     // Guard rail: security page currently has zero external links.
     expect(externalLinks.length).toBe(0);
+  });
+
+  describe('design system', () => {
+    it('uses SectionHeading for Zero-Knowledge Architecture section', () => {
+      render(<SecurityContent />);
+
+      expect(
+        screen.getByRole('heading', { level: 2, name: /Zero-Knowledge Architecture/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('uses SectionHeading for Privacy Promises section', () => {
+      render(<SecurityContent />);
+
+      expect(
+        screen.getByRole('heading', { level: 2, name: /Privacy Promises/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('uses GlassCard for content blocks', () => {
+      render(<SecurityContent />);
+
+      const cards = screen.getAllByTestId('glass-card');
+      expect(cards.length).toBeGreaterThan(0);
+    });
+
+    it('uses ScrollReveal for section entrance animations', () => {
+      // ScrollReveal is mocked as pass-through — content inside should render normally
+      render(<SecurityContent />);
+
+      expect(screen.getByText(/Zero-Knowledge Architecture/i)).toBeInTheDocument();
+      expect(screen.getByText(/How Your Data Flows/i)).toBeInTheDocument();
+    });
+
+    it('heading hierarchy has no skipped levels', () => {
+      const { container } = render(<SecurityContent />);
+
+      const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const levels = Array.from(headings).map((h) =>
+        parseInt(h.tagName.replace('H', ''), 10),
+      );
+
+      expect(levels).toContain(1);
+      expect(levels).toContain(2);
+      for (let i = 0; i < levels.length - 1; i++) {
+        const current = levels[i];
+        const next = levels[i + 1];
+        if (next > current) {
+          expect(next).toBeLessThanOrEqual(current + 1);
+        }
+      }
+    });
   });
 });

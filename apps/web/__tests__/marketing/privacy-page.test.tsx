@@ -102,21 +102,55 @@ describe('PrivacyPage', () => {
     expect(screen.getByText(/Right to Data Portability/i)).toBeInTheDocument();
   });
 
-  it('heading hierarchy has no skipped levels', () => {
-    const { container } = render(<PrivacyContent />);
+  describe('design system', () => {
+    it('uses SectionHeading for Data Controller section', () => {
+      render(<PrivacyContent />);
 
-    const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    const levels = Array.from(headings).map((h) =>
-      parseInt(h.tagName.replace('H', ''), 10),
-    );
+      // SectionHeading renders an h2 — verify section headings are present
+      expect(screen.getByRole('heading', { level: 2, name: /Data Controller/i })).toBeInTheDocument();
+    });
 
-    expect(levels).toContain(1);
-    for (let i = 0; i < levels.length - 1; i++) {
-      const current = levels[i];
-      const next = levels[i + 1];
-      if (next > current) {
-        expect(next).toBeLessThanOrEqual(current + 1);
+    it('uses SectionHeading for Your Rights section', () => {
+      render(<PrivacyContent />);
+
+      expect(screen.getByRole('heading', { level: 2, name: /Your Rights/i })).toBeInTheDocument();
+    });
+
+    it('uses GlassCard for content blocks', () => {
+      render(<PrivacyContent />);
+
+      const cards = screen.getAllByTestId('glass-card');
+      expect(cards.length).toBeGreaterThan(0);
+    });
+
+    it('uses ScrollReveal for section entrance animations', () => {
+      // ScrollReveal is mocked as pass-through — content inside should render normally
+      render(<PrivacyContent />);
+
+      // These texts appear inside ScrollReveal-wrapped sections
+      const dataControllerMatches = screen.getAllByText(/Data Controller/i);
+      expect(dataControllerMatches.length).toBeGreaterThan(0);
+      const dpoMatches = screen.getAllByText(/Data Protection Officer/i);
+      expect(dpoMatches.length).toBeGreaterThan(0);
+    });
+
+    it('heading hierarchy has no skipped levels', () => {
+      const { container } = render(<PrivacyContent />);
+
+      const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const levels = Array.from(headings).map((h) =>
+        parseInt(h.tagName.replace('H', ''), 10),
+      );
+
+      expect(levels).toContain(1);
+      expect(levels).toContain(2);
+      for (let i = 0; i < levels.length - 1; i++) {
+        const current = levels[i];
+        const next = levels[i + 1];
+        if (next > current) {
+          expect(next).toBeLessThanOrEqual(current + 1);
+        }
       }
-    }
+    });
   });
 });

@@ -9,7 +9,7 @@ import { render } from "@testing-library/react";
 import { useAnalysisStore } from "../../lib/stores/analysis-store";
 import type { FullAnalysisResult } from "@mergenix/shared-types";
 
-import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory } from '../__helpers__';
+import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../__helpers__';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -182,19 +182,9 @@ vi.mock("@/components/genetics/results/virtual-baby-card", () => ({
   VirtualBabyCard: () => <div data-testid="virtual-baby">Virtual Baby</div>,
 }));
 
-vi.mock("@/components/ui/badge", () => ({
-  Badge: ({
-    children,
-    ...props
-  }: {
-    children: React.ReactNode;
-    [key: string]: unknown;
-  }) => <span {...props}>{children}</span>,
-}));
+vi.mock("@/components/ui/badge", () => mockBadgeFactory());
 
-vi.mock("@/components/ui/input", () => ({
-  Input: (props: Record<string, unknown>) => <input {...props} />,
-}));
+vi.mock("@/components/ui/input", () => mockInputFactory());
 
 vi.mock("@/components/ui/select-filter", () => ({
   SelectFilter: () => <select data-testid="select-filter" />,

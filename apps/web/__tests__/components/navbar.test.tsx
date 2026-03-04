@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAuthStore } from '../../lib/stores/auth-store';
-import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
+import { mockLucideIcons, mockNextLinkFactory, mockBadgeFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -25,9 +25,7 @@ vi.mock('@/components/auth/user-menu', () => ({
   UserMenu: () => <div data-testid="user-menu">UserMenu</div>,
 }));
 
-vi.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => <span {...(props as React.HTMLAttributes<HTMLSpanElement>)}>{children}</span>,
-}));
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
