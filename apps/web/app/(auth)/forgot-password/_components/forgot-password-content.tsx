@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Mail, ChevronRight, ArrowLeft, CheckCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { X, Check } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -208,7 +208,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                           className="h-full rounded-full"
                           initial={{ width: 0 }}
                           animate={{ width: `${strength.widthPercent}%` }}
-                          transition={{ duration: 0.3, ease: "easeOut" }}
+                          transition={{ duration: 0.3, ease: "easeOut" as const }}
                           style={{ background: strength.color }}
                         />
                       </div>

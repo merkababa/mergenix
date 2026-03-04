@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { staggerContainer, staggerItem } from "@/lib/animation-variants";
 import { GlassCard } from "@/components/ui/glass-card";

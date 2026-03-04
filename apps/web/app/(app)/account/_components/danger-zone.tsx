@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Trash2, ChevronDown, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,7 @@ export function DangerZone() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
+              transition={{ duration: 0.25, ease: "easeInOut" as const }}
               className="overflow-hidden"
             >
               <div className="pt-5 space-y-4">

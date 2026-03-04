@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
 
-// Mock framer-motion to avoid animation issues in tests
+// Mock motion to avoid animation issues in tests
 
 // Mock Next.js Link — renders as a plain <a> tag
 vi.mock('next/link', () => mockNextLinkFactory());

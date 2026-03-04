@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useId } from "react";
-import { m, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "motion/react";
 import { ShieldCheck, ChevronDown, X } from "lucide-react";
 import Link from "next/link";
 import {
@@ -21,12 +21,12 @@ const expandVariants = {
   visible: {
     opacity: 1,
     height: "auto",
-    transition: { duration: 0.22, ease: "easeOut" },
+    transition: { duration: 0.22, ease: "easeOut" as const },
   },
   exit: {
     opacity: 0,
     height: 0,
-    transition: { duration: 0.18, ease: "easeIn" },
+    transition: { duration: 0.18, ease: "easeIn" as const },
   },
 };
 

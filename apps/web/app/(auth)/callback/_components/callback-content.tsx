@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { XCircle, ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -103,7 +103,7 @@ export function CallbackContent() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
-                    type: "spring",
+                    type: "spring" as const,
                     stiffness: 300,
                     damping: 15,
                     delay: 0.1,

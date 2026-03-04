@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { AnimatePresence, m } from "framer-motion";
+import type { Variants } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { Mail, AlertCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -17,19 +18,19 @@ import { PasswordInput } from "@/components/auth/password-input";
 
 // ── Animation variants ──────────────────────────────────────────────────
 
-const errorBannerVariants = {
+const errorBannerVariants: Variants = {
   hidden: { opacity: 0, y: -8, height: 0 },
   visible: {
     opacity: 1,
     y: 0,
     height: "auto",
-    transition: { duration: 0.25, ease: "easeOut" },
+    transition: { duration: 0.25, ease: "easeOut" as const },
   },
   exit: {
     opacity: 0,
     y: -8,
     height: 0,
-    transition: { duration: 0.2, ease: "easeIn" },
+    transition: { duration: 0.2, ease: "easeIn" as const },
   },
 };
 

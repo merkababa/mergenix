@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";

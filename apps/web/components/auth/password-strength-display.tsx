@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { Check, X } from "lucide-react";
 import {
   getPasswordStrength,

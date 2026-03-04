@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Archive, Trash2, Download, Clock, FileText, Crown } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";

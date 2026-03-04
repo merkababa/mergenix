@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { m, useTransform } from "framer-motion";
+import { m, useTransform } from "motion/react";
 import { ScrollReveal, useScrollProgress } from "@/components/ui/scroll-reveal";
 import { SectionHeading } from "@/components/marketing/section-heading";
 

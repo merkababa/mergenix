@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { useEffect, useRef } from "react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { Check, CheckCircle, FileSearch, Microscope, Dna, Pill, BarChart3, Globe, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { STEP_ORDER, type AnalysisStep } from "@/lib/stores/analysis-store";
@@ -135,7 +135,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                       : {}
                   }
                   transition={
-                    isActive ? { duration: 2, repeat: Infinity, ease: "easeInOut" } : {}
+                    isActive ? { duration: 2, repeat: Infinity, ease: "easeInOut" as const } : {}
                   }
                 >
                   {isCompleted ? (
@@ -167,7 +167,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                     animate={{
                       width: isCompleted ? "100%" : isActive ? "50%" : "0%",
                     }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    transition={{ duration: 0.5, ease: "easeOut" as const }}
                   />
                 </div>
               )}

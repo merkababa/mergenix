@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef, useId } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Trash2, AlertTriangle, X } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";

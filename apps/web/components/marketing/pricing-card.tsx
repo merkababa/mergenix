@@ -22,7 +22,7 @@ import {
   MessageCircle,
   type LucideIcon,
 } from "lucide-react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import Link from "next/link";
 import type { ReactElement } from "react";
 
@@ -92,7 +92,7 @@ function getFeatureIcon(feature: string): ReactElement {
 }
 
 // ---------------------------------------------------------------------------
-// Framer Motion variants — card reveal + child stagger propagation (INFO 13)
+// Motion variants — card reveal + child stagger propagation (INFO 13)
 // ---------------------------------------------------------------------------
 // The parent card variant uses `when: "beforeChildren"` + `staggerChildren` so
 // the feature list items animate AFTER the card slides in, triggered by the
@@ -171,7 +171,7 @@ export function PricingCard({
   disableAnimation = false,
 }: PricingCardProps) {
   // When animation is enabled, use named variants so children can participate
-  // in Framer Motion's propagation (staggerChildren via CARD_VARIANTS).
+  // in Motion's propagation (staggerChildren via CARD_VARIANTS).
   const motionProps = disableAnimation
     ? {}
     : {

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -39,7 +39,7 @@ export function ThemeToggle() {
       {/* Thumb */}
       <m.div
         layout
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        transition={{ type: "spring" as const, stiffness: 500, damping: 30 }}
         className="flex h-5 w-5 items-center justify-center rounded-full shadow-lg"
         style={{
           background: isDark

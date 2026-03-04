@@ -1,5 +1,5 @@
 /**
- * Shared Framer Motion animation variants for modal overlays and panels.
+ * Shared Motion animation variants for modal overlays and panels.
  *
  * Used by all modal components (age-verification, consent, chip-disclosure)
  * to ensure consistent enter/exit animations across the application.
@@ -17,12 +17,12 @@ export const modalVariants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.3, ease: "easeOut" },
+    transition: { duration: 0.3, ease: "easeOut" as const },
   },
   exit: {
     opacity: 0,
     scale: 0.95,
     y: 20,
-    transition: { duration: 0.2, ease: "easeIn" },
+    transition: { duration: 0.2, ease: "easeIn" as const },
   },
 };

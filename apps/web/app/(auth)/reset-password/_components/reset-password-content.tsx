@@ -3,7 +3,7 @@
 import { useState, useMemo, type FormEvent } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import {
   Lock,
   CheckCircle,

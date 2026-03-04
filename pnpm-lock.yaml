@@ -53,15 +53,15 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      framer-motion:
-        specifier: ^11.15.0
-        version: 11.18.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       idb-keyval:
         specifier: ^6.2.2
         version: 6.2.2
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@19.2.4)
+      motion:
+        specifier: ^12.34.5
+        version: 12.34.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next:
         specifier: ^15.1.0
         version: 15.5.12(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -139,8 +139,8 @@ importers:
         specifier: ^26.0.0
         version: 26.1.0
       otplib:
-        specifier: ^13.2.1
-        version: 13.2.1
+        specifier: ^13.3.0
+        version: 13.3.0
       postcss:
         specifier: ^8.4.49
         version: 8.5.6
@@ -727,23 +727,23 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@otplib/core@13.2.1':
-    resolution: {integrity: sha512-IyfHvYNCyipDxhmJdcUUvUeT3Hz84/GgM6G2G6BTEmnAKPzNA7U0kYGkxKZWY9h23W94RJk4qiClJRJN5zKGvg==}
+  '@otplib/core@13.3.0':
+    resolution: {integrity: sha512-pnQDOuCmFVeF/XnboJq9TOJgLoo2idNPJKMymOF8vGqJJ+ReKRYM9bUGjNPRWC0tHjMwu1TXbnzyBp494JgRag==}
 
-  '@otplib/hotp@13.2.1':
-    resolution: {integrity: sha512-iRKqvj0TnemtXXtEswzBX50Z0yMNa0lH9PSdr5N4CJc1mDEuUmFFZQqnu3PfA3fPd3WeAU+mHgmK/xq18+K1QA==}
+  '@otplib/hotp@13.3.0':
+    resolution: {integrity: sha512-XJMZGz2bg4QJwK7ulvl1GUI2VMn/flaIk/E/BTKAejHsX2kUtPF1bRhlZ2+elq8uU5Fs9Z9FHcQK2CPZNQbbUQ==}
 
-  '@otplib/plugin-base32-scure@13.2.1':
-    resolution: {integrity: sha512-vnA2qqgJ/FbFbDNGOLAS8dKfCsJFXwFsZKYklE8yl2INkCOUR0vbVdJ2TVmufzC8R1RRZHW+cDR20ACgc9XFYg==}
+  '@otplib/plugin-base32-scure@13.3.0':
+    resolution: {integrity: sha512-/jYbL5S6GB0Ie3XGEWtLIr9s5ZICl/BfmNL7+8/W7usZaUU4GiyLd2S+JGsNCslPyqNekSudD864nDAvRI0s8w==}
 
-  '@otplib/plugin-crypto-noble@13.2.1':
-    resolution: {integrity: sha512-Dxjmt4L+5eDWJf5EvbcMp+fxcliyKoB9N9sNQq/vuVAUvq+KiqpiiCQZ/wHyrN0ArB0NdevtK1KByyAq080ldg==}
+  '@otplib/plugin-crypto-noble@13.3.0':
+    resolution: {integrity: sha512-wmV+jBVncepgwv99G7Plrdzd0tHfbpXk2U+OD7MO7DzpDqOYEgOPi+IIneksJSTL8QvWdfi+uQEuhnER4fKouA==}
 
-  '@otplib/totp@13.2.1':
-    resolution: {integrity: sha512-LzDzAAK3w8rspF3urBnWjOlxso1SCGxX9Pnu/iy+HkC0y0HgiLsW7jhkr2hJ3u4cyBdL/tOKUhhELwsjyvunwQ==}
+  '@otplib/totp@13.3.0':
+    resolution: {integrity: sha512-XfjGNoN8d9S3Ove2j7AwkVV7+QDFsV7Lm7YwSiezNaHffkWtJ60aJYpmf+01dARdPST71U2ptueMsRJso4sq4A==}
 
-  '@otplib/uri@13.2.1':
-    resolution: {integrity: sha512-ssYnfiUrFTs/rPRUW8h59m0MVLYOC+UKk7tVGYgtG15lLaLBrNBQjM2YFanuzn9Jm4iv9JxiNG7TRkwcnyR09A==}
+  '@otplib/uri@13.3.0':
+    resolution: {integrity: sha512-3oh6nBXy+cm3UX9cxEAGZiDrfxHU2gfelYFV+XNCx+8dq39VaQVymwlU2yjPZiMAi/3agaUeEftf2RwM5F+Cyg==}
 
   '@playwright/test@1.58.2':
     resolution: {integrity: sha512-akea+6bHYBBfA9uQqSYmlJXn61cTa+jbO87xVLCWbTqbWadRVmhxlXATaOjOgcBaWU4ePo0wB41KMFv3o35IXA==}
@@ -1489,8 +1489,8 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
-  framer-motion@11.18.2:
-    resolution: {integrity: sha512-5F5Och7wrvtLVElIpclDT0CBzMVg3dL22B64aZwHtsIY8RB4mXICLrkajK4G9R+ieSAGcgrLeae2SeUTg2pr6w==}
+  framer-motion@12.34.5:
+    resolution: {integrity: sha512-Z2dQ+o7BsfpJI3+u0SQUNCrN+ajCKJen1blC4rCHx1Ta2EOHs+xKJegLT2aaD9iSMbU3OoX+WabQXkloUbZmJQ==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -1741,11 +1741,25 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
-  motion-dom@11.18.1:
-    resolution: {integrity: sha512-g76KvA001z+atjfxczdRtw/RXOM3OMSdd1f4DL77qCTF/+avrRJiawSG4yDibEQ215sr9kpinSlX2pCTJ9zbhw==}
+  motion-dom@12.34.5:
+    resolution: {integrity: sha512-k33CsnxO2K3gBRMUZT+vPmc4Utlb5menKdG0RyVNLtlqRaaJPRWlE9fXl8NTtfZ5z3G8TDvqSu0MENLqSTaHZA==}
 
-  motion-utils@11.18.1:
-    resolution: {integrity: sha512-49Kt+HKjtbJKLtgO/LKj9Ld+6vw9BjH5d9sc40R/kVyH8GLAXgT42M2NnuPcJNuA3s9ZfZBUcwIgpmZWGEE+hA==}
+  motion-utils@12.29.2:
+    resolution: {integrity: sha512-G3kc34H2cX2gI63RqU+cZq+zWRRPSsNIOjpdl9TN4AQwC4sgwYPl/Q/Obf/d53nOm569T0fYK+tcoSV50BWx8A==}
+
+  motion@12.34.5:
+    resolution: {integrity: sha512-N06NLJ9IeBHeielRqIvYvjPfXuRdyTxa+9++BgpGa+hY2D7TcMkI6QzV3jaRuv0aZRXgMa7cPy9YcBUBisPzAQ==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -1810,8 +1824,8 @@ packages:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
 
-  otplib@13.2.1:
-    resolution: {integrity: sha512-Cft9h/m34LtvnoB2TjP1E1E6v0biwcUntl6U4e+HgWrTa0bpwmb+u/D9gLFA+U6/ztlvrult0811Bu30nUVUuA==}
+  otplib@13.3.0:
+    resolution: {integrity: sha512-VYMKyyDG8yt2q+z58sz54/EIyTh7+tyMrjeemR44iVh5+dkKtIs57irTqxjH+IkAL1uMmG1JIFhG5CxTpqdU5g==}
 
   p-limit@2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
@@ -2978,32 +2992,32 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@otplib/core@13.2.1': {}
+  '@otplib/core@13.3.0': {}
 
-  '@otplib/hotp@13.2.1':
+  '@otplib/hotp@13.3.0':
     dependencies:
-      '@otplib/core': 13.2.1
-      '@otplib/uri': 13.2.1
+      '@otplib/core': 13.3.0
+      '@otplib/uri': 13.3.0
 
-  '@otplib/plugin-base32-scure@13.2.1':
+  '@otplib/plugin-base32-scure@13.3.0':
     dependencies:
-      '@otplib/core': 13.2.1
+      '@otplib/core': 13.3.0
       '@scure/base': 2.0.0
 
-  '@otplib/plugin-crypto-noble@13.2.1':
+  '@otplib/plugin-crypto-noble@13.3.0':
     dependencies:
       '@noble/hashes': 2.0.1
-      '@otplib/core': 13.2.1
+      '@otplib/core': 13.3.0
 
-  '@otplib/totp@13.2.1':
+  '@otplib/totp@13.3.0':
     dependencies:
-      '@otplib/core': 13.2.1
-      '@otplib/hotp': 13.2.1
-      '@otplib/uri': 13.2.1
+      '@otplib/core': 13.3.0
+      '@otplib/hotp': 13.3.0
+      '@otplib/uri': 13.3.0
 
-  '@otplib/uri@13.2.1':
+  '@otplib/uri@13.3.0':
     dependencies:
-      '@otplib/core': 13.2.1
+      '@otplib/core': 13.3.0
 
   '@playwright/test@1.58.2':
     dependencies:
@@ -3769,10 +3783,10 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@11.18.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  framer-motion@12.34.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
-      motion-dom: 11.18.1
-      motion-utils: 11.18.1
+      motion-dom: 12.34.5
+      motion-utils: 12.29.2
       tslib: 2.8.1
     optionalDependencies:
       react: 19.2.4
@@ -4018,11 +4032,19 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.12
 
-  motion-dom@11.18.1:
+  motion-dom@12.34.5:
     dependencies:
-      motion-utils: 11.18.1
+      motion-utils: 12.29.2
 
-  motion-utils@11.18.1: {}
+  motion-utils@12.29.2: {}
+
+  motion@12.34.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      framer-motion: 12.34.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
 
   ms@2.1.3: {}
 
@@ -4084,14 +4106,14 @@ snapshots:
       type-check: 0.4.0
       word-wrap: 1.2.5
 
-  otplib@13.2.1:
+  otplib@13.3.0:
     dependencies:
-      '@otplib/core': 13.2.1
-      '@otplib/hotp': 13.2.1
-      '@otplib/plugin-base32-scure': 13.2.1
-      '@otplib/plugin-crypto-noble': 13.2.1
-      '@otplib/totp': 13.2.1
-      '@otplib/uri': 13.2.1
+      '@otplib/core': 13.3.0
+      '@otplib/hotp': 13.3.0
+      '@otplib/plugin-base32-scure': 13.3.0
+      '@otplib/plugin-crypto-noble': 13.3.0
+      '@otplib/totp': 13.3.0
+      '@otplib/uri': 13.3.0
 
   p-limit@2.3.0:
     dependencies:

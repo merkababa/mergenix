@@ -4,7 +4,7 @@ import { type ReactNode, useState, useCallback, useId } from "react";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ChevronDown } from "lucide-react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 
 interface AccordionItem {
   question: string;
@@ -17,7 +17,7 @@ interface AccordionProps {
 }
 
 /**
- * Interactive FAQ accordion component with smooth Framer Motion
+ * Interactive FAQ accordion component with smooth Motion
  * open/close animations. Only one item can be open at a time.
  * Fully accessible with ARIA attributes and keyboard support.
  */
@@ -58,7 +58,7 @@ export function Accordion({ items, className }: AccordionProps) {
               <span>{item.question}</span>
               <m.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
+                transition={{ duration: 0.25, ease: "easeInOut" as const }}
                 className="shrink-0 text-[var(--text-muted)]"
               >
                 <ChevronDown className="h-5 w-5" aria-hidden="true" />
@@ -74,7 +74,7 @@ export function Accordion({ items, className }: AccordionProps) {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  transition={{ duration: 0.3, ease: "easeInOut" as const }}
                   className="overflow-hidden"
                 >
                   <div className="px-6 pb-5 text-sm leading-relaxed text-[var(--text-body)]">

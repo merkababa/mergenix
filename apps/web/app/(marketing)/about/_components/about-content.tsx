@@ -12,7 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
 import { PageHeader } from "@/components/layout/page-header";

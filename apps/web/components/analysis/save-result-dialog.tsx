@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef, type RefObject } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { Save, X, Crown, AlertTriangle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";

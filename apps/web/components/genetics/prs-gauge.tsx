@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { memo } from "react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { cn } from "@/lib/utils";
 
 interface PrsGaugeProps {
@@ -98,14 +98,14 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
             strokeDasharray={dashArray}
             initial={{ strokeDasharray: `0 ${circumference}` }}
             animate={{ strokeDasharray: dashArray }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 1.2, ease: "easeOut" as const }}
           />
 
           {/* Needle */}
           <m.g
             initial={{ rotate: -180 }}
             animate={{ rotate: needleAngle }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+            transition={{ duration: 1.2, ease: "easeOut" as const, delay: 0.2 }}
             style={{ transformOrigin: `${cx}px ${cy}px` }}
           >
             <line

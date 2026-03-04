@@ -2,7 +2,7 @@ import React from 'react';
 import { vi } from 'vitest';
 
 /**
- * Shared framer-motion mock for all test files.
+ * Shared motion/react mock for all test files.
  * Vitest auto-resolves __mocks__/ folders adjacent to node_modules.
  * Provides a minimal implementation of motion components and hooks used in tests.
  */
@@ -13,7 +13,7 @@ const createMotionElement = (tag: React.ElementType) => {
     HTMLElement,
     { children?: React.ReactNode; [key: string]: unknown }
   >(({ children, ...props }, ref) => {
-    // Strip framer-motion props, keep only HTML attributes
+    // Strip motion props, keep only HTML attributes
     const {
       variants,
       initial,
@@ -82,6 +82,11 @@ export const AnimatePresence = ({ children }: { children?: React.ReactNode }) =>
 
 // LazyMotion — render children without animation
 export const LazyMotion = ({ children }: { children?: React.ReactNode }) => (
+  <>{children}</>
+);
+
+// MotionConfig — pass through children without configuration
+export const MotionConfig = ({ children }: { children?: React.ReactNode }) => (
   <>{children}</>
 );
 

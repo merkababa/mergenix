@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PrsGauge } from "@/components/genetics/prs-gauge";
 import { PunnettSquare } from "@/components/genetics/punnett-square";

@@ -10,10 +10,10 @@ import { useState, useEffect } from "react";
  *
  * SSR-safe: returns `false` on the server (animations enabled by default).
  *
- * Note: Framer Motion 11.x ships its own `useReducedMotion()` hook, and this
+ * Note: Motion ships its own `useReducedMotion()` hook, and this
  * project's `MotionProvider` already sets `reducedMotion="user"` on
- * `<MotionConfig>`, which means Framer Motion animations automatically respect
- * the preference. This hook is for non-Framer-Motion animations (CSS class
+ * `<MotionConfig>`, which means Motion animations automatically respect
+ * the preference. This hook is for non-Motion animations (CSS class
  * toggles, conditional rendering, etc.).
  */
 export function useReducedMotion(): boolean {

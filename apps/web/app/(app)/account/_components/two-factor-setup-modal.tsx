@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { X, QrCode, KeyRound, ShieldCheck, Copy, Download, Check, Loader2 } from "lucide-react";
 import QRCodeLib from "qrcode";
 import { GlassCard } from "@/components/ui/glass-card";

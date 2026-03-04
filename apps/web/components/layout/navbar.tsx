@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Menu, X, Dna } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { UserMenu } from "@/components/auth/user-menu";
@@ -170,7 +170,7 @@ export function Navbar() {
                   <m.div
                     layoutId="nav-indicator"
                     className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-[#06d6a0] to-[#06b6d4]"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: "spring" as const, stiffness: 380, damping: 30 }}
                   />
                 )}
               </Link>

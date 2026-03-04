@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Shield, FileText, Cookie, Lock, Scale, Clock } from "lucide-react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { PageHeader } from "@/components/layout/page-header";

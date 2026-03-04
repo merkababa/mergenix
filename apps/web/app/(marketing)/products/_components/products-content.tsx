@@ -8,7 +8,7 @@ import {
   Zap,
   Users,
 } from "lucide-react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PricingCard } from "@/components/marketing/pricing-card";
 import { Accordion } from "@/components/ui/accordion";

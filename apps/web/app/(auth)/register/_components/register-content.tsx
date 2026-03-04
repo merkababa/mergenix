@@ -10,7 +10,7 @@ import {
 import {
   m,
   AnimatePresence,
-} from "framer-motion";
+} from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -66,13 +66,13 @@ const formVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
+    transition: { duration: 0.5, ease: "easeOut" as const },
   },
   exit: {
     opacity: 0,
     y: -20,
     scale: 0.98,
-    transition: { duration: 0.3, ease: "easeIn" },
+    transition: { duration: 0.3, ease: "easeIn" as const },
   },
 };
 
@@ -82,7 +82,7 @@ const successVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeOut", delay: 0.15 },
+    transition: { duration: 0.5, ease: "easeOut" as const, delay: 0.15 },
   },
 };
 
@@ -91,7 +91,7 @@ const envelopeVariants = {
   visible: {
     scale: 1,
     rotate: 0,
-    transition: { type: "spring", stiffness: 260, damping: 20, delay: 0.2 },
+    transition: { type: "spring" as const, stiffness: 260, damping: 20, delay: 0.2 },
   },
 };
 
@@ -481,7 +481,7 @@ export function RegisterContent() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{
-                  type: "spring",
+                  type: "spring" as const,
                   stiffness: 260,
                   damping: 20,
                   delay: 0.4,

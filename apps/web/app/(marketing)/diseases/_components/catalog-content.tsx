@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   RotateCcw,
 } from "lucide-react";
-import { m, useInView } from "framer-motion";
+import { m, useInView } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionHeading } from "@/components/marketing/section-heading";
@@ -47,7 +47,7 @@ const catalogCardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: { duration: 0.4, ease: "easeOut" as const },
   },
 };
 
@@ -58,7 +58,7 @@ const filterPanelVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
+    transition: { duration: 0.5, ease: "easeOut" as const },
   },
 };
 

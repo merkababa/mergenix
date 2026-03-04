@@ -8,7 +8,7 @@ import {
   useTransform,
   type MotionValue,
   type Variants,
-} from "framer-motion";
+} from "motion/react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -126,7 +126,7 @@ const REDUCED_MOTION_VARIANTS: Variants = {
 // ---------------------------------------------------------------------------
 
 /**
- * Framer Motion wrapper for scroll-triggered reveal animations.
+ * Motion wrapper for scroll-triggered reveal animations.
  *
  * Supports five animation types: "fade" (default), "blur", "clip", "scale", "rotate".
  * All types respect `prefers-reduced-motion` — reduced to a simple opacity fade.
@@ -188,7 +188,7 @@ export function ScrollReveal({
       transition={{
         duration: prefersReduced ? 0.15 : duration,
         delay: prefersReduced ? 0 : delay,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       }}
       style={animating ? { willChange: "transform, opacity" } : undefined}
       onAnimationComplete={handleAnimationComplete}

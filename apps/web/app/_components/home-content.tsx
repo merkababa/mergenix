@@ -8,7 +8,7 @@ import {
   Server,
   Eye,
 } from "lucide-react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { buttonVariants } from "@/components/ui/button";
 import { HelixAnimation } from "@/components/marketing/helix-animation";
@@ -59,7 +59,7 @@ export function HomeContent() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Privacy and security"
       >
@@ -127,7 +127,7 @@ export function HomeContent() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Pricing"
       >
@@ -178,7 +178,7 @@ export function HomeContent() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Frequently asked questions"
       >
@@ -202,7 +202,7 @@ export function HomeContent() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className="px-4 py-16 md:px-6 md:py-24"
         aria-label="Call to action"
       >

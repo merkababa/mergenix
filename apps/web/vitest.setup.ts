@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
-// Global framer-motion mock — resolves from __mocks__/framer-motion.tsx
-vi.mock('framer-motion');
+// Global motion/react mock — resolves from __mocks__/motion/react.tsx
+vi.mock('motion/react');
 
 // Mock Web Worker globally
 class MockWorker {

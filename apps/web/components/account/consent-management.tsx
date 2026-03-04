@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useId, useRef, useEffect, useCallback } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import {
   Shield,
   ShieldOff,

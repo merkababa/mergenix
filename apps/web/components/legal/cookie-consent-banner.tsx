@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Cookie, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLegalStore } from "@/lib/stores/legal-store";
@@ -16,12 +16,12 @@ const slideUpVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 300, damping: 30 },
+    transition: { type: "spring" as const, stiffness: 300, damping: 30 },
   },
   exit: {
     opacity: 0,
     y: 80,
-    transition: { duration: 0.25, ease: "easeIn" },
+    transition: { duration: 0.25, ease: "easeIn" as const },
   },
 };
 

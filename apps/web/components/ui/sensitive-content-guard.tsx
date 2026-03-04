@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useId, useRef, useState } from "react";
-import { AnimatePresence, m } from "framer-motion";
+import { AnimatePresence, m } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { useFocusTrap } from "@/hooks/use-focus-trap";

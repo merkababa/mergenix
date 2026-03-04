@@ -3,7 +3,7 @@
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
 import { useState, useCallback, useRef } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Shield, FileCheck, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GeneticFileFormat } from "@/lib/stores/analysis-store";
@@ -185,7 +185,7 @@ export function FileDropzone({
                         duration: 2.2,
                         repeat: Infinity,
                         delay,
-                        ease: "easeInOut",
+                        ease: "easeInOut" as const,
                       }}
                     />
                   ))}

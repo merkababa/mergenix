@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { Search, BookOpen } from "lucide-react";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { m, useTransform } from "framer-motion";
+import { m, useTransform } from "motion/react";
 import { Upload, Brain, HeartPulse } from "lucide-react";
 import { ScrollReveal, useScrollProgress } from "@/components/ui/scroll-reveal";
 import { SectionHeading } from "@/components/marketing/section-heading";
@@ -149,7 +149,7 @@ const STEPS_CONFIG: readonly StepConfig[] = [
 export function ScrollTimeline() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScrollProgress(sectionRef);
-  // useTransform called at top level — stable motion value, not recreated on render (idiomatic Framer Motion)
+  // useTransform called at top level — stable motion value, not recreated on render (idiomatic Motion)
   const lineScaleY = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
 
   return (

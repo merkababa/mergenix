@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { User, CreditCard, Activity, LogOut, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -94,7 +94,7 @@ export function UserMenu() {
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
+            transition={{ duration: 0.15, ease: "easeOut" as const }}
             role="menu"
             className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-[var(--glass-border)] bg-[var(--bg-glass)] shadow-[0_12px_40px_var(--shadow-elevated)] before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-[var(--accent-teal)] before:to-[var(--accent-cyan)] before:opacity-60"
             style={{

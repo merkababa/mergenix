@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { CheckCircle, XCircle, Mail, ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -115,7 +115,7 @@ export function VerifyEmailContent() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
-                    type: "spring",
+                    type: "spring" as const,
                     stiffness: 300,
                     damping: 15,
                     delay: 0.1,
@@ -153,7 +153,7 @@ export function VerifyEmailContent() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
-                    type: "spring",
+                    type: "spring" as const,
                     stiffness: 300,
                     damping: 15,
                     delay: 0.1,

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Shield, ChevronRight, Lock, Users } from "lucide-react";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import { buttonVariants } from "@/components/ui/button";
 import { DnaHelix3DDynamic } from "@/components/marketing/dna-helix-3d-dynamic";
 import { useCountUp } from "@/hooks/use-count-up";
@@ -53,7 +53,7 @@ export function HeroSection() {
     <m.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" as const }}
       className="relative overflow-hidden px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-20"
       aria-label="Hero"
     >
@@ -83,7 +83,7 @@ export function HeroSection() {
           <m.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" as const }}
             className="gradient-text max-w-3xl font-heading text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl xl:text-7xl"
           >
             Explore Your Genetic Possibilities
@@ -92,7 +92,7 @@ export function HeroSection() {
           <m.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" as const }}
             className="mt-6 max-w-xl text-center text-lg text-[var(--text-muted)] md:text-xl"
           >
             Compare two parents&apos; DNA to predict offspring disease risk, traits,
@@ -106,7 +106,7 @@ export function HeroSection() {
           <m.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" as const }}
             className="mt-6 flex items-center justify-center gap-8"
             role="group"
             aria-label="Key statistics"
@@ -140,7 +140,7 @@ export function HeroSection() {
           <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" as const }}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
           >
             <Link
@@ -162,7 +162,7 @@ export function HeroSection() {
           <m.ul
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" as const }}
             className="mt-8 flex flex-wrap items-center justify-center gap-3"
             role="list"
             aria-label="Trust indicators"
