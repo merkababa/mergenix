@@ -305,7 +305,7 @@ function DiseaseCatalogInner() {
             >
               <Icon className="mx-auto mb-2 h-5 w-5 text-[var(--accent-cyan)]" aria-hidden="true" />
               <AnimatedCounter value={value} />
-              <div className="font-heading text-[10px] font-medium uppercase tracking-widest text-[var(--accent-cyan)]">
+              <div className="font-heading text-xs font-medium uppercase tracking-widest text-[var(--accent-cyan)]">
                 {label}
               </div>
             </GlassCard>
@@ -472,10 +472,10 @@ function DiseaseCatalogInner() {
 
                   {/* SNP count + view link */}
                   <div className="flex items-center justify-between border-t border-[var(--border-subtle)] pt-3">
-                    <span className="font-mono text-xs text-[var(--text-dim)]">
+                    <span className="font-mono text-xs text-[var(--text-muted)]">
                       {disease.snpCount} SNP{disease.snpCount !== 1 ? "s" : ""} tracked
                     </span>
-                    <span className="flex items-center gap-1 text-xs font-medium text-[var(--accent-teal)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="flex items-center gap-1 text-xs font-medium text-[var(--accent-teal)] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
                       View details
                       <ChevronRight className="h-3 w-3" aria-hidden="true" />
                     </span>
@@ -493,7 +493,7 @@ function DiseaseCatalogInner() {
           transition={{ duration: 0.4 }}
           className="py-16 text-center"
         >
-          <Dna className="mx-auto mb-4 h-12 w-12 text-[var(--text-dim)] opacity-50" aria-hidden="true" />
+          <Dna className="mx-auto mb-4 h-12 w-12 text-[var(--text-muted)] opacity-50" aria-hidden="true" />
           <h3 className="font-heading text-lg font-semibold text-[var(--text-heading)]">
             No diseases found
           </h3>
@@ -549,7 +549,7 @@ function DiseaseCatalogInner() {
                 item === "ellipsis" ? (
                   <span
                     key={`ellipsis-${idx}`}
-                    className="px-1 text-sm text-[var(--text-dim)]"
+                    className="px-1 text-sm text-[var(--text-muted)]"
                     aria-hidden="true"
                   >
                     ...
@@ -586,7 +586,7 @@ function DiseaseCatalogInner() {
       )}
 
       {/* -- Footer Note -- */}
-      <p className="mt-8 text-center text-xs text-[var(--text-dim)]">
+      <p className="mt-8 text-center text-xs text-[var(--text-muted)]">
         Showing a curated selection of {DISEASES.length} representative conditions from
         our full database of {stats.totalDiseases.toLocaleString()} genetic diseases.
         Each condition is sourced from ClinVar, OMIM, and peer-reviewed literature.

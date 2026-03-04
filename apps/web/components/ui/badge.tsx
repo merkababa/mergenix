@@ -7,7 +7,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         /* Severity levels */
-        critical: "border border-[rgba(244,63,94,0.4)] bg-[rgba(244,63,94,0.15)] text-[#f43f5e] [[data-theme='light']_&]:text-[#be123c]",
+        critical: "border border-[rgba(220,38,38,0.5)] bg-[rgba(220,38,38,0.20)] text-[#ef4444] [[data-theme='light']_&]:text-[#b91c1c] font-bold",
         high: "border border-[rgba(244,63,94,0.4)] bg-[rgba(244,63,94,0.15)] text-[#f43f5e] [[data-theme='light']_&]:text-[#be123c]",
         moderate: "border border-[rgba(245,158,11,0.4)] bg-[rgba(245,158,11,0.15)] text-[#f59e0b] [[data-theme='light']_&]:text-[#b45309]",
         low: "border border-[rgba(6,214,160,0.4)] bg-[rgba(6,214,160,0.15)] text-[#06d6a0] [[data-theme='light']_&]:text-[#047857]",

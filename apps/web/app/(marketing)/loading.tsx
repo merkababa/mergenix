@@ -1,6 +1,6 @@
 export default function MarketingLoading() {
   return (
-    <div role="status" aria-label="Loading content" className="min-h-screen">
+    <div role="status" aria-live="polite" aria-label="Loading content" className="min-h-screen">
       <span className="sr-only">Loading...</span>
       <div className="animate-pulse max-w-6xl mx-auto px-6 py-20 space-y-8">
         <div

@@ -195,16 +195,24 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
               </p>
 
               {/* Scrollable consent text */}
-              <div
-                ref={scrollContainerRef}
-                tabIndex={0}
-                className="mb-4 max-h-60 overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
-              >
-                <div className="whitespace-pre-line text-sm text-[var(--text-body)]">
-                  {CONSENT_TEXT_GENETIC_PROCESSING}
+              <div className="relative mb-4">
+                <div
+                  ref={scrollContainerRef}
+                  tabIndex={0}
+                  className="max-h-60 overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
+                >
+                  <div className="whitespace-pre-line text-sm text-[var(--text-body)]">
+                    {CONSENT_TEXT_GENETIC_PROCESSING}
+                  </div>
+                  {/* Sentinel div — IntersectionObserver target */}
+                  <div ref={sentinelRef} aria-hidden="true" className="h-1" />
                 </div>
-                {/* Sentinel div — IntersectionObserver target */}
-                <div ref={sentinelRef} aria-hidden="true" className="h-1" />
+                {!hasScrolledToBottom && (
+                  <div
+                    className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 rounded-b-xl bg-gradient-to-t from-[var(--bg-elevated)] to-transparent"
+                    aria-hidden="true"
+                  />
+                )}
               </div>
 
               {/* Checkbox — disabled until user has scrolled to bottom */}

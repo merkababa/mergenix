@@ -1,6 +1,6 @@
 export default function AuthLoading() {
   return (
-    <div role="status" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
+    <div role="status" aria-live="polite" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
       <span className="sr-only">Loading...</span>
       <div className="animate-pulse w-full max-w-md px-6 space-y-4">
         <div

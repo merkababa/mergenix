@@ -161,7 +161,7 @@ const TraitCard = memo(function TraitCard({
           <p className="font-heading text-sm font-semibold text-[var(--text-heading)]">
             {trait.trait}
           </p>
-          <p className="mt-0.5 text-[10px] text-[var(--text-dim)]">
+          <p className="mt-0.5 text-xs text-[var(--text-muted)]">
             {trait.gene} &middot; {trait.rsid}
           </p>
         </div>
@@ -184,7 +184,7 @@ const TraitCard = memo(function TraitCard({
         </p>
       )}
       {isHealthTrait && trait.note && (
-        <p className="mt-1 text-xs italic text-[var(--text-dim)]">
+        <p className="mt-1 text-xs italic text-[var(--text-muted)]">
           {trait.note}
         </p>
       )}
@@ -222,7 +222,7 @@ const TraitCard = memo(function TraitCard({
       {isHealthTrait && trait.phenotypeDetails && (
         <div className="mt-2 space-y-1 border-t border-white/5 pt-2">
           {Object.entries(trait.phenotypeDetails).map(([key, detail]) => (
-            <p key={key} className="text-[10px] text-[var(--text-dim)]">
+            <p key={key} className="text-xs text-[var(--text-muted)]">
               <span className="font-medium text-[var(--text-muted)]">{key}:</span>{" "}
               {detail.description}
             </p>
@@ -437,7 +437,7 @@ export function TraitsTab() {
         <input
           type="search"
           placeholder="Search traits..."
-          className="min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-[var(--text-body)] placeholder:text-[var(--text-dim)] focus:border-[var(--accent-teal)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-teal)]"
+          className="min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-[var(--text-body)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-teal)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-teal)]"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search traits"
@@ -502,12 +502,12 @@ export function TraitsTab() {
                   <div className="flex items-center gap-2">
                     {isExpanded ? (
                       <ChevronDown
-                        className="h-4 w-4 shrink-0 text-[var(--text-dim)]"
+                        className="h-4 w-4 shrink-0 text-[var(--text-muted)]"
                         aria-hidden="true"
                       />
                     ) : (
                       <ChevronRight
-                        className="h-4 w-4 shrink-0 text-[var(--text-dim)]"
+                        className="h-4 w-4 shrink-0 text-[var(--text-muted)]"
                         aria-hidden="true"
                       />
                     )}
@@ -515,7 +515,7 @@ export function TraitsTab() {
                       {category}
                     </span>
                   </div>
-                  <span className="shrink-0 text-xs text-[var(--text-dim)]">
+                  <span className="shrink-0 text-xs text-[var(--text-muted)]">
                     {items.length} shown
                     {items.length !== detectedCount &&
                       ` / ${detectedCount} detected`}
@@ -554,7 +554,7 @@ export function TraitsTab() {
       {missing.length > 0 && (
         <GlassCard variant="subtle" hover="none" className="p-4">
           <div className="flex items-start gap-3">
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--text-dim)]" />
+            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--text-muted)]" />
             <div>
               <p className="text-xs font-semibold text-[var(--text-body)]">
                 Missing Data ({missing.length} trait

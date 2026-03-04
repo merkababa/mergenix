@@ -173,11 +173,11 @@ export function ResetPasswordContent() {
                 className="text-center"
               >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                  <CheckCircle className="h-7 w-7 text-[var(--accent-teal)]" />
+                  <CheckCircle className="h-7 w-7 text-[var(--accent-teal)]" aria-hidden="true" />
                 </div>
-                <h2 className="gradient-text font-heading text-2xl font-extrabold">
+                <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Password Reset!
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   Your password has been successfully reset. You can now sign in
                   with your new password.
@@ -200,11 +200,11 @@ export function ResetPasswordContent() {
                 className="text-center"
               >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]">
-                  <XCircle className="h-7 w-7 text-[var(--accent-rose)]" />
+                  <XCircle className="h-7 w-7 text-[var(--accent-rose)]" aria-hidden="true" />
                 </div>
-                <h2 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
+                <h1 className="font-heading text-2xl font-extrabold text-[var(--text-primary)]">
                   Reset Failed
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   {errorMessage}
                 </p>

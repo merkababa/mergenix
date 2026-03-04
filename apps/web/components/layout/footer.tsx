@@ -258,7 +258,7 @@ export function Footer() {
             <button
               type="button"
               onClick={handleOpenCpraSpiModal}
-              className="text-xs text-[var(--text-dim)] underline-offset-2 hover:text-[var(--text-muted)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+              className="min-h-[44px] inline-flex items-center text-xs text-[var(--text-dim)] underline-offset-2 hover:text-[var(--text-muted)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
             >
               Limit the Use of My Sensitive Personal Information
             </button>

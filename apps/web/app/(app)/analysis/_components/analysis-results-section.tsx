@@ -169,35 +169,41 @@ export function AnalysisResultsSection({
       {/* Result tabs */}
       <GlassCard variant="subtle" hover="none" className="p-1.5">
         {/* H3: single onKeyDown on tablist container for event delegation */}
-        <div
-          className="flex gap-1 overflow-x-auto"
-          role="tablist"
-          aria-label="Analysis results"
-          onKeyDown={onTabKeyDown}
-        >
-          {RESULT_TABS.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                id={`tab-${tab.key}`}
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`tabpanel-${tab.key}`}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => onTabChange(tab.key)}
-                className={`flex items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 font-heading text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#06d6a0] to-[#059669] font-bold text-[#050810] shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
-                    : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {tab.label}
-              </button>
-            );
-          })}
+        <div className="relative">
+          <div
+            className="flex gap-1 overflow-x-auto scrollbar-none"
+            role="tablist"
+            aria-label="Analysis results"
+            onKeyDown={onTabKeyDown}
+          >
+            {RESULT_TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  id={`tab-${tab.key}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`tabpanel-${tab.key}`}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => onTabChange(tab.key)}
+                  className={`flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 font-heading text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#06d6a0] to-[#059669] font-bold text-[#050810] shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
+                      : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--bg-glass)] to-transparent"
+            aria-hidden="true"
+          />
         </div>
       </GlassCard>
 

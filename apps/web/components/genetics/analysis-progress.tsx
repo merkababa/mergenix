@@ -148,7 +148,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                 {/* Label */}
                 <span
                   className={cn(
-                    "mt-1.5 text-center font-heading text-[10px] font-medium sm:text-xs",
+                    "mt-1.5 text-center font-heading text-xs font-medium",
                     isCompleted && "font-semibold text-[var(--accent-teal)]",
                     isActive && "font-bold text-[var(--accent-teal)]",
                     isPending && "text-[var(--text-dim)]",

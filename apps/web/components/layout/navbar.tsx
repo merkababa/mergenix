@@ -211,6 +211,7 @@ export function Navbar() {
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileOpen}
+            aria-controls="mobile-nav-menu"
           >
             {isMobileOpen ? (
               <X className="h-5 w-5" aria-hidden="true" />
@@ -228,6 +229,7 @@ export function Navbar() {
       {isMobileOpen && (
         <m.div
           ref={mobileMenuRef}
+          id="mobile-nav-menu"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

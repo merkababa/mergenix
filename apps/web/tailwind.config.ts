@@ -104,10 +104,6 @@ const config: Config = {
           "0%, 100%": { boxShadow: "0 0 20px rgba(6, 214, 160, 0.25), 0 4px 30px rgba(0, 0, 0, 0.4)" },
           "50%": { boxShadow: "0 0 40px rgba(6, 214, 160, 0.25), 0 4px 30px rgba(0, 0, 0, 0.4)" },
         },
-        fadeSlideUp: {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
@@ -115,10 +111,6 @@ const config: Config = {
         cardReveal: {
           from: { opacity: "0", transform: "translateY(24px)" },
           to: { opacity: "1", transform: "translateY(0)" },
-        },
-        glowPulse: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(6, 214, 160, 0.25), 0 4px 30px rgba(0, 0, 0, 0.4)" },
-          "50%": { boxShadow: "0 0 35px rgba(6, 214, 160, 0.25), 0 4px 30px rgba(0, 0, 0, 0.4)" },
         },
         subtleScan: {
           "0%": { backgroundPosition: "0% 0%" },
@@ -155,10 +147,8 @@ const config: Config = {
         "helix-float": "helixFloat 2.2s ease-in-out infinite",
         "gradient-shift": "gradientShift 6s ease infinite",
         "biolum-pulse": "biolumPulse 5s ease-in-out infinite",
-        "fade-slide-up": "fadeSlideUp 0.6s ease-out",
         shimmer: "shimmer 1.5s linear infinite",
         "card-reveal": "cardReveal 0.5s ease-out both",
-        "glow-pulse": "glowPulse 5s ease-in-out infinite",
         "subtle-scan": "subtleScan 30s linear infinite",
         "border-rainbow": "borderRainbow 3s ease infinite",
         "spin-slow": "spinSlow 3s linear infinite",

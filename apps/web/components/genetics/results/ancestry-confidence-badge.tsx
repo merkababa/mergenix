@@ -48,7 +48,7 @@ export const AncestryConfidenceBadge = memo(function AncestryConfidenceBadge({
       className="inline-flex flex-col gap-1"
     >
       <span
-        className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+        className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wider"
         style={{
           backgroundColor: style.bg,
           color: style.text,
@@ -58,14 +58,14 @@ export const AncestryConfidenceBadge = memo(function AncestryConfidenceBadge({
         {style.label}
       </span>
       {confidenceLevel === "low" && (
-        <p className="text-[10px] leading-relaxed text-[var(--text-dim)]">
+        <p className="text-xs leading-relaxed text-[var(--text-muted)]">
           {ancestry === "Unknown"
             ? "Most PRS studies are based on European populations. Ancestry could not be determined — accuracy may vary."
             : `Most PRS studies are based on European populations. Accuracy may be reduced for ${ancestry} ancestry.`}
         </p>
       )}
       {ancestryNote && confidenceLevel !== "low" && (
-        <p className="text-[10px] leading-relaxed text-[var(--text-dim)]">
+        <p className="text-xs leading-relaxed text-[var(--text-muted)]">
           {ancestryNote}
         </p>
       )}

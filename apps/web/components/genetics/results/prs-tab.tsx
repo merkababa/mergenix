@@ -223,15 +223,15 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
 
       {/* Offspring expected range */}
       <div className="mt-4 rounded-[10px] bg-[rgba(6,182,212,0.06)] px-3 py-2 text-center">
-        <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-dim)]">
+        <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
           Expected Range
         </p>
         <p className="mt-0.5 font-heading text-sm font-bold text-[var(--text-heading)]">
           {Math.round(offspring.rangeLow)}
-          <span className="text-[var(--text-dim)]">th</span>
+          <span className="text-[var(--text-muted)]">th</span>
           {" \u2013 "}
           {Math.round(offspring.rangeHigh)}
-          <span className="text-[var(--text-dim)]">th</span>
+          <span className="text-[var(--text-muted)]">th</span>
           {" percentile"}
         </p>
       </div>
@@ -271,7 +271,7 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
       {cautionNote && (
         <div className="mt-2 flex items-start gap-2 rounded-[8px] border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] px-2.5 py-2">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#f59e0b]" aria-hidden="true" />
-          <p className="text-[10px] leading-snug text-[var(--text-body)]">{cautionNote}</p>
+          <p className="text-xs leading-snug text-[var(--text-body)]">{cautionNote}</p>
         </div>
       )}
     </GlassCard>

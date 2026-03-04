@@ -105,9 +105,11 @@ export function FileDropzone({
         role="button"
         tabIndex={0}
         aria-label={`${label} - Drop genetic file or click to browse`}
+        aria-roledescription="File upload dropzone"
         className={cn(
           "group relative cursor-pointer overflow-hidden rounded-[20px] border-2 border-dashed p-8 text-center transition-all duration-300",
           "bg-[var(--bg-glass)] [backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]",
+          "focus-visible:border-solid focus-visible:border-[var(--accent-teal)] focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.25)] focus-visible:outline-none",
           selectedFile
             ? "border-[rgba(6,214,160,0.3)] shadow-[0_0_20px_rgba(6,214,160,0.1)]"
             : "border-[rgba(6,214,160,0.18)]",

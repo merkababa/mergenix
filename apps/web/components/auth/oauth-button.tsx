@@ -25,6 +25,7 @@ export function OAuthButton({
       type="button"
       onClick={onClick}
       disabled={isLoading}
+      aria-busy={isLoading || undefined}
       className={cn(
         "flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-2.5 font-heading text-sm font-semibold text-[var(--text-primary)] transition-all duration-200",
         "hover:border-[rgba(6,214,160,0.25)] hover:bg-[rgba(6,214,160,0.04)] hover:shadow-[0_0_15px_rgba(6,214,160,0.06)]",
@@ -34,7 +35,10 @@ export function OAuthButton({
       )}
     >
       {isLoading ? (
-        <Loader2 className="h-5 w-5 animate-spin" />
+        <>
+          <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+          <span className="sr-only">Loading</span>
+        </>
       ) : (
         <svg
           className="h-5 w-5"

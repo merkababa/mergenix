@@ -488,12 +488,12 @@ export function RegisterContent() {
                 }}
                 className="mx-auto -mt-4 mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-teal)]"
               >
-                <CheckCircle2 className="h-5 w-5 text-[var(--bg-deep)]" />
+                <CheckCircle2 className="h-5 w-5 text-[var(--bg-deep)]" aria-hidden="true" />
               </m.div>
 
-              <h2 className="gradient-text mb-2 font-heading text-2xl font-extrabold">
+              <h1 className="gradient-text mb-2 font-heading text-2xl font-extrabold">
                 Check your email
-              </h2>
+              </h1>
 
               <p className="mb-2 text-sm text-[var(--text-primary)]">
                 Verification email sent to{" "}

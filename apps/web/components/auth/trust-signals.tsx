@@ -24,7 +24,7 @@ export function TrustSignals({ lines = DEFAULT_LINES }: TrustSignalsProps) {
         <span className="text-xs text-[var(--text-muted)]">{lines[0]}</span>
       </div>
       {lines.slice(1).map((line) => (
-        <p key={line} className="mt-1 text-[10px] text-[var(--text-dim)]">
+        <p key={line} className="mt-1 text-xs text-[var(--text-muted)]">
           {line}
         </p>
       ))}

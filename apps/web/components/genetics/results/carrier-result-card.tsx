@@ -147,7 +147,7 @@ export const CarrierResultCard = memo(function CarrierResultCard({
                       </span>{" "}
                       daughters
                     </p>
-                    <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                    <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
                       Affected Risk
                     </p>
                   </div>
@@ -164,7 +164,7 @@ export const CarrierResultCard = memo(function CarrierResultCard({
                     >
                       {result.offspringRisk.affected}%
                     </p>
-                    <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                    <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
                       Offspring Risk
                     </p>
                   </>
@@ -173,7 +173,7 @@ export const CarrierResultCard = memo(function CarrierResultCard({
                 <div className="flex flex-col items-end gap-1" title="Upgrade to Pro for offspring risk predictions">
                   <Lock className="h-4 w-4 text-[#8b5cf6]" aria-hidden="true" />
                   <span className="text-xs font-medium text-[#8b5cf6]">Pro</span>
-                  <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                  <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
                     Offspring Risk
                   </p>
                 </div>
@@ -183,7 +183,7 @@ export const CarrierResultCard = memo(function CarrierResultCard({
                 <span className="font-mono text-sm text-[var(--text-muted)]">
                   {result.gene}
                 </span>
-                <p className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+                <p className="text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
                   Gene
                 </p>
               </div>
@@ -309,7 +309,7 @@ export const CarrierResultCard = memo(function CarrierResultCard({
               </p>
 
               {/* Mendelian context note */}
-              <p className="text-[10px] leading-relaxed text-[var(--text-muted)]">
+              <p className="text-xs leading-relaxed text-[var(--text-muted)]">
                 Theoretical Mendelian probabilities. Actual outcomes may differ due to penetrance, expressivity, and environmental factors.
               </p>
 

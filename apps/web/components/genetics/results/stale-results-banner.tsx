@@ -66,7 +66,7 @@ export function StaleResultsBanner({ dataVersion }: StaleResultsBannerProps) {
       <button
         type="button"
         onClick={() => setDismissed(true)}
-        className="flex-shrink-0 rounded-lg p-1 text-[var(--text-muted)] transition-colors hover:bg-[rgba(245,158,11,0.1)] hover:text-[var(--accent-amber)]"
+        className="flex flex-shrink-0 items-center justify-center rounded-lg p-1 text-[var(--text-muted)] transition-colors hover:bg-[rgba(245,158,11,0.1)] hover:text-[var(--accent-amber)] min-h-[44px] min-w-[44px]"
         aria-label="Dismiss stale results warning"
       >
         <X className="h-4 w-4" aria-hidden="true" />

@@ -127,11 +127,11 @@ export function ForgotPasswordContent() {
               >
                 {/* Success icon */}
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                  <CheckCircle className="h-7 w-7 text-[var(--accent-teal)]" />
+                  <CheckCircle className="h-7 w-7 text-[var(--accent-teal)]" aria-hidden="true" />
                 </div>
-                <h2 className="gradient-text font-heading text-2xl font-extrabold">
+                <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Check Your Email
-                </h2>
+                </h1>
                 <p className="mt-3 text-sm text-[var(--text-muted)]">
                   If an account exists with{" "}
                   <span className="font-medium text-[var(--text-primary)]">

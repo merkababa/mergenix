@@ -117,7 +117,7 @@ export function OverviewTab() {
               {stat.icon && <stat.icon className="h-4 w-4" aria-hidden="true" />}
               {stat.value}
             </p>
-            <p className="mt-1 text-[10px] font-medium uppercase tracking-widest text-[var(--text-muted)]">
+            <p className="mt-1 text-xs font-medium uppercase tracking-widest text-[var(--text-muted)]">
               {stat.label}
             </p>
           </GlassCard>

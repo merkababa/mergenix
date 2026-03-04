@@ -24,7 +24,7 @@
   --text-heading: #f1f5f9;
   --text-body: #cbd5e1;
   --text-muted: #94a3b8;
-  --text-dim: #94a3c8;
+  --text-dim: var(--text-muted);
 
   --border-subtle: rgba(148, 163, 184, 0.10);
   --glass-border: rgba(148, 163, 184, 0.08);
@@ -70,7 +70,7 @@
   --bg-elevated: #f1f5f9;
   --bg-glass: rgba(255, 255, 255, 0.72);
 
-  --accent-teal: #059669;
+  --accent-teal: #047857;
   --accent-violet: #7c3aed;
   --accent-cyan: #0891b2;
   --accent-amber: #d97706;
@@ -80,7 +80,7 @@
   --text-heading: #0f172a;
   --text-body: #334155;
   --text-muted: #475569;
-  --text-dim: #4b5563;
+  --text-dim: var(--text-muted);
 
   --border-subtle: rgba(15, 23, 42, 0.08);
   --glass-border: rgba(15, 23, 42, 0.06);
@@ -120,20 +120,9 @@
   50% { transform: translateY(-10px) rotate(180deg); opacity: 1; }
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 @keyframes biolumPulse {
   0%, 100% { box-shadow: 0 0 20px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
   50% { box-shadow: 0 0 40px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
-}
-
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes shimmer {
@@ -144,11 +133,6 @@
 @keyframes cardReveal {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
-  50% { box-shadow: 0 0 35px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
 }
 
 @keyframes subtleScan {
@@ -262,6 +246,14 @@ hr {
 }
 
 /* ── Glassmorphism Utility Classes ── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 .glass {
   background: var(--bg-glass);
   backdrop-filter: blur(var(--glass-blur));
@@ -310,7 +302,7 @@ hr {
 }
 
 .glow-pulse {
-  animation: glowPulse 5s ease-in-out infinite;
+  animation: biolumPulse 5s ease-in-out infinite;
 }
 
 .glow-violet {
@@ -443,7 +435,7 @@ hr {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradientShift 6s ease infinite;
+  animation: gradient-shift 6s ease infinite;
 }
 
 .gradient-text-teal {
@@ -459,7 +451,7 @@ hr {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradientShift 6s ease infinite;
+  animation: gradient-shift 6s ease infinite;
 }
 
 [data-theme="light"] .gradient-text-teal {
@@ -479,7 +471,7 @@ hr {
   height: 2px;
   background: linear-gradient(90deg, var(--accent-teal), var(--accent-violet), var(--accent-cyan));
   background-size: 200% 100%;
-  animation: gradientShift 4s ease infinite;
+  animation: gradient-shift 4s ease infinite;
   opacity: 0.7;
 }
 
@@ -627,12 +619,6 @@ section,
   100% { background-position: 0% 50%; }
 }
 
-@keyframes borderSweep {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 @keyframes iconBounce {
   0%   { transform: rotate(0deg) scale(1); }
   30%  { transform: rotate(-12deg) scale(1.15); }
@@ -697,7 +683,7 @@ section,
 
 .glass-card--sweep:hover::after {
   opacity: 1;
-  animation: borderSweep 3s ease infinite;
+  animation: auroraShift 3s ease infinite;
 }
 
 /* Card icon bounce on parent hover */

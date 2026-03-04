@@ -45,7 +45,7 @@ export function PageHeader({
             <span key={crumb.href} className="flex items-center gap-1">
               <ChevronRight className="h-3 w-3" />
               {i === breadcrumbs.length - 1 ? (
-                <span className="text-[var(--accent-teal)]">
+                <span className="text-[var(--accent-teal)]" aria-current="page">
                   {crumb.label}
                 </span>
               ) : (

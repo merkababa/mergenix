@@ -120,10 +120,10 @@ export function PunnettSquare({
                 role="cell"
               >
                 <div className="font-mono text-base font-bold">{cell.genotype}</div>
-                <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                <div className="mt-0.5 text-xs text-[var(--text-muted)]">
                   {probabilities.get(cell.genotype)}%
                 </div>
-                <div className="mt-0.5 text-[10px] opacity-80">{cell.label}</div>
+                <div className="mt-0.5 text-xs opacity-80">{cell.label}</div>
               </div>
             ))}
           </div>

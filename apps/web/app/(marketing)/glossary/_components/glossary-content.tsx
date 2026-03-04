@@ -127,7 +127,7 @@ export function GlossaryContent() {
           onClick={() => setActiveLetter(null)}
           aria-label="Show all terms"
           aria-pressed={!activeLetter}
-          className={`rounded-lg px-2.5 py-1 font-heading text-xs font-medium transition-all ${
+          className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 font-heading text-xs font-medium transition-all ${
             !activeLetter
               ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)]"
               : "text-[var(--text-dim)] hover:text-[var(--accent-teal)]"
@@ -144,7 +144,7 @@ export function GlossaryContent() {
               disabled={!hasTerms}
               aria-label={`Filter by letter ${letter}`}
               aria-pressed={activeLetter === letter}
-              className={`rounded-lg px-2 py-1 font-heading text-xs font-medium transition-all ${
+              className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2 font-heading text-xs font-medium transition-all ${
                 activeLetter === letter
                   ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)]"
                   : hasTerms
@@ -230,7 +230,7 @@ export function GlossaryContent() {
                           <button
                             key={related}
                             onClick={() => scrollToTerm(related)}
-                            className="rounded-lg bg-[rgba(6,214,160,0.06)] px-2 py-0.5 text-xs text-[var(--accent-teal)] transition-colors hover:bg-[rgba(6,214,160,0.15)]"
+                            className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-[rgba(6,214,160,0.06)] px-3 py-2.5 text-xs text-[var(--accent-teal)] transition-colors hover:bg-[rgba(6,214,160,0.15)]"
                           >
                             {related}
                           </button>

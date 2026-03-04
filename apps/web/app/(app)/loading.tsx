@@ -1,6 +1,6 @@
 export default function AppLoading() {
   return (
-    <div role="status" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
+    <div role="status" aria-live="polite" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
       <span className="sr-only">Loading...</span>
       <div className="animate-pulse space-y-4 w-full max-w-4xl px-6">
         <div

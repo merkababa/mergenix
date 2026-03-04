@@ -14,8 +14,8 @@ vi.mock('lucide-react', () => ({
 
 vi.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: any }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({ href, children, onClick, role, ...props }: { href: string; children: React.ReactNode; onClick?: any; role?: string; [key: string]: any }) => (
+    <a href={href} onClick={onClick} role={role} {...props}>{children}</a>
   ),
 }));
 
@@ -99,7 +99,7 @@ describe('UserMenu', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /User menu/i }));
 
-    const accountLink = screen.getByRole('link', { name: /Account Settings/i });
+    const accountLink = screen.getByRole('menuitem', { name: /Account Settings/i });
     expect(accountLink).toHaveAttribute('href', '/account');
   });
 
@@ -108,7 +108,7 @@ describe('UserMenu', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /User menu/i }));
 
-    const subscriptionLink = screen.getByRole('link', { name: /My Plan/i });
+    const subscriptionLink = screen.getByRole('menuitem', { name: /My Plan/i });
     expect(subscriptionLink).toHaveAttribute('href', '/subscription');
   });
 
@@ -117,7 +117,7 @@ describe('UserMenu', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /User menu/i }));
 
-    const analysisLink = screen.getByRole('link', { name: /Analysis/i });
+    const analysisLink = screen.getByRole('menuitem', { name: /Analysis/i });
     expect(analysisLink).toHaveAttribute('href', '/analysis');
   });
 
@@ -126,8 +126,8 @@ describe('UserMenu', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /User menu/i }));
 
-    // Sign Out is a button element (not a link)
-    expect(screen.getByRole('button', { name: /Sign Out/i })).toBeInTheDocument();
+    // Sign Out has menuitem role
+    expect(screen.getByRole('menuitem', { name: /Sign Out/i })).toBeInTheDocument();
   });
 
   it('clicking Sign Out calls logout', async () => {
@@ -136,7 +136,7 @@ describe('UserMenu', () => {
     render(<UserMenu />);
 
     fireEvent.click(screen.getByRole('button', { name: /User menu/i }));
-    fireEvent.click(screen.getByRole('button', { name: /Sign Out/i }));
+    fireEvent.click(screen.getByRole('menuitem', { name: /Sign Out/i }));
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });

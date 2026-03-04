@@ -105,31 +105,37 @@ export function ReportSidebar() {
       </aside>
 
       {/* Mobile horizontal tab bar — sticky at top */}
-      <nav
-        className="sticky top-0 z-30 -mx-4 mb-6 overflow-x-auto border-b border-[var(--border-subtle)] bg-[var(--bg-base)] px-4 pb-2 pt-2 lg:hidden"
-        aria-label="Report sections"
-      >
-        <ul className="flex gap-1 whitespace-nowrap" role="list">
-          {SECTION_LINKS.map(({ id, label, icon }) => (
-            <li key={id}>
-              <a
-                href={`#${id}`}
-                onClick={(e) => handleNavClick(e, id)}
-                className={cn(
-                  "inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200",
-                  activeSection === id
-                    ? "bg-[rgba(6,214,160,0.12)] text-[var(--accent-teal)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--text-body)]",
-                )}
-                aria-current={activeSection === id ? "location" : undefined}
-              >
-                <span aria-hidden="true">{icon}</span>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className="relative lg:hidden">
+        <nav
+          className="sticky top-0 z-30 -mx-4 mb-6 overflow-x-auto border-b border-[var(--border-subtle)] bg-[var(--bg-base)] px-4 pb-2 pt-2"
+          aria-label="Report sections"
+        >
+          <ul className="flex gap-1 whitespace-nowrap" role="list">
+            {SECTION_LINKS.map(({ id, label, icon }) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  onClick={(e) => handleNavClick(e, id)}
+                  className={cn(
+                    "inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200",
+                    activeSection === id
+                      ? "bg-[rgba(6,214,160,0.12)] text-[var(--accent-teal)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-body)]",
+                  )}
+                  aria-current={activeSection === id ? "location" : undefined}
+                >
+                  <span aria-hidden="true">{icon}</span>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div
+          className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--bg-glass)] to-transparent"
+          aria-hidden="true"
+        />
+      </div>
     </>
   );
 }

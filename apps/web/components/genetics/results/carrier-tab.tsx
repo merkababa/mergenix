@@ -202,7 +202,22 @@ export function CarrierTab() {
         <h3 className="font-heading text-xl font-bold text-[var(--text-heading)]">
           {isResearchMode ? "Raw Genotype Browser" : "Carrier Screening Results"}
         </h3>
-        <div role="radiogroup" aria-label="View mode" className="flex items-center gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-2">
+        <div
+          role="radiogroup"
+          aria-label="View mode"
+          className="flex items-center gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-2"
+          onKeyDown={(e) => {
+            if (["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"].includes(e.key)) {
+              e.preventDefault();
+              setIsResearchMode((prev) => !prev);
+              const radiogroup = e.currentTarget;
+              requestAnimationFrame(() => {
+                const selected = radiogroup.querySelector('[aria-checked="true"]');
+                (selected as HTMLElement)?.focus();
+              });
+            }
+          }}
+        >
           <span className="text-xs font-medium text-[var(--text-muted)]">Mode:</span>
           <button
             type="button"
@@ -210,7 +225,7 @@ export function CarrierTab() {
             onClick={() => setIsResearchMode(true)}
             aria-checked={isResearchMode}
             tabIndex={isResearchMode ? 0 : -1}
-            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
+            className={`flex min-h-[44px] items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
               isResearchMode
                 ? "bg-[var(--accent-teal)] text-white shadow-sm"
                 : "text-[var(--text-body)] hover:bg-[var(--bg-subtle)]"
@@ -224,7 +239,7 @@ export function CarrierTab() {
             onClick={() => setIsResearchMode(false)}
             aria-checked={!isResearchMode}
             tabIndex={!isResearchMode ? 0 : -1}
-            className={`rounded px-3 py-1 text-xs font-semibold transition-colors ${
+            className={`flex min-h-[44px] items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
               !isResearchMode
                 ? "bg-[var(--accent-primary)] text-white shadow-sm"
                 : "text-[var(--text-body)] hover:bg-[var(--bg-subtle)]"

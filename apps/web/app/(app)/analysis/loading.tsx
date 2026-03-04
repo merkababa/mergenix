@@ -1,6 +1,6 @@
 export default function AnalysisLoading() {
   return (
-    <div role="status" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
+    <div role="status" aria-live="polite" aria-label="Loading content" className="min-h-screen flex items-center justify-center">
       <span className="sr-only">Loading...</span>
       <div className="animate-pulse space-y-6 w-full max-w-5xl px-6">
         <div

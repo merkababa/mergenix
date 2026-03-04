@@ -142,7 +142,7 @@ const SavedResultItem = memo(function SavedResultItem({
                   <Download className="h-3.5 w-3.5" />
                   Load
                 </Button>
-                <span className="text-[10px] text-[var(--text-dim)]">Coming Soon</span>
+                <span className="text-xs text-[var(--text-muted)]">Coming Soon</span>
               </div>
               <Button
                 ref={deleteButtonRef}
