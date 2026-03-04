@@ -1,22 +1,127 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import {
-  mockGlassCardFactory,
-  mockSectionHeadingFactory,
-  mockPageHeaderFactory,
-  mockScrollRevealFactory,
-  mockNextLinkFactory,
-  mockLucideIcons,
-} from '../__helpers__';
+import React from 'react';
+
+// ─── Hoisted shared mock factories ────────────────────────────────────────────
+const {
+  createIconMock,
+  glassCardModule,
+  scrollRevealModule,
+  sectionHeadingModule,
+  pageHeaderModule,
+  nextLinkModule,
+} = vi.hoisted(() => {
+  const createIconMock =
+    (testId: string) =>
+    (props: React.SVGProps<SVGSVGElement>): React.ReactElement =>
+      React.createElement('svg', { 'data-testid': testId, ...props });
+
+  const glassCardModule = () => ({
+    GlassCard: ({
+      children,
+      variant: _v,
+      hover: _h,
+      rainbow: _r,
+      ...htmlProps
+    }: {
+      children?: React.ReactNode;
+      className?: string;
+      variant?: string;
+      hover?: string;
+      rainbow?: boolean;
+      [key: string]: unknown;
+    }): React.ReactElement =>
+      React.createElement('div', { 'data-testid': 'glass-card', ...htmlProps }, children),
+  });
+
+  const scrollRevealModule = () => ({
+    ScrollReveal: ({ children }: { children?: React.ReactNode }): React.ReactElement =>
+      React.createElement('div', { 'data-testid': 'scroll-reveal' }, children),
+  });
+
+  const sectionHeadingModule = () => ({
+    SectionHeading: ({
+      title,
+      subtitle,
+      id,
+    }: {
+      title: string;
+      subtitle?: string;
+      id?: string;
+      gradient?: string;
+      className?: string;
+    }): React.ReactElement =>
+      React.createElement(
+        'div',
+        { 'data-testid': 'section-heading', id },
+        React.createElement('h2', { id }, title),
+        subtitle ? React.createElement('p', null, subtitle) : null,
+      ),
+  });
+
+  const pageHeaderModule = () => ({
+    PageHeader: ({
+      title,
+      subtitle,
+    }: {
+      title: string;
+      subtitle?: string;
+      breadcrumbs?: unknown[];
+    }): React.ReactElement =>
+      React.createElement(
+        'div',
+        { 'data-testid': 'page-header' },
+        React.createElement('h1', null, title),
+        subtitle ? React.createElement('p', null, subtitle) : null,
+      ),
+  });
+
+  const nextLinkModule = () => ({
+    default: ({
+      children,
+      href,
+      ...props
+    }: {
+      children?: React.ReactNode;
+      href: string;
+      [key: string]: unknown;
+    }): React.ReactElement =>
+      React.createElement('a', { href, ...props }, children),
+  });
+
+  return {
+    createIconMock,
+    glassCardModule,
+    scrollRevealModule,
+    sectionHeadingModule,
+    pageHeaderModule,
+    nextLinkModule,
+  };
+});
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Lock', 'Eye', 'EyeOff', 'Server', 'ChevronDown', 'Cpu', 'Globe', 'KeyRound', 'ShieldCheck', 'HardDrive', 'Workflow', 'XCircle', 'ChevronRight', 'Check', 'ArrowRight', 'FileText'));
-vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
-vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
-vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
-vi.mock('next/link', () => mockNextLinkFactory());
+vi.mock('lucide-react', () => ({
+  Shield: createIconMock('icon-shield'),
+  Lock: createIconMock('icon-lock'),
+  EyeOff: createIconMock('icon-eye-off'),
+  Server: createIconMock('icon-server'),
+  ChevronDown: createIconMock('icon-chevron-down'),
+  Cpu: createIconMock('icon-cpu'),
+  Globe: createIconMock('icon-globe'),
+  KeyRound: createIconMock('icon-key-round'),
+  ShieldCheck: createIconMock('icon-shield-check'),
+  HardDrive: createIconMock('icon-hard-drive'),
+  Workflow: createIconMock('icon-workflow'),
+  XCircle: createIconMock('icon-x-circle'),
+  ChevronRight: createIconMock('icon-chevron-right'),
+}));
+
+vi.mock('@/components/ui/glass-card', glassCardModule);
+vi.mock('@/components/ui/scroll-reveal', scrollRevealModule);
+vi.mock('@/components/marketing/section-heading', sectionHeadingModule);
+vi.mock('@/components/layout/page-header', pageHeaderModule);
+vi.mock('next/link', nextLinkModule);
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 
@@ -194,6 +299,81 @@ describe('SecurityPage', () => {
           expect(next).toBeLessThanOrEqual(current + 1);
         }
       }
+    });
+  });
+
+  describe('design & layout', () => {
+    it('uses SectionHeading for Privacy Promises section', () => {
+      render(<SecurityContent />);
+
+      expect(
+        screen.getByRole('heading', { level: 2, name: /Privacy Promises/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('uses ScrollReveal for section entrance animations', () => {
+      // ScrollReveal is mocked as pass-through — content inside should render normally
+      render(<SecurityContent />);
+
+      expect(screen.getByText(/Zero-Knowledge Architecture/i)).toBeInTheDocument();
+      expect(screen.getByText(/How Your Data Flows/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('security attributes', () => {
+    it('expands and collapses FAQ answer on click', () => {
+      render(<SecurityContent />);
+
+      const faqButton = screen.getByText(/Can you see my DNA data\?/i);
+      expect(faqButton).toBeInTheDocument();
+
+      // Answer should not be visible before clicking
+      expect(
+        screen.queryByText(/processing happens in your browser/i),
+      ).not.toBeInTheDocument();
+
+      // Click to expand
+      fireEvent.click(faqButton);
+
+      // Answer should now be visible
+      expect(
+        screen.getByText(/processing happens in your browser/i),
+      ).toBeInTheDocument();
+    });
+
+    it("all external links have rel='noopener noreferrer'", () => {
+      const { container } = render(<SecurityContent />);
+
+      const externalLinks = container.querySelectorAll('a[target="_blank"]');
+      externalLinks.forEach((link) => {
+        expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+        expect(link).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+      });
+    });
+
+    it('all external links have referrerPolicy set for privacy', () => {
+      const { container } = render(<SecurityContent />);
+
+      const allLinks = Array.from(container.querySelectorAll('a[href]'));
+      const externalLinks = allLinks.filter((link) => {
+        const href = link.getAttribute('href') ?? '';
+        return href.startsWith('http://') || href.startsWith('https://');
+      });
+
+      // If external links exist, each must have a referrerPolicy set to a
+      // privacy-safe value. Currently the security page has no external links,
+      // so this acts as a guard rail: any future external link without
+      // referrerPolicy will immediately fail this test.
+      externalLinks.forEach((link) => {
+        const policy = link.getAttribute('referrerpolicy');
+        expect(
+          policy === 'no-referrer' || policy === 'strict-origin-when-cross-origin',
+          `External link to "${link.getAttribute('href')}" must have referrerPolicy="no-referrer" or "strict-origin-when-cross-origin", got "${policy}"`,
+        ).toBe(true);
+      });
+
+      // Explicitly document: the security page currently has zero external links.
+      expect(externalLinks.length).toBe(0);
     });
   });
 });

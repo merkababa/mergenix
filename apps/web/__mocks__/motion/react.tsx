@@ -103,7 +103,7 @@ const createMotionValue = (initial: unknown = 0) => {
       // Return unsubscribe function
       return () => {};
     }),
-    current: val,
+    get current() { return val; },
   };
 };
 
@@ -115,7 +115,7 @@ export const useScroll = () => ({
   scrollY: createMotionValue(0),
   scrollX: createMotionValue(0),
 });
-export const useInView = (_ref?: React.RefObject<Element | null>, _options?: Record<string, unknown>): boolean => false;
+export const useInView = (_ref?: React.RefObject<Element | null>, _options?: { once?: boolean; margin?: string; amount?: number | "some" | "all"; root?: React.RefObject<Element | null> }): boolean => false;
 export const useAnimation = () => ({ start: vi.fn(), stop: vi.fn(), set: vi.fn() });
 export const useSpring = (value: unknown) => createMotionValue(value);
 export const useReducedMotion = () => false;

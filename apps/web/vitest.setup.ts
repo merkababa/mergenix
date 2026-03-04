@@ -31,3 +31,19 @@ globalThis.URL = class extends URL {
     super(typeof url === 'string' ? url : url.toString(), base || 'http://localhost');
   }
 } as typeof URL;
+
+// Global IntersectionObserver mock — jsdom doesn't implement this API
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: ReadonlyArray<number> = [];
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+  takeRecords = vi.fn().mockReturnValue([]);
+}
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+});

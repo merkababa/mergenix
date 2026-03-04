@@ -1,33 +1,151 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import {
-  mockGlassCardFactory,
-  mockSectionHeadingFactory,
-  mockPageHeaderFactory,
-  mockScrollRevealFactory,
-  mockNextLinkFactory,
-  mockButtonFactory,
-  mockLucideIcons,
-  installSimpleIntersectionObserver,
-  mockInputFactory,
-  mockBadgeFactory,
-} from '../__helpers__';
+import React from 'react';
 
-// jsdom doesn't implement IntersectionObserver — mock it globally
-beforeAll(() => {
-  installSimpleIntersectionObserver();
+// ─── Hoisted shared mock factories ────────────────────────────────────────────
+const {
+  createIconMock,
+  glassCardModule,
+  scrollRevealModule,
+  sectionHeadingModule,
+  pageHeaderModule,
+  nextLinkModule,
+} = vi.hoisted(() => {
+  const createIconMock =
+    (testId: string) =>
+    (props: React.SVGProps<SVGSVGElement>): React.ReactElement =>
+      React.createElement('svg', { 'data-testid': testId, ...props });
+
+  const glassCardModule = () => ({
+    GlassCard: ({
+      children,
+      variant: _v,
+      hover: _h,
+      rainbow: _r,
+      ...htmlProps
+    }: {
+      children?: React.ReactNode;
+      className?: string;
+      variant?: string;
+      hover?: string;
+      rainbow?: boolean;
+      [key: string]: unknown;
+    }): React.ReactElement =>
+      React.createElement('div', { 'data-testid': 'glass-card', ...htmlProps }, children),
+  });
+
+  const scrollRevealModule = () => ({
+    ScrollReveal: ({ children }: { children?: React.ReactNode }): React.ReactElement =>
+      React.createElement('div', { 'data-testid': 'scroll-reveal' }, children),
+  });
+
+  const sectionHeadingModule = () => ({
+    SectionHeading: ({
+      title,
+      subtitle,
+      id,
+    }: {
+      title: string;
+      subtitle?: string;
+      id?: string;
+      gradient?: string;
+      className?: string;
+    }): React.ReactElement =>
+      React.createElement(
+        'div',
+        { 'data-testid': 'section-heading', id },
+        React.createElement('h2', { id }, title),
+        subtitle ? React.createElement('p', null, subtitle) : null,
+      ),
+  });
+
+  const pageHeaderModule = () => ({
+    PageHeader: ({
+      title,
+      subtitle,
+    }: {
+      title: string;
+      subtitle?: string;
+      breadcrumbs?: unknown[];
+    }): React.ReactElement =>
+      React.createElement(
+        'div',
+        { 'data-testid': 'page-header' },
+        React.createElement('h1', null, title),
+        subtitle ? React.createElement('p', null, subtitle) : null,
+      ),
+  });
+
+  const nextLinkModule = () => ({
+    default: ({
+      children,
+      href,
+      ...props
+    }: {
+      children?: React.ReactNode;
+      href: string;
+      [key: string]: unknown;
+    }): React.ReactElement =>
+      React.createElement('a', { href, ...props }, children),
+  });
+
+  return {
+    createIconMock,
+    glassCardModule,
+    scrollRevealModule,
+    sectionHeadingModule,
+    pageHeaderModule,
+    nextLinkModule,
+  };
 });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => mockLucideIcons('Search', 'Filter', 'Microscope', 'Dna', 'Activity', 'ChevronRight', 'ChevronLeft', 'RotateCcw'));
-vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/button', () => mockButtonFactory());
-vi.mock('@/components/ui/badge', () => mockBadgeFactory());
-vi.mock('@/components/ui/input', () => mockInputFactory());
-vi.mock('@/components/ui/select-filter', () => ({
-  SelectFilter: (props: any) => <select aria-label={props.ariaLabel} />,
+
+vi.mock('lucide-react', () => ({
+  Search: createIconMock('icon-search'),
+  Filter: createIconMock('icon-filter'),
+  Microscope: createIconMock('icon-microscope'),
+  Dna: createIconMock('icon-dna'),
+  Activity: createIconMock('icon-activity'),
+  ChevronRight: createIconMock('icon-chevron-right'),
+  ChevronLeft: createIconMock('icon-chevron-left'),
+  RotateCcw: createIconMock('icon-rotate-ccw'),
 }));
-vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
+
+vi.mock('@/components/ui/glass-card', glassCardModule);
+
+vi.mock('@/components/ui/badge', () => ({
+  Badge: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) =>
+    React.createElement('span', props, children),
+}));
+
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) =>
+    React.createElement('button', props, children),
+}));
+
+vi.mock('@/components/ui/input', () => ({
+  Input: (props: {
+    'aria-label'?: string;
+    placeholder?: string;
+    value?: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  }) =>
+    React.createElement('input', {
+      'aria-label': props['aria-label'],
+      placeholder: props.placeholder,
+      value: props.value,
+      onChange: props.onChange,
+    }),
+}));
+
+vi.mock('@/components/ui/select-filter', () => ({
+  SelectFilter: (props: { ariaLabel?: string }) =>
+    React.createElement('select', { 'aria-label': props.ariaLabel }),
+}));
+
+vi.mock('@/components/marketing/section-heading', sectionHeadingModule);
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn() }),
   useSearchParams: () => ({
@@ -35,9 +153,10 @@ vi.mock('next/navigation', () => ({
     toString: () => '',
   }),
 }));
-vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
-vi.mock('@/components/ui/scroll-reveal', () => mockScrollRevealFactory());
-vi.mock('next/link', () => mockNextLinkFactory());
+
+vi.mock('@/components/layout/page-header', pageHeaderModule);
+vi.mock('@/components/ui/scroll-reveal', scrollRevealModule);
+vi.mock('next/link', nextLinkModule);
 
 vi.mock('@/lib/disease-data', () => ({
   DISEASES: [
