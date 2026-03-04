@@ -31,6 +31,7 @@
 **Design overhaul COMPLETE (D1-D4).** All 4 sprints shipped across PRs #117-#120.
 **Tech Debt Sprint:** PR #121 — **MERGED** (Architect A, Code Reviewer A — 2/2 A, 1 review round). Mock dedup (shared `__mocks__/framer-motion.tsx`, 34 test files cleaned, -608 lines), marketing page tests (7 files, 48 tests), marketing page polish (3 components → design system), type fixes (client.ts, CLAUDE.md suppression notes removed). 49 files, +1,104/-611 lines. 3,215 tests. 6 WARN/INFO items deferred to tech debt backlog.
 **Design Review WARNs:** PR #123 — **MERGED** (Architect A, Code Reviewer A-, Designer A- — 3/3 A, 2 review rounds). 25 design review WARNs fixed: touch targets ≥44px (7 components), ARIA (6 fixes incl. menu keyboard nav), --text-dim→--text-muted alias, light-mode contrast fix, keyframe dedup, badge differentiation, heading hierarchy (3), UX polish (scroll hints, 10px→12px, tab overflow). 35 files, +228/-176 lines. 1,775 tests.
+**Test Mock Dedup:** PR #124 — **MERGED** (Architect A+, Code Reviewer A — 2/2 A, 1 review round). Deduplicate test mocks into shared `__helpers__/` module (5 helper files, 55 test files updated, 2 duplicate files removed). Typed factories, zero `any`. Net -985 lines. 1,769 tests.
 
 ## Current Sprint
 
@@ -116,19 +117,20 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 | Item | Source | Severity | Notes |
 |------|--------|----------|-------|
-| Marketing test mock dedup (GlassCard, SectionHeading, PageHeader, ScrollReveal, Link) | Tech Debt PR review | WARN | Extract shared `__tests__/marketing/_mocks.ts` — same pattern as framer-motion dedup |
-| `any` types in marketing test mocks | Tech Debt PR review | WARN | Replace `(props: any)` with typed props in 7 test files |
-| IntersectionObserver mock duplication | Tech Debt PR review | INFO | Move to `vitest.setup.ts` like framer-motion mock |
+| ~~Marketing test mock dedup~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — shared `__helpers__/` module with typed factories |
+| ~~`any` types in marketing test mocks~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — proper TypeScript interfaces in all helpers |
+| ~~IntersectionObserver mock duplication~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — 3 variants in `__helpers__/mock-intersection-observer.ts` |
 | Privacy/security test file pairs overlap | Tech Debt PR review | INFO | Consider merging `*-page.test.tsx` + `*-page-design.test.tsx` per page |
 | `useInView` mock missing options param | Tech Debt PR review | INFO | Add `_options?: Record<string, unknown>` second param |
-| `MotionValue.current` stale after `.set()` | Tech Debt PR review | INFO | Use getter: `get current() { return val; }` |
+| ~~`MotionValue.current` stale after `.set()`~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — reactive getter |
+| Input/Badge mock dedup (11 files each) | PR #124 Code Review | INFO | Extract `mockInputFactory()` + `mockBadgeFactory()` — slight shape variations across files |
 | ~~28 design review WARNs (touch targets + ARIA)~~ | Design review 2026-03-04 | ~~WARN~~ | **Fixed in PR #123** — 25 actionable WARNs resolved (3 were already fixed/N/A) |
 
 ---
 
 ## Next Task: TBD
 
-All 28 design review WARNs resolved. Deferred tech debt items remain in table above.
+All 28 design review WARNs resolved. Test mock dedup done (PR #124). Remaining tech debt: 3 INFO items.
 
 ---
 
