@@ -311,6 +311,27 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 *None. All implementation work is complete. Remaining work is infrastructure + legal (manual tasks for kukiz).*
 
+## TODO — Alpha Launch Setup (2026-03-06)
+
+Findings from browser audit of existing accounts:
+
+| # | Task | Service | Status | Notes |
+|---|------|---------|--------|-------|
+| 1 | Upgrade Railway from trial to Hobby ($5/mo) | Railway | **TODO** | Trial expires in ~7 days. Hobby plan sufficient for alpha. |
+| 2 | Connect GitHub repo (`maayango285/Tortit`) to Vercel | Vercel | **TODO** | Project `mergenix` exists (ID: `prj_PMtuvbSxpasHZR3MDPmA5C2mjo9W`), git not linked. |
+| 3 | Add `mergenix.com` domain in Resend + DNS verify | Resend | **TODO** | Account exists, 1 API key (`re_6vTqC7Fp...`). Domain not configured. |
+| 4 | Open Stripe dashboard, create test products/prices | Stripe | **TODO** | Browser blocked — open `dashboard.stripe.com` manually. |
+| 5 | Log in / sign up for Sentry, create projects | Sentry | **TODO** | Not logged in. Need frontend + backend DSNs. |
+| 6 | Generate secrets (JWT, encryption, bypass) | CLI | **TODO** | `openssl rand -base64 64` for each. |
+| 7 | Add 13+ secrets to GitHub repo Settings | GitHub | **TODO** | After all service accounts are ready. |
+| 8 | DNS: `mergenix.com` CNAME → Vercel, `api.mergenix.com` → Railway | DNS | **TODO** | Railway API already at `mergenix-api-production.up.railway.app`. |
+| 9 | First deploy + smoke test | All | **TODO** | After secrets + DNS are configured. |
+
+### Already existing:
+- **Vercel:** `mergenix` project on Hobby plan, `mergenix.vercel.app` live (no deployment yet)
+- **Railway:** `mergenix` project with 2x Postgres (both Online) + `mergenix-api` (Online at `mergenix-api-production.up.railway.app`)
+- **Resend:** Account (`t2.technion@gmail.com`), 1 API key with sending access
+
 ---
 
 ## Notes
