@@ -38,8 +38,8 @@ export function HelixFallback({
               'absolute h-2 w-2 rounded-full',
               // Uses design system tokens: --accent-teal (#06d6a0), --accent-violet (#8b5cf6)
               isEven
-                ? 'bg-[var(--accent-teal)] shadow-[0_0_12px_rgba(6,214,160,0.5)]'
-                : 'bg-[var(--accent-violet)] shadow-[0_0_12px_rgba(139,92,246,0.5)]',
+                ? 'bg-(--accent-teal) shadow-[0_0_12px_rgba(6,214,160,0.5)]'
+                : 'bg-(--accent-violet) shadow-[0_0_12px_rgba(139,92,246,0.5)]',
             )}
             style={{
               left: horizontalOffset,

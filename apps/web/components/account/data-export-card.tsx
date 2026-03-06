@@ -62,15 +62,15 @@ export function DataExportCard() {
     <GlassCard variant="medium" hover="none" className="p-7">
       <div className="mb-4 flex items-center gap-3">
         <Download
-          className="h-5 w-5 text-[var(--accent-teal)]"
+          className="h-5 w-5 text-(--accent-teal)"
           aria-hidden="true"
         />
-        <h3 className="font-heading text-lg font-semibold text-[var(--text-heading)]">
+        <h3 className="font-heading text-lg font-semibold text-(--text-heading)">
           Export Your Data
         </h3>
       </div>
 
-      <p className="mb-5 text-sm text-[var(--text-muted)]">
+      <p className="mb-5 text-sm text-(--text-muted)">
         Download a copy of all your personal data in JSON format. This
         includes your profile, consent records, and payment history. Your
         genetic data is never stored on our servers.
@@ -112,7 +112,7 @@ export function DataExportCard() {
       {exportState === "success" && downloadUrl && (
         <div className="space-y-3">
           <div
-            className="flex items-center gap-2 text-sm text-[var(--accent-teal)]"
+            className="flex items-center gap-2 text-sm text-(--accent-teal)"
             role="status"
             aria-live="polite"
           >
@@ -123,7 +123,7 @@ export function DataExportCard() {
             ref={downloadRef}
             href={downloadUrl}
             download="mergenix-data-export.json"
-            className="inline-flex items-center gap-2 rounded-[10px] border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 text-sm font-medium text-[var(--accent-teal)] transition-colors hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 text-sm font-medium text-(--accent-teal) transition-colors hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
             Download mergenix-data-export.json
@@ -135,7 +135,7 @@ export function DataExportCard() {
       {exportState === "error" && (
         <div className="space-y-3">
           <div
-            className="flex items-center gap-2 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+            className="flex items-center gap-2 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
             role="alert"
             aria-live="assertive"
           >

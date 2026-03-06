@@ -50,7 +50,7 @@ export function LegalContent() {
       />
 
       {/* -- Last Updated -- */}
-      <p className="mb-8 text-center text-xs text-[var(--text-dim)]">
+      <p className="mb-8 text-center text-xs text-(--text-dim)">
         Last updated: {LEGAL_LAST_UPDATED}
       </p>
 
@@ -61,14 +61,14 @@ export function LegalContent() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <GlassCard variant="medium" hover="none" className="mb-12 flex items-center gap-4 p-6">
-          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-            <Shield className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
+            <Shield className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
           </div>
           <div>
-            <h2 className="font-heading text-base font-semibold text-[var(--text-heading)]">
+            <h2 className="font-heading text-base font-semibold text-(--text-heading)">
               Your DNA Never Leaves Your Device
             </h2>
-            <p className="mt-1 text-sm text-[var(--text-muted)]">
+            <p className="mt-1 text-sm text-(--text-muted)">
               All genetic analysis runs entirely in your browser. We never upload,
               store, or transmit your DNA data. This is our architectural guarantee.
             </p>
@@ -85,8 +85,8 @@ export function LegalContent() {
             aria-current={activeSection === item.id ? "true" : undefined}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               activeSection === item.id
-                ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)]"
-                : "bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--accent-teal)]"
+                ? "bg-[rgba(6,214,160,0.15)] text-(--accent-teal)"
+                : "bg-(--bg-elevated) text-(--text-muted) hover:text-(--accent-teal)"
             }`}
           >
             <item.icon className="h-3.5 w-3.5" aria-hidden="true" />
@@ -107,8 +107,8 @@ export function LegalContent() {
                 aria-current={activeSection === item.id ? "true" : undefined}
                 className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors ${
                   activeSection === item.id
-                    ? "bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)]"
-                    : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                    ? "bg-[rgba(6,214,160,0.1)] text-(--accent-teal)"
+                    : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                 }`}
               >
                 <item.icon className="h-4 w-4" aria-hidden="true" />
@@ -125,15 +125,15 @@ export function LegalContent() {
             <section className="mb-12" id="terms">
               <GlassCard variant="subtle" hover="none" className="p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
-                  <h2 className="font-heading text-2xl font-bold text-[var(--text-heading)]">
+                  <FileText className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+                  <h2 className="font-heading text-2xl font-bold text-(--text-heading)">
                     Terms of Service
                   </h2>
                 </div>
 
-                <div className="space-y-6 text-sm leading-relaxed text-[var(--text-body)]">
+                <div className="space-y-6 text-sm leading-relaxed text-(--text-body)">
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       1. Acceptance of Terms
                     </h3>
                     <p>
@@ -143,7 +143,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       2. Service Description
                     </h3>
                     <p>
@@ -154,7 +154,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       3. Not Medical Advice
                     </h3>
                     <p>
@@ -166,7 +166,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       4. User Accounts
                     </h3>
                     <p>
@@ -176,7 +176,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       5. Payment Terms
                     </h3>
                     <p>
@@ -187,7 +187,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       6. Limitation of Liability
                     </h3>
                     <p>
@@ -198,7 +198,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       7. Changes to Terms
                     </h3>
                     <p>
@@ -210,7 +210,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       8. Accuracy Limitations
                     </h3>
                     <p>
@@ -224,7 +224,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       9. Dispute Resolution &amp; Binding Arbitration
                     </h3>
                     <p>
@@ -248,7 +248,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       10. Prohibited Uses
                     </h3>
                     <p>
@@ -261,7 +261,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       11. Age Restriction
                     </h3>
                     <p>
@@ -272,7 +272,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       12. Indemnification
                     </h3>
                     <p>
@@ -284,7 +284,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       13. Regulatory Classification
                     </h3>
                     <p>
@@ -304,23 +304,23 @@ export function LegalContent() {
             <section className="mb-12" id="privacy">
               <GlassCard variant="subtle" hover="none" className="p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
-                  <h2 className="font-heading text-2xl font-bold text-[var(--text-heading)]">
+                  <Shield className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+                  <h2 className="font-heading text-2xl font-bold text-(--text-heading)">
                     Privacy Policy
                   </h2>
                 </div>
 
-                <div className="space-y-6 text-sm leading-relaxed text-[var(--text-body)]">
+                <div className="space-y-6 text-sm leading-relaxed text-(--text-body)">
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       1. Genetic Data
                     </h3>
 
                     {/* -- Privacy guarantee callout -- */}
                     <div className="mb-3 rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] p-4">
                       <div className="flex items-start gap-3">
-                        <Lock className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
-                        <p className="font-medium text-[var(--text-heading)]">
+                        <Lock className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
+                        <p className="font-medium text-(--text-heading)">
                           Your DNA data never leaves your device.
                         </p>
                       </div>
@@ -334,7 +334,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       2. Account Data
                     </h3>
                     <p>
@@ -346,7 +346,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       3. Analytics
                     </h3>
                     <p>
@@ -357,15 +357,15 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       4. Third-Party Sharing
                     </h3>
 
                     {/* -- No-sharing guarantee callout -- */}
                     <div className="mb-3 rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] p-4">
                       <div className="flex items-start gap-3">
-                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
-                        <p className="font-medium text-[var(--text-heading)]">
+                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
+                        <p className="font-medium text-(--text-heading)">
                           We do not sell, share, or provide your personal or genetic data to any third party.
                         </p>
                       </div>
@@ -378,7 +378,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       5. Data Deletion
                     </h3>
                     <p>
@@ -389,7 +389,7 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       6. Security
                     </h3>
                     <p>
@@ -401,14 +401,14 @@ export function LegalContent() {
 
                   {/* -- Consent Withdrawal -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       7. Withdrawing Consent
                     </h3>
                     <p>
                       You may withdraw your consent at any time by contacting{" "}
                       <a
                         href="mailto:privacy@mergenix.com"
-                        className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                        className="font-medium text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                       >
                         privacy@mergenix.com
                       </a>{" "}
@@ -423,7 +423,7 @@ export function LegalContent() {
                   <div>
                     <h3
                       id="data-retention-heading"
-                      className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]"
+                      className="mb-2 font-heading text-base font-semibold text-(--text-heading)"
                     >
                       8. Data Retention Policy
                     </h3>
@@ -432,54 +432,54 @@ export function LegalContent() {
                       Below is our data retention schedule:
                     </p>
 
-                    <div className="overflow-x-auto rounded-xl border border-[var(--border-subtle)]">
+                    <div className="overflow-x-auto rounded-xl border border-(--border-subtle)">
                       <table className="w-full text-sm" aria-labelledby="data-retention-heading">
                         <thead>
-                          <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
-                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                          <tr className="border-b border-(--border-subtle) bg-(--bg-elevated)">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-(--text-heading)">
                               <div className="flex items-center gap-2">
-                                <Clock className="h-3.5 w-3.5 text-[var(--accent-teal)]" aria-hidden="true" />
+                                <Clock className="h-3.5 w-3.5 text-(--accent-teal)" aria-hidden="true" />
                                 Data Type
                               </div>
                             </th>
-                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-(--text-heading)">
                               Retention Period
                             </th>
-                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-[var(--text-heading)]">
+                            <th scope="col" className="px-4 py-2.5 text-left font-heading font-semibold text-(--text-heading)">
                               Deletion Method
                             </th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[var(--border-subtle)]">
+                        <tbody className="divide-y divide-(--border-subtle)">
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Account profile</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Until account deletion</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">User-initiated or auto after 2yr inactivity</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Account profile</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Until account deletion</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">User-initiated or auto after 2yr inactivity</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Saved analysis results</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Until deleted by user</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">User-initiated deletion</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Saved analysis results</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Until deleted by user</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">User-initiated deletion</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Payment records</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">7 years (to satisfy the longest applicable tax/financial record-keeping obligation across jurisdictions in which we operate)</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Automatic purge</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Payment records</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">7 years (to satisfy the longest applicable tax/financial record-keeping obligation across jurisdictions in which we operate)</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Automatic purge</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Consent records</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">7 years or until account deletion</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Automatic purge</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Consent records</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">7 years or until account deletion</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Automatic purge</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Audit logs</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">90 days</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Automatic rotation</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Audit logs</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">90 days</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Automatic rotation</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-2.5 text-[var(--text-body)]">Genetic data (DNA files)</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">Never stored</td>
-                            <td className="px-4 py-2.5 text-[var(--text-muted)]">N/A — processed client-side only</td>
+                            <td className="px-4 py-2.5 text-(--text-body)">Genetic data (DNA files)</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">Never stored</td>
+                            <td className="px-4 py-2.5 text-(--text-muted)">N/A — processed client-side only</td>
                           </tr>
                         </tbody>
                       </table>
@@ -488,36 +488,36 @@ export function LegalContent() {
 
                   {/* -- GDPR Rights (EU Users) -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       9. GDPR Rights (EU Users)
                     </h3>
                     <p className="mb-3">
                       If you are located in the European Economic Area (EEA), you have the
                       following rights under the General Data Protection Regulation (GDPR):
                     </p>
-                    <ul className="ml-5 list-disc space-y-1.5 text-[var(--text-muted)]">
+                    <ul className="ml-5 list-disc space-y-1.5 text-(--text-muted)">
                       <li>
-                        <strong className="text-[var(--text-body)]">Right of Access</strong> — Request
+                        <strong className="text-(--text-body)">Right of Access</strong> — Request
                         a copy of all personal data we hold about you (use the Data Export feature in account settings).
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Rectification</strong> — Update
+                        <strong className="text-(--text-body)">Right to Rectification</strong> — Update
                         inaccurate personal data via your account profile.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Erasure</strong> — Delete
+                        <strong className="text-(--text-body)">Right to Erasure</strong> — Delete
                         your account and all associated data from account settings.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Data Portability</strong> — Export
+                        <strong className="text-(--text-body)">Right to Data Portability</strong> — Export
                         your data in machine-readable JSON format.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Restrict Processing</strong> — Contact
+                        <strong className="text-(--text-body)">Right to Restrict Processing</strong> — Contact
                         us to restrict how we process your data.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Object</strong> — Opt
+                        <strong className="text-(--text-body)">Right to Object</strong> — Opt
                         out of analytics processing via cookie preferences.
                       </li>
                     </ul>
@@ -525,7 +525,7 @@ export function LegalContent() {
                       To exercise any of these rights, contact us at{" "}
                       <a
                         href="mailto:privacy@mergenix.com"
-                        className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                        className="font-medium text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                       >
                         privacy@mergenix.com
                       </a>
@@ -535,34 +535,34 @@ export function LegalContent() {
 
                   {/* -- CCPA Rights (California Users) -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       10. CCPA Rights (California Users)
                     </h3>
                     <p className="mb-3">
                       If you are a California resident, the California Consumer Privacy Act
                       (CCPA) provides you with additional rights:
                     </p>
-                    <ul className="ml-5 list-disc space-y-1.5 text-[var(--text-muted)]">
+                    <ul className="ml-5 list-disc space-y-1.5 text-(--text-muted)">
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Know</strong> — You
+                        <strong className="text-(--text-body)">Right to Know</strong> — You
                         can request details about what personal information we collect and how
                         we use it.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Delete</strong> — You
+                        <strong className="text-(--text-body)">Right to Delete</strong> — You
                         can request deletion of your personal information.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Correct</strong> — You
+                        <strong className="text-(--text-body)">Right to Correct</strong> — You
                         can request correction of inaccurate personal information we hold
                         about you.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Opt-Out of Sale</strong> — We
+                        <strong className="text-(--text-body)">Right to Opt-Out of Sale</strong> — We
                         do NOT sell your personal information. There is nothing to opt out of.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Right to Non-Discrimination</strong> — We
+                        <strong className="text-(--text-body)">Right to Non-Discrimination</strong> — We
                         will not discriminate against you for exercising any CCPA rights.
                       </li>
                     </ul>
@@ -570,7 +570,7 @@ export function LegalContent() {
 
                   {/* -- EU Representative -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       11. EU Representative (Article 27)
                     </h3>
                     <p>
@@ -582,14 +582,14 @@ export function LegalContent() {
 
                   {/* -- International Transfers -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       12. International Data Transfers
                     </h3>
                     <p>
                       Your data may be processed in the United States. We rely on Standard
                       Contractual Clauses (SCCs) approved by the European Commission for any
                       transfers of personal data outside the EEA. See our{" "}
-                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
+                      <Link href="/privacy" className="font-medium text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs">
                         Privacy Notice
                       </Link>{" "}
                       for full details.
@@ -598,14 +598,14 @@ export function LegalContent() {
 
                   {/* -- Law Enforcement -- */}
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       13. Law Enforcement Requests
                     </h3>
                     <p>
                       We may disclose your account data (never raw genetic data, which we do
                       not possess) if required by valid legal process such as a court order
                       or subpoena. We will notify you unless legally prohibited. See our{" "}
-                      <Link href="/privacy" className="font-medium text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm">
+                      <Link href="/privacy" className="font-medium text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs">
                         Privacy Notice
                       </Link>{" "}
                       for full details.
@@ -621,43 +621,43 @@ export function LegalContent() {
             <section className="mb-12" id="cookies">
               <GlassCard variant="subtle" hover="none" className="p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <Cookie className="h-5 w-5 text-[var(--accent-amber)]" aria-hidden="true" />
-                  <h2 className="font-heading text-2xl font-bold text-[var(--text-heading)]">
+                  <Cookie className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
+                  <h2 className="font-heading text-2xl font-bold text-(--text-heading)">
                     Cookie Policy
                   </h2>
                 </div>
 
-                <div className="space-y-6 text-sm leading-relaxed text-[var(--text-body)]">
+                <div className="space-y-6 text-sm leading-relaxed text-(--text-body)">
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       Essential Cookies
                     </h3>
                     <p className="mb-3">
                       We use essential cookies for authentication and core functionality.
                       These are required for the service to function and cannot be disabled.
                     </p>
-                    <ul className="ml-5 list-disc space-y-1 text-[var(--text-muted)]">
+                    <ul className="ml-5 list-disc space-y-1 text-(--text-muted)">
                       <li>
-                        <strong className="text-[var(--text-body)]">Authentication cookie</strong> (httpOnly,
+                        <strong className="text-(--text-body)">Authentication cookie</strong> (httpOnly,
                         secure) — Maintains your login session. Cannot be read by JavaScript.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Theme preference</strong> (localStorage) — Stores
+                        <strong className="text-(--text-body)">Theme preference</strong> (localStorage) — Stores
                         your dark/light mode selection.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Cookie consent</strong> (localStorage) — Remembers
+                        <strong className="text-(--text-body)">Cookie consent</strong> (localStorage) — Remembers
                         your cookie preferences.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Login indicator</strong> (session
+                        <strong className="text-(--text-body)">Login indicator</strong> (session
                         cookie) — Non-sensitive flag for UI state. Contains no user data.
                       </li>
                     </ul>
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       Analytics Cookies
                     </h3>
                     <p className="mb-3">
@@ -665,7 +665,7 @@ export function LegalContent() {
                       used. Analytics cookies are <strong>opt-in only</strong> and require
                       your explicit consent.
                     </p>
-                    <ul className="ml-5 list-disc space-y-1 text-[var(--text-muted)]">
+                    <ul className="ml-5 list-disc space-y-1 text-(--text-muted)">
                       <li>All analytics data is anonymous and aggregated</li>
                       <li>No genetic data is ever included in analytics</li>
                       <li>No cross-site tracking or fingerprinting</li>
@@ -674,19 +674,19 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       Marketing Cookies
                     </h3>
 
                     {/* -- No marketing cookies callout -- */}
                     <div className="rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] p-4">
                       <div className="flex items-start gap-3">
-                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
+                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
                         <div>
-                          <p className="font-medium text-[var(--text-heading)]">
+                          <p className="font-medium text-(--text-heading)">
                             We do NOT use marketing cookies.
                           </p>
-                          <p className="mt-1 text-[var(--text-muted)]">
+                          <p className="mt-1 text-(--text-muted)">
                             We do not serve ads, do not share data with ad networks, and do not
                             use any advertising or tracking cookies. We never will.
                           </p>
@@ -704,13 +704,13 @@ export function LegalContent() {
             <section id="gina">
               <GlassCard variant="subtle" hover="none" className="p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <Scale className="h-5 w-5 text-[var(--accent-violet)]" aria-hidden="true" />
-                  <h2 className="font-heading text-2xl font-bold text-[var(--text-heading)]">
+                  <Scale className="h-5 w-5 text-(--accent-violet)" aria-hidden="true" />
+                  <h2 className="font-heading text-2xl font-bold text-(--text-heading)">
                     Your Rights Under GINA
                   </h2>
                 </div>
 
-                <div className="space-y-6 text-sm leading-relaxed text-[var(--text-body)]">
+                <div className="space-y-6 text-sm leading-relaxed text-(--text-body)">
                   <p>
                     The Genetic Information Nondiscrimination Act (GINA) is a U.S. federal
                     law that protects individuals from discrimination based on their genetic
@@ -718,25 +718,25 @@ export function LegalContent() {
                   </p>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       What GINA Covers
                     </h3>
                     <div className="space-y-3">
-                      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4">
-                        <h4 className="mb-1.5 font-heading text-sm font-semibold text-[var(--accent-teal)]">
+                      <div className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4">
+                        <h4 className="mb-1.5 font-heading text-sm font-semibold text-(--accent-teal)">
                           Title I — Health Insurance
                         </h4>
-                        <p className="text-[var(--text-muted)]">
+                        <p className="text-(--text-muted)">
                           Health insurers cannot use genetic information to make eligibility,
                           coverage, underwriting, or premium-setting decisions. They cannot
                           require or request genetic testing.
                         </p>
                       </div>
-                      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4">
-                        <h4 className="mb-1.5 font-heading text-sm font-semibold text-[var(--accent-teal)]">
+                      <div className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4">
+                        <h4 className="mb-1.5 font-heading text-sm font-semibold text-(--accent-teal)">
                           Title II — Employment
                         </h4>
-                        <p className="text-[var(--text-muted)]">
+                        <p className="text-(--text-muted)">
                           Employers with 15 or more employees cannot use genetic information
                           in hiring, firing, promotion, or any other employment decisions.
                           They cannot request, require, or purchase genetic information about
@@ -747,46 +747,46 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       What GINA Does NOT Cover
                     </h3>
 
                     {/* -- Limitation callout -- */}
                     <div className="mb-3 rounded-2xl border border-[rgba(251,191,36,0.2)] bg-[rgba(251,191,36,0.04)] p-4">
                       <div className="flex items-start gap-3">
-                        <Scale className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-amber)]" aria-hidden="true" />
-                        <p className="font-medium text-[var(--text-heading)]">
+                        <Scale className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-amber)" aria-hidden="true" />
+                        <p className="font-medium text-(--text-heading)">
                           GINA has important limitations. Be aware of what is NOT protected.
                         </p>
                       </div>
                     </div>
 
-                    <ul className="ml-5 list-disc space-y-1.5 text-[var(--text-muted)]">
+                    <ul className="ml-5 list-disc space-y-1.5 text-(--text-muted)">
                       <li>
-                        <strong className="text-[var(--text-body)]">Life insurance</strong> — Life
+                        <strong className="text-(--text-body)">Life insurance</strong> — Life
                         insurance companies may use genetic information in underwriting decisions.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Disability insurance</strong> — Not
+                        <strong className="text-(--text-body)">Disability insurance</strong> — Not
                         covered by GINA protections.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Long-term care insurance</strong> — Not
+                        <strong className="text-(--text-body)">Long-term care insurance</strong> — Not
                         covered by GINA protections.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Small employers</strong> — Employers
+                        <strong className="text-(--text-body)">Small employers</strong> — Employers
                         with fewer than 15 employees are not covered by Title II.
                       </li>
                       <li>
-                        <strong className="text-[var(--text-body)]">Military</strong> — Members of
+                        <strong className="text-(--text-body)">Military</strong> — Members of
                         the U.S. military are covered by separate regulations.
                       </li>
                     </ul>
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       State-Level Protections
                     </h3>
                     <p>
@@ -798,19 +798,19 @@ export function LegalContent() {
                   </div>
 
                   <div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       Our Recommendation
                     </h3>
 
                     {/* -- Recommendation callout -- */}
                     <div className="rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] p-4">
                       <div className="flex items-start gap-3">
-                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
+                        <Shield className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
                         <div>
-                          <p className="font-medium text-[var(--text-heading)]">
+                          <p className="font-medium text-(--text-heading)">
                             Consult a genetic counselor before making decisions.
                           </p>
-                          <p className="mt-1 text-[var(--text-muted)]">
+                          <p className="mt-1 text-(--text-muted)">
                             We strongly recommend consulting with a certified genetic counselor
                             to understand how genetic information may affect your insurance,
                             employment, and family planning decisions. Mergenix results are

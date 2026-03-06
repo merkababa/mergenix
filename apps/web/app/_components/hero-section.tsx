@@ -29,7 +29,7 @@ const TRUST_BADGES: readonly TrustBadge[] = [
 // (rgba(6,214,160,...)). Tailwind doesn't expose a direct bg-primary shorthand
 // for this token, so bg-[rgba(...)] is the idiomatic approach here.
 const TRUST_BADGE_CLASS =
-  "inline-flex items-center gap-2 rounded-xl border border-[rgba(6,214,160,0.12)] bg-[rgba(6,214,160,0.05)] px-3 py-2 backdrop-blur-sm";
+  "inline-flex items-center gap-2 rounded-xl border border-[rgba(6,214,160,0.12)] bg-[rgba(6,214,160,0.05)] px-3 py-2 backdrop-blur-xs";
 
 /* -- Format number with commas -- */
 function formatNumber(n: number): string {
@@ -74,7 +74,7 @@ export function HeroSection() {
         >
           <DnaHelix3DDynamic className="h-full w-full" />
           {/* Bottom gradient fade — blends helix into content below */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent" />
         </div>
 
         {/* Text content block — centered, sits above helix gradient overlap */}
@@ -93,11 +93,11 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" as const }}
-            className="mt-6 max-w-xl text-center text-lg text-[var(--text-muted)] md:text-xl"
+            className="mt-6 max-w-xl text-center text-lg text-(--text-muted) md:text-xl"
           >
             Compare two parents&apos; DNA to predict offspring disease risk, traits,
             and drug responses.{" "}
-            <span className="font-medium text-[var(--accent-teal)]">
+            <span className="font-medium text-(--accent-teal)">
               Your DNA never leaves your device.
             </span>
           </m.p>
@@ -114,23 +114,23 @@ export function HeroSection() {
             <div className="text-center">
               <span
                 ref={diseaseCount.ref}
-                className="font-heading text-3xl font-extrabold text-[var(--accent-teal)] md:text-4xl"
+                className="font-heading text-3xl font-extrabold text-(--accent-teal) md:text-4xl"
               >
                 {formatNumber(diseaseCount.count)}
               </span>
-              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-(--text-muted)">
                 Diseases Screened
               </p>
             </div>
-            <div className="h-10 w-px bg-[var(--border-subtle)]" aria-hidden="true" />
+            <div className="h-10 w-px bg-(--border-subtle)" aria-hidden="true" />
             <div className="text-center">
               <span
                 ref={traitCount.ref}
-                className="font-heading text-3xl font-extrabold text-[var(--accent-violet)] md:text-4xl"
+                className="font-heading text-3xl font-extrabold text-(--accent-violet) md:text-4xl"
               >
                 {formatNumber(traitCount.count)}
               </span>
-              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+              <p className="mt-1 text-xs font-medium uppercase tracking-wider text-(--text-muted)">
                 Traits Predicted
               </p>
             </div>
@@ -169,8 +169,8 @@ export function HeroSection() {
           >
             {TRUST_BADGES.map(({ icon: Icon, label }) => (
               <li key={label} className={TRUST_BADGE_CLASS}>
-                <Icon className="h-4 w-4 text-[var(--accent-teal)]" aria-hidden="true" />
-                <span className="text-xs text-[var(--text-muted)]">{label}</span>
+                <Icon className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
+                <span className="text-xs text-(--text-muted)">{label}</span>
               </li>
             ))}
           </m.ul>

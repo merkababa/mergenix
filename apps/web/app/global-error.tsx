@@ -18,13 +18,13 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html lang="en">
       <body
-        className={`${sora.variable} ${lexend.variable} min-h-screen bg-[#050810] antialiased`}
+        className={`${sora.variable} ${lexend.variable} min-h-screen bg-bio-deep antialiased`}
         style={{ fontFamily: "var(--font-lexend), sans-serif" }}
       >
         <div className="flex min-h-screen items-center justify-center p-4">
           <main
             role="alert"
-            className="w-full max-w-md rounded-[20px] border border-[rgba(148,163,184,0.15)] bg-[rgba(255,255,255,0.04)] p-10 text-center"
+            className="w-full max-w-md rounded-glass border border-[rgba(148,163,184,0.15)] bg-[rgba(255,255,255,0.04)] p-10 text-center"
             style={{ backdropFilter: "blur(12px)" }}
           >
             <h1

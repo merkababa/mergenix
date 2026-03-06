@@ -116,7 +116,7 @@ export function SubscriptionContent() {
           <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
             My Plan
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
+          <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
             Manage your plan and view payment history
           </p>
         </div>
@@ -168,7 +168,7 @@ export function SubscriptionContent() {
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           My Plan
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-[var(--text-muted)]">
+        <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
           Manage your plan and view payment history
         </p>
       </div>
@@ -177,7 +177,7 @@ export function SubscriptionContent() {
         {/* ── Error Banner ── */}
         {error && (
           <div
-            className="flex items-center gap-3 rounded-xl border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] p-4 text-sm text-[#f43f5e]"
+            className="flex items-center gap-3 rounded-xl border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] p-4 text-sm text-accent-rose"
             role="alert"
             aria-live="polite"
           >
@@ -196,8 +196,8 @@ export function SubscriptionContent() {
         {/* ── Current Plan ── */}
         <GlassCard variant="medium" hover="none" className="glow-pulse p-7">
           <div className="mb-4 flex items-center gap-3">
-            <Crown className="h-5 w-5 text-[#8b5cf6]" />
-            <h2 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+            <Crown className="h-5 w-5 text-accent-violet" />
+            <h2 className="font-heading text-lg font-bold text-(--text-heading)">
               Current Plan
             </h2>
           </div>
@@ -205,31 +205,31 @@ export function SubscriptionContent() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <span className="font-heading text-3xl font-extrabold text-[var(--text-primary)]">
+                <span className="font-heading text-3xl font-extrabold text-(--text-primary)">
                   {currentTierData?.name ?? "Free"}
                 </span>
                 <Badge variant={userTier}>
                   {isActive ? "Active" : "Inactive"}
                 </Badge>
               </div>
-              <p className="mt-1 text-sm text-[var(--text-muted)]">
+              <p className="mt-1 text-sm text-(--text-muted)">
                 {userTier === "free"
                   ? "Free plan - No purchase required"
                   : "One-time purchase - Lifetime access"}
               </p>
             </div>
             <div className="text-right">
-              <span className="font-heading text-2xl font-bold text-[var(--accent-teal)]">
+              <span className="font-heading text-2xl font-bold text-(--accent-teal)">
                 {formattedPrice}
               </span>
-              <p className="text-xs text-[var(--text-dim)]">
+              <p className="text-xs text-(--text-dim)">
                 {userTier === "free" ? "free forever" : "paid once"}
               </p>
             </div>
           </div>
 
           <div className="mt-5">
-            <div className="inline-flex rounded-xl bg-gradient-to-r from-[#06d6a0] to-[#06b6d4] px-5 py-2 font-heading text-xs font-bold uppercase tracking-wider text-[#050810] shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
+            <div className="inline-flex rounded-xl bg-linear-to-r from-accent-teal to-accent-cyan px-5 py-2 font-heading text-xs font-bold uppercase tracking-wider text-bio-deep shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
               Your Current Plan
             </div>
           </div>
@@ -247,12 +247,12 @@ export function SubscriptionContent() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" />
-                    <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+                    <Sparkles className="h-5 w-5 text-(--accent-teal)" />
+                    <h3 className="font-heading text-lg font-bold text-(--text-heading)">
                       Upgrade to {tier.name}
                     </h3>
                   </div>
-                  <p className="mt-2 text-sm text-[var(--text-muted)]">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     {tier.id === "premium"
                       ? "Unlock 500+ disease screenings, pharmacogenomics, and full counseling."
                       : "Get all disease screening, automated referral letter, ClinVar integration, and PDF exports."}
@@ -261,21 +261,21 @@ export function SubscriptionContent() {
                     {tier.features.map((f) => (
                       <li
                         key={f}
-                        className="flex items-center gap-2 text-xs text-[var(--text-body)]"
+                        className="flex items-center gap-2 text-xs text-(--text-body)"
                       >
-                        <Sparkles className="h-3 w-3 shrink-0 text-[var(--accent-teal)]" />
+                        <Sparkles className="h-3 w-3 shrink-0 text-(--accent-teal)" />
                         {f}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div className="ml-4 shrink-0 text-right">
-                  <span className="font-heading text-2xl font-bold text-[var(--accent-teal)]">
+                  <span className="font-heading text-2xl font-bold text-(--accent-teal)">
                     ${tier.price.toFixed(2)}
                   </span>
-                  <p className="text-xs text-[var(--text-dim)]">one-time</p>
+                  <p className="text-xs text-(--text-dim)">one-time</p>
                   {currentTierData && currentTierData.price > 0 && (
-                    <p className="text-xs text-[var(--text-dim)]">
+                    <p className="text-xs text-(--text-dim)">
                       Pay ${(tier.price - currentTierData.price).toFixed(2)} to
                       upgrade
                     </p>
@@ -305,12 +305,12 @@ export function SubscriptionContent() {
         ) : (
           <GlassCard variant="subtle" hover="none" className="p-7">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-[var(--accent-teal)]" />
-              <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+              <Shield className="h-5 w-5 text-(--accent-teal)" />
+              <h3 className="font-heading text-lg font-bold text-(--text-heading)">
                 You have the best plan
               </h3>
             </div>
-            <p className="mt-2 text-sm text-[var(--text-muted)]">
+            <p className="mt-2 text-sm text-(--text-muted)">
               You&apos;re on the Pro plan with full access to all features.
               Thank you for your support!
             </p>
@@ -320,8 +320,8 @@ export function SubscriptionContent() {
         {/* ── Payment History ── */}
         <GlassCard variant="medium" hover="none" className="p-7">
           <div className="mb-5 flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-[var(--accent-teal)]" />
-            <h2 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+            <CreditCard className="h-5 w-5 text-(--accent-teal)" />
+            <h2 className="font-heading text-lg font-bold text-(--text-heading)">
               Payment History
             </h2>
           </div>
@@ -340,11 +340,11 @@ export function SubscriptionContent() {
             ) : paymentHistory.length === 0 ? (
               /* Empty state */
               <div className="flex flex-col items-center py-8 text-center">
-                <Clock className="mb-3 h-8 w-8 text-[var(--text-dim)]" />
-                <p className="font-heading text-sm font-medium text-[var(--text-muted)]">
+                <Clock className="mb-3 h-8 w-8 text-(--text-dim)" />
+                <p className="font-heading text-sm font-medium text-(--text-muted)">
                   No payments yet
                 </p>
-                <p className="mt-1 text-xs text-[var(--text-dim)]">
+                <p className="mt-1 text-xs text-(--text-dim)">
                   Your payment history will appear here after your first
                   purchase.
                 </p>
@@ -354,17 +354,17 @@ export function SubscriptionContent() {
               paymentHistory.map((payment) => (
                 <div
                   key={payment.id}
-                  className="flex items-center justify-between rounded-xl border border-[var(--border-subtle)] p-4"
+                  className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4"
                 >
                   <div className="flex items-center gap-3">
-                    <Clock className="h-4 w-4 shrink-0 text-[var(--text-dim)]" />
+                    <Clock className="h-4 w-4 shrink-0 text-(--text-dim)" />
                     <div>
-                      <p className="font-heading text-sm font-medium text-[var(--text-heading)]">
+                      <p className="font-heading text-sm font-medium text-(--text-heading)">
                         {payment.tierGranted.charAt(0).toUpperCase() +
                           payment.tierGranted.slice(1)}{" "}
                         Plan Purchase
                       </p>
-                      <p className="text-xs text-[var(--text-muted)]">
+                      <p className="text-xs text-(--text-muted)">
                         {formatDate(payment.createdAt)}{" "}
                         <span className="capitalize">
                           &middot; {payment.status}
@@ -373,7 +373,7 @@ export function SubscriptionContent() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="font-heading text-sm font-bold text-[var(--accent-teal)]">
+                    <span className="font-heading text-sm font-bold text-(--accent-teal)">
                       ${formatAmount(payment.amount)}
                     </span>
                     <Button

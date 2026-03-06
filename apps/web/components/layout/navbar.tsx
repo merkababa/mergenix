@@ -119,7 +119,7 @@ export function Navbar() {
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
         isScrolled
-          ? "border-b border-[var(--border-subtle)] bg-[var(--navbar-bg)] shadow-[0_4px_30px_var(--shadow-ambient)]"
+          ? "border-b border-(--border-subtle) bg-(--navbar-bg) shadow-[0_4px_30px_var(--shadow-ambient)]"
           : "bg-transparent",
       )}
       style={{
@@ -138,8 +138,8 @@ export function Navbar() {
           aria-label="Mergenix home"
         >
           <div className="relative flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-[var(--accent-teal)] opacity-20 blur-md" />
-            <Dna className="relative h-7 w-7 text-[var(--accent-teal)]" aria-hidden="true" />
+            <div className="absolute inset-0 rounded-full bg-(--accent-teal) opacity-20 blur-md" />
+            <Dna className="relative h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
           </div>
           <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em] md:text-2xl">
             Mergenix
@@ -161,15 +161,15 @@ export function Navbar() {
                 className={cn(
                   "relative rounded-xl px-4 py-2 font-heading text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)] ring-1 ring-[rgba(6,214,160,0.2)]"
-                    : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]",
+                    ? "bg-[rgba(6,214,160,0.1)] text-(--accent-teal) ring-1 ring-[rgba(6,214,160,0.2)]"
+                    : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)",
                 )}
               >
                 {link.label}
                 {isActive && (
                   <m.div
                     layoutId="nav-indicator"
-                    className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-gradient-to-r from-[#06d6a0] to-[#06b6d4]"
+                    className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-linear-to-r from-accent-teal to-accent-cyan"
                     transition={{ type: "spring" as const, stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -190,13 +190,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 font-heading text-sm font-semibold text-[var(--accent-teal)] transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-[0_0_15px_rgba(6,214,160,0.1)]"
+                  className="rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 font-heading text-sm font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-[0_0_15px_rgba(6,214,160,0.1)]"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-xl bg-gradient-to-r from-[#06d6a0] to-[#059669] px-4 py-2 font-heading text-sm font-semibold text-[#050810] shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)] hover:-translate-y-0.5"
+                  className="rounded-xl bg-linear-to-r from-accent-teal to-day-accent-teal px-4 py-2 font-heading text-sm font-semibold text-bio-deep shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)] hover:-translate-y-0.5"
                 >
                   Get Started
                 </Link>
@@ -207,7 +207,7 @@ export function Navbar() {
           {/* Mobile hamburger */}
           <button
             ref={hamburgerRef}
-            className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] md:hidden"
+            className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-colors hover:text-(--accent-teal) md:hidden"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label={isMobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileOpen}
@@ -237,17 +237,17 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation menu"
-          className="fixed inset-0 z-[60] flex flex-col bg-[var(--bg-deep)] md:hidden"
+          className="fixed inset-0 z-60 flex flex-col bg-(--bg-deep) md:hidden"
         >
           {/* Overlay header row: brand + close button */}
-          <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
+          <div className="flex items-center justify-between border-b border-(--border-subtle) px-4 py-3">
             <Link
               href="/"
               onClick={closeMobileMenu}
               className="flex items-center gap-2 no-underline"
               aria-label="Mergenix home"
             >
-              <Dna className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              <Dna className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
               <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em]">
                 Mergenix
               </span>
@@ -255,7 +255,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={closeMobileMenu}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--accent-teal)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-teal)]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-colors hover:text-(--accent-teal) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--accent-teal)"
               aria-label="Close navigation menu"
             >
               <X className="h-5 w-5" aria-hidden="true" />
@@ -281,8 +281,8 @@ export function Navbar() {
                   className={cn(
                     "block w-full max-w-xs rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold transition-all",
                     isActive
-                      ? "bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)] ring-1 ring-[rgba(6,214,160,0.2)]"
-                      : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]",
+                      ? "bg-[rgba(6,214,160,0.1)] text-(--accent-teal) ring-1 ring-[rgba(6,214,160,0.2)]"
+                      : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)",
                   )}
                 >
                   {link.label}
@@ -290,21 +290,21 @@ export function Navbar() {
               );
             })}
 
-            <hr className="my-3 w-full max-w-xs border-[var(--border-subtle)]" />
+            <hr className="my-3 w-full max-w-xs border-(--border-subtle)" />
 
             {isAuthenticated ? (
               <div className="flex w-full max-w-xs flex-col gap-2">
                 <Link
                   href="/account"
                   onClick={closeMobileMenu}
-                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-[var(--text-muted)] transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-(--text-muted) transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                 >
                   Account Settings
                 </Link>
                 <Link
                   href="/subscription"
                   onClick={closeMobileMenu}
-                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-[var(--text-muted)] transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                  className="block w-full rounded-2xl px-6 py-3 text-center font-heading text-lg font-semibold text-(--text-muted) transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                 >
                   My Plan
                 </Link>
@@ -314,14 +314,14 @@ export function Navbar() {
                 <Link
                   href="/login"
                   onClick={closeMobileMenu}
-                  className="w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center font-heading text-base font-semibold text-[var(--accent-teal)] transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
+                  className="w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center font-heading text-base font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
                   onClick={closeMobileMenu}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#06d6a0] to-[#059669] py-3 text-center font-heading text-base font-semibold text-[#050810] shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)]"
+                  className="w-full rounded-2xl bg-linear-to-r from-accent-teal to-day-accent-teal py-3 text-center font-heading text-base font-semibold text-bio-deep shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)]"
                 >
                   Get Started
                 </Link>

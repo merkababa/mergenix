@@ -4,8 +4,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 const stepCircleVariants = cva(
   [
     "inline-flex items-center justify-center rounded-full",
-    "bg-gradient-to-br from-[#06d6a0] to-[#059669]",
-    "font-heading font-bold text-[#050810]",
+    "bg-linear-to-br from-accent-teal to-day-accent-teal",
+    "font-heading font-bold text-bio-deep",
     "shadow-[0_0_20px_rgba(6,214,160,0.35)]",
   ],
   {

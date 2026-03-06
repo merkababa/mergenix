@@ -136,7 +136,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-sm"
+            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-xs"
             onClick={onClose}
           />
 
@@ -153,16 +153,16 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-dim)] transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-[var(--accent-rose)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
+                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-(--accent-rose) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              <h2 className="mb-1 font-heading text-lg font-bold text-[var(--text-heading)]">
+              <h2 className="mb-1 font-heading text-lg font-bold text-(--text-heading)">
                 Change Password
               </h2>
-              <p className="mb-5 text-sm text-[var(--text-muted)]">
+              <p className="mb-5 text-sm text-(--text-muted)">
                 Enter your current password and choose a new one.
               </p>
 
@@ -173,11 +173,11 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   className="py-8 text-center"
                 >
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-                    <svg className="h-6 w-6 text-[var(--accent-teal)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg className="h-6 w-6 text-(--accent-teal)" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="font-heading text-sm font-semibold text-[var(--accent-teal)]">
+                  <p className="font-heading text-sm font-semibold text-(--accent-teal)">
                     Password changed successfully
                   </p>
                 </m.div>
@@ -203,7 +203,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   {/* Password strength meter */}
                   {newPassword && (
                     <div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-[var(--border-subtle)]">
+                      <div className="h-1.5 overflow-hidden rounded-full bg-(--border-subtle)">
                         <m.div
                           className="h-full rounded-full"
                           initial={{ width: 0 }}
@@ -235,15 +235,15 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                           <Check
                             className={`h-3.5 w-3.5 ${
                               met
-                                ? "text-[var(--accent-teal)]"
-                                : "text-[var(--text-dim)]"
+                                ? "text-(--accent-teal)"
+                                : "text-(--text-dim)"
                             }`}
                           />
                           <span
                             className={
                               met
-                                ? "text-[var(--text-body)]"
-                                : "text-[var(--text-dim)]"
+                                ? "text-(--text-body)"
+                                : "text-(--text-dim)"
                             }
                           >
                             {text}
@@ -273,7 +273,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+                        className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                         role="alert"
                       >
                         {error}

@@ -71,7 +71,7 @@ function DiseaseBarChart() {
       viewBox="0 0 120 56"
       fill="none"
       aria-hidden="true"
-      className="flex-shrink-0"
+      className="shrink-0"
     >
       {/* Bar chart bars — representing disease distribution; fills = --accent-rose opacity variants */}
       <rect x="4" y="20" width="12" height="32" rx="3" fill="rgba(244,63,94,0.35)" />
@@ -132,7 +132,7 @@ export function BentoFeatures() {
 
               {/* Title */}
               <h3
-                className="mb-3 font-heading text-2xl font-bold text-[var(--text-heading)] md:text-3xl"
+                className="mb-3 font-heading text-2xl font-bold text-(--text-heading) md:text-3xl"
                 style={{ fontSize: "var(--font-size-fluid-heading)" }}
               >
                 {HERO_FEATURE.title}
@@ -140,7 +140,7 @@ export function BentoFeatures() {
 
               {/* Description + chart row */}
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <p className="max-w-sm text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+                <p className="max-w-sm text-sm leading-relaxed text-(--text-muted) sm:text-base">
                   {HERO_FEATURE.description}
                 </p>
                 <DiseaseBarChart />
@@ -149,14 +149,14 @@ export function BentoFeatures() {
               {/* Stat + CTA */}
               <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <span className="font-heading text-3xl font-extrabold text-[var(--accent-rose)]">
+                  <span className="font-heading text-3xl font-extrabold text-(--accent-rose)">
                     {CARRIER_PANEL_COUNT_DISPLAY}
                   </span>
-                  <span className="ml-2 text-sm text-[var(--text-dim)]">conditions analyzed</span>
+                  <span className="ml-2 text-sm text-(--text-dim)">conditions analyzed</span>
                 </div>
                 <Link
                   href="/diseases"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent-rose)] transition-opacity hover:opacity-80"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-rose) transition-opacity hover:opacity-80"
                   aria-label="Browse the full disease catalog"
                 >
                   Browse Disease Catalog
@@ -215,10 +215,10 @@ export function BentoFeatures() {
                       {feature.badge}
                     </span>
 
-                    <h3 className="mb-1.5 font-heading text-sm font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-1.5 font-heading text-sm font-semibold text-(--text-heading)">
                       {feature.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+                    <p className="text-xs leading-relaxed text-(--text-muted)">
                       {feature.description}
                     </p>
                   </GlassCard>

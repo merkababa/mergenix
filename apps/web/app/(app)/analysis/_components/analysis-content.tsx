@@ -208,7 +208,7 @@ export function AnalysisContent() {
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Genetic Analysis
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-[var(--text-muted)]">
+        <p className="mx-auto mt-3 max-w-2xl text-(--text-muted)">
           Upload both parents&apos; DNA files to predict offspring disease risk, traits, and more
         </p>
       </div>
@@ -220,20 +220,20 @@ export function AnalysisContent() {
           hover="none"
           className="mb-8 flex items-center gap-3 border-[rgba(245,158,11,0.15)] p-4"
         >
-          <Lock className="h-5 w-5 flex-shrink-0 text-[var(--accent-amber)]" />
+          <Lock className="h-5 w-5 shrink-0 text-(--accent-amber)" />
           <div className="flex-1">
-            <p className="text-sm text-[var(--text-body)]">
+            <p className="text-sm text-(--text-body)">
               {userTier === "premium" ? (
                 <>
                   <span className="font-semibold">Premium tier</span> &mdash;{" "}
-                  <span className="text-[var(--accent-teal)]">
+                  <span className="text-(--accent-teal)">
                     Upgrade to Pro for genetic counseling referrals.
                   </span>
                 </>
               ) : (
                 <>
                   <span className="font-semibold">Free tier:</span> All trait predictions included.{" "}
-                  <span className="text-[var(--accent-teal)]">
+                  <span className="text-(--accent-teal)">
                     Upgrade to Premium for disease screening.
                   </span>
                 </>
@@ -281,10 +281,10 @@ export function AnalysisContent() {
           hover="none"
           className="mt-8 flex items-center gap-3 border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.04)] p-4"
         >
-          <AlertTriangle className="h-5 w-5 flex-shrink-0 text-[var(--accent-rose)]" />
+          <AlertTriangle className="h-5 w-5 shrink-0 text-(--accent-rose)" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[var(--text-body)]">Analysis Error</p>
-            <p className="mt-0.5 text-sm text-[var(--text-muted)]">{errorMessage}</p>
+            <p className="text-sm font-medium text-(--text-body)">Analysis Error</p>
+            <p className="mt-0.5 text-sm text-(--text-muted)">{errorMessage}</p>
           </div>
           <Button variant="ghost" size="sm" onClick={handleReset}>
             Try Again

@@ -167,8 +167,8 @@ test.describe('Status Distinction — Not Detected vs Not Tested', () => {
     await loadDemoAndGoToCarrierTab(page);
 
     // Badge variants from badge.tsx:
-    //   "normal" (used for low_risk/Not Detected): text-[#06d6a0] (green teal)
-    //   "default" (used for not_tested/Not Tested):  text-[var(--text-body)] (neutral)
+    //   "normal" (used for low_risk/Not Detected): text-accent-teal (green teal)
+    //   "default" (used for not_tested/Not Tested):  text-(--text-body) (neutral)
     //
     // We verify that the "Low Risk" badge element has a different computed color
     // than the "Not Tested" badge element, confirming visual distinction.

@@ -151,7 +151,7 @@ function UploadZone({
 
   return (
     <div>
-      <p className="mb-2 font-heading text-sm font-semibold text-[var(--text-primary)]">
+      <p className="mb-2 font-heading text-sm font-semibold text-(--text-primary)">
         {label}
       </p>
 
@@ -163,16 +163,16 @@ function UploadZone({
         >
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-              <FileIcon className="h-5 w-5 text-[var(--accent-teal)]" />
+              <FileIcon className="h-5 w-5 text-(--accent-teal)" />
             </div>
             <div className="min-w-0">
               <p
-                className="truncate font-heading text-sm font-semibold text-[var(--text-heading)]"
+                className="truncate font-heading text-sm font-semibold text-(--text-heading)"
                 data-testid={`filename-${person}`}
               >
                 {file.name}
               </p>
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-(--text-muted)">
                 {formatFileSize(file.size)}
               </p>
             </div>
@@ -197,14 +197,14 @@ function UploadZone({
           aria-describedby={formatDescriptionId}
           className={cn(
             "flex min-h-[120px] cursor-pointer flex-col items-center justify-center gap-3 rounded-[16px] border-2 border-dashed p-6 text-center transition-all duration-200",
-            "bg-[var(--bg-glass)] [backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]",
+            "bg-(--bg-glass) [backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]",
             isDragOver
               ? "border-[rgba(6,214,160,0.6)] bg-[rgba(6,214,160,0.06)]"
               : "border-[rgba(148,163,184,0.15)] hover:border-[rgba(6,214,160,0.4)]",
             disabled && "pointer-events-none opacity-50",
           )}
         >
-          <Upload className="h-6 w-6 text-[var(--text-muted)]" />
+          <Upload className="h-6 w-6 text-(--text-muted)" />
 
           <div>
             <Button
@@ -221,7 +221,7 @@ function UploadZone({
 
           <p
             id={formatDescriptionId}
-            className="text-xs text-[var(--text-dim)]"
+            className="text-xs text-(--text-dim)"
           >
             .txt, .csv, .vcf, .gz &mdash; max 200 MB
           </p>
@@ -242,7 +242,7 @@ function UploadZone({
       {error && (
         <p
           role="alert"
-          className="mt-2 text-sm text-[var(--accent-rose)]"
+          className="mt-2 text-sm text-(--accent-rose)"
         >
           {error}
         </p>
@@ -282,7 +282,7 @@ export function CoupleUploadCard({
       {/* ── Heading ── */}
       <h2
         id="couple-upload-heading"
-        className="mb-6 font-heading text-lg font-bold text-[var(--text-heading)]"
+        className="mb-6 font-heading text-lg font-bold text-(--text-heading)"
       >
         Upload DNA Files
       </h2>
@@ -302,7 +302,7 @@ export function CoupleUploadCard({
         {/* ── Desktop Arrow Connector ── */}
         <div className="pointer-events-none absolute inset-0 hidden items-center justify-center md:flex" aria-hidden="true">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <ArrowRight className="h-4 w-4 text-[var(--accent-teal)]" />
+            <ArrowRight className="h-4 w-4 text-(--accent-teal)" />
           </div>
         </div>
 
@@ -321,7 +321,7 @@ export function CoupleUploadCard({
       {sameFileError && (
         <p
           role="alert"
-          className="mt-4 text-center text-sm text-[var(--accent-rose)]"
+          className="mt-4 text-center text-sm text-(--accent-rose)"
         >
           Please upload files from two different individuals
         </p>

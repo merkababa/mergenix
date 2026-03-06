@@ -12,9 +12,9 @@ function CounselingSkeleton() {
   return (
     <div role="status" aria-busy="true" className="animate-pulse space-y-6">
       <span className="sr-only">Loading...</span>
-      <div className="mx-auto h-32 max-w-md rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-24 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-48 rounded-[20px] bg-[var(--bg-elevated)]" />
+      <div className="mx-auto h-32 max-w-md rounded-glass bg-(--bg-elevated)" />
+      <div className="h-24 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-48 rounded-glass bg-(--bg-elevated)" />
     </div>
   );
 }

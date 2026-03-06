@@ -49,7 +49,7 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
       aria-label={`${trait.name}: Likely ${trait.prediction}, approximately ${pct} percent probability`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="font-heading text-sm font-semibold text-[var(--text-heading)]">
+        <p className="font-heading text-sm font-semibold text-(--text-heading)">
           {trait.icon && (
             <span className="mr-1.5" aria-hidden="true">
               {trait.icon}
@@ -59,7 +59,7 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
         </p>
       </div>
 
-      <p className="mt-1 text-xs text-[var(--text-body)]">
+      <p className="mt-1 text-xs text-(--text-body)">
         Likely {trait.prediction} (~{pct}% likely)
       </p>
 
@@ -71,10 +71,10 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label={`${trait.name} probability: ${pct} percent`}
-          className="h-2 w-full rounded-full bg-[var(--glass-bg)]"
+          className="h-2 w-full rounded-full bg-(--bg-glass)"
         >
           <div
-            className="h-2 rounded-full bg-[var(--accent-teal)]"
+            className="h-2 rounded-full bg-(--accent-teal)"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -98,17 +98,17 @@ function LockedTraitCard({
       aria-label={`${traitName}: Locked. Upgrade to Pro to view.`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="font-heading text-sm font-semibold text-[var(--text-dim)]">
+        <p className="font-heading text-sm font-semibold text-(--text-dim)">
           {traitName}
         </p>
-        <Lock className="h-4 w-4 flex-shrink-0 text-[var(--text-dim)]" aria-hidden="true" />
+        <Lock className="h-4 w-4 shrink-0 text-(--text-dim)" aria-hidden="true" />
       </div>
 
       {/* Blurred placeholder for locked value */}
-      <div className="mt-1 h-4 w-24 rounded bg-[var(--glass-bg)] blur-sm" aria-hidden="true" />
+      <div className="mt-1 h-4 w-24 rounded-sm bg-(--bg-glass) blur-xs" aria-hidden="true" />
 
       {/* Blurred probability bar placeholder */}
-      <div className="mt-2 h-2 w-full rounded-full bg-[var(--glass-bg)] blur-sm" aria-hidden="true" />
+      <div className="mt-2 h-2 w-full rounded-full bg-(--bg-glass) blur-xs" aria-hidden="true" />
 
       {onUpgrade && (
         <Button
@@ -145,8 +145,8 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
     <GlassCard variant="medium" hover="none" className="p-6">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
-        <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+        <Sparkles className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+        <h3 className="font-heading text-lg font-bold text-(--text-heading)">
           Virtual Baby — Genetic Possibilities
         </h3>
       </div>
@@ -155,10 +155,10 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
       <section aria-label="Important disclaimer" className="mt-4">
         <div className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4">
           <AlertTriangle
-            className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#f59e0b]"
+            className="mt-0.5 h-5 w-5 shrink-0 text-accent-amber"
             aria-hidden="true"
           />
-          <p className="text-xs font-medium leading-relaxed text-[var(--text-body)]">
+          <p className="text-xs font-medium leading-relaxed text-(--text-body)">
             {VIRTUAL_BABY_DISCLAIMER}
           </p>
         </div>
@@ -184,14 +184,14 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
       {/* Upgrade CTA for non-pro tiers */}
       {tier !== "pro" && (
         <div className="mt-5 flex items-center gap-4 rounded-xl border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] p-4">
-          <Lock className="h-5 w-5 flex-shrink-0 text-[#8b5cf6]" aria-hidden="true" />
-          <p className="flex-1 text-sm text-[var(--text-body)]">
+          <Lock className="h-5 w-5 shrink-0 text-accent-violet" aria-hidden="true" />
+          <p className="flex-1 text-sm text-(--text-body)">
             {`Showing 1 of ${traits.length} trait predictions. Upgrade to Pro for full access.`}
           </p>
           {onUpgrade && (
             <Button
               size="sm"
-              className="bg-[rgba(139,92,246,0.15)] border border-[rgba(139,92,246,0.3)] text-[#8b5cf6] hover:bg-[rgba(139,92,246,0.25)]"
+              className="bg-[rgba(139,92,246,0.15)] border border-[rgba(139,92,246,0.3)] text-accent-violet hover:bg-[rgba(139,92,246,0.25)]"
               onClick={onUpgrade}
             >
               Upgrade to Pro

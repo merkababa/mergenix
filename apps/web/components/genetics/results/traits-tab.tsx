@@ -98,7 +98,7 @@ function HealthConsentInterstitial({
         aria-modal="true"
         aria-labelledby="health-consent-title"
         tabIndex={-1}
-        className="w-full max-w-lg rounded-xl border border-amber-500/30 bg-[var(--glass-bg)] p-6 shadow-2xl outline-none"
+        className="w-full max-w-lg rounded-xl border border-amber-500/30 bg-(--bg-glass) p-6 shadow-2xl outline-hidden"
         onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
       >
@@ -108,7 +108,7 @@ function HealthConsentInterstitial({
         >
           Health-Related Genetic Results
         </h2>
-        <div className="mt-3 space-y-3 text-sm text-[var(--text-body)]">
+        <div className="mt-3 space-y-3 text-sm text-(--text-body)">
           <p>
             You are about to view genetic trait predictions related to health
             conditions including cancer risk, neurological conditions, and
@@ -129,7 +129,7 @@ function HealthConsentInterstitial({
           <button
             type="button"
             onClick={onDecline}
-            className="min-h-[44px] rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm text-[var(--text-body)] transition-colors hover:bg-white/10"
+            className="min-h-[44px] rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm text-(--text-body) transition-colors hover:bg-white/10"
           >
             Not Now
           </button>
@@ -158,10 +158,10 @@ const TraitCard = memo(function TraitCard({
     <GlassCard variant="medium" hover="glow" className="p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="font-heading text-sm font-semibold text-[var(--text-heading)]">
+          <p className="font-heading text-sm font-semibold text-(--text-heading)">
             {trait.trait}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+          <p className="mt-0.5 text-xs text-(--text-muted)">
             {trait.gene} &middot; {trait.rsid}
           </p>
         </div>
@@ -179,12 +179,12 @@ const TraitCard = memo(function TraitCard({
 
       {/* Show description and notes for health traits */}
       {isHealthTrait && trait.description && (
-        <p className="mt-2 text-xs text-[var(--text-muted)]">
+        <p className="mt-2 text-xs text-(--text-muted)">
           {trait.description}
         </p>
       )}
       {isHealthTrait && trait.note && (
-        <p className="mt-1 text-xs italic text-[var(--text-muted)]">
+        <p className="mt-1 text-xs italic text-(--text-muted)">
           {trait.note}
         </p>
       )}
@@ -194,7 +194,7 @@ const TraitCard = memo(function TraitCard({
         {Object.entries(trait.offspringProbabilities).map(
           ([phenotype, pct]) => (
             <div key={phenotype} className="flex items-center gap-2">
-              <div className="w-20 truncate text-xs text-[var(--text-muted)]">
+              <div className="w-20 truncate text-xs text-(--text-muted)">
                 {phenotype}
               </div>
               <div
@@ -203,14 +203,14 @@ const TraitCard = memo(function TraitCard({
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-label={`${phenotype}: ${pct}%`}
-                className="h-2 flex-1 rounded-full bg-[var(--glass-bg)]"
+                className="h-2 flex-1 rounded-full bg-(--bg-glass)"
               >
                 <div
-                  className={`h-2 rounded-full ${isHealthTrait ? "bg-amber-500/60" : "bg-[var(--accent-teal)]"}`}
+                  className={`h-2 rounded-full ${isHealthTrait ? "bg-amber-500/60" : "bg-(--accent-teal)"}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="w-10 text-right text-xs font-medium text-[var(--text-body)]">
+              <span className="w-10 text-right text-xs font-medium text-(--text-body)">
                 {pct}%
               </span>
             </div>
@@ -222,8 +222,8 @@ const TraitCard = memo(function TraitCard({
       {isHealthTrait && trait.phenotypeDetails && (
         <div className="mt-2 space-y-1 border-t border-white/5 pt-2">
           {Object.entries(trait.phenotypeDetails).map(([key, detail]) => (
-            <p key={key} className="text-xs text-[var(--text-muted)]">
-              <span className="font-medium text-[var(--text-muted)]">{key}:</span>{" "}
+            <p key={key} className="text-xs text-(--text-muted)">
+              <span className="font-medium text-(--text-muted)">{key}:</span>{" "}
               {detail.description}
             </p>
           ))}
@@ -379,7 +379,7 @@ export function TraitsTab() {
   if (traits.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-(--text-muted)">
           No trait predictions available.
         </p>
       </div>
@@ -405,16 +405,16 @@ export function TraitsTab() {
           className="flex items-center gap-3 border-[rgba(6,214,160,0.15)] bg-[rgba(6,214,160,0.04)] p-4"
         >
           <Sparkles
-            className="h-5 w-5 flex-shrink-0 text-[var(--accent-teal)]"
+            className="h-5 w-5 shrink-0 text-(--accent-teal)"
             aria-hidden="true"
           />
-          <p className="text-sm text-[var(--text-body)]">
+          <p className="text-sm text-(--text-body)">
             Traits are included free. Upgrade to Premium for health insights.
           </p>
         </GlassCard>
       )}
 
-      <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+      <h3 className="font-heading text-lg font-bold text-(--text-heading)">
         Trait Predictions
       </h3>
 
@@ -437,13 +437,13 @@ export function TraitsTab() {
         <input
           type="search"
           placeholder="Search traits..."
-          className="min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-[var(--text-body)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-teal)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-teal)]"
+          className="min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-(--text-body) placeholder:text-(--text-muted) focus:border-(--accent-teal) focus:outline-hidden focus:ring-1 focus:ring-(--accent-teal)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search traits"
         />
         <select
-          className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-[var(--text-body)] focus:border-[var(--accent-teal)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-teal)]"
+          className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-(--text-body) focus:border-(--accent-teal) focus:outline-hidden focus:ring-1 focus:ring-(--accent-teal)"
           value={confidenceFilter}
           onChange={(e) => setConfidenceFilter(e.target.value)}
           aria-label="Filter by confidence"
@@ -489,7 +489,7 @@ export function TraitsTab() {
             return (
               <div
                 key={category}
-                className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]"
+                className="overflow-hidden rounded-xl border border-white/10 bg-white/2"
               >
                 <button
                   id={headerId}
@@ -502,20 +502,20 @@ export function TraitsTab() {
                   <div className="flex items-center gap-2">
                     {isExpanded ? (
                       <ChevronDown
-                        className="h-4 w-4 shrink-0 text-[var(--text-muted)]"
+                        className="h-4 w-4 shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     ) : (
                       <ChevronRight
-                        className="h-4 w-4 shrink-0 text-[var(--text-muted)]"
+                        className="h-4 w-4 shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     )}
-                    <span className="font-heading text-sm font-semibold text-[var(--text-heading)]">
+                    <span className="font-heading text-sm font-semibold text-(--text-heading)">
                       {category}
                     </span>
                   </div>
-                  <span className="shrink-0 text-xs text-[var(--text-muted)]">
+                  <span className="shrink-0 text-xs text-(--text-muted)">
                     {items.length} shown
                     {items.length !== detectedCount &&
                       ` / ${detectedCount} detected`}
@@ -544,7 +544,7 @@ export function TraitsTab() {
         </div>
       ) : (
         <div aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 py-10 text-center">
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-(--text-muted)">
             No traits match your search.
           </p>
         </div>
@@ -554,13 +554,13 @@ export function TraitsTab() {
       {missing.length > 0 && (
         <GlassCard variant="subtle" hover="none" className="p-4">
           <div className="flex items-start gap-3">
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--text-muted)]" />
+            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-(--text-muted)" />
             <div>
-              <p className="text-xs font-semibold text-[var(--text-body)]">
+              <p className="text-xs font-semibold text-(--text-body)">
                 Missing Data ({missing.length} trait
                 {missing.length !== 1 ? "s" : ""})
               </p>
-              <p className="mt-1 text-xs text-[var(--text-muted)]">
+              <p className="mt-1 text-xs text-(--text-muted)">
                 The following traits could not be predicted because one or both
                 parents are missing genotype data at the required SNP.
               </p>

@@ -94,12 +94,12 @@ export function HomeContent() {
                     className="h-full p-6"
                   >
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+                      <Icon className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
                     </div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                    <p className="text-sm leading-relaxed text-(--text-muted)">
                       {feature.description}
                     </p>
                   </GlassCard>
@@ -223,7 +223,7 @@ export function HomeContent() {
             <h2 className="gradient-text relative font-heading text-3xl font-extrabold md:text-4xl">
               Ready to Know?
             </h2>
-            <p className="relative mx-auto mt-4 max-w-lg text-[var(--text-muted)]">
+            <p className="relative mx-auto mt-4 max-w-lg text-(--text-muted)">
               Create a free account and start your genetic analysis today.
               Your DNA stays on your device — always.
             </p>

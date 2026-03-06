@@ -30,32 +30,32 @@ export function TierGateOverlay({ lockedCount }: TierGateOverlayProps) {
       </p>
 
       {/* Blurred preview cards — hidden from assistive technology */}
-      <div aria-hidden="true" className="pointer-events-none select-none space-y-3 blur-[4px]">
+      <div aria-hidden="true" className="pointer-events-none select-none space-y-3 blur-xs">
         {Array.from({ length: Math.min(lockedCount, 3) }, (_, i) => i).map((i) => (
           <div
             key={i}
-            className="relative overflow-hidden rounded-[20px] border border-[rgba(148,163,184,0.05)] bg-[rgba(12,18,32,0.35)] p-4 [backdrop-filter:blur(8px)]"
+            className="relative overflow-hidden rounded-glass border border-[rgba(148,163,184,0.05)] bg-[rgba(12,18,32,0.35)] p-4 [backdrop-filter:blur(8px)]"
           >
             <div className="flex items-center justify-between">
               <div className="space-y-1.5">
-                <div className="h-3 w-36 rounded bg-[var(--border-subtle)]" />
-                <div className="h-2.5 w-24 rounded bg-[var(--border-subtle)]" />
+                <div className="h-3 w-36 rounded-sm bg-(--border-subtle)" />
+                <div className="h-2.5 w-24 rounded-sm bg-(--border-subtle)" />
               </div>
-              <div className="h-3 w-20 rounded bg-[var(--border-subtle)]" />
+              <div className="h-3 w-20 rounded-sm bg-(--border-subtle)" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Overlay: lock icon + upgrade CTA */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[20px] bg-[rgba(5,8,16,0.75)] backdrop-blur-sm">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-glass)]">
-          <Lock className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-glass bg-[rgba(5,8,16,0.75)] backdrop-blur-xs">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-glass)">
+          <Lock className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
         </div>
-        <p aria-hidden="true" className="text-center text-sm font-semibold text-[var(--text-heading)]">
+        <p aria-hidden="true" className="text-center text-sm font-semibold text-(--text-heading)">
           Upgrade to Premium to unlock 500+ diseases
         </p>
-        <p aria-hidden="true" className="text-center text-xs text-[var(--text-muted)]">
+        <p aria-hidden="true" className="text-center text-xs text-(--text-muted)">
           {lockedCount} more conditions locked
         </p>
         <Link

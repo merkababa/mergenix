@@ -58,7 +58,7 @@ export default function ComingSoonPage() {
           <div className="relative flex items-center justify-center">
             {/* Teal halo */}
             <div
-              className="absolute rounded-full bg-[#06d6a0] opacity-20"
+              className="absolute rounded-full bg-accent-teal opacity-20"
               style={{ width: "11rem", height: "11rem", filter: "blur(32px)" }}
               aria-hidden="true"
             />
@@ -137,7 +137,7 @@ export default function ComingSoonPage() {
           <form onSubmit={handleSubmit} noValidate>
             {/* Input container */}
             <div
-              className={`input-wrapper flex items-center rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-xl${shake ? " shake" : ""}`}
+              className={`input-wrapper flex items-center rounded-xl border border-white/10 bg-white/6 backdrop-blur-xl${shake ? " shake" : ""}`}
               onAnimationEnd={() => setShake(false)}
             >
               {/* Lock icon */}
@@ -167,7 +167,7 @@ export default function ComingSoonPage() {
                 }}
                 placeholder="Enter access code..."
                 autoComplete="current-password"
-                className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-white placeholder-white/30 outline-none"
+                className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-white placeholder:text-white/30 outline-hidden"
                 aria-label="Access code for team members"
                 aria-describedby={error ? "password-error password-hint" : "password-hint"}
                 aria-invalid={!!error}
@@ -178,7 +178,7 @@ export default function ComingSoonPage() {
               <button
                 type="submit"
                 disabled={isLoading || isSuccess || !password}
-                className="submit-btn m-1 flex shrink-0 items-center justify-center rounded-lg bg-[#06d6a0] px-4 py-2.5 text-[#050810] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="submit-btn m-1 flex shrink-0 items-center justify-center rounded-lg bg-accent-teal px-4 py-2.5 text-bio-deep disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Submit access code"
               >
                 {isLoading ? (
@@ -256,7 +256,7 @@ export default function ComingSoonPage() {
             Need to get in touch?{" "}
             <a
               href="mailto:contact@mergenix.com"
-              className="text-[#06d6a0] transition-colors hover:text-[#06d6a0]/75"
+              className="text-accent-teal transition-colors hover:text-accent-teal/75"
             >
               Contact Us
             </a>

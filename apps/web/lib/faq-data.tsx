@@ -68,7 +68,7 @@ export const FAQ_ITEMS: FaqItem[] = [
         cannot process your file or produces a processing error, contact{" "}
         <a
           href="mailto:support@mergenix.com"
-          className="underline text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+          className="underline text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
         >
           support@mergenix.com
         </a>{" "}

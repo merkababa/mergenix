@@ -68,20 +68,20 @@ export function PartnerConsentCheckbox({
   }, []);
 
   return (
-    <div className="rounded-xl border-2 border-[var(--accent-amber,#f59e0b)] bg-[rgba(245,158,11,0.05)] p-4">
+    <div className="rounded-xl border-2 border-(--accent-amber,#f59e0b) bg-[rgba(245,158,11,0.05)] p-4">
       <div className="flex items-start gap-3">
         <input
           type="checkbox"
           id="partner-consent-checkbox"
           checked={partnerConsentGiven}
           onChange={handleChange}
-          className="mt-1 h-4 w-4 shrink-0 rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)] accent-[var(--accent-teal)]"
+          className="mt-1 h-4 w-4 shrink-0 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
           aria-describedby="partner-consent-explanation"
         />
         <div className="flex-1">
           <label
             htmlFor="partner-consent-checkbox"
-            className="cursor-pointer text-sm font-medium text-[var(--text-body)]"
+            className="cursor-pointer text-sm font-medium text-(--text-body)"
           >
             {PARTNER_CONSENT_LABEL}
           </label>
@@ -90,7 +90,7 @@ export function PartnerConsentCheckbox({
           <div className="mt-2 relative inline-block">
             <button
               type="button"
-              className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-(--text-muted) hover:text-(--text-primary) transition-colors"
               onMouseEnter={handleInfoMouseEnter}
               onMouseLeave={handleInfoMouseLeave}
               onClick={handleInfoClick}
@@ -104,7 +104,7 @@ export function PartnerConsentCheckbox({
               <div
                 role="tooltip"
                 id="partner-consent-explanation"
-                className="absolute left-0 top-full z-10 mt-1 w-72 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-3 text-xs text-[var(--text-body)] shadow-lg"
+                className="absolute left-0 top-full z-10 mt-1 w-72 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) p-3 text-xs text-(--text-body) shadow-lg"
               >
                 {EXPLANATION_TEXT}
               </div>

@@ -55,7 +55,7 @@ export const MARKETING_TIERS: MarketingTier[] = [
     cta: "Get Started Free",
     ctaVariant: "outline",
     ctaHref: "/analysis",
-    barGradient: "bg-gradient-to-r from-[#94a3b8] to-[#64748b]",
+    barGradient: "bg-linear-to-r from-text-dark-muted to-[#64748b]",
     cardClass: "",
   },
   {
@@ -84,7 +84,7 @@ export const MARKETING_TIERS: MarketingTier[] = [
     ctaVariant: "violet",
     ctaHref: "/register",
     popular: true,
-    barGradient: "bg-gradient-to-r from-[#8b5cf6] to-[#a78bfa]",
+    barGradient: "bg-linear-to-r from-accent-violet to-[#a78bfa]",
     cardClass:
       "border-[rgba(139,92,246,0.4)] shadow-[0_4px_30px_var(--shadow-ambient),0_0_50px_var(--glow-violet)]",
   },
@@ -115,7 +115,7 @@ export const MARKETING_TIERS: MarketingTier[] = [
     cta: "Get Pro",
     ctaVariant: "primary",
     ctaHref: "/register",
-    barGradient: "bg-gradient-to-r from-[#06d6a0] to-[#06b6d4]",
+    barGradient: "bg-linear-to-r from-accent-teal to-accent-cyan",
     cardClass: "",
   },
 ];

@@ -33,9 +33,9 @@ function getCellLabel(type: CellType, riskType: "carrier" | "trait"): string {
 }
 
 const CELL_STYLES: Record<CellType, string> = {
-  normal: "bg-[rgba(6,214,160,0.1)] text-[#06d6a0]",
-  carrier: "bg-[rgba(245,158,11,0.1)] text-[#f59e0b]",
-  affected: "bg-[rgba(244,63,94,0.1)] text-[#f43f5e]",
+  normal: "bg-[rgba(6,214,160,0.1)] text-accent-teal",
+  carrier: "bg-[rgba(245,158,11,0.1)] text-accent-amber",
+  affected: "bg-[rgba(244,63,94,0.1)] text-accent-rose",
 };
 
 export function PunnettSquare({
@@ -80,18 +80,18 @@ export function PunnettSquare({
       role="table"
       aria-label="Punnett square showing offspring genotype probabilities"
     >
-      <div className="flex flex-col gap-0.5 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
+      <div className="flex flex-col gap-0.5 overflow-hidden rounded-xl border border-(--border-subtle) bg-(--bg-elevated)">
         {/* Header row: corner + column headers */}
         <div role="row" className="flex gap-0.5">
           <div className="w-1/3 bg-transparent" role="cell" />
           <div
-            className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+            className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
             role="columnheader"
           >
             {b1}
           </div>
           <div
-            className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+            className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
             role="columnheader"
           >
             {b2}
@@ -105,7 +105,7 @@ export function PunnettSquare({
         ].map(({ header, rowCells, key }) => (
           <div key={key} role="row" className="flex gap-0.5">
             <div
-              className="flex w-1/3 items-center justify-center bg-[var(--bg-glass)] px-3 py-2 font-heading text-sm font-bold text-[var(--text-heading)]"
+              className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
               role="rowheader"
             >
               {header}
@@ -114,13 +114,13 @@ export function PunnettSquare({
               <div
                 key={`${key}-${i}`}
                 className={cn(
-                  "w-1/3 rounded p-2.5 text-center transition-transform hover:scale-[1.04]",
+                  "w-1/3 rounded-sm p-2.5 text-center transition-transform hover:scale-[1.04]",
                   CELL_STYLES[cell.type],
                 )}
                 role="cell"
               >
                 <div className="font-mono text-base font-bold">{cell.genotype}</div>
-                <div className="mt-0.5 text-xs text-[var(--text-muted)]">
+                <div className="mt-0.5 text-xs text-(--text-muted)">
                   {probabilities.get(cell.genotype)}%
                 </div>
                 <div className="mt-0.5 text-xs opacity-80">{cell.label}</div>

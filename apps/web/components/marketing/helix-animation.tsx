@@ -28,8 +28,8 @@ export function HelixAnimation({
             className={cn(
               "absolute h-2 w-2 rounded-full",
               isEven
-                ? "bg-gradient-to-br from-[#06d6a0] to-[#059669] shadow-[0_0_12px_rgba(6,214,160,0.5)]"
-                : "bg-gradient-to-br from-[#8b5cf6] to-[#a78bfa] shadow-[0_0_12px_rgba(139,92,246,0.5)]",
+                ? "bg-linear-to-br from-accent-teal to-day-accent-teal shadow-[0_0_12px_rgba(6,214,160,0.5)]"
+                : "bg-linear-to-br from-accent-violet to-[#a78bfa] shadow-[0_0_12px_rgba(139,92,246,0.5)]",
             )}
             style={{
               left: horizontalOffset,

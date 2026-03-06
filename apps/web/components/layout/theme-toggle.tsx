@@ -16,7 +16,7 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="relative h-8 w-14 min-h-[44px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)]"
+        className="relative h-8 w-14 min-h-[44px] rounded-full border border-(--border-subtle) bg-(--bg-elevated)"
         aria-label="Toggle theme"
       />
     );
@@ -27,14 +27,14 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="group relative flex h-8 w-14 min-h-[44px] items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-1 transition-all hover:border-[rgba(6,214,160,0.3)] hover:shadow-[0_0_12px_var(--glow-teal)]"
+      className="group relative flex h-8 w-14 min-h-[44px] items-center rounded-full border border-(--border-subtle) bg-(--bg-elevated) p-1 transition-all hover:border-[rgba(6,214,160,0.3)] hover:shadow-[0_0_12px_var(--glow-teal)]"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       role="switch"
       aria-checked={isDark}
     >
       {/* Track icons */}
-      <Moon className="absolute left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--text-dim)]" aria-hidden="true" />
-      <Sun className="absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--text-dim)]" aria-hidden="true" />
+      <Moon className="absolute left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-(--text-dim)" aria-hidden="true" />
+      <Sun className="absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-(--text-dim)" aria-hidden="true" />
 
       {/* Thumb */}
       <m.div
@@ -60,7 +60,7 @@ export function ThemeToggle() {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Moon className="h-2.5 w-2.5 text-[#050810]" />
+              <Moon className="h-2.5 w-2.5 text-bio-deep" />
             </m.div>
           ) : (
             <m.div
@@ -70,7 +70,7 @@ export function ThemeToggle() {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Sun className="h-2.5 w-2.5 text-[#050810]" />
+              <Sun className="h-2.5 w-2.5 text-bio-deep" />
             </m.div>
           )}
         </AnimatePresence>

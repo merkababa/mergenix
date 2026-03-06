@@ -84,7 +84,7 @@ export function GinaNotice() {
       {/* ── Collapsed header row ── */}
       <div className="flex items-center gap-3 px-4 py-3">
         <ShieldCheck
-          className="h-4 w-4 shrink-0 text-[var(--accent-teal)]"
+          className="h-4 w-4 shrink-0 text-(--accent-teal)"
           aria-hidden="true"
         />
 
@@ -94,10 +94,10 @@ export function GinaNotice() {
             onClick={handleToggle}
             aria-expanded={expanded}
             aria-controls={panelId}
-            className="w-full min-h-[44px] text-left text-[var(--text-body)] hover:text-[var(--text-heading)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm inline-flex items-center gap-2"
+            className="w-full min-h-[44px] text-left text-(--text-body) hover:text-(--text-heading) transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs inline-flex items-center gap-2"
           >
             <span>
-              <span className="font-semibold text-[var(--text-heading)]">
+              <span className="font-semibold text-(--text-heading)">
                 Important:
               </span>{" "}
               Know your genetic privacy rights (GINA)
@@ -108,7 +108,7 @@ export function GinaNotice() {
               className="shrink-0"
               aria-hidden="true"
             >
-              <ChevronDown className="h-4 w-4 text-[var(--text-muted)]" />
+              <ChevronDown className="h-4 w-4 text-(--text-muted)" />
             </m.span>
           </button>
         </h3>
@@ -117,7 +117,7 @@ export function GinaNotice() {
           type="button"
           onClick={handleDismiss}
           aria-label="Dismiss GINA notice"
-          className="shrink-0 rounded-md p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.08)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1"
+          className="shrink-0 rounded-md p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.08)] hover:text-(--text-primary) focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1"
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -135,12 +135,12 @@ export function GinaNotice() {
             className="overflow-hidden"
           >
             <div className="border-t border-[rgba(6,214,160,0.15)] px-4 pb-4 pt-3">
-              <p className="text-sm leading-relaxed text-[var(--text-body)]">
+              <p className="text-sm leading-relaxed text-(--text-body)">
                 {GINA_BODY_TEXT}
               </p>
               <Link
                 href="/legal#gina"
-                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent-teal)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-(--accent-teal) underline-offset-2 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
               >
                 Read the full GINA notice
                 <span aria-hidden="true"> →</span>

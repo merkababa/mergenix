@@ -33,11 +33,11 @@ export function PageHeader({
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Breadcrumb"
-          className="mb-4 flex items-center justify-center gap-1 text-sm font-body text-[var(--text-muted)]"
+          className="mb-4 flex items-center justify-center gap-1 text-sm font-body text-(--text-muted)"
         >
           <Link
             href="/"
-            className="transition-colors hover:text-[var(--accent-teal)]"
+            className="transition-colors hover:text-(--accent-teal)"
           >
             Home
           </Link>
@@ -45,13 +45,13 @@ export function PageHeader({
             <span key={crumb.href} className="flex items-center gap-1">
               <ChevronRight className="h-3 w-3" />
               {i === breadcrumbs.length - 1 ? (
-                <span className="text-[var(--accent-teal)]" aria-current="page">
+                <span className="text-(--accent-teal)" aria-current="page">
                   {crumb.label}
                 </span>
               ) : (
                 <Link
                   href={crumb.href}
-                  className="transition-colors hover:text-[var(--accent-teal)]"
+                  className="transition-colors hover:text-(--accent-teal)"
                 >
                   {crumb.label}
                 </Link>
@@ -66,7 +66,7 @@ export function PageHeader({
       </h1>
 
       {subtitle && (
-        <p className="mx-auto mt-3 max-w-2xl font-body text-base text-[var(--text-muted)] md:text-lg">
+        <p className="mx-auto mt-3 max-w-2xl font-body text-base text-(--text-muted) md:text-lg">
           {subtitle}
         </p>
       )}

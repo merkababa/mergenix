@@ -8,13 +8,13 @@ export function Skeleton({ className, variant = "text", ...props }: SkeletonProp
   return (
     <div
       className={cn(
-        "animate-shimmer bg-[length:200%_100%]",
-        "bg-gradient-to-r from-[var(--bg-elevated)] via-[var(--border-subtle)] to-[var(--bg-elevated)]",
+        "animate-shimmer bg-size-[200%_100%]",
+        "bg-linear-to-r from-(--bg-elevated) via-(--border-subtle) to-(--bg-elevated)",
         {
           "h-4 w-full rounded-lg": variant === "text",
           "h-10 w-10 rounded-full": variant === "circular",
           "h-32 w-full rounded-2xl": variant === "rectangular",
-          "h-48 w-full rounded-[20px] border border-[var(--border-subtle)]":
+          "h-48 w-full rounded-glass border border-(--border-subtle)":
             variant === "card",
         },
         className,
@@ -28,7 +28,7 @@ export function Skeleton({ className, variant = "text", ...props }: SkeletonProp
 /** Multi-line skeleton card matching the disease card layout */
 export function SkeletonCard() {
   return (
-    <div className="overflow-hidden rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-glass)] p-5">
+    <div className="overflow-hidden rounded-glass border border-(--border-subtle) bg-(--bg-glass) p-5">
       <Skeleton className="mb-3 h-5 w-3/5" />
       <Skeleton className="mb-2 h-3 w-full" />
       <Skeleton className="mb-4 h-3 w-2/5" />

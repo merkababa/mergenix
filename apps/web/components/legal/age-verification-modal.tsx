@@ -121,7 +121,7 @@ export function AgeVerificationModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
           <m.div
             variants={modalVariants}
@@ -137,41 +137,41 @@ export function AgeVerificationModal({
               aria-labelledby="age-verify-title"
               aria-describedby="age-verify-description"
               tabIndex={-1}
-              className="outline-none rounded-2xl border border-[var(--glass-border)] bg-[var(--bg-glass)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+              className="outline-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* Icon */}
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
                 <ShieldCheck
-                  className="h-8 w-8 text-[var(--accent-teal)]"
+                  className="h-8 w-8 text-(--accent-teal)"
                   aria-hidden="true"
                 />
               </div>
 
               <h2
                 id="age-verify-title"
-                className="mb-2 text-center font-heading text-xl font-bold text-[var(--text-heading)]"
+                className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
               >
                 Age Verification Required
               </h2>
 
               <p
                 id="age-verify-description"
-                className="mb-6 text-center text-sm text-[var(--text-muted)]"
+                className="mb-6 text-center text-sm text-(--text-muted)"
               >
                 Mergenix provides genetic health information. You must be at
                 least 18 years old to use this service.
               </p>
 
               {/* Checkbox */}
-              <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
+              <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  className="mt-0.5 h-4 w-4 rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)] accent-[var(--accent-teal)]"
+                  className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
                   aria-label="I confirm that I am 18 years of age or older"
                 />
-                <span className="text-sm text-[var(--text-body)]">
+                <span className="text-sm text-(--text-body)">
                   I confirm that I am 18 years of age or older
                 </span>
               </label>
@@ -195,13 +195,13 @@ export function AgeVerificationModal({
                     safeLocalStorageSet(UNDER_18_KEY, Date.now().toString());
                     router.push("/");
                   }}
-                  className="text-sm text-[var(--text-muted)] underline hover:text-[var(--text-primary)]"
+                  className="text-sm text-(--text-muted) underline hover:text-(--text-primary)"
                 >
                   I am under 18
                 </button>
               </p>
 
-              <p className="mt-3 text-center text-xs text-[var(--text-dim)]">
+              <p className="mt-3 text-center text-xs text-(--text-dim)">
                 This verification is required by applicable regulations
                 governing genetic health information services.
               </p>

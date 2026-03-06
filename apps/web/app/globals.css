@@ -1,6 +1,268 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-background: var(--bg-deep);
+
+  --color-bio-deep: #050810;
+  --color-bio-surface: #0c1220;
+  --color-bio-elevated: #141e33;
+  --color-bio-glass: rgba(12, 18, 32, 0.65);
+
+  --color-accent-teal: #06d6a0;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-amber: #f59e0b;
+  --color-accent-rose: #f43f5e;
+
+  --color-day-deep: #f8fafc;
+  --color-day-surface: #ffffff;
+  --color-day-elevated: #f1f5f9;
+  --color-day-glass: rgba(255, 255, 255, 0.72);
+
+  --color-day-accent-teal: #059669;
+  --color-day-accent-violet: #7c3aed;
+  --color-day-accent-cyan: #0891b2;
+  --color-day-accent-amber: #d97706;
+  --color-day-accent-rose: #e11d48;
+
+  --color-text-dark-primary: #e2e8f0;
+  --color-text-dark-heading: #f1f5f9;
+  --color-text-dark-body: #cbd5e1;
+  --color-text-dark-muted: #94a3b8;
+  --color-text-dark-dim: #7c8db5;
+
+  --color-text-light-primary: #0f172a;
+  --color-text-light-heading: #0f172a;
+  --color-text-light-body: #334155;
+  --color-text-light-muted: #475569;
+  --color-text-light-dim: #6b7280;
+
+  --font-heading: var(--font-sora), sans-serif;
+  --font-body: var(--font-lexend), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
+
+  --radius-glass: 20px;
+  --radius-card: 18px;
+  --radius-btn: 14px;
+  --radius-pill: 9999px;
+
+  --shadow-glow:
+    0 0 20px rgba(6, 214, 160, 0.25), 0 4px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow-strong:
+    0 0 40px rgba(6, 214, 160, 0.35), 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow-violet:
+    0 0 30px rgba(139, 92, 246, 0.2), 0 4px 30px rgba(0, 0, 0, 0.4);
+  --shadow-ambient: 0 4px 30px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glass-border: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-light-ambient: 0 4px 30px rgba(15, 23, 42, 0.08);
+  --shadow-light-elevated: 0 8px 40px rgba(15, 23, 42, 0.12);
+
+  --backdrop-blur-glass: 16px;
+  --backdrop-blur-glass-strong: 20px;
+
+  --background-image-gradient-app: linear-gradient(
+    160deg,
+    #050810 0%,
+    #0c1220 40%,
+    #0f0a24 70%,
+    #050810 100%
+  );
+  --background-image-gradient-app-light: linear-gradient(
+    160deg,
+    #f8fafc 0%,
+    #ffffff 40%,
+    #f1f5f9 70%,
+    #f8fafc 100%
+  );
+  --background-image-gradient-teal: linear-gradient(135deg, #06d6a0, #059669);
+  --background-image-gradient-teal-cyan: linear-gradient(
+    135deg,
+    #06d6a0,
+    #06b6d4
+  );
+  --background-image-gradient-violet: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  --background-image-gradient-rainbow-bar: linear-gradient(
+    90deg,
+    #06d6a0,
+    #8b5cf6,
+    #06b6d4
+  );
+  --background-image-gradient-cta: linear-gradient(
+    135deg,
+    #080c18 0%,
+    #0c1220 40%,
+    #0f0a24 100%
+  );
+  --background-image-gradient-card: linear-gradient(135deg, #0c1220, #1a2236);
+  --background-image-gradient-card-light: linear-gradient(
+    135deg,
+    #ffffff,
+    #f8fafc
+  );
+
+  --animate-helix-float: helixFloat 2.2s ease-in-out infinite;
+  --animate-gradient-shift: gradient-shift 6s ease infinite;
+  --animate-biolum-pulse: biolumPulse 5s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.5s linear infinite;
+  --animate-card-reveal: cardReveal 0.5s ease-out both;
+  --animate-subtle-scan: subtleScan 30s linear infinite;
+  --animate-border-rainbow: borderRainbow 3s ease infinite;
+  --animate-spin-slow: spinSlow 3s linear infinite;
+  --animate-scale-in: scaleIn 0.4s ease-out;
+  --animate-slide-in-left: slideInLeft 0.5s ease-out;
+  --animate-slide-in-right: slideInRight 0.5s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
+
+  @keyframes helixFloat {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.7;
+    }
+    50% {
+      transform: translateY(-10px) rotate(180deg);
+      opacity: 1;
+    }
+  }
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  @keyframes biolumPulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 20px rgba(6, 214, 160, 0.25),
+        0 4px 30px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(6, 214, 160, 0.25),
+        0 4px 30px rgba(0, 0, 0, 0.4);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes cardReveal {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes subtleScan {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 0% 100%;
+    }
+  }
+  @keyframes borderRainbow {
+    0% {
+      border-color: rgba(6, 214, 160, 0.3);
+    }
+    33% {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    66% {
+      border-color: rgba(6, 182, 212, 0.3);
+    }
+    100% {
+      border-color: rgba(6, 214, 160, 0.3);
+    }
+  }
+  @keyframes spinSlow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /* Restore v3 button cursor (v4 changed default to `default`) */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 /* ==========================================================================
    Mergenix — Global Design System
@@ -114,39 +376,7 @@
   --cta-gradient: linear-gradient(135deg, #f1f5f9 0%, #ffffff 40%, #f8fafc 100%);
 }
 
-/* ── Keyframe Animations ── */
-@keyframes helixFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-  50% { transform: translateY(-10px) rotate(180deg); opacity: 1; }
-}
-
-@keyframes biolumPulse {
-  0%, 100% { box-shadow: 0 0 20px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
-  50% { box-shadow: 0 0 40px var(--glow-teal), 0 4px 30px var(--shadow-ambient); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes cardReveal {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes subtleScan {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 0% 100%; }
-}
-
-@keyframes borderRainbow {
-  0% { border-color: rgba(6, 214, 160, 0.3); }
-  33% { border-color: rgba(139, 92, 246, 0.3); }
-  66% { border-color: rgba(6, 182, 212, 0.3); }
-  100% { border-color: rgba(6, 214, 160, 0.3); }
-}
-
+/* ── Keyframe Animations (non-@theme — unique keyframes only) ── */
 @keyframes noiseShift {
   0% { transform: translate(0, 0); }
   10% { transform: translate(-5%, -5%); }
@@ -159,11 +389,6 @@
   80% { transform: translate(-15%, 0); }
   90% { transform: translate(10%, 5%); }
   100% { transform: translate(5%, 0); }
-}
-
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 @keyframes pulseRing {
@@ -722,12 +947,6 @@ section,
 @keyframes biolum-pulse {
   0%, 100% { filter: drop-shadow(0 0 30px rgba(6, 214, 160, 0.4)); }
   50%       { filter: drop-shadow(0 0 55px rgba(6, 214, 160, 0.75)); }
-}
-
-@keyframes gradient-shift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 @keyframes dna-rotate {

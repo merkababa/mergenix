@@ -50,17 +50,17 @@ export interface PasswordStrength {
 }
 
 export const STRENGTH_TEXT_COLORS: Record<StrengthLevel, string> = {
-  weak: "text-[var(--accent-rose)]",
-  fair: "text-[var(--accent-amber)]",
-  good: "text-[var(--accent-teal)]",
-  strong: "text-[var(--accent-teal)]",
+  weak: "text-(--accent-rose)",
+  fair: "text-(--accent-amber)",
+  good: "text-(--accent-teal)",
+  strong: "text-(--accent-teal)",
 };
 
 export const STRENGTH_BAR_COLORS: Record<StrengthLevel, string> = {
-  weak: "bg-[var(--accent-rose)]",
-  fair: "bg-[var(--accent-amber)]",
-  good: "bg-[var(--accent-teal)]",
-  strong: "bg-[var(--accent-teal)]",
+  weak: "bg-(--accent-rose)",
+  fair: "bg-(--accent-amber)",
+  good: "bg-(--accent-teal)",
+  strong: "bg-(--accent-teal)",
 };
 
 export function getPasswordStrength(password: string): PasswordStrength {

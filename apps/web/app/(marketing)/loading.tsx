@@ -8,7 +8,7 @@ export default function MarketingLoading() {
           style={{ background: "var(--bg-elevated)" }}
         />
         <div
-          className="h-6 rounded w-2/3 mx-auto"
+          className="h-6 rounded-sm w-2/3 mx-auto"
           style={{ background: "var(--bg-elevated)" }}
         />
         <div className="grid grid-cols-3 gap-6 mt-12">

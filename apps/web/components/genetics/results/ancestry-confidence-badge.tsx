@@ -58,14 +58,14 @@ export const AncestryConfidenceBadge = memo(function AncestryConfidenceBadge({
         {style.label}
       </span>
       {confidenceLevel === "low" && (
-        <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="text-xs leading-relaxed text-(--text-muted)">
           {ancestry === "Unknown"
             ? "Most PRS studies are based on European populations. Ancestry could not be determined — accuracy may vary."
             : `Most PRS studies are based on European populations. Accuracy may be reduced for ${ancestry} ancestry.`}
         </p>
       )}
       {ancestryNote && confidenceLevel !== "low" && (
-        <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="text-xs leading-relaxed text-(--text-muted)">
           {ancestryNote}
         </p>
       )}

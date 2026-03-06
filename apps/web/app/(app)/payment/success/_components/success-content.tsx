@@ -82,13 +82,13 @@ function PaymentSuccessContent() {
         <GlassCard variant="medium" hover="none" className="p-8">
           <div role="status" aria-live="polite">
             <Loader2
-              className="mx-auto h-16 w-16 animate-spin text-[var(--accent-teal)]"
+              className="mx-auto h-16 w-16 animate-spin text-(--accent-teal)"
               aria-hidden="true"
             />
             <h1 className="gradient-text font-heading mt-6 text-3xl font-extrabold">
               Verifying your purchase...
             </h1>
-            <p className="mt-3 text-[var(--text-muted)]">
+            <p className="mt-3 text-(--text-muted)">
               Please wait while we confirm your payment.
             </p>
           </div>
@@ -102,7 +102,7 @@ function PaymentSuccessContent() {
       <GlassCard variant="medium" hover="none" className="p-8">
         <div role="status" aria-live="polite">
           <CheckCircle2
-            className="mx-auto h-16 w-16 text-[#06d6a0]"
+            className="mx-auto h-16 w-16 text-accent-teal"
             aria-hidden="true"
           />
 
@@ -110,7 +110,7 @@ function PaymentSuccessContent() {
             Payment Successful!
           </h1>
 
-          <p className="mt-3 text-[var(--text-muted)]">
+          <p className="mt-3 text-(--text-muted)">
             Your account has been upgraded
             {user?.tier && user.tier !== "free"
               ? ` to ${user.tier.charAt(0).toUpperCase() + user.tier.slice(1)}`
@@ -119,13 +119,13 @@ function PaymentSuccessContent() {
           </p>
 
           {sessionId && (
-            <p className="mt-2 text-xs text-[var(--text-dim)]">
+            <p className="mt-2 text-xs text-(--text-dim)">
               Session: {sessionId}
             </p>
           )}
         </div>
 
-        <p className="mt-6 text-sm text-[var(--text-muted)]">
+        <p className="mt-6 text-sm text-(--text-muted)">
           Redirecting in {countdown} second{countdown !== 1 ? "s" : ""}...
         </p>
 
@@ -162,9 +162,9 @@ export function SuccessContent() {
         <div className="mx-auto max-w-lg text-center">
           <GlassCard variant="medium" hover="none" className="p-8">
             <div className="animate-pulse">
-              <div className="mx-auto h-16 w-16 rounded-full bg-[var(--bg-elevated)]" />
-              <div className="mx-auto mt-6 h-8 w-48 rounded bg-[var(--bg-elevated)]" />
-              <div className="mx-auto mt-3 h-4 w-64 rounded bg-[var(--bg-elevated)]" />
+              <div className="mx-auto h-16 w-16 rounded-full bg-(--bg-elevated)" />
+              <div className="mx-auto mt-6 h-8 w-48 rounded-sm bg-(--bg-elevated)" />
+              <div className="mx-auto mt-3 h-4 w-64 rounded-sm bg-(--bg-elevated)" />
             </div>
           </GlassCard>
         </div>

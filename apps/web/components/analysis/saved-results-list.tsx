@@ -80,18 +80,18 @@ const SavedResultItem = memo(function SavedResultItem({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
-      className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4"
+      className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-          <FileText className="h-4 w-4 text-[var(--accent-teal)]" aria-hidden="true" />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
+          <FileText className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate font-heading text-sm font-semibold text-[var(--text-heading)]">
+          <p className="truncate font-heading text-sm font-semibold text-(--text-heading)">
             {result.label}
           </p>
-          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[var(--text-muted)]">
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-(--text-muted)">
             <span>
               {result.parent1Filename} + {result.parent2Filename}
             </span>
@@ -102,10 +102,10 @@ const SavedResultItem = memo(function SavedResultItem({
           </div>
         </div>
 
-        <div className="flex flex-shrink-0 items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-1.5">
           {isConfirming ? (
             <>
-              <span className="text-xs text-[var(--accent-rose)]">
+              <span className="text-xs text-(--accent-rose)">
                 Delete?
               </span>
               <Button
@@ -142,13 +142,13 @@ const SavedResultItem = memo(function SavedResultItem({
                   <Download className="h-3.5 w-3.5" />
                   Load
                 </Button>
-                <span className="text-xs text-[var(--text-muted)]">Coming Soon</span>
+                <span className="text-xs text-(--text-muted)">Coming Soon</span>
               </div>
               <Button
                 ref={deleteButtonRef}
                 variant="ghost"
                 size="sm"
-                className="text-[var(--text-muted)] hover:text-[var(--accent-rose)]"
+                className="text-(--text-muted) hover:text-(--accent-rose)"
                 onClick={() => onDeleteClick(result.id)}
                 isLoading={isDeleting}
                 disabled={isAnyLoading || isAnyDeleting}
@@ -246,8 +246,8 @@ export function SavedResultsList() {
   return (
     <GlassCard variant="subtle" hover="none" className="p-6">
       <div className="mb-4 flex items-center gap-3">
-        <Archive className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
-        <h2 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+        <Archive className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+        <h2 className="font-heading text-lg font-bold text-(--text-heading)">
           My Saved Analyses
         </h2>
       </div>
@@ -259,13 +259,13 @@ export function SavedResultsList() {
           {SKELETON_IDS.map((i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4"
+              className="animate-pulse rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
             >
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-[var(--border-subtle)]" />
+                <div className="h-9 w-9 rounded-full bg-(--border-subtle)" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-3.5 w-32 rounded bg-[var(--border-subtle)]" />
-                  <div className="h-3 w-48 rounded bg-[var(--border-subtle)]" />
+                  <div className="h-3.5 w-32 rounded-sm bg-(--border-subtle)" />
+                  <div className="h-3 w-48 rounded-sm bg-(--border-subtle)" />
                 </div>
               </div>
             </div>
@@ -281,7 +281,7 @@ export function SavedResultsList() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
             role="alert"
           >
             {error}
@@ -312,14 +312,14 @@ export function SavedResultsList() {
 
       {/* Empty state */}
       {!isLoading && !error && sortedResults.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-6 py-10 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-6 py-10 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <Archive className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+            <Archive className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
           </div>
-          <p className="font-heading text-sm font-semibold text-[var(--text-heading)]">
+          <p className="font-heading text-sm font-semibold text-(--text-heading)">
             No saved analyses yet
           </p>
-          <p className="mt-1.5 max-w-xs text-xs text-[var(--text-muted)]">
+          <p className="mt-1.5 max-w-xs text-xs text-(--text-muted)">
             Run an analysis and save the results to access them later.
           </p>
         </div>
@@ -327,11 +327,11 @@ export function SavedResultsList() {
 
       {/* Upgrade CTA for free users */}
       {!isLoading && userTier === "free" && sortedResults.length > 0 && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-[var(--text-muted)]">
-          <Crown className="h-3.5 w-3.5 text-[var(--accent-amber)]" aria-hidden="true" />
+        <div className="mt-4 flex items-center gap-2 text-xs text-(--text-muted)">
+          <Crown className="h-3.5 w-3.5 text-(--accent-amber)" aria-hidden="true" />
           <span>
             Free tier allows 1 saved analysis.{" "}
-            <a href="/subscription" className="font-medium text-[var(--accent-teal)] hover:underline">
+            <a href="/subscription" className="font-medium text-(--accent-teal) hover:underline">
               Upgrade for more
             </a>
           </span>

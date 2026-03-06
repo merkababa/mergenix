@@ -46,10 +46,10 @@ export function Accordion({ items, className }: AccordionProps) {
               type="button"
               className={cn(
                 "flex w-full items-center justify-between gap-4 px-6 py-5 text-left",
-                "font-heading text-base font-semibold text-[var(--text-heading)]",
+                "font-heading text-base font-semibold text-(--text-heading)",
                 "transition-colors duration-200",
-                "hover:text-[var(--accent-teal)]",
-                "focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-teal)]",
+                "hover:text-(--accent-teal)",
+                "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--accent-teal)",
               )}
               aria-expanded={isOpen}
               aria-controls={panelId}
@@ -59,7 +59,7 @@ export function Accordion({ items, className }: AccordionProps) {
               <m.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.25, ease: "easeInOut" as const }}
-                className="shrink-0 text-[var(--text-muted)]"
+                className="shrink-0 text-(--text-muted)"
               >
                 <ChevronDown className="h-5 w-5" aria-hidden="true" />
               </m.span>
@@ -77,7 +77,7 @@ export function Accordion({ items, className }: AccordionProps) {
                   transition={{ duration: 0.3, ease: "easeInOut" as const }}
                   className="overflow-hidden"
                 >
-                  <div className="px-6 pb-5 text-sm leading-relaxed text-[var(--text-body)]">
+                  <div className="px-6 pb-5 text-sm leading-relaxed text-(--text-body)">
                     {item.answer}
                   </div>
                 </m.div>

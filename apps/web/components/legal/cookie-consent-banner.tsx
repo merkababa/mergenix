@@ -55,10 +55,10 @@ function CategoryToggle({
       data-touch-target="true"
     >
       <div>
-        <span className="text-sm font-medium text-[var(--text-heading)]">
+        <span className="text-sm font-medium text-(--text-heading)">
           {label}
         </span>
-        <p className="text-xs text-[var(--text-muted)]">{description}</p>
+        <p className="text-xs text-(--text-muted)">{description}</p>
       </div>
       <button
         type="button"
@@ -66,14 +66,14 @@ function CategoryToggle({
         aria-checked={enabled}
         aria-label={ariaLabel}
         onClick={onToggle}
-        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 ${
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 ${
           enabled
-            ? "bg-[var(--accent-teal)]"
-            : "bg-[var(--border-subtle)]"
+            ? "bg-(--accent-teal)"
+            : "bg-(--border-subtle)"
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+          className={`inline-block h-4 w-4 rounded-full bg-white shadow-xs transition-transform duration-200 ${
             enabled ? "translate-x-[22px]" : "translate-x-[3px]"
           }`}
         />
@@ -168,23 +168,23 @@ export function CookieConsentBanner() {
             role="dialog"
             aria-label="Cookie consent"
             aria-describedby="cookie-consent-description"
-            className="mx-auto max-w-3xl rounded-2xl border border-[var(--glass-border)] bg-[var(--bg-glass)] p-5 shadow-[0_-4px_30px_var(--shadow-ambient)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+            className="mx-auto max-w-3xl rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-5 shadow-[0_-4px_30px_var(--shadow-ambient)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
           >
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
                 <Cookie
-                  className="h-5 w-5 text-[var(--accent-amber)]"
+                  className="h-5 w-5 text-(--accent-amber)"
                   aria-hidden="true"
                 />
               </div>
 
               <div className="flex-1 min-w-0">
-                <h2 className="font-heading text-base font-semibold text-[var(--text-heading)]">
+                <h2 className="font-heading text-base font-semibold text-(--text-heading)">
                   Cookie Preferences
                 </h2>
                 <p
                   id="cookie-consent-description"
-                  className="mt-1 text-sm text-[var(--text-muted)]"
+                  className="mt-1 text-sm text-(--text-muted)"
                 >
                   We use essential cookies for authentication and theme
                   preferences. You can optionally enable analytics or marketing
@@ -201,18 +201,18 @@ export function CookieConsentBanner() {
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden"
                     >
-                      <div id="cookie-customize-panel" className="mt-4 space-y-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4">
+                      <div id="cookie-customize-panel" className="mt-4 space-y-3 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4">
                         {/* Essential cookies — always on, non-toggleable */}
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-sm font-medium text-[var(--text-heading)]">
+                            <span className="text-sm font-medium text-(--text-heading)">
                               Essential Cookies
                             </span>
-                            <p className="text-xs text-[var(--text-muted)]">
+                            <p className="text-xs text-(--text-muted)">
                               Authentication, theme, consent storage
                             </p>
                           </div>
-                          <span className="rounded-full bg-[rgba(6,214,160,0.15)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent-teal)]">
+                          <span className="rounded-full bg-[rgba(6,214,160,0.15)] px-2.5 py-0.5 text-xs font-medium text-(--accent-teal)">
                             Always on
                           </span>
                         </div>
@@ -281,7 +281,7 @@ export function CookieConsentBanner() {
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--text-primary)]"
+                className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary)"
                 aria-label="Dismiss cookie banner"
               >
                 <X className="h-4 w-4" aria-hidden="true" />

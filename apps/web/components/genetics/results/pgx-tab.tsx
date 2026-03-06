@@ -84,8 +84,8 @@ export function PgxTab() {
 
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Pill className="h-5 w-5 text-[var(--accent-teal)]" />
-        <h3 className="font-heading text-xl font-bold text-[var(--text-heading)]">
+        <Pill className="h-5 w-5 text-(--accent-teal)" />
+        <h3 className="font-heading text-xl font-bold text-(--text-heading)">
           Pharmacogenomics
         </h3>
       </div>
@@ -113,7 +113,7 @@ export function PgxTab() {
       {/* Empty state */}
       {geneResults.length === 0 && (
         <GlassCard variant="subtle" hover="none" className="p-8 text-center">
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-(--text-muted)">
             No pharmacogenomic results available.
           </p>
         </GlassCard>
@@ -122,7 +122,7 @@ export function PgxTab() {
       {/* DTC disclaimer */}
       {pgx.disclaimer && (
         <GlassCard variant="subtle" hover="none" className="p-4">
-          <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+          <p className="text-xs leading-relaxed text-(--text-muted)">
             {pgx.disclaimer}
           </p>
         </GlassCard>
@@ -153,7 +153,7 @@ function DrugRecommendationTable({ parentLabel, recommendations }: DrugRecommend
   if (recommendations.length === 0) return null;
   return (
     <div className="space-y-2">
-      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+      <p className="text-xs font-semibold uppercase tracking-wider text-(--text-heading)">
         {parentLabel} Drug Recommendations
       </p>
       <div
@@ -164,18 +164,18 @@ function DrugRecommendationTable({ parentLabel, recommendations }: DrugRecommend
       >
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]">
+            <tr className="border-b border-(--border-subtle) text-(--text-muted)">
               <th className="pb-1.5 pr-3 font-medium">Drug</th>
               <th className="pb-1.5 pr-3 font-medium">Recommendation</th>
               <th className="pb-1.5 pr-3 font-medium">Strength</th>
               <th className="pb-1.5 font-medium">Category</th>
             </tr>
           </thead>
-          <tbody className="text-[var(--text-body)]">
+          <tbody className="text-(--text-body)">
             {recommendations.map((rec) => (
               <tr
                 key={rec.drug}
-                className="border-b border-[var(--border-subtle)] last:border-0"
+                className="border-b border-(--border-subtle) last:border-0"
               >
                 <td className="py-1.5 pr-3 font-medium">{rec.drug}</td>
                 <td className="py-1.5 pr-3">{rec.recommendation}</td>
@@ -212,13 +212,13 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
       {/* Gene header */}
       <div className="flex items-start justify-between">
         <div>
-          <h4 className="flex items-center gap-2 font-heading text-base font-bold text-[#06b6d4]">
+          <h4 className="flex items-center gap-2 font-heading text-base font-bold text-accent-cyan">
             {gene.gene}
             {hasAnyWarning && (
-              <AlertTriangle className="h-4 w-4 text-[#f59e0b]" aria-hidden="true" />
+              <AlertTriangle className="h-4 w-4 text-accent-amber" aria-hidden="true" />
             )}
           </h4>
-          <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+          <p className="mt-0.5 text-xs text-(--text-muted)">
             {gene.description}
           </p>
         </div>
@@ -226,11 +226,11 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
 
       {/* Parent A */}
       <div className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+        <p className="text-xs font-semibold uppercase tracking-wider text-(--text-heading)">
           Parent A
         </p>
-        <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--text-body)]">
-          <code className="rounded bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-(--text-body)">
+          <code className="rounded-sm bg-(--bg-elevated) px-1.5 py-0.5 font-mono text-xs">
             {gene.parentA.diplotype}
           </code>
           <Badge
@@ -243,11 +243,11 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
 
       {/* Parent B */}
       <div className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+        <p className="text-xs font-semibold uppercase tracking-wider text-(--text-heading)">
           Parent B
         </p>
-        <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--text-body)]">
-          <code className="rounded bg-[var(--bg-elevated)] px-1.5 py-0.5 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-(--text-body)">
+          <code className="rounded-sm bg-(--bg-elevated) px-1.5 py-0.5 font-mono text-xs">
             {gene.parentB.diplotype}
           </code>
           <Badge
@@ -273,19 +273,19 @@ const GeneCard = memo(function GeneCard({ gene, canShowOffspring }: { gene: PgxG
       {/* Offspring predictions (Pro tier only — couple/offspring data is gated) */}
       {canShowOffspring && gene.offspringPredictions.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-heading)]">
+          <p className="text-xs font-semibold uppercase tracking-wider text-(--text-heading)">
             Offspring Predictions
           </p>
           <div className="space-y-1.5">
             {gene.offspringPredictions.map((pred) => (
               <div
                 key={pred.diplotype}
-                className="flex flex-wrap items-center gap-2 rounded-lg bg-[var(--bg-elevated)] px-3 py-2 text-xs"
+                className="flex flex-wrap items-center gap-2 rounded-lg bg-(--bg-elevated) px-3 py-2 text-xs"
               >
-                <code className="font-mono font-semibold text-[var(--text-heading)]">
+                <code className="font-mono font-semibold text-(--text-heading)">
                   {pred.diplotype}
                 </code>
-                <span className="text-[var(--text-muted)]">
+                <span className="text-(--text-muted)">
                   {pred.probability.toFixed(0)}%
                 </span>
                 <Badge

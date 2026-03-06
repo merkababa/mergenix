@@ -46,8 +46,8 @@ export const RESULT_TABS: { key: ResultTab; label: string; icon: React.Component
 
 function TabErrorFallback({ label }: { label: string }) {
   return (
-    <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center">
-      <p className="text-sm text-[var(--text-muted)]">
+    <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center">
+      <p className="text-sm text-(--text-muted)">
         Failed to load {label}.
       </p>
     </div>
@@ -129,12 +129,12 @@ export function AnalysisResultsSection({
           hover="none"
           className="flex items-center gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
         >
-          <AlertTriangle className="h-5 w-5 flex-shrink-0 text-[var(--accent-amber)]" />
+          <AlertTriangle className="h-5 w-5 shrink-0 text-(--accent-amber)" />
           <div className="flex-1">
-            <p className="text-sm text-[var(--text-body)]">
+            <p className="text-sm text-(--text-body)">
               You&apos;re viewing demo results with synthetic data.
             </p>
-            <p className="mt-1 text-sm font-medium text-[var(--accent-teal)]">
+            <p className="mt-1 text-sm font-medium text-(--accent-teal)">
               Ready to analyze your own DNA?
             </p>
           </div>
@@ -190,8 +190,8 @@ export function AnalysisResultsSection({
                   onClick={() => onTabChange(tab.key)}
                   className={`flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 font-heading text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-gradient-to-r from-[#06d6a0] to-[#059669] font-bold text-[#050810] shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
-                      : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                      ? "bg-linear-to-r from-accent-teal to-day-accent-teal font-bold text-bio-deep shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
+                      : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -201,7 +201,7 @@ export function AnalysisResultsSection({
             })}
           </div>
           <div
-            className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--bg-glass)] to-transparent"
+            className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-(--bg-glass) to-transparent"
             aria-hidden="true"
           />
         </div>

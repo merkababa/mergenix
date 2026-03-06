@@ -91,7 +91,7 @@ export function PrivacyContent() {
       />
 
       {/* ── Effective Date ────────────────────────────────────────────── */}
-      <div className="mt-6 flex flex-wrap gap-4 text-sm text-[var(--text-muted)]">
+      <div className="mt-6 flex flex-wrap gap-4 text-sm text-(--text-muted)">
         <span><strong>Last updated:</strong> February 2026</span>
         <span aria-hidden="true">·</span>
         <span><strong>Effective date:</strong> February 2026</span>
@@ -110,14 +110,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                <Shield className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
+                <Shield className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Mergenix
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   As the entity responsible for the personal data processed through
                   this platform, we determine the purposes and means of processing your
                   personal data in accordance with applicable data protection laws.
@@ -145,12 +145,12 @@ export function PrivacyContent() {
               <ScrollReveal key={item.category}>
                 <GlassCard variant="medium" hover="glow" className="h-full p-7">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
-                    <Icon className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+                    <Icon className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
                   </div>
-                  <h3 className="mb-2 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
                     {item.category}
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     {item.description}
                   </p>
                 </GlassCard>
@@ -174,14 +174,14 @@ export function PrivacyContent() {
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(139,92,246,0.1)]">
-                  <Scale className="h-5 w-5 text-[var(--accent-violet)]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(139,92,246,0.1)]">
+                  <Scale className="h-5 w-5 text-(--accent-violet)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                     Article 6(1)(a) &mdash; Consent
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     For processing genetic analysis data, we rely on your explicit consent.
                     You may withdraw consent at any time through your account settings without
                     affecting the lawfulness of processing carried out before withdrawal.
@@ -189,14 +189,14 @@ export function PrivacyContent() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(6,182,212,0.1)]">
-                  <FileText className="h-5 w-5 text-[var(--accent-cyan)]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(6,182,212,0.1)]">
+                  <FileText className="h-5 w-5 text-(--accent-cyan)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                     Article 6(1)(b) &mdash; Contract
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     Processing of account and billing data is necessary for the
                     performance of our service agreement with you, including account
                     management and payment processing. Payment processing is handled
@@ -205,7 +205,7 @@ export function PrivacyContent() {
                     privacy policy is available at{" "}
                     <a
                       href="https://stripe.com/privacy"
-                      className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                      className="text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -216,14 +216,14 @@ export function PrivacyContent() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(245,158,11,0.1)]">
-                  <Shield className="h-5 w-5 text-[var(--accent-amber)]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(245,158,11,0.1)]">
+                  <Shield className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                     Article 9(2)(a) &mdash; Explicit Consent (Special Category Data)
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     Processing of your genetic data requires explicit consent under
                     GDPR Article 9(2)(a) because genetic data is a special category
                     of personal data. This consent is obtained via our dedicated
@@ -253,14 +253,14 @@ export function PrivacyContent() {
               <ScrollReveal key={right.title}>
                 <GlassCard variant="subtle" hover="glow" className="h-full p-7">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
+                      <Icon className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                      <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                         {right.title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                      <p className="text-sm leading-relaxed text-(--text-muted)">
                         {right.description}
                       </p>
                     </div>
@@ -285,14 +285,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(245,158,11,0.1)]">
-                <Clock className="h-6 w-6 text-[var(--accent-amber)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(245,158,11,0.1)]">
+                <Clock className="h-6 w-6 text-(--accent-amber)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Retention Periods
                 </h3>
-                <ul className="space-y-2 text-sm leading-relaxed text-[var(--text-muted)]">
+                <ul className="space-y-2 text-sm leading-relaxed text-(--text-muted)">
                   <li>
                     <strong>Account data:</strong> Retained for the duration of your account.
                     Deleted within 30 days of account closure. Accounts inactive for more
@@ -330,14 +330,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
-                <Lock className="h-6 w-6 text-[var(--accent-cyan)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
+                <Lock className="h-6 w-6 text-(--accent-cyan)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Client-Side Encryption — Planned for a Future Release
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   We plan to implement client-side AES-256-GCM encryption using
                   Argon2id-derived keys, so that saved analysis results are encrypted
                   in your browser before being transmitted to our servers. This feature
@@ -363,18 +363,18 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                <UserCheck className="h-6 w-6 text-[var(--accent-violet)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
+                <UserCheck className="h-6 w-6 text-(--accent-violet)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   DPO Contact
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   Data Protection Officer:{" "}
                   <a
                     href="mailto:privacy@mergenix.com"
-                    className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                    className="text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                   >
                     privacy@mergenix.com
                   </a>
@@ -403,14 +403,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                <Scale className="h-6 w-6 text-[var(--accent-teal)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
+                <Scale className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Article 27 Designation
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   An EU Representative under GDPR Article 27 will be formally
                   designated prior to public launch. This designation will be
                   completed before Mergenix becomes accessible to the general public,
@@ -419,7 +419,7 @@ export function PrivacyContent() {
                   may direct inquiries to our Data Protection Officer at{" "}
                   <a
                     href="mailto:privacy@mergenix.com"
-                    className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                    className="text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                   >
                     privacy@mergenix.com
                   </a>
@@ -444,14 +444,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
-                <Shield className="h-6 w-6 text-[var(--accent-cyan)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
+                <Shield className="h-6 w-6 text-(--accent-cyan)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Standard Contractual Clauses
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   Your data may be processed in the United States. We rely on
                   Standard Contractual Clauses (SCCs) approved by the European
                   Commission for any transfers of personal data outside the EEA,
@@ -482,14 +482,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(245,158,11,0.1)]">
-                <FileText className="h-6 w-6 text-[var(--accent-amber)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(245,158,11,0.1)]">
+                <FileText className="h-6 w-6 text-(--accent-amber)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   Legal Process Disclosure
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   We may disclose your account data (never raw genetic data, which
                   we do not possess) if required by valid legal process such as a
                   court order or subpoena. We will notify you of any such request
@@ -514,14 +514,14 @@ export function PrivacyContent() {
         <ScrollReveal>
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                <FileSearch className="h-6 w-6 text-[var(--accent-violet)]" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
+                <FileSearch className="h-6 w-6 text-(--accent-violet)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-[var(--text-heading)]">
+                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
                   DPIA Status
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   We have conducted a Data Protection Impact Assessment (DPIA) as
                   required by GDPR Article 35 for large-scale processing of special
                   category data, including genetic data. Our DPIA evaluates the
@@ -551,19 +551,19 @@ export function PrivacyContent() {
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
-                  <Mail className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
+                  <Mail className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                     Data Protection Contact
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     For any questions about this privacy notice or to exercise your data
                     subject rights, contact us at{" "}
                     <a
                       href="mailto:privacy@mergenix.com"
-                      className="text-[var(--accent-teal)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] focus-visible:ring-offset-1 rounded-sm"
+                      className="text-(--accent-teal) hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 rounded-xs"
                     >
                       privacy@mergenix.com
                     </a>
@@ -571,14 +571,14 @@ export function PrivacyContent() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(139,92,246,0.1)]">
-                  <Scale className="h-5 w-5 text-[var(--accent-violet)]" aria-hidden="true" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[rgba(139,92,246,0.1)]">
+                  <Scale className="h-5 w-5 text-(--accent-violet)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-heading text-base font-semibold text-[var(--text-heading)]">
+                  <h3 className="mb-1 font-heading text-base font-semibold text-(--text-heading)">
                     Right to Lodge a Complaint
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     If you believe your data protection rights have been violated, you
                     have the right to lodge a complaint with a supervisory authority in
                     the EU Member State of your habitual residence, place of work, or

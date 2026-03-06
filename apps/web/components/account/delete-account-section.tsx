@@ -150,15 +150,15 @@ export function DeleteAccountSection({
       >
         <div className="flex items-center gap-3 mb-4">
           <Trash2
-            className="h-5 w-5 text-[var(--accent-rose)]"
+            className="h-5 w-5 text-(--accent-rose)"
             aria-hidden="true"
           />
-          <h2 className="font-heading text-lg font-bold text-[var(--accent-rose)]">
+          <h2 className="font-heading text-lg font-bold text-(--accent-rose)">
             Delete Account
           </h2>
         </div>
 
-        <p className="mb-5 text-sm text-[var(--text-muted)]">
+        <p className="mb-5 text-sm text-(--text-muted)">
           Permanently delete your account and all associated data. This action
           cannot be undone. Your raw genetic files are never stored on our
           servers — only your saved analysis results will be deleted.
@@ -182,7 +182,7 @@ export function DeleteAccountSection({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
+            className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
             onClick={handleBackdropClick}
             role="presentation"
           >
@@ -200,14 +200,14 @@ export function DeleteAccountSection({
                 aria-labelledby={headingId}
                 aria-describedby={warningId}
                 tabIndex={-1}
-                className="relative outline-none rounded-2xl border border-[rgba(244,63,94,0.2)] bg-[var(--bg-glass)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+                className="relative outline-hidden rounded-2xl border border-[rgba(244,63,94,0.2)] bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
               >
                 {/* ── Close button ──────────────────────────────────── */}
                 <button
                   type="button"
                   onClick={closeModal}
                   disabled={isDeleting}
-                  className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] disabled:pointer-events-none disabled:opacity-50"
+                  className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal) disabled:pointer-events-none disabled:opacity-50"
                   aria-label="Close modal"
                 >
                   <X className="h-4 w-4" />
@@ -216,7 +216,7 @@ export function DeleteAccountSection({
                 {/* ── Warning icon ──────────────────────────────────── */}
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]">
                   <AlertTriangle
-                    className="h-8 w-8 text-[var(--accent-rose)]"
+                    className="h-8 w-8 text-(--accent-rose)"
                     aria-hidden="true"
                   />
                 </div>
@@ -224,7 +224,7 @@ export function DeleteAccountSection({
                 {/* ── Heading ───────────────────────────────────────── */}
                 <h2
                   id={headingId}
-                  className="mb-2 text-center font-heading text-xl font-bold text-[var(--text-heading)]"
+                  className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
                 >
                   Are you sure?
                 </h2>
@@ -232,7 +232,7 @@ export function DeleteAccountSection({
                 {/* ── Warning text ──────────────────────────────────── */}
                 <div
                   id={warningId}
-                  className="mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm text-[var(--text-muted)]"
+                  className="mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm text-(--text-muted)"
                 >
                   <p className="mb-2">This will permanently delete:</p>
                   <ul className="list-inside list-disc space-y-1 ml-1">
@@ -240,7 +240,7 @@ export function DeleteAccountSection({
                     <li>All saved analysis results</li>
                     <li>Your plan and tier status</li>
                   </ul>
-                  <p className="mt-3 font-semibold text-[var(--accent-rose)]">
+                  <p className="mt-3 font-semibold text-(--accent-rose)">
                     This cannot be undone.
                   </p>
                 </div>
@@ -249,9 +249,9 @@ export function DeleteAccountSection({
                 <div className="mb-5">
                   <label
                     htmlFor="delete-confirm-input"
-                    className="mb-2 block text-sm text-[var(--text-muted)]"
+                    className="mb-2 block text-sm text-(--text-muted)"
                   >
-                    Type <span className="font-mono font-bold text-[var(--text-primary)]">DELETE</span> to confirm
+                    Type <span className="font-mono font-bold text-(--text-primary)">DELETE</span> to confirm
                   </label>
                   <input
                     ref={inputRef}
@@ -262,7 +262,7 @@ export function DeleteAccountSection({
                     placeholder="Type DELETE to confirm"
                     disabled={isDeleting}
                     aria-label="Type DELETE to confirm account deletion"
-                    className="w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-dim)] outline-none transition-colors focus:border-[rgba(244,63,94,0.4)] focus:ring-2 focus:ring-[rgba(244,63,94,0.15)] disabled:opacity-50"
+                    className="w-full rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-4 py-3 text-sm text-(--text-primary) placeholder:text-(--text-dim) outline-hidden transition-colors focus:border-[rgba(244,63,94,0.4)] focus:ring-2 focus:ring-[rgba(244,63,94,0.15)] disabled:opacity-50"
                   />
                 </div>
 
@@ -274,7 +274,7 @@ export function DeleteAccountSection({
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+                      className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                       role="alert"
                       aria-live="assertive"
                     >

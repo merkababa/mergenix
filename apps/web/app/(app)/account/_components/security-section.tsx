@@ -45,22 +45,22 @@ export function SecuritySection() {
     <>
       <GlassCard variant="medium" hover="none" className="p-7">
         <div className="mb-5 flex items-center gap-3">
-          <Shield className="h-5 w-5 text-[var(--accent-teal)]" />
-          <h2 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+          <Shield className="h-5 w-5 text-(--accent-teal)" />
+          <h2 className="font-heading text-lg font-bold text-(--text-heading)">
             Security
           </h2>
         </div>
 
         <div className="space-y-4">
           {/* Password */}
-          <div className="flex items-center justify-between rounded-xl border border-[var(--border-subtle)] p-4">
+          <div className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4">
             <div className="flex items-center gap-3">
-              <Key className="h-5 w-5 text-[var(--text-dim)]" />
+              <Key className="h-5 w-5 text-(--text-dim)" />
               <div>
-                <p className="font-heading text-sm font-medium text-[var(--text-heading)]">
+                <p className="font-heading text-sm font-medium text-(--text-heading)">
                   Password
                 </p>
-                <p className="text-xs text-[var(--text-muted)]">
+                <p className="text-xs text-(--text-muted)">
                   Keep your account secure with a strong password
                 </p>
               </div>
@@ -75,14 +75,14 @@ export function SecuritySection() {
           </div>
 
           {/* 2FA */}
-          <div className="flex items-center justify-between rounded-xl border border-[var(--border-subtle)] p-4">
+          <div className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4">
             <div className="flex items-center gap-3">
-              <Smartphone className="h-5 w-5 text-[var(--text-dim)]" />
+              <Smartphone className="h-5 w-5 text-(--text-dim)" />
               <div>
-                <p className="font-heading text-sm font-medium text-[var(--text-heading)]">
+                <p className="font-heading text-sm font-medium text-(--text-heading)">
                   Two-Factor Authentication
                 </p>
-                <p className="text-xs text-[var(--text-muted)]">
+                <p className="text-xs text-(--text-muted)">
                   {is2FAEnabled
                     ? "2FA is enabled — your account has an extra layer of security"
                     : "Add an extra layer of security to your account"}
@@ -119,7 +119,7 @@ export function SecuritySection() {
                 className="overflow-hidden"
               >
                 <div className="rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.03)] p-4">
-                  <p className="mb-3 text-sm text-[var(--text-muted)]">
+                  <p className="mb-3 text-sm text-(--text-muted)">
                     Enter your authenticator code to disable 2FA:
                   </p>
                   <div className="flex gap-3">

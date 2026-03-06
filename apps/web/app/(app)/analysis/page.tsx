@@ -25,9 +25,9 @@ function AnalysisSkeleton() {
   return (
     <div role="status" aria-busy="true" className="animate-pulse space-y-6">
       <span className="sr-only">Loading...</span>
-      <div className="mx-auto h-10 w-64 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-48 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-32 rounded-[20px] bg-[var(--bg-elevated)]" />
+      <div className="mx-auto h-10 w-64 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-48 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-32 rounded-glass bg-(--bg-elevated)" />
     </div>
   );
 }

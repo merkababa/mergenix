@@ -251,7 +251,7 @@ export function SaveResultDialog() {
   // Not authenticated — prompt to sign in
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+      <div className="flex items-center gap-2 text-sm text-(--text-muted)">
         <Save className="h-4 w-4" aria-hidden="true" />
         <span>Sign in to save your analysis</span>
       </div>
@@ -272,14 +272,14 @@ export function SaveResultDialog() {
           Save Analysis
         </Button>
         {tierLimitText && (
-          <span className="text-xs text-[var(--text-muted)]" aria-live="polite">
+          <span className="text-xs text-(--text-muted)" aria-live="polite">
             {tierLimitText}
           </span>
         )}
         {isAtLimit && userTier !== "pro" && upgradeCTAText && (
           <a
             href="/subscription"
-            className="inline-flex items-center gap-1 text-xs font-medium text-[var(--accent-teal)] hover:underline"
+            className="inline-flex items-center gap-1 text-xs font-medium text-(--accent-teal) hover:underline"
           >
             <Crown className="h-3 w-3" aria-hidden="true" />
             {upgradeCTAText}
@@ -291,7 +291,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {showConsent && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
             onClick={handleConsentBackdropClick}
             role="presentation"
           >
@@ -308,29 +308,29 @@ export function SaveResultDialog() {
                 aria-modal="true"
                 aria-labelledby="consent-dialog-title"
                 tabIndex={-1}
-                className="outline-none"
+                className="outline-hidden"
               >
                 <GlassCard variant="medium" hover="none" className="p-6">
                   <div className="mb-4 flex items-center gap-3">
-                    <AlertTriangle className="h-5 w-5 text-[var(--accent-amber)]" aria-hidden="true" />
+                    <AlertTriangle className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
                     <h2
                       id="consent-dialog-title"
-                      className="font-heading text-lg font-bold text-[var(--text-heading)]"
+                      className="font-heading text-lg font-bold text-(--text-heading)"
                     >
                       Save Analysis
                     </h2>
                   </div>
 
-                  <p className="text-sm text-[var(--text-body)]">
+                  <p className="text-sm text-(--text-body)">
                     Your analysis results will be encrypted and stored on our servers.
                     Your raw genetic files are never uploaded — only the processed results.
                   </p>
-                  <p className="mt-2 text-sm text-[var(--text-muted)]">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     You can delete your saved analyses at any time from your account.
                     See our{" "}
                     <Link
                       href="/legal#privacy"
-                      className="font-medium text-[var(--accent-teal)] underline hover:no-underline"
+                      className="font-medium text-(--accent-teal) underline hover:no-underline"
                     >
                       Privacy Policy
                     </Link>{" "}
@@ -365,7 +365,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {isOpen && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
             onClick={handleSaveBackdropClick}
             role="presentation"
           >
@@ -382,20 +382,20 @@ export function SaveResultDialog() {
                 aria-modal="true"
                 aria-labelledby="save-dialog-title"
                 tabIndex={-1}
-                className="outline-none"
+                className="outline-hidden"
               >
                 <GlassCard variant="medium" hover="none" className="p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <h2
                       id="save-dialog-title"
-                      className="font-heading text-lg font-bold text-[var(--text-heading)]"
+                      className="font-heading text-lg font-bold text-(--text-heading)"
                     >
                       Save Analysis
                     </h2>
                     <button
                       type="button"
                       onClick={handleClose}
-                      className="rounded-lg p-1 text-[var(--text-muted)] transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--text-primary)]"
+                      className="rounded-lg p-1 text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary)"
                       aria-label="Close save dialog"
                     >
                       <X className="h-5 w-5" />
@@ -412,7 +412,7 @@ export function SaveResultDialog() {
                   />
 
                   {tierLimitText && (
-                    <p className="mt-2 text-xs text-[var(--text-muted)]">
+                    <p className="mt-2 text-xs text-(--text-muted)">
                       {tierLimitText}
                     </p>
                   )}
@@ -425,7 +425,7 @@ export function SaveResultDialog() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+                        className="mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                         role="alert"
                       >
                         {saveError}

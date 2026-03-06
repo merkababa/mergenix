@@ -125,7 +125,7 @@ export function ChipDisclosureModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
           <m.div
             variants={modalVariants}
@@ -141,40 +141,40 @@ export function ChipDisclosureModal({
               aria-labelledby="chip-disclosure-title"
               aria-describedby="chip-disclosure-description"
               tabIndex={-1}
-              className="outline-none rounded-2xl border border-[var(--glass-border)] bg-[var(--bg-glass)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+              className="outline-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* Icon */}
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(245,158,11,0.1)]">
                 <AlertTriangle
-                  className="h-8 w-8 text-[var(--accent-amber,#f59e0b)]"
+                  className="h-8 w-8 text-(--accent-amber,#f59e0b)"
                   aria-hidden="true"
                 />
               </div>
 
               <h2
                 id="chip-disclosure-title"
-                className="mb-2 text-center font-heading text-xl font-bold text-[var(--text-heading)]"
+                className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
               >
                 Important: Test Limitations
               </h2>
 
               <p
                 id="chip-disclosure-description"
-                className="mb-6 text-sm text-[var(--text-body)] leading-relaxed rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4"
+                className="mb-6 text-sm text-(--text-body) leading-relaxed rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
               >
                 {CHIP_LIMITATION_TEXT}
               </p>
 
               {/* Checkbox */}
-              <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
+              <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  className="mt-0.5 h-4 w-4 rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)] accent-[var(--accent-teal)]"
+                  className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
                   aria-label="I understand these limitations"
                 />
-                <span className="text-sm text-[var(--text-body)]">
+                <span className="text-sm text-(--text-body)">
                   I understand these limitations
                 </span>
               </label>

@@ -45,7 +45,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="mb-1.5 block font-heading text-sm font-medium text-[var(--text-primary)]"
+            className="mb-1.5 block font-heading text-sm font-medium text-(--text-primary)"
           >
             {label}
           </label>
@@ -58,10 +58,10 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             value={value}
             onChange={handleChange}
             className={cn(
-              "w-full rounded-xl border bg-[var(--bg-elevated)] px-4 py-2.5 pr-11 font-body text-sm text-[var(--text-primary)] placeholder:text-[var(--text-dim)]",
-              "border-[var(--border-subtle)]",
+              "w-full rounded-xl border bg-(--bg-elevated) px-4 py-2.5 pr-11 font-body text-sm text-(--text-primary) placeholder:text-(--text-dim)",
+              "border-(--border-subtle)",
               "transition-all duration-200",
-              "focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-none",
+              "focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-hidden",
               error &&
                 "border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]",
               className,
@@ -80,7 +80,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-0 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[var(--text-dim)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
+            className="absolute right-0 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] flex items-center justify-center text-(--text-dim) transition-colors hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
@@ -93,7 +93,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {error && (
           <p
             id={`${inputId}-error`}
-            className="mt-1 text-xs text-[var(--accent-rose)]"
+            className="mt-1 text-xs text-(--accent-rose)"
             role="alert"
           >
             {error}
@@ -109,7 +109,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                     "h-1 flex-1 rounded-full transition-colors duration-300",
                     level <= Math.ceil(strength.widthPercent / 20)
                       ? STRENGTH_BAR_COLORS[strength.level]
-                      : "bg-[var(--border-subtle)]",
+                      : "bg-(--border-subtle)",
                   )}
                 />
               ))}

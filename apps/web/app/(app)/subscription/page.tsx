@@ -12,10 +12,10 @@ function SubscriptionSkeleton() {
   return (
     <div role="status" aria-busy="true" className="mx-auto max-w-2xl animate-pulse space-y-6">
       <span className="sr-only">Loading...</span>
-      <div className="h-10 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-40 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-32 rounded-[20px] bg-[var(--bg-elevated)]" />
-      <div className="h-24 rounded-[20px] bg-[var(--bg-elevated)]" />
+      <div className="h-10 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-40 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-32 rounded-glass bg-(--bg-elevated)" />
+      <div className="h-24 rounded-glass bg-(--bg-elevated)" />
     </div>
   );
 }

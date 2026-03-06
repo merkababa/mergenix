@@ -50,8 +50,8 @@ export const HighContrastToggle = memo(function HighContrastToggle({
       className={cn(
         "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",
         enabled
-          ? "border-[var(--accent-teal)] bg-[rgba(6,214,160,0.1)] text-[var(--accent-teal)]"
-          : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--accent-teal)] hover:text-[var(--accent-teal)]",
+          ? "border-(--accent-teal) bg-[rgba(6,214,160,0.1)] text-(--accent-teal)"
+          : "border-(--border-subtle) text-(--text-muted) hover:border-(--accent-teal) hover:text-(--accent-teal)",
         className,
       )}
     >

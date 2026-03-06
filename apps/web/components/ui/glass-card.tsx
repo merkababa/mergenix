@@ -22,7 +22,7 @@ const NOISE_SVG_URI =
 // ---------------------------------------------------------------------------
 const glassCardVariants = cva(
   [
-    "relative overflow-hidden rounded-[20px] border transition-all duration-300",
+    "relative overflow-hidden rounded-glass border transition-all duration-300",
     "shadow-[0_4px_30px_var(--shadow-ambient),inset_0_1px_0_var(--inset-highlight)]",
   ],
   {
@@ -31,29 +31,29 @@ const glassCardVariants = cva(
         subtle: [
           "border-[rgba(148,163,184,0.05)] bg-[rgba(12,18,32,0.35)]",
           "[backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]",
-          "[[data-theme='light']_&]:bg-[rgba(255,255,255,0.4)]",
-          "[[data-theme='light']_&]:border-[rgba(15,23,42,0.04)]",
+          "in-data-[theme='light']:bg-[rgba(255,255,255,0.4)]",
+          "in-data-[theme='light']:border-[rgba(15,23,42,0.04)]",
         ],
         medium: [
-          "border-[var(--glass-border)] bg-[var(--bg-glass)]",
+          "border-(--glass-border) bg-(--bg-glass)",
           "[backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]",
         ],
         strong: [
           "border-[rgba(148,163,184,0.12)] bg-[rgba(12,18,32,0.85)]",
           "[backdrop-filter:blur(24px)] [-webkit-backdrop-filter:blur(24px)]",
-          "[[data-theme='light']_&]:bg-[rgba(255,255,255,0.9)]",
-          "[[data-theme='light']_&]:border-[rgba(15,23,42,0.08)]",
+          "in-data-[theme='light']:bg-[rgba(255,255,255,0.9)]",
+          "in-data-[theme='light']:border-[rgba(15,23,42,0.08)]",
         ],
         // D1.3 — new: frosted (saturate 180%)
         frosted: [
-          "border-[var(--glass-border)] bg-[var(--bg-glass)]",
+          "border-(--glass-border) bg-(--bg-glass)",
           "[backdrop-filter:blur(var(--glass-blur))_saturate(180%)]",
           "[-webkit-backdrop-filter:blur(var(--glass-blur))_saturate(180%)]",
-          "[[data-theme='light']_&]:bg-[rgba(255,255,255,0.55)]",
+          "in-data-[theme='light']:bg-[rgba(255,255,255,0.55)]",
         ],
         // D1.3 — new: aurora (animated shifting gradient via ::before pseudo)
         aurora: [
-          "border-[rgba(139,92,246,0.15)] bg-[var(--bg-glass)]",
+          "border-[rgba(139,92,246,0.15)] bg-(--bg-glass)",
           "[backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]",
           "glass-card--aurora",
         ],

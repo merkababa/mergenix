@@ -114,7 +114,7 @@ function AnimatedCounter({
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="font-heading text-2xl font-extrabold text-[var(--accent-teal)]">
+    <div ref={ref} className="font-heading text-2xl font-extrabold text-(--accent-teal)">
       {displayValue}
       {suffix}
     </div>
@@ -303,9 +303,9 @@ function DiseaseCatalogInner() {
               rainbow
               className="relative overflow-hidden p-5 text-center"
             >
-              <Icon className="mx-auto mb-2 h-5 w-5 text-[var(--accent-cyan)]" aria-hidden="true" />
+              <Icon className="mx-auto mb-2 h-5 w-5 text-(--accent-cyan)" aria-hidden="true" />
               <AnimatedCounter value={value} />
-              <div className="font-heading text-xs font-medium uppercase tracking-widest text-[var(--accent-cyan)]">
+              <div className="font-heading text-xs font-medium uppercase tracking-widest text-(--accent-cyan)">
                 {label}
               </div>
             </GlassCard>
@@ -388,7 +388,7 @@ function DiseaseCatalogInner() {
       />
 
       {/* -- Results count -- */}
-      <p className="mb-4 text-center text-sm text-[var(--text-muted)]" role="status" aria-live="polite">
+      <p className="mb-4 text-center text-sm text-(--text-muted)" role="status" aria-live="polite">
         Showing {paginated.length} of {filtered.length} diseases
         {search && (
           <>
@@ -412,7 +412,7 @@ function DiseaseCatalogInner() {
             <m.div key={disease.slug} variants={catalogCardVariants}>
               <Link
                 href={`/diseases/${disease.slug}`}
-                className="group block h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] rounded-[20px]"
+                className="group block h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal) rounded-glass"
               >
                 <GlassCard
                   variant="medium"
@@ -428,7 +428,7 @@ function DiseaseCatalogInner() {
                       because each gradient stop needs a resolved color, not a
                       theme-dependent variable that may differ between the two stops. */}
                   <div
-                    className="absolute bottom-0 right-0 top-0 w-[3px] rounded-r-[20px]"
+                    className="absolute bottom-0 right-0 top-0 w-[3px] rounded-r-glass"
                     aria-hidden="true"
                     style={{
                       background:
@@ -441,7 +441,7 @@ function DiseaseCatalogInner() {
                   />
 
                   <div className="mb-2 flex items-start justify-between gap-2">
-                    <h3 className="font-heading text-base font-bold text-[var(--text-heading)] transition-colors group-hover:text-[var(--accent-teal)]">
+                    <h3 className="font-heading text-base font-bold text-(--text-heading) transition-colors group-hover:text-(--accent-teal)">
                       {disease.name}
                     </h3>
                     <Badge variant={severityVariant(disease.severity)}>
@@ -449,7 +449,7 @@ function DiseaseCatalogInner() {
                     </Badge>
                   </div>
 
-                  <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-(--text-muted)">
                     {disease.description}
                   </p>
 
@@ -471,11 +471,11 @@ function DiseaseCatalogInner() {
                   </div>
 
                   {/* SNP count + view link */}
-                  <div className="flex items-center justify-between border-t border-[var(--border-subtle)] pt-3">
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="flex items-center justify-between border-t border-(--border-subtle) pt-3">
+                    <span className="font-mono text-xs text-(--text-muted)">
                       {disease.snpCount} SNP{disease.snpCount !== 1 ? "s" : ""} tracked
                     </span>
-                    <span className="flex items-center gap-1 text-xs font-medium text-[var(--accent-teal)] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+                    <span className="flex items-center gap-1 text-xs font-medium text-(--accent-teal) opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
                       View details
                       <ChevronRight className="h-3 w-3" aria-hidden="true" />
                     </span>
@@ -493,11 +493,11 @@ function DiseaseCatalogInner() {
           transition={{ duration: 0.4 }}
           className="py-16 text-center"
         >
-          <Dna className="mx-auto mb-4 h-12 w-12 text-[var(--text-muted)] opacity-50" aria-hidden="true" />
-          <h3 className="font-heading text-lg font-semibold text-[var(--text-heading)]">
+          <Dna className="mx-auto mb-4 h-12 w-12 text-(--text-muted) opacity-50" aria-hidden="true" />
+          <h3 className="font-heading text-lg font-semibold text-(--text-heading)">
             No diseases found
           </h3>
-          <p className="mt-2 text-sm text-[var(--text-muted)]">
+          <p className="mt-2 text-sm text-(--text-muted)">
             Try adjusting your search or filters to find what you&apos;re looking for
           </p>
           <Button
@@ -549,7 +549,7 @@ function DiseaseCatalogInner() {
                 item === "ellipsis" ? (
                   <span
                     key={`ellipsis-${idx}`}
-                    className="px-1 text-sm text-[var(--text-muted)]"
+                    className="px-1 text-sm text-(--text-muted)"
                     aria-hidden="true"
                   >
                     ...
@@ -562,8 +562,8 @@ function DiseaseCatalogInner() {
                     aria-current={item === safePage ? "page" : undefined}
                     className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-all duration-200 ${
                       item === safePage
-                        ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)] border border-[rgba(6,214,160,0.3)]"
-                        : "text-[var(--text-muted)] hover:bg-[rgba(6,214,160,0.06)] hover:text-[var(--accent-teal)]"
+                        ? "bg-[rgba(6,214,160,0.15)] text-(--accent-teal) border border-[rgba(6,214,160,0.3)]"
+                        : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                     }`}
                   >
                     {item}
@@ -586,7 +586,7 @@ function DiseaseCatalogInner() {
       )}
 
       {/* -- Footer Note -- */}
-      <p className="mt-8 text-center text-xs text-[var(--text-muted)]">
+      <p className="mt-8 text-center text-xs text-(--text-muted)">
         Showing a curated selection of {DISEASES.length} representative conditions from
         our full database of {stats.totalDiseases.toLocaleString()} genetic diseases.
         Each condition is sourced from ClinVar, OMIM, and peer-reviewed literature.
@@ -602,8 +602,8 @@ export function CatalogContent() {
     <Suspense
       fallback={
         <div className="py-16 text-center">
-          <Dna className="mx-auto mb-4 h-8 w-8 animate-pulse text-[var(--accent-teal)]" />
-          <p className="text-sm text-[var(--text-muted)]">Loading disease catalog...</p>
+          <Dna className="mx-auto mb-4 h-8 w-8 animate-pulse text-(--accent-teal)" />
+          <p className="text-sm text-(--text-muted)">Loading disease catalog...</p>
         </div>
       }
     >

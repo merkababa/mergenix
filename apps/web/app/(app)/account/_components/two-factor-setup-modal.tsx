@@ -198,7 +198,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-sm"
+            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-xs"
             onClick={onClose}
           />
 
@@ -215,7 +215,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-dim)] transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-[var(--accent-rose)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
+                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-(--accent-rose) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -228,10 +228,10 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     <div
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
                         i === step
-                          ? "bg-gradient-to-br from-[var(--accent-teal)] to-[var(--accent-cyan)] text-[var(--bg-deep)]"
+                          ? "bg-linear-to-br from-(--accent-teal) to-(--accent-cyan) text-(--bg-deep)"
                           : i < step
-                            ? "bg-[rgba(6,214,160,0.2)] text-[var(--accent-teal)]"
-                            : "bg-[var(--bg-elevated)] text-[var(--text-dim)]"
+                            ? "bg-[rgba(6,214,160,0.2)] text-(--accent-teal)"
+                            : "bg-(--bg-elevated) text-(--text-dim)"
                       }`}
                     >
                       <s.icon className="h-4 w-4" />
@@ -239,7 +239,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     {i < STEPS.length - 1 && (
                       <div
                         className={`h-0.5 w-8 rounded-full transition-colors duration-300 ${
-                          i < step ? "bg-[var(--accent-teal)]" : "bg-[var(--border-subtle)]"
+                          i < step ? "bg-(--accent-teal)" : "bg-(--border-subtle)"
                         }`}
                       />
                     )}
@@ -257,16 +257,16 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-[var(--text-heading)]">
+                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
                       Scan QR Code
                     </h2>
-                    <p className="mb-5 text-center text-sm text-[var(--text-muted)]">
+                    <p className="mb-5 text-center text-sm text-(--text-muted)">
                       Scan with your authenticator app (Google Authenticator, Authy, etc.)
                     </p>
 
                     {isSettingUp ? (
                       <div className="flex h-48 items-center justify-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-[var(--accent-teal)]" />
+                        <Loader2 className="h-8 w-8 animate-spin text-(--accent-teal)" />
                       </div>
                     ) : (
                       <>
@@ -288,21 +288,21 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                         </div>
 
                         {/* Secret key backup */}
-                        <div className="mb-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-3">
-                          <p className="mb-1.5 text-xs font-medium text-[var(--text-muted)]">
+                        <div className="mb-5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-3">
+                          <p className="mb-1.5 text-xs font-medium text-(--text-muted)">
                             Or enter this key manually:
                           </p>
                           <div className="flex items-center gap-2">
-                            <code className="flex-1 break-all font-mono text-xs text-[var(--text-primary)]">
+                            <code className="flex-1 break-all font-mono text-xs text-(--text-primary)">
                               {secret}
                             </code>
                             <button
                               onClick={handleCopySecret}
-                              className="flex-shrink-0 rounded-lg p-1.5 text-[var(--text-dim)] transition-colors hover:bg-[rgba(6,214,160,0.1)] hover:text-[var(--accent-teal)]"
+                              className="shrink-0 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(6,214,160,0.1)] hover:text-(--accent-teal)"
                               aria-label="Copy secret key"
                             >
                               {copiedSecret ? (
-                                <Check className="h-3.5 w-3.5 text-[var(--accent-teal)]" />
+                                <Check className="h-3.5 w-3.5 text-(--accent-teal)" />
                               ) : (
                                 <Copy className="h-3.5 w-3.5" />
                               )}
@@ -332,10 +332,10 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-[var(--text-heading)]">
+                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
                       Enter Verification Code
                     </h2>
-                    <p className="mb-5 text-center text-sm text-[var(--text-muted)]">
+                    <p className="mb-5 text-center text-sm text-(--text-muted)">
                       Enter the 6-digit code from your authenticator app
                     </p>
 
@@ -392,20 +392,20 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-[var(--text-heading)]">
+                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
                       Save Backup Codes
                     </h2>
-                    <p className="mb-5 text-center text-sm text-[var(--text-muted)]">
+                    <p className="mb-5 text-center text-sm text-(--text-muted)">
                       Save these codes somewhere safe. Each can be used once if you lose access to your authenticator.
                     </p>
 
                     {/* Backup codes grid */}
-                    <div className="mb-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-4">
+                    <div className="mb-4 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4">
                       <div className="grid grid-cols-2 gap-2">
                         {backupCodes.map((bCode) => (
                           <div
                             key={bCode}
-                            className="rounded-lg bg-[rgba(6,214,160,0.05)] px-3 py-1.5 text-center font-mono text-sm text-[var(--text-primary)]"
+                            className="rounded-lg bg-[rgba(6,214,160,0.05)] px-3 py-1.5 text-center font-mono text-sm text-(--text-primary)"
                           >
                             {bCode}
                           </div>
@@ -417,10 +417,10 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     <div className="mb-5 flex gap-2">
                       <button
                         onClick={handleCopyCodes}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2 text-xs font-medium text-[var(--text-muted)] transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-[var(--accent-teal)]"
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-3 py-2 text-xs font-medium text-(--text-muted) transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-(--accent-teal)"
                       >
                         {copiedCodes ? (
-                          <Check className="h-3.5 w-3.5 text-[var(--accent-teal)]" />
+                          <Check className="h-3.5 w-3.5 text-(--accent-teal)" />
                         ) : (
                           <Copy className="h-3.5 w-3.5" />
                         )}
@@ -428,7 +428,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                       </button>
                       <button
                         onClick={handleDownloadCodes}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-3 py-2 text-xs font-medium text-[var(--text-muted)] transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-[var(--accent-teal)]"
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-3 py-2 text-xs font-medium text-(--text-muted) transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-(--accent-teal)"
                       >
                         <Download className="h-3.5 w-3.5" />
                         Download

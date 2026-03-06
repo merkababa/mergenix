@@ -172,10 +172,10 @@ export function ScrollTimeline() {
             aria-hidden="true"
           >
             {/* Track line (faded) */}
-            <div className="absolute inset-0 bg-[var(--border-subtle)]" />
+            <div className="absolute inset-0 bg-(--border-subtle)" />
             {/* Animated fill line */}
             <m.div
-              className="absolute inset-x-0 top-0 origin-top bg-gradient-to-b from-[var(--accent-teal)] to-[var(--accent-violet)]"
+              className="absolute inset-x-0 top-0 origin-top bg-linear-to-b from-(--accent-teal) to-(--accent-violet)"
               style={{ scaleY: lineScaleY, height: "100%" }}
             />
           </div>
@@ -202,13 +202,13 @@ export function ScrollTimeline() {
                     >
                       <div className={`${isEven ? "md:ml-auto" : ""} max-w-xs`}>
                         <h3
-                          className="mb-3 font-heading font-bold text-[var(--text-heading)]"
+                          className="mb-3 font-heading font-bold text-(--text-heading)"
                           style={{ fontSize: "var(--font-size-fluid-body)" }}
                         >
                           <span className="sr-only">Step {step.number}: </span>
                           {step.title}
                         </h3>
-                        <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                        <p className="text-sm leading-relaxed text-(--text-muted)">
                           {step.description}
                         </p>
                       </div>
@@ -216,7 +216,7 @@ export function ScrollTimeline() {
                   </div>
 
                   {/* Center node — timeline anchor */}
-                  <div className="my-6 flex justify-center md:order-2 md:my-0 md:flex-shrink-0">
+                  <div className="my-6 flex justify-center md:order-2 md:my-0 md:shrink-0">
                     <div className="relative">
                       {/* Pulse ring */}
                       <div

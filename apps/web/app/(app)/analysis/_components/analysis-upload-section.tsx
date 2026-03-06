@@ -42,7 +42,7 @@ export function AnalysisUploadSection({
       {/* ── File Upload Card ── */}
       <ErrorBoundary
         fallback={
-          <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">
+          <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center text-sm text-(--text-muted)">
             Failed to load file upload. Please refresh.
           </div>
         }
@@ -59,7 +59,7 @@ export function AnalysisUploadSection({
       {/* ── Population Selector ── */}
       {bothFilesSelected && (
         <div className="mt-6">
-          <label className="mb-2 block text-sm font-medium text-[var(--text-body)]">
+          <label className="mb-2 block text-sm font-medium text-(--text-body)">
             Ancestral Population (optional)
           </label>
           <PopulationSelector />
@@ -79,8 +79,8 @@ export function AnalysisUploadSection({
             <ChevronRight className="h-5 w-5" />
           </Button>
           {/* Privacy trust badge (Business #7) */}
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-[var(--text-dim)]">
-            <Shield className="h-3.5 w-3.5 text-[var(--accent-teal)]" />
+          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-(--text-dim)">
+            <Shield className="h-3.5 w-3.5 text-(--accent-teal)" />
             Analysis runs entirely in your browser. No data is sent to our servers.
           </p>
         </div>
@@ -93,7 +93,7 @@ export function AnalysisUploadSection({
             <Dna className="h-4 w-4" />
             Try Demo Analysis
           </Button>
-          <p className="mt-2 text-xs text-[var(--text-dim)]">
+          <p className="mt-2 text-xs text-(--text-dim)">
             See sample results with synthetic DNA data
           </p>
         </div>

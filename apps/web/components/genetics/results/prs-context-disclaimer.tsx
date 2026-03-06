@@ -29,16 +29,16 @@ export const PrsContextDisclaimer = memo(function PrsContextDisclaimer({
       }}
     >
       <Info
-        className="mt-0.5 h-4 w-4 flex-shrink-0"
+        className="mt-0.5 h-4 w-4 shrink-0"
         style={{ color: "var(--accent-cyan)" }}
         aria-hidden="true"
       />
       <div className="space-y-1.5">
-        <p className="text-xs leading-relaxed text-[var(--text-body)]">
+        <p className="text-xs leading-relaxed text-(--text-body)">
           {PRS_CONTEXT_DISCLAIMER}
         </p>
         {isOffspring && (
-          <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+          <p className="text-xs leading-relaxed text-(--text-muted)">
             {PRS_OFFSPRING_DISCLAIMER}
           </p>
         )}

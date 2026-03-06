@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 type TraitCategory = "physical" | "health" | "behavioral";
 
 const CATEGORY_COLORS: Record<TraitCategory, string> = {
-  physical: "bg-[var(--accent-teal)]",
+  physical: "bg-(--accent-teal)",
   health: "bg-amber-500/60",
   behavioral: "bg-violet-500/60",
 };
 
 const CATEGORY_TEXT_COLORS: Record<TraitCategory, string> = {
-  physical: "text-[var(--accent-teal)]",
+  physical: "text-(--accent-teal)",
   health: "text-amber-400",
   behavioral: "text-violet-400",
 };
@@ -47,7 +47,7 @@ export function TraitProbabilityBar({
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="w-20 truncate text-xs text-[var(--text-muted)]">{phenotype}</div>
+      <div className="w-20 truncate text-xs text-(--text-muted)">{phenotype}</div>
       <div
         role="meter"
         aria-valuenow={clamped}
@@ -55,7 +55,7 @@ export function TraitProbabilityBar({
         aria-valuemax={100}
         aria-label={`${phenotype}: ${clamped}%`}
         aria-valuetext={`${phenotype}: ${clamped}% probability`}
-        className="h-2 flex-1 rounded-full bg-[var(--bg-glass)]"
+        className="h-2 flex-1 rounded-full bg-(--bg-glass)"
       >
         <div
           className={cn(

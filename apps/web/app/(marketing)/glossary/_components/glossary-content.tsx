@@ -23,7 +23,7 @@ function highlightMatch(text: string, query: string): ReactNode {
     part.toLowerCase().includes(queryLower) ? (
       <mark
         key={i}
-        className="bg-[rgba(6,214,160,0.2)] text-[var(--accent-teal)] rounded px-0.5"
+        className="bg-[rgba(6,214,160,0.2)] text-(--accent-teal) rounded-sm px-0.5"
       >
         {part}
       </mark>
@@ -117,7 +117,7 @@ export function GlossaryContent() {
       </div>
 
       {/* -- Results count -- */}
-      <p className="mb-4 text-center text-xs text-[var(--text-dim)]" role="status" aria-live="polite">
+      <p className="mb-4 text-center text-xs text-(--text-dim)" role="status" aria-live="polite">
         Showing {filtered.length} of {GLOSSARY_TERMS.length} terms
       </p>
 
@@ -129,8 +129,8 @@ export function GlossaryContent() {
           aria-pressed={!activeLetter}
           className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2.5 font-heading text-xs font-medium transition-all ${
             !activeLetter
-              ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)]"
-              : "text-[var(--text-dim)] hover:text-[var(--accent-teal)]"
+              ? "bg-[rgba(6,214,160,0.15)] text-(--accent-teal)"
+              : "text-(--text-dim) hover:text-(--accent-teal)"
           }`}
         >
           All
@@ -146,10 +146,10 @@ export function GlossaryContent() {
               aria-pressed={activeLetter === letter}
               className={`inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-2 font-heading text-xs font-medium transition-all ${
                 activeLetter === letter
-                  ? "bg-[rgba(6,214,160,0.15)] text-[var(--accent-teal)]"
+                  ? "bg-[rgba(6,214,160,0.15)] text-(--accent-teal)"
                   : hasTerms
-                    ? "text-[var(--text-muted)] hover:text-[var(--accent-teal)]"
-                    : "cursor-not-allowed text-[var(--text-dim)] opacity-30"
+                    ? "text-(--text-muted) hover:text-(--accent-teal)"
+                    : "cursor-not-allowed text-(--text-dim) opacity-30"
               }`}
             >
               {letter}
@@ -176,11 +176,11 @@ export function GlossaryContent() {
               exit={{ opacity: 0, y: -10 }}
               className="py-16 text-center"
             >
-              <BookOpen className="mx-auto mb-4 h-12 w-12 text-[var(--text-dim)] opacity-50" aria-hidden="true" />
-              <h3 className="font-heading text-lg font-semibold text-[var(--text-heading)]">
+              <BookOpen className="mx-auto mb-4 h-12 w-12 text-(--text-dim) opacity-50" aria-hidden="true" />
+              <h3 className="font-heading text-lg font-semibold text-(--text-heading)">
                 No terms found
               </h3>
-              <p className="mt-2 text-sm text-[var(--text-muted)]">
+              <p className="mt-2 text-sm text-(--text-muted)">
                 Try a different search term or browse by letter
               </p>
             </m.div>
@@ -209,28 +209,28 @@ export function GlossaryContent() {
                     hover="glow"
                     className={`p-5 transition-all duration-500 ${
                       flashTerm === term.term
-                        ? "ring-2 ring-[var(--accent-teal)] ring-offset-2 ring-offset-transparent"
+                        ? "ring-2 ring-(--accent-teal) ring-offset-2 ring-offset-transparent"
                         : ""
                     }`}
                   >
-                    <h3 className="mb-1.5 font-heading text-base font-semibold text-[var(--text-heading)]">
+                    <h3 className="mb-1.5 font-heading text-base font-semibold text-(--text-heading)">
                       {highlightMatch(term.term, search)}
                     </h3>
-                    <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+                    <p className="text-sm leading-relaxed text-(--text-muted)">
                       {highlightMatch(term.definition, search)}
                     </p>
 
                     {/* -- See also (related terms) -- */}
                     {validRelated && validRelated.length > 0 && (
                       <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                        <span className="text-xs font-medium text-[var(--text-dim)]">
+                        <span className="text-xs font-medium text-(--text-dim)">
                           See also:
                         </span>
                         {validRelated.map((related) => (
                           <button
                             key={related}
                             onClick={() => scrollToTerm(related)}
-                            className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-[rgba(6,214,160,0.06)] px-3 py-2.5 text-xs text-[var(--accent-teal)] transition-colors hover:bg-[rgba(6,214,160,0.15)]"
+                            className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-[rgba(6,214,160,0.06)] px-3 py-2.5 text-xs text-(--accent-teal) transition-colors hover:bg-[rgba(6,214,160,0.15)]"
                           >
                             {related}
                           </button>
@@ -245,7 +245,7 @@ export function GlossaryContent() {
         </AnimatePresence>
       </div>
 
-      <p className="mt-8 text-center text-xs text-[var(--text-dim)]">
+      <p className="mt-8 text-center text-xs text-(--text-dim)">
         {GLOSSARY_TERMS.length} terms available. Sourced from glossary.json.
       </p>
       </ScrollReveal>

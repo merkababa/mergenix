@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 function AuthSkeleton() {
   return (
     <div className="mx-auto w-full max-w-md animate-pulse">
-      <div className="h-[520px] rounded-[20px] bg-[var(--bg-elevated)]" />
+      <div className="h-[520px] rounded-glass bg-(--bg-elevated)" />
     </div>
   );
 }

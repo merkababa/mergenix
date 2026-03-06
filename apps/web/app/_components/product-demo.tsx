@@ -77,10 +77,10 @@ export function ProductDemo() {
           >
             {/* Perspective wrapper — desktop only; flat on mobile */}
             <div
-              className="rounded-2xl md:[perspective:1200px]"
+              className="rounded-2xl md:perspective-distant"
             >
               <div
-                className="overflow-hidden rounded-2xl md:[transform:rotateY(-5deg)] md:[transform-style:preserve-3d]"
+                className="overflow-hidden rounded-2xl md:transform-[rotateY(-5deg)] md:transform-3d"
                 style={{
                   border: "1px solid var(--glass-border)",
                   background: "var(--bg-glass)",
@@ -94,16 +94,16 @@ export function ProductDemo() {
                   aria-hidden="true"
                 >
                   {/* Window control dots */}
-                  <span className="h-3 w-3 rounded-full bg-[var(--accent-rose)] opacity-70" />
-                  <span className="h-3 w-3 rounded-full bg-[var(--accent-amber)] opacity-70" />
-                  <span className="h-3 w-3 rounded-full bg-[var(--accent-teal)] opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-rose) opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-amber) opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-teal) opacity-70" />
                   {/* URL bar */}
                   <div
                     className="mx-auto flex h-6 w-48 items-center justify-center rounded-full px-3"
                     style={{ background: "rgba(148,163,184,0.06)", border: "1px solid var(--border-subtle)" }}
                   >
                     {/* text-xs = 12px minimum (§4 — no text smaller than 12px) */}
-                    <span className="text-xs text-[var(--text-dim)]">mergenix.app/analysis</span>
+                    <span className="text-xs text-(--text-dim)">mergenix.app/analysis</span>
                   </div>
                 </div>
 
@@ -126,11 +126,11 @@ export function ProductDemo() {
                   {/* Dashboard header row */}
                   <div className="mb-5 flex items-center justify-between">
                     <div>
-                      <div className="h-4 w-36 rounded-full bg-[var(--bg-elevated)]" aria-hidden="true" />
-                      <div className="mt-2 h-3 w-24 rounded-full bg-[var(--border-subtle)]" aria-hidden="true" />
+                      <div className="h-4 w-36 rounded-full bg-(--bg-elevated)" aria-hidden="true" />
+                      <div className="mt-2 h-3 w-24 rounded-full bg-(--border-subtle)" aria-hidden="true" />
                     </div>
                     <div
-                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--accent-teal)]"
+                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-(--accent-teal)"
                       style={{ background: "rgba(6,214,160,0.12)", border: "1px solid rgba(6,214,160,0.2)" }}
                     >
                       Analysis Complete
@@ -141,7 +141,7 @@ export function ProductDemo() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {/* Carrier risk panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-dim)]">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-(--text-dim)">
                         Est. Carrier Risk
                       </p>
                       {/* Mock bars — values are sample data only, not real patient results */}
@@ -149,12 +149,12 @@ export function ProductDemo() {
                         <div key={item.label} className="mb-2">
                           <div className="mb-1 flex justify-between">
                             {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                            <span className="text-xs text-[var(--text-muted)]">{item.label}</span>
+                            <span className="text-xs text-(--text-muted)">{item.label}</span>
                             <span className="text-xs font-medium" style={{ color: item.color }}>
                               {item.pct}%
                             </span>
                           </div>
-                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--border-subtle)]">
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-(--border-subtle)">
                             <div
                               className="h-full rounded-full"
                               style={{ width: `${item.pct}%`, background: item.color }}
@@ -171,7 +171,7 @@ export function ProductDemo() {
 
                     {/* Traits panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-dim)]">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-(--text-dim)">
                         Trait Predictions
                       </p>
                       {/* Mock trait items — values are sample data only, not real patient results */}
@@ -182,7 +182,7 @@ export function ProductDemo() {
                           style={{ background: "rgba(148,163,184,0.04)" }}
                         >
                           {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                          <span className="text-xs text-[var(--text-muted)]">{trait.label}</span>
+                          <span className="text-xs text-(--text-muted)">{trait.label}</span>
                           <span className="text-xs font-semibold" style={{ color: trait.color }}>
                             {trait.value}
                           </span>

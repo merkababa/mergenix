@@ -46,18 +46,18 @@ function ComparisonCell({ value }: { value: boolean | string }) {
   if (typeof value === "boolean") {
     return value ? (
       <Check
-        className="mx-auto h-5 w-5 text-[var(--accent-teal)]"
+        className="mx-auto h-5 w-5 text-(--accent-teal)"
         aria-label="Included"
       />
     ) : (
       <X
-        className="mx-auto h-5 w-5 text-[var(--text-dim)]"
+        className="mx-auto h-5 w-5 text-(--text-dim)"
         aria-label="Not included"
       />
     );
   }
   return (
-    <span className="text-sm text-[var(--text-body)]">{value}</span>
+    <span className="text-sm text-(--text-body)">{value}</span>
   );
 }
 
@@ -124,23 +124,23 @@ export function ProductsContent() {
                 Feature comparison between Free, Premium, and Pro tiers
               </caption>
               <thead>
-                <tr className="border-b border-[var(--border-subtle)]">
+                <tr className="border-b border-(--border-subtle)">
                   <th
                     scope="col"
-                    className="px-6 py-4 font-heading text-sm font-semibold text-[var(--text-heading)]"
+                    className="px-6 py-4 font-heading text-sm font-semibold text-(--text-heading)"
                   >
                     Feature
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-4 text-center font-heading text-sm font-semibold text-[var(--text-muted)]"
+                    className="px-6 py-4 text-center font-heading text-sm font-semibold text-(--text-muted)"
                   >
                     Free
                   </th>
                   <th
                     scope="col"
                     data-highlighted="true"
-                    className="relative px-6 py-4 text-center font-heading text-sm font-semibold text-[var(--accent-violet)]"
+                    className="relative px-6 py-4 text-center font-heading text-sm font-semibold text-(--accent-violet)"
                   >
                     <span className="relative z-10">Premium</span>
                     {/* Subtle highlight column background via pseudo via wrapper div */}
@@ -151,7 +151,7 @@ export function ProductsContent() {
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-4 text-center font-heading text-sm font-semibold text-[var(--accent-teal)]"
+                    className="px-6 py-4 text-center font-heading text-sm font-semibold text-(--accent-teal)"
                   >
                     Pro
                   </th>
@@ -161,9 +161,9 @@ export function ProductsContent() {
                 {COMPARISON.map((row) => (
                   <tr
                     key={row.feature}
-                    className="border-b border-[var(--border-subtle)] transition-colors duration-200 hover:bg-[rgba(6,214,160,0.04)] hover:shadow-[inset_3px_0_0_var(--accent-teal)]"
+                    className="border-b border-(--border-subtle) transition-colors duration-200 hover:bg-[rgba(6,214,160,0.04)] hover:shadow-[inset_3px_0_0_var(--accent-teal)]"
                   >
-                    <td className="px-6 py-3.5 text-sm font-medium text-[var(--text-body)]">
+                    <td className="px-6 py-3.5 text-sm font-medium text-(--text-body)">
                       {row.feature}
                     </td>
                     <td data-label={row.feature} className="px-6 py-3.5 text-center">
@@ -195,9 +195,9 @@ export function ProductsContent() {
           <m.div
             key={text}
             variants={fadeUp}
-            className="flex items-center gap-2 text-sm text-[var(--text-muted)]"
+            className="flex items-center gap-2 text-sm text-(--text-muted)"
           >
-            <Icon className="h-4 w-4 text-[var(--accent-teal)]" aria-hidden="true" />
+            <Icon className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
             <span>{text}</span>
           </m.div>
         ))}
@@ -233,7 +233,7 @@ export function ProductsContent() {
           <h2 className="gradient-text font-heading text-2xl font-bold">
             Start Your Free Analysis Today
           </h2>
-          <p className="mx-auto mt-3 max-w-lg text-[var(--text-muted)]">
+          <p className="mx-auto mt-3 max-w-lg text-(--text-muted)">
             Sign up free. Upload your DNA files and get instant results.
           </p>
           <div className="mt-6">

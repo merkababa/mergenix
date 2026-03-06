@@ -52,24 +52,24 @@ function iconEntry(match: string, Icon: LucideIcon, color: string): FeatureIconE
 }
 
 const FEATURE_ICON_MAP: FeatureIconEntry[] = [
-  iconEntry("disease",                              ShieldCheck,    "text-[var(--accent-teal)]"),
-  iconEntry("trait",                                Dna,            "text-[var(--accent-cyan)]"),
-  iconEntry("file format",                          FileType,       "text-[var(--accent-violet)]"),
-  iconEntry("community",                            Users,          "text-[var(--text-muted)]"),
-  iconEntry("pharmacogenomic",                      Pill,           "text-[var(--accent-amber)]"),
-  iconEntry("polygenic",                            TrendingUp,     "text-[var(--accent-teal)]"),
+  iconEntry("disease",                              ShieldCheck,    "text-(--accent-teal)"),
+  iconEntry("trait",                                Dna,            "text-(--accent-cyan)"),
+  iconEntry("file format",                          FileType,       "text-(--accent-violet)"),
+  iconEntry("community",                            Users,          "text-(--text-muted)"),
+  iconEntry("pharmacogenomic",                      Pill,           "text-(--accent-amber)"),
+  iconEntry("polygenic",                            TrendingUp,     "text-(--accent-teal)"),
   // "email support" and "priority email" share the same icon — combined entry
-  iconEntry("email support|priority email",         Mail,           "text-[var(--accent-violet)]"),
+  iconEntry("email support|priority email",         Mail,           "text-(--accent-violet)"),
   // "dedicated support" and "dedicated priority" share the same icon — combined entry
-  iconEntry("dedicated support|dedicated priority", MessageCircle,  "text-[var(--accent-teal)]"),
-  iconEntry("clinvar",                              Database,       "text-[var(--accent-cyan)]"),
-  iconEntry("referral",                             FileText,       "text-[var(--accent-teal)]"),
-  iconEntry("pdf",                                  FileText,       "text-[var(--accent-amber)]"),
-  iconEntry("ethnicity",                            BarChart2,      "text-[var(--accent-cyan)]"),
-  iconEntry("punnett",                              FlaskConical,   "text-[var(--accent-teal)]"),
-  iconEntry("comparison",                           BarChart2,      "text-[var(--accent-violet)]"),
-  iconEntry("everything in",                        Star,           "text-[var(--accent-amber)]"),
-  iconEntry("health",                               HeartPulse,     "text-[var(--accent-rose)]"),
+  iconEntry("dedicated support|dedicated priority", MessageCircle,  "text-(--accent-teal)"),
+  iconEntry("clinvar",                              Database,       "text-(--accent-cyan)"),
+  iconEntry("referral",                             FileText,       "text-(--accent-teal)"),
+  iconEntry("pdf",                                  FileText,       "text-(--accent-amber)"),
+  iconEntry("ethnicity",                            BarChart2,      "text-(--accent-cyan)"),
+  iconEntry("punnett",                              FlaskConical,   "text-(--accent-teal)"),
+  iconEntry("comparison",                           BarChart2,      "text-(--accent-violet)"),
+  iconEntry("everything in",                        Star,           "text-(--accent-amber)"),
+  iconEntry("health",                               HeartPulse,     "text-(--accent-rose)"),
 ];
 
 /** Returns a semantic icon for the given feature label. Falls back to Sparkles. */
@@ -85,7 +85,7 @@ function getFeatureIcon(feature: string): ReactElement {
   // Default fallback
   return (
     <Sparkles
-      className={cn(FEATURE_ICON_CLASS, "text-[var(--accent-teal)]")}
+      className={cn(FEATURE_ICON_CLASS, "text-(--accent-teal)")}
       aria-hidden="true"
     />
   );
@@ -220,30 +220,30 @@ export function PricingCard({
         {/* Gradient top bar */}
         <div
           className={cn(
-            "absolute left-0 right-0 top-0 h-[2px] rounded-t-[20px]",
+            "absolute left-0 right-0 top-0 h-[2px] rounded-t-glass",
             barGradient,
           )}
           aria-hidden="true"
         />
 
         {/* Tier name */}
-        <h3 className="mb-2 font-heading text-lg font-bold text-[var(--text-heading)]">
+        <h3 className="mb-2 font-heading text-lg font-bold text-(--text-heading)">
           {tier}
         </h3>
 
         {/* Price */}
         <div className="mb-1 flex items-baseline gap-1">
-          <span className="font-heading text-4xl font-extrabold text-[var(--text-heading)]">
+          <span className="font-heading text-4xl font-extrabold text-(--text-heading)">
             {price}
           </span>
-          <span className="text-sm text-[var(--text-muted)]">{priceNote}</span>
+          <span className="text-sm text-(--text-muted)">{priceNote}</span>
         </div>
 
         {/* Description */}
-        <p className="mb-6 text-sm text-[var(--text-body)]">{description}</p>
+        <p className="mb-6 text-sm text-(--text-body)">{description}</p>
 
         {/* Divider */}
-        <hr className="mb-6 border-[var(--border-subtle)]" />
+        <hr className="mb-6 border-(--border-subtle)" />
 
         {/* Feature list — stagger triggered by parent card variant propagation */}
         <m.ul
@@ -255,7 +255,7 @@ export function PricingCard({
             <m.li
               key={feature}
               variants={FEATURE_ITEM_VARIANTS}
-              className="flex items-start gap-2.5 text-sm text-[var(--text-body)]"
+              className="flex items-start gap-2.5 text-sm text-(--text-body)"
             >
               {getFeatureIcon(feature)}
               <span>{feature}</span>

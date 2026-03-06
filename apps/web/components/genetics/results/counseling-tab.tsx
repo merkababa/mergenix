@@ -33,17 +33,17 @@ const URGENCY_CONFIG: Record<
 > = {
   high: {
     border: "border-[rgba(244,63,94,0.2)]",
-    iconColor: "text-[#f43f5e]",
+    iconColor: "text-accent-rose",
     bgTint: "bg-[rgba(244,63,94,0.04)]",
   },
   moderate: {
     border: "border-[rgba(245,158,11,0.2)]",
-    iconColor: "text-[#f59e0b]",
+    iconColor: "text-accent-amber",
     bgTint: "bg-[rgba(245,158,11,0.04)]",
   },
   informational: {
     border: "border-[rgba(6,214,160,0.2)]",
-    iconColor: "text-[#06d6a0]",
+    iconColor: "text-accent-teal",
     bgTint: "bg-[rgba(6,214,160,0.04)]",
   },
 };
@@ -87,7 +87,7 @@ export function CounselingTab() {
     <div data-privacy-mask="true" className="space-y-6">
       {/* Supportive intro paragraph */}
       <GlassCard variant="subtle" hover="none" className="p-5">
-        <p className="text-sm leading-relaxed text-[var(--text-body)]">
+        <p className="text-sm leading-relaxed text-(--text-body)">
           Genetic information can be complex and sometimes unexpected. Whatever
           your results show, remember that knowledge is a tool that empowers
           you to make informed decisions for your family&apos;s future.
@@ -107,10 +107,10 @@ export function CounselingTab() {
           <div className="space-y-2">
             {counseling.recommend ? (
               <>
-                <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+                <h3 className="font-heading text-lg font-bold text-(--text-heading)">
                   Consider Speaking with a Genetic Counselor
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-body)]">
+                <p className="text-sm leading-relaxed text-(--text-body)">
                   Based on your results, a genetic counselor can help you
                   understand the implications of certain findings and guide you
                   through your options.
@@ -118,10 +118,10 @@ export function CounselingTab() {
               </>
             ) : (
               <>
-                <h3 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+                <h3 className="font-heading text-lg font-bold text-(--text-heading)">
                   No Urgent Counseling Needed
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--text-body)]">
+                <p className="text-sm leading-relaxed text-(--text-body)">
                   Your results did not reveal any findings that require immediate
                   genetic counseling. However, you may still benefit from speaking
                   with a counselor if you have questions about your carrier
@@ -130,7 +130,7 @@ export function CounselingTab() {
               </>
             )}
             {counseling.urgency === "high" && (
-              <p className="text-sm italic leading-relaxed text-[var(--text-body)]">
+              <p className="text-sm italic leading-relaxed text-(--text-body)">
                 We understand this information may be concerning. You&apos;re not
                 alone — support is available.
               </p>
@@ -157,14 +157,14 @@ export function CounselingTab() {
       {/* Reasons list */}
       {counseling.reasons.length > 0 && (
         <GlassCard variant="medium" hover="none" className="p-5">
-          <h4 className="mb-3 font-heading text-sm font-bold text-[var(--text-heading)]">
+          <h4 className="mb-3 font-heading text-sm font-bold text-(--text-heading)">
             Reasons for Recommendation
           </h4>
           <ul className="space-y-2">
             {counseling.reasons.map((reason, index) => (
               <li key={index} className="flex items-start gap-2.5">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#f59e0b]" />
-                <span className="text-sm leading-relaxed text-[var(--text-body)]">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent-amber" />
+                <span className="text-sm leading-relaxed text-(--text-body)">
                   {reason}
                 </span>
               </li>
@@ -176,7 +176,7 @@ export function CounselingTab() {
       {/* Key findings */}
       {counseling.keyFindings && counseling.keyFindings.length > 0 && (
         <div className="space-y-3">
-          <h4 className="font-heading text-sm font-bold text-[var(--text-heading)]">
+          <h4 className="font-heading text-sm font-bold text-(--text-heading)">
             Key Findings
           </h4>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -187,10 +187,10 @@ export function CounselingTab() {
                 hover="none"
                 className="p-4"
               >
-                <h5 className="font-heading text-sm font-bold text-[var(--text-heading)]">
+                <h5 className="font-heading text-sm font-bold text-(--text-heading)">
                   {finding.condition}
                 </h5>
-                <p className="mt-1 text-xs text-[var(--text-muted)]">
+                <p className="mt-1 text-xs text-(--text-muted)">
                   Gene: {finding.gene}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
@@ -248,7 +248,7 @@ export function CounselingTab() {
       {counseling.recommendedSpecialties &&
         counseling.recommendedSpecialties.length > 0 && (
           <GlassCard variant="medium" hover="none" className="p-5">
-            <h4 className="mb-3 font-heading text-sm font-bold text-[var(--text-heading)]">
+            <h4 className="mb-3 font-heading text-sm font-bold text-(--text-heading)">
               Recommended Specialties
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -271,20 +271,20 @@ export function CounselingTab() {
             aria-expanded={referralExpanded}
             aria-controls="referral-letter-content"
           >
-            <h4 className="font-heading text-sm font-bold text-[var(--text-heading)]">
+            <h4 className="font-heading text-sm font-bold text-(--text-heading)">
               View Referral Letter
             </h4>
             {referralExpanded ? (
-              <ChevronUp className="h-4 w-4 text-[var(--text-muted)]" />
+              <ChevronUp className="h-4 w-4 text-(--text-muted)" />
             ) : (
-              <ChevronDown className="h-4 w-4 text-[var(--text-muted)]" />
+              <ChevronDown className="h-4 w-4 text-(--text-muted)" />
             )}
           </button>
           {referralExpanded && (
             <pre
               id="referral-letter-content"
               aria-label="Referral letter content"
-              className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-lg bg-[var(--bg-elevated)] p-4 font-mono text-xs leading-relaxed text-[var(--text-body)]"
+              className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-lg bg-(--bg-elevated) p-4 font-mono text-xs leading-relaxed text-(--text-body)"
             >
               {counseling.referralLetter}
             </pre>
@@ -292,20 +292,20 @@ export function CounselingTab() {
         </GlassCard>
       ) : tier !== "pro" && counseling.urgency !== "high" && counseling.recommend ? (
         <GlassCard variant="medium" hover="none" className="relative overflow-hidden p-5">
-          <div className="pointer-events-none select-none blur-sm" aria-hidden="true">
-            <h4 className="font-heading text-sm font-bold text-[var(--text-heading)]">
+          <div className="pointer-events-none select-none blur-xs" aria-hidden="true">
+            <h4 className="font-heading text-sm font-bold text-(--text-heading)">
               Referral Letter
             </h4>
-            <div className="mt-3 space-y-1.5 font-mono text-xs text-[var(--text-muted)]">
+            <div className="mt-3 space-y-1.5 font-mono text-xs text-(--text-muted)">
               <p>Dear Genetic Counselor,</p>
               <p>This letter is to refer the couple for genetic counseling...</p>
               <p>Key findings from their carrier screening include...</p>
             </div>
           </div>
-          <div className="absolute inset-0 flex items-center justify-center bg-[var(--glass-bg)]/60">
+          <div className="absolute inset-0 flex items-center justify-center bg-(--bg-glass)/60">
             <div className="text-center">
-              <Lock className="mx-auto mb-2 h-6 w-6 text-[#8b5cf6]" />
-              <p className="text-sm font-medium text-[var(--text-heading)]">
+              <Lock className="mx-auto mb-2 h-6 w-6 text-accent-violet" />
+              <p className="text-sm font-medium text-(--text-heading)">
                 Pro Feature
               </p>
             </div>
@@ -330,48 +330,48 @@ export function CounselingTab() {
         hover="none"
         className="border-[rgba(6,182,212,0.15)] bg-[rgba(6,182,212,0.04)] p-5"
       >
-        <h4 className="mb-3 font-heading text-sm font-bold text-[var(--text-heading)]">
+        <h4 className="mb-3 font-heading text-sm font-bold text-(--text-heading)">
           Emotional Support Resources
         </h4>
         <ul className="space-y-3">
           <li className="flex items-start gap-3">
-            <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-accent-cyan" />
             <div>
-              <p className="text-sm font-medium text-[var(--text-heading)]">
+              <p className="text-sm font-medium text-(--text-heading)">
                 Crisis Text Line
               </p>
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-(--text-muted)">
                 Text <span className="font-semibold">HOME</span> to{" "}
                 <span className="font-semibold">741741</span>
               </p>
             </div>
           </li>
           <li className="flex items-start gap-3">
-            <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent-cyan" />
             <div>
-              <p className="text-sm font-medium text-[var(--text-heading)]">
+              <p className="text-sm font-medium text-(--text-heading)">
                 NSGC (Find a Counselor)
               </p>
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-(--text-muted)">
                 <span className="font-semibold">1-800-233-6742</span> — NSGC
                 office for finding a genetic counselor
               </p>
             </div>
           </li>
           <li className="flex items-start gap-3">
-            <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-[#06b6d4]" />
+            <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-accent-cyan" />
             <a
               href={counseling.nsgcUrl ?? "https://findageneticcounselor.com"}
               target="_blank"
               rel="noopener noreferrer"
               referrerPolicy="no-referrer"
-              className="text-sm font-medium text-[#06b6d4] underline-offset-2 hover:underline"
+              className="text-sm font-medium text-accent-cyan underline-offset-2 hover:underline"
             >
               Find a Genetic Counselor (NSGC)
             </a>
           </li>
         </ul>
-        <p className="mt-3 text-xs text-[var(--text-muted)]">
+        <p className="mt-3 text-xs text-(--text-muted)">
           These resources are available in the United States. For international
           support, contact your local genetic counseling service.
         </p>

@@ -32,11 +32,11 @@ export const CYP2D6Warning = memo(function CYP2D6Warning({
       }}
     >
       <AlertTriangle
-        className="mt-0.5 h-4 w-4 flex-shrink-0"
+        className="mt-0.5 h-4 w-4 shrink-0"
         style={{ color: "var(--accent-amber)" }}
         aria-hidden="true"
       />
-      <p className="text-[11px] leading-relaxed text-[var(--text-body)]">
+      <p className="text-[11px] leading-relaxed text-(--text-body)">
         <span className="font-semibold">{gene}:</span> {message}
       </p>
     </div>

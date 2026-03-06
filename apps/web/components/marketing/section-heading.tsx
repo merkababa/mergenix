@@ -6,7 +6,7 @@ const headingGradientVariants = cva("", {
     gradient: {
       default: "gradient-text",
       teal: "gradient-text-teal",
-      none: "text-[var(--text-heading)]",
+      none: "text-(--text-heading)",
     },
   },
   defaultVariants: {
@@ -48,7 +48,7 @@ export function SectionHeading({
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-base leading-relaxed text-[var(--text-body)] sm:text-lg">
+        <p className="mt-4 text-base leading-relaxed text-(--text-body) sm:text-lg">
           {subtitle}
         </p>
       )}

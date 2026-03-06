@@ -184,7 +184,7 @@ export function LoginContent() {
           <h1 className="gradient-text mb-1 text-center font-heading text-3xl font-extrabold">
             Welcome Back
           </h1>
-          <p className="mb-8 text-center font-body text-sm text-[var(--text-muted)]">
+          <p className="mb-8 text-center font-body text-sm text-(--text-muted)">
             {requires2FA
               ? "Enter the code from your authenticator app"
               : "Sign in to access your genetic analysis"}
@@ -203,8 +203,8 @@ export function LoginContent() {
                 role="alert"
                 aria-live="polite"
               >
-                <AlertCircle className="h-4 w-4 shrink-0 text-[var(--accent-rose)]" />
-                <p className="text-sm text-[var(--accent-rose)]">{error}</p>
+                <AlertCircle className="h-4 w-4 shrink-0 text-(--accent-rose)" />
+                <p className="text-sm text-(--accent-rose)">{error}</p>
               </m.div>
             )}
           </AnimatePresence>
@@ -226,17 +226,17 @@ export function LoginContent() {
                 />
 
                 {/* Google data scope note (#13) */}
-                <p className="mt-2 text-center text-xs text-[var(--text-dim)]">
+                <p className="mt-2 text-center text-xs text-(--text-dim)">
                   Google provides only your name and email. We never access your Google data.
                 </p>
 
                 {/* Divider */}
                 <div className="my-6 flex items-center gap-3">
-                  <div className="h-px flex-1 bg-[var(--border-subtle)]" />
-                  <span className="font-body text-xs text-[var(--text-dim)]">
+                  <div className="h-px flex-1 bg-(--border-subtle)" />
+                  <span className="font-body text-xs text-(--text-dim)">
                     or sign in with email
                   </span>
-                  <div className="h-px flex-1 bg-[var(--border-subtle)]" />
+                  <div className="h-px flex-1 bg-(--border-subtle)" />
                 </div>
 
                 {/* Form */}
@@ -272,19 +272,19 @@ export function LoginContent() {
                   />
 
                   <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                    <label className="flex items-center gap-2 text-sm text-(--text-muted)">
                       <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="h-4 w-4 rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)]"
+                        className="h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated)"
                         style={{ accentColor: "var(--accent-teal)" }}
                       />
                       Remember me
                     </label>
                     <Link
                       href="/forgot-password"
-                      className="text-xs text-[var(--accent-teal)] transition-colors hover:text-[var(--accent-cyan)]"
+                      className="text-xs text-(--accent-teal) transition-colors hover:text-(--accent-cyan)"
                     >
                       Forgot password?
                     </Link>
@@ -329,7 +329,7 @@ export function LoginContent() {
                     aria-label="Enter 6-digit verification code"
                   />
 
-                  <p className="text-center text-xs text-[var(--text-dim)]">
+                  <p className="text-center text-xs text-(--text-dim)">
                     Enter the 6-digit code from your authenticator app.
                     <br />
                     It will auto-submit when complete.
@@ -361,7 +361,7 @@ export function LoginContent() {
                       setEmailTouched(false);
                       setPasswordTouched(false);
                     }}
-                    className="w-full text-center text-xs text-[var(--text-dim)] transition-colors hover:text-[var(--text-muted)]"
+                    className="w-full text-center text-xs text-(--text-dim) transition-colors hover:text-(--text-muted)"
                   >
                     Use a different account
                   </button>
@@ -371,11 +371,11 @@ export function LoginContent() {
           </AnimatePresence>
 
           {/* Register link */}
-          <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
+          <p className="mt-6 text-center text-sm text-(--text-muted)">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="font-semibold text-[var(--accent-teal)] transition-colors hover:text-[var(--accent-cyan)]"
+              className="font-semibold text-(--accent-teal) transition-colors hover:text-(--accent-cyan)"
             >
               Create one free
             </Link>

@@ -29,17 +29,17 @@ export function TierUpgradePrompt({
       hover="none"
       className="flex items-center gap-4 border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] p-5"
     >
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-        <Lock className="h-5 w-5 text-[#8b5cf6]" aria-hidden="true" />
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
+        <Lock className="h-5 w-5 text-accent-violet" aria-hidden="true" />
       </div>
 
       <div className="flex-1">
-        <p className="text-sm text-[var(--text-body)]">{message}</p>
+        <p className="text-sm text-(--text-body)">{message}</p>
       </div>
 
       <Link
         href="/subscription"
-        className={buttonVariants({ size: "sm", className: "bg-[rgba(139,92,246,0.15)] border-[rgba(139,92,246,0.3)] text-[#8b5cf6] hover:bg-[rgba(139,92,246,0.25)]" })}
+        className={buttonVariants({ size: "sm", className: "bg-[rgba(139,92,246,0.15)] border-[rgba(139,92,246,0.3)] text-accent-violet hover:bg-[rgba(139,92,246,0.25)]" })}
       >
         {buttonText}
       </Link>

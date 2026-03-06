@@ -28,7 +28,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_SCHEMA) }}
         />
       </head>
-      <body className="min-h-screen bg-[var(--app-gradient)] font-body antialiased">
+      <body className="min-h-screen bg-(--app-gradient) font-body antialiased">
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="dark"
@@ -37,7 +37,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             <MotionProvider>
-              <div className="relative z-[1] flex min-h-screen flex-col">
+              <div className="relative z-1 flex min-h-screen flex-col">
                 <a href="#main-content" className="skip-to-main">
                   Skip to main content
                 </a>

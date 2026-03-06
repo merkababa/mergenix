@@ -226,7 +226,7 @@ export function UpgradeModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs"
       onClick={handleBackdropClick}
       role="presentation"
     >
@@ -237,7 +237,7 @@ export function UpgradeModal({
         aria-labelledby={headingId}
         aria-describedby={descriptionId}
         tabIndex={-1}
-        className="relative w-full max-w-md mx-4 outline-none"
+        className="relative w-full max-w-md mx-4 outline-hidden"
       >
         <GlassCard variant="strong" hover="none" className="p-6">
           {/* ── Close button ────────────────────────────────────────── */}
@@ -245,7 +245,7 @@ export function UpgradeModal({
             type="button"
             onClick={handleClose}
             disabled={isCheckoutLoading}
-            className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)] disabled:pointer-events-none disabled:opacity-50"
+            className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal) disabled:pointer-events-none disabled:opacity-50"
             aria-label="Close modal"
           >
             <X className="h-4 w-4" />
@@ -253,12 +253,12 @@ export function UpgradeModal({
 
           {/* ── Header ──────────────────────────────────────────────── */}
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
-              <Sparkles className="h-5 w-5 text-[var(--accent-teal)]" aria-hidden="true" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
+              <Sparkles className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
             </div>
             <h2
               id={headingId}
-              className="font-heading text-xl font-bold text-[var(--text-primary)]"
+              className="font-heading text-xl font-bold text-(--text-primary)"
             >
               Upgrade to {targetPlan.name}
             </h2>
@@ -267,20 +267,20 @@ export function UpgradeModal({
           {/* ── Description (for aria-describedby) ──────────────────── */}
           <p
             id={descriptionId}
-            className="mb-5 text-sm text-[var(--text-muted)]"
+            className="mb-5 text-sm text-(--text-muted)"
           >
             Unlock more features with a one-time upgrade to{" "}
             {targetPlan.name}.
           </p>
 
           {/* ── Plan comparison ──────────────────────────────────────── */}
-          <div className="mb-5 flex items-center justify-center gap-4 rounded-2xl border border-[var(--glass-border)] bg-[rgba(148,163,184,0.04)] px-5 py-4">
+          <div className="mb-5 flex items-center justify-center gap-4 rounded-2xl border border-(--glass-border) bg-[rgba(148,163,184,0.04)] px-5 py-4">
             {/* Current plan */}
             <div className="flex flex-col items-center gap-1.5">
               <Badge variant={currentTier === "free" ? "free" : currentTier}>
                 {currentPlan.name}
               </Badge>
-              <span className="text-xs text-[var(--text-muted)]">
+              <span className="text-xs text-(--text-muted)">
                 {currentPlan.price === 0
                   ? "Free"
                   : formatPrice(currentPlan.price)}
@@ -288,14 +288,14 @@ export function UpgradeModal({
             </div>
 
             {/* Arrow */}
-            <ArrowRight className="h-5 w-5 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-(--accent-teal)" aria-hidden="true" />
 
             {/* Target plan */}
             <div className="flex flex-col items-center gap-1.5">
               <Badge variant={targetTier}>
                 {targetPlan.name}
               </Badge>
-              <span className="text-xs font-semibold text-[var(--text-primary)]">
+              <span className="text-xs font-semibold text-(--text-primary)">
                 {formatPrice(targetPlan.price)}
               </span>
             </div>
@@ -304,21 +304,21 @@ export function UpgradeModal({
           {/* ── New features list ────────────────────────────────────── */}
           {displayFeatures.length > 0 && (
             <div className="mb-5">
-              <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-(--text-muted)">
                 What you get
               </h3>
               <ul className="space-y-2">
                 {displayFeatures.map((feature) => (
                   <li
                     key={feature}
-                    className="flex items-start gap-2 text-sm text-[var(--text-body)]"
+                    className="flex items-start gap-2 text-sm text-(--text-body)"
                   >
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-teal)]" aria-hidden="true" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
                     <span>{feature}</span>
                   </li>
                 ))}
                 {hiddenFeaturesCount > 0 && (
-                  <li className="text-xs text-[var(--text-muted)] pl-6">
+                  <li className="text-xs text-(--text-muted) pl-6">
                     +{hiddenFeaturesCount} more feature
                     {hiddenFeaturesCount !== 1 ? "s" : ""}
                   </li>
@@ -328,22 +328,22 @@ export function UpgradeModal({
           )}
 
           {/* ── Price display ────────────────────────────────────────── */}
-          <div className="mb-5 rounded-xl border border-[var(--glass-border)] bg-[rgba(6,214,160,0.04)] px-4 py-3">
+          <div className="mb-5 rounded-xl border border-(--glass-border) bg-[rgba(6,214,160,0.04)] px-4 py-3">
             {isPayingDifference ? (
               <div className="flex items-baseline justify-between">
-                <span className="text-sm text-[var(--text-body)]">
+                <span className="text-sm text-(--text-body)">
                   Pay the difference
                 </span>
-                <span className="font-heading text-lg font-bold text-[var(--accent-teal)]">
+                <span className="font-heading text-lg font-bold text-(--accent-teal)">
                   {formatPrice(upgradePrice)}
                 </span>
               </div>
             ) : (
               <div className="flex items-baseline justify-between">
-                <span className="text-sm text-[var(--text-body)]">
+                <span className="text-sm text-(--text-body)">
                   One-time payment
                 </span>
-                <span className="font-heading text-lg font-bold text-[var(--accent-teal)]">
+                <span className="font-heading text-lg font-bold text-(--accent-teal)">
                   {formatPrice(targetPlan.price)}
                 </span>
               </div>
@@ -357,8 +357,8 @@ export function UpgradeModal({
               role="alert"
               aria-live="assertive"
             >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#f43f5e]" aria-hidden="true" />
-              <p className="text-sm text-[#f43f5e]">{error}</p>
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent-rose" aria-hidden="true" />
+              <p className="text-sm text-accent-rose">{error}</p>
             </div>
           )}
 
@@ -388,7 +388,7 @@ export function UpgradeModal({
           </div>
 
           {/* ── Disclaimer ───────────────────────────────────────────── */}
-          <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-[var(--text-muted)]">
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-(--text-muted)">
             <Shield className="h-3.5 w-3.5" aria-hidden="true" />
             You&apos;ll be redirected to Stripe&apos;s secure checkout
           </p>

@@ -260,7 +260,7 @@ describe('Navbar', () => {
     fireEvent.scroll(window);
 
     // After scroll, header should gain the scrolled background class
-    expect(header!.className).toMatch(/bg-\[var\(--navbar-bg\)\]/);
+    expect(header!.className).toMatch(/bg-\(--navbar-bg\)/);
   });
 
   // ── D4.5: Brand text logo styling ─────────────────────────────────────

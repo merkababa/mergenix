@@ -122,32 +122,32 @@ export function ConsentManagement() {
       <GlassCard variant="subtle" hover="none" className="p-7">
         <div className="flex items-center gap-3 mb-4">
           <Shield
-            className="h-5 w-5 text-[var(--accent-teal)]"
+            className="h-5 w-5 text-(--accent-teal)"
             aria-hidden="true"
           />
-          <h2 className="font-heading text-lg font-bold text-[var(--text-heading)]">
+          <h2 className="font-heading text-lg font-bold text-(--text-heading)">
             Consent Management
           </h2>
         </div>
 
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium text-[var(--text-muted)]">
+            <span className="text-sm font-medium text-(--text-muted)">
               Genetic Data Processing Consent:
             </span>
             {isActive ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(6,214,160,0.1)] px-3 py-1 text-xs font-semibold text-[var(--accent-teal)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(6,214,160,0.1)] px-3 py-1 text-xs font-semibold text-(--accent-teal)">
                 <ShieldCheck className="h-3 w-3" aria-hidden="true" />
                 Active
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(244,63,94,0.1)] px-3 py-1 text-xs font-semibold text-[var(--accent-rose)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(244,63,94,0.1)] px-3 py-1 text-xs font-semibold text-(--accent-rose)">
                 <ShieldOff className="h-3 w-3" aria-hidden="true" />
                 Withdrawn
               </span>
             )}
           </div>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-(--text-muted)">
             {isActive
               ? "You have granted consent for genetic data processing. You may withdraw this consent at any time."
               : "Your genetic data processing consent is no longer active. You may re-consent at any time to use genetic analysis features."}
@@ -185,7 +185,7 @@ export function ConsentManagement() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md"
+            className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
             role="presentation"
           >
             <m.div
@@ -200,12 +200,12 @@ export function ConsentManagement() {
                 aria-modal="true"
                 aria-labelledby={dialogHeadingId}
                 aria-describedby={dialogDescriptionId}
-                className="relative outline-none rounded-2xl border border-[rgba(244,63,94,0.2)] bg-[var(--bg-glass)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+                className="relative outline-hidden rounded-2xl border border-[rgba(244,63,94,0.2)] bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
               >
                 {/* ── Warning icon ──────────────────────────────────── */}
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]">
                   <AlertTriangle
-                    className="h-8 w-8 text-[var(--accent-rose)]"
+                    className="h-8 w-8 text-(--accent-rose)"
                     aria-hidden="true"
                   />
                 </div>
@@ -213,7 +213,7 @@ export function ConsentManagement() {
                 {/* ── Heading ───────────────────────────────────────── */}
                 <h2
                   id={dialogHeadingId}
-                  className="mb-2 text-center font-heading text-xl font-bold text-[var(--text-heading)]"
+                  className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
                 >
                   Withdraw Genetic Data Consent
                 </h2>
@@ -221,7 +221,7 @@ export function ConsentManagement() {
                 {/* ── Consequences ──────────────────────────────────── */}
                 <div
                   id={dialogDescriptionId}
-                  className="mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm text-[var(--text-muted)]"
+                  className="mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm text-(--text-muted)"
                 >
                   <p className="mb-2">
                     By withdrawing consent, the following will happen:

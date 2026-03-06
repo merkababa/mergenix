@@ -121,13 +121,13 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
           </m.g>
 
           {/* Scale labels */}
-          <text x="16" y="115" className="fill-[var(--text-dim)] text-[9px] font-body">
+          <text x="16" y="115" className="fill-(--text-dim) text-[9px] font-body">
             Low
           </text>
-          <text x="85" y="22" className="fill-[var(--text-dim)] text-[9px] font-body">
+          <text x="85" y="22" className="fill-(--text-dim) text-[9px] font-body">
             Avg
           </text>
-          <text x="170" y="115" className="fill-[var(--text-dim)] text-[9px] font-body">
+          <text x="170" y="115" className="fill-(--text-dim) text-[9px] font-body">
             High
           </text>
         </svg>
@@ -146,13 +146,13 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
             >
               {Math.round(clamped)}
             </span>
-            <span className="ml-0.5 text-xs text-[var(--text-dim)]">th</span>
+            <span className="ml-0.5 text-xs text-(--text-dim)">th</span>
           </m.div>
         </div>
       </div>
 
       {/* Condition label */}
-      <p className="mt-2 font-heading text-sm font-semibold text-[var(--text-heading)]">
+      <p className="mt-2 font-heading text-sm font-semibold text-(--text-heading)">
         {condition}
       </p>
       {/* Risk level with text label and high-contrast pattern marker */}

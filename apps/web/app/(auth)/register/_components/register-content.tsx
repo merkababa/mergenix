@@ -252,7 +252,7 @@ export function RegisterContent() {
                 Create Account
               </h1>
               {/* Value proposition subtitle (#11) */}
-              <p className="mb-8 text-center font-body text-sm text-[var(--text-muted)]">
+              <p className="mb-8 text-center font-body text-sm text-(--text-muted)">
                 Predict offspring health risks and traits.
                 <br />
                 100% private — your DNA never leaves your device.
@@ -266,7 +266,7 @@ export function RegisterContent() {
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-[var(--accent-rose)]"
+                    className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                     role="alert"
                   >
                     {generalError}
@@ -282,17 +282,17 @@ export function RegisterContent() {
               />
 
               {/* Google data scope note (#13) */}
-              <p className="mt-2 text-center text-xs text-[var(--text-dim)]">
+              <p className="mt-2 text-center text-xs text-(--text-dim)">
                 Google provides only your name and email. We never access your Google data.
               </p>
 
               {/* Divider */}
               <div className="my-6 flex items-center gap-3">
-                <div className="h-px flex-1 bg-[var(--border-subtle)]" />
-                <span className="font-body text-xs text-[var(--text-dim)]">
+                <div className="h-px flex-1 bg-(--border-subtle)" />
+                <span className="font-body text-xs text-(--text-dim)">
                   or create with email
                 </span>
-                <div className="h-px flex-1 bg-[var(--border-subtle)]" />
+                <div className="h-px flex-1 bg-(--border-subtle)" />
               </div>
 
               {/* Form */}
@@ -375,7 +375,7 @@ export function RegisterContent() {
 
                 {/* Terms checkbox */}
                 <div>
-                  <label className="flex items-start gap-2.5 text-sm text-[var(--text-muted)]">
+                  <label className="flex items-start gap-2.5 text-sm text-(--text-muted)">
                     <input
                       type="checkbox"
                       checked={acceptedTerms}
@@ -390,28 +390,28 @@ export function RegisterContent() {
                           }));
                         }
                       }}
-                      className="mt-0.5 h-4 w-4 rounded border-[var(--border-subtle)] bg-[var(--bg-elevated)]"
+                      className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated)"
                       aria-required="true"
                     />
                     <span>
                       I agree to the{" "}
                       <Link
                         href="/legal"
-                        className="font-medium text-[var(--accent-teal)] hover:text-[var(--accent-cyan)]"
+                        className="font-medium text-(--accent-teal) hover:text-(--accent-cyan)"
                       >
                         Terms of Service
                       </Link>{" "}
                       and{" "}
                       <Link
                         href="/legal#privacy"
-                        className="font-medium text-[var(--accent-teal)] hover:text-[var(--accent-cyan)]"
+                        className="font-medium text-(--accent-teal) hover:text-(--accent-cyan)"
                       >
                         Privacy Policy
                       </Link>
                     </span>
                   </label>
                   {touchedFields.has("terms") && fieldErrors.terms && (
-                    <p className="mt-1 ml-6.5 text-xs text-[var(--accent-rose)]" role="alert">
+                    <p className="mt-1 ml-6.5 text-xs text-(--accent-rose)" role="alert">
                       {fieldErrors.terms}
                     </p>
                   )}
@@ -431,11 +431,11 @@ export function RegisterContent() {
               </form>
 
               {/* Login link */}
-              <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
+              <p className="mt-6 text-center text-sm text-(--text-muted)">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-semibold text-[var(--accent-teal)] transition-colors hover:text-[var(--accent-cyan)]"
+                  className="font-semibold text-(--accent-teal) transition-colors hover:text-(--accent-cyan)"
                 >
                   Sign in
                 </Link>
@@ -473,7 +473,7 @@ export function RegisterContent() {
                 animate="visible"
                 className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] ring-1 ring-[rgba(6,214,160,0.2)]"
               >
-                <Mail className="h-10 w-10 text-[var(--accent-teal)]" />
+                <Mail className="h-10 w-10 text-(--accent-teal)" />
               </m.div>
 
               {/* Animated checkmark */}
@@ -486,23 +486,23 @@ export function RegisterContent() {
                   damping: 20,
                   delay: 0.4,
                 }}
-                className="mx-auto -mt-4 mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-teal)]"
+                className="mx-auto -mt-4 mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-(--accent-teal)"
               >
-                <CheckCircle2 className="h-5 w-5 text-[var(--bg-deep)]" aria-hidden="true" />
+                <CheckCircle2 className="h-5 w-5 text-(--bg-deep)" aria-hidden="true" />
               </m.div>
 
               <h1 className="gradient-text mb-2 font-heading text-2xl font-extrabold">
                 Check your email
               </h1>
 
-              <p className="mb-2 text-sm text-[var(--text-primary)]">
+              <p className="mb-2 text-sm text-(--text-primary)">
                 Verification email sent to{" "}
-                <strong className="text-[var(--accent-teal)]">
+                <strong className="text-(--accent-teal)">
                   {registeredEmail}
                 </strong>
               </p>
 
-              <p className="mb-6 text-sm text-[var(--text-muted)]">
+              <p className="mb-6 text-sm text-(--text-muted)">
                 Check your inbox and click the link to verify your account.
                 The link will expire in 24 hours.
               </p>
@@ -524,7 +524,7 @@ export function RegisterContent() {
               </Button>
 
               {/* Resend / help text */}
-              <p className="mb-6 text-xs text-[var(--text-dim)]">
+              <p className="mb-6 text-xs text-(--text-dim)">
                 Didn&apos;t receive it? Check your spam folder or{" "}
                 <button
                   type="button"
@@ -533,7 +533,7 @@ export function RegisterContent() {
                     setPassword("");
                     setGeneralError(null);
                   }}
-                  className="font-medium text-[var(--accent-teal)] underline decoration-[var(--accent-teal)]/30 underline-offset-2 transition-colors hover:text-[var(--accent-cyan)]"
+                  className="font-medium text-(--accent-teal) underline decoration-(--accent-teal)/30 underline-offset-2 transition-colors hover:text-(--accent-cyan)"
                 >
                   try again with a different email
                 </button>

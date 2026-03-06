@@ -8,7 +8,7 @@ export default function AuthLoading() {
           style={{ background: "var(--bg-elevated)" }}
         />
         <div
-          className="h-4 rounded w-1/2 mx-auto"
+          className="h-4 rounded-sm w-1/2 mx-auto"
           style={{ background: "var(--bg-elevated)" }}
         />
         <div className="space-y-3 mt-8">

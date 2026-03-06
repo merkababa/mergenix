@@ -135,7 +135,7 @@ export function SaveOptionsModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs"
           onClick={handleBackdropClick}
           role="presentation"
         >
@@ -153,13 +153,13 @@ export function SaveOptionsModal({
               aria-labelledby={headingId}
               aria-describedby={descriptionId}
               tabIndex={-1}
-              className="relative outline-none rounded-2xl border border-[var(--glass-border)] bg-[var(--bg-glass)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+              className="relative outline-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* ── Close button ────────────────────────────────────────── */}
               <button
                 type="button"
                 onClick={handleClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-teal)]"
+                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" />
@@ -168,14 +168,14 @@ export function SaveOptionsModal({
               {/* ── Header ──────────────────────────────────────────────── */}
               <h2
                 id={headingId}
-                className="mb-2 text-center font-heading text-xl font-bold text-[var(--text-heading)]"
+                className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
               >
                 Save Your Results
               </h2>
 
               <p
                 id={descriptionId}
-                className="mb-6 text-center text-sm text-[var(--text-muted)]"
+                className="mb-6 text-center text-sm text-(--text-muted)"
               >
                 Choose how you want to save your analysis results.
               </p>
@@ -192,15 +192,15 @@ export function SaveOptionsModal({
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
                       <FileDown
-                        className="h-5 w-5 text-[var(--accent-teal)]"
+                        className="h-5 w-5 text-(--accent-teal)"
                         aria-hidden="true"
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-base font-semibold text-[var(--text-heading)]">
+                      <h3 className="font-heading text-base font-semibold text-(--text-heading)">
                         Download PDF Report
                       </h3>
-                      <p className="mt-1 text-sm text-[var(--text-muted)]">
+                      <p className="mt-1 text-sm text-(--text-muted)">
                         Generate a PDF report you can save locally or print
                       </p>
                       {canExportPDF ? (
@@ -223,7 +223,7 @@ export function SaveOptionsModal({
                             <Lock className="mr-1 h-3 w-3" aria-hidden="true" />
                             Pro Only
                           </Button>
-                          <span className="text-xs text-[var(--text-dim)]">
+                          <span className="text-xs text-(--text-dim)">
                             Upgrade to Pro to export PDF reports
                           </span>
                         </div>
@@ -236,21 +236,21 @@ export function SaveOptionsModal({
                 <GlassCard
                   variant="subtle"
                   hover="none"
-                  className="p-5 border-[var(--border-subtle)]"
+                  className="p-5 border-(--border-subtle)"
                   data-testid="option-save-encrypted"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
                       <Shield
-                        className="h-5 w-5 text-[var(--text-muted)]"
+                        className="h-5 w-5 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-base font-semibold text-[var(--text-dim)]">
+                      <h3 className="font-heading text-base font-semibold text-(--text-dim)">
                         Save to Secure Cloud
                       </h3>
-                      <p className="mt-1 text-sm text-[var(--text-dim)]">
+                      <p className="mt-1 text-sm text-(--text-dim)">
                         End-to-end encrypted storage — access from any device
                       </p>
                       <Button
@@ -262,7 +262,7 @@ export function SaveOptionsModal({
                       >
                         Coming Soon
                       </Button>
-                      <p className="mt-2 text-xs text-[var(--text-dim)]">
+                      <p className="mt-2 text-xs text-(--text-dim)">
                         Encrypted cloud storage is being built. Check back soon!
                       </p>
                     </div>

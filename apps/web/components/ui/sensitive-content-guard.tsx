@@ -125,16 +125,16 @@ export function SensitiveContentGuard({
           aria-hidden="true"
         >
           <div className="space-y-3">
-            <div className="h-4 w-3/4 rounded bg-[var(--text-muted)] opacity-20" />
-            <div className="h-4 w-1/2 rounded bg-[var(--text-muted)] opacity-20" />
-            <div className="h-4 w-5/6 rounded bg-[var(--text-muted)] opacity-20" />
-            <div className="h-4 w-2/3 rounded bg-[var(--text-muted)] opacity-20" />
+            <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
           </div>
         </div>
 
         {/* Upgrade overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-[20px] bg-[rgba(5,8,16,0.7)] p-6 text-center">
-          <p className="text-sm font-medium text-[var(--text-body)]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-glass bg-[rgba(5,8,16,0.7)] p-6 text-center">
+          <p className="text-sm font-medium text-(--text-body)">
             {CATEGORY_LABELS[category]} results require{" "}
             {TIER_DISPLAY_NAMES[requiredTier]}
           </p>
@@ -170,10 +170,10 @@ export function SensitiveContentGuard({
               aria-hidden="true"
             >
               <div className="space-y-3">
-                <div className="h-4 w-3/4 rounded bg-[var(--text-muted)] opacity-20" />
-                <div className="h-4 w-1/2 rounded bg-[var(--text-muted)] opacity-20" />
-                <div className="h-4 w-5/6 rounded bg-[var(--text-muted)] opacity-20" />
-                <div className="h-4 w-2/3 rounded bg-[var(--text-muted)] opacity-20" />
+                <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
               </div>
             </div>
 
@@ -225,7 +225,7 @@ export function SensitiveContentGuard({
               aria-modal="true"
               aria-labelledby={`ad-warning-title-${uniqueId}`}
               aria-describedby={`ad-warning-desc-${uniqueId}`}
-              className="relative z-10 mx-4 max-w-md rounded-[20px] border border-[rgba(244,63,94,0.3)] bg-[rgba(12,18,32,0.95)] p-6 shadow-[0_4px_30px_rgba(244,63,94,0.15)]"
+              className="relative z-10 mx-4 max-w-md rounded-glass border border-[rgba(244,63,94,0.3)] bg-[rgba(12,18,32,0.95)] p-6 shadow-[0_4px_30px_rgba(244,63,94,0.15)]"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -235,14 +235,14 @@ export function SensitiveContentGuard({
             >
               <h2
                 id={`ad-warning-title-${uniqueId}`}
-                className="mb-3 text-lg font-heading font-semibold text-[var(--text-primary)]"
+                className="mb-3 text-lg font-heading font-semibold text-(--text-primary)"
               >
                 Important: Autosomal Dominant Condition
               </h2>
 
               <p
                 id={`ad-warning-desc-${uniqueId}`}
-                className="mb-6 text-sm leading-relaxed text-[var(--text-body)]"
+                className="mb-6 text-sm leading-relaxed text-(--text-body)"
               >
                 This result relates to an autosomal dominant condition. It has
                 direct medical implications for you. We recommend reviewing with

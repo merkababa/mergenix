@@ -73,7 +73,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
   return (
     <div
       className={cn(
-        "rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-glass)] p-6",
+        "rounded-glass border border-(--border-subtle) bg-(--bg-glass) p-6",
         "[backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]",
         className,
       )}
@@ -117,11 +117,11 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                   className={cn(
                     "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300",
                     isCompleted &&
-                      "border-[#06d6a0] bg-gradient-to-br from-[#06d6a0] to-[#059669] text-[#050810]",
+                      "border-accent-teal bg-linear-to-br from-accent-teal to-day-accent-teal text-bio-deep",
                     isActive &&
-                      "border-[var(--accent-teal)] bg-transparent text-[var(--accent-teal)]",
+                      "border-(--accent-teal) bg-transparent text-(--accent-teal)",
                     isPending &&
-                      "border-[var(--border-subtle)] bg-[var(--bg-elevated)] text-[var(--text-dim)]",
+                      "border-(--border-subtle) bg-(--bg-elevated) text-(--text-dim)",
                   )}
                   animate={
                     isActive
@@ -149,9 +149,9 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                 <span
                   className={cn(
                     "mt-1.5 text-center font-heading text-xs font-medium",
-                    isCompleted && "font-semibold text-[var(--accent-teal)]",
-                    isActive && "font-bold text-[var(--accent-teal)]",
-                    isPending && "text-[var(--text-dim)]",
+                    isCompleted && "font-semibold text-(--accent-teal)",
+                    isActive && "font-bold text-(--accent-teal)",
+                    isPending && "text-(--text-dim)",
                   )}
                 >
                   {step.label}
@@ -160,9 +160,9 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
 
               {/* Connector line */}
               {i < STEPS.length - 1 && (
-                <div className="mx-1 mb-5 h-0.5 flex-1 rounded-full bg-[var(--border-subtle)]">
+                <div className="mx-1 mb-5 h-0.5 flex-1 rounded-full bg-(--border-subtle)">
                   <m.div
-                    className="h-full rounded-full bg-gradient-to-r from-[#06d6a0] to-[#06b6d4]"
+                    className="h-full rounded-full bg-linear-to-r from-accent-teal to-accent-cyan"
                     initial={{ width: "0%" }}
                     animate={{
                       width: isCompleted ? "100%" : isActive ? "50%" : "0%",
@@ -181,7 +181,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
         key={currentStep}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-4 text-center font-body text-sm text-[var(--text-muted)]"
+        className="mt-4 text-center font-body text-sm text-(--text-muted)"
       >
         {activeDescription}
       </m.p>

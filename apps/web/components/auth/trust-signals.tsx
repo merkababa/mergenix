@@ -20,11 +20,11 @@ export function TrustSignals({ lines = DEFAULT_LINES }: TrustSignalsProps) {
   return (
     <GlassCard variant="subtle" hover="none" className="mt-4 p-4 text-center">
       <div className="flex items-center justify-center gap-2">
-        <Shield className="h-4 w-4 text-[var(--accent-teal)]" aria-hidden="true" />
-        <span className="text-xs text-[var(--text-muted)]">{lines[0]}</span>
+        <Shield className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
+        <span className="text-xs text-(--text-muted)">{lines[0]}</span>
       </div>
       {lines.slice(1).map((line) => (
-        <p key={line} className="mt-1 text-xs text-[var(--text-muted)]">
+        <p key={line} className="mt-1 text-xs text-(--text-muted)">
           {line}
         </p>
       ))}

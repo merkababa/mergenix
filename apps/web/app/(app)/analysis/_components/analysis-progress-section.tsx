@@ -23,7 +23,7 @@ export function AnalysisProgressSection({
     <div className="mt-8 space-y-4">
       <ErrorBoundary
         fallback={
-          <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--bg-elevated)] p-6 text-center text-sm text-[var(--text-muted)]">
+          <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center text-sm text-(--text-muted)">
             Failed to load analysis progress.
           </div>
         }

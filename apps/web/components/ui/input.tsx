@@ -18,14 +18,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="mb-1.5 block font-heading text-sm font-medium text-[var(--text-primary)]"
+            className="mb-1.5 block font-heading text-sm font-medium text-(--text-primary)"
           >
             {label}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-dim)]">
+            <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-(--text-dim)">
               {icon}
             </div>
           )}
@@ -34,10 +34,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             type={type}
             className={cn(
-              "w-full rounded-xl border bg-[var(--bg-elevated)] px-4 py-2.5 font-body text-sm text-[var(--text-primary)] placeholder:text-[var(--text-dim)]",
-              "border-[var(--border-subtle)]",
+              "w-full rounded-xl border bg-(--bg-elevated) px-4 py-2.5 font-body text-sm text-(--text-primary) placeholder:text-(--text-dim)",
+              "border-(--border-subtle)",
               "transition-all duration-200",
-              "focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-none",
+              "focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-hidden",
               error &&
                 "border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]",
               icon && "pl-10",
@@ -51,7 +51,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {error && (
           <p
             id={`${inputId}-error`}
-            className="mt-1 text-xs text-[var(--accent-rose)]"
+            className="mt-1 text-xs text-(--accent-rose)"
             role="alert"
           >
             {error}
