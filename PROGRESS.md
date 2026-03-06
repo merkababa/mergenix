@@ -144,21 +144,18 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 ## Tailwind CSS 3.4 → 4.2 Migration
 
-**Status:** PR #147 — **review complete, ready to merge**
-**Review:** Architect A, Code Reviewer A, Designer A- → A (1 BLOCK fixed). 126 files, +2,027/-2,088 lines.
+**Status:** PR #147 — **MERGED** (Architect A, Code Reviewer A, Designer A). 126 files, +2,027/-2,088 lines.
 **Changes:** CSS-first `@theme {}`, `@tailwindcss/postcss`, `tailwind-merge` 3.0, class renames (120+ files), keyframe dedup, dark mode `@custom-variant`, deleted `tailwind.config.ts`.
-**Tests:** 1,777 web tests + engine tests all passing.
 
-## Dependabot Triage (2026-03-06)
+## Dependabot Triage (2026-03-06) — COMPLETE
 
-**Batch PR #146** — 6 safe patches merged into one PR (postcss, autoprefixer, sqlalchemy, sentry-sdk, qrcode, actions/setup-node). Ready to merge.
-**Closed:** #97, #132, #138, #139, #144, #145 (covered by TW4 migration, @types/node mismatch, or deferred major).
-**Closed (superseded by #146):** #129, #133, #134, #135, #136, #140, #141.
-**Remaining open (5):** #130 (download-artifact 7→8), #131 (upload-artifact 6→7), #137 (structlog 24→25), #142 (lucide-react 0.469→0.577), #143 (jsdom 26→28). Need investigation.
+**All Dependabot PRs resolved.** Zero open.
+- **Batch PR #146 — MERGED:** postcss, autoprefixer, sqlalchemy, sentry-sdk, qrcode, actions/setup-node (6 safe patches)
+- **Batch PR #148 — MERGED:** upload-artifact 7.0, download-artifact 8.0, structlog 25.5, lucide-react 0.577, jsdom 28.1 (5 major/minor bumps)
+- **Closed (12):** #97, #103, #106, #132, #138, #139, #144, #145 (covered by TW4 migration, @types/node mismatch, stripe deferred, or not needed)
+- **Closed (superseded by batches):** #129, #130, #131, #133, #134, #135, #136, #137, #140, #141, #142, #143
 
 **Remaining work:**
-- Merge PR #146 (safe deps batch) and PR #147 (TW4 migration)
-- 5 Dependabot PRs still open (need research on major bumps)
 - Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
