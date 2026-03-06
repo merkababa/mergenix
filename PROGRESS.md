@@ -142,16 +142,23 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | #106 | @next/eslint-plugin-next | 15→16 | **Close** | Must not upgrade without Next.js 16. Peer dep mismatch, no lint rule benefit. |
 | #103 | @types/node | 22→25 | **Close** | Runtime mismatch — project runs Node 22 LTS, v25 types non-existent APIs. |
 
-## Next Task: Tailwind CSS 3.4 → 4.2 Migration
+## Tailwind CSS 3.4 → 4.2 Migration
 
-**Status:** Plan complete, execution not started.
-**Plan:** `docs/plans/tailwind-v4-migration.md` (full migration plan with 8 phases)
-**Scope:** 132 files, 131 CSS variables, 11 animations, 10 custom components, 1,059-line globals.css
-**Key risks:** Shadow/rounded scale shift (visual), tailwind-merge v4 compat, monorepo content detection
+**Status:** PR #147 — **review complete, ready to merge**
+**Review:** Architect A, Code Reviewer A, Designer A- → A (1 BLOCK fixed). 126 files, +2,027/-2,088 lines.
+**Changes:** CSS-first `@theme {}`, `@tailwindcss/postcss`, `tailwind-merge` 3.0, class renames (120+ files), keyframe dedup, dark mode `@custom-variant`, deleted `tailwind.config.ts`.
+**Tests:** 1,777 web tests + engine tests all passing.
+
+## Dependabot Triage (2026-03-06)
+
+**Batch PR #146** — 6 safe patches merged into one PR (postcss, autoprefixer, sqlalchemy, sentry-sdk, qrcode, actions/setup-node). Ready to merge.
+**Closed:** #97, #132, #138, #139, #144, #145 (covered by TW4 migration, @types/node mismatch, or deferred major).
+**Closed (superseded by #146):** #129, #133, #134, #135, #136, #140, #141.
+**Remaining open (5):** #130 (download-artifact 7→8), #131 (upload-artifact 6→7), #137 (structlog 24→25), #142 (lucide-react 0.469→0.577), #143 (jsdom 26→28). Need investigation.
 
 **Remaining work:**
-- Tailwind CSS 3.4 → 4.2 migration (planned, ~1-2 days)
-- 5 Dependabot PRs (2 to close, 3 deferred major migrations — #97 covered by TW4 migration)
+- Merge PR #146 (safe deps batch) and PR #147 (TW4 migration)
+- 5 Dependabot PRs still open (need research on major bumps)
 - Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
 
 ---
