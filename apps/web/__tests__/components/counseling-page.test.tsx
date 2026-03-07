@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory } from '../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -8,9 +8,7 @@ vi.mock('lucide-react', () => mockLucideIcons('Heart', 'Shield', 'ExternalLink',
 
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
-vi.mock('@/components/ui/button', () => ({
-  buttonVariants: () => 'mock-button-class',
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
 

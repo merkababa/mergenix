@@ -7,11 +7,7 @@ import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkF
 
 vi.mock('lucide-react', () => mockLucideIcons('CheckCircle2', 'ChevronRight', 'Loader2'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/button', () => ({
-  ...mockButtonFactory(),
-  buttonVariants: ({ variant, size, className }: any) =>
-    [variant, size, className].filter(Boolean).join(' '),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 const mockRouterPush = vi.fn();
 let mockSearchParamsMap = new Map<string, string>();

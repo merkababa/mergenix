@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 // ─── Hoisted shared mock factories ────────────────────────────────────────────
-// vi.mock() calls are hoisted above imports by Vitest, so shared factories must
-// be defined via vi.hoisted() to be available when mock factories execute.
 const {
   createIconMock,
   glassCardModule,
@@ -13,92 +11,9 @@ const {
   pageHeaderModule,
   nextLinkModule,
 } = vi.hoisted(() => {
-  const createIconMock =
-    (testId: string) =>
-    (props: React.SVGProps<SVGSVGElement>): React.ReactElement =>
-      React.createElement('svg', { 'data-testid': testId, ...props });
-
-  const glassCardModule = () => ({
-    GlassCard: ({
-      children,
-      variant: _v,
-      hover: _h,
-      rainbow: _r,
-      ...htmlProps
-    }: {
-      children?: React.ReactNode;
-      className?: string;
-      variant?: string;
-      hover?: string;
-      rainbow?: boolean;
-      [key: string]: unknown;
-    }): React.ReactElement =>
-      React.createElement('div', { 'data-testid': 'glass-card', ...htmlProps }, children),
-  });
-
-  const scrollRevealModule = () => ({
-    ScrollReveal: ({ children }: { children?: React.ReactNode }): React.ReactElement =>
-      React.createElement('div', { 'data-testid': 'scroll-reveal' }, children),
-  });
-
-  const sectionHeadingModule = () => ({
-    SectionHeading: ({
-      title,
-      subtitle,
-      id,
-    }: {
-      title: string;
-      subtitle?: string;
-      id?: string;
-      gradient?: string;
-      className?: string;
-    }): React.ReactElement =>
-      React.createElement(
-        'div',
-        { 'data-testid': 'section-heading', id },
-        React.createElement('h2', { id }, title),
-        subtitle ? React.createElement('p', null, subtitle) : null,
-      ),
-  });
-
-  const pageHeaderModule = () => ({
-    PageHeader: ({
-      title,
-      subtitle,
-    }: {
-      title: string;
-      subtitle?: string;
-      breadcrumbs?: unknown[];
-    }): React.ReactElement =>
-      React.createElement(
-        'div',
-        { 'data-testid': 'page-header' },
-        React.createElement('h1', null, title),
-        subtitle ? React.createElement('p', null, subtitle) : null,
-      ),
-  });
-
-  const nextLinkModule = () => ({
-    default: ({
-      children,
-      href,
-      ...props
-    }: {
-      children?: React.ReactNode;
-      href: string;
-      [key: string]: unknown;
-    }): React.ReactElement =>
-      React.createElement('a', { href, ...props }, children),
-  });
-
-  return {
-    createIconMock,
-    glassCardModule,
-    scrollRevealModule,
-    sectionHeadingModule,
-    pageHeaderModule,
-    nextLinkModule,
-  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createMarketingMocks } = require('../__helpers__/mock-marketing.ts');
+  return createMarketingMocks();
 });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────

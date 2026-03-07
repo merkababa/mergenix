@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import type { ReactNode, HTMLAttributes, ButtonHTMLAttributes, InputHTMLAttributes } from 'react';
 
 // ─── GlassCard ────────────────────────────────────────────────────────────────
@@ -5,7 +6,7 @@ import type { ReactNode, HTMLAttributes, ButtonHTMLAttributes, InputHTMLAttribut
 interface MockGlassCardProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
   variant?: string;
-  hover?: boolean;
+  hover?: string;
   rainbow?: boolean;
   className?: string;
 }
@@ -35,6 +36,7 @@ export function mockButtonFactory() {
         {children}
       </button>
     ),
+    buttonVariants: vi.fn((_props?: Record<string, unknown>) => 'mocked-button-variants'),
   };
 }
 

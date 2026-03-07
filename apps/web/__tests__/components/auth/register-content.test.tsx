@@ -1,23 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
+import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory, mockNextNavigationFactory } from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
 vi.mock('next/link', () => mockNextLinkFactory());
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-  }),
-  usePathname: () => '/register',
-  useSearchParams: () => new URLSearchParams(),
-}));
+vi.mock('next/navigation', () => mockNextNavigationFactory({ pathname: '/register' }));
 
 const mockRegister = vi.fn();
 const mockResendVerification = vi.fn();
@@ -92,11 +81,7 @@ vi.mock('@/lib/animation-variants', () => ({
   fadeUp: { hidden: {}, visible: {} },
 }));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/button', () => ({
-  ...mockButtonFactory(),
-  buttonVariants: ({ variant, size, className }: any) =>
-    [variant, size, className].filter(Boolean).join(' '),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 vi.mock('@/components/ui/input', () => mockInputFactory());
 

@@ -6,9 +6,12 @@ import type { FullAnalysisResult } from '@mergenix/shared-types';
 import { CARRIER_PANEL_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 // Mock next/navigation for SPA navigation (useRouter)
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-}));
+const { mockNextNavigationFactory } = vi.hoisted(() => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mod = require('../__helpers__/mock-next-navigation.ts');
+  return { mockNextNavigationFactory: mod.mockNextNavigationFactory };
+});
+vi.mock('next/navigation', () => mockNextNavigationFactory());
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 

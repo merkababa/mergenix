@@ -11,92 +11,9 @@ const {
   pageHeaderModule,
   nextLinkModule,
 } = vi.hoisted(() => {
-  const createIconMock =
-    (testId: string) =>
-    (props: React.SVGProps<SVGSVGElement>): React.ReactElement =>
-      React.createElement('svg', { 'data-testid': testId, ...props });
-
-  const glassCardModule = () => ({
-    GlassCard: ({
-      children,
-      variant: _v,
-      hover: _h,
-      rainbow: _r,
-      ...htmlProps
-    }: {
-      children?: React.ReactNode;
-      className?: string;
-      variant?: string;
-      hover?: string;
-      rainbow?: boolean;
-      [key: string]: unknown;
-    }): React.ReactElement =>
-      React.createElement('div', { 'data-testid': 'glass-card', ...htmlProps }, children),
-  });
-
-  const scrollRevealModule = () => ({
-    ScrollReveal: ({ children }: { children?: React.ReactNode }): React.ReactElement =>
-      React.createElement('div', { 'data-testid': 'scroll-reveal' }, children),
-  });
-
-  const sectionHeadingModule = () => ({
-    SectionHeading: ({
-      title,
-      subtitle,
-      id,
-    }: {
-      title: string;
-      subtitle?: string;
-      id?: string;
-      gradient?: string;
-      className?: string;
-    }): React.ReactElement =>
-      React.createElement(
-        'div',
-        { 'data-testid': 'section-heading', id },
-        React.createElement('h2', { id }, title),
-        subtitle ? React.createElement('p', null, subtitle) : null,
-      ),
-  });
-
-  const pageHeaderModule = () => ({
-    PageHeader: ({
-      title,
-      subtitle,
-    }: {
-      title: string;
-      subtitle?: string;
-      breadcrumbs?: unknown[];
-    }): React.ReactElement =>
-      React.createElement(
-        'div',
-        { 'data-testid': 'page-header' },
-        React.createElement('h1', null, title),
-        subtitle ? React.createElement('p', null, subtitle) : null,
-      ),
-  });
-
-  const nextLinkModule = () => ({
-    default: ({
-      children,
-      href,
-      ...props
-    }: {
-      children?: React.ReactNode;
-      href: string;
-      [key: string]: unknown;
-    }): React.ReactElement =>
-      React.createElement('a', { href, ...props }, children),
-  });
-
-  return {
-    createIconMock,
-    glassCardModule,
-    scrollRevealModule,
-    sectionHeadingModule,
-    pageHeaderModule,
-    nextLinkModule,
-  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createMarketingMocks } = require('../__helpers__/mock-marketing.ts');
+  return createMarketingMocks();
 });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
@@ -146,6 +63,10 @@ vi.mock('@/components/ui/select-filter', () => ({
 
 vi.mock('@/components/marketing/section-heading', sectionHeadingModule);
 
+// Uses custom useSearchParams (plain object) — incompatible with
+// mockNextNavigationFactory() which returns URLSearchParams.
+// CatalogContent calls searchParams.get() and searchParams.toString()
+// directly, so a plain object mock is sufficient here.
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn() }),
   useSearchParams: () => ({

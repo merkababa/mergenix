@@ -7,11 +7,7 @@ import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkF
 
 vi.mock('lucide-react', () => mockLucideIcons('Crown', 'Sparkles', 'ChevronRight', 'CreditCard', 'Clock', 'Download', 'AlertCircle', 'Shield'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/button', () => ({
-  ...mockButtonFactory(),
-  buttonVariants: ({ variant, size, className }: any) =>
-    [variant, size, className].filter(Boolean).join(' '),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 vi.mock('@/components/ui/badge', () => mockBadgeFactory({ includeVariant: true }));
 

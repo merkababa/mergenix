@@ -9,7 +9,7 @@ import { render } from "@testing-library/react";
 import { useAnalysisStore } from "../../lib/stores/analysis-store";
 import type { FullAnalysisResult } from "@mergenix/shared-types";
 
-import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../__helpers__';
+import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory, mockNextNavigationFactory, mockAuthStoreFactory, mockLegalStoreFactory } from '../__helpers__';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -22,9 +22,10 @@ vi.mock("@/components/ui/sensitive-content-guard", () => ({
 
 // ─── Additional mocks for AnalysisPage ──────────────────────────────────────
 
-vi.mock("@/lib/stores/legal-store", () => ({
-  useLegalStore: (selector: (s: Record<string, unknown>) => unknown) =>
-    selector({ partnerConsentGiven: false, geneticDataConsentGiven: false, chipLimitationAcknowledged: false }),
+vi.mock("@/lib/stores/legal-store", () => mockLegalStoreFactory({
+  partnerConsentGiven: false,
+  geneticDataConsentGiven: false,
+  chipLimitationAcknowledged: false,
 }));
 
 vi.mock("@/hooks/use-genetics-worker", () => ({
@@ -87,16 +88,12 @@ vi.mock("@/components/genetics/results/stale-results-banner", () => ({
 }));
 
 // Mock useAuthStore
-vi.mock("@/lib/stores/auth-store", () => ({
-  useAuthStore: (
-    selector: (s: { user: { tier: string } | null }) => unknown,
-  ) => selector({ user: { tier: "pro" } }),
+vi.mock("@/lib/stores/auth-store", () => mockAuthStoreFactory({
+  user: { id: 'user-1', name: 'Test User', email: 'test@example.com', tier: 'pro', is_verified: true, has_2fa: false, created_at: '2025-01-01T00:00:00Z' },
 }));
 
 // Mock next/navigation
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
-}));
+vi.mock("next/navigation", () => mockNextNavigationFactory());
 
 // Mock lucide-react icons — explicit mocks to avoid Proxy hangs
 vi.mock("lucide-react", () => mockLucideIcons(

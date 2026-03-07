@@ -6,11 +6,7 @@ import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkF
 
 vi.mock('lucide-react', () => mockLucideIcons('XCircle', 'ChevronRight'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
-vi.mock('@/components/ui/button', () => ({
-  ...mockButtonFactory(),
-  buttonVariants: ({ variant, size, className }: any) =>
-    [variant, size, className].filter(Boolean).join(' '),
-}));
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('next/link', () => mockNextLinkFactory());
 
 // ─── Import component after mocks ─────────────────────────────────────────────
