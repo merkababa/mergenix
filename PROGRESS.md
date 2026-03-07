@@ -9,7 +9,7 @@
 ## Current Status
 
 **Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
-**Coming Soon page:** PR #89 — review-complete (8/8 A Gemini + 8/8 A Claude). Ready to merge.
+**Coming Soon page:** PR #89 — **MERGED**.
 **TW4 Fix + Landing Page Redesign:** PR #149 — **MERGED**. CSS cascade layer fix + crypto→medical SaaS redesign + review fixes.
 
 ## Current Sprint
