@@ -8,31 +8,9 @@
 
 ## Current Status
 
-**ALL 11 STREAMS COMPLETE.** Mergenix V3 is feature-complete and alpha-launch-ready.
-**Coming Soon page:** PR #89 — **MERGED** (8/8 A+ Gemini + 8/8 A Claude). Site-wide lock active.
-**Web Polish:** PR #90 — **MERGED** (10/10 A/A+ Claude, 6 review rounds). 104 files, a11y + type safety + tier alignment + test coverage.
-**Trait Expansion Tier 1:** PR #91 — **MERGED** (10/10 A+ Claude, 4 review rounds). 236 traits (was 79), chip coverage, category accordion UI, health consent interstitial, GINA notice, amber health bars.
-**Trait Expansion Tier 2:** PR #92 — **MERGED** (4/5 A+ + 1 A Claude, 3 review rounds). 290 traits (was 236), 54 new HIGH-confidence traits, 4 inverted phenotypes fixed, 6 PMIDs corrected, health disclaimers added.
-**Trait Expansion Tier 3:** PR #93 — **MERGED** (5/5 A/A- Claude, 2 review rounds). 412 traits (was 290), 122 new MODERATE-confidence traits, rs1800888 gene/chr fix, 9 psychiatric traits renamed biology-first, 8 PMID corrections, disclaimers added.
-**Trait Expansion Tier 4:** PR #111 — **MERGED** (10/10 A+ Claude, 4 review rounds). 476 traits (was 412), 64 new traits completing the catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first, health disclaimers on 8 sensitive entries.
-**Test count:** 3,047+ tests passing across all packages (1,433 engine + 1,614 web).
-**PMID Audit:** PR #112 — **MERGED** (4/4 A+ Claude, 2 review rounds). Fixed 5 entries citing parasitology paper PMID 15888295, added disclaimers + population caveats to 3 MLH1 entries.
-**Full-App Review Fixes:** PR #113 — **MERGED** (10/10 A/A+ Claude, 2 review rounds). 16 findings across 10 reviewer domains: TOTP Fernet encryption, CSRF header, email verification gate, CFTR ΔF508 fix, 4 chromosome corrections, motion→m tree-shaking (42 files), WCAG contrast, loading skeletons, PRS ancestry enforcement, DPIA completion, 30+ new tests. 98 files changed.
-**Test count:** 3,053+ Vitest + 672 Python = 3,725+ tests passing.
-**Launch Readiness:** PR #114 — **MERGED** (4/4 A Claude, 1 review round). 15 pre-alpha fixes: hide broken cloud save, custom error pages, fake counselor removal, GDPR email verification, API retry, Redis prod compose, EU Article 27, server-side metadata, footer links, ClinVar stub. Also: optimized review pipeline (10→2-4 reviewers, 3 round cap), executor checklist, Final Cleanup Rule. 30 files, +2,397/-1,391 lines, 48 new tests.
-**Test count:** 3,090 Vitest + 683 Python = 3,773 tests passing.
-**Analysis Decomposition:** PR #115 — **MERGED** (2/2 A Claude, 1 review round). Decomposed `analysis-content.tsx` (562→~230 lines) into 4 sub-components. 7 review findings fixed. Tech debt resolved.
-**Website Audit Fixes:** PR #116 — **MERGED** (2/2 A Claude, 1 review round). Full website audit (4 parallel agents). Added robots.txt, sitemap, favicon, OG image (Next.js Metadata API). Payment page metadata. Shared SITE_URL env var. saveResult field fix. 13 files, +374/-224 lines.
-**Design Overhaul Review:** 2026-03-02 — Full-site design review (6 parallel agents, 1 completed, 5 rate-limited). Grade: **B**. 20 ranked improvements identified. 4-sprint plan created at `docs/plans/design-overhaul-2026.md`. See below for next steps.
-**Design Overhaul Sprint D1:** PR #117 — **MERGED** (Architect A, Designer A, Code Reviewer B→A+, 2 review rounds). Fluid typography (clamp), 5 scroll animation types, GlassCard variants (frosted/aurora/spotlight/noise/sweep), section color narrative (glow orbs, wave dividers), card micro-interactions, semantic pricing icons. 5 files, +753/-60 lines. 13 review issues fixed.
-**Design Overhaul Sprint D2:** PR #118 — **MERGED** (Architect A, Code Reviewer A, Designer A, Technologist A, Business A — 5/5 A, 1 review round). 3D DNA helix (React Three Fiber, dynamic import, GPU dispose), cinematic crown hero layout, bento grid features, scroll timeline, social proof (real CARRIER_PANEL_COUNT), product demo (realistic carrier risk values). Named Three.js imports for tree-shaking, stale closure fix, WCAG AA contrast, sr-only screen reader context. 16 files, +2,185/-621 lines. 4 new test files. 15 WARN/INFOs fixed across 3 cleanup commits.
-**Design Overhaul Sprint D3:** PR #119 — **MERGED** (Architect A, Code Reviewer A-, Designer A- — 3/3 A/A-, 1 review round). Sample report data visualization: TraitProbabilityBar (animated, role="meter", category colors), PrsGauge SVG charts, carrier risk card differentiation (rose/amber/teal), PunnettSquare expandable, sticky sidebar with scroll-spy + focus management, tier-gate overlay (blur + lock + CTA), CTA button fix (Link + buttonVariants). Also fixed pre-existing React.ElementType build error. 10 review findings fixed. 7 files, +953/-378 lines. 26 integration tests (1691 web total).
-**Design Overhaul Sprint D4:** PR #120 — **MERGED** (Architect A, Code Reviewer A, Designer A- — 3/3 A/A-, 1 review round). Secondary pages & polish: "Most Popular" pricing card (aurora, scale, glow), comparison table highlight, about team section (placeholder avatars), science cards, count-up stats, navbar brand text, footer brand moment ("Genetics Meets Insight"), mobile full-screen overlay (focus trap, 44px targets), View Transitions API (progressive enhancement), gradient text audit (SectionHeading default→solid). 6 review findings fixed. 12 files, +838/-155 lines. 37 new tests (1727 web total).
-**Design overhaul COMPLETE (D1-D4).** All 4 sprints shipped across PRs #117-#120.
-**Tech Debt Sprint:** PR #121 — **MERGED** (Architect A, Code Reviewer A — 2/2 A, 1 review round). Mock dedup (shared `__mocks__/framer-motion.tsx`, 34 test files cleaned, -608 lines), marketing page tests (7 files, 48 tests), marketing page polish (3 components → design system), type fixes (client.ts, CLAUDE.md suppression notes removed). 49 files, +1,104/-611 lines. 3,215 tests. 6 WARN/INFO items deferred to tech debt backlog.
-**Design Review WARNs:** PR #123 — **MERGED** (Architect A, Code Reviewer A-, Designer A- — 3/3 A, 2 review rounds). 25 design review WARNs fixed: touch targets ≥44px (7 components), ARIA (6 fixes incl. menu keyboard nav), --text-dim→--text-muted alias, light-mode contrast fix, keyframe dedup, badge differentiation, heading hierarchy (3), UX polish (scroll hints, 10px→12px, tab overflow). 35 files, +228/-176 lines. 1,775 tests.
-**Test Mock Dedup:** PR #124 — **MERGED** (Architect A+, Code Reviewer A — 2/2 A, 1 review round). Deduplicate test mocks into shared `__helpers__/` module (5 helper files, 55 test files updated, 2 duplicate files removed). Typed factories, zero `any`. Net -985 lines. 1,769 tests.
-**Tech Debt Round 2:** PR #128 — **MERGED** (Architect A-, Code Reviewer A- — 2/2 A, 2 review rounds). Marketing test cleanup (vi.hoisted() typed mock factories, zero `any`), framer-motion mock fixes (useInView boolean return, MotionValue reactive getter, IntersectionObserver configurable:true), root-level test file dedup (merged into marketing/ with GDPR + security guardrail tests preserved). 14 files, +814/-775 lines. 1,752 tests.
+**Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
+**Coming Soon page:** PR #89 — review-complete (8/8 A Gemini + 8/8 A Claude). Ready to merge.
+**TW4 Fix + Landing Page Redesign:** PR #149 — review-complete (Architect A, Code A, Designer A, Marketing A-). Ready to merge. 3 commits: cascade layer fix, crypto→medical SaaS redesign, review fixes.
 
 ## Current Sprint
 
@@ -73,90 +51,8 @@
 | Stream Q Sprints 1+2: QA Infrastructure + Accuracy | Claude | **Merged** | test/stream-q-sprint-1-2 | PR #86 — 515 new tests across 20 files (+10,730 lines). Synthetic genome factory (seedable PRNG, 4 formats), golden standard files, parser comprehensive (136 tests), encryption oracle + stub contracts (58 tests), privacy E2E (5 Playwright), smoke tests, carrier/coverage/offspring/liftover accuracy, legacy-ported (47 from Python), save/load integrity, recovery key E2E. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds). |
 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **Merged** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
-| Coming Soon Page with Site Lock | Claude | **Merged** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). |
-| Web Polish: A11y, Type Safety, Tier Alignment | Claude | **Merged** | review/web-polish-r4 | PR #90 — Multi-round Claude review (R1–R6) across 10 reviewer personas. Accessibility (heading hierarchy, ARIA roles, touch targets), type safety (Tier unions, Record types), business logic (aligned TIER_GATING with PRICING_TIERS: free diseases 25→0, traits 10→79, ethnicity all tiers), PGx exclusive bounds, OAuth CSRF validation, consent retry queue, 136+ new tests. 104 files, +2,639/-1,633 lines. Gate 2: 10/10 A/A+ Claude (6 rounds). 3,010 tests total. |
-| Trait Expansion Phase 1: Tier 1 (236 traits) | Claude | **Merged** | feature/trait-expansion-phase-1 | PR #91 — 157 new traits (79→236), 15 categories, chip coverage (7 DTC chips), category accordion UI, health consent interstitial (GINA notice), SensitiveContentGuard, amber health bars, consent withdrawal sync. 23 files, +9,886 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
-| Trait Expansion Phase 2: Tier 2 (290 traits) | Claude | **Merged** | feature/trait-expansion-tier-2 | PR #92 — 54 new HIGH-confidence traits (236→290), 13 categories. dbSNP-verified alleles, PMID-backed sources, health disclaimers, chip coverage. 4 files, +8,196 lines. 3 review rounds → **4/5 A+ + 1 A Claude**. 3,047 tests. |
-| Trait Expansion Phase 3: Tier 3 (412 traits) | Claude | **Merged** | feature/trait-expansion-tier-3 | PR #93 — 122 new MODERATE-confidence traits (290→412), 13 categories. rs1800888 gene/chr fix (PAX9→ADRB3), 9 psychiatric traits renamed to biology-first (Bipolar→CACNA1C, Schizophrenia→ZNF804A, etc.), 8 PMID corrections, 4 year fixes, disclaimers added to behavioral/PGx entries, "Orientals" removed. 6 files, +7,028 lines. 2 review rounds → **5/5 A/A- Claude**. 3,047 tests. |
-| Trait Expansion Phase 4: Tier 4 (476 traits) | Claude | **Merged** | feature/trait-expansion-tier-4 | PR #111 — 64 new traits (412→476) completing the master catalog. 5 HIGH, 38 MODERATE, 21 LOW confidence. 7+ PMIDs corrected, 4 traits renamed biology-first (Leadership→Nicotinic Receptor β3, etc.), rs699 allele strand fix, rs2853676 TERT completely reworked, health disclaimers on 8 entries, population disclaimers on 5 behavioral traits. 6 files, +3,120 lines. 4 review rounds → **10/10 A+ Claude**. 3,047 tests. |
-| PMID 15888295 Audit | Claude | **Merged** | fix/pmid-15888295-audit | PR #112 — Fixed 5 entries citing parasitology paper. Added disclaimers + population caveats to 3 MLH1 entries. 2 review rounds → **4/4 A+ Claude**. |
-| Full-App Review Fixes | Claude | **Merged** | fix/full-app-review-fixes | PR #113 — 16 findings from 10-reviewer full-app review. TOTP Fernet encryption at rest, CSRF header, email verification gate, CFTR ΔF508 label fix, 4 chromosome corrections, motion→m LazyMotion tree-shaking (42 source + 27 test files), WCAG AA contrast, heading hierarchy, loading skeletons, PRS ancestry enforcement (hide/warning/caution), DPIA completion, consent regex fix, retention 3yr→2yr. 98 files, +1,750/-590 lines, 30+ new tests. 2 review rounds → **10/10 A/A+ Claude** (1 A+, 5 A R1, 4 A R2). 3,725 tests. |
-| Launch Readiness Fixes | Claude | **Merged** | fix/launch-readiness | PR #114 — 15 pre-alpha items across 3 sprints. Hide cloud save UI, custom 404/500 pages, remove fake counselors (NSGC CTA), GDPR email verification, API retry (429/5xx exponential backoff), prod docker-compose, Redis auth, EU Art 27, server-side metadata (3 pages), footer links, ClinVar stub. Review pipeline optimized (10→2-4 reviewers, 3-round cap, executor checklist, Final Cleanup Rule). 30 files, +2,397/-1,391 lines. 1 review round → **4/4 A Claude** (Architect, Code, Security, Designer). 3,773 tests. |
-| Analysis Content Decomposition | Claude | **Merged** | refactor/decompose-analysis-content | PR #115 — Decomposed `analysis-content.tsx` (562→~230 lines) into 4 sub-components: upload section, progress section, results section, modals. All props-only (no store access). DRY tab config, simplified props, removed dead code. 5 files, +482/-292 lines. 1 review round → **2/2 A Claude** (Architect, Code Reviewer). 3,773 tests. |
-| Website Audit Fixes | Claude | **Merged** | fix/website-audit-gaps | PR #116 — Full website audit (4 parallel agents: marketing, app, backend, config). Added robots.txt, sitemap (476 disease URLs), favicon, OG image (all programmatic via Next.js Metadata API). Payment success/cancel metadata (server component extraction). Shared SITE_URL env var. saveResult field fix. .env.example updates. 13 files, +374/-224 lines. 1 review round → **2/2 A Claude** (Architect, Code Reviewer). 3,773 tests. |
-| **Design Overhaul Review** | Claude | **Plan Ready** | docs only (main) | Full-site 2026 design review. 6 parallel designer-reviewer agents launched (1 completed comprehensive review, 5 hit API rate limits). Grade: **B**. 20 ranked improvements identified across homepage, about, products, sample report, design system, nav/layout. 4-sprint plan: D1 Foundation → D2 Homepage → D3 Sample Report & Data Viz → D4 Secondary Pages. Plan at `docs/plans/design-overhaul-2026.md`. Review log at `docs/research/agent-logs/2026-03-02-design-review/`. |
-
----
-
-## Design Review Deep Dive — COMPLETE (2026-03-04)
-
-All 5 designer-reviewer agents that previously hit rate limits have been re-run successfully. Results: **A- across all 5 sections.** 4 BLOCKs, 28 WARNs, 28 INFOs. Full logs at `docs/research/agent-logs/2026-03-04-design-review-deep/`.
-
-| Agent | Grade | BLOCKs | WARNs | INFOs |
-|-------|-------|--------|-------|-------|
-| Nav & Layout | A- | 0 | 4 | 4 |
-| Design System & Theming | A- | 2 | 6 | 6 |
-| Auth & Account UX | A- | 0 | 6 | 6 |
-| Analysis & Results UI | A- | 2 | 6 | 6 |
-| Legal & Compliance Pages | A- | 0 | 6 | 6 |
-
-**4 BLOCKs fixed in PR #122 — MERGED** (Architect A, Code Reviewer A, Designer A — 3/3 A, 1 review round). Fixes: `--text-secondary` undefined, badge light-mode contrast, HealthConsentInterstitial focus trap, Punnett square `role="row"`. 4 files, +109/-80 lines. 28 WARNs + 28 INFOs remain as future polish items.
-
----
-
-## Design Overhaul — Decision Points (User Input Needed)
-
-1. **Hero helix approach:** Three.js 3D (~150KB) vs CSS 3D (0KB) vs Lottie (~50KB)?
-2. **Social proof:** Use real/placeholder testimonial data?
-3. **Team section on About page:** Real photos/bios or skip for now?
-4. **Tier recommender quiz on Products page:** Build now or defer?
-5. **View Transitions API:** Ship (experimental) or wait?
-
----
-
-## Deferred Tech Debt
-
-| Item | Source | Severity | Notes |
-|------|--------|----------|-------|
-| ~~Marketing test mock dedup~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — shared `__helpers__/` module with typed factories |
-| ~~`any` types in marketing test mocks~~ | ~~Tech Debt PR review~~ | ~~WARN~~ | **Fixed in PR #124** — proper TypeScript interfaces in all helpers |
-| ~~IntersectionObserver mock duplication~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — 3 variants in `__helpers__/mock-intersection-observer.ts` |
-| ~~Privacy/security test file pairs overlap~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #125** — merged into parent files as nested `describe('design system')` blocks |
-| ~~`useInView` mock missing options param~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #125** — returns boolean, added options param, fixed RefObject generic |
-| ~~`MotionValue.current` stale after `.set()`~~ | ~~Tech Debt PR review~~ | ~~INFO~~ | **Fixed in PR #124** — reactive getter |
-| ~~Input/Badge mock dedup (11 files each)~~ | ~~PR #124 Code Review~~ | ~~INFO~~ | **Fixed in PR #125** — `mockInputFactory()` + `mockBadgeFactory()` in shared `__helpers__/`, replaced 24 inline mocks |
-| ~~28 design review WARNs (touch targets + ARIA)~~ | Design review 2026-03-04 | ~~WARN~~ | **Fixed in PR #123** — 25 actionable WARNs resolved (3 were already fixed/N/A) |
-
----
-
-## Dependabot Triage (2026-03-04)
-
-**12 safe PRs merged:** #94 (pnpm/action-setup SHA), #95 (download-artifact 6→7), #96 (pdfmake web), #99 (resend 2.23.0), #100 (otplib 13.3.0), #101 (sentry-sdk 2.53.0), #102 (pydantic-settings 2.13.1), #104 (pydantic[email] 2.12.5), #105 (alembic 1.18.4), #107 (pdfmake root), #108 (typescript-eslint 8.56.1), #110 (turbo 2.8.12). Build + 1,767 web tests + engine tests all passing.
-
-**5 PRs remaining (open):**
-| PR | Package | Bump | Decision | Reason |
-|----|---------|------|----------|--------|
-| #109 | zod | 3→4 | **Defer** | Massive API overhaul (string validators, record args, error API, default+optional behavior). Multi-day migration. |
-| #97 | tailwindcss | 3→4 | **Defer** | Architectural rewrite (JS→CSS config). Silent visual regressions (border/ring/cursor defaults). 1-2 day effort. |
-| #98 | framer-motion | 11→12 | **Defer** | Gesture callback arg changed (Element, not Event). Medium effort, ~half day. |
-| #106 | @next/eslint-plugin-next | 15→16 | **Close** | Must not upgrade without Next.js 16. Peer dep mismatch, no lint rule benefit. |
-| #103 | @types/node | 22→25 | **Close** | Runtime mismatch — project runs Node 22 LTS, v25 types non-existent APIs. |
-
-## Tailwind CSS 3.4 → 4.2 Migration
-
-**Status:** PR #147 — **MERGED** (Architect A, Code Reviewer A, Designer A). 126 files, +2,027/-2,088 lines.
-**Changes:** CSS-first `@theme {}`, `@tailwindcss/postcss`, `tailwind-merge` 3.0, class renames (120+ files), keyframe dedup, dark mode `@custom-variant`, deleted `tailwind.config.ts`.
-
-## Dependabot Triage (2026-03-06) — COMPLETE
-
-**All Dependabot PRs resolved.** Zero open.
-- **Batch PR #146 — MERGED:** postcss, autoprefixer, sqlalchemy, sentry-sdk, qrcode, actions/setup-node (6 safe patches)
-- **Batch PR #148 — MERGED:** upload-artifact 7.0, download-artifact 8.0, structlog 25.5, lucide-react 0.577, jsdom 28.1 (5 major/minor bumps)
-- **Closed (12):** #97, #103, #106, #132, #138, #139, #144, #145 (covered by TW4 migration, @types/node mismatch, stripe deferred, or not needed)
-- **Closed (superseded by batches):** #129, #130, #131, #133, #134, #135, #136, #137, #140, #141, #142, #143
-
-**Remaining work:**
-- Alpha Launch Phases A-F (service accounts, secrets, DNS, deploy — manual/kukiz tasks)
+| Coming Soon Page with Site Lock | Claude | **Review Complete** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). Ready to merge. |
+| TW4 Fix + Landing Page Redesign | Claude | **Review Complete** | fix/tw4-styling-issues | PR #149 — CSS cascade layer fix (48 rules wrapped in @layer base/components) + full design overhaul (crypto→medical SaaS, 18 files, -677 lines) + review fixes (dead CSS removal, a11y, SEO). Light mode default, neutral shadows, GlassCard simplified 202→102 lines. Gate 2: Architect A, Code A, Designer A, Marketing A-. 1,777 tests. Ready to merge. |
 
 ---
 
@@ -250,15 +146,6 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 | 2026-02-20 | Claude | Stream L Sprint 2 — Legal Compliance: L5 Cookie Consent Audit (CPRA focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets, equal-prominence buttons), L6 Data Retention Enforcement (RetentionService batched purge, 3-tier audit 90d/1yr/2yr, inactive user 3yr free-tier, payment SET NULL 7yr, cron endpoint timing-safe+rate-limited+CSRF-exempt), DPIA, Breach Response Plan, ROPA, DPO Appointment. 38 files, +3,718 LOC. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds). | PR #85 |
 | 2026-02-20 | Claude | Stream Q Sprints 1+2 — QA Infrastructure + Accuracy: 515 new tests, 20 files, +10,730 lines (test-only). Sprint 1: synthetic genome factory (seedable LCG PRNG, 4 DTC formats), golden standards (5 datasets), parser comprehensive (136 tests, 11 groups), encryption oracle + stubs (58 tests, AES-256-GCM + Argon2id contracts), privacy E2E (5 Playwright, canary rsID network interception), smoke tests (9), no-console ESLint, carrier panel validator. Sprint 2: carrier accuracy (35, real CF/SCD/FH/OTC), coverage accuracy (25, chip detection), offspring accuracy (63, Mendelian + PRS), liftover accuracy (36, 5 dbSNP round-trips), legacy-ported (47 from deleted Python), save/load integrity (48, 7 todo), recovery key E2E (10, 7 fixme). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds, 6 fixes). | PR #86 |
 | 2026-02-21 | Claude | Stream Q Sprints 3+4 — E2E, Accessibility, Performance, Fuzzing, Integration: ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E scenarios (Playwright coverage across all major user flows), accessibility compliance (axe-core injection, WCAG criteria), performance benchmarks (Core Web Vitals, memory profiling, worker efficiency). Sprint 4: Fuzz testing (property-based input generation, edge case discovery), integration flows (carrier detection→offspring→counseling pipeline), CI reliability (flake detection, retry strategies). Test results: genetics-engine 1,392 pass; web 1,482 pass; total 2,874 tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE — all 30+ tasks done across PR #86 merged + PR #87 open.** | PR #87 |
-| 2026-02-21 | Claude | Stream Ops — EU Region, CI Hardening, Alpha Deploy: EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security. Gate 1: 4/4 A/A+ Gemini. Gate 2: 4/4 A/A+ Claude. **Stream Ops COMPLETE.** | PR #88 |
-| 2026-02-22 | Claude | Coming Soon Page with Site Lock: Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests. Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). | PR #89 |
-| 2026-02-23 | Claude | Web Polish — A11y, Type Safety, Tier Alignment, Test Coverage: Multi-round Claude review (R1–R6) across 10 personas. h1 heading hierarchy, role="alert"/role="status", ARIA radiogroup, 44px touch targets, getTierVariant typed Tier, Record<RiskLevel>, TIER_GATING aligned with PRICING_TIERS (free diseases 25→0, traits 10→79, ethnicity all), PGx exclusive upper bounds, OAuth CSRF state validation, consent retry queue (GDPR Art 7), VCF slash genotype tests, haploid parsing tests, PGx boundary tests, flushPendingConsents tests. 104 files, 3,010 tests. 10/10 A/A+ Claude (6 rounds). | PR #90 |
-| 2026-03-02 | Claude | Design Overhaul Review — Full-site 2026 design audit: 6 parallel designer-reviewer agents (Opus). 1 completed comprehensive review (all pages + components + design system), 5 hit API rate limits. Grade: **B**. 20 ranked improvements: interactive 3D DNA helix hero, bento grid features, data viz for sample report (bars/gauges/Punnett), layout variety, scroll animation library, social proof, fluid typography, card evolution, risk color coding, View Transitions. 4-sprint plan (D1-D4, ~15-18 days). Plan: `docs/plans/design-overhaul-2026.md`. Review: `docs/research/agent-logs/2026-03-02-design-review/`. | docs only |
-| 2026-03-02 | Claude | Project Statistics: 292 commits, 111 PRs (74 merged), 686 files, ~280K LOC (69K TS + 37K TSX + 26K Python + 112K JSON), 170 test files (59,880 lines), 989K insertions / 452K deletions total churn, 257/292 commits co-authored by Claude (88%), ~98M combined AI tokens, ~$1,800 estimated API cost. Zero human code lines written. | stats |
-| 2026-03-03 | Claude | Design Overhaul Sprint D1 — Foundation: Fluid typography (CSS clamp, 4 sizes), scroll animation library (5 types: fade/blur/clip/scale/rotate + useScrollProgress hook), GlassCard evolution (frosted/aurora variants, spotlight mouse-tracking, noise overlay, gradient border sweep), section color narrative (700px glow orbs, teal→violet→cyan zones, wave dividers), card micro-interactions (icon bounce, badge slide-in, stagger-reveal), semantic pricing icons (18→15 entries via helper). 5 files, +753/-60 lines. Architect A, Designer A, Code Reviewer B→A+ (13 issues fixed R2). | PR #117 |
-| 2026-03-03 | Claude | Design Overhaul Sprint D2 — Homepage & Hero Transformation: 3D DNA helix (React Three Fiber, dynamic import, CSS fallback, GPU dispose, named imports for tree-shaking), cinematic crown hero (full-width helix backdrop, centered text, gradient overlap), bento grid features (asymmetric layout, animated SVG illustrations), scroll timeline (3-step vertical with scroll-driven line), social proof (real CARRIER_PANEL_COUNT, placeholder testimonials), product demo (realistic carrier risk values, perspective transform, floating overlay), pricing badge fix. useFrame stale closure fix (configRef pattern), WCAG AA contrast (text-muted), sr-only screen reader context, role="region" for aria-label. 16 files, +2,185/-621 lines, 4 new test files. 5/5 A Claude (Architect, Code, Designer, Technologist, Business). 15 WARN/INFOs fixed. | PR #118 |
-| 2026-03-04 | Claude | Design Review WARNs — 25 a11y/touch/token fixes: Touch targets ≥44px (7 components), ARIA fixes (hamburger aria-controls, breadcrumb aria-current, user menu role="menu" + APG keyboard nav, radiogroup arrows, dropzone roledescription, loading aria-live), --text-dim→--text-muted alias, light-mode --accent-teal contrast fix (#059669→#047857), 4 keyframe dedup, critical/high badge differentiation, heading h2→h1 (3 auth pages), scroll hints, text-[10px]→text-xs (19 instances), tab overflow indicators, .scrollbar-none utility. 35 files, +228/-176 lines. 3/3 A Claude (Architect, Code, Designer, 2 rounds). | PR #123 |
-| 2026-03-04 | Claude | Tech Debt Round 2 — Test mock dedup + coverage fixes: Marketing test cleanup (vi.hoisted() typed factories, zero `any`), framer-motion mock fixes (useInView boolean return, MotionValue reactive getter, IntersectionObserver configurable:true), root-level test file dedup (merged into marketing/ with GDPR + security guardrail tests preserved). 14 files, +814/-775 lines. 2/2 A Claude (Architect, Code Reviewer, 2 rounds). | PR #128 |
 
 ---
 
@@ -266,71 +153,55 @@ All 5 designer-reviewer agents that previously hit rate limits have been re-run 
 
 ---
 
-## Next Steps — Alpha Launch Checklist
+## Next Steps
 
-**All 11 implementation streams COMPLETE. 2,874+ tests passing. Codebase is feature-complete.**
-
-### Phase A: Service Accounts (kukiz, ~2 hours)
-- [ ] A1: Create Vercel project, link repo → `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
-- [ ] A2: Create Railway project + PostgreSQL (US for now — free tier has no EU) → `RAILWAY_TOKEN`, `DATABASE_URL`
-  - **TODO:** Migrate DB to EU-west region when on paid Railway plan (GDPR requirement before public launch)
-- [ ] A3: Create Stripe account (test mode first) → `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, price IDs
-- [ ] A4: Register domain on Resend → `RESEND_API_KEY`
-- [ ] A5: Create Sentry projects (frontend + backend) → `SENTRY_DSN`
-- [ ] A6: Generate secrets (`openssl rand -base64 64`) → `JWT_SECRET`, `DATA_ENCRYPTION_KEY`, `SITE_BYPASS_SECRET`
-
-### Phase B: GitHub Secrets (kukiz, ~30 min)
-- [ ] Add 13+ secrets to GitHub repo Settings → Secrets
-
-### Phase C: DNS (kukiz, ~15 min)
-- [ ] `mergenix.com` CNAME → `cname.vercel-dns.com`
-- [ ] `api.mergenix.com` CNAME → Railway-provided domain
-
-### Phase D: First Deploy (kukiz, ~2 hours)
-- [ ] Push to main → CI → auto-deploy
-- [ ] Verify `curl https://api.mergenix.com/health`
-- [ ] Verify `curl https://mergenix.com` → Coming Soon page
-- [ ] Test bypass with `SITE_BYPASS_SECRET`
-- [ ] Smoke test: register → login → upload → results → payment → delete
-
-### Phase E: Legal Sign-offs (kukiz + legal, 1-4 weeks)
-- [ ] E1: Appoint DPO (Art 37) — see `docs/legal/dpo-appointment.md`
-- [ ] E2: Register DPO with relevant DPA (ICO, DPC, CNIL)
-- [ ] E3: Appoint EU Representative (Art 27) — see `docs/legal/ropa.md`
-- [ ] E4: Sign DPIA (Art 35) — see `docs/legal/dpia.md`
-- [ ] E5: Verify Stripe DPA in place
-- [ ] E6: Verify Resend DPA in place
-
-### Phase F: Go Live
-- [ ] Flip `SITE_COMING_SOON` from `true` to `false` in Vercel env vars
-- [ ] Redeploy frontend → site is live
+1. ~~Phase 6: Payment UI~~ → **PR #35 merged** (8/8 A+)
+2. ~~Phase 7: Backend API~~ → **PR #36 merged** (8/8 A+)
+3. ~~Phase 8A: Integration Polish~~ → **PR #37 merged** (10/10 A+)
+4. ~~Phase 8B: Legal/Privacy~~ → **PR #38 merged** (10/10 A+ Gemini + 10/10 A+ Claude)
+5. ~~Phase 8C: E2E Tests~~ → **PR #40 merged** (153 scenarios)
+6. ~~Refactor Plan Review~~ → **PR #45 merged** (Gate 1: 10/10 A+ Gemini, Gate 2: 10/10 A- Claude — accepted)
+   - 5 Claude review rounds, ~73 fixes applied, 144+ architectural decisions documented
+   - Final: 7/10 A- (zero BLOCKs), 3/10 B+ — user accepted, merged
+7. **Begin V3 Implementation** — Execute refactor plan streams
+   - **Stream 0 (Research): 11/12 COMPLETE** — see `docs/V3_IMPLEMENTATION_LOG.md`
+     - R1-R5, R7-R11: Done (Gemini). R6: Done (Claude). R12: Partial (audit script methodology issue)
+     - Research archive: PR #46 (`docs/research/stream0/`)
+     - Key findings: 9 diseases to remove, 8 gene symbols to update, PRS ancestry-awareness critical, ethnicity data gap (153/2500+)
+   - **Stream D (Data Cleanup): COMPLETE** — PR #47 merged. 2,697 entries. Centralized count.
+   - **Stream E (Engine): MERGED** — PR #48. 25 tasks (T1+T8 + E1-E23), 898 tests
+     - Gate 1: 10/10 A+ Gemini (2 fix rounds)
+     - Gate 2: 7/10 Claude completed (3 rate-limited), issues fixed: wired coverage+chip detection, ENGINE_VERSION dedup, raw decompression security, prototype pollution fix, cache cleanup, ethnicity tier fix, stage display names, em dash fix, locale fix
+     - 24 files changed in review fix commit, 898 tests across 20 test files
+   - **Stream TD (Types + Data): MERGED** — PR #49. Carrier panel restructure, coverage_tier, PRS ancestry_transferability, RiskLevel expansion, rsID fixes, 901 tests
+   - **Stream F (Frontend): COMPLETE** — all 4 sprints merged (47 tasks)
+     - Sprint 1: PR #50 MERGED (15 tasks, 714 tests)
+     - Sprint 2: PR #51 MERGED (6 tasks, 803 tests)
+     - Sprint 3: PR #52 MERGED (13 tasks, 940 web / 1332 total tests)
+     - Sprint 4: PR #53 MERGED (7 tasks, 1070 Vitest + 25 Playwright E2E)
+   - **Stream B (Backend): COMPLETE** — all 12 active B-tasks done across 3 sprints + deferred items
+     - Sprint 1 (Foundation): PR #54 MERGED — B11, B3, B1, B2. 205 backend tests. Gate 2: 7/7 A Claude.
+     - Sprint 2 (ZK Pivot + GDPR): PR #55 MERGED — B13, B7, B8, B12. 245 tests. Gate 1: 6/6 A. Gate 2: 6/6 A.
+     - Sprint 3 (Business): PR #56 MERGED — B5, B6, B9, B10. 503 tests. Gate 1: 7/7 A+. Gate 2: 7/7 A.
+     - Deferred Items: PR #57 MERGED — 12/13 items. 380 tests. Gate 1: 6/6 A+. Gate 2: 4/4 A/A+.
+   - **Stream S (Security): COMPLETE** — all 3 sprints merged
+     - Sprint 1 (Containment): PR #58 MERGED — S1 CSP headers, S2 tracker audit + data-mask, S10 RSC enforcement. 34 files, +1,400 LOC, 55 new tests (2,026 total). Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
+     - Sprint 2 (Data): PR #59 MERGED — S3 Worker Memory, S5 Audit Logging, S6 IndexedDB Storage. 16 files, +2,162 LOC, 2,600 total tests. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A Claude.
+     - Sprint 3 (Ops): PR #61 MERGED — S4 Supply Chain, S7 Rate Limiting, S8 Secret Rotation, S9 Alerting. 27 files, +2,723 LOC. Gate 1: 6/6 A/A+ Gemini. Gate 2: 6/6 A Claude.
+   - **Stream C (Legacy Cleanup): COMPLETE** — PR #83 merged. Deleted 142 legacy files (~152K lines), fixed "subscription" terminology, deleted legacy CI workflows, updated README for V3.
+   - **Stream L (Legal): Sprint 1 COMPLETE** — PR #84 MERGED. 6 tasks (L1/L8, L2, L3, L4, L9/L10). Privacy Policy (7yr retention, ZKE, DPO, EU Rep, transfers), ToS 9-13 (arbitration, prohibited uses, 18+), GDPR Art 9(2)(a) consent, GINA pre-upload notice, pre-payment disclosure, refund scoping. 11 files, +609 LOC, 2,070 tests. Gate 1: 5/5 A/A+ Gemini. Gate 2: 5/5 A+ Claude (2 rounds).
+   - **Stream L (Legal): Sprint 2 COMPLETE** — PR #85 MERGED. L5 (cookie consent audit: CPRA modal focus trap, ConsentGate fallback, marketing toggle, WCAG touch targets), L6 (data retention enforcement: RetentionService batched purge, 3-tier audit retention 90d/1yr/2yr, inactive user 3yr, payment SET NULL 7yr, cron endpoint timing-safe + rate limited + CSRF exempt), 4 legal docs (DPIA, Breach Response, ROPA, DPO Appointment). 38 files, +3,718 LOC, 1,201 web + 624 backend tests. Gate 1: 10/10 A+ Gemini (2 rounds). Gate 2: 10/10 A Claude (3 rounds).
+     - Remaining L tasks: None — Stream L complete after PR #85 merges
+   - **Stream Q (QA): COMPLETE** — PR #86 merged, PR #87 open. 30+ tasks across 4 sprints. 1,000+ new tests total.
+     - Sprints 1+2: PR #86 MERGED. 515 new tests, 20 files, +10,730 lines. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude (2 rounds).
+     - Sprints 3+4: PR #87 OPEN. ~400 new tests (16 files + 2 helpers). E2E, a11y, performance, fuzzing, integration. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **All Q tasks done.**
+   - **Remaining streams:** Ops (3 tasks)
 
 ---
 
 ## Active Blockers
 
-*None. All implementation work is complete. Remaining work is infrastructure + legal (manual tasks for kukiz).*
-
-## TODO — Alpha Launch Setup (2026-03-06)
-
-Findings from browser audit of existing accounts:
-
-| # | Task | Service | Status | Notes |
-|---|------|---------|--------|-------|
-| 1 | Upgrade Railway from trial to Hobby ($5/mo) | Railway | **TODO** | Trial expires in ~7 days. Hobby plan sufficient for alpha. |
-| 2 | Connect GitHub repo (`maayango285/Tortit`) to Vercel | Vercel | **TODO** | Project `mergenix` exists (ID: `prj_PMtuvbSxpasHZR3MDPmA5C2mjo9W`), git not linked. |
-| 3 | Add `mergenix.com` domain in Resend + DNS verify | Resend | **TODO** | Account exists, 1 API key (`re_6vTqC7Fp...`). Domain not configured. |
-| 4 | Open Stripe dashboard, create test products/prices | Stripe | **TODO** | Browser blocked — open `dashboard.stripe.com` manually. |
-| 5 | Log in / sign up for Sentry, create projects | Sentry | **TODO** | Not logged in. Need frontend + backend DSNs. |
-| 6 | Generate secrets (JWT, encryption, bypass) | CLI | **TODO** | `openssl rand -base64 64` for each. |
-| 7 | Add 13+ secrets to GitHub repo Settings | GitHub | **TODO** | After all service accounts are ready. |
-| 8 | DNS: `mergenix.com` CNAME → Vercel, `api.mergenix.com` → Railway | DNS | **TODO** | Railway API already at `mergenix-api-production.up.railway.app`. |
-| 9 | First deploy + smoke test | All | **TODO** | After secrets + DNS are configured. |
-
-### Already existing:
-- **Vercel:** `mergenix` project on Hobby plan, `mergenix.vercel.app` live (no deployment yet)
-- **Railway:** `mergenix` project with 2x Postgres (both Online) + `mergenix-api` (Online at `mergenix-api-production.up.railway.app`)
-- **Resend:** Account (`t2.technion@gmail.com`), 1 API key with sending access
+*R12 (rsID audit) needs re-run with corrected ClinVar lookup methodology. Non-blocking.*
 
 ---
 
