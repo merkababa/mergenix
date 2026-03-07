@@ -11,6 +11,7 @@
 **Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
 **Coming Soon page:** PR #89 — **MERGED**.
 **TW4 Fix + Landing Page Redesign:** PR #149 — **MERGED**. CSS cascade layer fix + crypto→medical SaaS redesign + review fixes.
+**Test Mock Dedup:** PR #150 — **MERGED**. Shared helpers for navigation, stores, marketing mocks. -560 lines duplication.
 
 ## Current Sprint
 
