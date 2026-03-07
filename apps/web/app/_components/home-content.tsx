@@ -43,7 +43,7 @@ const PRIVACY_FEATURES = [
   },
   {
     icon: Shield,
-    title: "HIPAA-Conscious Design",
+    title: "Healthcare-Grade Privacy",
     description: "Built with healthcare privacy standards in mind from day one.",
   },
 ] as const;
@@ -63,14 +63,7 @@ export function HomeContent() {
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Privacy and security"
       >
-        {/* Background orb — rgba(6,214,160,...) = --accent-teal at very low opacity.
-            Using bg-[rgba(...)] in Tailwind's arbitrary value syntax is intentional:
-            the exact token isn't exposed as bg-teal-400/4 without custom config. */}
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="absolute right-1/3 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-[rgba(6,214,160,0.04)] blur-[100px]" />
-        </div>
-
-        <div className="relative mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl">
           <SectionHeading
             title="Your DNA Never Leaves Your Device"
             subtitle="Privacy is not a feature — it is our architecture."
@@ -90,7 +83,7 @@ export function HomeContent() {
                 <m.div key={feature.title} variants={staggerItem}>
                   <GlassCard
                     variant="medium"
-                    hover="glow"
+                    hover="lift"
                     className="h-full p-6"
                   >
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
@@ -131,12 +124,7 @@ export function HomeContent() {
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Pricing"
       >
-        {/* Background orb */}
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="absolute left-1/3 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[rgba(139,92,246,0.04)] blur-[100px]" />
-        </div>
-
-        <div className="relative mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl">
           <SectionHeading
             title="Simple, One-Time Pricing"
             subtitle="Pay once, use forever. No subscriptions, no hidden fees."
@@ -182,12 +170,7 @@ export function HomeContent() {
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Frequently asked questions"
       >
-        {/* Background orb */}
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="absolute right-1/4 top-1/3 h-64 w-64 rounded-full bg-[rgba(6,214,160,0.03)] blur-[100px]" />
-        </div>
-
-        <div className="relative mx-auto max-w-3xl">
+        <div className="mx-auto max-w-3xl">
           <SectionHeading
             title="Frequently Asked Questions"
             className="mb-12"
@@ -210,17 +193,12 @@ export function HomeContent() {
           <GlassCard
             variant="strong"
             hover="none"
-            className="glow-pulse relative overflow-hidden p-10 text-center md:p-14"
+            className="relative overflow-hidden p-10 text-center md:p-14"
           >
-            {/* Background orb inside CTA card */}
-            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-              <div className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(6,214,160,0.06)] blur-[80px]" />
-            </div>
-
             {/* DNA helix animation */}
             <HelixAnimation dotCount={3} className="relative mx-auto mb-6 h-6 w-24" />
 
-            <h2 className="gradient-text relative font-heading text-3xl font-extrabold md:text-4xl">
+            <h2 className="text-(--text-heading) relative font-heading text-3xl font-extrabold md:text-4xl">
               Ready to Know?
             </h2>
             <p className="relative mx-auto mt-4 max-w-lg text-(--text-muted)">

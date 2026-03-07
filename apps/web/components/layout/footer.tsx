@@ -109,11 +109,8 @@ export function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 no-underline">
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-(--accent-teal) opacity-15 blur-xs" />
-                <Dna className="relative h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
-              </div>
-              <span className="gradient-text-teal font-heading text-lg font-extrabold tracking-[-0.03em]">
+              <Dna className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
+              <span className="font-heading text-lg font-extrabold tracking-[-0.03em] text-(--text-heading)">
                 Mergenix
               </span>
             </Link>
@@ -159,7 +156,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.ariaLabel}
-                  className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-(--accent-teal) hover:shadow-[0_0_12px_var(--glow-teal)]"
+                  className="flex h-9 w-9 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-(--accent-teal) hover:shadow-sm"
                 >
                   <social.icon className="h-4 w-4" aria-hidden="true" />
                 </a>
@@ -215,7 +212,11 @@ export function Footer() {
                 </p>
               </div>
               {isSubscribed ? (
-                <div className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-3">
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-3"
+                >
                   <CheckCircle className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
                   <span className="text-sm font-medium text-(--accent-teal)">
                     Thanks! We&apos;ll be in touch.

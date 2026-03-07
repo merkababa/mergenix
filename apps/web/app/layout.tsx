@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-(--app-gradient) font-body antialiased">
         <ThemeProvider
           attribute="data-theme"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >

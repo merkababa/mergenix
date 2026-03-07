@@ -35,11 +35,11 @@ export function HelixFallback({
           <span
             key={i}
             className={cn(
-              'absolute h-2 w-2 rounded-full',
-              // Uses design system tokens: --accent-teal (#06d6a0), --accent-violet (#8b5cf6)
+              'absolute h-1.5 w-1.5 rounded-full',
+              // Muted medical palette: sky blue + slate gray
               isEven
-                ? 'bg-(--accent-teal) shadow-[0_0_12px_rgba(6,214,160,0.5)]'
-                : 'bg-(--accent-violet) shadow-[0_0_12px_rgba(139,92,246,0.5)]',
+                ? 'bg-[#0EA5E9] shadow-[0_0_8px_rgba(14,165,233,0.3)]'
+                : 'bg-[#94A3B8] shadow-[0_0_8px_rgba(148,163,184,0.3)]',
             )}
             style={{
               left: horizontalOffset,

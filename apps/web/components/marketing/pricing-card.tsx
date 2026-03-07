@@ -196,7 +196,7 @@ export function PricingCard({
         <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
           <Badge
             variant="premium"
-            className="card-badge whitespace-nowrap px-4 py-1 shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+            className="card-badge whitespace-nowrap px-4 py-1"
           >
             <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
             Most Popular
@@ -205,14 +205,13 @@ export function PricingCard({
       )}
 
       <GlassCard
-        variant={popular ? "aurora" : "medium"}
+        variant="medium"
         hover="lift"
-        microInteractions
         className={cn(
           "flex w-full flex-col p-8",
           popular && [
-            "border-[rgba(139,92,246,0.35)]",
-            "shadow-[0_4px_30px_var(--shadow-ambient),0_0_60px_var(--glow-violet)]",
+            "border-2 border-accent-violet",
+            "shadow-lg",
           ],
           cardClass,
         )}

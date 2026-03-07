@@ -20,14 +20,14 @@ const buttonVariants = cva(
       variant: {
         primary: [
           "bg-linear-to-r from-accent-teal to-day-accent-teal text-bio-deep",
-          "shadow-[0_4px_24px_rgba(6,214,160,0.3),inset_0_1px_0_rgba(255,255,255,0.15)]",
-          "hover:shadow-[0_8px_40px_rgba(6,214,160,0.5),inset_0_1px_0_rgba(255,255,255,0.15)]",
+          "shadow-md",
+          "hover:shadow-lg",
           "hover:-translate-y-0.5 active:translate-y-0",
         ],
         secondary: [
           "border border-(--border-subtle) bg-(--bg-elevated) text-(--text-primary)",
           "hover:border-[rgba(6,214,160,0.25)] hover:bg-[rgba(6,214,160,0.06)]",
-          "hover:shadow-[0_0_15px_rgba(6,214,160,0.08)]",
+          "hover:shadow-sm",
         ],
         ghost: [
           "text-(--text-muted)",
@@ -35,19 +35,19 @@ const buttonVariants = cva(
         ],
         destructive: [
           "bg-linear-to-r from-accent-rose to-day-accent-rose text-white",
-          "shadow-[0_4px_24px_rgba(244,63,94,0.3)]",
-          "hover:shadow-[0_8px_40px_rgba(244,63,94,0.5)]",
+          "shadow-md",
+          "hover:shadow-lg",
           "hover:-translate-y-0.5",
         ],
         outline: [
           "border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] text-(--accent-teal)",
           "hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]",
-          "hover:shadow-[0_0_15px_rgba(6,214,160,0.1)]",
+          "hover:shadow-sm",
         ],
         violet: [
           "bg-linear-to-r from-accent-violet to-[#a78bfa] text-white",
-          "shadow-[0_4px_24px_rgba(139,92,246,0.3)]",
-          "hover:shadow-[0_8px_40px_rgba(139,92,246,0.5)]",
+          "shadow-md",
+          "hover:shadow-lg",
           "hover:-translate-y-0.5",
         ],
       },

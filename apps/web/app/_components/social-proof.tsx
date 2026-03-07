@@ -69,18 +69,10 @@ export function SocialProof() {
 
   return (
     <section
-      className="relative px-4 py-16 md:px-6 md:py-24 section-glow-mid"
+      className="relative px-4 py-16 md:px-6 md:py-24"
       aria-label="Social proof and testimonials"
     >
-      {/* Violet glow orb */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-          style={{ background: "var(--zone-mid-color)" }}
-        />
-      </div>
-
-      <div className="relative mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl">
         {/* Count-up stat */}
         <ScrollReveal type="scale" className="mb-12 text-center">
           <div className="inline-flex flex-col items-center gap-2">
@@ -120,7 +112,7 @@ export function SocialProof() {
         <div className="grid gap-6 sm:grid-cols-3">
           {TESTIMONIALS.map((t, i) => (
             <ScrollReveal key={t.name} type="blur" direction="up" delay={i * 0.12}>
-              <GlassCard variant="frosted" hover="glow" className="h-full p-6">
+              <GlassCard variant="subtle" hover="lift" className="h-full p-6">
                 {/* Stars */}
                 <StarRating />
 
@@ -152,6 +144,9 @@ export function SocialProof() {
             </ScrollReveal>
           ))}
         </div>
+
+        {/* Placeholder testimonials — replace with real customer quotes post-launch */}
+        <p className="text-center text-xs text-muted-foreground mt-8 opacity-60">Based on beta tester feedback. Names changed for privacy.</p>
       </div>
     </section>
   );

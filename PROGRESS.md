@@ -10,7 +10,6 @@
 
 **Stream Ops COMPLETE.** PR #88 merged. All streams done. Mergenix is alpha-launch-ready.
 **Coming Soon page:** PR #89 — review-complete (8/8 A Gemini + 8/8 A Claude). Ready to merge.
-**TW4 Fix + Landing Page Redesign:** PR #149 — review-complete (Architect A, Code A, Designer A, Marketing A-). Ready to merge. 3 commits: cascade layer fix, crypto→medical SaaS redesign, review fixes.
 
 ## Current Sprint
 
@@ -52,7 +51,6 @@
 | Stream Q Sprints 3+4: E2E, A11y, Performance, Fuzzing, Integration | Claude | **Merged** | test/stream-q-sprint-3-4 | PR #87 — ~400 new tests across 16 test files + 1 production utility + 1 shared E2E helper. Sprint 3: E2E coverage (Playwright), accessibility compliance (axe-core), performance monitoring (Core Web Vitals, memory). Sprint 4: Fuzz testing (property-based), integration scenarios (carrier→offspring→counseling flow), CI reliability (flake detection, retry logic). Test counts: genetics-engine 1,392 pass; web 1,482 pass. Gate 1: 6/6 A+ Gemini. Gate 2: 6/6 A/A+ Claude. **Stream Q COMPLETE.** |
 | Stream Ops: EU Region, CI Hardening, Alpha Deploy | Claude | **Merged** | ops/stream-ops-final | PR #88 — EU GDPR region (vercel.json fra1), CI/CD pipeline hardening (SHA-pinned Actions, permissions: read-all, workflow_run deploy gate, E2E artifact reuse), ClinVar streaming download, turbo caching, alpha deploy runbook, supply-chain security (pinned CLI versions, Vercel token env var). Gate 1: 4/4 A/A+ Gemini (2 rounds). Gate 2: 4/4 A/A+ Claude (3 rounds). **Stream Ops COMPLETE.** |
 | Coming Soon Page with Site Lock | Claude | **Review Complete** | feature/coming-soon-page | PR #89 — Site-wide lock behind coming-soon page. HMAC-SHA-256 bypass cookie, rate limiting, CSRF, timing-safe comparison, a11y (aria-invalid, live regions). 78 tests (crypto, route, middleware, component). Gate 1: 8/8 A+ Gemini (3 rounds). Gate 2: 8/8 A Claude (3 rounds). Ready to merge. |
-| TW4 Fix + Landing Page Redesign | Claude | **Review Complete** | fix/tw4-styling-issues | PR #149 — CSS cascade layer fix (48 rules wrapped in @layer base/components) + full design overhaul (crypto→medical SaaS, 18 files, -677 lines) + review fixes (dead CSS removal, a11y, SEO). Light mode default, neutral shadows, GlassCard simplified 202→102 lines. Gate 2: Architect A, Code A, Designer A, Marketing A-. 1,777 tests. Ready to merge. |
 
 ---
 

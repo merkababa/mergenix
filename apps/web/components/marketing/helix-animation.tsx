@@ -18,18 +18,18 @@ export function HelixAnimation({
     <div className={cn("relative", className)} aria-hidden="true">
       {Array.from({ length: dotCount }, (_, i) => {
         const isEven = i % 2 === 0;
-        const delay = `${i * 0.4}s`;
-        const duration = `${2.2 + i * 0.15}s`;
+        const delay = `${i * 0.6}s`;
+        const duration = `${3.5 + i * 0.2}s`;
         const horizontalOffset = `${(i / (dotCount - 1 || 1)) * 100}%`;
 
         return (
           <span
             key={i}
             className={cn(
-              "absolute h-2 w-2 rounded-full",
+              "absolute h-1.5 w-1.5 rounded-full",
               isEven
-                ? "bg-linear-to-br from-accent-teal to-day-accent-teal shadow-[0_0_12px_rgba(6,214,160,0.5)]"
-                : "bg-linear-to-br from-accent-violet to-[#a78bfa] shadow-[0_0_12px_rgba(139,92,246,0.5)]",
+                ? "bg-[#0EA5E9] shadow-[0_0_8px_rgba(14,165,233,0.3)]"
+                : "bg-[#94A3B8] shadow-[0_0_8px_rgba(148,163,184,0.3)]",
             )}
             style={{
               left: horizontalOffset,

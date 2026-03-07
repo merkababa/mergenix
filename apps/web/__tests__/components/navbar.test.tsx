@@ -265,11 +265,13 @@ describe('Navbar', () => {
 
   // ── D4.5: Brand text logo styling ─────────────────────────────────────
 
-  it('D4.5: brand wordmark "Mergenix" has gradient-text-teal class', () => {
+  it('D4.6: navbar wordmark is visible within the home link', () => {
     render(<Navbar />);
 
-    const wordmark = screen.getByText('Mergenix');
-    expect(wordmark.className).toMatch(/gradient-text-teal/);
+    const homeLink = screen.getByRole('link', { name: /Mergenix home/i });
+    expect(homeLink).toBeInTheDocument();
+    // The wordmark text should be present and accessible
+    expect(screen.getByText('Mergenix')).toBeInTheDocument();
   });
 
   it('D4.5: brand wordmark uses heading font with extrabold weight', () => {

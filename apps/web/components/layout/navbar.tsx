@@ -137,11 +137,8 @@ export function Navbar() {
           className="flex items-center gap-2.5 no-underline"
           aria-label="Mergenix home"
         >
-          <div className="relative flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-(--accent-teal) opacity-20 blur-md" />
-            <Dna className="relative h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
-          </div>
-          <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em] md:text-2xl">
+          <Dna className="h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
+          <span className="font-heading text-xl font-extrabold tracking-[-0.03em] text-(--text-heading) md:text-2xl">
             Mergenix
           </span>
         </Link>
@@ -190,13 +187,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 font-heading text-sm font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-[0_0_15px_rgba(6,214,160,0.1)]"
+                  className="rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 font-heading text-sm font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-xl bg-linear-to-r from-accent-teal to-day-accent-teal px-4 py-2 font-heading text-sm font-semibold text-bio-deep shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)] hover:-translate-y-0.5"
+                  className="rounded-xl bg-linear-to-r from-accent-teal to-day-accent-teal px-4 py-2 font-heading text-sm font-semibold text-bio-deep shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5"
                 >
                   Get Started
                 </Link>
@@ -248,7 +245,7 @@ export function Navbar() {
               aria-label="Mergenix home"
             >
               <Dna className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
-              <span className="gradient-text-teal font-heading text-xl font-extrabold tracking-[-0.03em]">
+              <span className="font-heading text-xl font-extrabold tracking-[-0.03em] text-(--text-heading)">
                 Mergenix
               </span>
             </Link>
@@ -314,14 +311,14 @@ export function Navbar() {
                 <Link
                   href="/login"
                   onClick={closeMobileMenu}
-                  className="w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center font-heading text-base font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)]"
+                  className="w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center font-heading text-base font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
                   onClick={closeMobileMenu}
-                  className="w-full rounded-2xl bg-linear-to-r from-accent-teal to-day-accent-teal py-3 text-center font-heading text-base font-semibold text-bio-deep shadow-[0_2px_16px_rgba(6,214,160,0.3)] transition-all hover:shadow-[0_4px_24px_rgba(6,214,160,0.5)]"
+                  className="w-full rounded-2xl bg-linear-to-r from-accent-teal to-day-accent-teal py-3 text-center font-heading text-base font-semibold text-bio-deep shadow-sm transition-all hover:shadow-md"
                 >
                   Get Started
                 </Link>

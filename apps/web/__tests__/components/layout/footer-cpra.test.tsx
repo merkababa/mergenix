@@ -46,11 +46,15 @@ describe('Footer — D4.6 Brand Moment', () => {
     ).toBeInTheDocument();
   });
 
-  it('D4.6: footer brand section uses gradient text for the wordmark', () => {
+  it('D4.6: footer brand section renders the Mergenix wordmark as visible text', () => {
     render(<Footer />);
-    // The brand span in footer should carry gradient-text-teal
-    const brandSpans = document.querySelectorAll('.gradient-text-teal');
-    expect(brandSpans.length).toBeGreaterThanOrEqual(1);
+    // The brand wordmark should be visible as text content in the footer
+    const brandNames = screen.getAllByText('Mergenix');
+    expect(brandNames.length).toBeGreaterThanOrEqual(1);
+    // The brand text should be inside a link pointing to the homepage
+    const homeLinks = screen.getAllByRole('link', { name: 'Mergenix' });
+    expect(homeLinks.length).toBeGreaterThanOrEqual(1);
+    expect(homeLinks[0]).toHaveAttribute('href', '/');
   });
 
   it('D4.6: footer has a decorative separator between brand section and link columns', () => {

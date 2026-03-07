@@ -11,7 +11,7 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 
 /** Shared inline style for the three mock dashboard panels (§8 — no repeated literals). */
 const PANEL_STYLE = {
-  // --bg-surface (#0c1220) at 60% opacity
+  /* Intentionally dark: mock browser window always shows dark dashboard preview */
   background: "rgba(12,18,32,0.6)",
   border: "1px solid var(--border-subtle)",
 } as const;
@@ -48,19 +48,7 @@ export function ProductDemo() {
       className="relative overflow-hidden px-4 py-16 md:px-6 md:py-24"
       aria-label="Product demonstration"
     >
-      {/* Background orbs */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute left-1/3 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full blur-[120px]"
-          style={{ background: "var(--zone-pricing-color)" }}
-        />
-        <div
-          className="absolute right-1/4 top-1/3 h-64 w-64 rounded-full blur-[100px]"
-          style={{ background: "var(--zone-hero-color)" }}
-        />
-      </div>
-
-      <div className="relative mx-auto max-w-5xl">
+      <div className="mx-auto max-w-5xl">
         <SectionHeading
           title="See Your Results Come to Life"
           subtitle="A clear, visual analysis dashboard built for families — not just scientists."
@@ -90,7 +78,8 @@ export function ProductDemo() {
                 {/* Browser chrome bar */}
                 <div
                   className="flex items-center gap-2 px-4 py-3"
-                  style={{ background: "rgba(12,18,32,0.9)", borderBottom: "1px solid var(--border-subtle)" }} /* --bg-surface (#0c1220) at 90% opacity */
+                  /* Intentionally dark: mock browser window always shows dark dashboard preview */
+                  style={{ background: "rgba(12,18,32,0.9)", borderBottom: "1px solid var(--border-subtle)" }}
                   aria-hidden="true"
                 >
                   {/* Window control dots */}

@@ -13,18 +13,17 @@ const _tempVec3B = new Vector3();
 
 // ── Constants — hoisted outside component bodies ─────────────────────────────
 
-/** Teal strand color: matches --accent-teal / --color-primary-400 */
-const COLOR_TEAL = new Color('hsl(173, 80%, 40%)');
+/** Primary strand color: sky blue — clinical/medical feel */
+const COLOR_PRIMARY = new Color('#0EA5E9');
 
-/** Violet strand color: matches --accent-violet / --color-accent-400 */
-const COLOR_VIOLET = new Color('hsl(265, 85%, 60%)');
+/** Secondary strand color: slate gray — neutral accent */
+const COLOR_SECONDARY = new Color('#94A3B8');
 
-/** Rung color: subtle white/gray */
-// slate-400 — closest to --text-dim; Three.js requires raw hex (cannot consume CSS variables)
-const COLOR_RUNG = new Color('#94a3b8');
+/** Rung color: light slate — subtle connectors */
+const COLOR_RUNG = new Color('#CBD5E1');
 
-/** Sphere geometry args: [radius, widthSegments, heightSegments] */
-const SPHERE_ARGS: [number, number, number] = [0.15, 8, 8];
+/** Sphere geometry args: [radius, widthSegments, heightSegments] — reduced for subtlety */
+const SPHERE_ARGS: [number, number, number] = [0.1, 8, 8];
 
 /** Rung cylinder args: [radiusTop, radiusBottom, height, radialSegments] */
 const CYLINDER_ARGS: [number, number, number, number] = [0.04, 0.04, 1, 6];
@@ -43,9 +42,9 @@ const TWIST_PER_PAIR = (2 * Math.PI) / 10;
 export interface DnaHelix3DProps {
   /** Optional Tailwind / CSS class for sizing the container */
   className?: string;
-  /** Number of nucleotide pairs per strand. Default: 20 */
+  /** Number of nucleotide pairs per strand. Default: 10 */
   dotCount?: number;
-  /** Y-axis rotation speed in radians per frame. Default: 0.002 */
+  /** Y-axis rotation speed in radians per frame. Default: 0.001 */
   rotationSpeed?: number;
   /** Whether to enable mouse-parallax tilt. Default: true */
   interactive?: boolean;
@@ -56,10 +55,10 @@ export interface DnaHelix3DProps {
 interface PairData {
   /** Index along the helix */
   index: number;
-  /** 3D position of teal nucleotide */
-  tealPos: Vector3;
-  /** 3D position of violet nucleotide */
-  violetPos: Vector3;
+  /** 3D position of primary (sky blue) nucleotide */
+  primaryPos: Vector3;
+  /** 3D position of secondary (slate) nucleotide */
+  secondaryPos: Vector3;
 }
 
 function buildPairs(count: number): PairData[] {
@@ -72,12 +71,12 @@ function buildPairs(count: number): PairData[] {
 
     pairs.push({
       index: i,
-      tealPos: new Vector3(
+      primaryPos: new Vector3(
         Math.cos(angle) * HELIX_RADIUS,
         y,
         Math.sin(angle) * HELIX_RADIUS,
       ),
-      violetPos: new Vector3(
+      secondaryPos: new Vector3(
         Math.cos(angle + Math.PI) * HELIX_RADIUS,
         y,
         Math.sin(angle + Math.PI) * HELIX_RADIUS,
@@ -174,14 +173,14 @@ const HelixScene = React.memo(function HelixScene({
       // Continuous Y rotation
       groupRef.current.rotation.y += speed;
 
-      // Mouse parallax — subtle X/Y tilt (±0.1 rad max)
+      // Mouse parallax — very subtle X/Y tilt (±0.04 rad max)
       if (isInteractive && mouseRef.current) {
-        const targetX = mouseRef.current.y * 0.1;
-        const targetZ = mouseRef.current.x * 0.1;
+        const targetX = mouseRef.current.y * 0.04;
+        const targetZ = mouseRef.current.x * 0.04;
         groupRef.current.rotation.x +=
-          (targetX - groupRef.current.rotation.x) * 0.05;
+          (targetX - groupRef.current.rotation.x) * 0.03;
         groupRef.current.rotation.z +=
-          (targetZ - groupRef.current.rotation.z) * 0.05;
+          (targetZ - groupRef.current.rotation.z) * 0.03;
       }
     }
   });
@@ -191,20 +190,20 @@ const HelixScene = React.memo(function HelixScene({
       {/* For dotCount > ~40, consider switching to InstancedMesh for better GPU performance */}
       {pairs.map((pair) => (
         <React.Fragment key={pair.index}>
-          {/* Teal nucleotide */}
-          <mesh position={pair.tealPos}>
+          {/* Primary (sky blue) nucleotide */}
+          <mesh position={pair.primaryPos}>
             <sphereGeometry args={SPHERE_ARGS} />
-            <meshBasicMaterial color={COLOR_TEAL} />
+            <meshBasicMaterial color={COLOR_PRIMARY} transparent opacity={0.7} />
           </mesh>
 
-          {/* Violet nucleotide */}
-          <mesh position={pair.violetPos}>
+          {/* Secondary (slate) nucleotide */}
+          <mesh position={pair.secondaryPos}>
             <sphereGeometry args={SPHERE_ARGS} />
-            <meshBasicMaterial color={COLOR_VIOLET} />
+            <meshBasicMaterial color={COLOR_SECONDARY} transparent opacity={0.7} />
           </mesh>
 
           {/* Rung connecting the pair */}
-          <Rung posA={pair.tealPos} posB={pair.violetPos} />
+          <Rung posA={pair.primaryPos} posB={pair.secondaryPos} />
         </React.Fragment>
       ))}
     </group>
@@ -221,8 +220,8 @@ const HelixScene = React.memo(function HelixScene({
  */
 export const DnaHelix3D = React.memo(function DnaHelix3D({
   className,
-  dotCount = 20,
-  rotationSpeed = 0.002,
+  dotCount = 10,
+  rotationSpeed = 0.001,
   interactive = true,
 }: DnaHelix3DProps) {
   const [isReduced, setIsReduced] = useState(false);

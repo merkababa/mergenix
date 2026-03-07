@@ -96,7 +96,7 @@ export function BentoFeatures() {
 
   return (
     <section
-      className="relative px-4 py-16 md:px-6 md:py-24 section-glow-pricing"
+      className="relative px-4 py-16 md:px-6 md:py-24"
       aria-label="Key features"
     >
       <div className="relative mx-auto max-w-6xl">
@@ -111,10 +111,8 @@ export function BentoFeatures() {
           {/* Hero feature card — col-span-2 */}
           <ScrollReveal type="scale" className="md:col-span-2">
             <GlassCard
-              variant="aurora"
-              hover="glow"
-              spotlight
-              microInteractions
+              variant="medium"
+              hover="lift"
               className="relative h-full overflow-hidden p-7 md:p-8"
             >
               {/* Badge */}
@@ -164,12 +162,6 @@ export function BentoFeatures() {
                 </Link>
               </div>
 
-              {/* Subtle corner glow */}
-              <div
-                className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full blur-[60px]"
-                style={{ background: "rgba(244,63,94,0.12)" }}
-                aria-hidden="true"
-              />
             </GlassCard>
           </ScrollReveal>
 
@@ -177,7 +169,6 @@ export function BentoFeatures() {
           <div className="flex flex-col gap-6">
             {SECONDARY_FEATURES.map((feature, i) => {
               const Icon = feature.icon;
-              const isSpotlight = i === 1;
               return (
                 <ScrollReveal
                   key={feature.title}
@@ -186,10 +177,8 @@ export function BentoFeatures() {
                   delay={0.1 + i * 0.1}
                 >
                   <GlassCard
-                    variant={i === 0 ? "frosted" : "subtle"}
-                    hover="glow"
-                    spotlight={isSpotlight}
-                    microInteractions
+                    variant="subtle"
+                    hover="lift"
                     className="h-full p-5"
                   >
                     {/* Gradient icon container */}

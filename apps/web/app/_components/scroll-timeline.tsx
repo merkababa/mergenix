@@ -154,7 +154,7 @@ export function ScrollTimeline() {
 
   return (
     <section
-      className="relative px-4 py-16 md:px-6 md:py-24 section-glow-mid"
+      className="relative px-4 py-16 md:px-6 md:py-24"
       aria-label="How it works"
     >
       <div ref={sectionRef} className="relative mx-auto max-w-5xl">
@@ -175,7 +175,7 @@ export function ScrollTimeline() {
             <div className="absolute inset-0 bg-(--border-subtle)" />
             {/* Animated fill line */}
             <m.div
-              className="absolute inset-x-0 top-0 origin-top bg-linear-to-b from-(--accent-teal) to-(--accent-violet)"
+              className="absolute inset-x-0 top-0 origin-top bg-(--accent-teal)"
               style={{ scaleY: lineScaleY, height: "100%" }}
             />
           </div>
@@ -217,19 +217,7 @@ export function ScrollTimeline() {
 
                   {/* Center node — timeline anchor */}
                   <div className="my-6 flex justify-center md:order-2 md:my-0 md:shrink-0">
-                    <div className="relative">
-                      {/* Pulse ring */}
-                      <div
-                        className="absolute inset-0 rounded-full"
-                        style={{
-                          /* Requires @keyframes pulseRing in globals.css */
-                          animation: "pulseRing 2.5s ease-out infinite",
-                          background: "rgba(6,214,160,0.15)",
-                        }}
-                        aria-hidden="true"
-                      />
-                      <StepCircle step={step.number} size="lg" />
-                    </div>
+                    <StepCircle step={step.number} size="lg" />
                   </div>
 
                   {/* Illustration — alternates sides on desktop */}
