@@ -255,11 +255,11 @@ describe('LiftoverTable.liftBatch', () => {
   describe('mixed results', () => {
     it('should lift a batch with some successes and some failures', () => {
       const snps = [
-        { rsid: 'rs1801133', position: 11856378 },  // in table, correct position
-        { rsid: 'rs429358', position: 45411941 },    // in table, correct position
-        { rsid: 'rs9999999', position: 12345 },      // not in table
-        { rsid: 'rs7903146', position: 114758349 },  // in table, correct position
-        { rsid: 'rs_missing', position: 67890 },     // not in table
+        { rsid: 'rs1801133', position: 11856378 }, // in table, correct position
+        { rsid: 'rs429358', position: 45411941 }, // in table, correct position
+        { rsid: 'rs9999999', position: 12345 }, // not in table
+        { rsid: 'rs7903146', position: 114758349 }, // in table, correct position
+        { rsid: 'rs_missing', position: 67890 }, // not in table
       ];
 
       const { results, summary } = table.liftBatch(snps, 'GRCh37', 'GRCh38');
@@ -289,14 +289,14 @@ describe('LiftoverTable.liftBatch', () => {
 
   describe('all successes', () => {
     it('should have zero failures when all SNPs are in the table', () => {
-      const snps = TEST_ENTRIES.map(e => ({
+      const snps = TEST_ENTRIES.map((e) => ({
         rsid: e.rsid,
         position: e.grch37Position,
       }));
 
       const { results, summary } = table.liftBatch(snps, 'GRCh37', 'GRCh38');
 
-      expect(results.every(r => r.success)).toBe(true);
+      expect(results.every((r) => r.success)).toBe(true);
       expect(summary.successfulLifts).toBe(TEST_ENTRIES.length);
       expect(summary.failedLifts).toBe(0);
       expect(summary.unmappedRsids).toHaveLength(0);
@@ -313,7 +313,7 @@ describe('LiftoverTable.liftBatch', () => {
 
       const { results, summary } = table.liftBatch(snps, 'GRCh37', 'GRCh38');
 
-      expect(results.every(r => !r.success)).toBe(true);
+      expect(results.every((r) => !r.success)).toBe(true);
       expect(summary.successfulLifts).toBe(0);
       expect(summary.failedLifts).toBe(3);
       expect(summary.unmappedRsids).toEqual(['rs_fake_1', 'rs_fake_2', 'rs_fake_3']);
@@ -336,14 +336,14 @@ describe('LiftoverTable.liftBatch', () => {
 
   describe('GRCh38 to GRCh37 batch', () => {
     it('should lift a batch in the reverse direction', () => {
-      const snps = TEST_ENTRIES.map(e => ({
+      const snps = TEST_ENTRIES.map((e) => ({
         rsid: e.rsid,
         position: e.grch38Position,
       }));
 
       const { results, summary } = table.liftBatch(snps, 'GRCh38', 'GRCh37');
 
-      expect(results.every(r => r.success)).toBe(true);
+      expect(results.every((r) => r.success)).toBe(true);
       expect(summary.sourceBuild).toBe('GRCh38');
       expect(summary.targetBuild).toBe('GRCh37');
 

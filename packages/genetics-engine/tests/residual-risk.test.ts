@@ -24,7 +24,7 @@ const TEST_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Test Disease',
     ethnicity: 'European',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.04,
     source: 'Test Source',
   },
@@ -45,7 +45,7 @@ const TEST_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Rare Disease',
     ethnicity: 'European',
-    detectionRate: 0.50,
+    detectionRate: 0.5,
     priorCarrierFreq: 0.001,
     source: 'Test Source',
   },
@@ -61,7 +61,7 @@ describe('calculateResidualRisk', () => {
     //        = 0.10 * 0.04 / (1 - 0.036)
     //        = 0.004 / 0.964
     //        = ~0.004149
-    const result = calculateResidualRisk(0.90, 0.04);
+    const result = calculateResidualRisk(0.9, 0.04);
     expect(result).toBeCloseTo(0.004149, 4);
   });
 
@@ -98,7 +98,7 @@ describe('calculateResidualRisk', () => {
   });
 
   it('should return 0 when prior carrier frequency is 0', () => {
-    const result = calculateResidualRisk(0.90, 0.0);
+    const result = calculateResidualRisk(0.9, 0.0);
     expect(result).toBe(0);
   });
 
@@ -110,7 +110,7 @@ describe('calculateResidualRisk', () => {
   it('should always return less than or equal to prior frequency', () => {
     // Testing negative can only reduce (or maintain) risk, never increase it
     const priors = [0.001, 0.01, 0.04, 0.1, 0.25];
-    const rates = [0.0, 0.25, 0.50, 0.75, 0.90, 0.95, 1.0];
+    const rates = [0.0, 0.25, 0.5, 0.75, 0.9, 0.95, 1.0];
     for (const prior of priors) {
       for (const rate of rates) {
         const residual = calculateResidualRisk(rate, prior);
@@ -136,19 +136,17 @@ describe('calculateResidualRisk', () => {
   });
 
   it('should throw for detection rate > 1', () => {
-    expect(() => calculateResidualRisk(1.1, 0.04)).toThrow(
-      'detectionRate must be between 0 and 1',
-    );
+    expect(() => calculateResidualRisk(1.1, 0.04)).toThrow('detectionRate must be between 0 and 1');
   });
 
   it('should throw for prior carrier freq < 0', () => {
-    expect(() => calculateResidualRisk(0.90, -0.01)).toThrow(
+    expect(() => calculateResidualRisk(0.9, -0.01)).toThrow(
       'priorCarrierFreq must be between 0 and 1',
     );
   });
 
   it('should throw for prior carrier freq > 1', () => {
-    expect(() => calculateResidualRisk(0.90, 1.1)).toThrow(
+    expect(() => calculateResidualRisk(0.9, 1.1)).toThrow(
       'priorCarrierFreq must be between 0 and 1',
     );
   });
@@ -180,7 +178,7 @@ describe('getResidualRisk', () => {
     const result = getResidualRisk('Test Disease', 'European', TEST_DETECTION_RATES);
     expect(result).not.toBeNull();
     expect(result!.ethnicity).toBe('European');
-    expect(result!.detectionRate).toBe(0.90);
+    expect(result!.detectionRate).toBe(0.9);
     expect(result!.priorCarrierFreq).toBe(0.04);
   });
 
@@ -312,23 +310,17 @@ describe('formatResidualRisk', () => {
 
 describe('COMMON_DETECTION_RATES', () => {
   it('should contain entries for Cystic Fibrosis', () => {
-    const cfEntries = COMMON_DETECTION_RATES.filter(
-      (e) => e.condition === 'Cystic Fibrosis',
-    );
+    const cfEntries = COMMON_DETECTION_RATES.filter((e) => e.condition === 'Cystic Fibrosis');
     expect(cfEntries.length).toBeGreaterThanOrEqual(4);
   });
 
   it('should contain entries for Sickle Cell Disease', () => {
-    const scdEntries = COMMON_DETECTION_RATES.filter(
-      (e) => e.condition === 'Sickle Cell Disease',
-    );
+    const scdEntries = COMMON_DETECTION_RATES.filter((e) => e.condition === 'Sickle Cell Disease');
     expect(scdEntries.length).toBeGreaterThanOrEqual(2);
   });
 
   it('should contain entries for Tay-Sachs Disease', () => {
-    const tsEntries = COMMON_DETECTION_RATES.filter(
-      (e) => e.condition === 'Tay-Sachs Disease',
-    );
+    const tsEntries = COMMON_DETECTION_RATES.filter((e) => e.condition === 'Tay-Sachs Disease');
     expect(tsEntries.length).toBeGreaterThanOrEqual(2);
   });
 
@@ -363,9 +355,7 @@ describe('COMMON_DETECTION_RATES', () => {
   });
 
   it('Unknown/Mixed should use most conservative detection rate for CF', () => {
-    const cfEntries = COMMON_DETECTION_RATES.filter(
-      (e) => e.condition === 'Cystic Fibrosis',
-    );
+    const cfEntries = COMMON_DETECTION_RATES.filter((e) => e.condition === 'Cystic Fibrosis');
     const unknownEntry = cfEntries.find((e) => e.ethnicity === 'Unknown/Mixed');
     const otherEntries = cfEntries.filter((e) => e.ethnicity !== 'Unknown/Mixed');
 

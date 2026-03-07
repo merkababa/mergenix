@@ -87,7 +87,6 @@ function buildMockEnvelope(): MockEncryptedEnvelope {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Recovery Key — Full E2E Flow', () => {
-
   /**
    * THE CANONICAL RECOVERY KEY USER FLOW
    *
@@ -153,82 +152,73 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    *   - POST   /auth/reset-password    → 200
    *   - PUT    /api/analyses/analysis-001 → 200 (re-encrypted envelope)
    */
-  test.fixme(
-    'TODO(stream-ops): create account → save encrypted analysis → generate recovery key → password reset → recover with key → verify data',
-    async ({ page }) => {
-      // ── Step 1: Register ────────────────────────────────────────────────
-      // TODO(B3): Mock POST /auth/register + GET /auth/me
-      // await page.goto('/register');
-      // await page.getByLabel('Email').fill('recovery-test@example.com');
-      // await page.getByLabel('Password').fill('OriginalPassword123!');
-      // await page.getByRole('button', { name: /create account/i }).click();
-      // await expect(page).toHaveURL(/\/analysis/);
-
-      // ── Step 2: Run analysis (or load demo) ────────────────────────────
-      // TODO(B3): Navigate to /analysis and load demo data, or mock the worker
-      // await page.goto('/analysis');
-      // await page.getByRole('button', { name: /try demo/i }).click();
-      // await expect(page.getByRole('tab', { name: /overview/i })).toBeVisible();
-
-      // ── Step 3: Save the analysis ──────────────────────────────────────
-      // TODO(B3): Mock POST /api/analyses to return a result ID
-      // Mock POST /api/analyses
-      // await page.route(`${API_BASE}/api/analyses`, async (route) => {
-      //   await route.fulfill({
-      //     status: 201,
-      //     contentType: 'application/json',
-      //     body: JSON.stringify({ id: 'analysis-001', label: 'Test Analysis', createdAt: new Date().toISOString() }),
-      //   });
-      // });
-      // await page.getByRole('button', { name: /save results/i }).click();
-      // await page.getByLabel(/label/i).fill('Test Analysis');
-      // await page.getByRole('button', { name: /save/i }).click();
-      // await expect(page.getByText(/saved/i)).toBeVisible();
-
-      // ── Step 4: Generate recovery key ──────────────────────────────────
-      // TODO(B3): Navigate to security settings and generate a recovery key
-      // await page.goto('/account');
-      // await page.getByRole('tab', { name: /security/i }).click();
-      // await page.getByRole('button', { name: /generate recovery key/i }).click();
-      // const recoveryKeyDisplay = await page.getByTestId('recovery-key-display');
-      // await expect(recoveryKeyDisplay).toBeVisible();
-      // const recoveryKey = await recoveryKeyDisplay.textContent();
-      // expect(recoveryKey).toMatch(/^[0-9a-f]{64}$/);
-
-      // ── Step 5: Download PDF ───────────────────────────────────────────
-      // TODO(B3): Covered by separate test below
-
-      // ── Step 6: Log out and simulate forgotten password ────────────────
-      // await page.getByRole('button', { name: /log out/i }).click();
-      // await expect(page).toHaveURL(/\/login/);
-
-      // ── Step 7: Password reset with recovery key ───────────────────────
-      // TODO(B3): Mock POST /auth/forgot-password + POST /auth/reset-password
-      // await page.goto('/forgot-password');
-      // await page.getByLabel('Email').fill('recovery-test@example.com');
-      // await page.getByRole('button', { name: /send reset/i }).click();
-      // await page.goto('/reset-password?token=mock-reset-token-123');
-      // await page.getByLabel(/new password/i).fill('NewPassword456!');
-      // await page.getByLabel(/recovery key/i).fill(recoveryKey);
-      // await page.getByRole('button', { name: /reset password/i }).click();
-      // await expect(page).toHaveURL(/\/login/);
-
-      // ── Step 8: Log in with new password and verify data ──────────────
-      // TODO(B3): Mock GET /api/analyses + GET /api/analyses/analysis-001
-      // await page.getByLabel('Email').fill('recovery-test@example.com');
-      // await page.getByLabel('Password').fill('NewPassword456!');
-      // await page.getByRole('button', { name: /sign in/i }).click();
-      // await page.goto('/analysis/saved');
-      // await page.getByText('Test Analysis').click();
-      // await expect(page.getByRole('tab', { name: /overview/i })).toBeVisible();
-      // Verify the carrier tab shows the expected data
-      // await page.getByRole('tab', { name: /carrier/i }).click();
-      // await expect(page.getByText(/Cystic Fibrosis/i)).toBeVisible();
-
-      // This stub must be removed when B3 is implemented.
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): create account → save encrypted analysis → generate recovery key → password reset → recover with key → verify data', async ({
+    page,
+  }) => {
+    // ── Step 1: Register ────────────────────────────────────────────────
+    // TODO(B3): Mock POST /auth/register + GET /auth/me
+    // await page.goto('/register');
+    // await page.getByLabel('Email').fill('recovery-test@example.com');
+    // await page.getByLabel('Password').fill('OriginalPassword123!');
+    // await page.getByRole('button', { name: /create account/i }).click();
+    // await expect(page).toHaveURL(/\/analysis/);
+    // ── Step 2: Run analysis (or load demo) ────────────────────────────
+    // TODO(B3): Navigate to /analysis and load demo data, or mock the worker
+    // await page.goto('/analysis');
+    // await page.getByRole('button', { name: /try demo/i }).click();
+    // await expect(page.getByRole('tab', { name: /overview/i })).toBeVisible();
+    // ── Step 3: Save the analysis ──────────────────────────────────────
+    // TODO(B3): Mock POST /api/analyses to return a result ID
+    // Mock POST /api/analyses
+    // await page.route(`${API_BASE}/api/analyses`, async (route) => {
+    //   await route.fulfill({
+    //     status: 201,
+    //     contentType: 'application/json',
+    //     body: JSON.stringify({ id: 'analysis-001', label: 'Test Analysis', createdAt: new Date().toISOString() }),
+    //   });
+    // });
+    // await page.getByRole('button', { name: /save results/i }).click();
+    // await page.getByLabel(/label/i).fill('Test Analysis');
+    // await page.getByRole('button', { name: /save/i }).click();
+    // await expect(page.getByText(/saved/i)).toBeVisible();
+    // ── Step 4: Generate recovery key ──────────────────────────────────
+    // TODO(B3): Navigate to security settings and generate a recovery key
+    // await page.goto('/account');
+    // await page.getByRole('tab', { name: /security/i }).click();
+    // await page.getByRole('button', { name: /generate recovery key/i }).click();
+    // const recoveryKeyDisplay = await page.getByTestId('recovery-key-display');
+    // await expect(recoveryKeyDisplay).toBeVisible();
+    // const recoveryKey = await recoveryKeyDisplay.textContent();
+    // expect(recoveryKey).toMatch(/^[0-9a-f]{64}$/);
+    // ── Step 5: Download PDF ───────────────────────────────────────────
+    // TODO(B3): Covered by separate test below
+    // ── Step 6: Log out and simulate forgotten password ────────────────
+    // await page.getByRole('button', { name: /log out/i }).click();
+    // await expect(page).toHaveURL(/\/login/);
+    // ── Step 7: Password reset with recovery key ───────────────────────
+    // TODO(B3): Mock POST /auth/forgot-password + POST /auth/reset-password
+    // await page.goto('/forgot-password');
+    // await page.getByLabel('Email').fill('recovery-test@example.com');
+    // await page.getByRole('button', { name: /send reset/i }).click();
+    // await page.goto('/reset-password?token=mock-reset-token-123');
+    // await page.getByLabel(/new password/i).fill('NewPassword456!');
+    // await page.getByLabel(/recovery key/i).fill(recoveryKey);
+    // await page.getByRole('button', { name: /reset password/i }).click();
+    // await expect(page).toHaveURL(/\/login/);
+    // ── Step 8: Log in with new password and verify data ──────────────
+    // TODO(B3): Mock GET /api/analyses + GET /api/analyses/analysis-001
+    // await page.getByLabel('Email').fill('recovery-test@example.com');
+    // await page.getByLabel('Password').fill('NewPassword456!');
+    // await page.getByRole('button', { name: /sign in/i }).click();
+    // await page.goto('/analysis/saved');
+    // await page.getByText('Test Analysis').click();
+    // await expect(page.getByRole('tab', { name: /overview/i })).toBeVisible();
+    // Verify the carrier tab shows the expected data
+    // await page.getByRole('tab', { name: /carrier/i }).click();
+    // await expect(page.getByText(/Cystic Fibrosis/i)).toBeVisible();
+    // This stub must be removed when B3 is implemented.
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 
   /**
    * WRONG RECOVERY KEY ERROR PATH
@@ -261,51 +251,43 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    *   - GET /api/analyses/analysis-001 → 200 { encryptedEnvelope: buildMockEnvelope() }
    *   - The decryption failure happens client-side (no additional mock needed)
    */
-  test.fixme(
-    'TODO(stream-ops): wrong recovery key returns appropriate error, not garbage data',
-    async ({ page }) => {
-      // ── Mock: analysis endpoint returns a valid encrypted envelope ──────
-      // await page.route(`${API_BASE}/api/analyses/analysis-001`, async (route) => {
-      //   await route.fulfill({
-      //     status: 200,
-      //     contentType: 'application/json',
-      //     body: JSON.stringify({
-      //       id: 'analysis-001',
-      //       encryptedEnvelope: JSON.stringify(buildMockEnvelope()),
-      //     }),
-      //   });
-      // });
-
-      // ── Navigate to reset password page ─────────────────────────────────
-      // await page.goto('/reset-password?token=mock-token');
-      // await page.getByLabel(/new password/i).fill('NewPassword456!');
-
-      // ── Enter the WRONG recovery key ─────────────────────────────────────
-      // const wrongKey = 'a'.repeat(64); // A different valid-looking 64-char hex key
-      // await page.getByLabel(/recovery key/i).fill(wrongKey);
-      // await page.getByRole('button', { name: /reset password/i }).click();
-
-      // ── Assert: error is shown, NOT garbage health data ──────────────────
-      // const errorAlert = page.getByRole('alert');
-      // await expect(errorAlert).toBeVisible({ timeout: 5_000 });
-      // await expect(errorAlert).toContainText(/invalid recovery key|incorrect key|decryption failed/i);
-
-      // Assert we are still on the reset page
-      // await expect(page).toHaveURL(/\/reset-password/);
-
-      // Assert no carrier data was displayed (which would indicate garbage decryption)
-      // const carrierTable = page.getByRole('table', { name: /carrier/i });
-      // await expect(carrierTable).not.toBeVisible();
-
-      // ── ZKE guarantee verification ──────────────────────────────────────
-      // The error message must NOT hint at what the correct key is.
-      // const errorText = await errorAlert.textContent();
-      // expect(errorText).not.toMatch(/correct key is/i);
-      // expect(errorText).not.toMatch(/[0-9a-f]{64}/); // Must not show the real key
-
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): wrong recovery key returns appropriate error, not garbage data', async ({
+    page,
+  }) => {
+    // ── Mock: analysis endpoint returns a valid encrypted envelope ──────
+    // await page.route(`${API_BASE}/api/analyses/analysis-001`, async (route) => {
+    //   await route.fulfill({
+    //     status: 200,
+    //     contentType: 'application/json',
+    //     body: JSON.stringify({
+    //       id: 'analysis-001',
+    //       encryptedEnvelope: JSON.stringify(buildMockEnvelope()),
+    //     }),
+    //   });
+    // });
+    // ── Navigate to reset password page ─────────────────────────────────
+    // await page.goto('/reset-password?token=mock-token');
+    // await page.getByLabel(/new password/i).fill('NewPassword456!');
+    // ── Enter the WRONG recovery key ─────────────────────────────────────
+    // const wrongKey = 'a'.repeat(64); // A different valid-looking 64-char hex key
+    // await page.getByLabel(/recovery key/i).fill(wrongKey);
+    // await page.getByRole('button', { name: /reset password/i }).click();
+    // ── Assert: error is shown, NOT garbage health data ──────────────────
+    // const errorAlert = page.getByRole('alert');
+    // await expect(errorAlert).toBeVisible({ timeout: 5_000 });
+    // await expect(errorAlert).toContainText(/invalid recovery key|incorrect key|decryption failed/i);
+    // Assert we are still on the reset page
+    // await expect(page).toHaveURL(/\/reset-password/);
+    // Assert no carrier data was displayed (which would indicate garbage decryption)
+    // const carrierTable = page.getByRole('table', { name: /carrier/i });
+    // await expect(carrierTable).not.toBeVisible();
+    // ── ZKE guarantee verification ──────────────────────────────────────
+    // The error message must NOT hint at what the correct key is.
+    // const errorText = await errorAlert.textContent();
+    // expect(errorText).not.toMatch(/correct key is/i);
+    // expect(errorText).not.toMatch(/[0-9a-f]{64}/); // Must not show the real key
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 
   /**
    * RECOVERY KEY PDF DOWNLOAD
@@ -343,57 +325,49 @@ test.describe('Recovery Key — Full E2E Flow', () => {
    * Related tests:
    *   - apps/web/__tests__/pdf-document-builder.test.ts — PDF content unit tests
    */
-  test.fixme(
-    'TODO(stream-ops): recovery key PDF download contains the actual recovery key',
-    async ({ page }) => {
-      // ── Navigate to security settings ────────────────────────────────────
-      // await page.goto('/account');
-      // await page.getByRole('tab', { name: /security/i }).click();
-
-      // ── Generate a recovery key ──────────────────────────────────────────
-      // await page.getByRole('button', { name: /generate recovery key/i }).click();
-
-      // Capture the key displayed on screen before download
-      // const keyDisplay = page.getByTestId('recovery-key-value');
-      // await expect(keyDisplay).toBeVisible();
-      // const displayedKey = (await keyDisplay.textContent())?.replace(/\s/g, '');
-      // expect(displayedKey).toMatch(/^[0-9a-f]{64}$/);
-
-      // ── Click download and intercept the file ────────────────────────────
-      // const [download] = await Promise.all([
-      //   page.waitForEvent('download'),
-      //   page.getByRole('button', { name: /download pdf/i }).click(),
-      // ]);
-
-      // ── Assert: download metadata ────────────────────────────────────────
-      // expect(download.suggestedFilename()).toMatch(/recovery-key.*\.pdf$/i);
-
-      // ── Assert: PDF contains the recovery key ────────────────────────────
-      // The exact verification method depends on the PDF implementation:
-      //
-      // Option A (server-side PDF): Intercept the PDF generation API call and
-      //   assert the request body contains the key.
-      //
-      // Option B (client-side react-pdf): Check that the PDF component was
-      //   rendered with the correct key prop.
-      //   await page.route('/api/pdf/recovery-key', async (route) => {
-      //     const body = JSON.parse(route.request().postData() ?? '{}');
-      //     expect(body.recoveryKey).toBe(displayedKey);
-      //     await route.continue();
-      //   });
-      //
-      // Option C (inspect PDF blob): Parse the downloaded PDF using a PDF
-      //   parsing library and check that the key text is present.
-
-      // ── Assert: PDF does NOT contain the user's password ─────────────────
-      // The PDF is a user-readable document — it must contain the recovery key
-      // but NEVER the user's password or any derived cryptographic material.
-      //
-      // (Tested at unit level in pdf-document-builder.test.ts when implemented)
-
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): recovery key PDF download contains the actual recovery key', async ({
+    page,
+  }) => {
+    // ── Navigate to security settings ────────────────────────────────────
+    // await page.goto('/account');
+    // await page.getByRole('tab', { name: /security/i }).click();
+    // ── Generate a recovery key ──────────────────────────────────────────
+    // await page.getByRole('button', { name: /generate recovery key/i }).click();
+    // Capture the key displayed on screen before download
+    // const keyDisplay = page.getByTestId('recovery-key-value');
+    // await expect(keyDisplay).toBeVisible();
+    // const displayedKey = (await keyDisplay.textContent())?.replace(/\s/g, '');
+    // expect(displayedKey).toMatch(/^[0-9a-f]{64}$/);
+    // ── Click download and intercept the file ────────────────────────────
+    // const [download] = await Promise.all([
+    //   page.waitForEvent('download'),
+    //   page.getByRole('button', { name: /download pdf/i }).click(),
+    // ]);
+    // ── Assert: download metadata ────────────────────────────────────────
+    // expect(download.suggestedFilename()).toMatch(/recovery-key.*\.pdf$/i);
+    // ── Assert: PDF contains the recovery key ────────────────────────────
+    // The exact verification method depends on the PDF implementation:
+    //
+    // Option A (server-side PDF): Intercept the PDF generation API call and
+    //   assert the request body contains the key.
+    //
+    // Option B (client-side react-pdf): Check that the PDF component was
+    //   rendered with the correct key prop.
+    //   await page.route('/api/pdf/recovery-key', async (route) => {
+    //     const body = JSON.parse(route.request().postData() ?? '{}');
+    //     expect(body.recoveryKey).toBe(displayedKey);
+    //     await route.continue();
+    //   });
+    //
+    // Option C (inspect PDF blob): Parse the downloaded PDF using a PDF
+    //   parsing library and check that the key text is present.
+    // ── Assert: PDF does NOT contain the user's password ─────────────────
+    // The PDF is a user-readable document — it must contain the recovery key
+    // but NEVER the user's password or any derived cryptographic material.
+    //
+    // (Tested at unit level in pdf-document-builder.test.ts when implemented)
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -401,7 +375,6 @@ test.describe('Recovery Key — Full E2E Flow', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Recovery Key — Security Properties', () => {
-
   /**
    * RECOVERY KEY UNIQUENESS
    *
@@ -419,28 +392,22 @@ test.describe('Recovery Key — Security Properties', () => {
    *   generateRecoveryKey() calls crypto.getRandomValues(new Uint8Array(32))
    *   which provides cryptographically secure randomness — guaranteed unique per call.
    */
-  test.fixme(
-    'TODO(stream-ops): newly generated recovery key is different from the previous key',
-    async ({ page }) => {
-      // await page.goto('/account');
-      // await page.getByRole('tab', { name: /security/i }).click();
-
-      // const keyDisplay = page.getByTestId('recovery-key-value');
-
-      // await page.getByRole('button', { name: /generate recovery key/i }).click();
-      // await expect(keyDisplay).toBeVisible();
-      // const key1 = (await keyDisplay.textContent())?.replace(/\s/g, '');
-
-      // await page.getByRole('button', { name: /regenerate/i }).click();
-      // const key2 = (await keyDisplay.textContent())?.replace(/\s/g, '');
-
-      // expect(key1).toMatch(/^[0-9a-f]{64}$/);
-      // expect(key2).toMatch(/^[0-9a-f]{64}$/);
-      // expect(key1).not.toBe(key2);
-
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): newly generated recovery key is different from the previous key', async ({
+    page,
+  }) => {
+    // await page.goto('/account');
+    // await page.getByRole('tab', { name: /security/i }).click();
+    // const keyDisplay = page.getByTestId('recovery-key-value');
+    // await page.getByRole('button', { name: /generate recovery key/i }).click();
+    // await expect(keyDisplay).toBeVisible();
+    // const key1 = (await keyDisplay.textContent())?.replace(/\s/g, '');
+    // await page.getByRole('button', { name: /regenerate/i }).click();
+    // const key2 = (await keyDisplay.textContent())?.replace(/\s/g, '');
+    // expect(key1).toMatch(/^[0-9a-f]{64}$/);
+    // expect(key2).toMatch(/^[0-9a-f]{64}$/);
+    // expect(key1).not.toBe(key2);
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 
   /**
    * RECOVERY KEY IS NOT STORED ON SERVER
@@ -458,36 +425,29 @@ test.describe('Recovery Key — Security Properties', () => {
    * Note: The recovery key MAY appear in the URL bar if the PDF is downloaded via
    * a GET request — the implementation must use POST or blob URLs to avoid this.
    */
-  test.fixme(
-    'TODO(stream-ops): recovery key is never transmitted to the backend server',
-    async ({ page }) => {
-      // const outgoingBodies: string[] = [];
-
-      // page.on('request', (request) => {
-      //   const body = request.postData() ?? '';
-      //   outgoingBodies.push(body);
-      // });
-
-      // await page.goto('/account');
-      // await page.getByRole('tab', { name: /security/i }).click();
-      // await page.getByRole('button', { name: /generate recovery key/i }).click();
-
-      // const keyDisplay = page.getByTestId('recovery-key-value');
-      // await expect(keyDisplay).toBeVisible();
-      // const recoveryKey = (await keyDisplay.textContent())?.replace(/\s/g, '');
-      // expect(recoveryKey).toMatch(/^[0-9a-f]{64}$/);
-
-      // // Wait a moment for any async sends to fire
-      // await page.waitForTimeout(1_000);
-
-      // // Assert: the recovery key was NEVER sent in any request body
-      // for (const body of outgoingBodies) {
-      //   expect(body).not.toContain(recoveryKey!);
-      // }
-
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): recovery key is never transmitted to the backend server', async ({
+    page,
+  }) => {
+    // const outgoingBodies: string[] = [];
+    // page.on('request', (request) => {
+    //   const body = request.postData() ?? '';
+    //   outgoingBodies.push(body);
+    // });
+    // await page.goto('/account');
+    // await page.getByRole('tab', { name: /security/i }).click();
+    // await page.getByRole('button', { name: /generate recovery key/i }).click();
+    // const keyDisplay = page.getByTestId('recovery-key-value');
+    // await expect(keyDisplay).toBeVisible();
+    // const recoveryKey = (await keyDisplay.textContent())?.replace(/\s/g, '');
+    // expect(recoveryKey).toMatch(/^[0-9a-f]{64}$/);
+    // // Wait a moment for any async sends to fire
+    // await page.waitForTimeout(1_000);
+    // // Assert: the recovery key was NEVER sent in any request body
+    // for (const body of outgoingBodies) {
+    //   expect(body).not.toContain(recoveryKey!);
+    // }
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 
   /**
    * RECOVERY KEY DISPLAY IS MASKED BY DEFAULT
@@ -502,33 +462,27 @@ test.describe('Recovery Key — Security Properties', () => {
    *   3. Click "Reveal"
    *   4. Assert: recovery key is now visible and matches expected format
    */
-  test.fixme(
-    'TODO(stream-ops): recovery key is masked by default and requires explicit reveal action',
-    async ({ page }) => {
-      // await page.goto('/account');
-      // await page.getByRole('tab', { name: /security/i }).click();
-      // await page.getByRole('button', { name: /generate recovery key/i }).click();
-
-      // // Key should be masked initially
-      // const maskedDisplay = page.getByTestId('recovery-key-masked');
-      // await expect(maskedDisplay).toBeVisible();
-
-      // // The actual key should not be readable
-      // const visibleText = await maskedDisplay.textContent();
-      // expect(visibleText).not.toMatch(/^[0-9a-f]{64}$/);
-
-      // // Click reveal
-      // await page.getByRole('button', { name: /reveal|show/i }).click();
-
-      // // Now the key is readable
-      // const revealedDisplay = page.getByTestId('recovery-key-value');
-      // await expect(revealedDisplay).toBeVisible();
-      // const key = (await revealedDisplay.textContent())?.replace(/\s/g, '');
-      // expect(key).toMatch(/^[0-9a-f]{64}$/);
-
-      // Placeholder removed — test.fixme() already prevents execution.
-    },
-  );
+  test.fixme('TODO(stream-ops): recovery key is masked by default and requires explicit reveal action', async ({
+    page,
+  }) => {
+    // await page.goto('/account');
+    // await page.getByRole('tab', { name: /security/i }).click();
+    // await page.getByRole('button', { name: /generate recovery key/i }).click();
+    // // Key should be masked initially
+    // const maskedDisplay = page.getByTestId('recovery-key-masked');
+    // await expect(maskedDisplay).toBeVisible();
+    // // The actual key should not be readable
+    // const visibleText = await maskedDisplay.textContent();
+    // expect(visibleText).not.toMatch(/^[0-9a-f]{64}$/);
+    // // Click reveal
+    // await page.getByRole('button', { name: /reveal|show/i }).click();
+    // // Now the key is readable
+    // const revealedDisplay = page.getByTestId('recovery-key-value');
+    // await expect(revealedDisplay).toBeVisible();
+    // const key = (await revealedDisplay.textContent())?.replace(/\s/g, '');
+    // expect(key).toMatch(/^[0-9a-f]{64}$/);
+    // Placeholder removed — test.fixme() already prevents execution.
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -12,7 +12,9 @@ type MockIconProps = SVGAttributes<SVGSVGElement> & {
  * Usage:
  *   vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Lock', 'Mail'));
  */
-export function mockLucideIcons(...iconNames: string[]): Record<string, (props: MockIconProps) => JSX.Element> {
+export function mockLucideIcons(
+  ...iconNames: string[]
+): Record<string, (props: MockIconProps) => JSX.Element> {
   const icons: Record<string, (props: MockIconProps) => JSX.Element> = {};
   for (const name of iconNames) {
     const testId = name

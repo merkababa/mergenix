@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { Heart, Shield, ExternalLink, ChevronRight } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Heart, Shield, ExternalLink, ChevronRight } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-const NSGC_DIRECTORY_URL = "https://findageneticcounselor.nsgc.org";
+const NSGC_DIRECTORY_URL = 'https://findageneticcounselor.nsgc.org';
 
 export function CounselingContent() {
   return (
     <>
       <div className="mb-8 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-          <Heart aria-hidden="true" className="h-7 w-7 text-(--accent-teal)" />
+          <Heart aria-hidden="true" className="text-(--accent-teal) h-7 w-7" />
         </div>
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Find a Genetic Counselor
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
+        <p className="text-(--text-muted) mx-auto mt-3 max-w-xl">
           Connect with board-certified genetic counselors who can help you understand your results
         </p>
       </div>
@@ -28,12 +28,12 @@ export function CounselingContent() {
         hover="none"
         className="mb-8 flex items-start gap-4 border-[rgba(6,214,160,0.15)] p-6"
       >
-        <Shield aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-teal)" />
+        <Shield aria-hidden="true" className="text-(--accent-teal) mt-0.5 h-5 w-5 shrink-0" />
         <div>
-          <p className="text-sm leading-relaxed text-(--text-body)">
-            Genetic counselors are healthcare professionals trained to help individuals and
-            families understand and adapt to the medical, psychological, and familial implications
-            of genetic contributions to disease. Meeting with one is a routine part of family planning.
+          <p className="text-(--text-body) text-sm leading-relaxed">
+            Genetic counselors are healthcare professionals trained to help individuals and families
+            understand and adapt to the medical, psychological, and familial implications of genetic
+            contributions to disease. Meeting with one is a routine part of family planning.
           </p>
         </div>
       </GlassCard>
@@ -42,32 +42,33 @@ export function CounselingContent() {
       <GlassCard
         variant="medium"
         hover="glow"
-        className="mb-8 bg-(--bg-elevated) border-(--border-subtle) rounded-glass p-8"
+        className="bg-(--bg-elevated) border-(--border-subtle) rounded-glass mb-8 p-8"
       >
         <div className="flex flex-col items-center gap-6 text-center md:flex-row md:text-left">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-accent-teal to-accent-cyan shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
-            <ExternalLink aria-hidden="true" className="h-8 w-8 text-bio-deep" />
+          <div className="bg-linear-to-br from-accent-teal to-accent-cyan flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
+            <ExternalLink aria-hidden="true" className="text-bio-deep h-8 w-8" />
           </div>
           <div className="flex-1">
-            <h2 className="font-heading text-xl font-bold text-(--text-heading)">
+            <h2 className="font-heading text-(--text-heading) text-xl font-bold">
               Find a Certified Genetic Counselor Near You
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-(--text-muted)">
+            <p className="text-(--text-muted) mt-2 text-sm leading-relaxed">
               The National Society of Genetic Counselors (NSGC) maintains the largest directory of
-              board-certified genetic counselors in the United States. Search by location, specialty,
-              insurance, and telehealth availability to find a counselor that fits your needs.
+              board-certified genetic counselors in the United States. Search by location,
+              specialty, insurance, and telehealth availability to find a counselor that fits your
+              needs.
             </p>
-            <ul className="mt-3 space-y-1 text-left text-xs text-(--text-dim)">
+            <ul className="text-(--text-dim) mt-3 space-y-1 text-left text-xs">
               <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-(--accent-teal)" />
+                <span aria-hidden="true" className="bg-(--accent-teal) h-1.5 w-1.5 rounded-full" />
                 Search by prenatal, pediatric, cancer, cardiovascular, and more specialties
               </li>
               <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-(--accent-teal)" />
+                <span aria-hidden="true" className="bg-(--accent-teal) h-1.5 w-1.5 rounded-full" />
                 Filter for telehealth / virtual appointments
               </li>
               <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-(--accent-teal)" />
+                <span aria-hidden="true" className="bg-(--accent-teal) h-1.5 w-1.5 rounded-full" />
                 All counselors are NSGC board-certified professionals
               </li>
             </ul>
@@ -80,50 +81,50 @@ export function CounselingContent() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Open NSGC genetic counselor directory in a new tab"
-            className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
+            className={cn(buttonVariants({ variant: 'primary', size: 'lg' }))}
           >
             Search the NSGC Directory
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </a>
         </div>
 
-        <p className="mt-4 text-center text-xs text-(--text-dim)">
-          You will be redirected to{" "}
-          <span className="font-mono">findageneticcounselor.nsgc.org</span>
-          {" "}— an official NSGC resource operated independently of Mergenix.
+        <p className="text-(--text-dim) mt-4 text-center text-xs">
+          You will be redirected to{' '}
+          <span className="font-mono">findageneticcounselor.nsgc.org</span> — an official NSGC
+          resource operated independently of Mergenix.
         </p>
       </GlassCard>
 
       {/* ── Why genetic counseling matters ── */}
       <GlassCard variant="subtle" hover="none" className="p-6">
-        <h2 className="font-heading text-base font-bold text-(--text-heading)">
+        <h2 className="font-heading text-(--text-heading) text-base font-bold">
           Why See a Genetic Counselor?
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-(--text-primary)">Understand Your Results</p>
-            <p className="text-xs text-(--text-muted)">
+            <p className="text-(--text-primary) text-sm font-medium">Understand Your Results</p>
+            <p className="text-(--text-muted) text-xs">
               A counselor helps you interpret probabilistic genetic findings in the context of your
               family history and personal health goals.
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium text-(--text-primary)">Family Planning</p>
-            <p className="text-xs text-(--text-muted)">
+            <p className="text-(--text-primary) text-sm font-medium">Family Planning</p>
+            <p className="text-(--text-muted) text-xs">
               Carrier screening results are most meaningful when discussed with a professional who
               can explain reproductive options and risk estimates.
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium text-(--text-primary)">Emotional Support</p>
-            <p className="text-xs text-(--text-muted)">
-              Genetic counselors are trained to address the psychological impact of genetic information
-              and provide coping strategies.
+            <p className="text-(--text-primary) text-sm font-medium">Emotional Support</p>
+            <p className="text-(--text-muted) text-xs">
+              Genetic counselors are trained to address the psychological impact of genetic
+              information and provide coping strategies.
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium text-(--text-primary)">Clinical Follow-Up</p>
-            <p className="text-xs text-(--text-muted)">
+            <p className="text-(--text-primary) text-sm font-medium">Clinical Follow-Up</p>
+            <p className="text-(--text-muted) text-xs">
               They can coordinate referrals to specialists and help you navigate insurance coverage
               for confirmatory genetic testing.
             </p>

@@ -49,9 +49,7 @@ async def test_save_result_success(
     assert "created_at" in data
 
     # Verify stored as JSON-serialized envelope in DB
-    result = await db_session.execute(
-        select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"]))
-    )
+    result = await db_session.execute(select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"])))
     row = result.scalar_one()
     assert row.result_data is not None
     assert isinstance(row.result_data, bytes)
@@ -79,9 +77,7 @@ async def test_save_result_with_data_version(
     assert response.status_code == 201
     data = response.json()
 
-    result = await db_session.execute(
-        select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"]))
-    )
+    result = await db_session.execute(select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"])))
     row = result.scalar_one()
     assert row.data_version == "1.2.0"
 
@@ -141,7 +137,7 @@ async def test_save_result_pro_unlimited(
         response = await client.post(
             "/analysis/results",
             headers=pro_auth_headers,
-            json=_save_payload(label=f"Pro Analysis {i+1}"),
+            json=_save_payload(label=f"Pro Analysis {i + 1}"),
         )
         assert response.status_code == 201
 
@@ -932,9 +928,7 @@ async def test_password_reset_wipes_analysis_results(
 
     # Verify the result exists
     count_result = await db_session.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == test_user.id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
     )
     assert count_result.scalar_one() == 1
 
@@ -963,9 +957,7 @@ async def test_password_reset_wipes_analysis_results(
 
     # Verify all analysis results are wiped
     count_result = await db_session.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == test_user.id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
     )
     assert count_result.scalar_one() == 0
 
@@ -1044,9 +1036,7 @@ async def test_password_change_wipes_analysis_results(
 
     # Verify it exists
     count_result = await db_session.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == test_user.id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
     )
     assert count_result.scalar_one() == 1
 
@@ -1063,9 +1053,7 @@ async def test_password_change_wipes_analysis_results(
 
     # Verify all analysis results are wiped
     count_result = await db_session.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == test_user.id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
     )
     assert count_result.scalar_one() == 0
 
@@ -1244,11 +1232,7 @@ async def test_partner_notification_failure_does_not_fail_save(
         assert "id" in data
 
         # Verify the analysis was actually persisted
-        result = await db_session.execute(
-            select(AnalysisResult).where(
-                AnalysisResult.id == uuid.UUID(data["id"])
-            )
-        )
+        result = await db_session.execute(select(AnalysisResult).where(AnalysisResult.id == uuid.UUID(data["id"])))
         row = result.scalar_one_or_none()
         assert row is not None
 
@@ -1418,8 +1402,7 @@ async def test_get_result_legacy_format_error_includes_data_version_hint(
     data = response.json()
     assert data["detail"]["code"] == "LEGACY_FORMAT"
     # The error should hint about the missing data version
-    assert "data_version" in data["detail"]["error"].lower() or \
-           "version" in data["detail"]["error"].lower()
+    assert "data_version" in data["detail"]["error"].lower() or "version" in data["detail"]["error"].lower()
 
 
 @pytest.mark.asyncio
@@ -1462,10 +1445,12 @@ async def test_get_result_with_data_version_and_corrupt_data_returns_422(
 async def test_safe_send_partner_notification_is_module_level() -> None:
     """_safe_send_partner_notification should be a module-level function, not a closure."""
     from app.routers import analysis as analysis_module
+
     assert hasattr(analysis_module, "_safe_send_partner_notification"), (
         "_safe_send_partner_notification should be defined at module level in analysis.py"
     )
     import inspect
+
     assert inspect.iscoroutinefunction(analysis_module._safe_send_partner_notification), (
         "_safe_send_partner_notification should be an async function"
     )

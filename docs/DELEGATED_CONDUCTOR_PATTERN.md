@@ -8,6 +8,7 @@
 ## Problem
 
 When a conductor (main Claude session) executes multiple sequential tasks in one conversation:
+
 - Context fills up with file contents, agent outputs, and review results
 - Later tasks suffer from compacted/lost context
 - Review quality degrades as conversation grows
@@ -49,6 +50,7 @@ Main Conductor (you)
 ## Roles & Rules
 
 ### Main Conductor (your session)
+
 - Creates the feature branch
 - Creates task list with dependencies
 - Spawns one Task Conductor per task (sequential, background)
@@ -57,7 +59,9 @@ Main Conductor (you)
 - Creates PR and merges
 
 ### Task Conductor (general-purpose teammate)
+
 **MUST follow the same conductor rules as the main session:**
+
 - NEVER read large source files directly — delegate to Explore agents
 - NEVER write/edit code files — delegate to executor agents
 - NEVER run tests/builds directly — delegate to agents
@@ -67,12 +71,14 @@ Main Conductor (you)
 - Return concise summary (files changed, what was done, pass/fail)
 
 ### Executor Agents (spawned by Task Conductor)
+
 - Own specific files — never touch files outside ownership
 - Read checklist and gotchas docs before writing code
 - Run lint + typecheck on their files before reporting done
 - Model: Sonnet (well-specified tasks)
 
 ### Review Agents (spawned by Main Conductor)
+
 - Run after ALL tasks are committed to the branch
 - One agent per reviewer role (never combine)
 - Model: Opus (deep reasoning)
@@ -139,6 +145,7 @@ Only these files may be created/modified:
 ## Main Conductor Execution Flow
 
 ### Phase 1: Setup
+
 ```
 1. Create feature branch
 2. Create task list with sequential dependencies
@@ -146,6 +153,7 @@ Only these files may be created/modified:
 ```
 
 ### Phase 2: Sequential Task Execution
+
 ```
 For each task (D2.1, D2.2, ... D2.N):
   1. Spawn Task Conductor (general-purpose, background)
@@ -156,6 +164,7 @@ For each task (D2.1, D2.2, ... D2.N):
 ```
 
 ### Phase 3: Review Pipeline
+
 ```
 1. Run full static analysis gate (lint + typecheck + test + build)
 2. Spawn 2-4 reviewer agents in PARALLEL (Opus model)
@@ -168,6 +177,7 @@ For each task (D2.1, D2.2, ... D2.N):
 ```
 
 ### Phase 4: Ship
+
 ```
 1. Create PR with summary of all tasks
 2. Merge (squash)
@@ -178,27 +188,27 @@ For each task (D2.1, D2.2, ... D2.N):
 
 ## Benefits
 
-| Benefit | How |
-|---------|-----|
-| **Context isolation** | Each task conductor has fresh context, no bleed-over |
-| **Main context stays clean** | Only receives 2-3 line summaries, never full file contents |
-| **Parallel within tasks** | Task conductors spawn parallel executors for independent files |
-| **Sequential between tasks** | Later tasks see committed changes from earlier tasks |
-| **Reusable** | Same pattern works for any multi-task sprint in any project |
-| **Review efficiency** | One review pipeline for the whole sprint, not per-task |
+| Benefit                      | How                                                            |
+| ---------------------------- | -------------------------------------------------------------- |
+| **Context isolation**        | Each task conductor has fresh context, no bleed-over           |
+| **Main context stays clean** | Only receives 2-3 line summaries, never full file contents     |
+| **Parallel within tasks**    | Task conductors spawn parallel executors for independent files |
+| **Sequential between tasks** | Later tasks see committed changes from earlier tasks           |
+| **Reusable**                 | Same pattern works for any multi-task sprint in any project    |
+| **Review efficiency**        | One review pipeline for the whole sprint, not per-task         |
 
 ---
 
 ## Anti-Patterns (Never Do These)
 
-| Anti-Pattern | Why It Fails |
-|-------------|-------------|
-| Main conductor reads/writes code directly | Context pollution, violates conductor rules |
-| Teammate acts as executor (writes code itself) | No file ownership boundaries, no parallelism |
-| Review pipeline per task | 6x the review cost for sequential tasks on the same branch |
-| Combining multiple reviewers into one agent | Each reviewer needs focused expertise |
-| Skipping static analysis between tasks | Broken lint/types compound across tasks |
-| Running full test suite per task | Slow; save for the review pipeline gate |
+| Anti-Pattern                                   | Why It Fails                                               |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| Main conductor reads/writes code directly      | Context pollution, violates conductor rules                |
+| Teammate acts as executor (writes code itself) | No file ownership boundaries, no parallelism               |
+| Review pipeline per task                       | 6x the review cost for sequential tasks on the same branch |
+| Combining multiple reviewers into one agent    | Each reviewer needs focused expertise                      |
+| Skipping static analysis between tasks         | Broken lint/types compound across tasks                    |
+| Running full test suite per task               | Slow; save for the review pipeline gate                    |
 
 ---
 

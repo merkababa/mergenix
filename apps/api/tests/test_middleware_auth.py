@@ -125,9 +125,7 @@ async def test_csrf_header_passes_when_present_on_post(
     )
     # The CSRF middleware must NOT block the request.  The endpoint handler
     # should be reached, returning one of these expected statuses.
-    assert response.status_code in (200, 400, 401, 422), (
-        f"Unexpected status {response.status_code}: {response.json()}"
-    )
+    assert response.status_code in (200, 400, 401, 422), f"Unexpected status {response.status_code}: {response.json()}"
 
 
 @pytest.mark.asyncio
@@ -144,9 +142,7 @@ async def test_csrf_header_passes_when_present_on_delete(
     )
     # The CSRF middleware must NOT block the request.  The endpoint handler
     # should be reached, returning one of these expected statuses.
-    assert response.status_code in (200, 400, 401, 422), (
-        f"Unexpected status {response.status_code}: {response.json()}"
-    )
+    assert response.status_code in (200, 400, 401, 422), f"Unexpected status {response.status_code}: {response.json()}"
 
 
 # ── CSRF Protection: Safe Methods Bypass ─────────────────────────────────
@@ -191,9 +187,7 @@ async def test_csrf_header_not_required_on_options(
     )
     # OPTIONS is used for CORS preflight and should never be CSRF-blocked.
     # Assert explicitly: not a 403 CSRF rejection.
-    assert response.status_code != 403 or (
-        response.json().get("detail", {}).get("code") != "CSRF_HEADER_MISSING"
-    )
+    assert response.status_code != 403 or (response.json().get("detail", {}).get("code") != "CSRF_HEADER_MISSING")
 
 
 # ── Locked User Tests ────────────────────────────────────────────────────
@@ -287,9 +281,7 @@ async def test_password_change_invalidates_all_sessions(
     await db_session.commit()
 
     # Verify sessions exist
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     sessions_before = result.scalars().all()
     assert len(sessions_before) == 3
 
@@ -307,9 +299,7 @@ async def test_password_change_invalidates_all_sessions(
     assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.json()}"
 
     # Verify all sessions are deleted
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     sessions_after = result.scalars().all()
     assert len(sessions_after) == 0
 
@@ -339,9 +329,7 @@ async def test_password_reset_invalidates_all_sessions(
     await db_session.commit()
 
     # Verify sessions exist
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == test_user.id))
     sessions_before = result.scalars().all()
     assert len(sessions_before) == 2
 
@@ -366,8 +354,6 @@ async def test_password_reset_invalidates_all_sessions(
     assert response.status_code == 200
 
     # Verify all sessions are deleted
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == test_user.id))
     sessions_after = result.scalars().all()
     assert len(sessions_after) == 0

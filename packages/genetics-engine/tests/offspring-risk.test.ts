@@ -13,11 +13,7 @@
 import { describe, it, expect } from 'vitest';
 
 // Import directly from offspring-risk (the new module)
-import {
-  calculateARRisk,
-  calculateADRisk,
-  calculateXLinkedRisk,
-} from '../src/offspring-risk';
+import { calculateARRisk, calculateADRisk, calculateXLinkedRisk } from '../src/offspring-risk';
 
 // Import the same names from combiner (backward-compat re-exports)
 import {
@@ -90,9 +86,7 @@ describe('offspring-risk module — calculateADRisk', () => {
   });
 
   it('carrier is treated as affected in AD', () => {
-    expect(calculateADRisk('carrier', 'normal')).toEqual(
-      calculateADRisk('affected', 'normal'),
-    );
+    expect(calculateADRisk('carrier', 'normal')).toEqual(calculateADRisk('affected', 'normal'));
   });
 
   it('carrier column is always 0 for AD', () => {

@@ -11,13 +11,13 @@ JWT signing secret safely.
 
 ### Environment Variables
 
-| Variable | Purpose | Default |
-|---|---|---|
-| `JWT_SECRET` | Current signing key for new tokens | *(required)* |
-| `JWT_KEY_ID` | Key ID (`kid`) embedded in JWT headers | `v1` |
-| `JWT_SECRET_PREVIOUS` | Previous signing key, accepted during rotation | `""` (empty) |
-| `JWT_KEY_ID_PREVIOUS` | Key ID of the previous key | `""` (empty) |
-| `SECRET_ROTATION_MAX_AGE_DAYS` | Alert threshold for key age | `90` |
+| Variable                       | Purpose                                        | Default      |
+| ------------------------------ | ---------------------------------------------- | ------------ |
+| `JWT_SECRET`                   | Current signing key for new tokens             | _(required)_ |
+| `JWT_KEY_ID`                   | Key ID (`kid`) embedded in JWT headers         | `v1`         |
+| `JWT_SECRET_PREVIOUS`          | Previous signing key, accepted during rotation | `""` (empty) |
+| `JWT_KEY_ID_PREVIOUS`          | Key ID of the previous key                     | `""` (empty) |
+| `SECRET_ROTATION_MAX_AGE_DAYS` | Alert threshold for key age                    | `90`         |
 
 ### How It Works
 
@@ -85,6 +85,7 @@ invalidated, forcing all users to re-authenticate.
 ### Step 3: Deploy
 
 Deploy the updated environment variables. The application will:
+
 - Sign all **new** tokens with the new `JWT_SECRET` and `JWT_KEY_ID`.
 - Accept tokens signed with either the new or previous secret during verification.
 - Legacy tokens (without `kid` headers) will be tried against both secrets.
@@ -94,6 +95,7 @@ Deploy the updated environment variables. The application will:
 After deployment, verify the rotation is working:
 
 1. **New tokens use the new key**:
+
    ```python
    from jose import jwt
    # Decode a newly issued token's header (without verification)
@@ -194,12 +196,12 @@ if is_key_rotation_recommended(key_deployed_at):
 
 ### Recommended Alerts
 
-| Alert | Condition | Severity |
-|---|---|---|
-| Key rotation recommended | Key age >= `SECRET_ROTATION_MAX_AGE_DAYS` | Warning |
-| Rotation window open too long | `JWT_SECRET_PREVIOUS` set for > 14 days | Warning |
-| Unknown kid rejection spike | Elevated rate of `JWTError: unknown key ID` | Critical |
-| Emergency rotation triggered | `JWT_KEY_ID` contains "emergency" | Critical |
+| Alert                         | Condition                                   | Severity |
+| ----------------------------- | ------------------------------------------- | -------- |
+| Key rotation recommended      | Key age >= `SECRET_ROTATION_MAX_AGE_DAYS`   | Warning  |
+| Rotation window open too long | `JWT_SECRET_PREVIOUS` set for > 14 days     | Warning  |
+| Unknown kid rejection spike   | Elevated rate of `JWTError: unknown key ID` | Critical |
+| Emergency rotation triggered  | `JWT_KEY_ID` contains "emergency"           | Critical |
 
 ## Important Notes
 

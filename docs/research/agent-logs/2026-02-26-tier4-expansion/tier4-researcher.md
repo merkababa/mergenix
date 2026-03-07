@@ -13,23 +13,23 @@
 
 ## Category Breakdown
 
-| Category | Missing rsIDs |
-|----------|--------------|
-| Physical Appearance | 3 |
-| Behavioral/Personality | 5 |
-| Athletic/Fitness | 4 |
-| Nutrition/Metabolism | 1 |
-| Sensory/Perception/Immune | 5 |
-| Reproductive/Hormonal | 6 |
-| Unusual/Quirky/Fun | 5 |
-| Skin/Aging/Longevity | 8 |
-| Pharmacogenomic | 2 |
-| Cardiovascular/Metabolic | 4 |
-| Neurological/Brain | 8 |
-| Cancer Risk | 2 |
-| Musculoskeletal/Bone | 10 |
-| Eye/Vision/Dental | 8 |
-| TOTAL | 64 |
+| Category                  | Missing rsIDs |
+| ------------------------- | ------------- |
+| Physical Appearance       | 3             |
+| Behavioral/Personality    | 5             |
+| Athletic/Fitness          | 4             |
+| Nutrition/Metabolism      | 1             |
+| Sensory/Perception/Immune | 5             |
+| Reproductive/Hormonal     | 6             |
+| Unusual/Quirky/Fun        | 5             |
+| Skin/Aging/Longevity      | 8             |
+| Pharmacogenomic           | 2             |
+| Cardiovascular/Metabolic  | 4             |
+| Neurological/Brain        | 8             |
+| Cancer Risk               | 2             |
+| Musculoskeletal/Bone      | 10            |
+| Eye/Vision/Dental         | 8             |
+| TOTAL                     | 64            |
 
 ## Pleiotropic rsIDs (9)
 

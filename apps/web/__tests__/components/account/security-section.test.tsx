@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockInputFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('Shield', 'Key', 'Smartphone', 'Loader2'));
@@ -52,13 +58,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 import { SecuritySection } from '../../../app/(app)/account/_components/security-section';
@@ -176,6 +179,8 @@ describe('SecuritySection', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
     });
 
-    expect(screen.queryByText('Enter your authenticator code to disable 2FA:')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Enter your authenticator code to disable 2FA:'),
+    ).not.toBeInTheDocument();
   });
 });

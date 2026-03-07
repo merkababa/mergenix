@@ -1,16 +1,16 @@
-import { Suspense } from "react";
-import type { Metadata } from "next";
-import { CallbackContent } from "./_components/callback-content";
+import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import { CallbackContent } from './_components/callback-content';
 
 export const metadata: Metadata = {
-  title: "Signing In... | Mergenix",
-  description: "Completing your Mergenix sign-in.",
+  title: 'Signing In... | Mergenix',
+  description: 'Completing your Mergenix sign-in.',
 };
 
 function AuthSkeleton() {
   return (
     <div className="mx-auto w-full max-w-md animate-pulse">
-      <div className="h-[280px] rounded-glass bg-(--bg-elevated)" />
+      <div className="rounded-glass bg-(--bg-elevated) h-[280px]" />
     </div>
   );
 }

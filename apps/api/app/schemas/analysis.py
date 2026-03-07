@@ -19,26 +19,30 @@ from app.schemas.encryption import EncryptedEnvelope
 # ── Requests ──────────────────────────────────────────────────────────────
 
 
-_SUMMARY_ALLOWED_KEYS: frozenset[str] = frozenset({
-    "trait_count",
-    "carrier_count",
-    "condition_count",
-    "pgx_count",
-    "risk_count",
-    "prs_count",
-    "has_results",
-    "total_variants_analyzed",
-})
+_SUMMARY_ALLOWED_KEYS: frozenset[str] = frozenset(
+    {
+        "trait_count",
+        "carrier_count",
+        "condition_count",
+        "pgx_count",
+        "risk_count",
+        "prs_count",
+        "has_results",
+        "total_variants_analyzed",
+    }
+)
 
 # Keys that were previously allowed but removed for ZKE privacy compliance.
 # high_risk_count and health_risk_count store unencrypted health-sensitive
 # metadata (specific risk counts) that contradicts the ZKE design — the
 # server should not know how many high-risk conditions a user has.
 # Replaced with the non-sensitive boolean ``has_results``.
-_SUMMARY_REMOVED_KEYS: frozenset[str] = frozenset({
-    "high_risk_count",
-    "health_risk_count",
-})
+_SUMMARY_REMOVED_KEYS: frozenset[str] = frozenset(
+    {
+        "high_risk_count",
+        "health_risk_count",
+    }
+)
 
 _SUMMARY_MAX_ENTRIES = 20
 
@@ -67,8 +71,7 @@ class SaveAnalysisRequest(BaseModel):
     result_data: EncryptedEnvelope = Field(
         ...,
         description=(
-            "Client-encrypted analysis result envelope. "
-            "The server stores this opaque blob as-is, never decrypting it."
+            "Client-encrypted analysis result envelope. The server stores this opaque blob as-is, never decrypting it."
         ),
     )
     summary: dict[str, Any] = Field(
@@ -82,10 +85,7 @@ class SaveAnalysisRequest(BaseModel):
     )
     consent_given: bool = Field(
         ...,
-        description=(
-            "User must explicitly consent to storing their genetic analysis data. "
-            "Must be True to proceed."
-        ),
+        description=("User must explicitly consent to storing their genetic analysis data. Must be True to proceed."),
     )
     password_reset_warning_acknowledged: bool = Field(
         ...,
@@ -118,10 +118,7 @@ class SaveAnalysisRequest(BaseModel):
     def consent_must_be_true(cls, v: bool) -> bool:
         """Reject requests where consent is not explicitly given."""
         if not v:
-            raise ValueError(
-                "Consent is required to save genetic analysis data. "
-                "Set consent_given to true."
-            )
+            raise ValueError("Consent is required to save genetic analysis data. Set consent_given to true.")
         return v
 
     @field_validator("password_reset_warning_acknowledged")
@@ -157,9 +154,7 @@ class SaveAnalysisRequest(BaseModel):
         genetic data that bypasses the at-rest encryption of result_data.
         """
         if len(v) > _SUMMARY_MAX_ENTRIES:
-            raise ValueError(
-                f"Summary dict exceeds maximum of {_SUMMARY_MAX_ENTRIES} entries"
-            )
+            raise ValueError(f"Summary dict exceeds maximum of {_SUMMARY_MAX_ENTRIES} entries")
         for key in v:
             if key in _SUMMARY_REMOVED_KEYS:
                 raise ValueError(
@@ -167,10 +162,7 @@ class SaveAnalysisRequest(BaseModel):
                     f"compliance. Use 'has_results' (bool) instead."
                 )
             if key not in _SUMMARY_ALLOWED_KEYS:
-                raise ValueError(
-                    f"Summary key '{key}' is not allowed. "
-                    f"Allowed: {sorted(_SUMMARY_ALLOWED_KEYS)}"
-                )
+                raise ValueError(f"Summary key '{key}' is not allowed. Allowed: {sorted(_SUMMARY_ALLOWED_KEYS)}")
             if not isinstance(v[key], (int, float, str, type(None))):
                 raise ValueError(
                     f"Summary value for '{key}' must be a simple type "
@@ -200,6 +192,7 @@ class AnalysisListItem(BaseModel):
         ``health_risk_count`` have been removed to comply with ZKE
         design — the server should not store unencrypted health risk data.
     """
+
     # TODO(Phase 2): Evaluate if summary stats should be encrypted or
     # replaced with generic labels (e.g., "results available") to further
     # minimize plaintext metadata exposure. Decision: keep summaries

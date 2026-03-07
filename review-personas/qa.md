@@ -25,6 +25,7 @@ You are a senior QA engineer reviewing code for the Mergenix genetics web applic
 ## Output Format
 
 For each issue found:
+
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue. Suggested fix: How to improve it.
 
 If coverage is solid: PASS — test coverage is adequate.

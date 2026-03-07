@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
-import { m } from "motion/react";
-import { cn } from "@/lib/utils";
+import { memo } from 'react';
+import { m } from 'motion/react';
+import { cn } from '@/lib/utils';
 
 interface PrsGaugeProps {
   percentile: number;
@@ -12,21 +12,60 @@ interface PrsGaugeProps {
   className?: string;
 }
 
-function getRiskInfo(percentile: number): { color: string; label: string; glowColor: string; patternClass: string } {
+function getRiskInfo(percentile: number): {
+  color: string;
+  label: string;
+  glowColor: string;
+  patternClass: string;
+} {
   if (percentile < 20)
-    return { color: "#06d6a0", label: "Low", glowColor: "rgba(6, 214, 160, 0.4)", patternClass: "risk-pattern-low" };
+    return {
+      color: '#06d6a0',
+      label: 'Low',
+      glowColor: 'rgba(6, 214, 160, 0.4)',
+      patternClass: 'risk-pattern-low',
+    };
   if (percentile < 40)
-    return { color: "#14b8a6", label: "Below Average", glowColor: "rgba(20, 184, 166, 0.4)", patternClass: "risk-pattern-below-avg" };
+    return {
+      color: '#14b8a6',
+      label: 'Below Average',
+      glowColor: 'rgba(20, 184, 166, 0.4)',
+      patternClass: 'risk-pattern-below-avg',
+    };
   if (percentile < 60)
-    return { color: "#06b6d4", label: "Average", glowColor: "rgba(6, 182, 212, 0.4)", patternClass: "risk-pattern-average" };
+    return {
+      color: '#06b6d4',
+      label: 'Average',
+      glowColor: 'rgba(6, 182, 212, 0.4)',
+      patternClass: 'risk-pattern-average',
+    };
   if (percentile < 80)
-    return { color: "#f59e0b", label: "Above Average", glowColor: "rgba(245, 158, 11, 0.4)", patternClass: "risk-pattern-above-avg" };
+    return {
+      color: '#f59e0b',
+      label: 'Above Average',
+      glowColor: 'rgba(245, 158, 11, 0.4)',
+      patternClass: 'risk-pattern-above-avg',
+    };
   if (percentile < 95)
-    return { color: "#f97316", label: "Elevated", glowColor: "rgba(249, 115, 22, 0.4)", patternClass: "risk-pattern-elevated" };
-  return { color: "#f43f5e", label: "High", glowColor: "rgba(244, 63, 94, 0.4)", patternClass: "risk-pattern-high" };
+    return {
+      color: '#f97316',
+      label: 'Elevated',
+      glowColor: 'rgba(249, 115, 22, 0.4)',
+      patternClass: 'risk-pattern-elevated',
+    };
+  return {
+    color: '#f43f5e',
+    label: 'High',
+    glowColor: 'rgba(244, 63, 94, 0.4)',
+    patternClass: 'risk-pattern-high',
+  };
 }
 
-export const PrsGauge = memo(function PrsGauge({ percentile, condition, className }: PrsGaugeProps) {
+export const PrsGauge = memo(function PrsGauge({
+  percentile,
+  condition,
+  className,
+}: PrsGaugeProps) {
   const clamped = Math.min(Math.max(percentile, 0), 100);
   const { color, label, patternClass } = getRiskInfo(clamped);
 
@@ -43,12 +82,12 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
   // Needle angle: -180 (left) to 0 (right), with 0% = -180 and 100% = 0
   const needleAngle = -180 + (clamped / 100) * 180;
 
-  const safeId = condition.replace(/[^a-zA-Z0-9]/g, "-");
+  const safeId = condition.replace(/[^a-zA-Z0-9]/g, '-');
   const valueText = `PRS score: ${Math.round(clamped)} (${Math.round(clamped)}th percentile, ${label} risk level)`;
 
   return (
     <div
-      className={cn("text-center", className)}
+      className={cn('text-center', className)}
       role="meter"
       aria-valuenow={clamped}
       aria-valuemin={0}
@@ -98,14 +137,14 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
             strokeDasharray={dashArray}
             initial={{ strokeDasharray: `0 ${circumference}` }}
             animate={{ strokeDasharray: dashArray }}
-            transition={{ duration: 1.2, ease: "easeOut" as const }}
+            transition={{ duration: 1.2, ease: 'easeOut' as const }}
           />
 
           {/* Needle */}
           <m.g
             initial={{ rotate: -180 }}
             animate={{ rotate: needleAngle }}
-            transition={{ duration: 1.2, ease: "easeOut" as const, delay: 0.2 }}
+            transition={{ duration: 1.2, ease: 'easeOut' as const, delay: 0.2 }}
             style={{ transformOrigin: `${cx}px ${cy}px` }}
           >
             <line
@@ -121,13 +160,13 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
           </m.g>
 
           {/* Scale labels */}
-          <text x="16" y="115" className="fill-(--text-dim) text-[9px] font-body">
+          <text x="16" y="115" className="fill-(--text-dim) font-body text-[9px]">
             Low
           </text>
-          <text x="85" y="22" className="fill-(--text-dim) text-[9px] font-body">
+          <text x="85" y="22" className="fill-(--text-dim) font-body text-[9px]">
             Avg
           </text>
-          <text x="170" y="115" className="fill-(--text-dim) text-[9px] font-body">
+          <text x="170" y="115" className="fill-(--text-dim) font-body text-[9px]">
             High
           </text>
         </svg>
@@ -140,23 +179,18 @@ export const PrsGauge = memo(function PrsGauge({ percentile, condition, classNam
             transition={{ delay: 0.8, duration: 0.3 }}
             className="text-center"
           >
-            <span
-              className="font-heading text-2xl font-extrabold"
-              style={{ color }}
-            >
+            <span className="font-heading text-2xl font-extrabold" style={{ color }}>
               {Math.round(clamped)}
             </span>
-            <span className="ml-0.5 text-xs text-(--text-dim)">th</span>
+            <span className="text-(--text-dim) ml-0.5 text-xs">th</span>
           </m.div>
         </div>
       </div>
 
       {/* Condition label */}
-      <p className="mt-2 font-heading text-sm font-semibold text-(--text-heading)">
-        {condition}
-      </p>
+      <p className="font-heading text-(--text-heading) mt-2 text-sm font-semibold">{condition}</p>
       {/* Risk level with text label and high-contrast pattern marker */}
-      <p className={cn("text-xs font-medium", patternClass)} style={{ color }}>
+      <p className={cn('text-xs font-medium', patternClass)} style={{ color }}>
         {label} Risk
       </p>
     </div>

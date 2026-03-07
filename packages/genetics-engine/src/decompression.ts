@@ -106,10 +106,7 @@ const ZIP_METHOD_STORED = 0;
  * @param header - First bytes of the file (at least 2 bytes needed)
  * @returns Detected compression format
  */
-export function detectCompression(
-  fileName: string,
-  header: Uint8Array,
-): CompressionFormat {
+export function detectCompression(fileName: string, header: Uint8Array): CompressionFormat {
   // Check magic bytes first (most reliable)
   if (header.length >= 2) {
     if (header[0] === ZIP_MAGIC_0 && header[1] === ZIP_MAGIC_1) {
@@ -146,11 +143,12 @@ function readUint16LE(data: Uint8Array, offset: number): number {
  */
 function readUint32LE(data: Uint8Array, offset: number): number {
   return (
-    (data[offset] ?? 0) |
-    ((data[offset + 1] ?? 0) << 8) |
-    ((data[offset + 2] ?? 0) << 16) |
-    ((data[offset + 3] ?? 0) << 24)
-  ) >>> 0; // >>> 0 ensures unsigned
+    ((data[offset] ?? 0) |
+      ((data[offset + 1] ?? 0) << 8) |
+      ((data[offset + 2] ?? 0) << 16) |
+      ((data[offset + 3] ?? 0) << 24)) >>>
+    0
+  ); // >>> 0 ensures unsigned
 }
 
 /**
@@ -175,9 +173,11 @@ function isGeneticDataFile(name: string): boolean {
  * @returns ReadableStream of the decompressed file content, plus its uncompressed size
  * @throws DecompressionError if no suitable file found or format issues
  */
-function extractFirstGeneticFileFromZip(
-  data: Uint8Array,
-): { stream: ReadableStream<Uint8Array>; uncompressedSize: number; fileName: string } {
+function extractFirstGeneticFileFromZip(data: Uint8Array): {
+  stream: ReadableStream<Uint8Array>;
+  uncompressedSize: number;
+  fileName: string;
+} {
   let offset = 0;
 
   while (offset + ZIP_LOCAL_HEADER_SIZE <= data.length) {
@@ -232,7 +232,10 @@ function extractFirstGeneticFileFromZip(
         // Type assertion needed: DecompressionStream writable accepts BufferSource,
         // but pipeThrough expects exact Uint8Array match. Safe at runtime.
         const decompressed = sourceStream.pipeThrough(
-          new DecompressionStream('deflate-raw') as unknown as TransformStream<Uint8Array, Uint8Array>,
+          new DecompressionStream('deflate-raw') as unknown as TransformStream<
+            Uint8Array,
+            Uint8Array
+          >,
         );
         return { stream: decompressed, uncompressedSize, fileName };
       }
@@ -338,15 +341,18 @@ export async function decompress(
   const fullBuffer = await file.arrayBuffer();
   const fullData = new Uint8Array(fullBuffer);
 
-  const { stream: extractedStream, uncompressedSize, fileName: _innerName } =
-    extractFirstGeneticFileFromZip(fullData);
+  const {
+    stream: extractedStream,
+    uncompressedSize,
+    fileName: _innerName,
+  } = extractFirstGeneticFileFromZip(fullData);
 
   // Check declared uncompressed size against limits
   if (uncompressedSize > options.maxSize) {
     throw new DecompressionError(
       'SIZE_EXCEEDED',
       `ZIP entry declares uncompressed size ${String(uncompressedSize)} bytes, ` +
-      `which exceeds the maximum allowed ${String(options.maxSize)} bytes.`,
+        `which exceeds the maximum allowed ${String(options.maxSize)} bytes.`,
     );
   }
 
@@ -354,17 +360,12 @@ export async function decompress(
     throw new DecompressionError(
       'RATIO_EXCEEDED',
       `ZIP entry compression ratio (${String(Math.round(uncompressedSize / originalSize))}:1) ` +
-      `exceeds the maximum allowed ${String(options.maxRatio)}:1.`,
+        `exceeds the maximum allowed ${String(options.maxRatio)}:1.`,
     );
   }
 
   // Wrap in a monitoring transform
-  const monitoredStream = createMonitoredStream(
-    extractedStream,
-    originalSize,
-    options,
-    onProgress,
-  );
+  const monitoredStream = createMonitoredStream(extractedStream, originalSize, options, onProgress);
 
   return {
     format: 'zip',
@@ -405,7 +406,7 @@ function createMonitoredStream(
           new DecompressionError(
             'SIZE_EXCEEDED',
             `Decompressed size (${String(totalBytesOut)} bytes) exceeds maximum ` +
-            `allowed (${String(options.maxSize)} bytes).`,
+              `allowed (${String(options.maxSize)} bytes).`,
           ),
         );
         return;
@@ -419,7 +420,7 @@ function createMonitoredStream(
             new DecompressionError(
               'RATIO_EXCEEDED',
               `Compression ratio (${String(Math.round(ratio))}:1) exceeds maximum ` +
-              `allowed (${String(options.maxRatio)}:1).`,
+                `allowed (${String(options.maxRatio)}:1).`,
             ),
           );
           return;

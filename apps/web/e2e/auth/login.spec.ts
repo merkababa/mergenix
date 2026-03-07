@@ -19,7 +19,6 @@ import {
   mockTokenResponse,
 } from '../utils/mock-api.utils';
 
-
 // ── P0: Critical Login Tests ─────────────────────────────────────────────
 
 test.describe('Login — P0 Critical', () => {
@@ -100,12 +99,8 @@ test.describe('Login — P0 Critical', () => {
     await loginPage.submit();
 
     // Should show the 2FA input step
-    await expect(
-      page.getByLabel(/verification code/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/enter the code from your authenticator/i),
-    ).toBeVisible();
+    await expect(page.getByLabel(/verification code/i)).toBeVisible();
+    await expect(page.getByText(/enter the code from your authenticator/i)).toBeVisible();
   });
 
   test('4. Valid 2FA code completes login successfully', async ({ page }) => {
@@ -299,8 +294,7 @@ test.describe('Login — P1 Important', () => {
         body: JSON.stringify(mockTokenResponse()),
         headers: {
           'Content-Type': 'application/json',
-          'Set-Cookie':
-            'mergenix_refresh=mock-refresh-token; Path=/; HttpOnly; SameSite=Strict',
+          'Set-Cookie': 'mergenix_refresh=mock-refresh-token; Path=/; HttpOnly; SameSite=Strict',
         },
       });
     });

@@ -35,12 +35,8 @@ test.describe('Age Verification', () => {
     await expect(modal).toBeVisible();
 
     // Verify the modal contains expected content
-    await expect(
-      modal.getByText(/Age Verification Required/i),
-    ).toBeVisible();
-    await expect(
-      modal.getByText(/You must be at least 18 years old/i),
-    ).toBeVisible();
+    await expect(modal.getByText(/Age Verification Required/i)).toBeVisible();
+    await expect(modal.getByText(/You must be at least 18 years old/i)).toBeVisible();
 
     // Verify the confirmation checkbox is present
     const checkbox = modal.getByRole('checkbox', {
@@ -55,9 +51,7 @@ test.describe('Age Verification', () => {
     await expect(continueButton).toBeDisabled();
 
     // Verify the "I am under 18" link is present
-    await expect(
-      modal.getByRole('button', { name: /I am under 18/i }),
-    ).toBeVisible();
+    await expect(modal.getByRole('button', { name: /I am under 18/i })).toBeVisible();
   });
 
   // ── Scenario 2 (P0): Users under 18 are blocked from registering ──
@@ -82,10 +76,7 @@ test.describe('Age Verification', () => {
     expect(new URL(page.url()).pathname).toBe('/');
 
     // Verify the under-18 flag is stored in localStorage
-    const under18Value = await page.evaluate(
-      (key) => localStorage.getItem(key),
-      UNDER_18_KEY,
-    );
+    const under18Value = await page.evaluate((key) => localStorage.getItem(key), UNDER_18_KEY);
     expect(under18Value).toBeTruthy();
     // The value should be a timestamp
     expect(Number(under18Value)).toBeGreaterThan(0);
@@ -129,10 +120,7 @@ test.describe('Age Verification', () => {
     expect(new URL(page.url()).pathname).toBe('/register');
 
     // Verify the age_verified flag is set in localStorage
-    const ageVerified = await page.evaluate(
-      (key) => localStorage.getItem(key),
-      AGE_VERIFIED_KEY,
-    );
+    const ageVerified = await page.evaluate((key) => localStorage.getItem(key), AGE_VERIFIED_KEY);
     expect(ageVerified).toBe('true');
   });
 
@@ -166,9 +154,7 @@ test.describe('Age Verification', () => {
 
     // Wait for page to settle, then verify the modal does NOT reappear
     await page.waitForLoadState('domcontentloaded');
-    await expect(
-      page.getByRole('dialog', { name: /Age Verification Required/i }),
-    ).toBeHidden();
+    await expect(page.getByRole('dialog', { name: /Age Verification Required/i })).toBeHidden();
 
     // Verify localStorage still has the flag
     const ageVerifiedAfter = await page.evaluate(
@@ -183,8 +169,6 @@ test.describe('Age Verification', () => {
 
     // Wait for page to settle, then verify the modal still does not appear
     await page.waitForLoadState('domcontentloaded');
-    await expect(
-      page.getByRole('dialog', { name: /Age Verification Required/i }),
-    ).toBeHidden();
+    await expect(page.getByRole('dialog', { name: /Age Verification Required/i })).toBeHidden();
   });
 });

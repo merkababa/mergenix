@@ -8,19 +8,19 @@
 
 ## Raw Capability Comparison
 
-| Metric | Claude Opus 4.6 | Claude Sonnet 4.5 | Gemini 3 Pro Preview |
-|---|---|---|---|
-| Context window | 200K | 200K | **1M (5x)** |
-| Max output | ~32K | ~32K | **64K (2x)** |
-| Speed (tok/s) | ~50 | ~75 | **~130-156 (2x)** |
-| Input cost / 1M tokens | $15.00 | $3.00 | **$2.00** |
-| Output cost / 1M tokens | $75.00 | $15.00 | **$12.00** |
-| SWE-bench Verified | -- | **77.2%** | 76.2% |
-| GPQA Diamond (science) | ~85% | ~80% | **91.9%** |
-| AIME 2025 (math) | ~85% | ~80% | **95%** |
-| Hallucination risk | Low | Low | **Higher** (esp. multi-turn) |
-| Instruction adherence | Excellent | Excellent | Good (tends to "overreach") |
-| Multimodal | Text + images | Text + images | **Text + images + audio + video** |
+| Metric                  | Claude Opus 4.6 | Claude Sonnet 4.5 | Gemini 3 Pro Preview              |
+| ----------------------- | --------------- | ----------------- | --------------------------------- |
+| Context window          | 200K            | 200K              | **1M (5x)**                       |
+| Max output              | ~32K            | ~32K              | **64K (2x)**                      |
+| Speed (tok/s)           | ~50             | ~75               | **~130-156 (2x)**                 |
+| Input cost / 1M tokens  | $15.00          | $3.00             | **$2.00**                         |
+| Output cost / 1M tokens | $75.00          | $15.00            | **$12.00**                        |
+| SWE-bench Verified      | --              | **77.2%**         | 76.2%                             |
+| GPQA Diamond (science)  | ~85%            | ~80%              | **91.9%**                         |
+| AIME 2025 (math)        | ~85%            | ~80%              | **95%**                           |
+| Hallucination risk      | Low             | Low               | **Higher** (esp. multi-turn)      |
+| Instruction adherence   | Excellent       | Excellent         | Good (tends to "overreach")       |
+| Multimodal              | Text + images   | Text + images     | **Text + images + audio + video** |
 
 ---
 
@@ -54,61 +54,61 @@
 
 ### Grading Scale
 
-| Grade | Meaning |
-|---|---|
-| **A+** | Gemini clearly better -- delegate always |
-| **A** | Gemini better -- delegate when possible |
-| **B+** | Gemini comparable -- delegate to save tokens |
-| **B** | Both similar -- delegate for cost savings only |
-| **C** | Claude meaningfully better -- only delegate if token-starved |
-| **D** | Claude much better -- avoid delegating |
+| Grade  | Meaning                                                      |
+| ------ | ------------------------------------------------------------ |
+| **A+** | Gemini clearly better -- delegate always                     |
+| **A**  | Gemini better -- delegate when possible                      |
+| **B+** | Gemini comparable -- delegate to save tokens                 |
+| **B**  | Both similar -- delegate for cost savings only               |
+| **C**  | Claude meaningfully better -- only delegate if token-starved |
+| **D**  | Claude much better -- avoid delegating                       |
 
 ---
 
 ### A-Tier: Delegate to Gemini
 
-| Task | Grade | Why | Mergenix Example | Key Rules |
-|---|---|---|---|---|
-| Full-codebase analysis | **A+** | 1M context fits ALL .py + JSON in one shot | "Review entire codebase for inconsistencies" | 1, 5, 7 |
-| Large JSON data validation | **A+** | carrier_panel.json (2,715 entries) + trait_snps.json in one prompt | "Verify all diseases have valid OMIM IDs" | 1, 4, 5, 7 |
-| Bulk data research | **A+** | Faster, cheaper, can process entire datasets | "Cross-reference carrier panel against ClinVar naming" | 1, 2, 4, 5 |
-| PR summaries / quick code review | **A** | Gemini Code Assist has dedicated PR integration; sees entire codebase | "Summarize PR changes and flag issues" | 1, 3, 5 |
-| CSS / visual theming | **A** | #1 on WebDev Arena; strong at mockup-to-CSS | "Design glassmorphism card variants" | 1, 3, 6 |
-| UI prototyping | **A** | Praised for "vibe coding" and full-project scaffolding | "Prototype a user onboarding flow" | 1, 3, 6 |
-| Scientific accuracy checking | **A** | 91.9% GPQA Diamond (surpasses human experts) | "Are Punnett square calcs genetically sound?" | 1, 2, 4, 7 |
-| Screenshot / visual review | **A** | Native multimodal vision, battle-tested | "What's wrong with this page layout?" | 1, 5, 7 |
-| Planning perspective gathering | **A** | 11 personas in parallel, each gets full context; Claude synthesizes | "Analyze Phase 8C from security perspective" | 1, 3, 5, 7 |
+| Task                             | Grade  | Why                                                                   | Mergenix Example                                       | Key Rules  |
+| -------------------------------- | ------ | --------------------------------------------------------------------- | ------------------------------------------------------ | ---------- |
+| Full-codebase analysis           | **A+** | 1M context fits ALL .py + JSON in one shot                            | "Review entire codebase for inconsistencies"           | 1, 5, 7    |
+| Large JSON data validation       | **A+** | carrier_panel.json (2,715 entries) + trait_snps.json in one prompt    | "Verify all diseases have valid OMIM IDs"              | 1, 4, 5, 7 |
+| Bulk data research               | **A+** | Faster, cheaper, can process entire datasets                          | "Cross-reference carrier panel against ClinVar naming" | 1, 2, 4, 5 |
+| PR summaries / quick code review | **A**  | Gemini Code Assist has dedicated PR integration; sees entire codebase | "Summarize PR changes and flag issues"                 | 1, 3, 5    |
+| CSS / visual theming             | **A**  | #1 on WebDev Arena; strong at mockup-to-CSS                           | "Design glassmorphism card variants"                   | 1, 3, 6    |
+| UI prototyping                   | **A**  | Praised for "vibe coding" and full-project scaffolding                | "Prototype a user onboarding flow"                     | 1, 3, 6    |
+| Scientific accuracy checking     | **A**  | 91.9% GPQA Diamond (surpasses human experts)                          | "Are Punnett square calcs genetically sound?"          | 1, 2, 4, 7 |
+| Screenshot / visual review       | **A**  | Native multimodal vision, battle-tested                               | "What's wrong with this page layout?"                  | 1, 5, 7    |
+| Planning perspective gathering   | **A**  | 11 personas in parallel, each gets full context; Claude synthesizes   | "Analyze Phase 8C from security perspective"           | 1, 3, 5, 7 |
 
 ### B-Tier: Gemini viable, saves tokens
 
-| Task | Grade | Why | Mergenix Example | Key Rules |
-|---|---|---|---|---|
-| Simple feature implementation | **B+** | SWE-bench nearly tied (76.2 vs 77.2%) | "Add a search filter to disease catalog" | 3, 6, 8 |
-| Documentation writing | **B+** | Factual and thorough, less polished prose | "Write docstrings for parser.py" | 3, 5 |
-| Code refactoring (simple) | **B** | Large context sees cross-file patterns | "Rename deprecated params across pages/" | 3, 6, 8 |
-| Test coverage gap analysis | **B** | Can ingest all tests + source to find gaps | "What code paths have no test coverage?" | 1, 5, 7 |
-| CI/CD pipeline work | **B** | Both fine for YAML workflows | "Add deployment workflow to GitHub Actions" | 3 |
+| Task                          | Grade  | Why                                        | Mergenix Example                            | Key Rules |
+| ----------------------------- | ------ | ------------------------------------------ | ------------------------------------------- | --------- |
+| Simple feature implementation | **B+** | SWE-bench nearly tied (76.2 vs 77.2%)      | "Add a search filter to disease catalog"    | 3, 6, 8   |
+| Documentation writing         | **B+** | Factual and thorough, less polished prose  | "Write docstrings for parser.py"            | 3, 5      |
+| Code refactoring (simple)     | **B**  | Large context sees cross-file patterns     | "Rename deprecated params across pages/"    | 3, 6, 8   |
+| Test coverage gap analysis    | **B**  | Can ingest all tests + source to find gaps | "What code paths have no test coverage?"    | 1, 5, 7   |
+| CI/CD pipeline work           | **B**  | Both fine for YAML workflows               | "Add deployment workflow to GitHub Actions" | 3         |
 
 ### C-Tier: Keep on Claude
 
-| Task | Grade | Why | Mergenix Example |
-|---|---|---|---|
-| Complex backend logic | **C+** | Claude writes fewer bugs, cleaner structure | "Handle X-linked recessive inheritance" |
-| Writing pytest tests | **C+** | Claude's test scaffolding is superior | "Write edge case tests for trait_prediction.py" |
-| API integration code | **C** | Gemini hallucinate field names; Claude adds defensive coding | "Integrate ClinVar REST API" |
-| CSS-to-Streamlit integration | **C** | Claude handles Streamlit-specific patterns better | "Wire dark/light mode CSS into Streamlit theming" |
-| Debugging complex issues | **C** | Claude better at systematic root-cause analysis | "VCF parser crashes on multi-allelic sites" |
-| Architecture / planning (final decisions) | **C** | Claude weighs tradeoffs more carefully | "Design payment flow with Stripe webhooks" |
+| Task                                      | Grade  | Why                                                          | Mergenix Example                                  |
+| ----------------------------------------- | ------ | ------------------------------------------------------------ | ------------------------------------------------- |
+| Complex backend logic                     | **C+** | Claude writes fewer bugs, cleaner structure                  | "Handle X-linked recessive inheritance"           |
+| Writing pytest tests                      | **C+** | Claude's test scaffolding is superior                        | "Write edge case tests for trait_prediction.py"   |
+| API integration code                      | **C**  | Gemini hallucinate field names; Claude adds defensive coding | "Integrate ClinVar REST API"                      |
+| CSS-to-Streamlit integration              | **C**  | Claude handles Streamlit-specific patterns better            | "Wire dark/light mode CSS into Streamlit theming" |
+| Debugging complex issues                  | **C**  | Claude better at systematic root-cause analysis              | "VCF parser crashes on multi-allelic sites"       |
+| Architecture / planning (final decisions) | **C**  | Claude weighs tradeoffs more carefully                       | "Design payment flow with Stripe webhooks"        |
 
 ### D-Tier: Never delegate
 
-| Task | Grade | Why | Mergenix Example |
-|---|---|---|---|
-| OAuth / auth code | **D** | Security-sensitive; Gemini not reliable for financial-grade precision | "Implement Google OAuth with sessions" |
-| Payment code (Stripe/PayPal) | **D** | Hallucinated API fields = real money bugs | "Build Stripe checkout with webhooks" |
-| Multi-step agentic workflows | **D** | Claude follows complex instruction chains more reliably | "Branch, implement, test, fix, PR" |
-| Long debugging sessions | **D** | Gemini's context degrades across multi-turn conversations | Extended back-and-forth debugging |
-| Git workflow orchestration | **D** | Claude's CLI tool-use is more battle-tested; strict branch conventions | "Rebase, resolve conflicts, push" |
+| Task                         | Grade | Why                                                                    | Mergenix Example                       |
+| ---------------------------- | ----- | ---------------------------------------------------------------------- | -------------------------------------- |
+| OAuth / auth code            | **D** | Security-sensitive; Gemini not reliable for financial-grade precision  | "Implement Google OAuth with sessions" |
+| Payment code (Stripe/PayPal) | **D** | Hallucinated API fields = real money bugs                              | "Build Stripe checkout with webhooks"  |
+| Multi-step agentic workflows | **D** | Claude follows complex instruction chains more reliably                | "Branch, implement, test, fix, PR"     |
+| Long debugging sessions      | **D** | Gemini's context degrades across multi-turn conversations              | Extended back-and-forth debugging      |
+| Git workflow orchestration   | **D** | Claude's CLI tool-use is more battle-tested; strict branch conventions | "Rebase, resolve conflicts, push"      |
 
 ---
 
@@ -164,9 +164,11 @@ Ask yourself:
 ## Planning with Gemini
 
 ### When to Use
+
 Before every phase, use Gemini to gather perspectives from all 11 planning personas in parallel. This is **A-tier** work: each persona does a single-shot analysis of the phase from their domain. Claude then synthesizes all 11 perspectives into the final plan.
 
 ### Planning Personas
+
 Located in `review-personas/planning-*.md`, invoked via `GEMINI_SYSTEM_MD`:
 | # | Persona | File |
 |---|---------|------|
@@ -182,6 +184,7 @@ Located in `review-personas/planning-*.md`, invoked via `GEMINI_SYSTEM_MD`:
 | 10 | Ethics | `planning-ethics.md` |
 
 ### Planning Prompt Template (MANDATORY)
+
 Every Gemini planning call MUST include this context:
 
 ```
@@ -215,23 +218,26 @@ Every Gemini planning call MUST include this context:
 ```
 
 ### What to Include (per Rule 4: FEED GROUND TRUTH)
-| Context | Source | When to Include |
-|---|---|---|
-| Phase description + goals | User request | Always |
-| Directory tree | `find` output | Always |
-| PROGRESS.md | Full file | Always |
-| Source files the phase touches | Full contents | Always |
-| Related test files | Full contents | QA, Technologist perspectives |
-| Data/config files (JSON) | Full contents | Scientist, Business, Legal perspectives |
-| CLAUDE.md review standards | Relevant sections | Always |
-| Success criteria (checklistable) | User requirements | Always (Rule 7) |
+
+| Context                          | Source            | When to Include                         |
+| -------------------------------- | ----------------- | --------------------------------------- |
+| Phase description + goals        | User request      | Always                                  |
+| Directory tree                   | `find` output     | Always                                  |
+| PROGRESS.md                      | Full file         | Always                                  |
+| Source files the phase touches   | Full contents     | Always                                  |
+| Related test files               | Full contents     | QA, Technologist perspectives           |
+| Data/config files (JSON)         | Full contents     | Scientist, Business, Legal perspectives |
+| CLAUDE.md review standards       | Relevant sections | Always                                  |
+| Success criteria (checklistable) | User requirements | Always (Rule 7)                         |
 
 ### What NOT to Include
+
 - Entire codebase (save that for review stage -- planning needs focused context)
 - Multi-turn conversation (Rule 1: single-shot)
 - Vague asks like "plan this phase" (Rule 7: give checklistable criteria)
 
 ### Execution Flow
+
 1. Conductor prepares the planning prompt with all context above
 2. Fire **all 10 Gemini planning calls simultaneously** (no stagger -- paid API tier has 150+ RPM)
 3. Each returns: requirements checklist, risks, suggested approach, dependencies
@@ -239,7 +245,9 @@ Every Gemini planning call MUST include this context:
 5. User approves the plan before execution begins
 
 ### Upgrade from C to A: What Changed
+
 The delegation guide previously rated "Architecture / planning" as C-tier (keep on Claude). This is still true for **final architectural decisions**. But **perspective gathering** -- asking each domain expert "what requirements and risks do you see?" -- is **A-tier** Gemini work because:
+
 - It's a single-shot analysis (Rule 1)
 - Each persona has a constrained domain (Rule 3)
 - Output format is specified (Rule 5)
@@ -271,6 +279,7 @@ Your long prompt here...
 EOF
 gemini -p "" --model gemini-3-pro-preview < /tmp/gemini-prompt.txt 2>&1
 ```
+
 - Use `run_in_background: true` on Bash tool — responses take 10-30s
 - Always append `2>&1` — CLI prints status to stderr
 - Do NOT use any MCP Gemini tools — they will fail on Windows
@@ -278,7 +287,7 @@ gemini -p "" --model gemini-3-pro-preview < /tmp/gemini-prompt.txt 2>&1
 
 ### Rate Limits
 
-| Auth Method | RPM | RPD | Cost |
-|---|---|---|---|
+| Auth Method                    | RPM  | RPD    | Cost          |
+| ------------------------------ | ---- | ------ | ------------- |
 | API key paid tier (your setup) | 150+ | 1,000+ | Pay-per-token |
-| API key free tier | 10 | 100 | Free |
+| API key free tier              | 10   | 100    | Free          |

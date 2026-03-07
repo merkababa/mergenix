@@ -75,41 +75,46 @@ if genotype in phenotype_map:
 
 However, the actual panel contains:
 
-| Inheritance | Count | % of Panel |
-|---|---|---|
-| autosomal_recessive | 1,477 | 54.4% |
-| autosomal_dominant | 1,057 | 38.9% |
-| X-linked | 181 | 6.7% |
+| Inheritance         | Count | % of Panel |
+| ------------------- | ----- | ---------- |
+| autosomal_recessive | 1,477 | 54.4%      |
+| autosomal_dominant  | 1,057 | 38.9%      |
+| X-linked            | 181   | 6.7%       |
 
 **45.6% of diseases use the WRONG inheritance model.** The `calculate_offspring_risk()` function (line 119) applies AR risk calculations to AD and X-linked conditions, producing scientifically incorrect results.
 
 ### Correct Offspring Risk Tables
 
 #### Autosomal Dominant (AD)
+
 For AD conditions, a single pathogenic allele causes disease. The risk table should be:
 
-| Parent A | Parent B | Affected | Carrier* | Normal |
-|---|---|---|---|---|
-| normal | normal | 0% | 0% | 100% |
-| normal | affected (het) | 50% | 0% | 50% |
-| normal | affected (hom) | 100% | 0% | 0% |
-| affected (het) | affected (het) | 75% | 0% | 25% |
-| affected (het) | affected (hom) | 100% | 0% | 0% |
+| Parent A       | Parent B       | Affected | Carrier\* | Normal |
+| -------------- | -------------- | -------- | --------- | ------ |
+| normal         | normal         | 0%       | 0%        | 100%   |
+| normal         | affected (het) | 50%      | 0%        | 50%    |
+| normal         | affected (hom) | 100%     | 0%        | 0%     |
+| affected (het) | affected (het) | 75%      | 0%        | 25%    |
+| affected (het) | affected (hom) | 100%     | 0%        | 0%     |
 
-*Note: "Carrier" is not a meaningful status for AD conditions -- one copy = affected.
+\*Note: "Carrier" is not a meaningful status for AD conditions -- one copy = affected.
 
 #### X-Linked Recessive
+
 X-linked conditions require **sex-aware** risk calculation:
 
 **If mother is carrier (Xx) and father is normal (XY):**
+
 - Daughters: 50% carrier, 50% normal
 - Sons: 50% affected, 50% normal
 
 **If mother is carrier (Xx) and father is affected (xY):**
+
 - Daughters: 50% carrier, 50% affected
 - Sons: 50% affected, 50% normal
 
 **If mother is affected (xx) and father is normal (XY):**
+
 - Daughters: 100% carrier
 - Sons: 100% affected
 
@@ -191,11 +196,11 @@ Add a `penetrance` field to `carrier_panel.json`:
 
 ```json
 {
-    "penetrance": {
-        "value": 0.85,
-        "type": "age_dependent",
-        "notes": "85% by age 70"
-    }
+  "penetrance": {
+    "value": 0.85,
+    "type": "age_dependent",
+    "notes": "85% by age 70"
+  }
 }
 ```
 
@@ -226,13 +231,13 @@ The system only models single-SNP (monogenic) conditions. Complex diseases like 
 
 ### Feasibility Assessment
 
-| Factor | Assessment |
-|---|---|
-| Data availability | Consumer DTC files have ~600K-900K SNPs, enough for basic PRS |
-| Scientific validity | Moderate for European ancestry, poor for other populations |
-| Regulatory risk | HIGH -- FDA is actively developing DTC-PRS framework |
-| Implementation complexity | HIGH -- requires genome-wide scoring, reference panels |
-| Liability | HIGH -- users may make medical decisions based on PRS |
+| Factor                    | Assessment                                                    |
+| ------------------------- | ------------------------------------------------------------- |
+| Data availability         | Consumer DTC files have ~600K-900K SNPs, enough for basic PRS |
+| Scientific validity       | Moderate for European ancestry, poor for other populations    |
+| Regulatory risk           | HIGH -- FDA is actively developing DTC-PRS framework          |
+| Implementation complexity | HIGH -- requires genome-wide scoring, reference panels        |
+| Liability                 | HIGH -- users may make medical decisions based on PRS         |
 
 ### Recommendation
 
@@ -257,34 +262,36 @@ The panel includes 158 pharmacogenomics entries across 43 genes. This is actuall
 
 CPIC has 28 active guidelines covering 34 genes and 164 drugs. Our panel covers the following CPIC-critical genes:
 
-| Gene | In Panel | CPIC Level A Drug Examples |
-|---|---|---|
-| CYP2D6 | Yes | codeine, tramadol, tamoxifen, atomoxetine |
-| CYP2C19 | Yes | clopidogrel, voriconazole, escitalopram |
-| CYP2C9 | Yes | warfarin, phenytoin |
-| VKORC1 | Yes | warfarin |
-| CYP3A5 | Yes | tacrolimus |
-| DPYD | Yes | fluoropyrimidines (5-FU, capecitabine) |
-| TPMT | Yes | thiopurines (azathioprine, mercaptopurine) |
-| NUDT15 | Yes | thiopurines |
-| UGT1A1 | Yes | irinotecan, atazanavir |
-| SLCO1B1 | Yes | simvastatin |
-| HLA-B | Yes | abacavir, carbamazepine, allopurinol |
-| HLA-A | Yes | carbamazepine |
-| G6PD | Yes | rasburicase, dapsone |
-| IFNL3 | Yes | peginterferon alfa-2a/2b |
-| NAT2 | Yes | hydralazine (newest CPIC guideline) |
-| CYP2B6 | Yes | efavirenz |
-| RYR1 | Yes | volatile anesthetics, succinylcholine |
-| CACNA1S | Yes | volatile anesthetics |
+| Gene    | In Panel | CPIC Level A Drug Examples                 |
+| ------- | -------- | ------------------------------------------ |
+| CYP2D6  | Yes      | codeine, tramadol, tamoxifen, atomoxetine  |
+| CYP2C19 | Yes      | clopidogrel, voriconazole, escitalopram    |
+| CYP2C9  | Yes      | warfarin, phenytoin                        |
+| VKORC1  | Yes      | warfarin                                   |
+| CYP3A5  | Yes      | tacrolimus                                 |
+| DPYD    | Yes      | fluoropyrimidines (5-FU, capecitabine)     |
+| TPMT    | Yes      | thiopurines (azathioprine, mercaptopurine) |
+| NUDT15  | Yes      | thiopurines                                |
+| UGT1A1  | Yes      | irinotecan, atazanavir                     |
+| SLCO1B1 | Yes      | simvastatin                                |
+| HLA-B   | Yes      | abacavir, carbamazepine, allopurinol       |
+| HLA-A   | Yes      | carbamazepine                              |
+| G6PD    | Yes      | rasburicase, dapsone                       |
+| IFNL3   | Yes      | peginterferon alfa-2a/2b                   |
+| NAT2    | Yes      | hydralazine (newest CPIC guideline)        |
+| CYP2B6  | Yes      | efavirenz                                  |
+| RYR1    | Yes      | volatile anesthetics, succinylcholine      |
+| CACNA1S | Yes      | volatile anesthetics                       |
 
 ### Gaps Identified
 
 Missing CPIC genes that should be considered:
+
 - **CYP4F2**: Affects warfarin dosing (Level A with VKORC1/CYP2C9)
 - Wait, CYP4F2 IS in the panel. Good.
 
 Additional DPWG genes not in panel:
+
 - **CYP1A2**: Clozapine metabolism
 - **CYP2E1**: Isoniazid hepatotoxicity
 - **GSTT1/GSTM1**: Various drug metabolism
@@ -313,32 +320,35 @@ Pharmacogenomics entries in the carrier panel are treated with the same carrier/
 ### Current Limitations
 
 The trait prediction engine uses single-SNP Punnett squares. This is:
+
 - **Appropriate** for truly Mendelian traits (earwax type, blood type, cilantro taste)
 - **Oversimplified** for polygenic traits (eye color, height, skin pigmentation)
 
 ### Multi-SNP Prediction Models
 
 The **HIrisPlex-S system** is the gold standard for appearance prediction from DNA:
+
 - **IrisPlex**: 6 SNPs for eye color prediction (>90% accuracy for blue/brown)
 - **HIrisPlex**: 24 SNPs for combined hair + eye color (~70-87% accuracy depending on color)
 - **HIrisPlex-S**: 41 SNPs for eye + hair + skin color
 
 Our current trait panel has:
+
 - 4 Eye Color SNPs (rs12913832, rs1800407, rs12896399 -- partial IrisPlex overlap)
 - 2 Red Hair SNPs (partial HIrisPlex overlap)
 - 1 Hair Color - Blond Hair SNP
 
 ### Per-Trait Assessment
 
-| Trait | Current Approach | Better Approach | Feasibility |
-|---|---|---|---|
-| Eye Color | Single-SNP Punnett | IrisPlex 6-SNP model | HIGH |
-| Hair Color | Single-SNP Punnett | HIrisPlex 24-SNP model | HIGH |
-| Skin Pigmentation | Single-SNP Punnett | HIrisPlex-S 41-SNP model | HIGH |
-| Height | 1 SNP (rs1042713) | Need 100s-1000s of SNPs | LOW |
-| Earwax Type | Single-SNP (rs17822931) | Already correct (Mendelian) | N/A |
-| Lactose Tolerance | Single-SNP (rs4988235) | Already correct (nearly Mendelian) | N/A |
-| Bitter Taste | 3 SNPs combined | Already reasonable | N/A |
+| Trait             | Current Approach        | Better Approach                    | Feasibility |
+| ----------------- | ----------------------- | ---------------------------------- | ----------- |
+| Eye Color         | Single-SNP Punnett      | IrisPlex 6-SNP model               | HIGH        |
+| Hair Color        | Single-SNP Punnett      | HIrisPlex 24-SNP model             | HIGH        |
+| Skin Pigmentation | Single-SNP Punnett      | HIrisPlex-S 41-SNP model           | HIGH        |
+| Height            | 1 SNP (rs1042713)       | Need 100s-1000s of SNPs            | LOW         |
+| Earwax Type       | Single-SNP (rs17822931) | Already correct (Mendelian)        | N/A         |
+| Lactose Tolerance | Single-SNP (rs4988235)  | Already correct (nearly Mendelian) | N/A         |
+| Bitter Taste      | 3 SNPs combined         | Already reasonable                 | N/A         |
 
 ### Recommendation
 
@@ -358,10 +368,12 @@ Our current trait panel has:
 `clinvar_client.py` queries ClinVar via NCBI E-utilities API in real-time during analysis. This approach has pros and cons:
 
 **Pros:**
+
 - Always queries the latest ClinVar data
 - No need to maintain a local copy
 
 **Cons:**
+
 - Rate limited (3 req/sec without API key, 10 req/sec with key)
 - For 2,715 diseases, a full panel cross-reference would take 4.5-15 minutes
 - Network dependency during analysis
@@ -370,6 +382,7 @@ Our current trait panel has:
 ### ClinVar Update Frequency
 
 ClinVar data is updated:
+
 - **Weekly** on Mondays (website and FTP)
 - **Monthly** comprehensive archived releases (first Thursday of each month)
 - GitHub releases at https://github.com/ncbi/clinvar/releases
@@ -407,15 +420,16 @@ The result is discarded. The ClinVar integration is essentially a no-op.
 
 Confidence levels in the panel:
 
-| Confidence | Count | % |
-|---|---|---|
-| high | 2,533 | 93.3% |
-| medium | 131 | 4.8% |
-| low | 51 | 1.9% |
+| Confidence | Count | %     |
+| ---------- | ----- | ----- |
+| high       | 2,533 | 93.3% |
+| medium     | 131   | 4.8%  |
+| low        | 51    | 1.9%  |
 
 ### ACMG 5-Tier Variant Classification
 
 The ACMG/AMP framework classifies variants into:
+
 1. **Pathogenic (P)** -- very strong evidence
 2. **Likely Pathogenic (LP)** -- strong evidence
 3. **Variant of Uncertain Significance (VUS)** -- insufficient evidence
@@ -458,14 +472,14 @@ Our 3-tier system (high/medium/low) does not map cleanly to the ACMG 5-tier syst
 
 ### Industry Comparison
 
-| Panel | Genes | Conditions | Focus |
-|---|---|---|---|
-| **Mergenix** | ~2,715 rsIDs | ~2,715 conditions | Carrier + PGx + Dominant |
-| **Myriad Foresight** | 274 genes | ~175 conditions | Carrier screening (AR + X-linked) |
-| **Invitae Comprehensive** | 288 genes | ~300 conditions | Carrier screening (AR + X-linked) |
-| **Counsyl/Myriad** | 176 genes | ~175 conditions | Universal carrier screen |
-| **ACMG Tier 1** | ~40 conditions | ~40 conditions | CF+1 carrier freq > 1:100 |
-| **ACMG Tier 2** | ~75 conditions | ~75 conditions | Carrier freq > 1:200 |
+| Panel                     | Genes          | Conditions        | Focus                             |
+| ------------------------- | -------------- | ----------------- | --------------------------------- |
+| **Mergenix**              | ~2,715 rsIDs   | ~2,715 conditions | Carrier + PGx + Dominant          |
+| **Myriad Foresight**      | 274 genes      | ~175 conditions   | Carrier screening (AR + X-linked) |
+| **Invitae Comprehensive** | 288 genes      | ~300 conditions   | Carrier screening (AR + X-linked) |
+| **Counsyl/Myriad**        | 176 genes      | ~175 conditions   | Universal carrier screen          |
+| **ACMG Tier 1**           | ~40 conditions | ~40 conditions    | CF+1 carrier freq > 1:100         |
+| **ACMG Tier 2**           | ~75 conditions | ~75 conditions    | Carrier freq > 1:200              |
 
 ### Key Differences
 
@@ -485,6 +499,7 @@ Our 3-tier system (high/medium/low) does not map cleanly to the ACMG 5-tier syst
 ### Missing High-Impact Conditions
 
 Conditions commonly on clinical panels but potentially missing from ours:
+
 - **Spinal Muscular Atrophy (SMA)**: Requires copy number analysis of SMN1, not a single SNP
 - **Fragile X syndrome**: Requires trinucleotide repeat expansion testing
 - **Alpha-thalassemia**: Requires deletion analysis
@@ -513,14 +528,15 @@ Carrier frequencies in the panel are single values (e.g., "1 in 25" for CF). The
 
 Carrier frequencies vary dramatically by population:
 
-| Condition | European | Ashkenazi Jewish | African American | Hispanic |
-|---|---|---|---|---|
-| Cystic Fibrosis | 1 in 25 | 1 in 24 | 1 in 65 | 1 in 46 |
-| Sickle Cell Disease | 1 in 500 | rare | 1 in 13 | 1 in 36 |
-| Tay-Sachs Disease | 1 in 300 | 1 in 30 | rare | rare |
-| Beta-thalassemia | 1 in 50 | 1 in 30 | 1 in 75 | variable |
+| Condition           | European | Ashkenazi Jewish | African American | Hispanic |
+| ------------------- | -------- | ---------------- | ---------------- | -------- |
+| Cystic Fibrosis     | 1 in 25  | 1 in 24          | 1 in 65          | 1 in 46  |
+| Sickle Cell Disease | 1 in 500 | rare             | 1 in 13          | 1 in 36  |
+| Tay-Sachs Disease   | 1 in 300 | 1 in 30          | rare             | rare     |
+| Beta-thalassemia    | 1 in 50  | 1 in 30          | 1 in 75          | variable |
 
 Research shows:
+
 - Self-reported ethnicity is an imperfect indicator of genetic ancestry (9% discordance)
 - Admixed populations (Latin American) have variable carrier frequencies depending on ancestry proportions
 - ACMG now recommends panethnic expanded carrier screening rather than ethnicity-based testing
@@ -531,14 +547,14 @@ Research shows:
 
 ```json
 {
-    "carrier_frequency": {
-        "panethnic": "1 in 25",
-        "european": "1 in 25",
-        "ashkenazi_jewish": "1 in 24",
-        "african_american": "1 in 65",
-        "hispanic": "1 in 46",
-        "east_asian": "1 in 100"
-    }
+  "carrier_frequency": {
+    "panethnic": "1 in 25",
+    "european": "1 in 25",
+    "ashkenazi_jewish": "1 in 24",
+    "african_american": "1 in 65",
+    "hispanic": "1 in 46",
+    "east_asian": "1 in 100"
+  }
 }
 ```
 
@@ -555,6 +571,7 @@ Research shows:
 ### Current State
 
 The VCF parser in `parser.py` extracts basic genotype information (rsid -> genotype). It does not leverage:
+
 - Functional annotations (CADD, SIFT, PolyPhen-2)
 - Quality metrics (GQ, DP)
 - Allele frequency data
@@ -590,13 +607,13 @@ The VCF parser in `parser.py` extracts basic genotype information (rsid -> genot
 
 The current `calculate_offspring_risk()` function correctly implements AR inheritance:
 
-| Parent A | Parent B | Affected | Carrier | Normal |
-|---|---|---|---|---|
-| normal x normal | | 0% | 0% | 100% |
-| normal x carrier | | 0% | 50% | 50% |
-| carrier x carrier | | 25% | 50% | 25% |
-| carrier x affected | | 50% | 50% | 0% |
-| affected x affected | | 100% | 0% | 0% |
+| Parent A            | Parent B | Affected | Carrier | Normal |
+| ------------------- | -------- | -------- | ------- | ------ |
+| normal x normal     |          | 0%       | 0%      | 100%   |
+| normal x carrier    |          | 0%       | 50%     | 50%    |
+| carrier x carrier   |          | 25%      | 50%     | 25%    |
+| carrier x affected  |          | 50%      | 50%     | 0%     |
+| affected x affected |          | 100%     | 0%      | 0%     |
 
 These values are scientifically correct for AR inheritance.
 
@@ -625,29 +642,37 @@ Some conditions (Leber hereditary optic neuropathy, MELAS) follow maternal inher
 Based on FDA's DTC genetic testing framework and industry best practices, the following disclaimers are needed:
 
 #### 1. Clinical Use Disclaimer (REQUIRED)
+
 > "This analysis is for informational and educational purposes only. Results should NOT be used for clinical diagnosis or to make medical decisions. Always consult a certified genetic counselor or healthcare provider for clinical genetic testing and interpretation."
 
 #### 2. Limitations of SNP-Based Testing (REQUIRED)
+
 > "This analysis tests specific genetic variants (SNPs) and does not sequence entire genes. Many pathogenic variants, including structural variants, copy number changes, and trinucleotide repeat expansions, cannot be detected by this method. A negative result does not guarantee the absence of carrier status."
 
 #### 3. Not a Clinical Test (REQUIRED)
+
 > "This product has not been cleared or approved by the U.S. Food and Drug Administration (FDA). The laboratory tests used have not been validated by an FDA-cleared or CLIA-certified laboratory for clinical diagnostic use."
 
 #### 4. Polygenic Trait Disclaimer (REQUIRED for traits)
+
 > "Trait predictions are based on known genetic associations and simplified Mendelian models. Many traits, including eye color, height, and skin pigmentation, are influenced by multiple genes and environmental factors. Actual outcomes may differ significantly from predictions."
 
 #### 5. Pharmacogenomics Disclaimer (REQUIRED for PGx)
+
 > "Pharmacogenomics results are based on known drug-gene interactions from CPIC guidelines. Drug response is also influenced by other genetic variants not tested, drug interactions, organ function, and other factors. Do not change medications without consulting your healthcare provider."
 
 #### 6. Ancestry Limitation (RECOMMENDED)
+
 > "Carrier frequency data and risk estimates are primarily derived from studies of European-descent populations. These estimates may be less accurate for individuals of other ancestries."
 
 #### 7. Penetrance Disclaimer (RECOMMENDED)
+
 > "Not all individuals who carry a pathogenic variant will develop the associated condition (incomplete penetrance). The severity of conditions can also vary among affected individuals (variable expressivity)."
 
 ### Comparison with 23andMe Disclaimers
 
 23andMe's FDA-authorized carrier screening includes:
+
 - "This test is not a diagnostic test"
 - "This test does not account for all possible genetic variants"
 - "Results should be confirmed by an independent clinical test"
@@ -669,39 +694,39 @@ Based on FDA's DTC genetic testing framework and industry best practices, the fo
 
 ### P0: Critical Bugs (Fix Immediately)
 
-| # | Issue | Impact | Effort |
-|---|---|---|---|
-| 1 | **Trait prediction crash** -- `map_genotype_to_phenotype()` returns unhashable dict | All trait predictions fail at runtime | LOW (1 line fix) |
-| 2 | **Wrong inheritance model** for 45.6% of panel | Incorrect risk calculations for 1,238 diseases | MEDIUM (new risk functions) |
+| #   | Issue                                                                               | Impact                                         | Effort                      |
+| --- | ----------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------- |
+| 1   | **Trait prediction crash** -- `map_genotype_to_phenotype()` returns unhashable dict | All trait predictions fail at runtime          | LOW (1 line fix)            |
+| 2   | **Wrong inheritance model** for 45.6% of panel                                      | Incorrect risk calculations for 1,238 diseases | MEDIUM (new risk functions) |
 
 ### P1: High Priority (Next Sprint)
 
-| # | Issue | Impact | Effort |
-|---|---|---|---|
-| 3 | **Add scientific disclaimers** | Legal/ethical compliance | LOW |
-| 4 | **Fix ClinVar dead code** | Code health, wasted API calls | LOW |
-| 5 | **Separate pharmacogenomics analysis** | Misleading results currently | MEDIUM |
-| 6 | **Add trait prediction tests** | Zero test coverage for trait engine | MEDIUM |
+| #   | Issue                                  | Impact                              | Effort |
+| --- | -------------------------------------- | ----------------------------------- | ------ |
+| 3   | **Add scientific disclaimers**         | Legal/ethical compliance            | LOW    |
+| 4   | **Fix ClinVar dead code**              | Code health, wasted API calls       | LOW    |
+| 5   | **Separate pharmacogenomics analysis** | Misleading results currently        | MEDIUM |
+| 6   | **Add trait prediction tests**         | Zero test coverage for trait engine | MEDIUM |
 
 ### P2: Medium Priority (Next Quarter)
 
-| # | Issue | Impact | Effort |
-|---|---|---|---|
-| 7 | Compound heterozygosity detection | Better accuracy for multi-variant genes | MEDIUM |
-| 8 | IrisPlex multi-SNP eye color model | Major improvement for eye color prediction | MEDIUM |
-| 9 | Ancestry-aware carrier frequencies | Better accuracy for diverse populations | MEDIUM |
-| 10 | Confidence re-calibration with ClinVar | Better trust/credibility | MEDIUM |
-| 11 | Penetrance data for AD conditions | More accurate AD risk estimates | MEDIUM |
-| 12 | Panel organization (carrier/PGx/dominant) | Clinical credibility | LOW |
+| #   | Issue                                     | Impact                                     | Effort |
+| --- | ----------------------------------------- | ------------------------------------------ | ------ |
+| 7   | Compound heterozygosity detection         | Better accuracy for multi-variant genes    | MEDIUM |
+| 8   | IrisPlex multi-SNP eye color model        | Major improvement for eye color prediction | MEDIUM |
+| 9   | Ancestry-aware carrier frequencies        | Better accuracy for diverse populations    | MEDIUM |
+| 10  | Confidence re-calibration with ClinVar    | Better trust/credibility                   | MEDIUM |
+| 11  | Penetrance data for AD conditions         | More accurate AD risk estimates            | MEDIUM |
+| 12  | Panel organization (carrier/PGx/dominant) | Clinical credibility                       | LOW    |
 
 ### P3: Low Priority (Backlog)
 
-| # | Issue | Impact | Effort |
-|---|---|---|---|
-| 13 | VCF quality filtering (GQ/DP) | Better reliability for VCF input | LOW |
-| 14 | HIrisPlex hair color model | Better hair color predictions | MEDIUM |
-| 15 | Local ClinVar snapshot | Offline capability, speed | HIGH |
-| 16 | Polygenic risk scores | Complex disease risk | VERY HIGH |
+| #   | Issue                         | Impact                           | Effort    |
+| --- | ----------------------------- | -------------------------------- | --------- |
+| 13  | VCF quality filtering (GQ/DP) | Better reliability for VCF input | LOW       |
+| 14  | HIrisPlex hair color model    | Better hair color predictions    | MEDIUM    |
+| 15  | Local ClinVar snapshot        | Offline capability, speed        | HIGH      |
+| 16  | Polygenic risk scores         | Complex disease risk             | VERY HIGH |
 
 ---
 

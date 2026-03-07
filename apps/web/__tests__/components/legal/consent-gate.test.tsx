@@ -24,10 +24,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── Import component after mocks ────────────────────────────────────────────

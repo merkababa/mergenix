@@ -38,9 +38,7 @@ async function getAccessToken(
 
   if (loginResponse.status() !== 200) {
     const errorBody = await loginResponse.text();
-    throw new Error(
-      `Failed to log in as ${user.email}: ${loginResponse.status()} ${errorBody}`,
-    );
+    throw new Error(`Failed to log in as ${user.email}: ${loginResponse.status()} ${errorBody}`);
   }
 
   const body = await loginResponse.json();

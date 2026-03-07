@@ -40,9 +40,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-async def _safe_send_partner_notification(
-    to_email: str, analyzer_name: str, analysis_date: datetime
-) -> None:
+async def _safe_send_partner_notification(to_email: str, analyzer_name: str, analysis_date: datetime) -> None:
     """Send a partner notification email, swallowing any exceptions.
 
     This is a module-level async function (not a closure) used as a
@@ -59,9 +57,7 @@ async def _safe_send_partner_notification(
             analysis_date=analysis_date,
         )
     except Exception:
-        logger.exception(
-            "Partner notification email failed (to=%s)", mask_email(to_email)
-        )
+        logger.exception("Partner notification email failed (to=%s)", mask_email(to_email))
 
 
 # ── Save Result ──────────────────────────────────────────────────────────
@@ -110,25 +106,19 @@ async def save_result(
         )
 
     # Serialize the EncryptedEnvelope to JSON bytes for LargeBinary storage.
-    envelope_bytes = json.dumps(
-        body.result_data.model_dump(), separators=(",", ":")
-    ).encode("utf-8")
+    envelope_bytes = json.dumps(body.result_data.model_dump(), separators=(",", ":")).encode("utf-8")
 
     # Lock the User row to serialize save operations for this user.
     # SELECT ... FOR UPDATE on the user row guarantees mutual exclusion
     # even when the AnalysisResult count is 0 (where FOR UPDATE on the
     # count query would lock nothing).
-    await db.execute(
-        select(User).where(User.id == user.id).with_for_update()
-    )
+    await db.execute(select(User).where(User.id == user.id).with_for_update())
 
     # Check tier limit — the user-row lock above prevents TOCTOU race
     # conditions where concurrent requests could bypass the limit.
     limit = TIER_RESULT_LIMITS.get(user.tier, 1)
     count_result = await db.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == user.id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == user.id)
     )
     current_count = count_result.scalar_one()
 

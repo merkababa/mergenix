@@ -91,12 +91,8 @@ test.describe('Keyboard Navigation', () => {
     const hasEmailInput = focusSequence.some(
       (item) => item.toLowerCase().includes('email') || item.toLowerCase().includes('you@example'),
     );
-    const hasPasswordInput = focusSequence.some(
-      (item) => item.toLowerCase().includes('password'),
-    );
-    const hasSignInButton = focusSequence.some(
-      (item) => item.toLowerCase().includes('sign in'),
-    );
+    const hasPasswordInput = focusSequence.some((item) => item.toLowerCase().includes('password'));
+    const hasSignInButton = focusSequence.some((item) => item.toLowerCase().includes('sign in'));
 
     expect(hasEmailInput).toBe(true);
     expect(hasPasswordInput).toBe(true);
@@ -140,11 +136,9 @@ test.describe('Keyboard Navigation', () => {
     const hasEmailInput = focusSequence.some(
       (item) => item.toLowerCase().includes('email') || item.toLowerCase().includes('you@example'),
     );
-    const hasPasswordInput = focusSequence.some(
-      (item) => item.toLowerCase().includes('password'),
-    );
-    const hasCreateButton = focusSequence.some(
-      (item) => item.toLowerCase().includes('create account'),
+    const hasPasswordInput = focusSequence.some((item) => item.toLowerCase().includes('password'));
+    const hasCreateButton = focusSequence.some((item) =>
+      item.toLowerCase().includes('create account'),
     );
 
     expect(hasNameInput).toBe(true);
@@ -160,9 +154,7 @@ test.describe('Keyboard Navigation', () => {
       (item) => item.toLowerCase().includes('email') || item.toLowerCase().includes('you@example'),
     );
     const passwordIndex = focusSequence.findIndex(
-      (item) =>
-        item.toLowerCase().includes('password') &&
-        !item.toLowerCase().includes('strength'),
+      (item) => item.toLowerCase().includes('password') && !item.toLowerCase().includes('strength'),
     );
 
     if (nameIndex >= 0 && emailIndex >= 0) {
@@ -174,9 +166,7 @@ test.describe('Keyboard Navigation', () => {
   });
 
   // #3 — All interactive elements have visible focus indicator
-  test('All interactive elements should have visible focus indicators', async ({
-    page,
-  }) => {
+  test('All interactive elements should have visible focus indicators', async ({ page }) => {
     await page.goto('/login');
     await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
 
@@ -189,7 +179,9 @@ test.describe('Keyboard Navigation', () => {
     for (let i = 0; i < maxTabs; i++) {
       await page.keyboard.press('Tab');
 
-      const tag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase() ?? 'body');
+      const tag = await page.evaluate(
+        () => document.activeElement?.tagName.toLowerCase() ?? 'body',
+      );
       if (tag === 'body') break;
 
       elementsWithFocus++;
@@ -271,9 +263,7 @@ authTest.describe('Keyboard Navigation — Authenticated', () => {
 
 test.describe('Keyboard Navigation — Accordions', () => {
   // #5 — FAQ accordions toggle with Enter/Space
-  test('FAQ accordions should toggle open/closed with Enter key', async ({
-    page,
-  }) => {
+  test('FAQ accordions should toggle open/closed with Enter key', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1').first()).toBeVisible();
 

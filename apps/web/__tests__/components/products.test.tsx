@@ -45,7 +45,25 @@ vi.mock('@/components/ui/button', () => ({
 vi.mock('lucide-react', () => ({
   Check: (props: Record<string, unknown>) => <svg aria-label="Included" {...props} />,
   X: (props: Record<string, unknown>) => <svg aria-label="Not included" {...props} />,
-  ...mockLucideIcons('Shield', 'Zap', 'Users', 'Sparkles', 'ShieldCheck', 'Dna', 'FileType', 'Pill', 'TrendingUp', 'Mail', 'MessageCircle', 'Database', 'FileText', 'Star', 'BarChart2', 'HeartPulse', 'FlaskConical'),
+  ...mockLucideIcons(
+    'Shield',
+    'Zap',
+    'Users',
+    'Sparkles',
+    'ShieldCheck',
+    'Dna',
+    'FileType',
+    'Pill',
+    'TrendingUp',
+    'Mail',
+    'MessageCircle',
+    'Database',
+    'FileText',
+    'Star',
+    'BarChart2',
+    'HeartPulse',
+    'FlaskConical',
+  ),
 }));
 
 // ─── Import under test ────────────────────────────────────────────────────────
@@ -58,7 +76,9 @@ describe('ProductsContent', () => {
   describe('D4.1 — Most Popular pricing card prominent styling', () => {
     it('renders the page heading', () => {
       render(<ProductsContent />);
-      expect(screen.getByRole('heading', { level: 1, name: /Simple, One-Time Pricing/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 1, name: /Simple, One-Time Pricing/i }),
+      ).toBeInTheDocument();
     });
 
     it('renders all three pricing tier names', () => {

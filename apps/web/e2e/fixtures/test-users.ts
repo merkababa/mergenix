@@ -26,8 +26,7 @@ function requireEnv(key: string, fallback?: string): string {
   if (val) return val;
   if (fallback && !process.env.CI) return fallback;
   throw new Error(
-    `Missing required environment variable: ${key}. ` +
-    'Set it in your .env file or CI secrets.'
+    `Missing required environment variable: ${key}. ` + 'Set it in your .env file or CI secrets.',
   );
 }
 
@@ -92,7 +91,7 @@ export function validateTestUserEnv(): void {
     if (missing.length > 0) {
       throw new Error(
         `Missing required E2E environment variables in CI: ${missing.join(', ')}. ` +
-        'Default passwords must not be used in CI environments.'
+          'Default passwords must not be used in CI environments.',
       );
     }
   }

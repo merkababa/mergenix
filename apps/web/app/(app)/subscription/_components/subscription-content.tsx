@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Crown,
   Sparkles,
@@ -10,16 +10,16 @@ import {
   Download,
   AlertCircle,
   Shield,
-} from "lucide-react";
-import Link from "next/link";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { usePaymentStore } from "@/lib/stores/payment-store";
-import { PRICING_TIERS, getPricingTier } from "@mergenix/shared-types";
-import type { Tier, PricingTier } from "@mergenix/shared-types";
+} from 'lucide-react';
+import Link from 'next/link';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { usePaymentStore } from '@/lib/stores/payment-store';
+import { PRICING_TIERS, getPricingTier } from '@mergenix/shared-types';
+import type { Tier, PricingTier } from '@mergenix/shared-types';
 
 /** Format cents to a dollar string, e.g. 1499 -> "14.99" */
 function formatAmount(cents: number): string {
@@ -33,14 +33,7 @@ function formatDate(iso: string): string {
 
 /** Skeleton placeholder for loading states */
 function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "animate-pulse rounded-lg bg-[rgba(148,163,184,0.1)]",
-        className,
-      )}
-    />
-  );
+  return <div className={cn('animate-pulse rounded-lg bg-[rgba(148,163,184,0.1)]', className)} />;
 }
 
 export function SubscriptionContent() {
@@ -67,7 +60,7 @@ export function SubscriptionContent() {
 
   // ── Derived values ───────────────────────────────────────────────────
 
-  const userTier: Tier = user?.tier ?? "free";
+  const userTier: Tier = user?.tier ?? 'free';
 
   const currentTierData = useMemo<PricingTier | undefined>(
     () => getPricingTier(userTier),
@@ -75,12 +68,12 @@ export function SubscriptionContent() {
   );
 
   const formattedPrice = useMemo<string>(() => {
-    if (!currentTierData) return "$0.00";
+    if (!currentTierData) return '$0.00';
     return `$${currentTierData.price.toFixed(2)}`;
   }, [currentTierData]);
 
   const upgradeOptions = useMemo<PricingTier[]>(() => {
-    const tierOrder: Tier[] = ["free", "premium", "pro"];
+    const tierOrder: Tier[] = ['free', 'premium', 'pro'];
     const currentIndex = tierOrder.indexOf(userTier);
     return PRICING_TIERS.filter((tier) => {
       const tierIndex = tierOrder.indexOf(tier.id);
@@ -88,16 +81,16 @@ export function SubscriptionContent() {
     });
   }, [userTier]);
 
-  const isActive = subscriptionStatus?.isActive ?? userTier !== "free";
+  const isActive = subscriptionStatus?.isActive ?? userTier !== 'free';
 
   // ── Handlers ─────────────────────────────────────────────────────────
 
   const handleCheckout = useCallback(
-    async (tier: "premium" | "pro") => {
+    async (tier: 'premium' | 'pro') => {
       try {
         const response = await createCheckout(tier);
-        if (!response.checkoutUrl.startsWith("https://checkout.stripe.com/")) {
-          throw new Error("Invalid checkout URL");
+        if (!response.checkoutUrl.startsWith('https://checkout.stripe.com/')) {
+          throw new Error('Invalid checkout URL');
         }
         window.location.href = response.checkoutUrl;
       } catch {
@@ -116,16 +109,12 @@ export function SubscriptionContent() {
           <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
             My Plan
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
+          <p className="text-(--text-muted) mx-auto mt-3 max-w-xl">
             Manage your plan and view payment history
           </p>
         </div>
 
-        <div
-          className="mx-auto max-w-2xl space-y-6"
-          aria-busy="true"
-          role="status"
-        >
+        <div className="mx-auto max-w-2xl space-y-6" aria-busy="true" role="status">
           <span className="sr-only">Loading plan information...</span>
           {/* Current plan skeleton */}
           <GlassCard variant="medium" hover="none" className="p-7">
@@ -165,10 +154,8 @@ export function SubscriptionContent() {
   return (
     <>
       <div className="mb-8 text-center">
-        <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
-          My Plan
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
+        <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">My Plan</h1>
+        <p className="text-(--text-muted) mx-auto mt-3 max-w-xl">
           Manage your plan and view payment history
         </p>
       </div>
@@ -177,7 +164,7 @@ export function SubscriptionContent() {
         {/* ── Error Banner ── */}
         {error && (
           <div
-            className="flex items-center gap-3 rounded-xl border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] p-4 text-sm text-accent-rose"
+            className="text-accent-rose flex items-center gap-3 rounded-xl border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] p-4 text-sm"
             role="alert"
             aria-live="polite"
           >
@@ -196,40 +183,36 @@ export function SubscriptionContent() {
         {/* ── Current Plan ── */}
         <GlassCard variant="medium" hover="none" className="glow-pulse p-7">
           <div className="mb-4 flex items-center gap-3">
-            <Crown className="h-5 w-5 text-accent-violet" />
-            <h2 className="font-heading text-lg font-bold text-(--text-heading)">
-              Current Plan
-            </h2>
+            <Crown className="text-accent-violet h-5 w-5" />
+            <h2 className="font-heading text-(--text-heading) text-lg font-bold">Current Plan</h2>
           </div>
 
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <span className="font-heading text-3xl font-extrabold text-(--text-primary)">
-                  {currentTierData?.name ?? "Free"}
+                <span className="font-heading text-(--text-primary) text-3xl font-extrabold">
+                  {currentTierData?.name ?? 'Free'}
                 </span>
-                <Badge variant={userTier}>
-                  {isActive ? "Active" : "Inactive"}
-                </Badge>
+                <Badge variant={userTier}>{isActive ? 'Active' : 'Inactive'}</Badge>
               </div>
-              <p className="mt-1 text-sm text-(--text-muted)">
-                {userTier === "free"
-                  ? "Free plan - No purchase required"
-                  : "One-time purchase - Lifetime access"}
+              <p className="text-(--text-muted) mt-1 text-sm">
+                {userTier === 'free'
+                  ? 'Free plan - No purchase required'
+                  : 'One-time purchase - Lifetime access'}
               </p>
             </div>
             <div className="text-right">
-              <span className="font-heading text-2xl font-bold text-(--accent-teal)">
+              <span className="font-heading text-(--accent-teal) text-2xl font-bold">
                 {formattedPrice}
               </span>
-              <p className="text-xs text-(--text-dim)">
-                {userTier === "free" ? "free forever" : "paid once"}
+              <p className="text-(--text-dim) text-xs">
+                {userTier === 'free' ? 'free forever' : 'paid once'}
               </p>
             </div>
           </div>
 
           <div className="mt-5">
-            <div className="inline-flex rounded-xl bg-linear-to-r from-accent-teal to-accent-cyan px-5 py-2 font-heading text-xs font-bold uppercase tracking-wider text-bio-deep shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
+            <div className="bg-linear-to-r from-accent-teal to-accent-cyan font-heading text-bio-deep inline-flex rounded-xl px-5 py-2 text-xs font-bold uppercase tracking-wider shadow-[0_4px_16px_rgba(6,214,160,0.3)]">
               Your Current Plan
             </div>
           </div>
@@ -238,46 +221,37 @@ export function SubscriptionContent() {
         {/* ── Upgrade Options ── */}
         {upgradeOptions.length > 0 ? (
           upgradeOptions.map((tier) => (
-            <GlassCard
-              key={tier.id}
-              variant="subtle"
-              hover="glow"
-              className="p-7"
-            >
+            <GlassCard key={tier.id} variant="subtle" hover="glow" className="p-7">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-(--accent-teal)" />
-                    <h3 className="font-heading text-lg font-bold text-(--text-heading)">
+                    <Sparkles className="text-(--accent-teal) h-5 w-5" />
+                    <h3 className="font-heading text-(--text-heading) text-lg font-bold">
                       Upgrade to {tier.name}
                     </h3>
                   </div>
-                  <p className="mt-2 text-sm text-(--text-muted)">
-                    {tier.id === "premium"
-                      ? "Unlock 500+ disease screenings, pharmacogenomics, and full counseling."
-                      : "Get all disease screening, automated referral letter, ClinVar integration, and PDF exports."}
+                  <p className="text-(--text-muted) mt-2 text-sm">
+                    {tier.id === 'premium'
+                      ? 'Unlock 500+ disease screenings, pharmacogenomics, and full counseling.'
+                      : 'Get all disease screening, automated referral letter, ClinVar integration, and PDF exports.'}
                   </p>
                   <ul className="mt-3 space-y-1.5">
                     {tier.features.map((f) => (
-                      <li
-                        key={f}
-                        className="flex items-center gap-2 text-xs text-(--text-body)"
-                      >
-                        <Sparkles className="h-3 w-3 shrink-0 text-(--accent-teal)" />
+                      <li key={f} className="text-(--text-body) flex items-center gap-2 text-xs">
+                        <Sparkles className="text-(--accent-teal) h-3 w-3 shrink-0" />
                         {f}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div className="ml-4 shrink-0 text-right">
-                  <span className="font-heading text-2xl font-bold text-(--accent-teal)">
+                  <span className="font-heading text-(--accent-teal) text-2xl font-bold">
                     ${tier.price.toFixed(2)}
                   </span>
-                  <p className="text-xs text-(--text-dim)">one-time</p>
+                  <p className="text-(--text-dim) text-xs">one-time</p>
                   {currentTierData && currentTierData.price > 0 && (
-                    <p className="text-xs text-(--text-dim)">
-                      Pay ${(tier.price - currentTierData.price).toFixed(2)} to
-                      upgrade
+                    <p className="text-(--text-dim) text-xs">
+                      Pay ${(tier.price - currentTierData.price).toFixed(2)} to upgrade
                     </p>
                   )}
                 </div>
@@ -285,19 +259,15 @@ export function SubscriptionContent() {
 
               <div className="mt-5">
                 <Button
-                  variant={tier.id === "pro" ? "primary" : "violet"}
+                  variant={tier.id === 'pro' ? 'primary' : 'violet'}
                   size="md"
                   disabled={isCheckoutLoading}
                   isLoading={isCheckoutLoading}
-                  onClick={() =>
-                    handleCheckout(tier.id as "premium" | "pro")
-                  }
+                  onClick={() => handleCheckout(tier.id as 'premium' | 'pro')}
                   aria-label={`Upgrade to ${tier.name} for $${tier.price.toFixed(2)}`}
                 >
                   Upgrade to {tier.name}
-                  {!isCheckoutLoading && (
-                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
-                  )}
+                  {!isCheckoutLoading && <ChevronRight className="h-4 w-4" aria-hidden="true" />}
                 </Button>
               </div>
             </GlassCard>
@@ -305,14 +275,14 @@ export function SubscriptionContent() {
         ) : (
           <GlassCard variant="subtle" hover="none" className="p-7">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-(--accent-teal)" />
-              <h3 className="font-heading text-lg font-bold text-(--text-heading)">
+              <Shield className="text-(--accent-teal) h-5 w-5" />
+              <h3 className="font-heading text-(--text-heading) text-lg font-bold">
                 You have the best plan
               </h3>
             </div>
-            <p className="mt-2 text-sm text-(--text-muted)">
-              You&apos;re on the Pro plan with full access to all features.
-              Thank you for your support!
+            <p className="text-(--text-muted) mt-2 text-sm">
+              You&apos;re on the Pro plan with full access to all features. Thank you for your
+              support!
             </p>
           </GlassCard>
         )}
@@ -320,16 +290,13 @@ export function SubscriptionContent() {
         {/* ── Payment History ── */}
         <GlassCard variant="medium" hover="none" className="p-7">
           <div className="mb-5 flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-(--accent-teal)" />
-            <h2 className="font-heading text-lg font-bold text-(--text-heading)">
+            <CreditCard className="text-(--accent-teal) h-5 w-5" />
+            <h2 className="font-heading text-(--text-heading) text-lg font-bold">
               Payment History
             </h2>
           </div>
 
-          <div
-            className="space-y-3"
-            aria-busy={isLoading && !paymentHistory}
-          >
+          <div className="space-y-3" aria-busy={isLoading && !paymentHistory}>
             {!paymentHistory ? (
               /* Still loading payment history */
               <div role="status">
@@ -340,13 +307,12 @@ export function SubscriptionContent() {
             ) : paymentHistory.length === 0 ? (
               /* Empty state */
               <div className="flex flex-col items-center py-8 text-center">
-                <Clock className="mb-3 h-8 w-8 text-(--text-dim)" />
-                <p className="font-heading text-sm font-medium text-(--text-muted)">
+                <Clock className="text-(--text-dim) mb-3 h-8 w-8" />
+                <p className="font-heading text-(--text-muted) text-sm font-medium">
                   No payments yet
                 </p>
-                <p className="mt-1 text-xs text-(--text-dim)">
-                  Your payment history will appear here after your first
-                  purchase.
+                <p className="text-(--text-dim) mt-1 text-xs">
+                  Your payment history will appear here after your first purchase.
                 </p>
               </div>
             ) : (
@@ -354,26 +320,23 @@ export function SubscriptionContent() {
               paymentHistory.map((payment) => (
                 <div
                   key={payment.id}
-                  className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4"
+                  className="border-(--border-subtle) flex items-center justify-between rounded-xl border p-4"
                 >
                   <div className="flex items-center gap-3">
-                    <Clock className="h-4 w-4 shrink-0 text-(--text-dim)" />
+                    <Clock className="text-(--text-dim) h-4 w-4 shrink-0" />
                     <div>
-                      <p className="font-heading text-sm font-medium text-(--text-heading)">
-                        {payment.tierGranted.charAt(0).toUpperCase() +
-                          payment.tierGranted.slice(1)}{" "}
+                      <p className="font-heading text-(--text-heading) text-sm font-medium">
+                        {payment.tierGranted.charAt(0).toUpperCase() + payment.tierGranted.slice(1)}{' '}
                         Plan Purchase
                       </p>
-                      <p className="text-xs text-(--text-muted)">
-                        {formatDate(payment.createdAt)}{" "}
-                        <span className="capitalize">
-                          &middot; {payment.status}
-                        </span>
+                      <p className="text-(--text-muted) text-xs">
+                        {formatDate(payment.createdAt)}{' '}
+                        <span className="capitalize">&middot; {payment.status}</span>
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="font-heading text-sm font-bold text-(--accent-teal)">
+                    <span className="font-heading text-(--accent-teal) text-sm font-bold">
                       ${formatAmount(payment.amount)}
                     </span>
                     <Button
@@ -382,23 +345,23 @@ export function SubscriptionContent() {
                       aria-label={`Download receipt for ${payment.tierGranted} plan purchase`}
                       onClick={() => {
                         const receiptContent = [
-                          "MERGENIX - PAYMENT RECEIPT",
-                          "=".repeat(40),
-                          "",
+                          'MERGENIX - PAYMENT RECEIPT',
+                          '='.repeat(40),
+                          '',
                           `Plan: ${payment.tierGranted.charAt(0).toUpperCase() + payment.tierGranted.slice(1)}`,
                           `Amount: $${formatAmount(payment.amount)} ${payment.currency.toUpperCase()}`,
                           `Date: ${formatDate(payment.createdAt)}`,
                           `Status: ${payment.status}`,
                           `Payment ID: ${payment.id}`,
-                          "",
-                          "=".repeat(40),
-                          "Thank you for your purchase!",
-                          "mergenix.com",
-                        ].join("\n");
+                          '',
+                          '='.repeat(40),
+                          'Thank you for your purchase!',
+                          'mergenix.com',
+                        ].join('\n');
 
-                        const blob = new Blob([receiptContent], { type: "text/plain" });
+                        const blob = new Blob([receiptContent], { type: 'text/plain' });
                         const url = URL.createObjectURL(blob);
-                        const a = document.createElement("a");
+                        const a = document.createElement('a');
                         a.href = url;
                         a.download = `mergenix-receipt-${payment.id}.txt`;
                         a.click();
@@ -416,10 +379,7 @@ export function SubscriptionContent() {
 
         {/* ── Comparison link ── */}
         <div className="text-center">
-          <Link
-            href="/products"
-            className={cn(buttonVariants({ variant: "ghost", size: "md" }))}
-          >
+          <Link href="/products" className={cn(buttonVariants({ variant: 'ghost', size: 'md' }))}>
             Compare All Plans
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </Link>

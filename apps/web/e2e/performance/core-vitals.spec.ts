@@ -36,18 +36,14 @@ test.describe('Performance: Core Web Vitals', () => {
       }));
     });
 
-    const fcpEntry = paintEntries.find(
-      (entry) => entry.name === 'first-contentful-paint',
-    );
+    const fcpEntry = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
 
     // Collect LCP using PerformanceObserver retrospectively
     // LCP may not be in getEntriesByType, so we also check largest-contentful-paint
     const lcpValue = await page.evaluate(() => {
       return new Promise<number>((resolve) => {
         // Try to get the last LCP entry if already buffered
-        const existingEntries = performance.getEntriesByType(
-          'largest-contentful-paint',
-        );
+        const existingEntries = performance.getEntriesByType('largest-contentful-paint');
         if (existingEntries.length > 0) {
           const lastEntry = existingEntries[existingEntries.length - 1];
           resolve(lastEntry.startTime);
@@ -100,9 +96,7 @@ test.describe('Performance: Core Web Vitals', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('analysis page remains responsive during file upload (no long tasks)', async ({
-    page,
-  }) => {
+  test('analysis page remains responsive during file upload (no long tasks)', async ({ page }) => {
     // Set up long task observer BEFORE navigating to the page
     await page.addInitScript(() => {
       (window as any).__longTasks = [];
@@ -166,9 +160,7 @@ test.describe('Performance: Core Web Vitals', () => {
 
     // Check that the UI remains interactive — the "Start Analysis" button
     // should be visible and clickable after both files are uploaded
-    await expect(
-      page.getByRole('button', { name: /start analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /start analysis/i })).toBeVisible();
 
     // Verify no excessively long tasks (>150ms) occurred during upload
     // Long tasks > 50ms can block the main thread; > 150ms is concerning
@@ -180,10 +172,12 @@ test.describe('Performance: Core Web Vitals', () => {
       (task: { duration: number }) => task.duration > 150,
     );
 
-    expect.soft(
-      excessivelyLongTasks.length,
-      `Found ${excessivelyLongTasks.length} long tasks (>150ms) during file upload: ${JSON.stringify(excessivelyLongTasks)}`,
-    ).toBe(0);
+    expect
+      .soft(
+        excessivelyLongTasks.length,
+        `Found ${excessivelyLongTasks.length} long tasks (>150ms) during file upload: ${JSON.stringify(excessivelyLongTasks)}`,
+      )
+      .toBe(0);
   });
 
   // -------------------------------------------------------------------------
@@ -191,9 +185,7 @@ test.describe('Performance: Core Web Vitals', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('slow API responses show loading skeletons and app does not freeze', async ({
-    page,
-  }) => {
+  test('slow API responses show loading skeletons and app does not freeze', async ({ page }) => {
     // Mock a slow API endpoint that the analysis page might call.
     // The auth /me endpoint is called on page load to determine user tier.
     await page.route('**/auth/me', async (route) => {
@@ -228,9 +220,9 @@ test.describe('Performance: Core Web Vitals', () => {
 
     // The page should still render its heading even while API is slow
     // This verifies the app does not freeze waiting for API responses
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible({
+      timeout: 5000,
+    });
 
     // The page should remain interactive — we can interact with elements
     // even while the API is still loading
@@ -279,9 +271,7 @@ test.describe('Performance: Core Web Vitals', () => {
     const productsLink = page.getByRole('link', { name: /products|pricing/i }).first();
 
     // Try About link first, fall back to Products if not found
-    const navLink = (await aboutLink.isVisible().catch(() => false))
-      ? aboutLink
-      : productsLink;
+    const navLink = (await aboutLink.isVisible().catch(() => false)) ? aboutLink : productsLink;
 
     if (await navLink.isVisible().catch(() => false)) {
       // Click the link
@@ -291,9 +281,7 @@ test.describe('Performance: Core Web Vitals', () => {
       await page.waitForLoadState('domcontentloaded');
 
       // Check that the marker survived — if it did, no full reload occurred
-      const markerAfterNav = await page.evaluate(
-        () => (window as any).__navMarker,
-      );
+      const markerAfterNav = await page.evaluate(() => (window as any).__navMarker);
 
       expect(
         markerAfterNav,
@@ -311,9 +299,7 @@ test.describe('Performance: Core Web Vitals', () => {
   // Priority: P2 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('no hydration mismatch errors in console on key pages', async ({
-    page,
-  }) => {
+  test('no hydration mismatch errors in console on key pages', async ({ page }) => {
     const hydrationErrors: { page: string; message: string }[] = [];
 
     // Set up console error listener
@@ -330,7 +316,7 @@ test.describe('Performance: Core Web Vitals', () => {
           'Hydration failed because the initial UI does not match',
           'There was an error while hydrating',
           'content does not match server-rendered',
-          'server-rendered HTML didn\'t match',
+          "server-rendered HTML didn't match",
         ];
 
         if (hydrationPatterns.some((pattern) => text.includes(pattern))) {

@@ -93,7 +93,7 @@ def _init_sentry(dsn: str) -> None:
             traces_sample_rate=0.1,
             profiles_sample_rate=0.1,
             environment=get_settings().environment,
-            before_send=_scrub_pii,
+            before_send=_scrub_pii,  # type: ignore[arg-type]
         )
 
 
@@ -107,9 +107,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # but we verify connectivity here.
     try:
         async with engine.begin() as conn:
-            await conn.execute(
-                __import__("sqlalchemy").text("SELECT 1")
-            )
+            await conn.execute(__import__("sqlalchemy").text("SELECT 1"))
         log.info("database_connection_verified")
     except Exception:
         log.error("database_connection_failed")
@@ -154,7 +152,7 @@ def create_app() -> FastAPI:
 
     # ── Rate Limiting ─────────────────────────────────────────────────────
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)  # type: ignore[arg-type]
 
     # ── CSRF Protection ──────────────────────────────────────────────────
     # Requires X-Requested-With: XMLHttpRequest on state-changing methods

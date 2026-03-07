@@ -8,9 +8,7 @@ describe('TierUpgradePrompt', () => {
   it('renders the message text', () => {
     render(<TierUpgradePrompt message="Upgrade to Pro for full screening." />);
 
-    expect(
-      screen.getByText('Upgrade to Pro for full screening.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Upgrade to Pro for full screening.')).toBeInTheDocument();
   });
 
   it('renders default "Upgrade Plan" button text', () => {
@@ -20,12 +18,7 @@ describe('TierUpgradePrompt', () => {
   });
 
   it('renders custom buttonText prop', () => {
-    render(
-      <TierUpgradePrompt
-        message="Some message"
-        buttonText="Unlock Full Screening"
-      />,
-    );
+    render(<TierUpgradePrompt message="Some message" buttonText="Unlock Full Screening" />);
 
     expect(screen.getByText('Unlock Full Screening')).toBeInTheDocument();
     expect(screen.queryByText('Upgrade Plan')).not.toBeInTheDocument();
@@ -39,9 +32,7 @@ describe('TierUpgradePrompt', () => {
   });
 
   it('lock icon is present and decorative (aria-hidden)', () => {
-    const { container } = render(
-      <TierUpgradePrompt message="Some message" />,
-    );
+    const { container } = render(<TierUpgradePrompt message="Some message" />);
 
     // lucide-react renders Lock as an <svg> with aria-hidden="true"
     const svg = container.querySelector('svg[aria-hidden="true"]');

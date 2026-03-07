@@ -18,7 +18,9 @@ vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactor
 
 vi.mock('@/components/marketing/step-circle', () => ({
   StepCircle: ({ step }: { step: number }) => (
-    <div data-testid={`step-circle-${step}`} aria-label={`Step ${step}`}>{step}</div>
+    <div data-testid={`step-circle-${step}`} aria-label={`Step ${step}`}>
+      {step}
+    </div>
   ),
 }));
 

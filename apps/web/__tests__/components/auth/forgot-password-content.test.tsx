@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+  mockInputFactory,
+} from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -17,13 +23,10 @@ const mockStoreState: Record<string, unknown> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/components/auth/dna-dots', () => ({
@@ -71,7 +74,9 @@ describe('ForgotPasswordContent', () => {
   it('submit calls forgotPassword from store', async () => {
     render(<ForgotPasswordContent />);
 
-    fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email Address'), {
+      target: { value: 'test@example.com' },
+    });
 
     const form = screen.getByLabelText('Email Address').closest('form')!;
     await act(async () => {
@@ -84,7 +89,9 @@ describe('ForgotPasswordContent', () => {
   it('shows "Check Your Email" heading on success', async () => {
     render(<ForgotPasswordContent />);
 
-    fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email Address'), {
+      target: { value: 'test@example.com' },
+    });
 
     const form = screen.getByLabelText('Email Address').closest('form')!;
     await act(async () => {
@@ -99,7 +106,9 @@ describe('ForgotPasswordContent', () => {
   it('shows the submitted email in success message', async () => {
     render(<ForgotPasswordContent />);
 
-    fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'user@domain.com' } });
+    fireEvent.change(screen.getByLabelText('Email Address'), {
+      target: { value: 'user@domain.com' },
+    });
 
     const form = screen.getByLabelText('Email Address').closest('form')!;
     await act(async () => {
@@ -114,7 +123,9 @@ describe('ForgotPasswordContent', () => {
   it('"Try a different email" button resets to form', async () => {
     render(<ForgotPasswordContent />);
 
-    fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email Address'), {
+      target: { value: 'test@example.com' },
+    });
 
     const form = screen.getByLabelText('Email Address').closest('form')!;
     await act(async () => {
@@ -145,7 +156,9 @@ describe('ForgotPasswordContent', () => {
 
     render(<ForgotPasswordContent />);
 
-    fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email Address'), {
+      target: { value: 'test@example.com' },
+    });
 
     const form = screen.getByLabelText('Email Address').closest('form')!;
     await act(async () => {

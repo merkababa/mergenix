@@ -7,7 +7,11 @@ const prompt = fs.readFileSync(basedir + '/r2_legal.txt', 'utf8');
 for (let attempt = 1; attempt <= 3; attempt++) {
   console.log(`Attempt ${attempt}/3 (prompt: ${prompt.length} chars)...`);
   const result = spawnSync('cmd', ['/c', 'gemini', '--model', 'gemini-3.1-pro-preview'], {
-    input: prompt, timeout: 250000, maxBuffer: 10 * 1024 * 1024, encoding: 'utf8', env
+    input: prompt,
+    timeout: 250000,
+    maxBuffer: 10 * 1024 * 1024,
+    encoding: 'utf8',
+    env,
   });
   if (result.stdout && result.stdout.length > 100) {
     fs.writeFileSync(basedir + '/legal.md', result.stdout);
@@ -15,7 +19,9 @@ for (let attempt = 1; attempt <= 3; attempt++) {
     console.log(result.stdout.substring(0, 400));
     break;
   } else {
-    const err = result.error ? result.error.message.substring(0, 100) : (result.stderr || '').substring(0, 150);
+    const err = result.error
+      ? result.error.message.substring(0, 100)
+      : (result.stderr || '').substring(0, 150);
     console.log(`Attempt ${attempt} failed: ${err}`);
     if (attempt < 3) {
       console.log('Waiting 30s before retry...');

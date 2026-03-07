@@ -4,7 +4,9 @@ import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../../
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => mockLucideIcons('Download', 'Loader2', 'CheckCircle2', 'AlertTriangle'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Download', 'Loader2', 'CheckCircle2', 'AlertTriangle'),
+);
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 

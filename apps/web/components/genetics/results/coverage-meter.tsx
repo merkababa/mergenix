@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
+import { memo } from 'react';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -23,29 +23,29 @@ interface CoverageMeterProps {
 
 function getConfidenceColor(level: string): string {
   switch (level) {
-    case "high":
-      return "var(--accent-teal)";
-    case "moderate":
-      return "var(--accent-amber)";
-    case "low":
-    case "insufficient":
-      return "var(--accent-rose)";
+    case 'high':
+      return 'var(--accent-teal)';
+    case 'moderate':
+      return 'var(--accent-amber)';
+    case 'low':
+    case 'insufficient':
+      return 'var(--accent-rose)';
     default:
-      return "var(--text-muted)";
+      return 'var(--text-muted)';
   }
 }
 
 function getConfidenceBgColor(level: string): string {
   switch (level) {
-    case "high":
-      return "rgba(6, 214, 160, 0.12)";
-    case "moderate":
-      return "rgba(245, 158, 11, 0.12)";
-    case "low":
-    case "insufficient":
-      return "rgba(244, 63, 94, 0.12)";
+    case 'high':
+      return 'rgba(6, 214, 160, 0.12)';
+    case 'moderate':
+      return 'rgba(245, 158, 11, 0.12)';
+    case 'low':
+    case 'insufficient':
+      return 'rgba(244, 63, 94, 0.12)';
     default:
-      return "rgba(148, 163, 184, 0.08)";
+      return 'rgba(148, 163, 184, 0.08)';
   }
 }
 
@@ -69,15 +69,15 @@ export const CoverageMeter = memo(function CoverageMeter({
   const bgColor = getConfidenceBgColor(confidenceLevel);
 
   return (
-    <div className="space-y-1.5" style={{ background: bgColor, borderRadius: "8px", padding: "8px 10px" }}>
+    <div
+      className="space-y-1.5"
+      style={{ background: bgColor, borderRadius: '8px', padding: '8px 10px' }}
+    >
       <div className="flex items-center justify-between text-xs">
-        <span className="font-medium text-(--text-body)">
+        <span className="text-(--text-body) font-medium">
           Tested {variantsTested} of {variantsTotal} variants
         </span>
-        <span
-          className="font-mono font-semibold"
-          style={{ color: barColor }}
-        >
+        <span className="font-mono font-semibold" style={{ color: barColor }}>
           {roundedPct}%
         </span>
       </div>
@@ -88,7 +88,7 @@ export const CoverageMeter = memo(function CoverageMeter({
         aria-valuemax={100}
         aria-valuetext={`Tested ${variantsTested} of ${variantsTotal} variants (${roundedPct}%)`}
         aria-label={`${diseaseName} variant coverage`}
-        className="h-1.5 w-full rounded-full bg-(--border-subtle)"
+        className="bg-(--border-subtle) h-1.5 w-full rounded-full"
       >
         <div
           className="h-1.5 rounded-full transition-all duration-300"

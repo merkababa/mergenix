@@ -145,10 +145,7 @@ test.describe('Mobile — iPhone 14: Page Loads Without Errors', () => {
 
     // Filter out non-critical browser console errors (e.g., extension-injected)
     const realErrors = consoleErrors.filter(
-      (e) =>
-        !e.includes('Extension') &&
-        !e.includes('chrome-extension') &&
-        !e.includes('favicon'),
+      (e) => !e.includes('Extension') && !e.includes('chrome-extension') && !e.includes('favicon'),
     );
     expect(realErrors).toHaveLength(0);
   });
@@ -199,10 +196,7 @@ test.describe('Mobile — Pixel 7: Page Loads Without Errors', () => {
     await expect(page.locator('h1').first()).toBeVisible({ timeout: 15_000 });
 
     const realErrors = consoleErrors.filter(
-      (e) =>
-        !e.includes('Extension') &&
-        !e.includes('chrome-extension') &&
-        !e.includes('favicon'),
+      (e) => !e.includes('Extension') && !e.includes('chrome-extension') && !e.includes('favicon'),
     );
     expect(realErrors).toHaveLength(0);
   });
@@ -272,9 +266,7 @@ test.describe('Mobile — Touch Target Size Compliance', () => {
   test.describe('Pixel 7', () => {
     test.use({ ...PIXEL_7 });
 
-    test('all interactive elements on homepage are at least 44px on Pixel 7', async ({
-      page,
-    }) => {
+    test('all interactive elements on homepage are at least 44px on Pixel 7', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       await expect(page.locator('h1').first()).toBeVisible({ timeout: 10_000 });
 
@@ -304,12 +296,14 @@ test.describe('Mobile — No Horizontal Scroll', () => {
 
         // Wait for all pending network requests and DOM mutations to settle
         // before measuring horizontal scroll — avoids flakiness from layout shifts.
-        await page.waitForFunction(() => document.readyState === 'complete', undefined, {
-          timeout: 5_000,
-        }).catch(() => {
-          // If readyState never reaches complete, proceed anyway — the body
-          // is already visible and we have our best measurement opportunity.
-        });
+        await page
+          .waitForFunction(() => document.readyState === 'complete', undefined, {
+            timeout: 5_000,
+          })
+          .catch(() => {
+            // If readyState never reaches complete, proceed anyway — the body
+            // is already visible and we have our best measurement opportunity.
+          });
 
         const hasScroll = await hasHorizontalScroll(page);
         expect(hasScroll).toBe(false);
@@ -329,12 +323,14 @@ test.describe('Mobile — No Horizontal Scroll', () => {
 
         // Wait for all pending network requests and DOM mutations to settle
         // before measuring horizontal scroll — avoids flakiness from layout shifts.
-        await page.waitForFunction(() => document.readyState === 'complete', undefined, {
-          timeout: 5_000,
-        }).catch(() => {
-          // If readyState never reaches complete, proceed anyway — the body
-          // is already visible and we have our best measurement opportunity.
-        });
+        await page
+          .waitForFunction(() => document.readyState === 'complete', undefined, {
+            timeout: 5_000,
+          })
+          .catch(() => {
+            // If readyState never reaches complete, proceed anyway — the body
+            // is already visible and we have our best measurement opportunity.
+          });
 
         const hasScroll = await hasHorizontalScroll(page);
         expect(hasScroll).toBe(false);
@@ -366,16 +362,16 @@ test.describe('Mobile — File Upload Reachable on Mobile Viewport', () => {
 
       // On the analysis page: verify file upload inputs or upload zone are visible
       // The analysis page should show upload dropzones or file inputs
-      const fileInputOrDropzone = page.locator(
-        'input[type="file"], [data-testid*="upload"], [aria-label*="upload" i], [aria-label*="file" i]',
-      ).first();
+      const fileInputOrDropzone = page
+        .locator(
+          'input[type="file"], [data-testid*="upload"], [aria-label*="upload" i], [aria-label*="file" i]',
+        )
+        .first();
 
       await expect(fileInputOrDropzone).toBeAttached({ timeout: 10_000 });
     });
 
-    test('demo analysis button is reachable on mobile iPhone 14 viewport', async ({
-      page,
-    }) => {
+    test('demo analysis button is reachable on mobile iPhone 14 viewport', async ({ page }) => {
       await page.goto('/analysis', { waitUntil: 'domcontentloaded' });
       await expect(page.locator('body')).toBeVisible({ timeout: 15_000 });
 
@@ -419,9 +415,11 @@ test.describe('Mobile — File Upload Reachable on Mobile Viewport', () => {
         return;
       }
 
-      const fileInputOrDropzone = page.locator(
-        'input[type="file"], [data-testid*="upload"], [aria-label*="upload" i], [aria-label*="file" i]',
-      ).first();
+      const fileInputOrDropzone = page
+        .locator(
+          'input[type="file"], [data-testid*="upload"], [aria-label*="upload" i], [aria-label*="file" i]',
+        )
+        .first();
 
       await expect(fileInputOrDropzone).toBeAttached({ timeout: 10_000 });
     });
@@ -440,22 +438,20 @@ test.describe('Mobile — Low-Memory Device Warning', () => {
    * This test documents the requirement for future implementation.
    */
 
-  test.fixme(
-    'memory warning banner appears when deviceMemory < 4GB (iPhone SE / low-end Android)',
-    async ({ page }) => {
-      // Requires overriding navigator.deviceMemory via page.addInitScript
-      // or using Chrome DevTools Protocol to throttle memory.
-      // This feature is not yet implemented in the analysis page.
-    },
-  );
+  test.fixme('memory warning banner appears when deviceMemory < 4GB (iPhone SE / low-end Android)', async ({
+    page,
+  }) => {
+    // Requires overriding navigator.deviceMemory via page.addInitScript
+    // or using Chrome DevTools Protocol to throttle memory.
+    // This feature is not yet implemented in the analysis page.
+  });
 
-  test.fixme(
-    'analysis warning recommends smaller file when device has < 2GB RAM',
-    async ({ page }) => {
-      // Requires the app to implement device.ts `getDeviceCapabilities()`
-      // integration with the analysis UI to show adaptive warnings.
-    },
-  );
+  test.fixme('analysis warning recommends smaller file when device has < 2GB RAM', async ({
+    page,
+  }) => {
+    // Requires the app to implement device.ts `getDeviceCapabilities()`
+    // integration with the analysis UI to show adaptive warnings.
+  });
 
   /**
    * Partial test (non-fixme): Verify that the device detection module
@@ -463,9 +459,7 @@ test.describe('Mobile — Low-Memory Device Warning', () => {
    *
    * This is a smoke test — it does not require full browser integration.
    */
-  test('analysis page renders without crash on low-viewport device (375px)', async ({
-    page,
-  }) => {
+  test('analysis page renders without crash on low-viewport device (375px)', async ({ page }) => {
     // Use the smallest common mobile viewport (iPhone SE / older Android)
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/analysis', { waitUntil: 'domcontentloaded' });
@@ -495,9 +489,7 @@ test.describe('Mobile — Viewport-Specific Layout', () => {
       expect(hasNav).toBe(true);
     });
 
-    test('page content does not overflow outside viewport width on iPhone 14', async ({
-      page,
-    }) => {
+    test('page content does not overflow outside viewport width on iPhone 14', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       await expect(page.locator('h1').first()).toBeVisible({ timeout: 10_000 });
 
@@ -514,9 +506,7 @@ test.describe('Mobile — Viewport-Specific Layout', () => {
             const styles = window.getComputedStyle(el);
             // Skip fixed-position elements (tooltips, modals, etc.)
             if (styles.position === 'fixed') continue;
-            overflows.push(
-              `${el.tagName}.${el.className} — right: ${Math.round(rect.right)}px`,
-            );
+            overflows.push(`${el.tagName}.${el.className} — right: ${Math.round(rect.right)}px`);
             if (overflows.length >= 5) break; // Cap at 5 for readability
           }
         }
@@ -537,17 +527,11 @@ test.describe('Mobile — Viewport-Specific Layout', () => {
    * These tests require physical hardware or advanced emulation not available
    * in Playwright's built-in device emulation.
    */
-  test.fixme(
-    'pinch-to-zoom does not break layout (requires real device testing)',
-    () => {
-      // Requires hardware gesture simulation not available in Playwright headless.
-    },
-  );
+  test.fixme('pinch-to-zoom does not break layout (requires real device testing)', () => {
+    // Requires hardware gesture simulation not available in Playwright headless.
+  });
 
-  test.fixme(
-    'swipe navigation works on mobile tab panels (requires real device testing)',
-    () => {
-      // Swipe events on touch screens require real device or advanced gesture lib.
-    },
-  );
+  test.fixme('swipe navigation works on mobile tab panels (requires real device testing)', () => {
+    // Swipe events on touch screens require real device or advanced gesture lib.
+  });
 });

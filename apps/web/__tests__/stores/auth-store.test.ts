@@ -202,9 +202,9 @@ describe('useAuthStore', () => {
       const error = new Error('Invalid credentials');
       mockLogin.mockRejectedValue(error);
 
-      await expect(
-        useAuthStore.getState().login('test@example.com', 'wrong'),
-      ).rejects.toThrow('Invalid credentials');
+      await expect(useAuthStore.getState().login('test@example.com', 'wrong')).rejects.toThrow(
+        'Invalid credentials',
+      );
 
       const state = useAuthStore.getState();
       expect(state.error).toBe('Invalid credentials');
@@ -214,9 +214,9 @@ describe('useAuthStore', () => {
     it('sets generic error message for non-Error throws', async () => {
       mockLogin.mockRejectedValue('string error');
 
-      await expect(
-        useAuthStore.getState().login('test@example.com', 'pw'),
-      ).rejects.toBe('string error');
+      await expect(useAuthStore.getState().login('test@example.com', 'pw')).rejects.toBe(
+        'string error',
+      );
 
       expect(useAuthStore.getState().error).toBe('Login failed');
     });
@@ -243,18 +243,16 @@ describe('useAuthStore', () => {
     });
 
     it('throws when no challenge token is set', async () => {
-      await expect(
-        useAuthStore.getState().login2FA('123456'),
-      ).rejects.toThrow('No 2FA challenge in progress');
+      await expect(useAuthStore.getState().login2FA('123456')).rejects.toThrow(
+        'No 2FA challenge in progress',
+      );
     });
 
     it('sets error on 2FA failure', async () => {
       useAuthStore.setState({ requires2FA: true, challengeToken: 'c-1' });
       mockLogin2FA.mockRejectedValue(new Error('Invalid code'));
 
-      await expect(
-        useAuthStore.getState().login2FA('000000'),
-      ).rejects.toThrow('Invalid code');
+      await expect(useAuthStore.getState().login2FA('000000')).rejects.toThrow('Invalid code');
 
       expect(useAuthStore.getState().error).toBe('Invalid code');
       expect(useAuthStore.getState().isLoading).toBe(false);
@@ -402,9 +400,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockForgotPassword.mockRejectedValue(new Error('User not found'));
 
-      await expect(
-        useAuthStore.getState().forgotPassword('no@example.com'),
-      ).rejects.toThrow('User not found');
+      await expect(useAuthStore.getState().forgotPassword('no@example.com')).rejects.toThrow(
+        'User not found',
+      );
 
       expect(useAuthStore.getState().error).toBe('User not found');
     });
@@ -425,9 +423,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockResetPassword.mockRejectedValue(new Error('Token expired'));
 
-      await expect(
-        useAuthStore.getState().resetPassword('bad', 'pw'),
-      ).rejects.toThrow('Token expired');
+      await expect(useAuthStore.getState().resetPassword('bad', 'pw')).rejects.toThrow(
+        'Token expired',
+      );
 
       expect(useAuthStore.getState().error).toBe('Token expired');
     });
@@ -448,9 +446,7 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockVerifyEmail.mockRejectedValue(new Error('Invalid token'));
 
-      await expect(
-        useAuthStore.getState().verifyEmail('bad'),
-      ).rejects.toThrow('Invalid token');
+      await expect(useAuthStore.getState().verifyEmail('bad')).rejects.toThrow('Invalid token');
 
       expect(useAuthStore.getState().error).toBe('Invalid token');
     });
@@ -473,9 +469,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockUpdateProfile.mockRejectedValue(new Error('Profile update failed'));
 
-      await expect(
-        useAuthStore.getState().updateProfile({ name: 'X' }),
-      ).rejects.toThrow('Profile update failed');
+      await expect(useAuthStore.getState().updateProfile({ name: 'X' })).rejects.toThrow(
+        'Profile update failed',
+      );
 
       expect(useAuthStore.getState().error).toBe('Profile update failed');
     });
@@ -496,9 +492,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockChangePassword.mockRejectedValue(new Error('Wrong current password'));
 
-      await expect(
-        useAuthStore.getState().changePassword('wrong', 'new'),
-      ).rejects.toThrow('Wrong current password');
+      await expect(useAuthStore.getState().changePassword('wrong', 'new')).rejects.toThrow(
+        'Wrong current password',
+      );
 
       expect(useAuthStore.getState().error).toBe('Wrong current password');
     });
@@ -527,9 +523,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockDeleteAccount.mockRejectedValue(new Error('Wrong password'));
 
-      await expect(
-        useAuthStore.getState().deleteAccount('bad-pw'),
-      ).rejects.toThrow('Wrong password');
+      await expect(useAuthStore.getState().deleteAccount('bad-pw')).rejects.toThrow(
+        'Wrong password',
+      );
 
       expect(useAuthStore.getState().error).toBe('Wrong password');
     });
@@ -553,7 +549,14 @@ describe('useAuthStore', () => {
   describe('getSessions', () => {
     it('returns sessions from authClient', async () => {
       const sessions = [
-        { id: 's1', device: 'Chrome', ip: '1.2.3.4', location: 'US', lastActive: '2024-01-01', isCurrent: true },
+        {
+          id: 's1',
+          device: 'Chrome',
+          ip: '1.2.3.4',
+          location: 'US',
+          lastActive: '2024-01-01',
+          isCurrent: true,
+        },
       ];
       mockGetSessions.mockResolvedValue(sessions);
 
@@ -666,7 +669,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockGetGoogleOAuthUrl.mockRejectedValue(new Error('OAuth unavailable'));
 
-      await expect(useAuthStore.getState().getGoogleOAuthUrl()).rejects.toThrow('OAuth unavailable');
+      await expect(useAuthStore.getState().getGoogleOAuthUrl()).rejects.toThrow(
+        'OAuth unavailable',
+      );
       expect(useAuthStore.getState().error).toBe('OAuth unavailable');
     });
   });
@@ -688,9 +693,9 @@ describe('useAuthStore', () => {
     it('sets error on failure', async () => {
       mockGoogleCallback.mockRejectedValue(new Error('OAuth login failed'));
 
-      await expect(
-        useAuthStore.getState().googleCallback('bad', 'state'),
-      ).rejects.toThrow('OAuth login failed');
+      await expect(useAuthStore.getState().googleCallback('bad', 'state')).rejects.toThrow(
+        'OAuth login failed',
+      );
 
       expect(useAuthStore.getState().error).toBe('OAuth login failed');
     });

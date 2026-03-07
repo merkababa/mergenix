@@ -44,6 +44,7 @@ You are a privacy attorney and data protection officer reviewing code for the Me
 ## Output Format
 
 For each issue found:
+
 ```
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue
   Regulatory reference: GDPR Article X / GINA Section Y / HIPAA Rule Z

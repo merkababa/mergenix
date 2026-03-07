@@ -34,7 +34,9 @@ import { SocialProof } from '../../app/_components/social-proof';
 describe('SocialProof', () => {
   it('renders the section heading', () => {
     render(<SocialProof />);
-    expect(screen.getByRole('heading', { name: /Trusted by Families and Clinicians/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Trusted by Families and Clinicians/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders all 3 testimonial cards', () => {
@@ -68,6 +70,8 @@ describe('SocialProof', () => {
 
   it('renders the section as a social proof landmark', () => {
     render(<SocialProof />);
-    expect(screen.getByRole('region', { name: /Social proof and testimonials/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: /Social proof and testimonials/i }),
+    ).toBeInTheDocument();
   });
 });

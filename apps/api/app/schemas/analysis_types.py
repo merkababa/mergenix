@@ -7,24 +7,26 @@ from pydantic.alias_generators import to_camel
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
+
 def to_camel_case(string: str) -> str:
     """
     Convert snake_case to camelCase.
     """
     return to_camel(string)
 
+
 class BaseSchema(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel_case,
         populate_by_name=True,
         from_attributes=True,
-        use_enum_values=True
+        use_enum_values=True,
     )
 
 
 # ─── File Format Types ──────────────────────────────────────────────────────
 
-FileFormat = Literal['23andme', 'ancestrydna', 'myheritage', 'vcf', 'unknown']
+FileFormat = Literal["23andme", "ancestrydna", "myheritage", "vcf", "unknown"]
 
 
 # ─── Tier Types ─────────────────────────────────────────────────────────────
@@ -32,7 +34,7 @@ FileFormat = Literal['23andme', 'ancestrydna', 'myheritage', 'vcf', 'unknown']
 # TIER_FREE/TIER_PREMIUM/TIER_PRO string constants). This Literal alias is
 # kept for Pydantic schema validation where typing.Literal is required.
 
-Tier = Literal['free', 'premium', 'pro']
+Tier = Literal["free", "premium", "pro"]
 
 
 # ─── Inheritance Pattern Types ──────────────────────────────────────────────
@@ -40,34 +42,35 @@ Tier = Literal['free', 'premium', 'pro']
 # NOTE: 'y_linked' and 'mitochondrial' are reserved for future implementation.
 # They are NOT currently supported by the frontend genetics engine.
 InheritancePattern = Literal[
-    'autosomal_recessive',
-    'autosomal_dominant',
-    'X-linked',
-    'y_linked',
-    'mitochondrial',
+    "autosomal_recessive",
+    "autosomal_dominant",
+    "X-linked",
+    "y_linked",
+    "mitochondrial",
 ]
 
 
 # ─── Carrier Analysis Types ─────────────────────────────────────────────────
 
-CarrierStatus = Literal['normal', 'carrier', 'affected', 'unknown']
+CarrierStatus = Literal["normal", "carrier", "affected", "unknown"]
 
 RiskLevel = Literal[
-    'high_risk',
-    'carrier_detected',
-    'low_risk',
-    'not_tested',
-    'potential_risk',
-    'coverage_insufficient',
-    'unknown'
+    "high_risk",
+    "carrier_detected",
+    "low_risk",
+    "not_tested",
+    "potential_risk",
+    "coverage_insufficient",
+    "unknown",
 ]
+
 
 class OffspringRisk(BaseSchema):
     affected: float
     carrier: float
     normal: float
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def probabilities_must_sum_to_100(self) -> OffspringRisk:
         """Validate that affected + carrier + normal sum to ~100%.
 
@@ -89,14 +92,16 @@ class OffspringRisk(BaseSchema):
             )
         return self
 
+
 class XLinkedOffspringRisk(OffspringRisk):
     sons: OffspringRisk
     daughters: OffspringRisk
 
+
 class CarrierResult(BaseSchema):
     condition: str
     gene: str
-    severity: Literal['high', 'moderate', 'low']
+    severity: Literal["high", "moderate", "low"]
     description: str
     parent_a_status: CarrierStatus = Field(alias="parentAStatus")
     parent_b_status: CarrierStatus = Field(alias="parentBStatus")
@@ -108,10 +113,12 @@ class CarrierResult(BaseSchema):
 
 # ─── Trait Prediction Types ─────────────────────────────────────────────────
 
+
 class PunnettOutcome(BaseSchema):
     genotype: str
     phenotype: str
     probability: float
+
 
 class TraitResult(BaseSchema):
     trait: str
@@ -119,9 +126,9 @@ class TraitResult(BaseSchema):
     rsid: str
     chromosome: str
     description: str
-    confidence: Literal['high', 'medium', 'low']
-    inheritance: Literal['codominant', 'additive', 'dominant', 'recessive']
-    status: Literal['success', 'missing', 'error']
+    confidence: Literal["high", "medium", "low"]
+    inheritance: Literal["codominant", "additive", "dominant", "recessive"]
+    status: Literal["success", "missing", "error"]
     parent_a_genotype: str = Field(alias="parentAGenotype")
     parent_b_genotype: str = Field(alias="parentBGenotype")
     offspring_probabilities: dict[str, float]
@@ -133,36 +140,41 @@ class TraitResult(BaseSchema):
 # ─── Pharmacogenomics Types ─────────────────────────────────────────────────
 
 MetabolizerStatus = Literal[
-    'poor_metabolizer',
-    'intermediate_metabolizer',
-    'normal_metabolizer',
-    'rapid_metabolizer',
-    'ultra_rapid_metabolizer',
-    'unknown'
+    "poor_metabolizer",
+    "intermediate_metabolizer",
+    "normal_metabolizer",
+    "rapid_metabolizer",
+    "ultra_rapid_metabolizer",
+    "unknown",
 ]
+
 
 class DrugRecommendation(BaseSchema):
     drug: str
     recommendation: str
-    strength: Literal['strong', 'moderate']
+    strength: Literal["strong", "moderate"]
     source: str
     category: str
+
 
 class MetabolizerResult(BaseSchema):
     status: MetabolizerStatus
     activity_score: float
     description: str
 
+
 class ParentPgxAnalysis(BaseSchema):
     diplotype: str
     metabolizer_status: MetabolizerResult
     drug_recommendations: list[DrugRecommendation]
+
 
 class OffspringPgxPrediction(BaseSchema):
     diplotype: str
     probability: float
     metabolizer_status: MetabolizerResult
     drug_recommendations: list[DrugRecommendation]
+
 
 class PgxGeneResult(BaseSchema):
     gene: str
@@ -171,6 +183,7 @@ class PgxGeneResult(BaseSchema):
     parent_a: ParentPgxAnalysis = Field(alias="parentA")
     parent_b: ParentPgxAnalysis = Field(alias="parentB")
     offspring_predictions: list[OffspringPgxPrediction]
+
 
 class PgxAnalysisResult(BaseSchema):
     genes_analyzed: int
@@ -183,7 +196,8 @@ class PgxAnalysisResult(BaseSchema):
 
 # ─── Polygenic Risk Score Types ─────────────────────────────────────────────
 
-RiskCategory = Literal['low', 'below_average', 'average', 'above_average', 'elevated', 'high']
+RiskCategory = Literal["low", "below_average", "average", "above_average", "elevated", "high"]
+
 
 class PrsParentResult(BaseSchema):
     raw_score: float
@@ -194,11 +208,13 @@ class PrsParentResult(BaseSchema):
     snps_total: int
     coverage_pct: float
 
+
 class PrsOffspringPrediction(BaseSchema):
     expected_percentile: float
     range_low: float
     range_high: float
     confidence: str
+
 
 class PrsConditionResult(BaseSchema):
     name: str
@@ -208,12 +224,14 @@ class PrsConditionResult(BaseSchema):
     ancestry_note: str
     reference: str
 
+
 class PrsMetadata(BaseSchema):
     source: str
     version: str
     conditions_covered: int
     last_updated: str
     disclaimer: str
+
 
 class PrsAnalysisResult(BaseSchema):
     conditions: dict[str, PrsConditionResult]
@@ -229,16 +247,17 @@ class PrsAnalysisResult(BaseSchema):
 # ─── Ethnicity Types ────────────────────────────────────────────────────────
 
 Population = Literal[
-    'African/African American',
-    'East Asian',
-    'South Asian',
-    'European (Non-Finnish)',
-    'Finnish',
-    'Latino/Admixed American',
-    'Ashkenazi Jewish',
-    'Middle Eastern',
-    'Global'
+    "African/African American",
+    "East Asian",
+    "South Asian",
+    "European (Non-Finnish)",
+    "Finnish",
+    "Latino/Admixed American",
+    "Ashkenazi Jewish",
+    "Middle Eastern",
+    "Global",
 ]
+
 
 class EthnicityAdjustment(BaseSchema):
     base_risk: float
@@ -246,6 +265,7 @@ class EthnicityAdjustment(BaseSchema):
     adjustment_factor: float
     population_frequency: float
     global_frequency: float
+
 
 class EthnicitySummary(BaseSchema):
     rsid: str
@@ -258,18 +278,19 @@ class EthnicitySummary(BaseSchema):
 
 # ─── Counseling Types ───────────────────────────────────────────────────────
 
-CounselingUrgency = Literal['high', 'moderate', 'informational']
+CounselingUrgency = Literal["high", "moderate", "informational"]
 
 CounselorSpecialty = Literal[
-    'prenatal',
-    'carrier_screening',
-    'cancer',
-    'cardiovascular',
-    'pediatric',
-    'neurogenetics',
-    'pharmacogenomics',
-    'general'
+    "prenatal",
+    "carrier_screening",
+    "cancer",
+    "cardiovascular",
+    "pediatric",
+    "neurogenetics",
+    "pharmacogenomics",
+    "general",
 ]
+
 
 class CounselingKeyFinding(BaseSchema):
     condition: str
@@ -278,6 +299,7 @@ class CounselingKeyFinding(BaseSchema):
     parent_a_status: CarrierStatus = Field(alias="parentAStatus")
     parent_b_status: CarrierStatus = Field(alias="parentBStatus")
     inheritance: InheritancePattern
+
 
 class CounselingResult(BaseSchema):
     recommend: bool
@@ -293,18 +315,21 @@ class CounselingResult(BaseSchema):
 
 # ─── Coverage & Chip Detection Types ────────────────────────────────────────
 
+
 class DiseaseCoverage(BaseSchema):
     variants_tested: int
     variants_total: int
     coverage_pct: float
     is_sufficient: bool
     total_known_variants: int | None = None
-    confidence_level: Literal['high', 'moderate', 'low', 'insufficient'] | None = None
+    confidence_level: Literal["high", "moderate", "low", "insufficient"] | None = None
+
 
 class CoverageMetrics(BaseSchema):
     total_diseases: int
     diseases_with_coverage: int
     per_disease: dict[str, DiseaseCoverage]
+
 
 class ChipVersion(BaseSchema):
     provider: str
@@ -312,7 +337,9 @@ class ChipVersion(BaseSchema):
     snp_count: int
     confidence: float
 
-GenomeBuild = Literal['GRCh37', 'GRCh38', 'unknown']
+
+GenomeBuild = Literal["GRCh37", "GRCh38", "unknown"]
+
 
 class FileMetadata(BaseSchema):
     provider: str | None
@@ -324,15 +351,18 @@ class FileMetadata(BaseSchema):
 
 # ─── Couple Analysis Types ───────────────────────────────────────────────────
 
+
 class ParentFileMetadata(BaseSchema):
     file_format: FileFormat
     snp_count: int
     genome_build: GenomeBuild
 
+
 class OffspringSummary(BaseSchema):
     high_risk_conditions: int
     carrier_risk_conditions: int
     total_conditions_analyzed: int
+
 
 class CoupleAnalysis(BaseSchema):
     parent_a: ParentFileMetadata = Field(alias="parentA")
@@ -341,6 +371,7 @@ class CoupleAnalysis(BaseSchema):
 
 
 # ─── Full Analysis Result ───────────────────────────────────────────────────
+
 
 class AnalysisMetadata(BaseSchema):
     parent1_format: FileFormat
@@ -351,6 +382,7 @@ class AnalysisMetadata(BaseSchema):
     engine_version: str
     tier: Tier
     data_version: str | None = None
+
 
 class FullAnalysisResult(BaseSchema):
     carrier: list[CarrierResult]

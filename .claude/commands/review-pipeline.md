@@ -3,6 +3,7 @@ Execute the optimized 3-layer code review pipeline before creating a PR.
 ## Layer 0: Static Analysis Gate
 
 Executors MUST pass all static checks before code goes to reviewers:
+
 1. `pnpm lint` — ESLint
 2. `pnpm typecheck` — TypeScript (exclude known pre-existing issues in `client.ts:157`, `demo-results.ts:268`)
 3. `pnpm test` — All Vitest tests passing
@@ -16,6 +17,7 @@ Only code that passes Layer 0 proceeds.
 After executors complete and Layer 0 passes, the Conductor reads each changed file and verifies against `docs/EXECUTOR_CHECKLIST.md`. This catches ~80% of what reviewers would find.
 
 ### Process
+
 1. List changed files: `git diff origin/main...HEAD --name-only`
 2. For each changed file, verify every applicable checklist item
 3. Fix violations immediately (spawn targeted fix agents — Haiku for mechanical, Sonnet for contextual)
@@ -28,16 +30,16 @@ After executors complete and Layer 0 passes, the Conductor reads each changed fi
 
 ### Reviewer Selection (pick 2-4, NOT more)
 
-| Trigger | Reviewers |
-|---------|-----------|
-| **Default (any PR)** | Architect + Code Reviewer (2) |
-| **New UI screens** | + Designer (3) |
-| **Backend / API / DB** | + Security (3) |
-| **Genetics / health data** | + Scientist (3) |
-| **Privacy / compliance** | + Security + Legal (4) |
-| **Performance-sensitive** | + Technologist (3) |
-| **User-facing copy / pricing** | + Business (3) |
-| **Genetic result display** | + Ethics (3) |
+| Trigger                        | Reviewers                     |
+| ------------------------------ | ----------------------------- |
+| **Default (any PR)**           | Architect + Code Reviewer (2) |
+| **New UI screens**             | + Designer (3)                |
+| **Backend / API / DB**         | + Security (3)                |
+| **Genetics / health data**     | + Scientist (3)               |
+| **Privacy / compliance**       | + Security + Legal (4)        |
+| **Performance-sensitive**      | + Technologist (3)            |
+| **User-facing copy / pricing** | + Business (3)                |
+| **Genetic result display**     | + Ethics (3)                  |
 
 **Rule**: More reviewers ≠ better. Overlapping reviewers find the same issues and waste tokens. 2 focused reviewers > 5 generalist reviewers. Only add a reviewer if the PR has clear relevance to their domain.
 
@@ -52,11 +54,13 @@ Focus on architectural and logic issues that a checklist cannot catch.
 ```
 
 ### Severity Classification (required for every finding)
+
 - **[BLOCK]**: Must fix before merge. Bugs, security issues, data loss risks, incorrect behavior.
 - **[WARN]**: Should fix. Code smell, maintainability concern, minor inconsistency.
 - **[INFO]**: Nice to have. Style preference, future improvement suggestion.
 
 ### Grading
+
 - **A+ (95-100)**: Exemplary — zero issues
 - **A (90-94)**: No BLOCKs, minor WARNs/INFOs only
 - **B+ (85-89)**: 1-2 BLOCKs
@@ -101,6 +105,7 @@ To determine ownership, run: `git diff origin/main...HEAD -- <file>` — if the 
 ### Gemini (Optional Pre-Check)
 
 Gemini can optionally run BEFORE Claude reviewers as a cheap broad sweep:
+
 - Fire selected roles via `review-personas/*.md` using Gemini CLI
 - Use to catch surface-level issues before spending Opus tokens
 - NOT required — skip if PR is small or time-constrained
@@ -116,13 +121,16 @@ Gemini can optionally run BEFORE Claude reviewers as a cheap broad sweep:
 ```
 
 ### Fix Flow
+
 - 6+ issues → executor team with file ownership (one executor per directory/module)
 - 1-5 issues → single executor agent
 
 ### Feedback Loop
+
 After each review cycle, record issues the self-review (Layer 1) missed → update `docs/EXECUTOR_CHECKLIST.md` with new items. The checklist is a living document that improves over time.
 
 ## Rules
+
 - Each grade must cite specific `file:line` evidence — no hand-waving
 - Each reviewer = separate agent — never combine multiple reviewers in one agent
 - Review happens BEFORE the PR is created, not after

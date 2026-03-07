@@ -76,7 +76,7 @@ function createPrng(seed: number): () => number {
   // Ensure the seed is a 32-bit unsigned integer
   let state = seed >>> 0;
   return (): number => {
-    state = ((Math.imul(1664525, state) + 1013904223) >>> 0);
+    state = (Math.imul(1664525, state) + 1013904223) >>> 0;
     return state / 4294967296;
   };
 }
@@ -93,15 +93,15 @@ const NUCLEOTIDES: readonly string[] = ['A', 'C', 'G', 'T'];
  * MT is rare in DTC arrays (~100 variants).
  */
 const CHROMOSOME_WEIGHTS: Array<{ chr: string; weight: number }> = [
-  { chr: '1',  weight: 8.0 },
-  { chr: '2',  weight: 7.5 },
-  { chr: '3',  weight: 6.2 },
-  { chr: '4',  weight: 5.8 },
-  { chr: '5',  weight: 5.5 },
-  { chr: '6',  weight: 5.3 },
-  { chr: '7',  weight: 5.0 },
-  { chr: '8',  weight: 4.8 },
-  { chr: '9',  weight: 4.3 },
+  { chr: '1', weight: 8.0 },
+  { chr: '2', weight: 7.5 },
+  { chr: '3', weight: 6.2 },
+  { chr: '4', weight: 5.8 },
+  { chr: '5', weight: 5.5 },
+  { chr: '6', weight: 5.3 },
+  { chr: '7', weight: 5.0 },
+  { chr: '8', weight: 4.8 },
+  { chr: '9', weight: 4.3 },
   { chr: '10', weight: 4.5 },
   { chr: '11', weight: 4.5 },
   { chr: '12', weight: 4.4 },
@@ -115,8 +115,8 @@ const CHROMOSOME_WEIGHTS: Array<{ chr: string; weight: number }> = [
   { chr: '20', weight: 2.3 },
   { chr: '21', weight: 1.5 },
   { chr: '22', weight: 1.4 },
-  { chr: 'X',  weight: 3.5 },
-  { chr: 'Y',  weight: 0.5 },
+  { chr: 'X', weight: 3.5 },
+  { chr: 'Y', weight: 0.5 },
   { chr: 'MT', weight: 0.1 },
 ];
 
@@ -145,13 +145,31 @@ function pickRsid(rnd: () => number, index: number): string {
 /** Generate a realistic chromosome position for a given chromosome. */
 function pickPosition(chr: string, rnd: () => number): number {
   const chrSizes: Record<string, number> = {
-    '1': 248956422, '2': 242193529, '3': 198295559, '4': 190214555,
-    '5': 181538259, '6': 170805979, '7': 159345973, '8': 145138636,
-    '9': 138394717, '10': 133797422, '11': 135086622, '12': 133275309,
-    '13': 114364328, '14': 107043718, '15': 101991189, '16': 90338345,
-    '17': 83257441,  '18': 80373285,  '19': 58617616,  '20': 64444167,
-    '21': 46709983,  '22': 50818468,  'X': 156040895,  'Y': 57227415,
-    'MT': 16569,
+    '1': 248956422,
+    '2': 242193529,
+    '3': 198295559,
+    '4': 190214555,
+    '5': 181538259,
+    '6': 170805979,
+    '7': 159345973,
+    '8': 145138636,
+    '9': 138394717,
+    '10': 133797422,
+    '11': 135086622,
+    '12': 133275309,
+    '13': 114364328,
+    '14': 107043718,
+    '15': 101991189,
+    '16': 90338345,
+    '17': 83257441,
+    '18': 80373285,
+    '19': 58617616,
+    '20': 64444167,
+    '21': 46709983,
+    '22': 50818468,
+    X: 156040895,
+    Y: 57227415,
+    MT: 16569,
   };
   const size = chrSizes[chr] ?? 100000000;
   return 1 + Math.floor(rnd() * size);
@@ -316,26 +334,18 @@ function renderVcf(variants: VariantSpec[], edgeCases: boolean): string {
  * const result = parse23andMe(content);
  */
 export function generateSyntheticGenome(options: SyntheticGenomeOptions): string {
-  const {
-    format,
-    seed,
-    variantCount = 500000,
-    mutations = [],
-    edgeCases = false,
-  } = options;
+  const { format, seed, variantCount = 500000, mutations = [], edgeCases = false } = options;
 
   const rnd = createPrng(seed);
 
   // Build an injection map for O(1) lookup during generation
-  const injectionMap = new Map<string, string>(
-    mutations.map(m => [m.rsid, m.genotype]),
-  );
+  const injectionMap = new Map<string, string>(mutations.map((m) => [m.rsid, m.genotype]));
 
   // Build variant specs for all injected mutations first (so they appear in the file)
-  const injectedSpecs: VariantSpec[] = mutations.map(m => mutationToSpec(m, rnd));
+  const injectedSpecs: VariantSpec[] = mutations.map((m) => mutationToSpec(m, rnd));
 
   // Track rsIDs already covered by injections (so random gen won't accidentally duplicate them)
-  const usedRsids = new Set<string>(mutations.map(m => m.rsid));
+  const usedRsids = new Set<string>(mutations.map((m) => m.rsid));
 
   // Generate random variants (variantCount - injected mutations)
   const randomCount = Math.max(0, variantCount - injectedSpecs.length);
@@ -371,7 +381,7 @@ export function generateSyntheticGenome(options: SyntheticGenomeOptions): string
   // Validate injection map is consistent (only matters for debugging).
   // Build a Set of rsIDs from allSpecs for O(1) lookup instead of O(n) per-injection find().
   // This reduces the validation from O(n*m) to O(n + m) where n = allSpecs, m = injections.
-  const allSpecsByRsid = new Map<string, VariantSpec>(allSpecs.map(s => [s.rsid, s]));
+  const allSpecsByRsid = new Map<string, VariantSpec>(allSpecs.map((s) => [s.rsid, s]));
   for (const [rsid, genotype] of injectionMap) {
     const spec = allSpecsByRsid.get(rsid);
     if (spec && spec.genotype !== genotype) {

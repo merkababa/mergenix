@@ -174,7 +174,11 @@ export { TIER_GATING } from './types';
 export type { TierGating } from './types';
 
 // ─── Build Detection ────────────────────────────────────────────────────────
-export { detectBuildFromHeaders, detectBuildFromSentinels, detectGenomeBuild } from './build-detection';
+export {
+  detectBuildFromHeaders,
+  detectBuildFromSentinels,
+  detectGenomeBuild,
+} from './build-detection';
 export type { BuildDetectionResult, SentinelSnp } from './build-detection';
 
 // ─── Liftover ───────────────────────────────────────────────────────────────
@@ -182,7 +186,13 @@ export { LiftoverTable, createLiftoverTable } from './liftover';
 export type { LiftoverEntry, LiftoverResult, LiftoverSummary } from './liftover';
 
 // ─── Strand Harmonization ───────────────────────────────────────────────────
-export { isPalindromicPair, analyzeStrand, flipStrand, harmonizeStrand, STRAND_REFERENCE_SNPS } from './strand';
+export {
+  isPalindromicPair,
+  analyzeStrand,
+  flipStrand,
+  harmonizeStrand,
+  STRAND_REFERENCE_SNPS,
+} from './strand';
 export type { StrandAnalysisResult, ReferenceAllele } from './strand';
 
 // ─── Coverage Calculator ───────────────────────────────────────────────────
@@ -191,17 +201,10 @@ export { calculateDiseaseCoverage, calculateCoverageMetrics, getCoverageSummary 
 // ─── Offspring Risk (Punnett-Square Arithmetic) ────────────────────────────
 // Direct exports from the extracted offspring-risk.ts module.
 // The same functions are also re-exported from combiner.ts for backward compat.
-export {
-  calculateARRisk,
-  calculateADRisk,
-  calculateXLinkedRisk,
-} from './offspring-risk';
+export { calculateARRisk, calculateADRisk, calculateXLinkedRisk } from './offspring-risk';
 
 // ─── Couple/Offspring Combiner ─────────────────────────────────────────────
-export {
-  combineForCondition,
-  combineAllConditions,
-} from './combiner';
+export { combineForCondition, combineAllConditions } from './combiner';
 export type { ParentConditionInput, OffspringPrediction } from './combiner';
 
 // ─── Residual Risk Calculator ───────────────────────────────────────────────

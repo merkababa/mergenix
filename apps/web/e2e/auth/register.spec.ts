@@ -59,12 +59,8 @@ test.describe('Registration — P0 Critical', () => {
 
     // Should show the "verify email" success screen
     await expect(page.getByText(/check your email/i)).toBeVisible();
-    await expect(
-      page.getByText(/newuser@test\.mergenix\.com/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/click the link to verify/i),
-    ).toBeVisible();
+    await expect(page.getByText(/newuser@test\.mergenix\.com/i)).toBeVisible();
+    await expect(page.getByText(/click the link to verify/i)).toBeVisible();
   });
 
   test('2. Registration blocked without accepting Terms & Privacy Policy', async ({ page }) => {
@@ -95,19 +91,20 @@ test.describe('Registration — P0 Critical', () => {
     // Do NOT bypass age verification — we want to test the modal
 
     // Clear any existing age verification from localStorage
-    await page.addInitScript((keys) => {
-      localStorage.removeItem(keys.ageKey);
-      localStorage.removeItem(keys.under18Key);
-    }, { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY });
+    await page.addInitScript(
+      (keys) => {
+        localStorage.removeItem(keys.ageKey);
+        localStorage.removeItem(keys.under18Key);
+      },
+      { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY },
+    );
 
     await page.goto('/register');
 
     // The age verification modal should appear
     const modal = page.getByRole('dialog', { name: /age verification/i });
     await expect(modal).toBeVisible();
-    await expect(
-      page.getByText(/you must be at least 18 years old/i),
-    ).toBeVisible();
+    await expect(page.getByText(/you must be at least 18 years old/i)).toBeVisible();
 
     // Click "I am under 18"
     await page.getByRole('button', { name: /I am under 18/i }).click();
@@ -116,10 +113,7 @@ test.describe('Registration — P0 Critical', () => {
     await expect(page).toHaveURL(/^\/$/);
 
     // under-18 flag should be set in localStorage
-    const under18Value = await page.evaluate(
-      (key) => localStorage.getItem(key),
-      UNDER_18_KEY,
-    );
+    const under18Value = await page.evaluate((key) => localStorage.getItem(key), UNDER_18_KEY);
     expect(under18Value).toBeTruthy();
   });
 });
@@ -131,10 +125,13 @@ test.describe('Registration — P1 Important', () => {
     // Do NOT bypass age verification — test the modal flow
 
     // Clear any existing age verification
-    await page.addInitScript((keys) => {
-      localStorage.removeItem(keys.ageKey);
-      localStorage.removeItem(keys.under18Key);
-    }, { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY });
+    await page.addInitScript(
+      (keys) => {
+        localStorage.removeItem(keys.ageKey);
+        localStorage.removeItem(keys.under18Key);
+      },
+      { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY },
+    );
 
     await page.goto('/register');
 
@@ -152,15 +149,10 @@ test.describe('Registration — P1 Important', () => {
 
     // Modal should close and registration form should be visible
     await expect(modal).not.toBeVisible();
-    await expect(
-      page.getByRole('heading', { name: /create account/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /create account/i })).toBeVisible();
 
     // Age verified flag should be persisted
-    const ageVerified = await page.evaluate(
-      (key) => localStorage.getItem(key),
-      AGE_VERIFIED_KEY,
-    );
+    const ageVerified = await page.evaluate((key) => localStorage.getItem(key), AGE_VERIFIED_KEY);
     expect(ageVerified).toBe('true');
   });
 
@@ -216,9 +208,7 @@ test.describe('Registration — P1 Important', () => {
     await passwordInput.fill('MyStr0ng!Pass1234');
 
     // Strength should improve to "Strong" or "Good"
-    await expect(
-      page.getByText(/strong|good/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/strong|good/i).first()).toBeVisible();
 
     // Attempt form submission with the weak password
     await passwordInput.fill('weak');
@@ -247,21 +237,19 @@ test.describe('Registration — P1 Important', () => {
     await emailInput.blur();
 
     // Should show email validation error
-    await expect(
-      page.getByText(/valid email/i),
-    ).toBeVisible();
+    await expect(page.getByText(/valid email/i)).toBeVisible();
 
     // Fix the email — error should clear
     await emailInput.fill('valid@example.com');
     await emailInput.blur();
 
     // The error should no longer be visible
-    await expect(
-      page.getByText(/valid email/i),
-    ).not.toBeVisible();
+    await expect(page.getByText(/valid email/i)).not.toBeVisible();
   });
 
-  test('8. ToS and Privacy consent recorded via API on successful registration', async ({ page }) => {
+  test('8. ToS and Privacy consent recorded via API on successful registration', async ({
+    page,
+  }) => {
     const registerPage = new RegisterPage(page);
 
     await bypassAgeVerification(page);
@@ -302,8 +290,7 @@ test.describe('Registration — P1 Important', () => {
     // assert that at least one of these keys exists with a truthy value.
     const hasTermsAccepted = registrationPayload!.terms_accepted === true;
     const hasConsentsObject =
-      registrationPayload!.consents != null &&
-      typeof registrationPayload!.consents === 'object';
+      registrationPayload!.consents != null && typeof registrationPayload!.consents === 'object';
     expect(
       hasTermsAccepted || hasConsentsObject,
       `Expected terms_accepted=true or consents object in payload, got: ${JSON.stringify(registrationPayload)}`,
@@ -318,10 +305,13 @@ test.describe('Registration — P2 Nice-to-Have', () => {
     const registerPage = new RegisterPage(page);
 
     // Start with age verification NOT bypassed — go through the modal
-    await page.addInitScript((keys) => {
-      localStorage.removeItem(keys.ageKey);
-      localStorage.removeItem(keys.under18Key);
-    }, { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY });
+    await page.addInitScript(
+      (keys) => {
+        localStorage.removeItem(keys.ageKey);
+        localStorage.removeItem(keys.under18Key);
+      },
+      { ageKey: AGE_VERIFIED_KEY, under18Key: UNDER_18_KEY },
+    );
 
     // Mock register API
     await page.route(`${API_BASE}/auth/register`, async (route) => {
@@ -344,10 +334,7 @@ test.describe('Registration — P2 Nice-to-Have', () => {
     await expect(modal).not.toBeVisible();
 
     // Verify age verification is stored in localStorage
-    const ageVerified = await page.evaluate(
-      (key) => localStorage.getItem(key),
-      AGE_VERIFIED_KEY,
-    );
+    const ageVerified = await page.evaluate((key) => localStorage.getItem(key), AGE_VERIFIED_KEY);
     expect(ageVerified).toBe('true');
 
     // Now complete registration

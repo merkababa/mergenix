@@ -27,15 +27,15 @@
  * Pass threshold: all non-todo tests PASS. Todo tests are intentional stubs.
  */
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 // fake-indexeddb/auto globally patches globalThis.indexedDB with an in-memory
 // implementation. Cross-test pollution is prevented by Vitest's `pool: 'forks'`
 // configuration (see vitest.config.ts), which runs each test file in its own
 // isolated process — so this global patch never bleeds into other test files.
-import "fake-indexeddb/auto";
+import 'fake-indexeddb/auto';
 
 // ── Mock the analysis API client (required by analysis-store at import time) ──
-vi.mock("@/lib/api/analysis-client", () => ({
+vi.mock('@/lib/api/analysis-client', () => ({
   saveResult: vi.fn(),
   listResults: vi.fn(),
   getResult: vi.fn(),
@@ -43,15 +43,15 @@ vi.mock("@/lib/api/analysis-client", () => ({
 }));
 
 // Imports after fake-indexeddb polyfill
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
 import {
   saveAnalysisResult,
   loadAnalysisResult,
   deleteAnalysisResult,
   clearAllResults,
   STORAGE_SCHEMA_VERSION,
-} from "@/lib/storage/indexed-db-store";
-import type { FullAnalysisResult } from "@mergenix/shared-types";
+} from '@/lib/storage/indexed-db-store';
+import type { FullAnalysisResult } from '@mergenix/shared-types';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -66,88 +66,88 @@ function createMockAnalysisResult(overrides?: Partial<FullAnalysisResult>): Full
   return {
     carrier: [
       {
-        condition: "Cystic Fibrosis (F508del)",
-        gene: "CFTR",
-        severity: "high",
-        description: "Autosomal recessive disorder affecting lung function.",
-        parentAStatus: "carrier",
-        parentBStatus: "carrier",
+        condition: 'Cystic Fibrosis (F508del)',
+        gene: 'CFTR',
+        severity: 'high',
+        description: 'Autosomal recessive disorder affecting lung function.',
+        parentAStatus: 'carrier',
+        parentBStatus: 'carrier',
         offspringRisk: { affected: 25, carrier: 50, normal: 25 },
-        riskLevel: "high_risk",
-        rsid: "rs113993960",
-        inheritance: "autosomal_recessive",
+        riskLevel: 'high_risk',
+        rsid: 'rs113993960',
+        inheritance: 'autosomal_recessive',
       },
       {
-        condition: "Sickle Cell Disease",
-        gene: "HBB",
-        severity: "high",
-        description: "Hemolytic anemia caused by HbS variant.",
-        parentAStatus: "normal",
-        parentBStatus: "carrier",
+        condition: 'Sickle Cell Disease',
+        gene: 'HBB',
+        severity: 'high',
+        description: 'Hemolytic anemia caused by HbS variant.',
+        parentAStatus: 'normal',
+        parentBStatus: 'carrier',
         offspringRisk: { affected: 0, carrier: 50, normal: 50 },
-        riskLevel: "carrier_detected",
-        rsid: "rs334",
-        inheritance: "autosomal_recessive",
+        riskLevel: 'carrier_detected',
+        rsid: 'rs334',
+        inheritance: 'autosomal_recessive',
       },
     ],
     traits: [
       {
-        trait: "Eye Color",
-        gene: "HERC2/OCA2",
-        rsid: "rs12913832",
-        chromosome: "15",
-        description: "Determines blue vs. brown eye color.",
-        confidence: "high",
-        inheritance: "dominant",
-        status: "success",
-        parentAGenotype: "AG",
-        parentBGenotype: "GG",
-        offspringProbabilities: { "Brown eyes": 75, "Blue eyes": 25 },
+        trait: 'Eye Color',
+        gene: 'HERC2/OCA2',
+        rsid: 'rs12913832',
+        chromosome: '15',
+        description: 'Determines blue vs. brown eye color.',
+        confidence: 'high',
+        inheritance: 'dominant',
+        status: 'success',
+        parentAGenotype: 'AG',
+        parentBGenotype: 'GG',
+        offspringProbabilities: { 'Brown eyes': 75, 'Blue eyes': 25 },
       },
     ],
     pgx: {
       genesAnalyzed: 2,
-      tier: "pro",
+      tier: 'pro',
       isLimited: false,
       results: {
         CYP2D6: {
-          gene: "CYP2D6",
-          description: "Cytochrome P450 2D6",
-          chromosome: "22",
+          gene: 'CYP2D6',
+          description: 'Cytochrome P450 2D6',
+          chromosome: '22',
           parentA: {
-            diplotype: "*1/*1",
+            diplotype: '*1/*1',
             metabolizerStatus: {
-              status: "normal_metabolizer",
+              status: 'normal_metabolizer',
               activityScore: 2.0,
-              description: "Normal metabolizer — standard dosing applies.",
+              description: 'Normal metabolizer — standard dosing applies.',
             },
             drugRecommendations: [],
           },
           parentB: {
-            diplotype: "*4/*4",
+            diplotype: '*4/*4',
             metabolizerStatus: {
-              status: "poor_metabolizer",
+              status: 'poor_metabolizer',
               activityScore: 0.0,
-              description: "Poor metabolizer — reduced activity.",
+              description: 'Poor metabolizer — reduced activity.',
             },
             drugRecommendations: [
               {
-                drug: "Codeine",
-                recommendation: "Avoid; poor metabolizer cannot activate prodrug.",
-                strength: "strong",
-                source: "CPIC",
-                category: "Pain",
+                drug: 'Codeine',
+                recommendation: 'Avoid; poor metabolizer cannot activate prodrug.',
+                strength: 'strong',
+                source: 'CPIC',
+                category: 'Pain',
               },
             ],
           },
           offspringPredictions: [
             {
-              diplotype: "*1/*4",
+              diplotype: '*1/*4',
               probability: 0.5,
               metabolizerStatus: {
-                status: "intermediate_metabolizer",
+                status: 'intermediate_metabolizer',
                 activityScore: 1.0,
-                description: "Intermediate metabolizer.",
+                description: 'Intermediate metabolizer.',
               },
               drugRecommendations: [],
             },
@@ -155,17 +155,17 @@ function createMockAnalysisResult(overrides?: Partial<FullAnalysisResult>): Full
         },
       },
       upgradeMessage: null,
-      disclaimer: "PGx results are for research use only.",
+      disclaimer: 'PGx results are for research use only.',
     },
     prs: {
       conditions: {
         coronary_artery_disease: {
-          name: "Coronary Artery Disease",
+          name: 'Coronary Artery Disease',
           parentA: {
             rawScore: 1.23456789012345,
             zScore: 0.98765432109876,
             percentile: 73.456789012345,
-            riskCategory: "above_average",
+            riskCategory: 'above_average',
             snpsFound: 1450,
             snpsTotal: 1700,
             coveragePct: 85.294117647058,
@@ -174,7 +174,7 @@ function createMockAnalysisResult(overrides?: Partial<FullAnalysisResult>): Full
             rawScore: 0.56789012345678,
             zScore: -0.12345678901234,
             percentile: 45.123456789012,
-            riskCategory: "average",
+            riskCategory: 'average',
             snpsFound: 1380,
             snpsTotal: 1700,
             coveragePct: 81.176470588235,
@@ -183,84 +183,84 @@ function createMockAnalysisResult(overrides?: Partial<FullAnalysisResult>): Full
             expectedPercentile: 59.290122900678,
             rangeLow: 42.1,
             rangeHigh: 76.4,
-            confidence: "moderate — 82% SNP coverage",
+            confidence: 'moderate — 82% SNP coverage',
           },
-          ancestryNote: "Score calibrated for European ancestry.",
-          reference: "Khera et al., Nature Genetics 2018",
+          ancestryNote: 'Score calibrated for European ancestry.',
+          reference: 'Khera et al., Nature Genetics 2018',
         },
       },
       metadata: {
-        source: "PGS Catalog",
-        version: "3.1.0",
+        source: 'PGS Catalog',
+        version: '3.1.0',
         conditionsCovered: 12,
-        lastUpdated: "2025-01-15",
-        disclaimer: "PRS is not diagnostic.",
+        lastUpdated: '2025-01-15',
+        disclaimer: 'PRS is not diagnostic.',
       },
-      tier: "pro",
+      tier: 'pro',
       conditionsAvailable: 12,
       conditionsTotal: 12,
-      disclaimer: "PRS is not diagnostic.",
+      disclaimer: 'PRS is not diagnostic.',
       isLimited: false,
       upgradeMessage: null,
     },
     counseling: {
       recommend: true,
-      urgency: "high",
+      urgency: 'high',
       reasons: [
-        "Both parents are carriers for Cystic Fibrosis.",
-        "25% chance of affected offspring.",
+        'Both parents are carriers for Cystic Fibrosis.',
+        '25% chance of affected offspring.',
       ],
-      nsgcUrl: "https://www.nsgc.org/find-a-counselor",
-      summaryText: "Genetic counseling is recommended based on your results.",
+      nsgcUrl: 'https://www.nsgc.org/find-a-counselor',
+      summaryText: 'Genetic counseling is recommended based on your results.',
       keyFindings: [
         {
-          condition: "Cystic Fibrosis (F508del)",
-          gene: "CFTR",
-          riskLevel: "high_risk",
-          parentAStatus: "carrier",
-          parentBStatus: "carrier",
-          inheritance: "autosomal_recessive",
+          condition: 'Cystic Fibrosis (F508del)',
+          gene: 'CFTR',
+          riskLevel: 'high_risk',
+          parentAStatus: 'carrier',
+          parentBStatus: 'carrier',
+          inheritance: 'autosomal_recessive',
         },
       ],
-      recommendedSpecialties: ["prenatal", "carrier_screening"],
+      recommendedSpecialties: ['prenatal', 'carrier_screening'],
       referralLetter: null,
       upgradeMessage: null,
     },
     metadata: {
-      parent1Format: "23andme",
-      parent2Format: "ancestrydna",
+      parent1Format: '23andme',
+      parent2Format: 'ancestrydna',
       parent1SnpCount: 638529,
       parent2SnpCount: 700184,
-      analysisTimestamp: "2025-03-01T14:30:00.000Z",
-      engineVersion: "3.1.0",
-      tier: "pro",
-      dataVersion: "1",
+      analysisTimestamp: '2025-03-01T14:30:00.000Z',
+      engineVersion: '3.1.0',
+      tier: 'pro',
+      dataVersion: '1',
     },
     coupleMode: true,
     coverageMetrics: {
       totalDiseases: 312,
       diseasesWithCoverage: 298,
       perDisease: {
-        "Cystic Fibrosis (F508del)": {
+        'Cystic Fibrosis (F508del)': {
           variantsTested: 3,
           variantsTotal: 3,
           coveragePct: 100.0,
           isSufficient: true,
           totalKnownVariants: 2100,
-          confidenceLevel: "high",
+          confidenceLevel: 'high',
         },
       },
     },
     chipVersion: {
-      provider: "23andMe",
-      version: "v5",
+      provider: '23andMe',
+      version: 'v5',
       snpCount: 638529,
       confidence: 0.97,
     },
-    genomeBuild: "GRCh37",
+    genomeBuild: 'GRCh37',
     coupleAnalysis: {
-      parentA: { fileFormat: "23andme", snpCount: 638529, genomeBuild: "GRCh37" },
-      parentB: { fileFormat: "ancestrydna", snpCount: 700184, genomeBuild: "GRCh37" },
+      parentA: { fileFormat: '23andme', snpCount: 638529, genomeBuild: 'GRCh37' },
+      parentB: { fileFormat: 'ancestrydna', snpCount: 700184, genomeBuild: 'GRCh37' },
       offspringSummary: {
         highRiskConditions: 1,
         carrierRiskConditions: 1,
@@ -281,33 +281,33 @@ function createEmptyAnalysisResult(): FullAnalysisResult {
     traits: [],
     pgx: {
       genesAnalyzed: 0,
-      tier: "free",
+      tier: 'free',
       isLimited: true,
       results: {},
-      upgradeMessage: "Upgrade to unlock PGx analysis.",
-      disclaimer: "",
+      upgradeMessage: 'Upgrade to unlock PGx analysis.',
+      disclaimer: '',
     },
     prs: {
       conditions: {},
       metadata: {
-        source: "",
-        version: "",
+        source: '',
+        version: '',
         conditionsCovered: 0,
-        lastUpdated: "",
-        disclaimer: "",
+        lastUpdated: '',
+        disclaimer: '',
       },
-      tier: "free",
+      tier: 'free',
       conditionsAvailable: 0,
       conditionsTotal: 0,
-      disclaimer: "",
+      disclaimer: '',
       isLimited: true,
-      upgradeMessage: "Upgrade for PRS.",
+      upgradeMessage: 'Upgrade for PRS.',
     },
     counseling: {
       recommend: false,
-      urgency: "informational",
+      urgency: 'informational',
       reasons: [],
-      nsgcUrl: "",
+      nsgcUrl: '',
       summaryText: null,
       keyFindings: null,
       recommendedSpecialties: null,
@@ -315,18 +315,18 @@ function createEmptyAnalysisResult(): FullAnalysisResult {
       upgradeMessage: null,
     },
     metadata: {
-      parent1Format: "unknown",
-      parent2Format: "unknown",
+      parent1Format: 'unknown',
+      parent2Format: 'unknown',
       parent1SnpCount: 0,
       parent2SnpCount: 0,
-      analysisTimestamp: "",
-      engineVersion: "3.0.0",
-      tier: "free",
+      analysisTimestamp: '',
+      engineVersion: '3.0.0',
+      tier: 'free',
     },
     coupleMode: false,
     coverageMetrics: { totalDiseases: 0, diseasesWithCoverage: 0, perDisease: {} },
     chipVersion: null,
-    genomeBuild: "GRCh37",
+    genomeBuild: 'GRCh37',
   };
 }
 
@@ -339,28 +339,30 @@ function createLargeAnalysisResult(): FullAnalysisResult {
   const carrier = Array.from({ length: 2697 }, (_, i) => ({
     condition: `Disease ${i + 1}`,
     gene: `GENE${i + 1}`,
-    severity: (i % 3 === 0 ? "high" : i % 3 === 1 ? "moderate" : "low") as
-      "high" | "moderate" | "low",
+    severity: (i % 3 === 0 ? 'high' : i % 3 === 1 ? 'moderate' : 'low') as
+      | 'high'
+      | 'moderate'
+      | 'low',
     description: `Description for disease ${i + 1}`,
-    parentAStatus: "carrier" as const,
-    parentBStatus: "normal" as const,
+    parentAStatus: 'carrier' as const,
+    parentBStatus: 'normal' as const,
     offspringRisk: { affected: 0, carrier: 50, normal: 50 },
-    riskLevel: "carrier_detected" as const,
+    riskLevel: 'carrier_detected' as const,
     rsid: `rs${1000000 + i}`,
-    inheritance: "autosomal_recessive" as const,
+    inheritance: 'autosomal_recessive' as const,
   }));
 
   return {
     ...createEmptyAnalysisResult(),
     carrier,
     metadata: {
-      parent1Format: "23andme",
-      parent2Format: "vcf",
+      parent1Format: '23andme',
+      parent2Format: 'vcf',
       parent1SnpCount: 638529,
       parent2SnpCount: 400000,
-      analysisTimestamp: "2025-03-01T14:30:00.000Z",
-      engineVersion: "3.1.0",
-      tier: "pro",
+      analysisTimestamp: '2025-03-01T14:30:00.000Z',
+      engineVersion: '3.1.0',
+      tier: 'pro',
     },
     coverageMetrics: {
       totalDiseases: 2697,
@@ -373,8 +375,8 @@ function createLargeAnalysisResult(): FullAnalysisResult {
 // ── Helper: deterministic fake encrypted envelope (valid JSON with all required fields) ──
 const makeFakeEnvelope = (id: string) =>
   JSON.stringify({
-    version: "1",
-    algorithm: "AES-256-GCM",
+    version: '1',
+    algorithm: 'AES-256-GCM',
     salt: btoa(`salt-${id}`),
     iv: btoa(`iv-for-${id}`),
     ciphertext: btoa(`test-encrypted-payload-for-${id}`),
@@ -387,7 +389,7 @@ const makeFakeEnvelope = (id: string) =>
 // and confirm that the safety guarantee hasn't been accidentally removed.
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("Save/Load — Current State (Stubs)", () => {
+describe('Save/Load — Current State (Stubs)', () => {
   beforeEach(() => {
     useAnalysisStore.getState().reset();
   });
@@ -397,7 +399,7 @@ describe("Save/Load — Current State (Stubs)", () => {
     // This is a ZKE safety guarantee. GREEN until Stream B3 ships.
     const store = useAnalysisStore.getState();
 
-    await expect(store.saveCurrentResult("My Analysis")).rejects.toThrow(
+    await expect(store.saveCurrentResult('My Analysis')).rejects.toThrow(
       /Encryption layer not yet implemented/i,
     );
   });
@@ -407,16 +409,16 @@ describe("Save/Load — Current State (Stubs)", () => {
     // garbage data. The blockade prevents that from reaching the UI.
     const store = useAnalysisStore.getState();
 
-    await expect(store.loadSavedResult("some-result-id")).rejects.toThrow(
+    await expect(store.loadSavedResult('some-result-id')).rejects.toThrow(
       /Encryption layer not yet implemented/i,
     );
   });
 
-  it("saveCurrentResult sets store.saveError on failure", async () => {
+  it('saveCurrentResult sets store.saveError on failure', async () => {
     const store = useAnalysisStore.getState();
 
     try {
-      await store.saveCurrentResult("My Analysis");
+      await store.saveCurrentResult('My Analysis');
     } catch {
       // Expected — the blockade throws. We only care about the side-effect.
     }
@@ -426,11 +428,11 @@ describe("Save/Load — Current State (Stubs)", () => {
     expect(state.saveError).toMatch(/Encryption layer not yet implemented/i);
   });
 
-  it("saveCurrentResult sets isSaving to false after failure", async () => {
+  it('saveCurrentResult sets isSaving to false after failure', async () => {
     const store = useAnalysisStore.getState();
 
     try {
-      await store.saveCurrentResult("My Analysis");
+      await store.saveCurrentResult('My Analysis');
     } catch {
       // Expected
     }
@@ -440,11 +442,11 @@ describe("Save/Load — Current State (Stubs)", () => {
     expect(state.isSaving).toBe(false);
   });
 
-  it("loadSavedResult sets store.saveError on failure", async () => {
+  it('loadSavedResult sets store.saveError on failure', async () => {
     const store = useAnalysisStore.getState();
 
     try {
-      await store.loadSavedResult("test-id-123");
+      await store.loadSavedResult('test-id-123');
     } catch {
       // Expected
     }
@@ -454,11 +456,11 @@ describe("Save/Load — Current State (Stubs)", () => {
     expect(state.saveError).toMatch(/Encryption layer not yet implemented/i);
   });
 
-  it("loadSavedResult sets isLoadingResult to false after failure", async () => {
+  it('loadSavedResult sets isLoadingResult to false after failure', async () => {
     const store = useAnalysisStore.getState();
 
     try {
-      await store.loadSavedResult("test-id-123");
+      await store.loadSavedResult('test-id-123');
     } catch {
       // Expected
     }
@@ -468,11 +470,11 @@ describe("Save/Load — Current State (Stubs)", () => {
     expect(state.isLoadingResult).toBe(false);
   });
 
-  it("clearSaveError clears the error set by saveCurrentResult", async () => {
+  it('clearSaveError clears the error set by saveCurrentResult', async () => {
     const store = useAnalysisStore.getState();
 
     try {
-      await store.saveCurrentResult("test");
+      await store.saveCurrentResult('test');
     } catch {
       // Expected
     }
@@ -485,13 +487,13 @@ describe("Save/Load — Current State (Stubs)", () => {
     expect(useAnalysisStore.getState().saveError).toBeNull();
   });
 
-  it("saveCurrentResult error message references Stream B3", async () => {
+  it('saveCurrentResult error message references Stream B3', async () => {
     // This ensures developers see WHERE to implement the fix.
     const store = useAnalysisStore.getState();
     let thrownError: Error | null = null;
 
     try {
-      await store.saveCurrentResult("test");
+      await store.saveCurrentResult('test');
     } catch (e) {
       thrownError = e as Error;
     }
@@ -509,10 +511,10 @@ describe("Save/Load — Current State (Stubs)", () => {
 // Tests requiring real Argon2id + AES-GCM are marked it.todo().
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("Save/Load — Contract (for Stream B3)", () => {
+describe('Save/Load — Contract (for Stream B3)', () => {
   // ── Serialisation sub-tests (run TODAY) ──────────────────────────────────
 
-  it("JSON round-trip: FullAnalysisResult serialises and deserialises identically", () => {
+  it('JSON round-trip: FullAnalysisResult serialises and deserialises identically', () => {
     // Pre-condition for the full encrypt→save→load→decrypt contract:
     // if JSON serialisation loses data, encryption won't help.
     const result = createMockAnalysisResult();
@@ -522,7 +524,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(deserialized).toEqual(result);
   });
 
-  it("floating-point precision: PRS percentiles survive JSON round-trip within 1e-12", () => {
+  it('floating-point precision: PRS percentiles survive JSON round-trip within 1e-12', () => {
     // The spec requires 1e-12 tolerance for computed float values.
     // JSON does not truncate IEEE 754 doubles, but this test confirms it explicitly.
     const result = createMockAnalysisResult();
@@ -539,22 +541,19 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(Math.abs(recoveredPercentile - originalPercentile)).toBeLessThan(1e-12);
   });
 
-  it("floating-point precision: PRS rawScore survives JSON round-trip within 1e-12", () => {
+  it('floating-point precision: PRS rawScore survives JSON round-trip within 1e-12', () => {
     const result = createMockAnalysisResult();
-    const originalRawScore =
-      result.prs.conditions.coronary_artery_disease.parentA.rawScore; // 1.23456789012345
+    const originalRawScore = result.prs.conditions.coronary_artery_disease.parentA.rawScore; // 1.23456789012345
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
-    const recoveredRawScore =
-      deserialized.prs.conditions.coronary_artery_disease.parentA.rawScore;
+    const recoveredRawScore = deserialized.prs.conditions.coronary_artery_disease.parentA.rawScore;
 
     expect(Math.abs(recoveredRawScore - originalRawScore)).toBeLessThan(1e-12);
   });
 
-  it("floating-point precision: offspring expected percentile survives round-trip within 1e-12", () => {
+  it('floating-point precision: offspring expected percentile survives round-trip within 1e-12', () => {
     const result = createMockAnalysisResult();
-    const original =
-      result.prs.conditions.coronary_artery_disease.offspring.expectedPercentile; // 59.290122900678
+    const original = result.prs.conditions.coronary_artery_disease.offspring.expectedPercentile; // 59.290122900678
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
     const recovered =
@@ -563,7 +562,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(Math.abs(recovered - original)).toBeLessThan(1e-12);
   });
 
-  it("string/enum fields: carrier riskLevel survives round-trip with exact equality", () => {
+  it('string/enum fields: carrier riskLevel survives round-trip with exact equality', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -576,7 +575,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     }
   });
 
-  it("string/enum fields: metadata tier, formats, and engineVersion are exact after round-trip", () => {
+  it('string/enum fields: metadata tier, formats, and engineVersion are exact after round-trip', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -588,7 +587,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(deserialized.metadata.analysisTimestamp).toBe(result.metadata.analysisTimestamp);
   });
 
-  it("empty analysis result serialises and deserialises with no data loss", () => {
+  it('empty analysis result serialises and deserialises with no data loss', () => {
     const result = createEmptyAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -602,7 +601,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(deserialized.coupleAnalysis).toBeUndefined();
   });
 
-  it("large analysis result (2697 diseases) serialises without data loss", () => {
+  it('large analysis result (2697 diseases) serialises without data loss', () => {
     const result = createLargeAnalysisResult();
 
     const serialized = JSON.stringify(result);
@@ -611,14 +610,14 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(deserialized.carrier).toHaveLength(2697);
 
     // Spot-check first and last entries
-    expect(deserialized.carrier[0].condition).toBe("Disease 1");
-    expect(deserialized.carrier[2696].condition).toBe("Disease 2697");
+    expect(deserialized.carrier[0].condition).toBe('Disease 1');
+    expect(deserialized.carrier[2696].condition).toBe('Disease 2697');
 
     // Verify rsid precision is preserved on the last entry
-    expect(deserialized.carrier[2696].rsid).toBe("rs1002696");
+    expect(deserialized.carrier[2696].rsid).toBe('rs1002696');
   });
 
-  it("large analysis result: no carrier entries lost in round-trip", () => {
+  it('large analysis result: no carrier entries lost in round-trip', () => {
     const result = createLargeAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -632,7 +631,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     }
   });
 
-  it("nested objects: offspringRisk values survive round-trip", () => {
+  it('nested objects: offspringRisk values survive round-trip', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -645,7 +644,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(recovered.normal).toBe(original.normal);
   });
 
-  it("nested objects: pgx drug recommendations survive round-trip", () => {
+  it('nested objects: pgx drug recommendations survive round-trip', () => {
     const result = createMockAnalysisResult();
     const originalDrug = result.pgx.results.CYP2D6.parentB.drugRecommendations[0];
 
@@ -658,7 +657,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(recoveredDrug.recommendation).toBe(originalDrug.recommendation);
   });
 
-  it("null fields are preserved across serialisation (not converted to undefined)", () => {
+  it('null fields are preserved across serialisation (not converted to undefined)', () => {
     const result = createMockAnalysisResult();
     // These fields are explicitly null — must not become undefined after parse.
 
@@ -669,7 +668,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     expect(deserialized.prs.upgradeMessage).toBeNull();
   });
 
-  it("boolean fields are preserved across serialisation", () => {
+  it('boolean fields are preserved across serialisation', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -689,7 +688,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     //   3. Load from IndexedDB via loadResultFromStorage(resultId)
     //   4. Call decryptEnvelope(key, loaded.encryptedEnvelope)
     //   5. Assert decrypted result deepEquals original result
-    "round-trip: encrypt → save to IndexedDB → load → decrypt → result matches original (requires Stream B3)",
+    'round-trip: encrypt → save to IndexedDB → load → decrypt → result matches original (requires Stream B3)',
   );
 
   it.todo(
@@ -697,7 +696,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     //   1. Call saveCurrentResult(label) — encrypts and sends EncryptedEnvelope to backend
     //   2. Call loadSavedResult(id) — fetches and decrypts
     //   3. Assert fullResults in store matches original
-    "round-trip: saveCurrentResult → loadSavedResult → fullResults matches original (requires Stream B3 + running backend)",
+    'round-trip: saveCurrentResult → loadSavedResult → fullResults matches original (requires Stream B3 + running backend)',
   );
 
   it.todo(
@@ -711,7 +710,7 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     //   // Assert gone
     //   const loaded = await loadResultFromStorage(resultId);
     //   expect(loaded).toBeNull();
-    "nuclear delete: after deletion, saved result is gone from IndexedDB (requires Stream B3)",
+    'nuclear delete: after deletion, saved result is gone from IndexedDB (requires Stream B3)',
   );
 
   it.todo(
@@ -719,14 +718,14 @@ describe("Save/Load — Contract (for Stream B3)", () => {
     //   const envelope = await encryptEnvelope(originalKey, result);
     //   const wrongKey = await deriveKey('wrong-password', salt);
     //   await expect(decryptEnvelope(wrongKey, envelope)).rejects.toThrow();
-    "nuclear delete: after deletion, wrong key cannot decrypt old envelope (requires Stream B3)",
+    'nuclear delete: after deletion, wrong key cannot decrypt old envelope (requires Stream B3)',
   );
 
   it.todo(
     // When Stream B3 and backend deletion are implemented:
     //   await deleteSavedResult(id);
     //   await expect(loadSavedResult(id)).rejects.toMatchObject({ status: 404 });
-    "nuclear delete: subsequent load after backend deletion returns 404/410 (requires Stream B3 + backend)",
+    'nuclear delete: subsequent load after backend deletion returns 404/410 (requires Stream B3 + backend)',
   );
 });
 
@@ -737,8 +736,8 @@ describe("Save/Load — Contract (for Stream B3)", () => {
 // They are pre-conditions for the encryption round-trip tests in Section 2.
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("Save/Load — Data Serialisation", () => {
-  it("FullAnalysisResult serialises to valid JSON without throwing", () => {
+describe('Save/Load — Data Serialisation', () => {
+  it('FullAnalysisResult serialises to valid JSON without throwing', () => {
     const result = createMockAnalysisResult();
 
     let serialized: string;
@@ -746,30 +745,30 @@ describe("Save/Load — Data Serialisation", () => {
       serialized = JSON.stringify(result);
     }).not.toThrow();
 
-    expect(typeof serialized!).toBe("string");
+    expect(typeof serialized!).toBe('string');
     expect(serialized!.length).toBeGreaterThan(0);
   });
 
-  it("JSON.parse(JSON.stringify(result)) preserves all top-level fields", () => {
+  it('JSON.parse(JSON.stringify(result)) preserves all top-level fields', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
 
     // Verify all top-level keys exist
-    expect(deserialized).toHaveProperty("carrier");
-    expect(deserialized).toHaveProperty("traits");
-    expect(deserialized).toHaveProperty("pgx");
-    expect(deserialized).toHaveProperty("prs");
-    expect(deserialized).toHaveProperty("counseling");
-    expect(deserialized).toHaveProperty("metadata");
-    expect(deserialized).toHaveProperty("coupleMode");
-    expect(deserialized).toHaveProperty("coverageMetrics");
-    expect(deserialized).toHaveProperty("chipVersion");
-    expect(deserialized).toHaveProperty("genomeBuild");
-    expect(deserialized).toHaveProperty("coupleAnalysis");
+    expect(deserialized).toHaveProperty('carrier');
+    expect(deserialized).toHaveProperty('traits');
+    expect(deserialized).toHaveProperty('pgx');
+    expect(deserialized).toHaveProperty('prs');
+    expect(deserialized).toHaveProperty('counseling');
+    expect(deserialized).toHaveProperty('metadata');
+    expect(deserialized).toHaveProperty('coupleMode');
+    expect(deserialized).toHaveProperty('coverageMetrics');
+    expect(deserialized).toHaveProperty('chipVersion');
+    expect(deserialized).toHaveProperty('genomeBuild');
+    expect(deserialized).toHaveProperty('coupleAnalysis');
   });
 
-  it("JSON.parse(JSON.stringify(result)) is deep-equal to the original", () => {
+  it('JSON.parse(JSON.stringify(result)) is deep-equal to the original', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -777,19 +776,19 @@ describe("Save/Load — Data Serialisation", () => {
     expect(deserialized).toEqual(result);
   });
 
-  it("analysisTimestamp string field survives round-trip without coercion", () => {
+  it('analysisTimestamp string field survives round-trip without coercion', () => {
     // analysisTimestamp is stored as a string (ISO 8601), NOT a Date object.
     // JSON.parse must not convert it — confirm it stays a string.
     const result = createMockAnalysisResult();
-    const timestamp = "2025-03-01T14:30:00.000Z";
+    const timestamp = '2025-03-01T14:30:00.000Z';
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
 
-    expect(typeof deserialized.metadata.analysisTimestamp).toBe("string");
+    expect(typeof deserialized.metadata.analysisTimestamp).toBe('string');
     expect(deserialized.metadata.analysisTimestamp).toBe(timestamp);
   });
 
-  it("Record<string, PrsConditionResult> survives round-trip with all keys intact", () => {
+  it('Record<string, PrsConditionResult> survives round-trip with all keys intact', () => {
     const result = createMockAnalysisResult();
     const conditionKeys = Object.keys(result.prs.conditions);
 
@@ -799,7 +798,7 @@ describe("Save/Load — Data Serialisation", () => {
     expect(recoveredKeys).toEqual(conditionKeys);
   });
 
-  it("Record<string, PgxGeneResult> survives round-trip with all keys intact", () => {
+  it('Record<string, PgxGeneResult> survives round-trip with all keys intact', () => {
     const result = createMockAnalysisResult();
     const geneKeys = Object.keys(result.pgx.results);
 
@@ -809,19 +808,18 @@ describe("Save/Load — Data Serialisation", () => {
     expect(recoveredKeys).toEqual(geneKeys);
   });
 
-  it("Record<string, DiseaseCoverage> in coverageMetrics survives round-trip", () => {
+  it('Record<string, DiseaseCoverage> in coverageMetrics survives round-trip', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
 
-    const originalCoverage = result.coverageMetrics.perDisease["Cystic Fibrosis (F508del)"];
-    const recoveredCoverage =
-      deserialized.coverageMetrics.perDisease["Cystic Fibrosis (F508del)"];
+    const originalCoverage = result.coverageMetrics.perDisease['Cystic Fibrosis (F508del)'];
+    const recoveredCoverage = deserialized.coverageMetrics.perDisease['Cystic Fibrosis (F508del)'];
 
     expect(recoveredCoverage).toEqual(originalCoverage);
   });
 
-  it("arrays (carrier, traits, offspring predictions) maintain order and length", () => {
+  it('arrays (carrier, traits, offspring predictions) maintain order and length', () => {
     const result = createMockAnalysisResult();
 
     const deserialized = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
@@ -835,7 +833,7 @@ describe("Save/Load — Data Serialisation", () => {
     );
   });
 
-  it("serialised FullAnalysisResult is valid JSON (parseable by any spec-compliant JSON parser)", () => {
+  it('serialised FullAnalysisResult is valid JSON (parseable by any spec-compliant JSON parser)', () => {
     const result = createMockAnalysisResult();
     const serialized = JSON.stringify(result);
 
@@ -844,7 +842,7 @@ describe("Save/Load — Data Serialisation", () => {
     expect(() => JSON.parse(JSON.stringify(JSON.parse(serialized)))).not.toThrow();
   });
 
-  it("serialised result does not contain undefined values (JSON.stringify drops them)", () => {
+  it('serialised result does not contain undefined values (JSON.stringify drops them)', () => {
     // undefined properties are silently dropped by JSON.stringify.
     // This test ensures the fixture doesn't accidentally rely on undefined values.
     const result = createMockAnalysisResult();
@@ -869,14 +867,14 @@ describe("Save/Load — Data Serialisation", () => {
 // (key invalidation) requires Stream B3; those tests are in Section 2 as todos.
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("Save/Load — Nuclear Delete (IndexedDB layer)", () => {
+describe('Save/Load — Nuclear Delete (IndexedDB layer)', () => {
   beforeEach(async () => {
     await clearAllResults();
     useAnalysisStore.getState().reset();
   });
 
-  it("after deleteResultFromStorage, loadResultFromStorage returns null", async () => {
-    const resultId = "delete-test-001";
+  it('after deleteResultFromStorage, loadResultFromStorage returns null', async () => {
+    const resultId = 'delete-test-001';
     const envelope = makeFakeEnvelope(resultId);
 
     // Save an entry
@@ -894,38 +892,48 @@ describe("Save/Load — Nuclear Delete (IndexedDB layer)", () => {
     expect(after).toBeNull();
   });
 
-  it("after deleteAnalysisResult, the entry does not appear in listAnalysisResults", async () => {
-    const resultId = "delete-list-test";
+  it('after deleteAnalysisResult, the entry does not appear in listAnalysisResults', async () => {
+    const resultId = 'delete-list-test';
 
     await saveAnalysisResult(resultId, makeFakeEnvelope(resultId), STORAGE_SCHEMA_VERSION);
     await deleteAnalysisResult(resultId);
 
-    const { listAnalysisResults } = await import(
-      "@/lib/storage/indexed-db-store"
-    );
+    const { listAnalysisResults } = await import('@/lib/storage/indexed-db-store');
     const allResults = await listAnalysisResults();
     const found = allResults.find((r) => r.resultId === resultId);
     expect(found).toBeUndefined();
   });
 
-  it("deleting a non-existent ID is a no-op (does not throw)", async () => {
+  it('deleting a non-existent ID is a no-op (does not throw)', async () => {
     await expect(
-      useAnalysisStore.getState().deleteResultFromStorage("non-existent-id"),
+      useAnalysisStore.getState().deleteResultFromStorage('non-existent-id'),
     ).resolves.toBeUndefined();
   });
 
-  it("clearAllResults removes all stored entries", async () => {
+  it('clearAllResults removes all stored entries', async () => {
     // Save multiple entries
-    await saveAnalysisResult("del-clear-1", makeFakeEnvelope("del-clear-1"), STORAGE_SCHEMA_VERSION);
-    await saveAnalysisResult("del-clear-2", makeFakeEnvelope("del-clear-2"), STORAGE_SCHEMA_VERSION);
-    await saveAnalysisResult("del-clear-3", makeFakeEnvelope("del-clear-3"), STORAGE_SCHEMA_VERSION);
+    await saveAnalysisResult(
+      'del-clear-1',
+      makeFakeEnvelope('del-clear-1'),
+      STORAGE_SCHEMA_VERSION,
+    );
+    await saveAnalysisResult(
+      'del-clear-2',
+      makeFakeEnvelope('del-clear-2'),
+      STORAGE_SCHEMA_VERSION,
+    );
+    await saveAnalysisResult(
+      'del-clear-3',
+      makeFakeEnvelope('del-clear-3'),
+      STORAGE_SCHEMA_VERSION,
+    );
 
     await clearAllResults();
 
     // All must be gone
-    const r1 = await loadAnalysisResult("del-clear-1");
-    const r2 = await loadAnalysisResult("del-clear-2");
-    const r3 = await loadAnalysisResult("del-clear-3");
+    const r1 = await loadAnalysisResult('del-clear-1');
+    const r2 = await loadAnalysisResult('del-clear-2');
+    const r3 = await loadAnalysisResult('del-clear-3');
 
     expect(r1).toBeNull();
     expect(r2).toBeNull();
@@ -942,7 +950,7 @@ describe("Save/Load — Nuclear Delete (IndexedDB layer)", () => {
     //   // the data is gone from IndexedDB, so there is nothing to decrypt.
     //   // Specifically: attempting decryptEnvelope on a re-fetched null entry
     //   // must throw (no envelope to feed to the decryption function).
-    "after deletion, the original encryption key cannot decrypt a re-fetched null entry (requires Stream B3)",
+    'after deletion, the original encryption key cannot decrypt a re-fetched null entry (requires Stream B3)',
   );
 });
 
@@ -954,8 +962,8 @@ describe("Save/Load — Nuclear Delete (IndexedDB layer)", () => {
 // serialisation layer properties that the export MUST rely on.
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("Save/Load — GDPR Export Format", () => {
-  it("serialised FullAnalysisResult produces machine-readable JSON", () => {
+describe('Save/Load — GDPR Export Format', () => {
+  it('serialised FullAnalysisResult produces machine-readable JSON', () => {
     const result = createMockAnalysisResult();
     const exported = JSON.stringify(result, null, 2); // pretty-printed for GDPR export
 
@@ -964,25 +972,25 @@ describe("Save/Load — GDPR Export Format", () => {
 
     // Must be a JSON object (not array or primitive)
     const parsed = JSON.parse(exported);
-    expect(typeof parsed).toBe("object");
+    expect(typeof parsed).toBe('object');
     expect(Array.isArray(parsed)).toBe(false);
   });
 
-  it("GDPR export includes all user data fields (carrier, traits, pgx, prs, counseling)", () => {
+  it('GDPR export includes all user data fields (carrier, traits, pgx, prs, counseling)', () => {
     const result = createMockAnalysisResult();
     const exported = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
 
     // All substantive user data sections must be present
-    expect(exported).toHaveProperty("carrier");
-    expect(exported).toHaveProperty("traits");
-    expect(exported).toHaveProperty("pgx");
-    expect(exported).toHaveProperty("prs");
-    expect(exported).toHaveProperty("counseling");
-    expect(exported).toHaveProperty("metadata");
-    expect(exported).toHaveProperty("coverageMetrics");
+    expect(exported).toHaveProperty('carrier');
+    expect(exported).toHaveProperty('traits');
+    expect(exported).toHaveProperty('pgx');
+    expect(exported).toHaveProperty('prs');
+    expect(exported).toHaveProperty('counseling');
+    expect(exported).toHaveProperty('metadata');
+    expect(exported).toHaveProperty('coverageMetrics');
   });
 
-  it("GDPR export includes analysis metadata (timestamps, tier, formats)", () => {
+  it('GDPR export includes analysis metadata (timestamps, tier, formats)', () => {
     const result = createMockAnalysisResult();
     const exported = JSON.parse(JSON.stringify(result)) as FullAnalysisResult;
 
@@ -992,7 +1000,7 @@ describe("Save/Load — GDPR Export Format", () => {
     expect(exported.metadata.parent1Format).toBeTruthy();
   });
 
-  it("GDPR export does NOT contain encryption keys (FullAnalysisResult never holds keys)", () => {
+  it('GDPR export does NOT contain encryption keys (FullAnalysisResult never holds keys)', () => {
     // ZKE guarantees: the plaintext result object NEVER contains the derived
     // AES key or the user's password. Those live only in memory during decryption.
     const result = createMockAnalysisResult();
@@ -1006,7 +1014,7 @@ describe("Save/Load — GDPR Export Format", () => {
     // Note: "iv" might appear as a field name in medical contexts, but not in FullAnalysisResult
   });
 
-  it("GDPR export does NOT contain internal storage IDs or raw encryption envelopes", () => {
+  it('GDPR export does NOT contain internal storage IDs or raw encryption envelopes', () => {
     // FullAnalysisResult contains health data — not storage metadata.
     // Storage IDs and EncryptedEnvelope strings live in IndexedDB only.
     //
@@ -1021,9 +1029,9 @@ describe("Save/Load — GDPR Export Format", () => {
 
     // These top-level IndexedDB StoredEntry keys must not appear as top-level
     // keys on the FullAnalysisResult object itself
-    expect(parsed).not.toHaveProperty("encryptedEnvelope");
-    expect(parsed).not.toHaveProperty("resultId");  // IndexedDB StoredEntry key
-    expect(parsed).not.toHaveProperty("savedAt");   // IndexedDB StoredEntry key
+    expect(parsed).not.toHaveProperty('encryptedEnvelope');
+    expect(parsed).not.toHaveProperty('resultId'); // IndexedDB StoredEntry key
+    expect(parsed).not.toHaveProperty('savedAt'); // IndexedDB StoredEntry key
 
     // The raw serialised string must also not contain these storage-layer fields
     const serialized = JSON.stringify(result);
@@ -1032,7 +1040,7 @@ describe("Save/Load — GDPR Export Format", () => {
     expect(serialized).not.toMatch(/"savedAt"/);
   });
 
-  it("GDPR export is stable: same input produces same serialised output", () => {
+  it('GDPR export is stable: same input produces same serialised output', () => {
     // Non-deterministic serialisation (e.g. Map iteration order, Date.now())
     // would break GDPR auditing. FullAnalysisResult uses only plain objects/arrays.
     const result = createMockAnalysisResult();
@@ -1050,6 +1058,6 @@ describe("Save/Load — GDPR Export Format", () => {
     //   expect(export).not.toHaveProperty('encryption_key');
     //   expect(export).not.toHaveProperty('password_hash');
     //   expect(export).not.toHaveProperty('refresh_token');
-    "GDPR export endpoint returns all user data fields without credentials (requires backend export endpoint)",
+    'GDPR export endpoint returns all user data fields without credentials (requires backend export endpoint)',
   );
 });

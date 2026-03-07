@@ -178,9 +178,9 @@ describe('Coverage Metrics — Accuracy', () => {
       { condition: 'Disease A', gene: 'GENE_A', rsid: 'rs3' },
     ];
     const genotypes = {
-      rs1: 'AG',   // valid
-      rs2: '--',   // no-call — should NOT count
-      rs3: '',     // empty — should NOT count
+      rs1: 'AG', // valid
+      rs2: '--', // no-call — should NOT count
+      rs3: '', // empty — should NOT count
     };
 
     const metrics = calculateCoverageMetrics(testPanel, genotypes);
@@ -401,9 +401,9 @@ describe('Coverage Metrics — Chip Detection Interaction', () => {
     const metrics = calculateCoverageMetrics(testPanel, partialChipGenotypes);
     const summary = getCoverageSummary(metrics);
 
-    expect(summary.fullyCovered).toBe(1);   // Disease Covered: 2/2
+    expect(summary.fullyCovered).toBe(1); // Disease Covered: 2/2
     expect(summary.partiallyCovered).toBe(1); // Disease Partial: 1/2
-    expect(summary.notCovered).toBe(1);       // Disease Not Covered: 0/2
+    expect(summary.notCovered).toBe(1); // Disease Not Covered: 0/2
     expect(summary.totalDiseases).toBe(3);
   });
 
@@ -439,7 +439,7 @@ describe('Coverage Metrics — Chip Detection Interaction', () => {
     // but the total disease count should match the unique conditions in the panel.
     const smallGenotypes = {
       rs75030207: 'CC', // CF F508del
-      rs334: 'AA',       // Sickle Cell
+      rs334: 'AA', // Sickle Cell
     };
 
     const metrics = calculateCoverageMetrics(carrierPanel, smallGenotypes);
@@ -512,11 +512,36 @@ describe('Coverage Metrics — Summary Accuracy', () => {
       totalDiseases: 5,
       diseasesWithCoverage: 4,
       perDisease: {
-        'Disease Full 1': { variantsTested: 3, variantsTotal: 3, coveragePct: 100, isSufficient: true },
-        'Disease Full 2': { variantsTested: 1, variantsTotal: 1, coveragePct: 100, isSufficient: true },
-        'Disease Partial 1': { variantsTested: 1, variantsTotal: 4, coveragePct: 25, isSufficient: true },
-        'Disease Partial 2': { variantsTested: 2, variantsTotal: 3, coveragePct: 66.7, isSufficient: true },
-        'Disease None': { variantsTested: 0, variantsTotal: 2, coveragePct: 0, isSufficient: false },
+        'Disease Full 1': {
+          variantsTested: 3,
+          variantsTotal: 3,
+          coveragePct: 100,
+          isSufficient: true,
+        },
+        'Disease Full 2': {
+          variantsTested: 1,
+          variantsTotal: 1,
+          coveragePct: 100,
+          isSufficient: true,
+        },
+        'Disease Partial 1': {
+          variantsTested: 1,
+          variantsTotal: 4,
+          coveragePct: 25,
+          isSufficient: true,
+        },
+        'Disease Partial 2': {
+          variantsTested: 2,
+          variantsTotal: 3,
+          coveragePct: 66.7,
+          isSufficient: true,
+        },
+        'Disease None': {
+          variantsTested: 0,
+          variantsTotal: 2,
+          coveragePct: 0,
+          isSufficient: false,
+        },
       },
     };
 
@@ -533,10 +558,10 @@ describe('Coverage Metrics — Summary Accuracy', () => {
       totalDiseases: 4,
       diseasesWithCoverage: 3,
       perDisease: {
-        'D1': { variantsTested: 2, variantsTotal: 2, coveragePct: 100, isSufficient: true },
-        'D2': { variantsTested: 1, variantsTotal: 2, coveragePct: 50, isSufficient: true },
-        'D3': { variantsTested: 1, variantsTotal: 4, coveragePct: 25, isSufficient: true },
-        'D4': { variantsTested: 0, variantsTotal: 1, coveragePct: 0, isSufficient: false },
+        D1: { variantsTested: 2, variantsTotal: 2, coveragePct: 100, isSufficient: true },
+        D2: { variantsTested: 1, variantsTotal: 2, coveragePct: 50, isSufficient: true },
+        D3: { variantsTested: 1, variantsTotal: 4, coveragePct: 25, isSufficient: true },
+        D4: { variantsTested: 0, variantsTotal: 1, coveragePct: 0, isSufficient: false },
       },
     };
 

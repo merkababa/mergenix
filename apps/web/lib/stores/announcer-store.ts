@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
+import { create } from 'zustand';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
 interface AnnouncerState {
   assertiveMessage: string;
   politeMessage: string;
-  announce: (message: string, priority?: "polite" | "assertive") => void;
+  announce: (message: string, priority?: 'polite' | 'assertive') => void;
   clear: () => void;
 }
 
@@ -22,18 +22,18 @@ const AUTO_CLEAR_MS = 5000;
 // ── Store ─────────────────────────────────────────────────────────────────
 
 export const useAnnouncerStore = create<AnnouncerState>()((set) => ({
-  assertiveMessage: "",
-  politeMessage: "",
+  assertiveMessage: '',
+  politeMessage: '',
 
-  announce: (message, priority = "assertive") => {
-    if (priority === "assertive") {
+  announce: (message, priority = 'assertive') => {
+    if (priority === 'assertive') {
       // Clear any existing assertive timer
       if (assertiveTimer !== null) {
         clearTimeout(assertiveTimer);
       }
       set({ assertiveMessage: message });
       assertiveTimer = setTimeout(() => {
-        set({ assertiveMessage: "" });
+        set({ assertiveMessage: '' });
         assertiveTimer = null;
       }, AUTO_CLEAR_MS);
     } else {
@@ -43,7 +43,7 @@ export const useAnnouncerStore = create<AnnouncerState>()((set) => ({
       }
       set({ politeMessage: message });
       politeTimer = setTimeout(() => {
-        set({ politeMessage: "" });
+        set({ politeMessage: '' });
         politeTimer = null;
       }, AUTO_CLEAR_MS);
     }
@@ -58,6 +58,6 @@ export const useAnnouncerStore = create<AnnouncerState>()((set) => ({
       clearTimeout(politeTimer);
       politeTimer = null;
     }
-    set({ assertiveMessage: "", politeMessage: "" });
+    set({ assertiveMessage: '', politeMessage: '' });
   },
 }));

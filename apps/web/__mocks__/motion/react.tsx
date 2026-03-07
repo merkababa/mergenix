@@ -9,45 +9,48 @@ import { vi } from 'vitest';
 
 // Motion element factory — accepts any motion tag and returns a stripped-down version
 const createMotionElement = (tag: React.ElementType) => {
-  return React.forwardRef<
-    HTMLElement,
-    { children?: React.ReactNode; [key: string]: unknown }
-  >(({ children, ...props }, ref) => {
-    // Strip motion props, keep only HTML attributes
-    const {
-      variants,
-      initial,
-      whileInView,
-      viewport,
-      animate,
-      exit,
-      transition,
-      whileHover,
-      whileTap,
-      layoutId,
-      style,
-      ...htmlProps
-    } = props;
-    // Void the props to prevent unused variable warnings
-    void variants;
-    void initial;
-    void whileInView;
-    void viewport;
-    void animate;
-    void exit;
-    void transition;
-    void whileHover;
-    void whileTap;
-    void layoutId;
-    void style;
-    // React.createElement is used instead of JSX here because the `tag` is a
-    // dynamically chosen React.ElementType (div, section, path, etc.). JSX
-    // cannot resolve per-element prop types for a runtime-determined tag, so
-    // TypeScript would infer `children` as `unknown` via the index signature.
-    // createElement accepts (type, props, ...children) without JSX's strict
-    // per-element type narrowing, keeping the ref and children types correct.
-    return React.createElement(tag, { ref, ...(htmlProps as Record<string, unknown>) }, children as React.ReactNode);
-  });
+  return React.forwardRef<HTMLElement, { children?: React.ReactNode; [key: string]: unknown }>(
+    ({ children, ...props }, ref) => {
+      // Strip motion props, keep only HTML attributes
+      const {
+        variants,
+        initial,
+        whileInView,
+        viewport,
+        animate,
+        exit,
+        transition,
+        whileHover,
+        whileTap,
+        layoutId,
+        style,
+        ...htmlProps
+      } = props;
+      // Void the props to prevent unused variable warnings
+      void variants;
+      void initial;
+      void whileInView;
+      void viewport;
+      void animate;
+      void exit;
+      void transition;
+      void whileHover;
+      void whileTap;
+      void layoutId;
+      void style;
+      // React.createElement is used instead of JSX here because the `tag` is a
+      // dynamically chosen React.ElementType (div, section, path, etc.). JSX
+      // cannot resolve per-element prop types for a runtime-determined tag, so
+      // TypeScript would infer `children` as `unknown` via the index signature.
+      // createElement accepts (type, props, ...children) without JSX's strict
+      // per-element type narrowing, keeping the ref and children types correct.
+      return React.createElement(
+        tag,
+        { ref, ...(htmlProps as Record<string, unknown>) },
+        children as React.ReactNode,
+      );
+    },
+  );
 };
 
 export const motion = {
@@ -76,19 +79,13 @@ export const motion = {
 export const m = motion;
 
 // AnimatePresence — render children without animation
-export const AnimatePresence = ({ children }: { children?: React.ReactNode }) => (
-  <>{children}</>
-);
+export const AnimatePresence = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 
 // LazyMotion — render children without animation
-export const LazyMotion = ({ children }: { children?: React.ReactNode }) => (
-  <>{children}</>
-);
+export const LazyMotion = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 
 // MotionConfig — pass through children without configuration
-export const MotionConfig = ({ children }: { children?: React.ReactNode }) => (
-  <>{children}</>
-);
+export const MotionConfig = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 
 // domAnimation — empty object (used by LazyMotion)
 export const domAnimation = {};
@@ -98,12 +95,16 @@ const createMotionValue = (initial: unknown = 0) => {
   let val = initial;
   return {
     get: () => val,
-    set: (v: unknown) => { val = v; },
+    set: (v: unknown) => {
+      val = v;
+    },
     on: vi.fn((_type: string, _callback: (v: unknown) => void) => {
       // Return unsubscribe function
       return () => {};
     }),
-    get current() { return val; },
+    get current() {
+      return val;
+    },
   };
 };
 
@@ -115,7 +116,15 @@ export const useScroll = () => ({
   scrollY: createMotionValue(0),
   scrollX: createMotionValue(0),
 });
-export const useInView = (_ref?: React.RefObject<Element | null>, _options?: { once?: boolean; margin?: string; amount?: number | "some" | "all"; root?: React.RefObject<Element | null> }): boolean => false;
+export const useInView = (
+  _ref?: React.RefObject<Element | null>,
+  _options?: {
+    once?: boolean;
+    margin?: string;
+    amount?: number | 'some' | 'all';
+    root?: React.RefObject<Element | null>;
+  },
+): boolean => false;
 export const useAnimation = () => ({ start: vi.fn(), stop: vi.fn(), set: vi.fn() });
 export const useSpring = (value: unknown) => createMotionValue(value);
 export const useReducedMotion = () => false;

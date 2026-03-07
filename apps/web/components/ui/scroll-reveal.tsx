@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 import {
   m,
   useReducedMotion,
@@ -8,19 +8,19 @@ import {
   useTransform,
   type MotionValue,
   type Variants,
-} from "motion/react";
+} from 'motion/react';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type ScrollRevealType = "fade" | "blur" | "clip" | "scale" | "rotate";
+export type ScrollRevealType = 'fade' | 'blur' | 'clip' | 'scale' | 'rotate';
 
 export interface ScrollRevealProps {
   children: React.ReactNode;
   /** Animation variant. Defaults to "fade" (backward-compatible). */
   type?: ScrollRevealType;
-  direction?: "up" | "down" | "left" | "right";
+  direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
   duration?: number;
   className?: string;
@@ -40,7 +40,7 @@ export interface ScrollProgressResult {
 // Constants (hoisted outside component bodies — checklist §3)
 // ---------------------------------------------------------------------------
 
-type Direction = NonNullable<ScrollRevealProps["direction"]>;
+type Direction = NonNullable<ScrollRevealProps['direction']>;
 
 /** Translation offsets for slide-based animations. */
 const DIRECTION_OFFSETS: Record<Direction, { x: number; y: number }> = {
@@ -52,13 +52,13 @@ const DIRECTION_OFFSETS: Record<Direction, { x: number; y: number }> = {
 
 /** clip-path hidden states per direction. */
 const CLIP_HIDDEN: Record<Direction, string> = {
-  up: "inset(100% 0% 0% 0%)",
-  down: "inset(0% 0% 100% 0%)",
-  left: "inset(0% 100% 0% 0%)",
-  right: "inset(0% 0% 0% 100%)",
+  up: 'inset(100% 0% 0% 0%)',
+  down: 'inset(0% 0% 100% 0%)',
+  left: 'inset(0% 100% 0% 0%)',
+  right: 'inset(0% 0% 0% 100%)',
 };
 
-const CLIP_VISIBLE = "inset(0% 0% 0% 0%)";
+const CLIP_VISIBLE = 'inset(0% 0% 0% 0%)';
 
 /** Rotation direction: left/right entries rotate on the Z axis; up/down keep 0. */
 const ROTATE_HIDDEN: Record<Direction, number> = {
@@ -81,8 +81,8 @@ function buildFadeVariants(offset: { x: number; y: number }): Variants {
 
 function buildBlurVariants(offset: { x: number; y: number }): Variants {
   return {
-    hidden: { opacity: 0, filter: "blur(10px)", x: offset.x, y: offset.y },
-    visible: { opacity: 1, filter: "blur(0px)", x: 0, y: 0 },
+    hidden: { opacity: 0, filter: 'blur(10px)', x: offset.x, y: offset.y },
+    visible: { opacity: 1, filter: 'blur(0px)', x: 0, y: 0 },
   };
 }
 
@@ -100,10 +100,7 @@ function buildScaleVariants(offset: { x: number; y: number }): Variants {
   };
 }
 
-function buildRotateVariants(
-  offset: { x: number; y: number },
-  direction: Direction,
-): Variants {
+function buildRotateVariants(offset: { x: number; y: number }, direction: Direction): Variants {
   return {
     hidden: {
       opacity: 0,
@@ -136,8 +133,8 @@ const REDUCED_MOTION_VARIANTS: Variants = {
  */
 export function ScrollReveal({
   children,
-  type = "fade",
-  direction = "up",
+  type = 'fade',
+  direction = 'up',
   delay = 0,
   duration = 0.5,
   className,
@@ -151,15 +148,15 @@ export function ScrollReveal({
   const variants: Variants = useMemo(() => {
     if (prefersReduced) return REDUCED_MOTION_VARIANTS;
     switch (type) {
-      case "blur":
+      case 'blur':
         return buildBlurVariants(offset);
-      case "clip":
+      case 'clip':
         return buildClipVariants(direction);
-      case "scale":
+      case 'scale':
         return buildScaleVariants(offset);
-      case "rotate":
+      case 'rotate':
         return buildRotateVariants(offset, direction);
-      case "fade":
+      case 'fade':
       default:
         return buildFadeVariants(offset);
     }
@@ -183,14 +180,14 @@ export function ScrollReveal({
     <m.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-50px" }}
+      viewport={{ once, margin: '-50px' }}
       variants={variants}
       transition={{
         duration: prefersReduced ? 0.15 : duration,
         delay: prefersReduced ? 0 : delay,
-        ease: "easeOut" as const,
+        ease: 'easeOut' as const,
       }}
-      style={animating ? { willChange: "transform, opacity" } : undefined}
+      style={animating ? { willChange: 'transform, opacity' } : undefined}
       onAnimationComplete={handleAnimationComplete}
       onViewportEnter={handleViewportEnter}
       className={className}
@@ -224,12 +221,10 @@ export function ScrollReveal({
  * );
  * ```
  */
-export function useScrollProgress(
-  ref: React.RefObject<HTMLElement | null>,
-): ScrollProgressResult {
+export function useScrollProgress(ref: React.RefObject<HTMLElement | null>): ScrollProgressResult {
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"],
+    offset: ['start end', 'end start'],
   });
 
   // Fade in as element enters viewport (0% → 30% scroll progress)

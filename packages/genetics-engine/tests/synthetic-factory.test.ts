@@ -125,8 +125,8 @@ describe('Golden Standard: MyHeritage format', () => {
   it('handles both rs-prefixed and VG-prefixed identifiers', () => {
     const result = parseMyHeritage(GOLDEN_MYHERITAGE.content);
     const allRsids = Object.keys(result);
-    const hasRs = allRsids.some(id => id.startsWith('rs'));
-    const hasVg = allRsids.some(id => id.startsWith('VG'));
+    const hasRs = allRsids.some((id) => id.startsWith('rs'));
+    const hasVg = allRsids.some((id) => id.startsWith('VG'));
     expect(hasRs).toBe(true);
     expect(hasVg).toBe(true);
   });

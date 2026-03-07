@@ -1,1163 +1,1776 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mergenix Orchestration Model</title>
-<style>
-  :root {
-    --bg: #0a0a1a;
-    --bg-gradient: linear-gradient(135deg, #0a0a1a 0%, #0d1230 50%, #0a0a1a 100%);
-    --surface: #12122a;
-    --surface-hover: #1a1a3a;
-    --border: #2a2a4a;
-    --border-glow: rgba(100,120,255,.15);
-    --text: #e8eaf6;
-    --text-muted: #8890b0;
-    --text-dim: #5a6080;
-    --blue: #5b8def;
-    --blue-dim: rgba(91,141,239,.15);
-    --green: #4caf7c;
-    --green-dim: rgba(76, 175, 124, 0.15);
-    --orange: #e09940;
-    --orange-dim: rgba(224, 153, 64, 0.15);
-    --purple: #a87ce0;
-    --purple-dim: rgba(168, 124, 224, 0.15);
-    --red: #e05555;
-    --red-dim: rgba(224, 85, 85, 0.15);
-    --gold: #d4a835;
-    --gold-dim: rgba(212, 168, 53, 0.15);
-    --cyan: #4cc9d0;
-    --cyan-dim: rgba(76, 201, 208, 0.15);
-    --pink: #d06090;
-    --pink-dim: rgba(208, 96, 144, 0.15);
-    --radius: 12px;
-    --shadow: 0 4px 24px rgba(0,0,0,.4);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,.5);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    min-height: 100vh;
-  }
-
-  .page-bg {
-    background: var(--bg-gradient);
-    min-height: 100vh;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
-
-  .header {
-    text-align: center;
-    padding: 4rem 1rem 3rem;
-    position: relative;
-  }
-  .header::after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--blue), var(--purple));
-    margin: 2rem auto 0;
-    border-radius: 2px;
-  }
-  .header h1 {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    background: linear-gradient(135deg, var(--blue), var(--purple), var(--cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .header .subtitle {
-    color: var(--text-muted);
-    font-size: 1.15rem;
-    margin-top: 0.5rem;
-    font-weight: 400;
-  }
-  .header .version {
-    color: var(--text-dim);
-    font-size: 0.85rem;
-    margin-top: 0.75rem;
-    font-family: 'SF Mono', 'Fira Code', monospace;
-  }
-
-  .section {
-    margin-top: 3.5rem;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .section-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  .section-label.blue { color: var(--blue); } .section-label.green { color: var(--green); }
-  .section-label.orange { color: var(--orange); } .section-label.purple { color: var(--purple); }
-  .section-label.red { color: var(--red); } .section-label.gold { color: var(--gold); }
-  .section-label.cyan { color: var(--cyan); } .section-label.pink { color: var(--pink); }
-
-  .section h2 {
-    font-size: 1.65rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 1rem;
-  }
-  .section p {
-    color: var(--text-muted);
-    max-width: 800px;
-    margin-bottom: 1.25rem;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .card:hover {
-    border-color: var(--border-glow);
-    box-shadow: var(--shadow-lg);
-  }
-  .card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-  }
-  .card p, .card li {
-    color: var(--text-muted);
-    font-size: 0.92rem;
-  }
-  .card ul {
-    list-style: none;
-    padding: 0;
-  }
-  .card ul li {
-    padding: 0.3rem 0;
-    padding-left: 1.4rem;
-    position: relative;
-  }
-  .card ul li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.7rem;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--text-dim);
-  }
-
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-
-  @media (max-width: 768px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .container { padding: 1rem; }
-    .header { padding: 2.5rem 0.5rem 2rem; }
-  }
-
-  .table-wrap {
-    overflow-x: auto;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    margin: 1rem 0;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  thead {
-    background: rgba(255,255,255,0.03);
-  }
-  th {
-    text-align: left;
-    padding: 0.75rem 1rem;
-    font-weight: 600;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  td {
-    padding: 0.65rem 1rem;
-    color: var(--text-muted);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    vertical-align: top;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
-
-  .arch-diagram {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    padding: 2rem 0;
-  }
-  .arch-layer {
-    width: 100%;
-    max-width: 700px;
-    text-align: center;
-    padding: 1.25rem 1.5rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    position: relative;
-    background: var(--surface);
-  }
-  .arch-layer .layer-num {
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-  }
-  .arch-layer h4 {
-    font-size: 1.05rem;
-    margin-bottom: 0.3rem;
-  }
-  .arch-layer .desc {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-  }
-  .arch-arrow {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 36px;
-    justify-content: center;
-    color: var(--text-dim);
-    font-size: 1.2rem;
-    user-select: none;
-  }
-
-  .layer-conductor { border-color: var(--blue); } .layer-conductor .layer-num { color: var(--blue); border-color: var(--blue); } .layer-conductor h4 { color: var(--blue); }
-  .layer-devlead { border-color: var(--green); } .layer-devlead .layer-num { color: var(--green); border-color: var(--green); } .layer-devlead h4 { color: var(--green); }
-  .layer-executor { border-color: var(--cyan); } .layer-executor .layer-num { color: var(--cyan); border-color: var(--cyan); } .layer-executor h4 { color: var(--cyan); }
-  .layer-gemini { border-color: var(--orange); } .layer-gemini .layer-num { color: var(--orange); border-color: var(--orange); } .layer-gemini h4 { color: var(--orange); }
-  .layer-claude { border-color: var(--purple); } .layer-claude .layer-num { color: var(--purple); border-color: var(--purple); } .layer-claude h4 { color: var(--purple); }
-
-  .redflag-card { background: var(--red-dim); border-color: rgba(224, 85, 85, 0.3); }
-  .redflag-card ul li::before { background: var(--red); } .redflag-card h3 { color: var(--red); }
-  .good-card { background: var(--green-dim); border-color: rgba(76, 175, 124, 0.3); }
-  .good-card ul li::before { background: var(--green); } .good-card h3 { color: var(--green); }
-  .warn-card { background: var(--orange-dim); border-color: rgba(224, 153, 64, 0.3); }
-  .warn-card ul li::before { background: var(--orange); } .warn-card h3 { color: var(--orange); }
-
-  .pipeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 1.5rem 0;
-  }
-  .pipeline-stage {
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    position: relative;
-  }
-  .pipeline-stage h4 { margin-bottom: 0.5rem; font-size: 1rem; }
-  .pipeline-stage p, .pipeline-stage li { font-size: 0.88rem; }
-  .pipeline-connector {
-    text-align: center;
-    padding: 0.4rem 0;
-    color: var(--text-dim);
-    font-size: 1.1rem;
-  }
-
-  .stage-layer0 { border-left: 3px solid var(--cyan); } .stage-layer0 h4 { color: var(--cyan); }
-  .stage-gemini { border-left: 3px solid var(--orange); } .stage-gemini h4 { color: var(--orange); }
-  .stage-judge { border-left: 3px solid var(--gold); } .stage-judge h4 { color: var(--gold); }
-  .stage-claude { border-left: 3px solid var(--purple); } .stage-claude h4 { color: var(--purple); }
-  .stage-overlap { border-left: 3px solid var(--pink); } .stage-overlap h4 { color: var(--pink); }
-
-  .reviewer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
-    margin-top: 1rem;
-  }
-  .reviewer-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .reviewer-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  .reviewer-card .r-num { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--text-dim); margin-bottom: 0.4rem; }
-  .reviewer-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-  .reviewer-card .r-icon { font-size: 1.4rem; margin-right: 0.5rem; vertical-align: middle; }
-  .reviewer-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
-
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-right: 0.4rem;
-    vertical-align: middle;
-  }
-  .badge-critical { background: var(--red-dim); color: var(--red); border: 1px solid rgba(224,85,85,0.3); } .badge-high { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(224,153,64,0.3); }
-  .badge-medium { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(212,168,53,0.3); } .badge-low { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(91,141,239,0.3); }
-
-  .fix-flow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    margin: 1rem 0;
-  }
-  @media (max-width: 768px) {
-    .fix-flow { grid-template-columns: 1fr; }
-    .reviewer-grid { grid-template-columns: 1fr; }
-  }
-
-  code {
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    background: rgba(255,255,255,0.06);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.85em;
-    color: var(--cyan);
-  }
-  .code-block {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    overflow-x: auto;
-    margin: 0.75rem 0;
-    line-height: 1.6;
-    white-space: pre;
-  }
-
-  .feedback-loop {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1rem 0;
-  }
-  .fb-step {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-  }
-  .fb-step .fb-icon { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-  .fb-arrow { text-align: center; color: var(--text-dim); font-size: 0.9rem; padding-left: 12px; }
-
-  .footer {
-    margin-top: 4rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 0.82rem;
-  }
-  .footer a { color: var(--blue); text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-
-  .grade-row { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-  .grade-row:last-child { border-bottom: none; }
-  .grade-letter { font-weight: 700; font-size: 1.1rem; width: 36px; text-align: center; flex-shrink: 0; }
-  .grade-desc { font-size: 0.88rem; color: var(--text-muted); }
-
-  .toc {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin: 2rem 0;
-    columns: 2;
-    column-gap: 2rem;
-  }
-  .toc a {
-    display: block;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.88rem;
-    padding: 0.25rem 0;
-    transition: color 0.2s;
-    break-inside: avoid;
-  }
-  .toc a:hover { color: var(--blue); } @media (max-width: 768px) { .toc { columns: 1; } }
-
-  @media print {
-    body, .page-bg { background: white; color: #1a1a2e; }
-    .card, .pipeline-stage, .reviewer-card, .arch-layer, .feedback-loop, .toc, .table-wrap {
-      background: white;
-      border-color: #ddd;
-      box-shadow: none;
-      break-inside: avoid;
-    }
-    th, td { color: #333; border-color: #ddd; }
-    thead { background: #f5f5f5; }
-    .section { opacity: 1 !important; transform: none !important; }
-    .header h1 { -webkit-text-fill-color: #1a1a2e; background: none; color: #1a1a2e; }
-    code { background: #f0f0f0; color: #333; }
-    .redflag-card { background: #fff0f0; }
-    .good-card { background: #f0fff0; }
-    .warn-card { background: #fffbf0; }
-    .section-label, .layer-num { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  }
-
-  [id] { scroll-margin-top: 1rem; }
-  .sep {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 3rem 0;
-  }
-</style>
-</head>
-<body>
-<div class="page-bg">
-<div class="container">
-
-<!-- ===== HEADER ===== -->
-<header class="header">
-  <h1>Mergenix Orchestration Model</h1>
-  <div class="subtitle">Multi-Agent Development &amp; Review Pipeline</div>
-  <div class="version">v2.0 -- Updated 2026-02-10</div>
-</header>
-
-<!-- ===== TABLE OF CONTENTS ===== -->
-<nav class="toc section visible">
-  <a href="#architecture">1. Architecture Overview</a>
-  <a href="#conductor-rules">2. Conductor Rules</a>
-  <a href="#planning">3. Planning Phase</a>
-  <a href="#execution">4. Execution Phase</a>
-  <a href="#review-pipeline">5. Three-Layer Review Pipeline</a>
-  <a href="#reviewers">6. The 10 Reviewer Roles</a>
-  <a href="#context-scoping">7. Context Scoping</a>
-  <a href="#fix-flow">8. Fix Flow</a>
-  <a href="#feedback-loop">9. Feedback Loop</a>
-  <a href="#gemini-rules">10. Gemini Delegation Rules</a>
-  <a href="#key-files">11. Key Files Reference</a>
-  <a href="#severity">12. Severity Definitions</a>
-  <a href="#grading">13. Grading Rubric</a>
-</nav>
-
-<!-- ===== 1. ARCHITECTURE OVERVIEW ===== -->
-<section class="section" id="architecture">
-  <div class="section-label blue">Section 1</div>
-  <h2>Architecture Overview</h2>
-  <p>The orchestration model uses five distinct layers. Each layer has a single responsibility. Code only flows downward; results flow upward.</p>
-
-  <div class="arch-diagram">
-    <div class="arch-layer layer-conductor">
-      <span class="layer-num">Layer 1</span>
-      <h4>Conductor</h4>
-      <div class="desc">Top-level orchestrator. Spawns teams, tracks progress, updates status files. <strong>Never writes code.</strong> Context window is sacred -- only summaries flow in.</div>
-    </div>
-    <div class="arch-arrow">&#9660;</div>
-    <div class="arch-layer layer-devlead">
-      <span class="layer-num">Layer 2</span>
-      <h4>Dev Team Leader</h4>
-      <div class="desc">Spawned via TeamCreate. Orchestrates executor agents with file ownership boundaries. <strong>Never writes code.</strong> Can delegate to Gemini where appropriate.</div>
-    </div>
-    <div class="arch-arrow">&#9660;</div>
-    <div class="arch-layer layer-executor">
-      <span class="layer-num">Layer 3</span>
-      <h4>Executor Agents</h4>
-      <div class="desc">Actual code writers. Each owns specific files to prevent merge conflicts. Pre-embedded with Technologist + Business checklists. Report results upward to Dev Team Leader.</div>
-    </div>
-    <div class="arch-arrow">&#9660; &#9660;</div>
-    <div class="arch-layer layer-gemini">
-      <span class="layer-num">Layer 4</span>
-      <h4>Gemini Review Coordinator</h4>
-      <div class="desc">Spawns separate Gemini instances per reviewer role. Each gets full code + diff in interleaved format. Uses enhanced prompts with adversarial questions and anti-inflation grading.</div>
-    </div>
-    <div class="arch-arrow">&#9660;</div>
-    <div class="arch-layer layer-claude">
-      <span class="layer-num">Layer 5</span>
-      <h4>Claude Opus Reviewers</h4>
-      <div class="desc">Independent Claude Opus agents per reviewer role. Own context, full tool access, can read files and trace code paths. Results go to Judge/Synthesis agent, not combined.</div>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 2. CONDUCTOR RULES ===== -->
-<section class="section" id="conductor-rules">
-  <div class="section-label red">Section 2</div>
-  <h2>Conductor Rules</h2>
-  <p>The Conductor's context window is the most valuable resource in the system. Every byte must earn its place. Long sessions lead to context compaction, which causes lost memory and hallucination.</p>
-
-  <div class="grid-2" style="margin-top: 1rem;">
-    <div class="card redflag-card">
-      <h3>&#9888; NEVER Do Directly</h3>
-      <ul>
-        <li>Write or edit code files (.ts, .tsx, .py, .js, .css)</li>
-        <li>Read large source files (over 50 lines)</li>
-        <li>Run tests or builds directly</li>
-        <li>Debug failing tests</li>
-        <li>Paste code blocks in responses</li>
-        <li>Combine 10 reviewers into 1 agent</li>
-        <li>Send Gemini only a diff (needs full files)</li>
-        <li>Spawn single agent to fix 6+ issues</li>
-      </ul>
-    </div>
-    <div class="card good-card">
-      <h3>&#10003; ALWAYS Do</h3>
-      <ul>
-        <li>Orchestrate agents -- spawn, assign, track, summarize</li>
-        <li>Summarize agent output in 2-3 lines max</li>
-        <li>Batch work into agents (1 agent with 5 steps &gt; 5 tool calls)</li>
-        <li>Use memory files for decisions and patterns</li>
-        <li>Background long tasks (Gemini reviews, test runs, builds)</li>
-        <li>Update PROGRESS.md, PROJECT_STATUS.md, CLAUDE.md</li>
-        <li>Run git commands (commit, push, branch, PR via gh)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card warn-card" style="margin-top: 1.25rem;">
-    <h3>&#9888; Red Flags (You're Doing It Wrong)</h3>
-    <ul>
-      <li>Reading a .ts / .tsx / .py file -- should delegate to explore agent</li>
-      <li>Writing code in Edit/Write call -- should delegate to executor</li>
-      <li>Tool output exceeds 100 lines -- should have delegated</li>
-      <li>Running vitest/pytest directly -- should delegate to agent</li>
-      <li>Spawning 3+ fire-and-forget Tasks -- should use TeamCreate</li>
-      <li>Context filling up fast -- doing too much yourself</li>
-      <li>Dev Team Leader writing code -- should delegate to executors</li>
-    </ul>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 3. PLANNING PHASE ===== -->
-<section class="section" id="planning">
-  <div class="section-label blue">Section 3</div>
-  <h2>Planning Phase</h2>
-  <p>Before execution begins, the Conductor spawns separate planning agents -- one per reviewer perspective. Each agent analyzes the phase from their domain. The Conductor then aggregates all perspectives into a unified plan for user approval.</p>
-
-  <div class="card" style="margin-top: 1rem;">
-    <h3>Planning Flow</h3>
-    <ul>
-      <li>Conductor asks user which reviewer perspectives to include (default: all 10)</li>
-      <li>Separate planning agent spawned per perspective</li>
-      <li>Each agent analyzes: file structure, test strategy, security threats, UX requirements, etc.</li>
-      <li>Conductor aggregates into unified plan</li>
-      <li>User approves before any execution begins</li>
-    </ul>
-  </div>
-
-  <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Phase-Type Reviewer Pre-Selection</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Phase Type</th><th>Default Reviewers</th><th>Usually Skip</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Frontend-only</strong></td>
-          <td>Architect, QA, Technologist, Business, Designer, Code Reviewer</td>
-          <td>Scientist, Security (unless auth UI)</td>
-        </tr>
-        <tr>
-          <td><strong>Backend-only</strong></td>
-          <td>Architect, QA, Technologist, Business, Security, Code Reviewer</td>
-          <td>Scientist (unless genetics), Designer</td>
-        </tr>
-        <tr>
-          <td><strong>Genetics</strong></td>
-          <td>Architect, QA, Scientist, Technologist, Code Reviewer</td>
-          <td>Business, Designer</td>
-        </tr>
-        <tr>
-          <td><strong>Full-stack</strong></td>
-          <td>ALL 10 reviewers</td>
-          <td>None</td>
-        </tr>
-        <tr>
-          <td><strong>Infrastructure</strong></td>
-          <td>Architect, Technologist, Security, Code Reviewer</td>
-          <td>Scientist, Business, Designer</td>
-        </tr>
-        <tr>
-          <td><strong>Auth / Payments</strong></td>
-          <td>ALL 10 (security-critical)</td>
-          <td>None</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size: 0.85rem; margin-top: 0.5rem;">Legal + Privacy and Ethics / Bioethics are always included when touching user data or genetic data. Always confirm reviewer selection with the user.</p>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 4. EXECUTION PHASE ===== -->
-<section class="section" id="execution">
-  <div class="section-label green">Section 4</div>
-  <h2>Execution Phase</h2>
-  <p>The Conductor spawns a Dev Team Leader via TeamCreate. The Leader splits work across executor agents with strict file ownership boundaries to prevent merge conflicts. Every executor prompt includes pre-embedded checklists.</p>
-
-  <div class="grid-2" style="margin-top: 1rem;">
-    <div class="card">
-      <h3>&#9874; Executor Enhancement</h3>
-      <p>Every executor agent prompt MUST include:</p>
-      <ul>
-        <li><strong>Technologist Checklist:</strong> asyncio.to_thread for blocking ops, useCallback, React.memo, hoisted constants, next/dynamic, no N+1 queries</li>
-        <li><strong>Business Checklist:</strong> correct terminology (one-time purchase), backend tier gating, price validation, upgrade CTAs, user-friendly errors</li>
-        <li>Reference to <code>docs/DEVELOPMENT_GOTCHAS.md</code></li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>&#9995; Layer 0: Static Analysis Gate</h3>
-      <p>Executors MUST pass all static checks before code goes to any reviewer:</p>
-      <ul>
-        <li><code>ruff check</code> -- Python linting</li>
-        <li><code>tsc --noEmit</code> -- TypeScript type checking</li>
-        <li><code>vitest --run</code> / <code>pytest</code> -- all tests passing</li>
-        <li>No build errors</li>
-      </ul>
-      <p style="margin-top: 0.5rem;">Filters out ~30% of mechanical issues that would waste reviewer cycles.</p>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 1.25rem;">
-    <h3>File Ownership Boundaries</h3>
-    <p>Each executor agent owns specific files. No two agents edit the same file. This prevents merge conflicts and ensures clear responsibility. If work touches shared files, the Dev Team Leader coordinates sequencing.</p>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 5. THREE-LAYER REVIEW PIPELINE ===== -->
-<section class="section" id="review-pipeline">
-  <div class="section-label orange">Section 5</div>
-  <h2>Three-Layer Review Pipeline</h2>
-  <p>Code passes through a rigorous three-layer review pipeline before any PR is created. Static analysis gates mechanical issues. Gemini provides broad sweep and triage. Claude Opus performs deep independent analysis.</p>
-
-  <div class="pipeline">
-    <!-- Layer 0 -->
-    <div class="pipeline-stage stage-layer0">
-      <h4>Layer 0: Static Analysis Gate</h4>
-      <ul>
-        <li><code>ruff check</code> -- Python lint (unused imports, style violations)</li>
-        <li><code>tsc --noEmit</code> -- TypeScript types (exclude known pre-existing errors in <code>client.ts:157</code> and <code>demo-results.ts:268</code>)</li>
-        <li>All tests passing (<code>vitest --run</code> / <code>pytest</code>)</li>
-        <li>Must pass BEFORE any LLM reviewer sees code</li>
-      </ul>
-    </div>
-
-    <div class="pipeline-connector">&#9660;</div>
-
-    <!-- Stage 1: Gemini -->
-    <div class="pipeline-stage stage-gemini">
-      <h4>&#9672; Stage 1: Gemini Reviews (Broad Sweep + Triage)</h4>
-      <ul>
-        <li>Coordinator spawns <strong>separate Gemini instances</strong> per reviewer role</li>
-        <li>Each gets <strong>full code + diff</strong> in interleaved format (diff first, then full file)</li>
-        <li>Enhanced prompts with adversarial questions, mandatory checklists, and grading calibration</li>
-        <li><strong>UNCERTAINTY flags</strong> for issues Gemini is not confident about -- escalated to Claude</li>
-        <li>Second-pass "breaker mindset" instruction for adversarial re-review</li>
-        <li>Anti-inflation grading: A+ = zero issues, tied to severity not overall feel</li>
-        <li>Alternative: <code>scripts/gemini-review.sh</code> script instead of Coordinator agent</li>
-        <li>Iterate until all relevant Gemini reviewers give A+</li>
-      </ul>
-    </div>
-
-    <div class="pipeline-connector">&#9660;</div>
-
-    <!-- Judge Layer -->
-    <div class="pipeline-stage stage-judge">
-      <h4>&#9878; Judge / Synthesis Layer</h4>
-      <p>Spawned after each review stage (Gemini or Claude). Model: <code>sonnet</code> (synthesis, not deep analysis).</p>
-      <ul>
-        <li><strong>Deduplicate</strong> -- same issue flagged by multiple reviewers merged into one</li>
-        <li><strong>Resolve conflicts</strong> -- if Technologist and Architect disagree, Judge decides by impact</li>
-        <li><strong>Prioritize</strong> -- rank all unique issues: CRITICAL &gt; HIGH &gt; MEDIUM &gt; LOW</li>
-        <li><strong>Final grade table</strong> -- <code>| Reviewer | Grade | Issues Found | Unique After Dedup |</code></li>
-        <li><strong>Fix manifest</strong> -- ordered list of issues grouped by file with clear instructions</li>
-      </ul>
-      <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">In Phase 7, reviewers flagged ~40 total issues but only ~25 were unique after dedup.</p>
-    </div>
-
-    <div class="pipeline-connector">&#9660;</div>
-
-    <!-- Pipeline Overlap -->
-    <div class="pipeline-stage stage-overlap">
-      <h4>&#9736; Pipeline Overlap: Gemini to Claude</h4>
-      <ul>
-        <li>As each Gemini role reaches A+, <strong>immediately start</strong> corresponding Claude Opus reviewer</li>
-        <li>Do not wait for ALL Gemini roles to pass -- overlap for non-overlapping file reviewers</li>
-        <li>If a fix touches files an already-running Claude reviewer is analyzing, re-run that reviewer</li>
-        <li>Projected savings: <strong>~30-40% review time reduction</strong></li>
-      </ul>
-    </div>
-
-    <div class="pipeline-connector">&#9660;</div>
-
-    <!-- Stage 2: Claude -->
-    <div class="pipeline-stage stage-claude">
-      <h4>&#9670; Stage 2: Claude Opus Independent Reviews (Deep Dive)</h4>
-      <ul>
-        <li>Separate Claude Opus agent per reviewer role -- <strong>own context, fully independent</strong></li>
-        <li>Receives Gemini's UNCERTAIN flags as priority review list</li>
-        <li>Full tool access: reads files, traces code paths, simulates runtime behavior</li>
-        <li>Results are NOT combined -- each goes to <strong>Judge/Synthesis agent</strong></li>
-        <li>Iterate until all Claude reviewers give A+</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 1rem;">
-    <h3>Grades Table Format</h3>
-    <div class="code-block">| Reviewer       | Gemini R1 | Gemini R2 | Claude Final | Key Fixes            |
-|----------------|-----------|-----------|--------------|----------------------|
-| Architect      | A-        | A+        | A+           | Fixed type coupling  |
-| QA             | A+        | A+        | A+           | --                   |
-| Technologist   | B+        | A+        | A+           | asyncio.to_thread    |
-| Security       | A         | A+        | A+           | Timing attack fix    |</div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 6. THE 10 REVIEWER ROLES ===== -->
-<section class="section" id="reviewers">
-  <div class="section-label purple">Section 6</div>
-  <h2>The 10 Reviewer Roles</h2>
-  <p>Each reviewer operates as a separate, independent agent with their own context. They never share context or combine results -- all output flows through the Judge/Synthesis layer.</p>
-
-  <div class="reviewer-grid">
-    <div class="reviewer-card" style="border-top: 3px solid var(--blue);">
-      <div class="r-num">Reviewer 1</div>
-      <h4><span class="r-icon">&#9783;</span> Architect</h4>
-      <p>System design, modularity, separation of concerns, scalability, design patterns, dependency management, type safety. Enforces layer purity and ORM anti-patterns. Gets ALL files.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--green);">
-      <div class="r-num">Reviewer 2</div>
-      <h4><span class="r-icon">&#9745;</span> QA</h4>
-      <p>Test coverage, edge cases, assertions, error handling, regression risk, logging and observability. Checks happy paths, negative paths, nulls, zeros, and boundary conditions.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--cyan);">
-      <div class="r-num">Reviewer 3</div>
-      <h4><span class="r-icon">&#9883;</span> Scientist</h4>
-      <p>rsID accuracy, genetics correctness, citations, scientific methodology, data integrity. Validates that genetic predictions match published GWAS data and population frequencies.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--orange);">
-      <div class="r-num">Reviewer 4</div>
-      <h4><span class="r-icon">&#9881;</span> Technologist</h4>
-      <p>Performance, React/Next.js patterns, bundle size, memory, async correctness, modern practices. Catches event loop blocking (bcrypt, Stripe SDK), N+1 queries, missing code splitting.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--gold);">
-      <div class="r-num">Reviewer 5</div>
-      <h4><span class="r-icon">&#9830;</span> Business</h4>
-      <p>Tier gating, conversion funnel, upgrade CTAs, copy quality, naming accuracy, market fit. Enforces one-time purchase terminology, backend price validation, demo conversion hooks.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--pink);">
-      <div class="r-num">Reviewer 6</div>
-      <h4><span class="r-icon">&#9786;</span> Designer</h4>
-      <p>Accessibility (ARIA roles, sr-only text, aria-controls), responsive design, heading hierarchy, keyboard navigation, UX flow. Focuses on WCAG compliance and visual consistency.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--red);">
-      <div class="r-num">Reviewer 7</div>
-      <h4><span class="r-icon">&#9888;</span> Security Analyst</h4>
-      <p>OWASP top 10, SQL/command injection, CSRF, token handling, encoding, secrets management, timing attacks. Constant-time comparisons, webhook signature verification, rate limiting.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid var(--purple);">
-      <div class="r-num">Reviewer 8</div>
-      <h4><span class="r-icon">&#9998;</span> Code Reviewer</h4>
-      <p>Readability, naming conventions, DRY/SOLID principles, style consistency, dead code elimination, import hygiene, function length, magic string elimination. Gets all changed code files.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid #7eb8a0;">
-      <div class="r-num">Reviewer 9</div>
-      <h4><span class="r-icon">&#9878;</span> Legal + Privacy</h4>
-      <p>GDPR compliance, GINA (genetic data), data retention, consent flows, right to deletion, cookie consent, age verification (COPPA), data export (Article 20), encryption adequacy, cross-border transfers.</p>
-    </div>
-    <div class="reviewer-card" style="border-top: 3px solid #c0a060;">
-      <div class="r-num">Reviewer 10</div>
-      <h4><span class="r-icon">&#9829;</span> Ethics / Bioethics</h4>
-      <p>Population bias in genetic data, responsible result framing, emotional harm prevention, informed consent UX, eugenics guardrails, disclaimer adequacy, vulnerable populations, data purpose limitation.</p>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 7. CONTEXT SCOPING ===== -->
-<section class="section" id="context-scoping">
-  <div class="section-label cyan">Section 7</div>
-  <h2>Context Scoping</h2>
-  <p>Not every reviewer needs every file. Scoping context by relevance reduces prompt size for Gemini and improves focus. Claude agents can read additional files if needed but start with the scoped set.</p>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Reviewer</th><th>Gets These Files</th><th>Skips</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>Architect</strong></td><td>ALL files (needs full picture)</td><td>None</td></tr>
-        <tr><td><strong>QA</strong></td><td>Test files + files they test</td><td>CSS, config</td></tr>
-        <tr><td><strong>Scientist</strong></td><td>Genetics engine files, data files</td><td>Auth, payments, UI</td></tr>
-        <tr><td><strong>Technologist</strong></td><td>All code files</td><td>Test files, docs</td></tr>
-        <tr><td><strong>Business</strong></td><td>UI components, API routes, config</td><td>Test files, internal services</td></tr>
-        <tr><td><strong>Designer</strong></td><td>UI components, CSS/styles, layouts</td><td>Backend, tests, engine</td></tr>
-        <tr><td><strong>Security</strong></td><td>Auth, payments, API routes, middleware</td><td>Pure UI, tests, genetics engine</td></tr>
-        <tr><td><strong>Code Reviewer</strong></td><td>All changed code files</td><td>Config, docs</td></tr>
-        <tr><td><strong>Legal + Privacy</strong></td><td>Auth, user data handling, consent flows, privacy policies</td><td>Pure UI styling, genetics engine internals</td></tr>
-        <tr><td><strong>Ethics / Bioethics</strong></td><td>Genetics results display, disclaimers, consent UX, carrier/trait output</td><td>Auth, payments, pure backend infra</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size: 0.85rem;">Rules: Architect and Code Reviewer always get ALL files. If unsure, include the file -- extra context is better than missing context.</p>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 8. FIX FLOW ===== -->
-<section class="section" id="fix-flow">
-  <div class="section-label red">Section 8</div>
-  <h2>Fix Flow</h2>
-  <p>After reviews identify issues, the fix flow routes work based on issue count. After fixes, only the reviewer roles that were below A+ are re-reviewed.</p>
-
-  <div class="fix-flow">
-    <div class="card" style="border-left: 3px solid var(--red);">
-      <h3>6+ Issues: Full Team</h3>
-      <ul>
-        <li>Conductor spawns Dev Team Leader</li>
-        <li>Leader creates executor team with file ownership</li>
-        <li>Executors implement fixes in parallel</li>
-        <li>QA agent verifies tests still pass</li>
-        <li>Report summary back to Conductor</li>
-      </ul>
-    </div>
-    <div class="card" style="border-left: 3px solid var(--green);">
-      <h3>1-5 Issues: Single Executor</h3>
-      <ul>
-        <li>Conductor spawns single executor agent</li>
-        <li>Agent implements all fixes + runs tests</li>
-        <li>Reports pass/fail back to Conductor</li>
-        <li>A single executor handles up to 5 related issues efficiently</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 1rem;">
-    <h3>After Fixes</h3>
-    <ul>
-      <li>Re-review <strong>only</strong> the reviewer roles that were below A+</li>
-      <li>Use the same stage (Gemini or Claude) that identified the issues</li>
-      <li>Iterate until all re-reviewed roles give A+</li>
-      <li>Never spawn a single agent to fix 6+ issues -- always use the team flow</li>
-    </ul>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 9. FEEDBACK LOOP ===== -->
-<section class="section" id="feedback-loop">
-  <div class="section-label gold">Section 9</div>
-  <h2>Feedback Loop (Gemini Calibration)</h2>
-  <p>After every Claude Opus review cycle, the Conductor executes a mandatory feedback loop. This is what makes Gemini improve over time. Skipping it degrades accuracy.</p>
-
-  <div class="feedback-loop">
-    <div class="fb-step">
-      <div class="fb-icon" style="background: var(--purple-dim); color: var(--purple);">&#9670;</div>
-      <div>Claude finds issues Gemini missed -- categorize by pattern (async-blocking, naming, security...)</div>
-    </div>
-    <div class="fb-arrow">&#9660;</div>
-    <div class="fb-step">
-      <div class="fb-icon" style="background: var(--orange-dim); color: var(--orange);">&#9998;</div>
-      <div>Append to <code>docs/gemini-calibration.md</code> -- cumulative learning across phases</div>
-    </div>
-    <div class="fb-arrow">&#9660;</div>
-    <div class="fb-step">
-      <div class="fb-icon" style="background: var(--blue-dim); color: var(--blue);">&#9881;</div>
-      <div>Include CALIBRATION section in next Gemini review prompt with confirmed misses and dismissed flags</div>
-    </div>
-    <div class="fb-arrow">&#9660;</div>
-    <div class="fb-step">
-      <div class="fb-icon" style="background: var(--green-dim); color: var(--green);">&#9745;</div>
-      <div>Track: Confirmed Misses, Confirmed UNCERTAIN Flags, Dismissed UNCERTAIN Flags</div>
-    </div>
-    <div class="fb-arrow">&#9660;</div>
-    <div class="fb-step">
-      <div class="fb-icon" style="background: var(--red-dim); color: var(--red);">&#9888;</div>
-      <div>After 3+ repeated misses for a pattern, <strong>skip Gemini</strong> for that reviewer role -- go directly to Claude</div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 1rem;">
-    <h3>Calibration Prompt Format</h3>
-    <div class="code-block">CALIBRATION FROM PREVIOUS REVIEWS:
-- You previously missed: [list from gemini-calibration.md]
-- Your UNCERTAIN flag on [X] was CONFIRMED -- increase sensitivity
-- Your UNCERTAIN flag on [Y] was DISMISSED -- reduce sensitivity
-- Common false positives to AVOID: [list]</div>
-  </div>
-
-  <div class="card" style="margin-top: 1rem;">
-    <h3>Calibration File Tracking</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Category</th><th>What It Tracks</th><th>Example</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Confirmed Misses</strong></td><td>Gemini missed, Claude caught</td><td>Phase 7: bcrypt blocks event loop (CRITICAL)</td></tr>
-          <tr><td><strong>Confirmed UNCERTAIN</strong></td><td>Gemini flagged uncertain, Claude confirmed</td><td>Phase 7: Stripe SDK blocking (HIGH)</td></tr>
-          <tr><td><strong>Dismissed UNCERTAIN</strong></td><td>Gemini flagged uncertain, Claude dismissed</td><td>False positive -- no actual issue</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 10. GEMINI DELEGATION RULES ===== -->
-<section class="section" id="gemini-rules">
-  <div class="section-label orange">Section 10</div>
-  <h2>Gemini Delegation Rules</h2>
-  <p>Gemini is called exclusively via Bash CLI. MCP tools are broken on Windows and must never be used.</p>
-
-  <div class="grid-2" style="margin-top: 1rem;">
-    <div class="card">
-      <h3>&#10003; A-Tier (Always Use)</h3>
-      <ul>
-        <li>Code review (with full files + diff)</li>
-        <li>Design review and visual analysis</li>
-        <li>Documentation writing</li>
-        <li>Multi-file analysis (1M context window)</li>
-        <li>JSON validation</li>
-        <li>CSS/UI review</li>
-      </ul>
-    </div>
-    <div class="card redflag-card">
-      <h3>&#10007; D-Tier (Never Use)</h3>
-      <ul>
-        <li>Authentication / authorization code</li>
-        <li>Payment processing code</li>
-        <li>Git operations</li>
-        <li>Multi-step agentic workflows</li>
-        <li>Debugging / troubleshooting</li>
-        <li>Codebase search</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 1.25rem;">
-    <h3>CLI Usage</h3>
-    <div class="code-block"># Always specify model explicitly (default is weaker gemini-2.0-flash)
-gemini -p "Your prompt here" --model gemini-3-pro-preview 2>&1
-
-# Long prompt via file
-cat &lt;&lt;'EOF' &gt; /tmp/gemini-prompt.txt
-Your long prompt here...
-EOF
-gemini -p "" --model gemini-3-pro-preview &lt; /tmp/gemini-prompt.txt 2>&1</div>
-    <ul style="margin-top: 0.75rem;">
-      <li>Always use <code>run_in_background: true</code> -- responses take 10-30s</li>
-      <li>Always append <code>2>&amp;1</code> -- CLI prints status to stderr</li>
-      <li><strong>NEVER fall back to weaker models</strong> on rate limit (429) -- wait and retry (60s, 120s, 300s)</li>
-      <li>Only delegate code to Gemini if it can match or exceed Claude quality</li>
-    </ul>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 11. KEY FILES REFERENCE ===== -->
-<section class="section" id="key-files">
-  <div class="section-label blue">Section 11</div>
-  <h2>Key Files Reference</h2>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>File / Directory</th><th>Purpose</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>apps/web/</code></td><td>Next.js 15 frontend (React 19, Tailwind, Zustand)</td></tr>
-        <tr><td><code>apps/api/</code></td><td>FastAPI backend (24 endpoints, cookie auth, Stripe, async)</td></tr>
-        <tr><td><code>packages/genetics-engine/</code></td><td>TypeScript genetics engine (~5,500 LOC, 366 tests)</td></tr>
-        <tr><td><code>packages/shared-types/</code></td><td>Shared TypeScript types across packages</td></tr>
-        <tr><td><code>packages/genetics-data/</code></td><td>JSON data files for genetic analysis</td></tr>
-        <tr><td><code>PROGRESS.md</code></td><td>Task tracking -- pushable directly to main</td></tr>
-        <tr><td><code>docs/PROJECT_STATUS.md</code></td><td>Full project state, known issues, next steps</td></tr>
-        <tr><td><code>docs/GEMINI_REVIEW_PROTOCOL.md</code></td><td>Enhanced Gemini review prompts and checklists</td></tr>
-        <tr><td><code>docs/gemini-calibration.md</code></td><td>Cumulative Gemini calibration data from feedback loops</td></tr>
-        <tr><td><code>docs/DEVELOPMENT_GOTCHAS.md</code></td><td>Common pitfalls and patterns for executor agents</td></tr>
-        <tr><td><code>docs/GEMINI_DELEGATION_GUIDE.md</code></td><td>A/B/C/D task tier matrix and delegation rules</td></tr>
-        <tr><td><code>CLAUDE.md</code></td><td>Project rules and orchestration protocol</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 12. SEVERITY DEFINITIONS ===== -->
-<section class="section" id="severity">
-  <div class="section-label red">Section 12</div>
-  <h2>Severity Definitions</h2>
-
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
-    <div class="card" style="border-top: 3px solid var(--red);">
-      <h3><span class="badge badge-critical">CRITICAL</span></h3>
-      <p style="margin-top: 0.5rem;">Exploitable vulnerability, data loss, financial loss, system crash. Examples: SQL injection, event loop blocking on high-traffic endpoint, charging wrong amount.</p>
-    </div>
-    <div class="card" style="border-top: 3px solid var(--orange);">
-      <h3><span class="badge badge-high">HIGH</span></h3>
-      <p style="margin-top: 0.5rem;">Incorrect behavior in primary feature, significant performance issue, architectural violation. Examples: N+1 on core endpoint, business logic in router, reflected XSS.</p>
-    </div>
-    <div class="card" style="border-top: 3px solid var(--gold);">
-      <h3><span class="badge badge-medium">MEDIUM</span></h3>
-      <p style="margin-top: 0.5rem;">Edge case bug, best practice lapse, confusing code. Examples: missing negative test, poor variable name, inefficient but non-blocking operation.</p>
-    </div>
-    <div class="card" style="border-top: 3px solid var(--blue);">
-      <h3><span class="badge badge-low">LOW</span></h3>
-      <p style="margin-top: 0.5rem;">Stylistic issue, typo, micro-optimization. Examples: comment typo, slightly verbose code, unused import.</p>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== 13. GRADING RUBRIC ===== -->
-<section class="section" id="grading">
-  <div class="section-label gold">Section 13</div>
-  <h2>Grading Rubric</h2>
-  <p>Grades are tied to issue severity, not overall feel. Anti-inflation rule: A+ should be exceptionally rare. If you have not found at least one potential concern, you have not looked hard enough.</p>
-
-  <div class="card" style="margin-top: 1rem;">
-    <div class="grade-row">
-      <div class="grade-letter" style="color: var(--green);">A+</div>
-      <div class="grade-desc"><strong>ZERO issues</strong> found after thorough adversarial analysis. Exceptionally rare.</div>
-    </div>
-    <div class="grade-row">
-      <div class="grade-letter" style="color: #6ecf6e;">A</div>
-      <div class="grade-desc">Only <span class="badge badge-low">LOW</span> severity issues. Minor stylistic or micro-optimization concerns.</div>
-    </div>
-    <div class="grade-row">
-      <div class="grade-letter" style="color: var(--gold);">A-</div>
-      <div class="grade-desc">At most <strong>one</strong> <span class="badge badge-medium">MEDIUM</span> issue. A single edge case or best practice lapse.</div>
-    </div>
-    <div class="grade-row">
-      <div class="grade-letter" style="color: var(--orange);">B+</div>
-      <div class="grade-desc">Multiple <span class="badge badge-medium">MEDIUM</span> issues or <strong>one</strong> <span class="badge badge-high">HIGH</span> issue. Needs targeted fixes.</div>
-    </div>
-    <div class="grade-row">
-      <div class="grade-letter" style="color: #e07050;">B</div>
-      <div class="grade-desc"><strong>One</strong> <span class="badge badge-critical">CRITICAL</span> issue. Security vulnerability, data loss risk, or system crash potential.</div>
-    </div>
-    <div class="grade-row">
-      <div class="grade-letter" style="color: var(--red);">&lt;B</div>
-      <div class="grade-desc">Multiple <span class="badge badge-high">HIGH</span> or <span class="badge badge-critical">CRITICAL</span> issues. Significant rework required.</div>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ===== FOOTER ===== -->
-<footer class="footer">
-  <p><strong>Mergenix Orchestration Model v2.0</strong></p>
-  <p>Generated 2026-02-10</p>
-  <p style="margin-top: 0.75rem;">
-    Source: <a href="./GEMINI_REVIEW_PROTOCOL.md">GEMINI_REVIEW_PROTOCOL.md</a>
-    &nbsp;&middot;&nbsp;
-    <a href="../CLAUDE.md">CLAUDE.md</a>
-    &nbsp;&middot;&nbsp;
-    conductor-protocol.md (project memory)
-  </p>
-</footer>
-
-</div><!-- .container -->
-</div><!-- .page-bg -->
-
-<script>
-// Scroll-triggered fade-in animations
-(function() {
-  var sections = document.querySelectorAll('.section');
-  if (!sections.length) return;
-
-  // Make sections visible that are already in viewport on load
-  function checkVisibility() {
-    var windowHeight = window.innerHeight;
-    sections.forEach(function(section) {
-      var rect = section.getBoundingClientRect();
-      if (rect.top < windowHeight - 60) {
-        section.classList.add('visible');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mergenix Orchestration Model</title>
+    <style>
+      :root {
+        --bg: #0a0a1a;
+        --bg-gradient: linear-gradient(135deg, #0a0a1a 0%, #0d1230 50%, #0a0a1a 100%);
+        --surface: #12122a;
+        --surface-hover: #1a1a3a;
+        --border: #2a2a4a;
+        --border-glow: rgba(100, 120, 255, 0.15);
+        --text: #e8eaf6;
+        --text-muted: #8890b0;
+        --text-dim: #5a6080;
+        --blue: #5b8def;
+        --blue-dim: rgba(91, 141, 239, 0.15);
+        --green: #4caf7c;
+        --green-dim: rgba(76, 175, 124, 0.15);
+        --orange: #e09940;
+        --orange-dim: rgba(224, 153, 64, 0.15);
+        --purple: #a87ce0;
+        --purple-dim: rgba(168, 124, 224, 0.15);
+        --red: #e05555;
+        --red-dim: rgba(224, 85, 85, 0.15);
+        --gold: #d4a835;
+        --gold-dim: rgba(212, 168, 53, 0.15);
+        --cyan: #4cc9d0;
+        --cyan-dim: rgba(76, 201, 208, 0.15);
+        --pink: #d06090;
+        --pink-dim: rgba(208, 96, 144, 0.15);
+        --radius: 12px;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
       }
-    });
-  }
 
-  // Use IntersectionObserver if available, otherwise fallback
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        min-height: 100vh;
+      }
+
+      .page-bg {
+        background: var(--bg-gradient);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+
+      .header {
+        text-align: center;
+        padding: 4rem 1rem 3rem;
+        position: relative;
+      }
+      .header::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--blue), var(--purple));
+        margin: 2rem auto 0;
+        border-radius: 2px;
+      }
+      .header h1 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, var(--blue), var(--purple), var(--cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header .subtitle {
+        color: var(--text-muted);
+        font-size: 1.15rem;
+        margin-top: 0.5rem;
+        font-weight: 400;
+      }
+      .header .version {
+        color: var(--text-dim);
+        font-size: 0.85rem;
+        margin-top: 0.75rem;
+        font-family: 'SF Mono', 'Fira Code', monospace;
+      }
+
+      .section {
+        margin-top: 3.5rem;
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .section-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .section-label.blue {
+        color: var(--blue);
+      }
+      .section-label.green {
+        color: var(--green);
+      }
+      .section-label.orange {
+        color: var(--orange);
+      }
+      .section-label.purple {
+        color: var(--purple);
+      }
+      .section-label.red {
+        color: var(--red);
+      }
+      .section-label.gold {
+        color: var(--gold);
+      }
+      .section-label.cyan {
+        color: var(--cyan);
+      }
+      .section-label.pink {
+        color: var(--pink);
+      }
+
+      .section h2 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+      .section p {
+        color: var(--text-muted);
+        max-width: 800px;
+        margin-bottom: 1.25rem;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .card:hover {
+        border-color: var(--border-glow);
+        box-shadow: var(--shadow-lg);
+      }
+      .card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .card p,
+      .card li {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+      .card ul {
+        list-style: none;
+        padding: 0;
+      }
+      .card ul li {
+        padding: 0.3rem 0;
+        padding-left: 1.4rem;
+        position: relative;
+      }
+      .card ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.7rem;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--text-dim);
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 768px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
         }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        .container {
+          padding: 1rem;
+        }
+        .header {
+          padding: 2.5rem 0.5rem 2rem;
+        }
+      }
 
-    sections.forEach(function(section) {
-      observer.observe(section);
-    });
-  } else {
-    // Fallback for older browsers
-    window.addEventListener('scroll', checkVisibility, { passive: true });
-    checkVisibility();
-  }
+      .table-wrap {
+        overflow-x: auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin: 1rem 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+      thead {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      th {
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      td {
+        padding: 0.65rem 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        vertical-align: top;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+      }
 
-  // Initial check
-  checkVisibility();
-})();
-</script>
-</body>
+      .arch-diagram {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding: 2rem 0;
+      }
+      .arch-layer {
+        width: 100%;
+        max-width: 700px;
+        text-align: center;
+        padding: 1.25rem 1.5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        position: relative;
+        background: var(--surface);
+      }
+      .arch-layer .layer-num {
+        position: absolute;
+        top: -10px;
+        left: 16px;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+      }
+      .arch-layer h4 {
+        font-size: 1.05rem;
+        margin-bottom: 0.3rem;
+      }
+      .arch-layer .desc {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+      .arch-arrow {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 36px;
+        justify-content: center;
+        color: var(--text-dim);
+        font-size: 1.2rem;
+        user-select: none;
+      }
+
+      .layer-conductor {
+        border-color: var(--blue);
+      }
+      .layer-conductor .layer-num {
+        color: var(--blue);
+        border-color: var(--blue);
+      }
+      .layer-conductor h4 {
+        color: var(--blue);
+      }
+      .layer-devlead {
+        border-color: var(--green);
+      }
+      .layer-devlead .layer-num {
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .layer-devlead h4 {
+        color: var(--green);
+      }
+      .layer-executor {
+        border-color: var(--cyan);
+      }
+      .layer-executor .layer-num {
+        color: var(--cyan);
+        border-color: var(--cyan);
+      }
+      .layer-executor h4 {
+        color: var(--cyan);
+      }
+      .layer-gemini {
+        border-color: var(--orange);
+      }
+      .layer-gemini .layer-num {
+        color: var(--orange);
+        border-color: var(--orange);
+      }
+      .layer-gemini h4 {
+        color: var(--orange);
+      }
+      .layer-claude {
+        border-color: var(--purple);
+      }
+      .layer-claude .layer-num {
+        color: var(--purple);
+        border-color: var(--purple);
+      }
+      .layer-claude h4 {
+        color: var(--purple);
+      }
+
+      .redflag-card {
+        background: var(--red-dim);
+        border-color: rgba(224, 85, 85, 0.3);
+      }
+      .redflag-card ul li::before {
+        background: var(--red);
+      }
+      .redflag-card h3 {
+        color: var(--red);
+      }
+      .good-card {
+        background: var(--green-dim);
+        border-color: rgba(76, 175, 124, 0.3);
+      }
+      .good-card ul li::before {
+        background: var(--green);
+      }
+      .good-card h3 {
+        color: var(--green);
+      }
+      .warn-card {
+        background: var(--orange-dim);
+        border-color: rgba(224, 153, 64, 0.3);
+      }
+      .warn-card ul li::before {
+        background: var(--orange);
+      }
+      .warn-card h3 {
+        color: var(--orange);
+      }
+
+      .pipeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 1.5rem 0;
+      }
+      .pipeline-stage {
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        position: relative;
+      }
+      .pipeline-stage h4 {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+      .pipeline-stage p,
+      .pipeline-stage li {
+        font-size: 0.88rem;
+      }
+      .pipeline-connector {
+        text-align: center;
+        padding: 0.4rem 0;
+        color: var(--text-dim);
+        font-size: 1.1rem;
+      }
+
+      .stage-layer0 {
+        border-left: 3px solid var(--cyan);
+      }
+      .stage-layer0 h4 {
+        color: var(--cyan);
+      }
+      .stage-gemini {
+        border-left: 3px solid var(--orange);
+      }
+      .stage-gemini h4 {
+        color: var(--orange);
+      }
+      .stage-judge {
+        border-left: 3px solid var(--gold);
+      }
+      .stage-judge h4 {
+        color: var(--gold);
+      }
+      .stage-claude {
+        border-left: 3px solid var(--purple);
+      }
+      .stage-claude h4 {
+        color: var(--purple);
+      }
+      .stage-overlap {
+        border-left: 3px solid var(--pink);
+      }
+      .stage-overlap h4 {
+        color: var(--pink);
+      }
+
+      .reviewer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1rem;
+      }
+      .reviewer-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .reviewer-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+      .reviewer-card .r-num {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        color: var(--text-dim);
+        margin-bottom: 0.4rem;
+      }
+      .reviewer-card h4 {
+        font-size: 1.05rem;
+        margin-bottom: 0.5rem;
+      }
+      .reviewer-card .r-icon {
+        font-size: 1.4rem;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+      }
+      .reviewer-card p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 0;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-right: 0.4rem;
+        vertical-align: middle;
+      }
+      .badge-critical {
+        background: var(--red-dim);
+        color: var(--red);
+        border: 1px solid rgba(224, 85, 85, 0.3);
+      }
+      .badge-high {
+        background: var(--orange-dim);
+        color: var(--orange);
+        border: 1px solid rgba(224, 153, 64, 0.3);
+      }
+      .badge-medium {
+        background: var(--gold-dim);
+        color: var(--gold);
+        border: 1px solid rgba(212, 168, 53, 0.3);
+      }
+      .badge-low {
+        background: var(--blue-dim);
+        color: var(--blue);
+        border: 1px solid rgba(91, 141, 239, 0.3);
+      }
+
+      .fix-flow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        margin: 1rem 0;
+      }
+      @media (max-width: 768px) {
+        .fix-flow {
+          grid-template-columns: 1fr;
+        }
+        .reviewer-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      code {
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: var(--cyan);
+      }
+      .code-block {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        overflow-x: auto;
+        margin: 0.75rem 0;
+        line-height: 1.6;
+        white-space: pre;
+      }
+
+      .feedback-loop {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin: 1rem 0;
+      }
+      .fb-step {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+      }
+      .fb-step .fb-icon {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+      }
+      .fb-arrow {
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 0.9rem;
+        padding-left: 12px;
+      }
+
+      .footer {
+        margin-top: 4rem;
+        padding: 2rem 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 0.82rem;
+      }
+      .footer a {
+        color: var(--blue);
+        text-decoration: none;
+      }
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .grade-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .grade-row:last-child {
+        border-bottom: none;
+      }
+      .grade-letter {
+        font-weight: 700;
+        font-size: 1.1rem;
+        width: 36px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .grade-desc {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .toc {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.5rem;
+        margin: 2rem 0;
+        columns: 2;
+        column-gap: 2rem;
+      }
+      .toc a {
+        display: block;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.88rem;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+        break-inside: avoid;
+      }
+      .toc a:hover {
+        color: var(--blue);
+      }
+      @media (max-width: 768px) {
+        .toc {
+          columns: 1;
+        }
+      }
+
+      @media print {
+        body,
+        .page-bg {
+          background: white;
+          color: #1a1a2e;
+        }
+        .card,
+        .pipeline-stage,
+        .reviewer-card,
+        .arch-layer,
+        .feedback-loop,
+        .toc,
+        .table-wrap {
+          background: white;
+          border-color: #ddd;
+          box-shadow: none;
+          break-inside: avoid;
+        }
+        th,
+        td {
+          color: #333;
+          border-color: #ddd;
+        }
+        thead {
+          background: #f5f5f5;
+        }
+        .section {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .header h1 {
+          -webkit-text-fill-color: #1a1a2e;
+          background: none;
+          color: #1a1a2e;
+        }
+        code {
+          background: #f0f0f0;
+          color: #333;
+        }
+        .redflag-card {
+          background: #fff0f0;
+        }
+        .good-card {
+          background: #f0fff0;
+        }
+        .warn-card {
+          background: #fffbf0;
+        }
+        .section-label,
+        .layer-num {
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+      }
+
+      [id] {
+        scroll-margin-top: 1rem;
+      }
+      .sep {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border), transparent);
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-bg">
+      <div class="container">
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+          <h1>Mergenix Orchestration Model</h1>
+          <div class="subtitle">Multi-Agent Development &amp; Review Pipeline</div>
+          <div class="version">v2.0 -- Updated 2026-02-10</div>
+        </header>
+
+        <!-- ===== TABLE OF CONTENTS ===== -->
+        <nav class="toc section visible">
+          <a href="#architecture">1. Architecture Overview</a>
+          <a href="#conductor-rules">2. Conductor Rules</a>
+          <a href="#planning">3. Planning Phase</a>
+          <a href="#execution">4. Execution Phase</a>
+          <a href="#review-pipeline">5. Three-Layer Review Pipeline</a>
+          <a href="#reviewers">6. The 10 Reviewer Roles</a>
+          <a href="#context-scoping">7. Context Scoping</a>
+          <a href="#fix-flow">8. Fix Flow</a>
+          <a href="#feedback-loop">9. Feedback Loop</a>
+          <a href="#gemini-rules">10. Gemini Delegation Rules</a>
+          <a href="#key-files">11. Key Files Reference</a>
+          <a href="#severity">12. Severity Definitions</a>
+          <a href="#grading">13. Grading Rubric</a>
+        </nav>
+
+        <!-- ===== 1. ARCHITECTURE OVERVIEW ===== -->
+        <section class="section" id="architecture">
+          <div class="section-label blue">Section 1</div>
+          <h2>Architecture Overview</h2>
+          <p>
+            The orchestration model uses five distinct layers. Each layer has a single
+            responsibility. Code only flows downward; results flow upward.
+          </p>
+
+          <div class="arch-diagram">
+            <div class="arch-layer layer-conductor">
+              <span class="layer-num">Layer 1</span>
+              <h4>Conductor</h4>
+              <div class="desc">
+                Top-level orchestrator. Spawns teams, tracks progress, updates status files.
+                <strong>Never writes code.</strong> Context window is sacred -- only summaries flow
+                in.
+              </div>
+            </div>
+            <div class="arch-arrow">&#9660;</div>
+            <div class="arch-layer layer-devlead">
+              <span class="layer-num">Layer 2</span>
+              <h4>Dev Team Leader</h4>
+              <div class="desc">
+                Spawned via TeamCreate. Orchestrates executor agents with file ownership boundaries.
+                <strong>Never writes code.</strong> Can delegate to Gemini where appropriate.
+              </div>
+            </div>
+            <div class="arch-arrow">&#9660;</div>
+            <div class="arch-layer layer-executor">
+              <span class="layer-num">Layer 3</span>
+              <h4>Executor Agents</h4>
+              <div class="desc">
+                Actual code writers. Each owns specific files to prevent merge conflicts.
+                Pre-embedded with Technologist + Business checklists. Report results upward to Dev
+                Team Leader.
+              </div>
+            </div>
+            <div class="arch-arrow">&#9660; &#9660;</div>
+            <div class="arch-layer layer-gemini">
+              <span class="layer-num">Layer 4</span>
+              <h4>Gemini Review Coordinator</h4>
+              <div class="desc">
+                Spawns separate Gemini instances per reviewer role. Each gets full code + diff in
+                interleaved format. Uses enhanced prompts with adversarial questions and
+                anti-inflation grading.
+              </div>
+            </div>
+            <div class="arch-arrow">&#9660;</div>
+            <div class="arch-layer layer-claude">
+              <span class="layer-num">Layer 5</span>
+              <h4>Claude Opus Reviewers</h4>
+              <div class="desc">
+                Independent Claude Opus agents per reviewer role. Own context, full tool access, can
+                read files and trace code paths. Results go to Judge/Synthesis agent, not combined.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 2. CONDUCTOR RULES ===== -->
+        <section class="section" id="conductor-rules">
+          <div class="section-label red">Section 2</div>
+          <h2>Conductor Rules</h2>
+          <p>
+            The Conductor's context window is the most valuable resource in the system. Every byte
+            must earn its place. Long sessions lead to context compaction, which causes lost memory
+            and hallucination.
+          </p>
+
+          <div class="grid-2" style="margin-top: 1rem">
+            <div class="card redflag-card">
+              <h3>&#9888; NEVER Do Directly</h3>
+              <ul>
+                <li>Write or edit code files (.ts, .tsx, .py, .js, .css)</li>
+                <li>Read large source files (over 50 lines)</li>
+                <li>Run tests or builds directly</li>
+                <li>Debug failing tests</li>
+                <li>Paste code blocks in responses</li>
+                <li>Combine 10 reviewers into 1 agent</li>
+                <li>Send Gemini only a diff (needs full files)</li>
+                <li>Spawn single agent to fix 6+ issues</li>
+              </ul>
+            </div>
+            <div class="card good-card">
+              <h3>&#10003; ALWAYS Do</h3>
+              <ul>
+                <li>Orchestrate agents -- spawn, assign, track, summarize</li>
+                <li>Summarize agent output in 2-3 lines max</li>
+                <li>Batch work into agents (1 agent with 5 steps &gt; 5 tool calls)</li>
+                <li>Use memory files for decisions and patterns</li>
+                <li>Background long tasks (Gemini reviews, test runs, builds)</li>
+                <li>Update PROGRESS.md, PROJECT_STATUS.md, CLAUDE.md</li>
+                <li>Run git commands (commit, push, branch, PR via gh)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card warn-card" style="margin-top: 1.25rem">
+            <h3>&#9888; Red Flags (You're Doing It Wrong)</h3>
+            <ul>
+              <li>Reading a .ts / .tsx / .py file -- should delegate to explore agent</li>
+              <li>Writing code in Edit/Write call -- should delegate to executor</li>
+              <li>Tool output exceeds 100 lines -- should have delegated</li>
+              <li>Running vitest/pytest directly -- should delegate to agent</li>
+              <li>Spawning 3+ fire-and-forget Tasks -- should use TeamCreate</li>
+              <li>Context filling up fast -- doing too much yourself</li>
+              <li>Dev Team Leader writing code -- should delegate to executors</li>
+            </ul>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 3. PLANNING PHASE ===== -->
+        <section class="section" id="planning">
+          <div class="section-label blue">Section 3</div>
+          <h2>Planning Phase</h2>
+          <p>
+            Before execution begins, the Conductor spawns separate planning agents -- one per
+            reviewer perspective. Each agent analyzes the phase from their domain. The Conductor
+            then aggregates all perspectives into a unified plan for user approval.
+          </p>
+
+          <div class="card" style="margin-top: 1rem">
+            <h3>Planning Flow</h3>
+            <ul>
+              <li>Conductor asks user which reviewer perspectives to include (default: all 10)</li>
+              <li>Separate planning agent spawned per perspective</li>
+              <li>
+                Each agent analyzes: file structure, test strategy, security threats, UX
+                requirements, etc.
+              </li>
+              <li>Conductor aggregates into unified plan</li>
+              <li>User approves before any execution begins</li>
+            </ul>
+          </div>
+
+          <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem">
+            Phase-Type Reviewer Pre-Selection
+          </h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase Type</th>
+                  <th>Default Reviewers</th>
+                  <th>Usually Skip</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Frontend-only</strong></td>
+                  <td>Architect, QA, Technologist, Business, Designer, Code Reviewer</td>
+                  <td>Scientist, Security (unless auth UI)</td>
+                </tr>
+                <tr>
+                  <td><strong>Backend-only</strong></td>
+                  <td>Architect, QA, Technologist, Business, Security, Code Reviewer</td>
+                  <td>Scientist (unless genetics), Designer</td>
+                </tr>
+                <tr>
+                  <td><strong>Genetics</strong></td>
+                  <td>Architect, QA, Scientist, Technologist, Code Reviewer</td>
+                  <td>Business, Designer</td>
+                </tr>
+                <tr>
+                  <td><strong>Full-stack</strong></td>
+                  <td>ALL 10 reviewers</td>
+                  <td>None</td>
+                </tr>
+                <tr>
+                  <td><strong>Infrastructure</strong></td>
+                  <td>Architect, Technologist, Security, Code Reviewer</td>
+                  <td>Scientist, Business, Designer</td>
+                </tr>
+                <tr>
+                  <td><strong>Auth / Payments</strong></td>
+                  <td>ALL 10 (security-critical)</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem">
+            Legal + Privacy and Ethics / Bioethics are always included when touching user data or
+            genetic data. Always confirm reviewer selection with the user.
+          </p>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 4. EXECUTION PHASE ===== -->
+        <section class="section" id="execution">
+          <div class="section-label green">Section 4</div>
+          <h2>Execution Phase</h2>
+          <p>
+            The Conductor spawns a Dev Team Leader via TeamCreate. The Leader splits work across
+            executor agents with strict file ownership boundaries to prevent merge conflicts. Every
+            executor prompt includes pre-embedded checklists.
+          </p>
+
+          <div class="grid-2" style="margin-top: 1rem">
+            <div class="card">
+              <h3>&#9874; Executor Enhancement</h3>
+              <p>Every executor agent prompt MUST include:</p>
+              <ul>
+                <li>
+                  <strong>Technologist Checklist:</strong> asyncio.to_thread for blocking ops,
+                  useCallback, React.memo, hoisted constants, next/dynamic, no N+1 queries
+                </li>
+                <li>
+                  <strong>Business Checklist:</strong> correct terminology (one-time purchase),
+                  backend tier gating, price validation, upgrade CTAs, user-friendly errors
+                </li>
+                <li>Reference to <code>docs/DEVELOPMENT_GOTCHAS.md</code></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>&#9995; Layer 0: Static Analysis Gate</h3>
+              <p>Executors MUST pass all static checks before code goes to any reviewer:</p>
+              <ul>
+                <li><code>ruff check</code> -- Python linting</li>
+                <li><code>tsc --noEmit</code> -- TypeScript type checking</li>
+                <li><code>vitest --run</code> / <code>pytest</code> -- all tests passing</li>
+                <li>No build errors</li>
+              </ul>
+              <p style="margin-top: 0.5rem">
+                Filters out ~30% of mechanical issues that would waste reviewer cycles.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1.25rem">
+            <h3>File Ownership Boundaries</h3>
+            <p>
+              Each executor agent owns specific files. No two agents edit the same file. This
+              prevents merge conflicts and ensures clear responsibility. If work touches shared
+              files, the Dev Team Leader coordinates sequencing.
+            </p>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 5. THREE-LAYER REVIEW PIPELINE ===== -->
+        <section class="section" id="review-pipeline">
+          <div class="section-label orange">Section 5</div>
+          <h2>Three-Layer Review Pipeline</h2>
+          <p>
+            Code passes through a rigorous three-layer review pipeline before any PR is created.
+            Static analysis gates mechanical issues. Gemini provides broad sweep and triage. Claude
+            Opus performs deep independent analysis.
+          </p>
+
+          <div class="pipeline">
+            <!-- Layer 0 -->
+            <div class="pipeline-stage stage-layer0">
+              <h4>Layer 0: Static Analysis Gate</h4>
+              <ul>
+                <li><code>ruff check</code> -- Python lint (unused imports, style violations)</li>
+                <li>
+                  <code>tsc --noEmit</code> -- TypeScript types (exclude known pre-existing errors
+                  in <code>client.ts:157</code> and <code>demo-results.ts:268</code>)
+                </li>
+                <li>All tests passing (<code>vitest --run</code> / <code>pytest</code>)</li>
+                <li>Must pass BEFORE any LLM reviewer sees code</li>
+              </ul>
+            </div>
+
+            <div class="pipeline-connector">&#9660;</div>
+
+            <!-- Stage 1: Gemini -->
+            <div class="pipeline-stage stage-gemini">
+              <h4>&#9672; Stage 1: Gemini Reviews (Broad Sweep + Triage)</h4>
+              <ul>
+                <li>
+                  Coordinator spawns <strong>separate Gemini instances</strong> per reviewer role
+                </li>
+                <li>
+                  Each gets <strong>full code + diff</strong> in interleaved format (diff first,
+                  then full file)
+                </li>
+                <li>
+                  Enhanced prompts with adversarial questions, mandatory checklists, and grading
+                  calibration
+                </li>
+                <li>
+                  <strong>UNCERTAINTY flags</strong> for issues Gemini is not confident about --
+                  escalated to Claude
+                </li>
+                <li>Second-pass "breaker mindset" instruction for adversarial re-review</li>
+                <li>Anti-inflation grading: A+ = zero issues, tied to severity not overall feel</li>
+                <li>
+                  Alternative: <code>scripts/gemini-review.sh</code> script instead of Coordinator
+                  agent
+                </li>
+                <li>Iterate until all relevant Gemini reviewers give A+</li>
+              </ul>
+            </div>
+
+            <div class="pipeline-connector">&#9660;</div>
+
+            <!-- Judge Layer -->
+            <div class="pipeline-stage stage-judge">
+              <h4>&#9878; Judge / Synthesis Layer</h4>
+              <p>
+                Spawned after each review stage (Gemini or Claude). Model:
+                <code>sonnet</code> (synthesis, not deep analysis).
+              </p>
+              <ul>
+                <li>
+                  <strong>Deduplicate</strong> -- same issue flagged by multiple reviewers merged
+                  into one
+                </li>
+                <li>
+                  <strong>Resolve conflicts</strong> -- if Technologist and Architect disagree,
+                  Judge decides by impact
+                </li>
+                <li>
+                  <strong>Prioritize</strong> -- rank all unique issues: CRITICAL &gt; HIGH &gt;
+                  MEDIUM &gt; LOW
+                </li>
+                <li>
+                  <strong>Final grade table</strong> --
+                  <code>| Reviewer | Grade | Issues Found | Unique After Dedup |</code>
+                </li>
+                <li>
+                  <strong>Fix manifest</strong> -- ordered list of issues grouped by file with clear
+                  instructions
+                </li>
+              </ul>
+              <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">
+                In Phase 7, reviewers flagged ~40 total issues but only ~25 were unique after dedup.
+              </p>
+            </div>
+
+            <div class="pipeline-connector">&#9660;</div>
+
+            <!-- Pipeline Overlap -->
+            <div class="pipeline-stage stage-overlap">
+              <h4>&#9736; Pipeline Overlap: Gemini to Claude</h4>
+              <ul>
+                <li>
+                  As each Gemini role reaches A+, <strong>immediately start</strong> corresponding
+                  Claude Opus reviewer
+                </li>
+                <li>
+                  Do not wait for ALL Gemini roles to pass -- overlap for non-overlapping file
+                  reviewers
+                </li>
+                <li>
+                  If a fix touches files an already-running Claude reviewer is analyzing, re-run
+                  that reviewer
+                </li>
+                <li>Projected savings: <strong>~30-40% review time reduction</strong></li>
+              </ul>
+            </div>
+
+            <div class="pipeline-connector">&#9660;</div>
+
+            <!-- Stage 2: Claude -->
+            <div class="pipeline-stage stage-claude">
+              <h4>&#9670; Stage 2: Claude Opus Independent Reviews (Deep Dive)</h4>
+              <ul>
+                <li>
+                  Separate Claude Opus agent per reviewer role --
+                  <strong>own context, fully independent</strong>
+                </li>
+                <li>Receives Gemini's UNCERTAIN flags as priority review list</li>
+                <li>
+                  Full tool access: reads files, traces code paths, simulates runtime behavior
+                </li>
+                <li>
+                  Results are NOT combined -- each goes to <strong>Judge/Synthesis agent</strong>
+                </li>
+                <li>Iterate until all Claude reviewers give A+</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1rem">
+            <h3>Grades Table Format</h3>
+            <div class="code-block">
+              | Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |
+              |----------------|-----------|-----------|--------------|----------------------| |
+              Architect | A- | A+ | A+ | Fixed type coupling | | QA | A+ | A+ | A+ | -- | |
+              Technologist | B+ | A+ | A+ | asyncio.to_thread | | Security | A | A+ | A+ | Timing
+              attack fix |
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 6. THE 10 REVIEWER ROLES ===== -->
+        <section class="section" id="reviewers">
+          <div class="section-label purple">Section 6</div>
+          <h2>The 10 Reviewer Roles</h2>
+          <p>
+            Each reviewer operates as a separate, independent agent with their own context. They
+            never share context or combine results -- all output flows through the Judge/Synthesis
+            layer.
+          </p>
+
+          <div class="reviewer-grid">
+            <div class="reviewer-card" style="border-top: 3px solid var(--blue)">
+              <div class="r-num">Reviewer 1</div>
+              <h4><span class="r-icon">&#9783;</span> Architect</h4>
+              <p>
+                System design, modularity, separation of concerns, scalability, design patterns,
+                dependency management, type safety. Enforces layer purity and ORM anti-patterns.
+                Gets ALL files.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--green)">
+              <div class="r-num">Reviewer 2</div>
+              <h4><span class="r-icon">&#9745;</span> QA</h4>
+              <p>
+                Test coverage, edge cases, assertions, error handling, regression risk, logging and
+                observability. Checks happy paths, negative paths, nulls, zeros, and boundary
+                conditions.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--cyan)">
+              <div class="r-num">Reviewer 3</div>
+              <h4><span class="r-icon">&#9883;</span> Scientist</h4>
+              <p>
+                rsID accuracy, genetics correctness, citations, scientific methodology, data
+                integrity. Validates that genetic predictions match published GWAS data and
+                population frequencies.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--orange)">
+              <div class="r-num">Reviewer 4</div>
+              <h4><span class="r-icon">&#9881;</span> Technologist</h4>
+              <p>
+                Performance, React/Next.js patterns, bundle size, memory, async correctness, modern
+                practices. Catches event loop blocking (bcrypt, Stripe SDK), N+1 queries, missing
+                code splitting.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--gold)">
+              <div class="r-num">Reviewer 5</div>
+              <h4><span class="r-icon">&#9830;</span> Business</h4>
+              <p>
+                Tier gating, conversion funnel, upgrade CTAs, copy quality, naming accuracy, market
+                fit. Enforces one-time purchase terminology, backend price validation, demo
+                conversion hooks.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--pink)">
+              <div class="r-num">Reviewer 6</div>
+              <h4><span class="r-icon">&#9786;</span> Designer</h4>
+              <p>
+                Accessibility (ARIA roles, sr-only text, aria-controls), responsive design, heading
+                hierarchy, keyboard navigation, UX flow. Focuses on WCAG compliance and visual
+                consistency.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--red)">
+              <div class="r-num">Reviewer 7</div>
+              <h4><span class="r-icon">&#9888;</span> Security Analyst</h4>
+              <p>
+                OWASP top 10, SQL/command injection, CSRF, token handling, encoding, secrets
+                management, timing attacks. Constant-time comparisons, webhook signature
+                verification, rate limiting.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid var(--purple)">
+              <div class="r-num">Reviewer 8</div>
+              <h4><span class="r-icon">&#9998;</span> Code Reviewer</h4>
+              <p>
+                Readability, naming conventions, DRY/SOLID principles, style consistency, dead code
+                elimination, import hygiene, function length, magic string elimination. Gets all
+                changed code files.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid #7eb8a0">
+              <div class="r-num">Reviewer 9</div>
+              <h4><span class="r-icon">&#9878;</span> Legal + Privacy</h4>
+              <p>
+                GDPR compliance, GINA (genetic data), data retention, consent flows, right to
+                deletion, cookie consent, age verification (COPPA), data export (Article 20),
+                encryption adequacy, cross-border transfers.
+              </p>
+            </div>
+            <div class="reviewer-card" style="border-top: 3px solid #c0a060">
+              <div class="r-num">Reviewer 10</div>
+              <h4><span class="r-icon">&#9829;</span> Ethics / Bioethics</h4>
+              <p>
+                Population bias in genetic data, responsible result framing, emotional harm
+                prevention, informed consent UX, eugenics guardrails, disclaimer adequacy,
+                vulnerable populations, data purpose limitation.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 7. CONTEXT SCOPING ===== -->
+        <section class="section" id="context-scoping">
+          <div class="section-label cyan">Section 7</div>
+          <h2>Context Scoping</h2>
+          <p>
+            Not every reviewer needs every file. Scoping context by relevance reduces prompt size
+            for Gemini and improves focus. Claude agents can read additional files if needed but
+            start with the scoped set.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reviewer</th>
+                  <th>Gets These Files</th>
+                  <th>Skips</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Architect</strong></td>
+                  <td>ALL files (needs full picture)</td>
+                  <td>None</td>
+                </tr>
+                <tr>
+                  <td><strong>QA</strong></td>
+                  <td>Test files + files they test</td>
+                  <td>CSS, config</td>
+                </tr>
+                <tr>
+                  <td><strong>Scientist</strong></td>
+                  <td>Genetics engine files, data files</td>
+                  <td>Auth, payments, UI</td>
+                </tr>
+                <tr>
+                  <td><strong>Technologist</strong></td>
+                  <td>All code files</td>
+                  <td>Test files, docs</td>
+                </tr>
+                <tr>
+                  <td><strong>Business</strong></td>
+                  <td>UI components, API routes, config</td>
+                  <td>Test files, internal services</td>
+                </tr>
+                <tr>
+                  <td><strong>Designer</strong></td>
+                  <td>UI components, CSS/styles, layouts</td>
+                  <td>Backend, tests, engine</td>
+                </tr>
+                <tr>
+                  <td><strong>Security</strong></td>
+                  <td>Auth, payments, API routes, middleware</td>
+                  <td>Pure UI, tests, genetics engine</td>
+                </tr>
+                <tr>
+                  <td><strong>Code Reviewer</strong></td>
+                  <td>All changed code files</td>
+                  <td>Config, docs</td>
+                </tr>
+                <tr>
+                  <td><strong>Legal + Privacy</strong></td>
+                  <td>Auth, user data handling, consent flows, privacy policies</td>
+                  <td>Pure UI styling, genetics engine internals</td>
+                </tr>
+                <tr>
+                  <td><strong>Ethics / Bioethics</strong></td>
+                  <td>Genetics results display, disclaimers, consent UX, carrier/trait output</td>
+                  <td>Auth, payments, pure backend infra</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 0.85rem">
+            Rules: Architect and Code Reviewer always get ALL files. If unsure, include the file --
+            extra context is better than missing context.
+          </p>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 8. FIX FLOW ===== -->
+        <section class="section" id="fix-flow">
+          <div class="section-label red">Section 8</div>
+          <h2>Fix Flow</h2>
+          <p>
+            After reviews identify issues, the fix flow routes work based on issue count. After
+            fixes, only the reviewer roles that were below A+ are re-reviewed.
+          </p>
+
+          <div class="fix-flow">
+            <div class="card" style="border-left: 3px solid var(--red)">
+              <h3>6+ Issues: Full Team</h3>
+              <ul>
+                <li>Conductor spawns Dev Team Leader</li>
+                <li>Leader creates executor team with file ownership</li>
+                <li>Executors implement fixes in parallel</li>
+                <li>QA agent verifies tests still pass</li>
+                <li>Report summary back to Conductor</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 3px solid var(--green)">
+              <h3>1-5 Issues: Single Executor</h3>
+              <ul>
+                <li>Conductor spawns single executor agent</li>
+                <li>Agent implements all fixes + runs tests</li>
+                <li>Reports pass/fail back to Conductor</li>
+                <li>A single executor handles up to 5 related issues efficiently</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1rem">
+            <h3>After Fixes</h3>
+            <ul>
+              <li>Re-review <strong>only</strong> the reviewer roles that were below A+</li>
+              <li>Use the same stage (Gemini or Claude) that identified the issues</li>
+              <li>Iterate until all re-reviewed roles give A+</li>
+              <li>Never spawn a single agent to fix 6+ issues -- always use the team flow</li>
+            </ul>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 9. FEEDBACK LOOP ===== -->
+        <section class="section" id="feedback-loop">
+          <div class="section-label gold">Section 9</div>
+          <h2>Feedback Loop (Gemini Calibration)</h2>
+          <p>
+            After every Claude Opus review cycle, the Conductor executes a mandatory feedback loop.
+            This is what makes Gemini improve over time. Skipping it degrades accuracy.
+          </p>
+
+          <div class="feedback-loop">
+            <div class="fb-step">
+              <div class="fb-icon" style="background: var(--purple-dim); color: var(--purple)">
+                &#9670;
+              </div>
+              <div>
+                Claude finds issues Gemini missed -- categorize by pattern (async-blocking, naming,
+                security...)
+              </div>
+            </div>
+            <div class="fb-arrow">&#9660;</div>
+            <div class="fb-step">
+              <div class="fb-icon" style="background: var(--orange-dim); color: var(--orange)">
+                &#9998;
+              </div>
+              <div>
+                Append to <code>docs/gemini-calibration.md</code> -- cumulative learning across
+                phases
+              </div>
+            </div>
+            <div class="fb-arrow">&#9660;</div>
+            <div class="fb-step">
+              <div class="fb-icon" style="background: var(--blue-dim); color: var(--blue)">
+                &#9881;
+              </div>
+              <div>
+                Include CALIBRATION section in next Gemini review prompt with confirmed misses and
+                dismissed flags
+              </div>
+            </div>
+            <div class="fb-arrow">&#9660;</div>
+            <div class="fb-step">
+              <div class="fb-icon" style="background: var(--green-dim); color: var(--green)">
+                &#9745;
+              </div>
+              <div>
+                Track: Confirmed Misses, Confirmed UNCERTAIN Flags, Dismissed UNCERTAIN Flags
+              </div>
+            </div>
+            <div class="fb-arrow">&#9660;</div>
+            <div class="fb-step">
+              <div class="fb-icon" style="background: var(--red-dim); color: var(--red)">
+                &#9888;
+              </div>
+              <div>
+                After 3+ repeated misses for a pattern, <strong>skip Gemini</strong> for that
+                reviewer role -- go directly to Claude
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1rem">
+            <h3>Calibration Prompt Format</h3>
+            <div class="code-block">
+              CALIBRATION FROM PREVIOUS REVIEWS: - You previously missed: [list from
+              gemini-calibration.md] - Your UNCERTAIN flag on [X] was CONFIRMED -- increase
+              sensitivity - Your UNCERTAIN flag on [Y] was DISMISSED -- reduce sensitivity - Common
+              false positives to AVOID: [list]
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1rem">
+            <h3>Calibration File Tracking</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>What It Tracks</th>
+                    <th>Example</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Confirmed Misses</strong></td>
+                    <td>Gemini missed, Claude caught</td>
+                    <td>Phase 7: bcrypt blocks event loop (CRITICAL)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Confirmed UNCERTAIN</strong></td>
+                    <td>Gemini flagged uncertain, Claude confirmed</td>
+                    <td>Phase 7: Stripe SDK blocking (HIGH)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dismissed UNCERTAIN</strong></td>
+                    <td>Gemini flagged uncertain, Claude dismissed</td>
+                    <td>False positive -- no actual issue</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 10. GEMINI DELEGATION RULES ===== -->
+        <section class="section" id="gemini-rules">
+          <div class="section-label orange">Section 10</div>
+          <h2>Gemini Delegation Rules</h2>
+          <p>
+            Gemini is called exclusively via Bash CLI. MCP tools are broken on Windows and must
+            never be used.
+          </p>
+
+          <div class="grid-2" style="margin-top: 1rem">
+            <div class="card">
+              <h3>&#10003; A-Tier (Always Use)</h3>
+              <ul>
+                <li>Code review (with full files + diff)</li>
+                <li>Design review and visual analysis</li>
+                <li>Documentation writing</li>
+                <li>Multi-file analysis (1M context window)</li>
+                <li>JSON validation</li>
+                <li>CSS/UI review</li>
+              </ul>
+            </div>
+            <div class="card redflag-card">
+              <h3>&#10007; D-Tier (Never Use)</h3>
+              <ul>
+                <li>Authentication / authorization code</li>
+                <li>Payment processing code</li>
+                <li>Git operations</li>
+                <li>Multi-step agentic workflows</li>
+                <li>Debugging / troubleshooting</li>
+                <li>Codebase search</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1.25rem">
+            <h3>CLI Usage</h3>
+            <div class="code-block">
+              # Always specify model explicitly (default is weaker gemini-2.0-flash) gemini -p "Your
+              prompt here" --model gemini-3-pro-preview 2>&1 # Long prompt via file cat
+              &lt;&lt;'EOF' &gt; /tmp/gemini-prompt.txt Your long prompt here... EOF gemini -p ""
+              --model gemini-3-pro-preview &lt; /tmp/gemini-prompt.txt 2>&1
+            </div>
+            <ul style="margin-top: 0.75rem">
+              <li>Always use <code>run_in_background: true</code> -- responses take 10-30s</li>
+              <li>Always append <code>2>&amp;1</code> -- CLI prints status to stderr</li>
+              <li>
+                <strong>NEVER fall back to weaker models</strong> on rate limit (429) -- wait and
+                retry (60s, 120s, 300s)
+              </li>
+              <li>Only delegate code to Gemini if it can match or exceed Claude quality</li>
+            </ul>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 11. KEY FILES REFERENCE ===== -->
+        <section class="section" id="key-files">
+          <div class="section-label blue">Section 11</div>
+          <h2>Key Files Reference</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>File / Directory</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>apps/web/</code></td>
+                  <td>Next.js 15 frontend (React 19, Tailwind, Zustand)</td>
+                </tr>
+                <tr>
+                  <td><code>apps/api/</code></td>
+                  <td>FastAPI backend (24 endpoints, cookie auth, Stripe, async)</td>
+                </tr>
+                <tr>
+                  <td><code>packages/genetics-engine/</code></td>
+                  <td>TypeScript genetics engine (~5,500 LOC, 366 tests)</td>
+                </tr>
+                <tr>
+                  <td><code>packages/shared-types/</code></td>
+                  <td>Shared TypeScript types across packages</td>
+                </tr>
+                <tr>
+                  <td><code>packages/genetics-data/</code></td>
+                  <td>JSON data files for genetic analysis</td>
+                </tr>
+                <tr>
+                  <td><code>PROGRESS.md</code></td>
+                  <td>Task tracking -- pushable directly to main</td>
+                </tr>
+                <tr>
+                  <td><code>docs/PROJECT_STATUS.md</code></td>
+                  <td>Full project state, known issues, next steps</td>
+                </tr>
+                <tr>
+                  <td><code>docs/GEMINI_REVIEW_PROTOCOL.md</code></td>
+                  <td>Enhanced Gemini review prompts and checklists</td>
+                </tr>
+                <tr>
+                  <td><code>docs/gemini-calibration.md</code></td>
+                  <td>Cumulative Gemini calibration data from feedback loops</td>
+                </tr>
+                <tr>
+                  <td><code>docs/DEVELOPMENT_GOTCHAS.md</code></td>
+                  <td>Common pitfalls and patterns for executor agents</td>
+                </tr>
+                <tr>
+                  <td><code>docs/GEMINI_DELEGATION_GUIDE.md</code></td>
+                  <td>A/B/C/D task tier matrix and delegation rules</td>
+                </tr>
+                <tr>
+                  <td><code>CLAUDE.md</code></td>
+                  <td>Project rules and orchestration protocol</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 12. SEVERITY DEFINITIONS ===== -->
+        <section class="section" id="severity">
+          <div class="section-label red">Section 12</div>
+          <h2>Severity Definitions</h2>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+              gap: 1rem;
+              margin-top: 1rem;
+            "
+          >
+            <div class="card" style="border-top: 3px solid var(--red)">
+              <h3><span class="badge badge-critical">CRITICAL</span></h3>
+              <p style="margin-top: 0.5rem">
+                Exploitable vulnerability, data loss, financial loss, system crash. Examples: SQL
+                injection, event loop blocking on high-traffic endpoint, charging wrong amount.
+              </p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--orange)">
+              <h3><span class="badge badge-high">HIGH</span></h3>
+              <p style="margin-top: 0.5rem">
+                Incorrect behavior in primary feature, significant performance issue, architectural
+                violation. Examples: N+1 on core endpoint, business logic in router, reflected XSS.
+              </p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--gold)">
+              <h3><span class="badge badge-medium">MEDIUM</span></h3>
+              <p style="margin-top: 0.5rem">
+                Edge case bug, best practice lapse, confusing code. Examples: missing negative test,
+                poor variable name, inefficient but non-blocking operation.
+              </p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h3><span class="badge badge-low">LOW</span></h3>
+              <p style="margin-top: 0.5rem">
+                Stylistic issue, typo, micro-optimization. Examples: comment typo, slightly verbose
+                code, unused import.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== 13. GRADING RUBRIC ===== -->
+        <section class="section" id="grading">
+          <div class="section-label gold">Section 13</div>
+          <h2>Grading Rubric</h2>
+          <p>
+            Grades are tied to issue severity, not overall feel. Anti-inflation rule: A+ should be
+            exceptionally rare. If you have not found at least one potential concern, you have not
+            looked hard enough.
+          </p>
+
+          <div class="card" style="margin-top: 1rem">
+            <div class="grade-row">
+              <div class="grade-letter" style="color: var(--green)">A+</div>
+              <div class="grade-desc">
+                <strong>ZERO issues</strong> found after thorough adversarial analysis.
+                Exceptionally rare.
+              </div>
+            </div>
+            <div class="grade-row">
+              <div class="grade-letter" style="color: #6ecf6e">A</div>
+              <div class="grade-desc">
+                Only <span class="badge badge-low">LOW</span> severity issues. Minor stylistic or
+                micro-optimization concerns.
+              </div>
+            </div>
+            <div class="grade-row">
+              <div class="grade-letter" style="color: var(--gold)">A-</div>
+              <div class="grade-desc">
+                At most <strong>one</strong> <span class="badge badge-medium">MEDIUM</span> issue. A
+                single edge case or best practice lapse.
+              </div>
+            </div>
+            <div class="grade-row">
+              <div class="grade-letter" style="color: var(--orange)">B+</div>
+              <div class="grade-desc">
+                Multiple <span class="badge badge-medium">MEDIUM</span> issues or
+                <strong>one</strong> <span class="badge badge-high">HIGH</span> issue. Needs
+                targeted fixes.
+              </div>
+            </div>
+            <div class="grade-row">
+              <div class="grade-letter" style="color: #e07050">B</div>
+              <div class="grade-desc">
+                <strong>One</strong> <span class="badge badge-critical">CRITICAL</span> issue.
+                Security vulnerability, data loss risk, or system crash potential.
+              </div>
+            </div>
+            <div class="grade-row">
+              <div class="grade-letter" style="color: var(--red)">&lt;B</div>
+              <div class="grade-desc">
+                Multiple <span class="badge badge-high">HIGH</span> or
+                <span class="badge badge-critical">CRITICAL</span> issues. Significant rework
+                required.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="sep"></div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+          <p><strong>Mergenix Orchestration Model v2.0</strong></p>
+          <p>Generated 2026-02-10</p>
+          <p style="margin-top: 0.75rem">
+            Source: <a href="./GEMINI_REVIEW_PROTOCOL.md">GEMINI_REVIEW_PROTOCOL.md</a>
+            &nbsp;&middot;&nbsp;
+            <a href="../CLAUDE.md">CLAUDE.md</a>
+            &nbsp;&middot;&nbsp; conductor-protocol.md (project memory)
+          </p>
+        </footer>
+      </div>
+      <!-- .container -->
+    </div>
+    <!-- .page-bg -->
+
+    <script>
+      // Scroll-triggered fade-in animations
+      (function () {
+        var sections = document.querySelectorAll('.section');
+        if (!sections.length) return;
+
+        // Make sections visible that are already in viewport on load
+        function checkVisibility() {
+          var windowHeight = window.innerHeight;
+          sections.forEach(function (section) {
+            var rect = section.getBoundingClientRect();
+            if (rect.top < windowHeight - 60) {
+              section.classList.add('visible');
+            }
+          });
+        }
+
+        // Use IntersectionObserver if available, otherwise fallback
+        if ('IntersectionObserver' in window) {
+          var observer = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
+          );
+
+          sections.forEach(function (section) {
+            observer.observe(section);
+          });
+        } else {
+          // Fallback for older browsers
+          window.addEventListener('scroll', checkVisibility, { passive: true });
+          checkVisibility();
+        }
+
+        // Initial check
+        checkVisibility();
+      })();
+    </script>
+  </body>
 </html>

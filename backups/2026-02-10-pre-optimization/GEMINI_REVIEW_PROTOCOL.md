@@ -10,14 +10,14 @@ Gemini consistently gives **higher grades** than Claude Opus and **misses critic
 
 ### What Gemini Misses (Pattern Analysis)
 
-| Issue Type | Example | Root Cause |
-|------------|---------|------------|
-| Deep async/concurrency | bcrypt blocking event loop | Gemini pattern-matches syntax, doesn't simulate runtime state |
-| ORM interaction bugs | lazy="raise" + cascade delete | Knows patterns individually, misses negative interactions |
-| Security timing attacks | Early-break in comparison loops | Applies localized fixes without holistic function analysis |
-| Naming/semantics | "subscription" for one-time purchase | No business context provided in prompt |
-| Architectural layer violations | Business logic in routers | No architectural rules provided in prompt |
-| Production hardening | No price validation in webhooks | Doesn't think adversarially by default |
+| Issue Type                     | Example                              | Root Cause                                                    |
+| ------------------------------ | ------------------------------------ | ------------------------------------------------------------- |
+| Deep async/concurrency         | bcrypt blocking event loop           | Gemini pattern-matches syntax, doesn't simulate runtime state |
+| ORM interaction bugs           | lazy="raise" + cascade delete        | Knows patterns individually, misses negative interactions     |
+| Security timing attacks        | Early-break in comparison loops      | Applies localized fixes without holistic function analysis    |
+| Naming/semantics               | "subscription" for one-time purchase | No business context provided in prompt                        |
+| Architectural layer violations | Business logic in routers            | No architectural rules provided in prompt                     |
+| Production hardening           | No price validation in webhooks      | Doesn't think adversarially by default                        |
 
 ### What Gemini Catches Well
 
@@ -100,6 +100,7 @@ CONTEXT (in this order):
 ## Role-Specific Checklists
 
 ### Architect
+
 - [ ] Layer purity: all business logic in services, not routers
 - [ ] Data model integrity: correct column types, loading strategies
 - [ ] Type definitions: specific, no `any`, derive from shared types
@@ -109,6 +110,7 @@ CONTEXT (in this order):
 - [ ] ORM anti-patterns: no N+1, cascade + lazy loading interactions checked
 
 ### QA
+
 - [ ] Happy path test exists
 - [ ] Negative path tests (invalid inputs, permission errors)
 - [ ] Edge cases: nulls, empty lists, zeros, boundaries
@@ -118,6 +120,7 @@ CONTEXT (in this order):
 - [ ] Test readability: clear names and structure
 
 ### Technologist
+
 - [ ] Event loop blocking: bcrypt, Stripe, file I/O wrapped in asyncio.to_thread
 - [ ] Idiomatic framework usage: FastAPI deps, React hooks, Next.js patterns
 - [ ] Efficient queries: SARGable, indexed, no N+1
@@ -126,6 +129,7 @@ CONTEXT (in this order):
 - [ ] Caching strategy: appropriate use, correct invalidation
 
 ### Business
+
 - [ ] Naming accuracy: matches product spec (not "subscription" for one-time)
 - [ ] Feature gating: tier checks on backend, not just frontend
 - [ ] Backend price validation: re-verify before charging
@@ -134,6 +138,7 @@ CONTEXT (in this order):
 - [ ] User-facing errors: clear, actionable messages
 
 ### Security Analyst
+
 - [ ] No SQL/command injection: parameterized queries only
 - [ ] Constant-time comparison: for ALL secret comparisons, no early exits
 - [ ] Webhook signature verification: before any processing
@@ -143,6 +148,7 @@ CONTEXT (in this order):
 - [ ] Rate limiting: on auth endpoints, expensive operations
 
 ### Code Reviewer
+
 - [ ] Descriptive naming: functions and variables describe purpose
 - [ ] Function length: short, focused, single responsibility
 - [ ] No magic strings/numbers: named constants instead
@@ -152,6 +158,7 @@ CONTEXT (in this order):
 - [ ] No code duplication: shared functions for repeated logic
 
 ### Legal + Privacy
+
 - [ ] GDPR compliance: personal data processing has lawful basis, data minimization applied
 - [ ] Genetic data regulations: GINA (US) / GDPR special categories (EU) — genetic data is sensitive, requires explicit consent
 - [ ] Right to deletion: account deletion actually purges ALL user data (not just soft-delete) — all tables, caches, backups
@@ -166,6 +173,7 @@ CONTEXT (in this order):
 - [ ] Cross-border transfers: EU users' data handling complies with Standard Contractual Clauses if transferred outside EU
 
 ### Ethics / Bioethics
+
 - [ ] Population bias: genetic predictions acknowledge limitations from European-skewed GWAS datasets, results qualified for non-European populations
 - [ ] Responsible result framing: carrier risk results presented with appropriate context, not catastrophized (e.g., "25% carrier probability" framed with what that actually means)
 - [ ] Emotional harm prevention: potentially distressing results (disease risk, carrier status) have appropriate warnings, context, and links to genetic counseling resources
@@ -245,12 +253,12 @@ Gemini reviews should output structured findings:
 
 ## Severity Definitions
 
-| Severity | Definition | Examples |
-|----------|-----------|----------|
-| **CRITICAL** | Exploitable vulnerability, data loss, financial loss, system crash | SQL injection, event loop blocking on high-traffic endpoint, charging wrong amount |
-| **HIGH** | Incorrect behavior in primary feature, significant perf issue, architectural violation | N+1 on core endpoint, business logic in router, reflected XSS |
-| **MEDIUM** | Edge case bug, best practice lapse, confusing code | Missing negative test, poor variable name, inefficient but non-blocking operation |
-| **LOW** | Stylistic issue, typo, micro-optimization | Comment typo, slightly verbose code, unused import |
+| Severity     | Definition                                                                             | Examples                                                                           |
+| ------------ | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **CRITICAL** | Exploitable vulnerability, data loss, financial loss, system crash                     | SQL injection, event loop blocking on high-traffic endpoint, charging wrong amount |
+| **HIGH**     | Incorrect behavior in primary feature, significant perf issue, architectural violation | N+1 on core endpoint, business logic in router, reflected XSS                      |
+| **MEDIUM**   | Edge case bug, best practice lapse, confusing code                                     | Missing negative test, poor variable name, inefficient but non-blocking operation  |
+| **LOW**      | Stylistic issue, typo, micro-optimization                                              | Comment typo, slightly verbose code, unused import                                 |
 
 ---
 

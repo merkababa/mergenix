@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
+import { memo } from 'react';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -16,13 +16,13 @@ interface LimitationsSectionProps {
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 export const DEFAULT_GENETIC_LIMITATIONS = [
-  "Cannot detect de novo (new) mutations not inherited from either parent.",
-  "Does not account for gene-gene interactions (epistasis) that may modify risk.",
-  "Environmental factors, lifestyle, and epigenetic modifications are not captured.",
-  "Limited to variants present on the genotyping chip used — rare mutations may be missed.",
-  "Cannot determine the phase (cis/trans) of compound heterozygous variants.",
-  "Copy number variations (CNVs) and structural variants are not assessed.",
-  "Results reflect population-level statistics and may not apply to every individual equally.",
+  'Cannot detect de novo (new) mutations not inherited from either parent.',
+  'Does not account for gene-gene interactions (epistasis) that may modify risk.',
+  'Environmental factors, lifestyle, and epigenetic modifications are not captured.',
+  'Limited to variants present on the genotyping chip used — rare mutations may be missed.',
+  'Cannot determine the phase (cis/trans) of compound heterozygous variants.',
+  'Copy number variations (CNVs) and structural variants are not assessed.',
+  'Results reflect population-level statistics and may not apply to every individual equally.',
 ];
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -40,30 +40,30 @@ export const LimitationsSection = memo(function LimitationsSection({
   const items = limitations.length > 0 ? limitations : DEFAULT_GENETIC_LIMITATIONS;
   const heading = context
     ? `What ${context.charAt(0).toUpperCase() + context.slice(1)} Analysis Cannot Tell You`
-    : "What This Analysis Cannot Tell You";
+    : 'What This Analysis Cannot Tell You';
 
   return (
     <details
       data-testid={context ? `limitations-${context}` : 'limitations-section'}
-      className="group rounded-xl border border-(--border-subtle) bg-(--bg-elevated)"
+      className="border-(--border-subtle) bg-(--bg-elevated) group rounded-xl border"
     >
-      <summary className="flex min-h-[44px] cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold text-(--text-heading) transition-colors hover:text-(--accent-teal)">
+      <summary className="text-(--text-heading) hover:text-(--accent-teal) flex min-h-[44px] cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold transition-colors">
         {heading}
         <span
-          className="ml-2 text-(--text-muted) transition-transform group-open:rotate-180"
+          className="text-(--text-muted) ml-2 transition-transform group-open:rotate-180"
           aria-hidden="true"
         >
           &#9662;
         </span>
       </summary>
-      <div className="border-t border-(--border-subtle) px-4 py-3">
+      <div className="border-(--border-subtle) border-t px-4 py-3">
         <ul className="space-y-2">
           {items.map((item, index) => (
             <li
               key={index}
-              className="flex items-start gap-2 text-xs leading-relaxed text-(--text-muted)"
+              className="text-(--text-muted) flex items-start gap-2 text-xs leading-relaxed"
             >
-              <span className="mt-0.5 shrink-0 text-(--accent-amber)" aria-hidden="true">
+              <span className="text-(--accent-amber) mt-0.5 shrink-0" aria-hidden="true">
                 &bull;
               </span>
               {item}

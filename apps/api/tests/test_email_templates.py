@@ -23,6 +23,7 @@ from app.config import get_settings
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _capture_html() -> tuple[AsyncMock, list[str]]:
     """Create a mock for _send that captures the html argument."""
     captured: list[str] = []
@@ -38,12 +39,14 @@ def _capture_html() -> tuple[AsyncMock, list[str]]:
 # Jinja2 environment tests
 # ---------------------------------------------------------------------------
 
+
 class TestJinjaEnvironment:
     """The email service should expose a Jinja2 rendering environment."""
 
     def test_jinja_env_exists(self):
         """A module-level _jinja_env should be importable."""
         from app.services.email_service import _jinja_env
+
         assert _jinja_env is not None
 
     def test_jinja_env_has_autoescape(self):
@@ -54,6 +57,7 @@ class TestJinjaEnvironment:
         truthy (i.e. configured) and that it returns True for HTML.
         """
         from app.services.email_service import _jinja_env
+
         # select_autoescape sets autoescape to a callable
         assert _jinja_env.autoescape
         # Verify the callable returns True for .html templates
@@ -63,24 +67,28 @@ class TestJinjaEnvironment:
     def test_base_template_exists(self):
         """The base.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("base.html")
         assert template is not None
 
     def test_verification_template_exists(self):
         """The verification.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("verification.html")
         assert template is not None
 
     def test_password_reset_template_exists(self):
         """The password_reset.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("password_reset.html")
         assert template is not None
 
     def test_deletion_confirmation_template_exists(self):
         """The deletion_confirmation.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("deletion_confirmation.html")
         assert template is not None
 
@@ -88,6 +96,7 @@ class TestJinjaEnvironment:
 # ---------------------------------------------------------------------------
 # Template rendering tests (via the public async functions)
 # ---------------------------------------------------------------------------
+
 
 class TestVerificationEmail:
     """send_verification_email renders the verification template."""
@@ -98,6 +107,7 @@ class TestVerificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "abc123token")
 
         html = captured[0]
@@ -111,6 +121,7 @@ class TestVerificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "tok")
 
         html = captured[0]
@@ -123,6 +134,7 @@ class TestVerificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "tok")
 
         html = captured[0]
@@ -134,6 +146,7 @@ class TestVerificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "tok")
 
         html = captured[0]
@@ -145,6 +158,7 @@ class TestVerificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "tok")
 
         html = captured[0]
@@ -156,6 +170,7 @@ class TestVerificationEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", "tok")
 
         mock_send.assert_called_once()
@@ -172,6 +187,7 @@ class TestPasswordResetEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "reset-tok-99")
 
         html = captured[0]
@@ -185,6 +201,7 @@ class TestPasswordResetEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "tok")
 
         html = captured[0]
@@ -196,6 +213,7 @@ class TestPasswordResetEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "tok")
 
         html = captured[0]
@@ -207,6 +225,7 @@ class TestPasswordResetEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "tok")
 
         html = captured[0]
@@ -218,6 +237,7 @@ class TestPasswordResetEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "tok")
 
         html = captured[0]
@@ -229,6 +249,7 @@ class TestPasswordResetEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_password_reset_email
+
             await send_password_reset_email("user@example.com", "tok")
 
         mock_send.assert_called_once()
@@ -247,6 +268,7 @@ class TestPurchaseReceiptEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -267,6 +289,7 @@ class TestPurchaseReceiptEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -287,6 +310,7 @@ class TestPurchaseReceiptEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -307,6 +331,7 @@ class TestPurchaseReceiptEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -327,6 +352,7 @@ class TestPurchaseReceiptEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -348,6 +374,7 @@ class TestPurchaseReceiptEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -369,6 +396,7 @@ class TestPurchaseReceiptEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -392,6 +420,7 @@ class TestDeletionConfirmationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "del-token-xyz")
 
         html = captured[0]
@@ -405,6 +434,7 @@ class TestDeletionConfirmationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "tok")
 
         html = captured[0]
@@ -417,6 +447,7 @@ class TestDeletionConfirmationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "tok")
 
         html = captured[0]
@@ -428,6 +459,7 @@ class TestDeletionConfirmationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "tok")
 
         html = captured[0]
@@ -440,6 +472,7 @@ class TestDeletionConfirmationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "tok")
 
         html = captured[0]
@@ -451,6 +484,7 @@ class TestDeletionConfirmationEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_deletion_confirmation_email
+
             await send_deletion_confirmation_email("user@example.com", "tok")
 
         mock_send.assert_called_once()
@@ -469,6 +503,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice Tester",
@@ -486,6 +521,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice",
@@ -503,6 +539,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice",
@@ -521,6 +558,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice",
@@ -538,6 +576,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             fixed_date = datetime(2026, 3, 15)
             await send_partner_notification_email(
                 to_email="partner@example.com",
@@ -556,6 +595,7 @@ class TestPartnerNotificationEmail:
         mock_send = AsyncMock(return_value=True)
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice",
@@ -574,6 +614,7 @@ class TestPartnerNotificationEmail:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_partner_notification_email
+
             await send_partner_notification_email(
                 to_email="partner@example.com",
                 analyzer_name="Alice",
@@ -592,12 +633,14 @@ class TestPurchaseReceiptTemplate:
     def test_purchase_receipt_template_exists(self):
         """The purchase_receipt.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("purchase_receipt.html")
         assert template is not None
 
     def test_partner_notification_template_exists(self):
         """The partner_notification.html template must be loadable."""
         from app.services.email_service import _jinja_env
+
         template = _jinja_env.get_template("partner_notification.html")
         assert template is not None
 
@@ -611,6 +654,7 @@ class TestAutoescaping:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_verification_email
+
             await send_verification_email("user@example.com", '<script>alert("xss")</script>')
 
         html = captured[0]
@@ -625,6 +669,7 @@ class TestAutoescaping:
         mock_send, captured = _capture_html()
         with patch("app.services.email_service._send", mock_send):
             from app.services.email_service import send_purchase_receipt_email
+
             await send_purchase_receipt_email(
                 to_email="user@example.com",
                 user_name="Test User",
@@ -655,6 +700,7 @@ class TestBaseTemplateStructure:
                 send_purchase_receipt_email,
                 send_verification_email,
             )
+
             await send_verification_email("a@b.com", "t1")
             await send_password_reset_email("a@b.com", "t2")
             await send_purchase_receipt_email(
@@ -690,6 +736,7 @@ class TestBaseTemplateStructure:
                 send_purchase_receipt_email,
                 send_verification_email,
             )
+
             await send_verification_email("a@b.com", "t1")
             await send_password_reset_email("a@b.com", "t2")
             await send_purchase_receipt_email(
@@ -724,6 +771,7 @@ class TestBaseTemplateStructure:
                 send_purchase_receipt_email,
                 send_verification_email,
             )
+
             await send_verification_email("a@b.com", "t1")
             await send_password_reset_email("a@b.com", "t2")
             await send_purchase_receipt_email(

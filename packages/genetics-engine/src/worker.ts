@@ -46,11 +46,7 @@ import type {
   Population,
 } from './types';
 
-import type {
-  WorkerConfig,
-  CoverageMetrics,
-  GenomeBuild,
-} from '@mergenix/shared-types';
+import type { WorkerConfig, CoverageMetrics, GenomeBuild } from '@mergenix/shared-types';
 
 import {
   parseGeneticFile,
@@ -290,9 +286,7 @@ function handleMessage(event: MessageEvent<WorkerRequest>): void {
  *
  * @param files - Array of files with name and content
  */
-async function handleParse(
-  files: Array<{ name: string; content: string }>,
-): Promise<void> {
+async function handleParse(files: Array<{ name: string; content: string }>): Promise<void> {
   if (busy) {
     postResponse({
       type: 'error',
@@ -416,20 +410,19 @@ async function handleAnalyze(
     cancelRequested = false;
 
     // Determine genotype sources: use request params, fall back to parsed data
-    const parent1: GenotypeMap =
-      isNonEmpty(parent1Genotypes)
-        ? parent1Genotypes
-        : (parsedGenotypes[0] ?? {});
-    const parent2: GenotypeMap =
-      isNonEmpty(parent2Genotypes)
-        ? parent2Genotypes
-        : (parsedGenotypes[1] ?? {});
+    const parent1: GenotypeMap = isNonEmpty(parent1Genotypes)
+      ? parent1Genotypes
+      : (parsedGenotypes[0] ?? {});
+    const parent2: GenotypeMap = isNonEmpty(parent2Genotypes)
+      ? parent2Genotypes
+      : (parsedGenotypes[1] ?? {});
 
     // Validate we have data to work with
     if (!isNonEmpty(parent1) || !isNonEmpty(parent2)) {
       postResponse({
         type: 'error',
-        message: 'Missing genotype data for one or both parents. Parse files first or provide genotypes.',
+        message:
+          'Missing genotype data for one or both parents. Parse files first or provide genotypes.',
         code: 'MISSING_DATA',
       });
       return;
@@ -485,7 +478,7 @@ async function handleAnalyze(
     progressReporter.forceReport('counseling_triage', 75, 'Starting counseling triage');
 
     // Extract PRS data for counseling triage
-    const prsForCounseling = Object.values(prsResults.conditions).map(c => ({
+    const prsForCounseling = Object.values(prsResults.conditions).map((c) => ({
       percentile: c.offspring.expectedPercentile,
       trait: c.name,
     }));
@@ -497,8 +490,7 @@ async function handleAnalyze(
       const parentAStatus = geneResult.parentA.metabolizerStatus.status;
       const parentBStatus = geneResult.parentB.metabolizerStatus.status;
       const isActionable =
-        parentAStatus !== 'normal_metabolizer' ||
-        parentBStatus !== 'normal_metabolizer';
+        parentAStatus !== 'normal_metabolizer' || parentBStatus !== 'normal_metabolizer';
       if (isActionable) {
         // Collect unique drugs from both parents' non-normal recommendations
         const drugs = new Set<string>();
@@ -714,10 +706,7 @@ async function handleParseStream(
  * @param fileRef - Object with the file name (file must be provided via Transferable)
  * @param maxSize - Optional override for maximum decompressed size
  */
-async function handleDecompress(
-  fileRef: { name: string },
-  maxSize?: number,
-): Promise<void> {
+async function handleDecompress(fileRef: { name: string }, maxSize?: number): Promise<void> {
   if (busy) {
     postResponse({
       type: 'error',
@@ -735,8 +724,8 @@ async function handleDecompress(
     // the message. Until that wiring is in place, we respond with a clear error.
     // The decompress() function is ready to be called once a File is available.
     void decompress; // preserve import — used when wiring is complete
-    void maxSize;    // preserve parameter — used when wiring is complete
-    void fileRef;    // preserve parameter — used when wiring is complete
+    void maxSize; // preserve parameter — used when wiring is complete
+    void fileRef; // preserve parameter — used when wiring is complete
 
     postResponse({
       type: 'error',
@@ -856,8 +845,7 @@ let _testResponseCapture: WorkerResponse[] | null = null;
  */
 declare const process: { env: { NODE_ENV?: string } } | undefined;
 const _isProduction: boolean =
-  typeof process !== 'undefined' &&
-  process?.env?.NODE_ENV === 'production';
+  typeof process !== 'undefined' && process?.env?.NODE_ENV === 'production';
 
 /**
  * Test-only helpers for inspecting and manipulating worker module state.
@@ -871,69 +859,71 @@ const _isProduction: boolean =
  *
  * @internal
  */
-export const __test__ = !_isProduction ? {
-  /** Get a snapshot of the current worker state. */
-  getState: () => ({
-    parsedGenotypes,
-    parsedFormats,
-    geneticsData,
-    governor,
-    busy,
-    cancelRequested,
-  }),
+export const __test__ = !_isProduction
+  ? {
+      /** Get a snapshot of the current worker state. */
+      getState: () => ({
+        parsedGenotypes,
+        parsedFormats,
+        geneticsData,
+        governor,
+        busy,
+        cancelRequested,
+      }),
 
-  /** Set parsedGenotypes to a given array. */
-  setParsedGenotypes: (genotypes: GenotypeMap[]) => {
-    parsedGenotypes = genotypes;
-  },
+      /** Set parsedGenotypes to a given array. */
+      setParsedGenotypes: (genotypes: GenotypeMap[]) => {
+        parsedGenotypes = genotypes;
+      },
 
-  /** Set parsedFormats to a given array. */
-  setParsedFormats: (formats: FileFormat[]) => {
-    parsedFormats = formats;
-  },
+      /** Set parsedFormats to a given array. */
+      setParsedFormats: (formats: FileFormat[]) => {
+        parsedFormats = formats;
+      },
 
-  /** Set geneticsData to a given value. */
-  setGeneticsData: (data: GeneticsData | null) => {
-    geneticsData = data;
-  },
+      /** Set geneticsData to a given value. */
+      setGeneticsData: (data: GeneticsData | null) => {
+        geneticsData = data;
+      },
 
-  /**
-   * Set the governor. If `create` is true, creates a real MemoryGovernor
-   * with a 500MB limit; if false, sets governor to null.
-   */
-  setGovernor: (create: boolean) => {
-    if (create) {
-      governor = new MemoryGovernor(500 * 1024 * 1024);
-    } else {
-      governor = null;
+      /**
+       * Set the governor. If `create` is true, creates a real MemoryGovernor
+       * with a 500MB limit; if false, sets governor to null.
+       */
+      setGovernor: (create: boolean) => {
+        if (create) {
+          governor = new MemoryGovernor(500 * 1024 * 1024);
+        } else {
+          governor = null;
+        }
+      },
+
+      /** Set the busy flag. */
+      setBusy: (value: boolean) => {
+        busy = value;
+      },
+
+      /**
+       * Simulate receiving a message from the main thread.
+       * Calls handleMessage with a synthetic MessageEvent.
+       */
+      simulateMessage: (request: WorkerRequest) => {
+        handleMessage({ data: request } as MessageEvent<WorkerRequest>);
+      },
+
+      /**
+       * Capture responses posted during a callback.
+       * Returns the array of responses that were posted during the callback's execution.
+       */
+      captureResponses: (fn: () => void): WorkerResponse[] => {
+        const captured: WorkerResponse[] = [];
+        _testResponseCapture = captured;
+        try {
+          fn();
+        } finally {
+          _testResponseCapture = null;
+        }
+        return captured;
+      },
     }
-  },
-
-  /** Set the busy flag. */
-  setBusy: (value: boolean) => {
-    busy = value;
-  },
-
-  /**
-   * Simulate receiving a message from the main thread.
-   * Calls handleMessage with a synthetic MessageEvent.
-   */
-  simulateMessage: (request: WorkerRequest) => {
-    handleMessage({ data: request } as MessageEvent<WorkerRequest>);
-  },
-
-  /**
-   * Capture responses posted during a callback.
-   * Returns the array of responses that were posted during the callback's execution.
-   */
-  captureResponses: (fn: () => void): WorkerResponse[] => {
-    const captured: WorkerResponse[] = [];
-    _testResponseCapture = captured;
-    try {
-      fn();
-    } finally {
-      _testResponseCapture = null;
-    }
-    return captured;
-  },
-} : undefined;
+  : undefined;

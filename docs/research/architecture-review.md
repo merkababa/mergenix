@@ -11,6 +11,7 @@
 This report provides a comprehensive review of Mergenix's current architecture, identifying structural strengths, weaknesses, and opportunities for improvement. The analysis covers code organization, dependency management, modularity, scalability considerations, and architectural patterns.
 
 **Key Findings:**
+
 - 22 architectural recommendations across 6 categories
 - Strong modular separation in auth and payments systems
 - Tight coupling between UI and business logic in some areas
@@ -55,6 +56,7 @@ Mergenix/
 ### 1.2 Dependency Graph
 
 **External Dependencies:**
+
 - `streamlit` - UI framework
 - `stripe` - Payment processing
 - `paypalrestsdk` - PayPal integration
@@ -65,6 +67,7 @@ Mergenix/
 - `pytest` - Testing
 
 **Internal Module Dependencies:**
+
 ```
 app.py
   ├─> pages/* (all 9 pages)
@@ -89,6 +92,7 @@ Source/parser.py
 **Circular Dependencies:** None detected.
 
 **Tight Coupling Issues:**
+
 - `pages/2_analysis.py` directly calls `Source/carrier_analysis.py` and `Source/trait_prediction.py`
 - `pages/3_disease_catalog.py` directly loads and manipulates `data/carrier_panel.json`
 - UI pages access `Source/auth/session.py` directly (tight coupling to session implementation)
@@ -100,6 +104,7 @@ Source/parser.py
 ### 2.1 Strong Modular Separation
 
 **Auth System:**
+
 - 7 well-separated modules with clear responsibilities
 - `manager.py` - User CRUD operations
 - `oauth.py` - Google OAuth flow
@@ -110,6 +115,7 @@ Source/parser.py
 - `tokens.py` - JWT token handling
 
 **Payments System:**
+
 - Clean separation between Stripe (`stripe_handler.py`) and PayPal (`paypal_handler.py`)
 - Both implement similar interfaces (could be formalized)
 
@@ -134,6 +140,7 @@ Source/parser.py
 **Issue:** UI pages directly call business logic functions.
 
 **Example from `pages/2_analysis.py`:**
+
 ```python
 from Source.carrier_analysis import analyze_carriers
 from Source.trait_prediction import predict_traits
@@ -146,6 +153,7 @@ trait_results = predict_traits(parent1_data, parent2_data)
 **Problem:** Changes to analysis logic require changes to UI code. Hard to test UI independently.
 
 **Recommendation:** Introduce a service layer:
+
 ```python
 # Source/services/genetics_service.py
 class GeneticsService:
@@ -170,6 +178,7 @@ results = service.analyze_offspring(parent1_data, parent2_data)
 **Issue:** Modules directly import and instantiate dependencies.
 
 **Example from `Source/auth/manager.py`:**
+
 ```python
 # Hard-coded file path
 USERS_FILE = "data/users.json"
@@ -182,6 +191,7 @@ def load_users():
 **Problem:** Hard to test (can't mock file system), hard to switch storage backends.
 
 **Recommendation:** Use dependency injection:
+
 ```python
 class UserRepository:
     def __init__(self, storage_path: str = "data/users.json"):
@@ -200,11 +210,13 @@ repo = UserRepository(storage_path="tests/fixtures/users.json")
 **Issue:** Error handling varies across modules.
 
 **Examples:**
+
 - `Source/parser.py` raises custom exceptions (`InvalidFileFormat`)
 - `Source/carrier_analysis.py` returns error dictionaries
 - `pages/*.py` use `st.error()` for all errors
 
 **Recommendation:** Standardize on a consistent error handling pattern:
+
 ```python
 # Source/exceptions.py
 class MergenixException(Exception):
@@ -233,6 +245,7 @@ def analyze_carriers(parent1, parent2):
 **Issue:** `Source/parser.py` is 1,262 lines with 4 format parsers in one file.
 
 **Recommendation:** Split into separate modules:
+
 ```
 Source/parsers/
   ├── __init__.py           # Unified parse() function
@@ -250,16 +263,19 @@ Source/parsers/
 ### 4.1 File-Based Storage Limitations
 
 **Current State:**
+
 - Users stored in `data/users.json`
 - Audit logs in `data/audit_log.json`
 - All reads/writes are synchronous file I/O
 
 **Bottlenecks:**
+
 - Concurrent writes will cause race conditions
 - No indexing (linear search for user lookups)
 - No transactions (partial writes on crash)
 
 **Scaling Path:**
+
 1. **Phase 1 (current):** JSON files (works up to ~1,000 users)
 2. **Phase 2:** SQLite with indexed queries (works up to ~100,000 users)
 3. **Phase 3:** PostgreSQL with connection pooling (works up to millions)
@@ -269,14 +285,17 @@ Source/parsers/
 ### 4.2 In-Memory Data Loading
 
 **Current State:**
+
 - `carrier_panel.json` (2,715 diseases) loaded on every analysis request
 - `trait_snps.json` (79 traits) loaded on every analysis request
 
 **Bottleneck:**
+
 - Repeated JSON parsing adds ~50-100ms per request
 - No caching between requests
 
 **Recommendation:** Implement in-memory caching:
+
 ```python
 # Source/cache.py
 import json
@@ -296,14 +315,17 @@ def load_trait_snps():
 ### 4.3 Stateful Streamlit Session
 
 **Current State:**
+
 - Session state stored in `st.session_state` (in-memory, per-user)
 - Lost on server restart or user refresh
 
 **Bottleneck:**
+
 - No persistence for long-running analyses
 - No resumability if user navigates away
 
 **Recommendation:** Persist session state to database:
+
 ```python
 # Source/session_store.py
 class SessionStore:
@@ -323,24 +345,29 @@ class SessionStore:
 ### 5.1 Missing Patterns
 
 **Repository Pattern:**
+
 - Currently: Direct file I/O scattered across modules
 - Recommended: Centralized data access layer
 
 **Factory Pattern:**
+
 - Currently: Parser selection via if/elif chains in `parse()`
 - Recommended: Parser factory with registration
 
 **Strategy Pattern:**
+
 - Currently: Payment handlers are separate but not polymorphic
 - Recommended: Common `PaymentProcessor` interface
 
 **Observer Pattern:**
+
 - Currently: No event system for user actions
 - Recommended: Event bus for audit logging, analytics
 
 ### 5.2 Recommended Pattern Implementations
 
 **Repository Pattern Example:**
+
 ```python
 # Source/repositories/user_repository.py
 from abc import ABC, abstractmethod
@@ -370,6 +397,7 @@ class SQLiteUserRepository(UserRepository):
 ```
 
 **Factory Pattern Example:**
+
 ```python
 # Source/parsers/__init__.py
 class ParserFactory:
@@ -406,22 +434,25 @@ ParserFactory.register("23andme", TwentyThreeMeParser)
 **Issue:** Mixed naming styles across modules.
 
 **Examples:**
+
 - `carrier_analysis.py` (snake_case)
 - `trait_prediction.py` (snake_case)
 - `tier_config.py` (snake_case)
 - But: `TwentyThreeMeParser` (PascalCase class in snake_case file)
 
 **Recommendation:**
+
 - Files: snake_case (e.g., `carrier_analysis.py`)
 - Classes: PascalCase (e.g., `CarrierAnalyzer`)
 - Functions: snake_case (e.g., `analyze_carriers()`)
 - Constants: UPPER_SNAKE_CASE (e.g., `MAX_FILE_SIZE`)
 
-### 6.2 Missing __init__.py Files
+### 6.2 Missing **init**.py Files
 
 **Issue:** Some directories lack `__init__.py`, making imports inconsistent.
 
 **Current State:**
+
 ```
 Source/
   ├── auth/
@@ -433,6 +464,7 @@ Source/
 ```
 
 **Recommendation:** Add `__init__.py` to all package directories:
+
 ```python
 # Source/payments/__init__.py
 from .stripe_handler import StripeHandler
@@ -446,11 +478,13 @@ __all__ = ["StripeHandler", "PayPalHandler"]
 **Issue:** Some modules have unclear responsibilities.
 
 **Example:** `Source/tier_config.py` defines both:
+
 - Feature tier definitions (Free, Premium, Pro)
 - Disease/trait limits per tier
 - UI display logic for tier badges
 
 **Recommendation:** Split into focused modules:
+
 ```
 Source/
   ├── models/
@@ -470,6 +504,7 @@ Source/
 **Status:** 15-20% coverage (61 tests)
 
 **Coverage by Module:**
+
 - `Source/parser.py` - ~60% covered (strongest)
 - `Source/auth/` - ~30% covered
 - `Source/carrier_analysis.py` - ~10% covered
@@ -481,6 +516,7 @@ Source/
 **Issue:** No clear testing strategy for Streamlit UI.
 
 **Recommendation:** Add UI testing layer:
+
 ```python
 # tests/ui/test_analysis_page.py
 from streamlit.testing.v1 import AppTest
@@ -504,6 +540,7 @@ def test_analysis_with_uploaded_files():
 **Issue:** Tests use real data files (`sample_data/`), not isolated fixtures.
 
 **Recommendation:** Create minimal test fixtures:
+
 ```
 tests/
   ├── fixtures/
@@ -521,6 +558,7 @@ tests/
 ### 8.1 Authentication Flow
 
 **Current Flow:**
+
 1. User enters email/password on `pages/4_auth.py`
 2. `Source/auth/manager.py` loads `data/users.json`
 3. `Source/auth/password.py` verifies bcrypt hash
@@ -528,6 +566,7 @@ tests/
 5. Token stored in `st.session_state`
 
 **Vulnerabilities:**
+
 - No rate limiting on login attempts
 - Sessions don't expire (infinite lifetime)
 - No CSRF protection on forms
@@ -539,10 +578,12 @@ tests/
 **Issue:** No role-based access control (RBAC).
 
 **Current State:**
+
 - All authenticated users have same permissions
 - No admin role for managing users/data
 
 **Recommendation:** Add RBAC layer:
+
 ```python
 # Source/auth/roles.py
 from enum import Enum
@@ -576,18 +617,21 @@ def has_permission(user_role: Role, permission: Permission) -> bool:
 ### 9.1 Bottleneck Analysis
 
 **Identified Bottlenecks:**
+
 1. **VCF parsing:** ~2-5 seconds for 100k-line files
 2. **Carrier analysis:** ~500ms for 2,715 diseases (no indexing)
 3. **Trait prediction:** ~100ms for 79 traits
 4. **JSON loading:** ~50-100ms per request (no caching)
 
 **Performance Budget:**
+
 - File upload: <1s for 10MB file
 - Parsing: <3s for largest supported format
 - Analysis: <1s for full carrier + trait analysis
 - Page load: <500ms for initial render
 
 **Current Performance:**
+
 - File upload: ~800ms (within budget)
 - Parsing: ~4s for VCF (exceeds budget)
 - Analysis: ~600ms (exceeds budget)
@@ -600,11 +644,13 @@ def has_permission(user_role: Role, permission: Permission) -> bool:
 **Current State:** No caching implemented.
 
 **Recommended Caching Layers:**
+
 1. **Data caching:** LRU cache for carrier_panel.json, trait_snps.json
 2. **Computation caching:** Memoize analysis results by input hash
 3. **Session caching:** Store parsed genetic data in session (avoid re-parsing)
 
 **Example:**
+
 ```python
 # Source/cache.py
 import hashlib
@@ -629,11 +675,13 @@ def cached_carrier_analysis(data_hash: str, parent1_data: tuple, parent2_data: t
 **Status:** Not production-ready.
 
 **Assumptions:**
+
 - Running on Streamlit Cloud or local server
 - Single-process deployment (no load balancing)
 - File-based storage (no shared database)
 
 **Limitations:**
+
 - Cannot scale horizontally (session state tied to single server)
 - No redundancy (single point of failure)
 - No monitoring/observability
@@ -641,6 +689,7 @@ def cached_carrier_analysis(data_hash: str, parent1_data: tuple, parent2_data: t
 ### 10.2 Production-Ready Architecture
 
 **Recommended Stack:**
+
 ```
 ┌─────────────────────────────────────┐
 │   Load Balancer (nginx/HAProxy)     │
@@ -662,6 +711,7 @@ def cached_carrier_analysis(data_hash: str, parent1_data: tuple, parent2_data: t
 ```
 
 **Key Components:**
+
 1. **Load balancer:** Distribute traffic across N Streamlit instances
 2. **Containerization:** Docker containers for consistent environments
 3. **Shared database:** PostgreSQL for user data, sessions, audit logs
@@ -674,6 +724,7 @@ def cached_carrier_analysis(data_hash: str, parent1_data: tuple, parent2_data: t
 **Recommendation:** Use Terraform/CloudFormation for reproducible deployments.
 
 **Example (Docker Compose for local testing):**
+
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -681,7 +732,7 @@ services:
   streamlit:
     build: .
     ports:
-      - "8501:8501"
+      - '8501:8501'
     environment:
       - DATABASE_URL=postgresql://mergenix:password@db:5432/mergenix
     depends_on:
@@ -707,12 +758,14 @@ volumes:
 ### 11.1 Current Documentation
 
 **Existing Docs:**
+
 - `README.md` - Project overview, setup instructions
 - `CLAUDE.md` - Project rules, git workflow
 - `PROGRESS.md` - Task tracking
 - `docs/research/` - 11 research reports (moved from .omc/)
 
 **Missing Docs:**
+
 - API documentation (no docstrings in many modules)
 - Architecture diagrams (no visual representations)
 - Deployment guide (no production setup instructions)
@@ -749,6 +802,7 @@ docs/
 **Recommendation:** Document all major architectural decisions.
 
 **Example ADR:**
+
 ```markdown
 # ADR-001: Use SQLite for User Data Storage
 
@@ -757,22 +811,28 @@ docs/
 **Deciders:** kukiz, Maayan, Claude
 
 ## Context
+
 Currently using JSON files for user data. Need better concurrency, indexing, transactions.
 
 ## Decision
+
 Migrate to SQLite with indexed queries for user data, sessions, audit logs.
 
 ## Consequences
+
 **Positive:**
+
 - Atomic transactions (no partial writes)
 - Indexed queries (faster lookups)
 - SQL interface (easier to query/report)
 
 **Negative:**
+
 - Migration complexity (need to convert existing JSON data)
 - New dependency (sqlite3, though it's in Python stdlib)
 
 ## Alternatives Considered
+
 1. Keep JSON files → rejected (doesn't solve concurrency issues)
 2. PostgreSQL → rejected (overkill for current scale)
 3. MongoDB → rejected (adds new dependency, no strong reason over SQLite)
@@ -784,67 +844,71 @@ Migrate to SQLite with indexed queries for user data, sessions, audit logs.
 
 ### 12.1 Critical (Do First)
 
-| Priority | Recommendation | Effort | Impact | Report Reference |
-|----------|---------------|--------|--------|------------------|
-| 1 | Migrate to SQLite for user data | Medium | High | database-architecture.md |
-| 2 | Add service layer (decouple UI from logic) | Medium | High | (this report, section 3.1) |
-| 3 | Implement data caching (carrier_panel, traits) | Low | High | performance-optimization.md |
-| 4 | Standardize error handling | Low | Medium | (this report, section 3.3) |
-| 5 | Add repository pattern for data access | Medium | High | (this report, section 5.2) |
+| Priority | Recommendation                                 | Effort | Impact | Report Reference            |
+| -------- | ---------------------------------------------- | ------ | ------ | --------------------------- |
+| 1        | Migrate to SQLite for user data                | Medium | High   | database-architecture.md    |
+| 2        | Add service layer (decouple UI from logic)     | Medium | High   | (this report, section 3.1)  |
+| 3        | Implement data caching (carrier_panel, traits) | Low    | High   | performance-optimization.md |
+| 4        | Standardize error handling                     | Low    | Medium | (this report, section 3.3)  |
+| 5        | Add repository pattern for data access         | Medium | High   | (this report, section 5.2)  |
 
 ### 12.2 High Priority (Do Soon)
 
-| Priority | Recommendation | Effort | Impact | Report Reference |
-|----------|---------------|--------|--------|------------------|
-| 6 | Split parser.py into modular parsers | Medium | Medium | (this report, section 3.4) |
-| 7 | Add dependency injection | High | High | (this report, section 3.2) |
-| 8 | Implement RBAC for user permissions | Medium | Medium | (this report, section 8.2) |
-| 9 | Add session expiration | Low | High | security-audit.md |
-| 10 | Implement factory pattern for parsers | Low | Medium | (this report, section 5.2) |
+| Priority | Recommendation                        | Effort | Impact | Report Reference           |
+| -------- | ------------------------------------- | ------ | ------ | -------------------------- |
+| 6        | Split parser.py into modular parsers  | Medium | Medium | (this report, section 3.4) |
+| 7        | Add dependency injection              | High   | High   | (this report, section 3.2) |
+| 8        | Implement RBAC for user permissions   | Medium | Medium | (this report, section 8.2) |
+| 9        | Add session expiration                | Low    | High   | security-audit.md          |
+| 10       | Implement factory pattern for parsers | Low    | Medium | (this report, section 5.2) |
 
 ### 12.3 Medium Priority (Do Eventually)
 
-| Priority | Recommendation | Effort | Impact | Report Reference |
-|----------|---------------|--------|--------|------------------|
-| 11 | Add __init__.py to all packages | Low | Low | (this report, section 6.2) |
-| 12 | Standardize naming conventions | Low | Low | (this report, section 6.1) |
-| 13 | Create minimal test fixtures | Low | Medium | (this report, section 7.3) |
-| 14 | Add UI tests with AppTest | High | Medium | (this report, section 7.2) |
-| 15 | Implement observer pattern for events | Medium | Low | (this report, section 5.1) |
+| Priority | Recommendation                        | Effort | Impact | Report Reference           |
+| -------- | ------------------------------------- | ------ | ------ | -------------------------- |
+| 11       | Add **init**.py to all packages       | Low    | Low    | (this report, section 6.2) |
+| 12       | Standardize naming conventions        | Low    | Low    | (this report, section 6.1) |
+| 13       | Create minimal test fixtures          | Low    | Medium | (this report, section 7.3) |
+| 14       | Add UI tests with AppTest             | High   | Medium | (this report, section 7.2) |
+| 15       | Implement observer pattern for events | Medium | Low    | (this report, section 5.1) |
 
 ### 12.4 Long-Term (Future Scaling)
 
-| Priority | Recommendation | Effort | Impact | Report Reference |
-|----------|---------------|--------|--------|------------------|
-| 16 | Migrate to PostgreSQL | High | High | database-architecture.md |
-| 17 | Add load balancing | High | High | (this report, section 10.2) |
-| 18 | Containerize with Docker | Medium | High | (this report, section 10.2) |
-| 19 | Add monitoring/observability | Medium | High | (this report, section 10.2) |
-| 20 | Implement object storage for files | Medium | Medium | (this report, section 10.2) |
+| Priority | Recommendation                     | Effort | Impact | Report Reference            |
+| -------- | ---------------------------------- | ------ | ------ | --------------------------- |
+| 16       | Migrate to PostgreSQL              | High   | High   | database-architecture.md    |
+| 17       | Add load balancing                 | High   | High   | (this report, section 10.2) |
+| 18       | Containerize with Docker           | Medium | High   | (this report, section 10.2) |
+| 19       | Add monitoring/observability       | Medium | High   | (this report, section 10.2) |
+| 20       | Implement object storage for files | Medium | Medium | (this report, section 10.2) |
 
 ---
 
 ## 13. Migration Path
 
 ### Phase 1: Foundation (Weeks 1-2)
+
 - Implement service layer
 - Add data caching
 - Migrate to SQLite
 - Standardize error handling
 
 ### Phase 2: Modularity (Weeks 3-4)
+
 - Add repository pattern
 - Split parser.py into modular parsers
 - Implement dependency injection
 - Add factory pattern for parsers
 
 ### Phase 3: Security & Testing (Weeks 5-6)
+
 - Implement RBAC
 - Add session expiration
 - Create minimal test fixtures
 - Add UI tests with AppTest
 
 ### Phase 4: Production-Ready (Weeks 7-8)
+
 - Containerize with Docker
 - Add monitoring/observability
 - Migrate to PostgreSQL (if needed)
@@ -854,14 +918,14 @@ Migrate to SQLite with indexed queries for user data, sessions, audit logs.
 
 ## 14. Related Reports
 
-| Report | Relevance |
-|--------|-----------|
-| `database-architecture.md` | Detailed SQLite migration plan |
-| `performance-optimization.md` | Caching strategy, bottleneck fixes |
-| `security-audit.md` | Security vulnerabilities, RBAC requirements |
-| `testing-strategy.md` | Test coverage plan, UI testing approach |
-| `auth-improvements.md` | Authentication system fixes |
-| `frontend-design.md` | UI component organization |
+| Report                        | Relevance                                   |
+| ----------------------------- | ------------------------------------------- |
+| `database-architecture.md`    | Detailed SQLite migration plan              |
+| `performance-optimization.md` | Caching strategy, bottleneck fixes          |
+| `security-audit.md`           | Security vulnerabilities, RBAC requirements |
+| `testing-strategy.md`         | Test coverage plan, UI testing approach     |
+| `auth-improvements.md`        | Authentication system fixes                 |
+| `frontend-design.md`          | UI component organization                   |
 
 ---
 
@@ -869,22 +933,24 @@ Migrate to SQLite with indexed queries for user data, sessions, audit logs.
 
 ### A.1 External Dependencies
 
-| Dependency | Version | Purpose | Risk |
-|------------|---------|---------|------|
-| streamlit | Latest | UI framework | High (breaking changes in major versions) |
-| stripe | Latest | Payment processing | Medium (API versioning) |
-| paypalrestsdk | Latest | PayPal integration | Medium (deprecated SDK) |
-| google-auth | Latest | OAuth authentication | Low (stable API) |
-| bcrypt | Latest | Password hashing | Low (stable) |
-| pyjwt | Latest | JWT tokens | Low (stable) |
-| ruff | Latest | Linting | Low (dev-only) |
-| pytest | Latest | Testing | Low (dev-only) |
+| Dependency    | Version | Purpose              | Risk                                      |
+| ------------- | ------- | -------------------- | ----------------------------------------- |
+| streamlit     | Latest  | UI framework         | High (breaking changes in major versions) |
+| stripe        | Latest  | Payment processing   | Medium (API versioning)                   |
+| paypalrestsdk | Latest  | PayPal integration   | Medium (deprecated SDK)                   |
+| google-auth   | Latest  | OAuth authentication | Low (stable API)                          |
+| bcrypt        | Latest  | Password hashing     | Low (stable)                              |
+| pyjwt         | Latest  | JWT tokens           | Low (stable)                              |
+| ruff          | Latest  | Linting              | Low (dev-only)                            |
+| pytest        | Latest  | Testing              | Low (dev-only)                            |
 
 **Risks:**
+
 - `paypalrestsdk` is deprecated — consider migrating to PayPal REST API v2
 - `streamlit` has frequent updates — pin to specific version in production
 
 **Recommendation:** Add `requirements.lock` with pinned versions:
+
 ```
 # requirements.txt (flexible)
 streamlit>=1.30.0
@@ -897,15 +963,15 @@ stripe==5.4.0
 
 ### A.2 Internal Module Coupling Matrix
 
-| Module | Depends On | Depended On By |
-|--------|------------|----------------|
-| app.py | pages/*, Source/tier_config.py | (none) |
-| pages/2_analysis.py | Source/carrier_analysis.py, Source/trait_prediction.py, Source/parser.py, Source/auth/session.py | app.py |
-| Source/carrier_analysis.py | data/carrier_panel.json | pages/2_analysis.py |
-| Source/trait_prediction.py | data/trait_snps.json | pages/2_analysis.py |
-| Source/parser.py | (none) | pages/2_analysis.py |
-| Source/auth/manager.py | data/users.json, Source/auth/password.py | pages/4_auth.py, pages/5_account.py |
-| Source/auth/session.py | data/users.json | pages/* (all) |
+| Module                     | Depends On                                                                                       | Depended On By                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| app.py                     | pages/\*, Source/tier_config.py                                                                  | (none)                              |
+| pages/2_analysis.py        | Source/carrier_analysis.py, Source/trait_prediction.py, Source/parser.py, Source/auth/session.py | app.py                              |
+| Source/carrier_analysis.py | data/carrier_panel.json                                                                          | pages/2_analysis.py                 |
+| Source/trait_prediction.py | data/trait_snps.json                                                                             | pages/2_analysis.py                 |
+| Source/parser.py           | (none)                                                                                           | pages/2_analysis.py                 |
+| Source/auth/manager.py     | data/users.json, Source/auth/password.py                                                         | pages/4_auth.py, pages/5_account.py |
+| Source/auth/session.py     | data/users.json                                                                                  | pages/\* (all)                      |
 
 **Tight Coupling:** `pages/2_analysis.py` → `Source/{carrier_analysis, trait_prediction}.py` (direct function calls)
 **Loose Coupling:** `Source/parser.py` (no internal dependencies)
@@ -916,19 +982,20 @@ stripe==5.4.0
 
 ### B.1 Lines of Code (LOC)
 
-| Module | LOC | Complexity |
-|--------|-----|------------|
-| Source/parser.py | 1,262 | High (4 format parsers) |
-| Source/ui/theme.py | 973 | Medium (CSS definitions) |
-| pages/2_analysis.py | ~400 (est.) | Medium (UI + logic) |
+| Module                     | LOC         | Complexity               |
+| -------------------------- | ----------- | ------------------------ |
+| Source/parser.py           | 1,262       | High (4 format parsers)  |
+| Source/ui/theme.py         | 973         | Medium (CSS definitions) |
+| pages/2_analysis.py        | ~400 (est.) | Medium (UI + logic)      |
 | Source/carrier_analysis.py | ~300 (est.) | Medium (Mendelian logic) |
-| Source/trait_prediction.py | ~200 (est.) | Low (Punnett squares) |
+| Source/trait_prediction.py | ~200 (est.) | Low (Punnett squares)    |
 
 **Total Codebase:** ~5,000-6,000 LOC (estimated)
 
 ### B.2 Cyclomatic Complexity
 
 **High Complexity Functions:**
+
 - `Source/parser.py::parse()` — 15+ branches (format detection + parsing)
 - `Source/carrier_analysis.py::analyze_carriers()` — 10+ branches (inheritance models)
 - `pages/2_analysis.py::render_results()` — 8+ branches (result formatting)

@@ -19,8 +19,7 @@
  * - Non-retryable errors (400, 403, 404, 409, etc.) are thrown immediately.
  */
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
 /** Default request timeout in milliseconds (15 seconds). */
 const DEFAULT_TIMEOUT_MS = 15_000;
@@ -43,12 +42,12 @@ export class ApiError extends Error {
   constructor(
     public readonly status: number,
     message: string,
-    public readonly code: string = "UNKNOWN",
+    public readonly code: string = 'UNKNOWN',
     public readonly fieldErrors: FieldError[] = [],
     public readonly challengeToken?: string,
   ) {
     super(message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
   }
 }
 
@@ -102,9 +101,10 @@ export async function withTransientRetry(fn: () => Promise<Response>): Promise<R
       let delay: number;
       if (retryAfter) {
         const parsed = parseInt(retryAfter, 10);
-        delay = Number.isFinite(parsed) && parsed > 0
-          ? Math.min(parsed * 1000, 30_000)
-          : BASE_DELAY_MS * Math.pow(2, attempt);
+        delay =
+          Number.isFinite(parsed) && parsed > 0
+            ? Math.min(parsed * 1000, 30_000)
+            : BASE_DELAY_MS * Math.pow(2, attempt);
       } else {
         delay = BASE_DELAY_MS * Math.pow(2, attempt);
       }
@@ -117,13 +117,13 @@ export async function withTransientRetry(fn: () => Promise<Response>): Promise<R
       );
     }
   }
-  throw lastError ?? new Error("Retry exhausted");
+  throw lastError ?? new Error('Retry exhausted');
 }
 
 // ── Request helpers ─────────────────────────────────────────────────────
 
 interface RequestOptions {
-  method: "GET" | "HEAD" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   body?: unknown;
   /** Skip adding Authorization header (e.g., for login/register). */
@@ -151,10 +151,7 @@ async function parseErrorResponse(response: Response): Promise<ApiError> {
   try {
     detail = await response.json();
   } catch {
-    return new ApiError(
-      response.status,
-      response.statusText || "Request failed",
-    );
+    return new ApiError(response.status, response.statusText || 'Request failed');
   }
 
   // FastAPI wraps errors in { detail: ... }
@@ -163,19 +160,19 @@ async function parseErrorResponse(response: Response): Promise<ApiError> {
   // Pydantic validation errors come as array
   if (Array.isArray(body)) {
     const fieldErrors: FieldError[] = body.map((err) => ({
-      field: err.loc?.slice(1).join(".") ?? "unknown",
-      message: err.msg ?? "Validation error",
+      field: err.loc?.slice(1).join('.') ?? 'unknown',
+      message: err.msg ?? 'Validation error',
     }));
     return new ApiError(
       response.status,
-      fieldErrors[0]?.message ?? "Validation error",
-      "VALIDATION_ERROR",
+      fieldErrors[0]?.message ?? 'Validation error',
+      'VALIDATION_ERROR',
       fieldErrors,
     );
   }
 
   // Structured error object
-  if (typeof body === "object" && body !== null) {
+  if (typeof body === 'object' && body !== null) {
     const obj = body as {
       error?: string;
       code?: string;
@@ -183,43 +180,39 @@ async function parseErrorResponse(response: Response): Promise<ApiError> {
     };
     return new ApiError(
       response.status,
-      obj.error ?? "Request failed",
-      obj.code ?? "UNKNOWN",
+      obj.error ?? 'Request failed',
+      obj.code ?? 'UNKNOWN',
       [],
       obj.challenge_token,
     );
   }
 
   // Plain string error
-  return new ApiError(
-    response.status,
-    typeof body === "string" ? body : "Request failed",
-  );
+  return new ApiError(response.status, typeof body === 'string' ? body : 'Request failed');
 }
 
 /**
  * Internal request executor. Handles auth header injection and error parsing.
  */
 async function executeRequest<T>(options: RequestOptions): Promise<T> {
-  const { method, path, body, skipAuth, headers: extraHeaders, signal } =
-    options;
+  const { method, path, body, skipAuth, headers: extraHeaders, signal } = options;
 
   const url = `${API_BASE_URL}${path}`;
 
   const headers: Record<string, string> = {
-    Accept: "application/json",
-    "X-Requested-With": "XMLHttpRequest",
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
     ...extraHeaders,
   };
-  if (method !== "GET" && method !== "HEAD") {
-    headers["Content-Type"] = "application/json";
+  if (method !== 'GET' && method !== 'HEAD') {
+    headers['Content-Type'] = 'application/json';
   }
 
   // Inject access token if available and not explicitly skipped
   if (!skipAuth && _getAccessToken) {
     const token = _getAccessToken();
     if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
+      headers['Authorization'] = `Bearer ${token}`;
     }
   }
 
@@ -229,7 +222,7 @@ async function executeRequest<T>(options: RequestOptions): Promise<T> {
   const fetchOptions: RequestInit = {
     method: method as RequestInit['method'],
     headers,
-    credentials: "include", // send cookies (for httpOnly refresh token)
+    credentials: 'include', // send cookies (for httpOnly refresh token)
     signal: effectiveSignal,
   };
 
@@ -267,12 +260,7 @@ async function requestWithRetry<T>(options: RequestOptions): Promise<T> {
   try {
     return await executeRequest<T>(options);
   } catch (error) {
-    if (
-      error instanceof ApiError &&
-      error.status === 401 &&
-      !options.skipAuth &&
-      _onUnauthorized
-    ) {
+    if (error instanceof ApiError && error.status === 401 && !options.skipAuth && _onUnauthorized) {
       // Deduplicate concurrent refresh attempts
       if (!_refreshPromise) {
         _refreshPromise = _onUnauthorized().finally(() => {
@@ -298,7 +286,7 @@ export function get<T>(
   options?: { skipAuth?: boolean; signal?: AbortSignal },
 ): Promise<T> {
   return requestWithRetry<T>({
-    method: "GET",
+    method: 'GET',
     path,
     skipAuth: options?.skipAuth,
     signal: options?.signal,
@@ -312,7 +300,7 @@ export function post<T>(
   options?: { skipAuth?: boolean; signal?: AbortSignal },
 ): Promise<T> {
   return requestWithRetry<T>({
-    method: "POST",
+    method: 'POST',
     path,
     body,
     skipAuth: options?.skipAuth,
@@ -327,7 +315,7 @@ export function put<T>(
   options?: { skipAuth?: boolean; signal?: AbortSignal },
 ): Promise<T> {
   return requestWithRetry<T>({
-    method: "PUT",
+    method: 'PUT',
     path,
     body,
     skipAuth: options?.skipAuth,
@@ -342,7 +330,7 @@ export function patch<T>(
   options?: { skipAuth?: boolean; signal?: AbortSignal },
 ): Promise<T> {
   return requestWithRetry<T>({
-    method: "PATCH",
+    method: 'PATCH',
     path,
     body,
     skipAuth: options?.skipAuth,
@@ -357,7 +345,7 @@ export function del<T>(
   options?: { skipAuth?: boolean; signal?: AbortSignal },
 ): Promise<T> {
   return requestWithRetry<T>({
-    method: "DELETE",
+    method: 'DELETE',
     path,
     body,
     skipAuth: options?.skipAuth,

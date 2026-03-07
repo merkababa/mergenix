@@ -34,9 +34,7 @@ class TestHealthEndpoint:
         """GET /health should include a version string."""
         response = await client.get("/health")
         data = response.json()
-        assert "version" in data, (
-            f"Health response should include 'version'. Got: {data}"
-        )
+        assert "version" in data, f"Health response should include 'version'. Got: {data}"
         assert isinstance(data["version"], str)
         assert len(data["version"]) > 0, "Version should be a non-empty string"
 
@@ -48,9 +46,7 @@ class TestHealthEndpoint:
 
         required_fields = ["status", "database", "version"]
         for field in required_fields:
-            assert field in data, (
-                f"Health response missing required field '{field}'. Got: {data}"
-            )
+            assert field in data, f"Health response missing required field '{field}'. Got: {data}"
 
 
 class TestHealthDbEndpoint:
@@ -99,9 +95,7 @@ class TestHealthDbEndpoint:
 
         required_fields = ["status", "database", "version"]
         for field in required_fields:
-            assert field in data, (
-                f"Health/db response missing required field '{field}'. Got: {data}"
-            )
+            assert field in data, f"Health/db response missing required field '{field}'. Got: {data}"
 
     @pytest.mark.asyncio
     async def test_health_db_returns_503_when_db_unreachable(

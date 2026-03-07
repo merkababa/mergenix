@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Shield } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
+import { Shield } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
 
 interface TrustSignalsProps {
   lines?: string[];
 }
 
 const DEFAULT_LINES = [
-  "Your DNA never leaves your device",
-  "Encrypted in transit. HIPAA-conscious design.",
+  'Your DNA never leaves your device',
+  'Encrypted in transit. HIPAA-conscious design.',
 ];
 
 /**
@@ -20,11 +20,11 @@ export function TrustSignals({ lines = DEFAULT_LINES }: TrustSignalsProps) {
   return (
     <GlassCard variant="subtle" hover="none" className="mt-4 p-4 text-center">
       <div className="flex items-center justify-center gap-2">
-        <Shield className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
-        <span className="text-xs text-(--text-muted)">{lines[0]}</span>
+        <Shield className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
+        <span className="text-(--text-muted) text-xs">{lines[0]}</span>
       </div>
       {lines.slice(1).map((line) => (
-        <p key={line} className="mt-1 text-xs text-(--text-muted)">
+        <p key={line} className="text-(--text-muted) mt-1 text-xs">
           {line}
         </p>
       ))}

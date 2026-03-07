@@ -12,30 +12,30 @@ This report provides a prioritized, actionable testing plan with specific test c
 
 ### Existing Tests (61 total)
 
-| Test File | Tests | What It Covers | Quality Assessment |
-|-----------|-------|----------------|-------------------|
-| `tests/test_carrier_analysis.py` | 25 | `determine_carrier_status`, `calculate_offspring_risk`, `analyze_carrier_risk` | **Good** -- covers all Mendelian inheritance patterns, edge cases (empty SNPs, unknown genotypes), result sorting, key validation |
-| `tests/test_carrier_panel.py` | 19 | Schema validation of `carrier_panel.json` (fields, formats, duplicates, categories) | **Good** -- thorough schema validation, catches data corruption |
-| `tests/test_oauth.py` | 13 | `GoogleOAuthHandler` init, config, auth URL, token exchange, user info, state validation | **Good** -- solid mock-based testing of OAuth flow |
-| `tests/conftest.py` | 2 fixtures | Shared `carrier_panel_path` and `carrier_panel` fixtures | **Adequate** -- could be expanded |
+| Test File                        | Tests      | What It Covers                                                                           | Quality Assessment                                                                                                                |
+| -------------------------------- | ---------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/test_carrier_analysis.py` | 25         | `determine_carrier_status`, `calculate_offspring_risk`, `analyze_carrier_risk`           | **Good** -- covers all Mendelian inheritance patterns, edge cases (empty SNPs, unknown genotypes), result sorting, key validation |
+| `tests/test_carrier_panel.py`    | 19         | Schema validation of `carrier_panel.json` (fields, formats, duplicates, categories)      | **Good** -- thorough schema validation, catches data corruption                                                                   |
+| `tests/test_oauth.py`            | 13         | `GoogleOAuthHandler` init, config, auth URL, token exchange, user info, state validation | **Good** -- solid mock-based testing of OAuth flow                                                                                |
+| `tests/conftest.py`              | 2 fixtures | Shared `carrier_panel_path` and `carrier_panel` fixtures                                 | **Adequate** -- could be expanded                                                                                                 |
 
 ### Untested Modules (Critical Gaps)
 
-| Module | LOC | Risk Level | Reason |
-|--------|-----|-----------|--------|
-| `Source/parser.py` | 1,262 | **CRITICAL** | Core file parsing for 4 formats -- any bug here means wrong analysis results |
-| `Source/trait_prediction.py` | 324 | **HIGH** | Punnett square math and phenotype mapping -- errors produce incorrect genetic predictions |
-| `Source/tier_config.py` | 330 | **HIGH** | Access control / paywall logic -- bugs could give free users paid features or lock paid users out |
-| `Source/auth/manager.py` | 462 | **HIGH** | User registration, authentication, password hashing, lockout -- security-critical |
-| `Source/auth/validators.py` | 134 | **MEDIUM** | Input validation for email, password, name -- security boundary |
-| `Source/auth/session.py` | 148 | **MEDIUM** | Session management, timeout, invalidation -- security boundary |
-| `Source/clinvar_client.py` | 351 | **MEDIUM** | External API integration -- needs mock-based testing |
-| `Source/payments/stripe_handler.py` | 439 | **MEDIUM** | Stripe checkout, webhooks, subscription management |
-| `Source/payments/paypal_handler.py` | 401 | **MEDIUM** | PayPal subscription management, webhooks |
-| `Source/ui/theme.py` | 973 | **LOW** | CSS generation -- less likely to cause data errors |
-| `Source/ui/components.py` | ~200 | **LOW** | UI component rendering |
-| `Source/ui/navbar.py` | ~150 | **LOW** | Navigation bar rendering |
-| `pages/*.py` (9 files) | ~2,500+ | **MEDIUM** | Page-level integration -- hard to unit test but important for end-to-end |
+| Module                              | LOC     | Risk Level   | Reason                                                                                            |
+| ----------------------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------- |
+| `Source/parser.py`                  | 1,262   | **CRITICAL** | Core file parsing for 4 formats -- any bug here means wrong analysis results                      |
+| `Source/trait_prediction.py`        | 324     | **HIGH**     | Punnett square math and phenotype mapping -- errors produce incorrect genetic predictions         |
+| `Source/tier_config.py`             | 330     | **HIGH**     | Access control / paywall logic -- bugs could give free users paid features or lock paid users out |
+| `Source/auth/manager.py`            | 462     | **HIGH**     | User registration, authentication, password hashing, lockout -- security-critical                 |
+| `Source/auth/validators.py`         | 134     | **MEDIUM**   | Input validation for email, password, name -- security boundary                                   |
+| `Source/auth/session.py`            | 148     | **MEDIUM**   | Session management, timeout, invalidation -- security boundary                                    |
+| `Source/clinvar_client.py`          | 351     | **MEDIUM**   | External API integration -- needs mock-based testing                                              |
+| `Source/payments/stripe_handler.py` | 439     | **MEDIUM**   | Stripe checkout, webhooks, subscription management                                                |
+| `Source/payments/paypal_handler.py` | 401     | **MEDIUM**   | PayPal subscription management, webhooks                                                          |
+| `Source/ui/theme.py`                | 973     | **LOW**      | CSS generation -- less likely to cause data errors                                                |
+| `Source/ui/components.py`           | ~200    | **LOW**      | UI component rendering                                                                            |
+| `Source/ui/navbar.py`               | ~150    | **LOW**      | Navigation bar rendering                                                                          |
+| `pages/*.py` (9 files)              | ~2,500+ | **MEDIUM**   | Page-level integration -- hard to unit test but important for end-to-end                          |
 
 ### Estimated Current Coverage
 
@@ -166,6 +166,7 @@ test_get_detailed_stats_with_metadata         -- chromosome counts from metadata
 ### Test Data Strategy for Parser
 
 Create **minimal synthetic test fixtures** in `tests/fixtures/`:
+
 - `sample_23andme.txt` -- 20-30 SNP lines with proper 23andMe header
 - `sample_ancestry.txt` -- 20-30 SNP lines with AncestryDNA format
 - `sample_myheritage.csv` -- 20-30 SNP lines with MyHeritage format
@@ -576,6 +577,7 @@ test_memory_usage_under_500mb                 -- parsing 600K SNP file uses < 50
 ### 11.2 Load Testing
 
 Use `locust` or `pytest-benchmark` for sustained throughput:
+
 - 10 concurrent users uploading files
 - Disease catalog page with 2715 entries
 - Repeated analysis runs
@@ -616,6 +618,7 @@ test_carrier_panel_notes_present              -- entries have "notes" field
 ### 13.1 Current CI Configuration
 
 The current `ci.yml` runs:
+
 - `pytest tests/ -v` on Python 3.10 and 3.12
 - `ruff check` (with `continue-on-error: true` -- should be `false`)
 
@@ -668,6 +671,7 @@ The current `ci.yml` runs:
 ## 14. Test Data Assessment
 
 ### Current State
+
 - `scripts/regenerate_sample_data.py` generates 23 sample files
 - These are NOT in the repository (`.gitignore` or just ungenerated)
 - No test fixtures directory exists
@@ -695,65 +699,65 @@ The current `ci.yml` runs:
 
 ### Phase 1: Foundation (Week 1) -- Target: +25% coverage
 
-| Priority | Task | Estimated Tests | Coverage Gain |
-|----------|------|-----------------|---------------|
-| P0 | Create `tests/fixtures/` with synthetic test data for all 4 formats | -- | -- |
-| P0 | `tests/test_parser.py` -- format detection + parsing for all 4 formats | ~55 tests | +15-18% |
-| P0 | `tests/test_trait_prediction.py` -- Punnett squares + phenotype mapping | ~20 tests | +5-7% |
-| P0 | Add `pytest-cov` to CI and set 30% minimum threshold | -- | -- |
+| Priority | Task                                                                    | Estimated Tests | Coverage Gain |
+| -------- | ----------------------------------------------------------------------- | --------------- | ------------- |
+| P0       | Create `tests/fixtures/` with synthetic test data for all 4 formats     | --              | --            |
+| P0       | `tests/test_parser.py` -- format detection + parsing for all 4 formats  | ~55 tests       | +15-18%       |
+| P0       | `tests/test_trait_prediction.py` -- Punnett squares + phenotype mapping | ~20 tests       | +5-7%         |
+| P0       | Add `pytest-cov` to CI and set 30% minimum threshold                    | --              | --            |
 
 ### Phase 2: Security & Auth (Week 2) -- Target: +40% coverage
 
-| Priority | Task | Estimated Tests | Coverage Gain |
-|----------|------|-----------------|---------------|
-| P1 | `tests/test_validators.py` -- email, password, name validation | ~15 tests | +2% |
-| P1 | `tests/test_auth_manager.py` -- registration, authentication, lockout | ~25 tests | +6-8% |
-| P1 | `tests/test_tier_config.py` -- tier limits, access control, pricing | ~25 tests | +4-5% |
-| P1 | `tests/test_auth_security.py` -- security-specific tests | ~8 tests | +1% |
+| Priority | Task                                                                  | Estimated Tests | Coverage Gain |
+| -------- | --------------------------------------------------------------------- | --------------- | ------------- |
+| P1       | `tests/test_validators.py` -- email, password, name validation        | ~15 tests       | +2%           |
+| P1       | `tests/test_auth_manager.py` -- registration, authentication, lockout | ~25 tests       | +6-8%         |
+| P1       | `tests/test_tier_config.py` -- tier limits, access control, pricing   | ~25 tests       | +4-5%         |
+| P1       | `tests/test_auth_security.py` -- security-specific tests              | ~8 tests        | +1%           |
 
 ### Phase 3: Integration & API (Week 3) -- Target: +55% coverage
 
-| Priority | Task | Estimated Tests | Coverage Gain |
-|----------|------|-----------------|---------------|
-| P2 | `tests/test_clinvar_client.py` -- mocked API tests | ~15 tests | +4-5% |
-| P2 | `tests/test_integration.py` -- end-to-end analysis flow | ~10 tests | +3-4% |
-| P2 | `tests/test_stripe_handler.py` -- mocked Stripe tests | ~12 tests | +3% |
-| P2 | `tests/test_paypal_handler.py` -- mocked PayPal tests | ~10 tests | +2% |
+| Priority | Task                                                    | Estimated Tests | Coverage Gain |
+| -------- | ------------------------------------------------------- | --------------- | ------------- |
+| P2       | `tests/test_clinvar_client.py` -- mocked API tests      | ~15 tests       | +4-5%         |
+| P2       | `tests/test_integration.py` -- end-to-end analysis flow | ~10 tests       | +3-4%         |
+| P2       | `tests/test_stripe_handler.py` -- mocked Stripe tests   | ~12 tests       | +3%           |
+| P2       | `tests/test_paypal_handler.py` -- mocked PayPal tests   | ~10 tests       | +2%           |
 
 ### Phase 4: Edge Cases & E2E (Week 4) -- Target: +65% coverage
 
-| Priority | Task | Estimated Tests | Coverage Gain |
-|----------|------|-----------------|---------------|
-| P3 | `tests/test_edge_cases.py` -- genetic data edge cases | ~10 tests | +2% |
-| P3 | `tests/test_parser_security.py` -- fuzzing & injection | ~10 tests | +2% |
-| P3 | Streamlit `AppTest` page render tests | ~9 tests | +3% |
-| P3 | CI: coverage threshold enforcement (fail below 50%) | -- | -- |
+| Priority | Task                                                   | Estimated Tests | Coverage Gain |
+| -------- | ------------------------------------------------------ | --------------- | ------------- |
+| P3       | `tests/test_edge_cases.py` -- genetic data edge cases  | ~10 tests       | +2%           |
+| P3       | `tests/test_parser_security.py` -- fuzzing & injection | ~10 tests       | +2%           |
+| P3       | Streamlit `AppTest` page render tests                  | ~9 tests        | +3%           |
+| P3       | CI: coverage threshold enforcement (fail below 50%)    | --              | --            |
 
 ### Phase 5: Polish (Ongoing) -- Target: +75% coverage
 
-| Priority | Task | Estimated Tests | Coverage Gain |
-|----------|------|-----------------|---------------|
-| P4 | Playwright E2E tests for critical user flows | ~5-10 tests | +5% |
-| P4 | Performance benchmarks | ~7 tests | +2% |
-| P4 | Mutation testing with `mutmut` on core engines | -- | quality validation |
-| P4 | Snapshot testing for UI consistency | ~5 tests | +1% |
+| Priority | Task                                           | Estimated Tests | Coverage Gain      |
+| -------- | ---------------------------------------------- | --------------- | ------------------ |
+| P4       | Playwright E2E tests for critical user flows   | ~5-10 tests     | +5%                |
+| P4       | Performance benchmarks                         | ~7 tests        | +2%                |
+| P4       | Mutation testing with `mutmut` on core engines | --              | quality validation |
+| P4       | Snapshot testing for UI consistency            | ~5 tests        | +1%                |
 
 ---
 
 ## 16. Tooling Recommendations
 
-| Tool | Purpose | Install |
-|------|---------|---------|
-| `pytest-cov` | Line + branch coverage reports | `pip install pytest-cov` |
-| `pytest-xdist` | Parallel test execution | `pip install pytest-xdist` |
-| `pytest-mock` | Simplified mocking | `pip install pytest-mock` |
-| `pytest-benchmark` | Performance benchmarks | `pip install pytest-benchmark` |
-| `mutmut` | Mutation testing | `pip install mutmut` |
-| `playwright` | Browser E2E testing | `pip install playwright && playwright install` |
-| `hypothesis` | Property-based testing (great for parser edge cases) | `pip install hypothesis` |
-| `syrupy` | Snapshot testing | `pip install syrupy` |
-| `Codecov` | Coverage tracking in CI | GitHub Action |
-| `faker` | Generate realistic test data | `pip install faker` |
+| Tool               | Purpose                                              | Install                                        |
+| ------------------ | ---------------------------------------------------- | ---------------------------------------------- |
+| `pytest-cov`       | Line + branch coverage reports                       | `pip install pytest-cov`                       |
+| `pytest-xdist`     | Parallel test execution                              | `pip install pytest-xdist`                     |
+| `pytest-mock`      | Simplified mocking                                   | `pip install pytest-mock`                      |
+| `pytest-benchmark` | Performance benchmarks                               | `pip install pytest-benchmark`                 |
+| `mutmut`           | Mutation testing                                     | `pip install mutmut`                           |
+| `playwright`       | Browser E2E testing                                  | `pip install playwright && playwright install` |
+| `hypothesis`       | Property-based testing (great for parser edge cases) | `pip install hypothesis`                       |
+| `syrupy`           | Snapshot testing                                     | `pip install syrupy`                           |
+| `Codecov`          | Coverage tracking in CI                              | GitHub Action                                  |
+| `faker`            | Generate realistic test data                         | `pip install faker`                            |
 
 ---
 
@@ -842,14 +846,14 @@ def temp_users_file():
 
 ## 18. Key Metrics & Targets
 
-| Metric | Current | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 |
-|--------|---------|---------|---------|---------|---------|---------|
-| Total tests | 61 | ~136 | ~201 | ~248 | ~277 | ~300+ |
-| Line coverage | ~15-20% | ~40% | ~50% | ~60% | ~65% | ~75% |
-| Modules tested | 3/15 | 5/15 | 8/15 | 12/15 | 14/15 | 15/15 |
-| CI coverage gate | None | 30% | 40% | 50% | 50% | 60% |
-| Security tests | 0 | 0 | 8 | 8 | 18 | 18 |
-| Integration tests | 0 | 0 | 0 | 10 | 10 | 20 |
+| Metric            | Current | Phase 1 | Phase 2 | Phase 3 | Phase 4 | Phase 5 |
+| ----------------- | ------- | ------- | ------- | ------- | ------- | ------- |
+| Total tests       | 61      | ~136    | ~201    | ~248    | ~277    | ~300+   |
+| Line coverage     | ~15-20% | ~40%    | ~50%    | ~60%    | ~65%    | ~75%    |
+| Modules tested    | 3/15    | 5/15    | 8/15    | 12/15   | 14/15   | 15/15   |
+| CI coverage gate  | None    | 30%     | 40%     | 50%     | 50%     | 60%     |
+| Security tests    | 0       | 0       | 8       | 8       | 18      | 18      |
+| Integration tests | 0       | 0       | 0       | 10      | 10      | 20      |
 
 ---
 

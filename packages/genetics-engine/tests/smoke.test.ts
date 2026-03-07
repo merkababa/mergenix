@@ -9,16 +9,8 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import {
-  detectFormat,
-  parse23andMe,
-  parseGeneticFile,
-  getGenotypeStats,
-} from '../src/parser';
-import {
-  analyzeCarrierRisk,
-  getAnalysisSummary,
-} from '../src/carrier';
+import { detectFormat, parse23andMe, parseGeneticFile, getGenotypeStats } from '../src/parser';
+import { analyzeCarrierRisk, getAnalysisSummary } from '../src/carrier';
 import type { CarrierPanelEntry, GenotypeMap } from '../src/types';
 
 // ─── Inline Fixtures ─────────────────────────────────────────────────────────

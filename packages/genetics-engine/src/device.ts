@@ -96,18 +96,21 @@ interface NavigatorWithDeviceMemory extends WorkerNavigator {
  * @returns DeviceProfile with memory limits and concurrency settings.
  */
 export function detectDevice(): DeviceProfile {
-  const nav = navigator as NavigatorWithDeviceMemory;
+  const nav = (typeof navigator !== 'undefined' ? navigator : {}) as NavigatorWithDeviceMemory;
 
-  // navigator.deviceMemory: Chrome/Edge only, returns GB (0.25, 0.5, 1, 2, 4, 8)
-  // Falls back to a heuristic based on hardwareConcurrency.
-  const deviceMemory: number = typeof nav.deviceMemory === 'number'
-    ? nav.deviceMemory
-    : estimateMemoryFromCores(nav.hardwareConcurrency);
-
+  // hardwareConcurrency guard MUST come first — estimateMemoryFromCores
+  // needs the guarded value, not the raw (possibly undefined) property.
   const hardwareConcurrency: number =
     typeof nav.hardwareConcurrency === 'number' && nav.hardwareConcurrency > 0
       ? nav.hardwareConcurrency
       : 2; // Conservative fallback
+
+  // navigator.deviceMemory: Chrome/Edge only, returns GB (0.25, 0.5, 1, 2, 4, 8)
+  // Falls back to a heuristic based on hardwareConcurrency.
+  const deviceMemory: number =
+    typeof nav.deviceMemory === 'number'
+      ? nav.deviceMemory
+      : estimateMemoryFromCores(hardwareConcurrency);
 
   // Mobile classification: low memory OR low core count
   const isMobile: boolean =

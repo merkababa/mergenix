@@ -110,9 +110,7 @@ export function shouldRecommendCounseling(
       } else {
         riskDescription = `offspring have a ${r.offspringRisk.affected}% chance of being affected`;
       }
-      reasons.push(
-        `Both parents are carriers for ${r.condition} \u2014 ${riskDescription}`,
-      );
+      reasons.push(`Both parents are carriers for ${r.condition} \u2014 ${riskDescription}`);
     }
   }
 
@@ -142,9 +140,7 @@ export function shouldRecommendCounseling(
   if (pgxResults) {
     for (const g of pgxResults) {
       if (g.actionable) {
-        reasons.push(
-          `Actionable pharmacogenomic finding for ${g.drug}`,
-        );
+        reasons.push(`Actionable pharmacogenomic finding for ${g.drug}`);
       }
     }
   }
@@ -186,11 +182,12 @@ export function generateReferralSummary(
     keyFindings: null,
     recommendedSpecialties: null,
     referralLetter: null,
-    upgradeMessage: tier === 'free'
-      ? 'Upgrade to Premium for detailed counseling summaries with key findings and recommended specialties, or Pro for a personalized referral letter.'
-      : tier === 'premium'
-        ? 'Upgrade to Pro for a personalized genetic counseling referral letter you can share with your healthcare provider.'
-        : null,
+    upgradeMessage:
+      tier === 'free'
+        ? 'Upgrade to Premium for detailed counseling summaries with key findings and recommended specialties, or Pro for a personalized referral letter.'
+        : tier === 'premium'
+          ? 'Upgrade to Pro for a personalized genetic counseling referral letter you can share with your healthcare provider.'
+          : null,
   };
 
   if (tier === 'free') {
@@ -201,12 +198,8 @@ export function generateReferralSummary(
   const keyFindings = extractKeyFindings(carrierResults);
   const specialties = inferSpecialties(carrierResults);
 
-  const highRiskCount = carrierResults.filter(
-    (r) => r.riskLevel === 'high_risk',
-  ).length;
-  const carrierCount = carrierResults.filter(
-    (r) => r.riskLevel === 'carrier_detected',
-  ).length;
+  const highRiskCount = carrierResults.filter((r) => r.riskLevel === 'high_risk').length;
+  const carrierCount = carrierResults.filter((r) => r.riskLevel === 'carrier_detected').length;
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -223,8 +216,7 @@ export function generateReferralSummary(
       summaryText += `  ${i + 1}. ${reasons[i]}\n`;
     }
   } else {
-    summaryText +=
-      'Recommendation: No urgent findings. Routine counseling optional.\n';
+    summaryText += 'Recommendation: No urgent findings. Routine counseling optional.\n';
   }
 
   base.summaryText = summaryText;
@@ -233,12 +225,7 @@ export function generateReferralSummary(
 
   // Pro: referral letter
   if (tier === 'pro') {
-    base.referralLetter = formatReferralLetter(
-      userName ?? '',
-      keyFindings,
-      specialties,
-      reasons,
-    );
+    base.referralLetter = formatReferralLetter(userName ?? '', keyFindings, specialties, reasons);
   }
 
   return base;
@@ -265,9 +252,7 @@ export function findProvidersBySpecialty(
 
   if (specialty) {
     const specLower = specialty.toLowerCase();
-    results = results.filter((p) =>
-      p.specialty.some((s) => s.toLowerCase() === specLower),
-    );
+    results = results.filter((p) => p.specialty.some((s) => s.toLowerCase() === specLower));
   }
 
   if (state) {
@@ -291,9 +276,7 @@ export function findProvidersBySpecialty(
  * @param carrierResults - Output of analyzeCarrierRisk()
  * @returns Array of key findings
  */
-function extractKeyFindings(
-  carrierResults: CarrierResult[],
-): CounselingKeyFinding[] {
+function extractKeyFindings(carrierResults: CarrierResult[]): CounselingKeyFinding[] {
   const findings: CounselingKeyFinding[] = [];
 
   for (const r of carrierResults) {
@@ -336,9 +319,7 @@ function extractKeyFindings(
  * @param carrierResults - Output of analyzeCarrierRisk()
  * @returns Sorted array of recommended specialty strings
  */
-function inferSpecialties(
-  carrierResults: CarrierResult[],
-): CounselorSpecialty[] {
+function inferSpecialties(carrierResults: CarrierResult[]): CounselorSpecialty[] {
   const specs = new Set<CounselorSpecialty>();
 
   for (const r of carrierResults) {

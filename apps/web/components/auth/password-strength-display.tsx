@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { m } from "motion/react";
-import { Check, X } from "lucide-react";
+import { useMemo } from 'react';
+import { m } from 'motion/react';
+import { Check, X } from 'lucide-react';
 import {
   getPasswordStrength,
   PASSWORD_REQUIREMENTS,
   STRENGTH_TEXT_COLORS,
   STRENGTH_BAR_COLORS,
   type StrengthLevel,
-} from "@/lib/password-utils";
+} from '@/lib/password-utils';
 
 interface PasswordStrengthDisplayProps {
   password: string;
 }
 
 const STRENGTH_WIDTHS: Record<StrengthLevel, string> = {
-  weak: "25%",
-  fair: "50%",
-  good: "75%",
-  strong: "100%",
+  weak: '25%',
+  fair: '50%',
+  good: '75%',
+  strong: '100%',
 };
 
 const STRENGTH_VALUES: Record<StrengthLevel, number> = {
@@ -30,10 +30,10 @@ const STRENGTH_VALUES: Record<StrengthLevel, number> = {
 };
 
 const STRENGTH_LABELS: Record<StrengthLevel, string> = {
-  weak: "Weak",
-  fair: "Fair",
-  good: "Good",
-  strong: "Strong",
+  weak: 'Weak',
+  fair: 'Fair',
+  good: 'Good',
+  strong: 'Strong',
 };
 
 export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayProps) {
@@ -46,7 +46,7 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
       {/* Strength bar */}
       <div className="space-y-1.5">
         <div
-          className="h-1.5 w-full overflow-hidden rounded-full bg-(--bg-elevated)"
+          className="bg-(--bg-elevated) h-1.5 w-full overflow-hidden rounded-full"
           role="meter"
           aria-valuenow={STRENGTH_VALUES[strength.level]}
           aria-valuemin={0}
@@ -78,13 +78,11 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
               role="listitem"
             >
               {met ? (
-                <Check className="h-3.5 w-3.5 text-(--accent-teal)" aria-hidden="true" />
+                <Check className="text-(--accent-teal) h-3.5 w-3.5" aria-hidden="true" />
               ) : (
-                <X className="h-3.5 w-3.5 text-(--text-dim)" aria-hidden="true" />
+                <X className="text-(--text-dim) h-3.5 w-3.5" aria-hidden="true" />
               )}
-              <span className={met ? "text-(--accent-teal)" : "text-(--text-dim)"}>
-                {req.text}
-              </span>
+              <span className={met ? 'text-(--accent-teal)' : 'text-(--text-dim)'}>{req.text}</span>
             </m.div>
           );
         })}

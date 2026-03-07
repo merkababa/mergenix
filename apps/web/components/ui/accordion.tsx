@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { type ReactNode, useState, useCallback, useId } from "react";
-import { cn } from "@/lib/utils";
-import { GlassCard } from "@/components/ui/glass-card";
-import { ChevronDown } from "lucide-react";
-import { m, AnimatePresence } from "motion/react";
+import { type ReactNode, useState, useCallback, useId } from 'react';
+import { cn } from '@/lib/utils';
+import { GlassCard } from '@/components/ui/glass-card';
+import { ChevronDown } from 'lucide-react';
+import { m, AnimatePresence } from 'motion/react';
 
 interface AccordionItem {
   question: string;
@@ -25,15 +25,16 @@ export function Accordion({ items, className }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const baseId = useId();
 
-  const toggle = useCallback(
-    (index: number) => {
-      setOpenIndex((prev) => (prev === index ? null : index));
-    },
-    [],
-  );
+  const toggle = useCallback((index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   return (
-    <div className={cn("flex flex-col gap-3", className)} role="region" aria-label="Frequently asked questions">
+    <div
+      className={cn('flex flex-col gap-3', className)}
+      role="region"
+      aria-label="Frequently asked questions"
+    >
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const triggerId = `${baseId}-trigger-${index}`;
@@ -45,11 +46,11 @@ export function Accordion({ items, className }: AccordionProps) {
               id={triggerId}
               type="button"
               className={cn(
-                "flex w-full items-center justify-between gap-4 px-6 py-5 text-left",
-                "font-heading text-base font-semibold text-(--text-heading)",
-                "transition-colors duration-200",
-                "hover:text-(--accent-teal)",
-                "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--accent-teal)",
+                'flex w-full items-center justify-between gap-4 px-6 py-5 text-left',
+                'font-heading text-(--text-heading) text-base font-semibold',
+                'transition-colors duration-200',
+                'hover:text-(--accent-teal)',
+                'focus-visible:outline-(--accent-teal) focus-visible:outline-2 focus-visible:-outline-offset-2',
               )}
               aria-expanded={isOpen}
               aria-controls={panelId}
@@ -58,8 +59,8 @@ export function Accordion({ items, className }: AccordionProps) {
               <span>{item.question}</span>
               <m.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.25, ease: "easeInOut" as const }}
-                className="shrink-0 text-(--text-muted)"
+                transition={{ duration: 0.25, ease: 'easeInOut' as const }}
+                className="text-(--text-muted) shrink-0"
               >
                 <ChevronDown className="h-5 w-5" aria-hidden="true" />
               </m.span>
@@ -72,12 +73,12 @@ export function Accordion({ items, className }: AccordionProps) {
                   role="region"
                   aria-labelledby={triggerId}
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" as const }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' as const }}
                   className="overflow-hidden"
                 >
-                  <div className="px-6 pb-5 text-sm leading-relaxed text-(--text-body)">
+                  <div className="text-(--text-body) px-6 pb-5 text-sm leading-relaxed">
                     {item.answer}
                   </div>
                 </m.div>
@@ -85,14 +86,7 @@ export function Accordion({ items, className }: AccordionProps) {
             </AnimatePresence>
 
             {/* Hidden panel for aria-controls reference when closed */}
-            {!isOpen && (
-              <div
-                id={panelId}
-                role="region"
-                aria-labelledby={triggerId}
-                hidden
-              />
-            )}
+            {!isOpen && <div id={panelId} role="region" aria-labelledby={triggerId} hidden />}
           </GlassCard>
         );
       })}

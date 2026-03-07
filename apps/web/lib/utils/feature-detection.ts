@@ -25,7 +25,7 @@
  * Required for all genetics analysis (runs in a worker thread).
  */
 export function detectWebWorker(): boolean {
-  return typeof globalThis.Worker !== "undefined";
+  return typeof globalThis.Worker !== 'undefined';
 }
 
 /**
@@ -43,7 +43,7 @@ export function detectWebWorker(): boolean {
  * via `Worker.postMessage(buffer, [buffer])`.
  */
 export function detectTransferableArrayBuffer(): boolean {
-  return typeof ArrayBuffer !== "undefined";
+  return typeof ArrayBuffer !== 'undefined';
 }
 
 /**
@@ -51,7 +51,7 @@ export function detectTransferableArrayBuffer(): boolean {
  * Required for decoding genetic file content from ArrayBuffers.
  */
 export function detectTextDecoder(): boolean {
-  return typeof TextDecoder !== "undefined";
+  return typeof TextDecoder !== 'undefined';
 }
 
 /**
@@ -59,7 +59,7 @@ export function detectTextDecoder(): boolean {
  * Required for encoding strings before encryption.
  */
 export function detectTextEncoder(): boolean {
-  return typeof TextEncoder !== "undefined";
+  return typeof TextEncoder !== 'undefined';
 }
 
 /**
@@ -70,7 +70,7 @@ export function detectTextEncoder(): boolean {
  * The app gracefully falls back to a WASM decompressor when absent.
  */
 export function detectDecompressionStream(): boolean {
-  return typeof globalThis.DecompressionStream !== "undefined";
+  return typeof globalThis.DecompressionStream !== 'undefined';
 }
 
 /**
@@ -79,8 +79,7 @@ export function detectDecompressionStream(): boolean {
  */
 export function detectCryptoSubtle(): boolean {
   return (
-    typeof globalThis.crypto !== "undefined" &&
-    typeof globalThis.crypto.subtle !== "undefined"
+    typeof globalThis.crypto !== 'undefined' && typeof globalThis.crypto.subtle !== 'undefined'
   );
 }
 
@@ -90,10 +89,10 @@ export function detectCryptoSubtle(): boolean {
  */
 export function detectIndexedDB(): boolean {
   return (
-    typeof globalThis.indexedDB !== "undefined" ||
+    typeof globalThis.indexedDB !== 'undefined' ||
     // Vendor-prefixed fallbacks for older browsers
-    typeof (globalThis as Record<string, unknown>).webkitIndexedDB !== "undefined" ||
-    typeof (globalThis as Record<string, unknown>).mozIndexedDB !== "undefined"
+    typeof (globalThis as Record<string, unknown>).webkitIndexedDB !== 'undefined' ||
+    typeof (globalThis as Record<string, unknown>).mozIndexedDB !== 'undefined'
   );
 }
 
@@ -137,12 +136,7 @@ export function detectFeatures(): FeatureDetectionResult {
   const indexedDB = detectIndexedDB();
 
   const allRequiredFeaturesPresent =
-    webWorker &&
-    transferableArrayBuffer &&
-    textDecoder &&
-    textEncoder &&
-    cryptoSubtle &&
-    indexedDB;
+    webWorker && transferableArrayBuffer && textDecoder && textEncoder && cryptoSubtle && indexedDB;
 
   return {
     webWorker,
@@ -163,30 +157,28 @@ export function detectFeatures(): FeatureDetectionResult {
  * The message explains what is missing and what the user can do.
  */
 export const MISSING_FEATURE_MESSAGES: Record<
-  keyof Omit<FeatureDetectionResult, "allRequiredFeaturesPresent" | "decompressionStream">,
+  keyof Omit<FeatureDetectionResult, 'allRequiredFeaturesPresent' | 'decompressionStream'>,
   string
 > = {
   webWorker:
-    "Your browser does not support Web Workers. Please use a modern browser (Chrome 80+, Firefox 79+, Safari 14+) to run the genetics analysis.",
+    'Your browser does not support Web Workers. Please use a modern browser (Chrome 80+, Firefox 79+, Safari 14+) to run the genetics analysis.',
   transferableArrayBuffer:
-    "Your browser does not support ArrayBuffer. Please use a modern browser to process DNA files.",
+    'Your browser does not support ArrayBuffer. Please use a modern browser to process DNA files.',
   textDecoder:
-    "Your browser does not support TextDecoder. Please use a modern browser to read DNA file content.",
+    'Your browser does not support TextDecoder. Please use a modern browser to read DNA file content.',
   textEncoder:
-    "Your browser does not support TextEncoder. Please use a modern browser to process your data.",
+    'Your browser does not support TextEncoder. Please use a modern browser to process your data.',
   cryptoSubtle:
-    "Your browser does not support the Web Crypto API. Encrypted storage requires a modern browser with HTTPS.",
+    'Your browser does not support the Web Crypto API. Encrypted storage requires a modern browser with HTTPS.',
   indexedDB:
-    "Your browser does not support IndexedDB. Result saving requires a modern browser with storage access.",
+    'Your browser does not support IndexedDB. Result saving requires a modern browser with storage access.',
 };
 
 /**
  * Return a list of user-facing warning messages for any missing required features.
  * Returns an empty array when all required features are present.
  */
-export function getMissingFeatureMessages(
-  features: FeatureDetectionResult,
-): string[] {
+export function getMissingFeatureMessages(features: FeatureDetectionResult): string[] {
   const messages: string[] = [];
 
   for (const [key, message] of Object.entries(MISSING_FEATURE_MESSAGES)) {

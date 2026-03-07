@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+  mockInputFactory,
+} from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -52,13 +58,10 @@ vi.mock('next/navigation', () => ({
 vi.mock('next/link', () => mockNextLinkFactory());
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: mockSetState,
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: mockSetState,
+  }),
 }));
 
 vi.mock('@/components/auth/dna-dots', () => ({
@@ -120,7 +123,10 @@ describe('LoginContent', () => {
     mockStoreState.error = null;
     mockLogin.mockResolvedValue({ success: true });
     mockLogin2FA.mockResolvedValue(undefined);
-    mockGetGoogleOAuthUrl.mockResolvedValue({ authorizationUrl: 'https://accounts.google.com/o/oauth2', state: 'rand-state' });
+    mockGetGoogleOAuthUrl.mockResolvedValue({
+      authorizationUrl: 'https://accounts.google.com/o/oauth2',
+      state: 'rand-state',
+    });
   });
 
   it('renders "Welcome Back" heading', () => {
@@ -227,7 +233,9 @@ describe('LoginContent', () => {
     render(<LoginContent />);
 
     expect(screen.getByLabelText('Enter 6-digit verification code')).toBeInTheDocument();
-    expect(screen.getByText(/Enter the 6-digit code from your authenticator app/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Enter the 6-digit code from your authenticator app/),
+    ).toBeInTheDocument();
   });
 
   it('auto-submits 2FA when 6 digits are entered', async () => {

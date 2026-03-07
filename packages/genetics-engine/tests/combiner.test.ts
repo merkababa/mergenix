@@ -73,15 +73,9 @@ describe('calculateARRisk', () => {
   });
 
   it('should be symmetric (order of parents does not matter)', () => {
-    expect(calculateARRisk('normal', 'carrier')).toEqual(
-      calculateARRisk('carrier', 'normal'),
-    );
-    expect(calculateARRisk('carrier', 'affected')).toEqual(
-      calculateARRisk('affected', 'carrier'),
-    );
-    expect(calculateARRisk('normal', 'affected')).toEqual(
-      calculateARRisk('affected', 'normal'),
-    );
+    expect(calculateARRisk('normal', 'carrier')).toEqual(calculateARRisk('carrier', 'normal'));
+    expect(calculateARRisk('carrier', 'affected')).toEqual(calculateARRisk('affected', 'carrier'));
+    expect(calculateARRisk('normal', 'affected')).toEqual(calculateARRisk('affected', 'normal'));
   });
 
   it('should return zeroes when parent1 is unknown', () => {
@@ -163,9 +157,7 @@ describe('calculateADRisk', () => {
   });
 
   it('should map carrier to affected (carrier x normal = affected x normal)', () => {
-    expect(calculateADRisk('carrier', 'normal')).toEqual(
-      calculateADRisk('affected', 'normal'),
-    );
+    expect(calculateADRisk('carrier', 'normal')).toEqual(calculateADRisk('affected', 'normal'));
   });
 
   it('should always have 0% carrier column for AD', () => {
@@ -328,13 +320,7 @@ describe('combineForCondition', () => {
   });
 
   it('should dispatch to X-linked calculator for X-linked', () => {
-    const prediction = combineForCondition(
-      'Hemophilia A',
-      'F8',
-      'X-linked',
-      'carrier',
-      'normal',
-    );
+    const prediction = combineForCondition('Hemophilia A', 'F8', 'X-linked', 'carrier', 'normal');
     expect(prediction.isSexLinked).toBe(true);
     expect(prediction.inheritance).toBe('X-linked');
     expect('sons' in prediction.offspringRisk).toBe(true);
@@ -366,13 +352,7 @@ describe('combineForCondition', () => {
   });
 
   it('should not include counseling URL for X-linked conditions', () => {
-    const prediction = combineForCondition(
-      'Hemophilia A',
-      'F8',
-      'X-linked',
-      'carrier',
-      'normal',
-    );
+    const prediction = combineForCondition('Hemophilia A', 'F8', 'X-linked', 'carrier', 'normal');
     expect(prediction.counselingUrl).toBeUndefined();
   });
 
@@ -425,12 +405,32 @@ describe('combineForCondition', () => {
 describe('combineAllConditions', () => {
   it('should match conditions between parents by name', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'Disease A', gene: 'GENE_A', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Disease B', gene: 'GENE_B', inheritance: 'autosomal_dominant', status: 'normal' },
+      {
+        condition: 'Disease A',
+        gene: 'GENE_A',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Disease B',
+        gene: 'GENE_B',
+        inheritance: 'autosomal_dominant',
+        status: 'normal',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'Disease A', gene: 'GENE_A', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Disease B', gene: 'GENE_B', inheritance: 'autosomal_dominant', status: 'carrier' },
+      {
+        condition: 'Disease A',
+        gene: 'GENE_A',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Disease B',
+        gene: 'GENE_B',
+        inheritance: 'autosomal_dominant',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -443,12 +443,32 @@ describe('combineAllConditions', () => {
 
   it('should only include conditions present in both parents', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'Shared Disease', gene: 'SHARED', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Parent1 Only', gene: 'P1', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Shared Disease',
+        gene: 'SHARED',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Parent1 Only',
+        gene: 'P1',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'Shared Disease', gene: 'SHARED', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Parent2 Only', gene: 'P2', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Shared Disease',
+        gene: 'SHARED',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Parent2 Only',
+        gene: 'P2',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -470,20 +490,45 @@ describe('combineAllConditions', () => {
 
   it('should return empty array for empty inputs', () => {
     expect(combineAllConditions([], [])).toHaveLength(0);
-    expect(combineAllConditions([], [{ condition: 'A', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' }])).toHaveLength(0);
-    expect(combineAllConditions([{ condition: 'A', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' }], [])).toHaveLength(0);
+    expect(
+      combineAllConditions(
+        [],
+        [{ condition: 'A', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' }],
+      ),
+    ).toHaveLength(0);
+    expect(
+      combineAllConditions(
+        [{ condition: 'A', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' }],
+        [],
+      ),
+    ).toHaveLength(0);
   });
 
   it('should sort by risk level (highest risk first)', () => {
     const parent1: ParentConditionInput[] = [
       { condition: 'Low Risk', gene: 'G1', inheritance: 'autosomal_recessive', status: 'normal' },
       { condition: 'High Risk', gene: 'G2', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Medium Risk', gene: 'G3', inheritance: 'autosomal_recessive', status: 'normal' },
+      {
+        condition: 'Medium Risk',
+        gene: 'G3',
+        inheritance: 'autosomal_recessive',
+        status: 'normal',
+      },
     ];
     const parent2: ParentConditionInput[] = [
       { condition: 'Low Risk', gene: 'G1', inheritance: 'autosomal_recessive', status: 'normal' },
-      { condition: 'High Risk', gene: 'G2', inheritance: 'autosomal_recessive', status: 'affected' },
-      { condition: 'Medium Risk', gene: 'G3', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'High Risk',
+        gene: 'G2',
+        inheritance: 'autosomal_recessive',
+        status: 'affected',
+      },
+      {
+        condition: 'Medium Risk',
+        gene: 'G3',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -505,12 +550,32 @@ describe('combineAllConditions', () => {
 
   it('should sort alphabetically as tie-breaker when risk scores are equal', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'Zebra Disease', gene: 'Z', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Alpha Disease', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Zebra Disease',
+        gene: 'Z',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Alpha Disease',
+        gene: 'A',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'Zebra Disease', gene: 'Z', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Alpha Disease', gene: 'A', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Zebra Disease',
+        gene: 'Z',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Alpha Disease',
+        gene: 'A',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -522,12 +587,32 @@ describe('combineAllConditions', () => {
 
   it('should include counseling URL for AD conditions in batch', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'AD Condition', gene: 'AD1', inheritance: 'autosomal_dominant', status: 'carrier' },
-      { condition: 'AR Condition', gene: 'AR1', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'AD Condition',
+        gene: 'AD1',
+        inheritance: 'autosomal_dominant',
+        status: 'carrier',
+      },
+      {
+        condition: 'AR Condition',
+        gene: 'AR1',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'AD Condition', gene: 'AD1', inheritance: 'autosomal_dominant', status: 'normal' },
-      { condition: 'AR Condition', gene: 'AR1', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'AD Condition',
+        gene: 'AD1',
+        inheritance: 'autosomal_dominant',
+        status: 'normal',
+      },
+      {
+        condition: 'AR Condition',
+        gene: 'AR1',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -558,12 +643,22 @@ describe('combineAllConditions', () => {
 
   it('should handle mixed inheritance patterns correctly', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'AR Disease', gene: 'AR', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'AR Disease',
+        gene: 'AR',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
       { condition: 'AD Disease', gene: 'AD', inheritance: 'autosomal_dominant', status: 'carrier' },
       { condition: 'XL Disease', gene: 'XL', inheritance: 'X-linked', status: 'carrier' },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'AR Disease', gene: 'AR', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'AR Disease',
+        gene: 'AR',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
       { condition: 'AD Disease', gene: 'AD', inheritance: 'autosomal_dominant', status: 'normal' },
       { condition: 'XL Disease', gene: 'XL', inheritance: 'X-linked', status: 'normal' },
     ];

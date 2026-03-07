@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+} from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -22,13 +27,10 @@ const mockStoreState: Record<string, unknown> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/components/auth/dna-dots', () => ({

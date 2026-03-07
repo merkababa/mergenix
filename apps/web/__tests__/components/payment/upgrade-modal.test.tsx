@@ -3,13 +3,28 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
-vi.mock('lucide-react', () => mockLucideIcons('Sparkles', 'ArrowRight', 'Shield', 'X', 'AlertCircle', 'AlertTriangle', 'Check'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Sparkles', 'ArrowRight', 'Shield', 'X', 'AlertCircle', 'AlertTriangle', 'Check'),
+);
 
 // Mock ChipDisclosureModal (rendered by UpgradeModal for chip limitation gate)
 vi.mock('@/components/legal/chip-disclosure-modal', () => ({
-  ChipDisclosureModal: ({ isOpen, onContinue, onCancel }: { isOpen: boolean; onContinue: () => void; onCancel: () => void }) =>
+  ChipDisclosureModal: ({
+    isOpen,
+    onContinue,
+    onCancel,
+  }: {
+    isOpen: boolean;
+    onContinue: () => void;
+    onCancel: () => void;
+  }) =>
     isOpen ? (
       <div data-testid="chip-disclosure-modal">
         <button onClick={onContinue}>Continue to Payment</button>
@@ -24,10 +39,10 @@ const mockLegalStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockLegalStoreState),
-    { getState: () => mockLegalStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockLegalStoreState), {
+    getState: () => mockLegalStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
@@ -82,9 +97,7 @@ describe('UpgradeModal', () => {
   });
 
   it('should not render when isOpen is false', () => {
-    const { container } = render(
-      <UpgradeModal {...defaultProps} isOpen={false} />,
-    );
+    const { container } = render(<UpgradeModal {...defaultProps} isOpen={false} />);
     // Modal should not be in the document
     expect(container.querySelector('[role="dialog"]')).not.toBeInTheDocument();
   });
@@ -119,13 +132,7 @@ describe('UpgradeModal', () => {
   });
 
   it('should show full price for Free->Premium upgrade', () => {
-    render(
-      <UpgradeModal
-        {...defaultProps}
-        currentTier="free"
-        targetTier="premium"
-      />,
-    );
+    render(<UpgradeModal {...defaultProps} currentTier="free" targetTier="premium" />);
     expect(screen.getByText('One-time payment')).toBeInTheDocument();
     // $14.99 appears both in the plan comparison area and in the price display
     const priceElements = screen.getAllByText('$14.99');
@@ -141,7 +148,10 @@ describe('UpgradeModal', () => {
   });
 
   it('should call createCheckout on confirm click', async () => {
-    mockCreateCheckout.mockResolvedValue({ checkoutUrl: 'https://stripe.com/checkout', sessionId: 'sess_1' });
+    mockCreateCheckout.mockResolvedValue({
+      checkoutUrl: 'https://stripe.com/checkout',
+      sessionId: 'sess_1',
+    });
 
     // Mock window.location.href
     const locationSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

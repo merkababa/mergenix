@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { m, useTransform } from "motion/react";
-import { ScrollReveal, useScrollProgress } from "@/components/ui/scroll-reveal";
-import { SectionHeading } from "@/components/marketing/section-heading";
+import { useRef } from 'react';
+import { m, useTransform } from 'motion/react';
+import { ScrollReveal, useScrollProgress } from '@/components/ui/scroll-reveal';
+import { SectionHeading } from '@/components/marketing/section-heading';
 
 // ---------------------------------------------------------------------------
 // Constants (hoisted — §3 of executor checklist)
@@ -12,22 +12,22 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 /** Shared inline style for the three mock dashboard panels (§8 — no repeated literals). */
 const PANEL_STYLE = {
   /* Intentionally dark: mock browser window always shows dark dashboard preview */
-  background: "rgba(12,18,32,0.6)",
-  border: "1px solid var(--border-subtle)",
+  background: 'rgba(12,18,32,0.6)',
+  border: '1px solid var(--border-subtle)',
 } as const;
 
 /** Mock carrier risk bar data — fictional sample values, not real patient data. */
 const MOCK_CARRIER_RISKS = [
-  { label: "Cystic Fibrosis", pct: 4, color: "var(--accent-teal)" },
-  { label: "Sickle Cell", pct: 8, color: "var(--accent-violet)" },
-  { label: "Fragile X", pct: 2, color: "var(--accent-cyan)" },
+  { label: 'Cystic Fibrosis', pct: 4, color: 'var(--accent-teal)' },
+  { label: 'Sickle Cell', pct: 8, color: 'var(--accent-violet)' },
+  { label: 'Fragile X', pct: 2, color: 'var(--accent-cyan)' },
 ] as const;
 
 /** Mock trait prediction data — fictional sample values, not real patient data. */
 const MOCK_TRAIT_PREDICTIONS = [
-  { label: "Eye Color", value: "Blue / Green", color: "var(--accent-cyan)" },
-  { label: "Hair Type", value: "Wavy (likely)", color: "var(--accent-violet)" },
-  { label: "Blood Type", value: "A or O", color: "var(--accent-rose)" },
+  { label: 'Eye Color', value: 'Blue / Green', color: 'var(--accent-cyan)' },
+  { label: 'Hair Type', value: 'Wavy (likely)', color: 'var(--accent-violet)' },
+  { label: 'Blood Type', value: 'A or O', color: 'var(--accent-rose)' },
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -60,53 +60,64 @@ export function ProductDemo() {
           <div
             className="relative mx-auto max-w-3xl"
             style={{
-              filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.5))",
+              filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.5))',
             }}
           >
             {/* Perspective wrapper — desktop only; flat on mobile */}
-            <div
-              className="rounded-2xl md:perspective-distant"
-            >
+            <div className="md:perspective-distant rounded-2xl">
               <div
-                className="overflow-hidden rounded-2xl md:transform-[rotateY(-5deg)] md:transform-3d"
+                className="md:transform-[rotateY(-5deg)] md:transform-3d overflow-hidden rounded-2xl"
                 style={{
-                  border: "1px solid var(--glass-border)",
-                  background: "var(--bg-glass)",
-                  backdropFilter: "blur(var(--glass-blur))",
+                  border: '1px solid var(--glass-border)',
+                  background: 'var(--bg-glass)',
+                  backdropFilter: 'blur(var(--glass-blur))',
                 }}
               >
                 {/* Browser chrome bar */}
                 <div
                   className="flex items-center gap-2 px-4 py-3"
                   /* Intentionally dark: mock browser window always shows dark dashboard preview */
-                  style={{ background: "rgba(12,18,32,0.9)", borderBottom: "1px solid var(--border-subtle)" }}
+                  style={{
+                    background: 'rgba(12,18,32,0.9)',
+                    borderBottom: '1px solid var(--border-subtle)',
+                  }}
                   aria-hidden="true"
                 >
                   {/* Window control dots */}
-                  <span className="h-3 w-3 rounded-full bg-(--accent-rose) opacity-70" />
-                  <span className="h-3 w-3 rounded-full bg-(--accent-amber) opacity-70" />
-                  <span className="h-3 w-3 rounded-full bg-(--accent-teal) opacity-70" />
+                  <span className="bg-(--accent-rose) h-3 w-3 rounded-full opacity-70" />
+                  <span className="bg-(--accent-amber) h-3 w-3 rounded-full opacity-70" />
+                  <span className="bg-(--accent-teal) h-3 w-3 rounded-full opacity-70" />
                   {/* URL bar */}
                   <div
                     className="mx-auto flex h-6 w-48 items-center justify-center rounded-full px-3"
-                    style={{ background: "rgba(148,163,184,0.06)", border: "1px solid var(--border-subtle)" }}
+                    style={{
+                      background: 'rgba(148,163,184,0.06)',
+                      border: '1px solid var(--border-subtle)',
+                    }}
                   >
                     {/* text-xs = 12px minimum (§4 — no text smaller than 12px) */}
-                    <span className="text-xs text-(--text-dim)">mergenix.app/analysis</span>
+                    <span className="text-(--text-dim) text-xs">mergenix.app/analysis</span>
                   </div>
                 </div>
 
                 {/* Mock dashboard content */}
-                <div className="relative p-5 md:p-7" role="region" aria-label="Sample analysis dashboard">
-                  <span className="sr-only">Illustrative example of analysis results. Values shown are fictional sample data.</span>
+                <div
+                  className="relative p-5 md:p-7"
+                  role="region"
+                  aria-label="Sample analysis dashboard"
+                >
+                  <span className="sr-only">
+                    Illustrative example of analysis results. Values shown are fictional sample
+                    data.
+                  </span>
                   {/* "Sample Data" badge — makes clear these are fictional values (§3 of fix list) */}
                   <span
                     className="absolute right-3 top-3 z-10 rounded-full px-2.5 py-1 text-xs font-semibold"
                     style={{
-                      background: "rgba(148,163,184,0.12)",
-                      border: "1px solid rgba(148,163,184,0.2)",
-                      color: "var(--text-dim)",
-                      backdropFilter: "blur(4px)",
+                      background: 'rgba(148,163,184,0.12)',
+                      border: '1px solid rgba(148,163,184,0.2)',
+                      color: 'var(--text-dim)',
+                      backdropFilter: 'blur(4px)',
                     }}
                   >
                     Sample Data
@@ -115,12 +126,21 @@ export function ProductDemo() {
                   {/* Dashboard header row */}
                   <div className="mb-5 flex items-center justify-between">
                     <div>
-                      <div className="h-4 w-36 rounded-full bg-(--bg-elevated)" aria-hidden="true" />
-                      <div className="mt-2 h-3 w-24 rounded-full bg-(--border-subtle)" aria-hidden="true" />
+                      <div
+                        className="bg-(--bg-elevated) h-4 w-36 rounded-full"
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="bg-(--border-subtle) mt-2 h-3 w-24 rounded-full"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div
-                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-(--accent-teal)"
-                      style={{ background: "rgba(6,214,160,0.12)", border: "1px solid rgba(6,214,160,0.2)" }}
+                      className="text-(--accent-teal) rounded-lg px-3 py-1.5 text-xs font-semibold"
+                      style={{
+                        background: 'rgba(6,214,160,0.12)',
+                        border: '1px solid rgba(6,214,160,0.2)',
+                      }}
                     >
                       Analysis Complete
                     </div>
@@ -130,7 +150,7 @@ export function ProductDemo() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {/* Carrier risk panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-(--text-dim)">
+                      <p className="text-(--text-dim) mb-3 text-xs font-semibold uppercase tracking-wider">
                         Est. Carrier Risk
                       </p>
                       {/* Mock bars — values are sample data only, not real patient results */}
@@ -138,12 +158,12 @@ export function ProductDemo() {
                         <div key={item.label} className="mb-2">
                           <div className="mb-1 flex justify-between">
                             {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                            <span className="text-xs text-(--text-muted)">{item.label}</span>
+                            <span className="text-(--text-muted) text-xs">{item.label}</span>
                             <span className="text-xs font-medium" style={{ color: item.color }}>
                               {item.pct}%
                             </span>
                           </div>
-                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-(--border-subtle)">
+                          <div className="bg-(--border-subtle) h-1.5 w-full overflow-hidden rounded-full">
                             <div
                               className="h-full rounded-full"
                               style={{ width: `${item.pct}%`, background: item.color }}
@@ -160,7 +180,7 @@ export function ProductDemo() {
 
                     {/* Traits panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-(--text-dim)">
+                      <p className="text-(--text-dim) mb-3 text-xs font-semibold uppercase tracking-wider">
                         Trait Predictions
                       </p>
                       {/* Mock trait items — values are sample data only, not real patient results */}
@@ -168,10 +188,10 @@ export function ProductDemo() {
                         <div
                           key={trait.label}
                           className="mb-2 flex items-center justify-between rounded-lg px-3 py-2"
-                          style={{ background: "rgba(148,163,184,0.04)" }}
+                          style={{ background: 'rgba(148,163,184,0.04)' }}
                         >
                           {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                          <span className="text-xs text-(--text-muted)">{trait.label}</span>
+                          <span className="text-(--text-muted) text-xs">{trait.label}</span>
                           <span className="text-xs font-semibold" style={{ color: trait.color }}>
                             {trait.value}
                           </span>
@@ -192,11 +212,11 @@ export function ProductDemo() {
               <div
                 className="rounded-xl px-4 py-3 text-sm font-semibold"
                 style={{
-                  background: "rgba(6,214,160,0.15)",
-                  border: "1px solid rgba(6,214,160,0.3)",
-                  backdropFilter: "blur(12px)",
-                  color: "var(--accent-teal)",
-                  boxShadow: "0 8px 32px rgba(6,214,160,0.15)",
+                  background: 'rgba(6,214,160,0.15)',
+                  border: '1px solid rgba(6,214,160,0.3)',
+                  backdropFilter: 'blur(12px)',
+                  color: 'var(--accent-teal)',
+                  boxShadow: '0 8px 32px rgba(6,214,160,0.15)',
                 }}
               >
                 <span className="mr-1.5">✓</span>
@@ -207,7 +227,7 @@ export function ProductDemo() {
             {/* Subtle reflection beneath mockup */}
             <div
               className="pointer-events-none absolute -bottom-8 left-1/2 h-16 w-3/4 -translate-x-1/2 rounded-full blur-3xl"
-              style={{ background: "rgba(6,214,160,0.08)" }}
+              style={{ background: 'rgba(6,214,160,0.08)' }}
               aria-hidden="true"
             />
           </div>

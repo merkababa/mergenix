@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { forwardRef, useState, type InputHTMLAttributes, useMemo } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { forwardRef, useState, type InputHTMLAttributes, useMemo } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   getPasswordStrength,
   STRENGTH_TEXT_COLORS,
   STRENGTH_BAR_COLORS,
-} from "@/lib/password-utils";
+} from '@/lib/password-utils';
 
 interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -22,7 +22,7 @@ interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
 const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, label, error, strengthMeter, id, value, onChange, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [internalValue, setInternalValue] = useState("");
+    const [internalValue, setInternalValue] = useState('');
 
     const currentValue = (value as string) ?? internalValue;
     const strength = useMemo(
@@ -30,7 +30,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
       [strengthMeter, currentValue],
     );
 
-    const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -45,7 +45,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="mb-1.5 block font-heading text-sm font-medium text-(--text-primary)"
+            className="font-heading text-(--text-primary) mb-1.5 block text-sm font-medium"
           >
             {label}
           </label>
@@ -54,48 +54,37 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           <input
             ref={ref}
             id={inputId}
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             value={value}
             onChange={handleChange}
             className={cn(
-              "w-full rounded-xl border bg-(--bg-elevated) px-4 py-2.5 pr-11 font-body text-sm text-(--text-primary) placeholder:text-(--text-dim)",
-              "border-(--border-subtle)",
-              "transition-all duration-200",
-              "focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-hidden",
+              'bg-(--bg-elevated) font-body text-(--text-primary) placeholder:text-(--text-dim) w-full rounded-xl border px-4 py-2.5 pr-11 text-sm',
+              'border-(--border-subtle)',
+              'transition-all duration-200',
+              'focus:outline-hidden focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)]',
               error &&
-                "border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]",
+                'border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]',
               className,
             )}
-            aria-invalid={error ? "true" : undefined}
+            aria-invalid={error ? 'true' : undefined}
             aria-describedby={
-              [
-                error ? `${inputId}-error` : null,
-                strength ? `${inputId}-strength` : null,
-              ]
+              [error ? `${inputId}-error` : null, strength ? `${inputId}-strength` : null]
                 .filter(Boolean)
-                .join(" ") || undefined
+                .join(' ') || undefined
             }
             {...props}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-0 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] flex items-center justify-center text-(--text-dim) transition-colors hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            className="text-(--text-dim) hover:text-(--text-primary) focus-visible:outline-(--accent-teal) absolute right-0 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         {error && (
-          <p
-            id={`${inputId}-error`}
-            className="mt-1 text-xs text-(--accent-rose)"
-            role="alert"
-          >
+          <p id={`${inputId}-error`} className="text-(--accent-rose) mt-1 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -106,20 +95,15 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                 <div
                   key={level}
                   className={cn(
-                    "h-1 flex-1 rounded-full transition-colors duration-300",
+                    'h-1 flex-1 rounded-full transition-colors duration-300',
                     level <= Math.ceil(strength.widthPercent / 20)
                       ? STRENGTH_BAR_COLORS[strength.level]
-                      : "bg-(--border-subtle)",
+                      : 'bg-(--border-subtle)',
                   )}
                 />
               ))}
             </div>
-            <p
-              className={cn(
-                "mt-1 text-xs font-medium",
-                STRENGTH_TEXT_COLORS[strength.level],
-              )}
-            >
+            <p className={cn('mt-1 text-xs font-medium', STRENGTH_TEXT_COLORS[strength.level])}>
               {strength.label}
             </p>
           </div>
@@ -129,6 +113,6 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
   },
 );
 
-PasswordInput.displayName = "PasswordInput";
+PasswordInput.displayName = 'PasswordInput';
 
 export { PasswordInput };

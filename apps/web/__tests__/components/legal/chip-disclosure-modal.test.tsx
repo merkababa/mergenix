@@ -14,10 +14,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────
@@ -63,7 +63,9 @@ describe('ChipDisclosureModal', () => {
   it('displays the chip limitation text', () => {
     render(<ChipDisclosureModal {...defaultProps} />);
 
-    expect(screen.getByText(/Direct-to-consumer genetic tests analyze approximately 600,000 to 700,000/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Direct-to-consumer genetic tests analyze approximately 600,000 to 700,000/),
+    ).toBeInTheDocument();
   });
 
   it('checkbox starts unchecked', () => {

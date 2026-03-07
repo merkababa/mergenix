@@ -52,7 +52,9 @@ async function getNavigationTiming(page: Page): Promise<{
   loadEventEnd: number;
 }> {
   return page.evaluate(() => {
-    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const nav = performance.getEntriesByType('navigation')[0] as
+      | PerformanceNavigationTiming
+      | undefined;
     if (!nav) {
       return { ttfb: 0, domInteractive: 0, domComplete: 0, loadEventEnd: 0 };
     }
@@ -121,21 +123,22 @@ test.describe('Performance Budget: LCP', () => {
 
     // Wait until at least one LCP entry has been recorded (event-driven),
     // with a 5-second timeout fallback in case the API is unavailable.
-    await page.waitForFunction(
-      () => performance.getEntriesByType('largest-contentful-paint').length > 0,
-      undefined,
-      { timeout: 5_000 },
-    ).catch(() => {
-      // LCP not observed within timeout — getLcp will return 0, test will skip
-    });
+    await page
+      .waitForFunction(
+        () => performance.getEntriesByType('largest-contentful-paint').length > 0,
+        undefined,
+        { timeout: 5_000 },
+      )
+      .catch(() => {
+        // LCP not observed within timeout — getLcp will return 0, test will skip
+      });
 
     const lcp = await getLcp(page);
 
     if (lcp > 0) {
-      expect(
-        lcp,
-        `LCP ${lcp.toFixed(0)}ms exceeds budget of ${LCP_BUDGET_MS}ms`,
-      ).toBeLessThan(LCP_BUDGET_MS);
+      expect(lcp, `LCP ${lcp.toFixed(0)}ms exceeds budget of ${LCP_BUDGET_MS}ms`).toBeLessThan(
+        LCP_BUDGET_MS,
+      );
     } else {
       // LCP not available in this browser — skip assertion, not a test failure
       test.skip(true, 'LCP PerformanceObserver not supported in this browser');
@@ -147,13 +150,15 @@ test.describe('Performance Budget: LCP', () => {
 
     // Wait until at least one LCP entry has been recorded (event-driven),
     // with a 5-second timeout fallback in case the API is unavailable.
-    await page.waitForFunction(
-      () => performance.getEntriesByType('largest-contentful-paint').length > 0,
-      undefined,
-      { timeout: 5_000 },
-    ).catch(() => {
-      // LCP not observed within timeout — getLcp will return 0, test will skip
-    });
+    await page
+      .waitForFunction(
+        () => performance.getEntriesByType('largest-contentful-paint').length > 0,
+        undefined,
+        { timeout: 5_000 },
+      )
+      .catch(() => {
+        // LCP not observed within timeout — getLcp will return 0, test will skip
+      });
 
     const lcp = await getLcp(page);
 
@@ -305,7 +310,10 @@ test.describe('Performance Budget: JS Bundle Size', () => {
       // chunked encoding). Skip the budget assertion — this is an E2E
       // contract test and we only enforce the budget when wire sizes are
       // measurable. A production build with a CDN will have content-length.
-      test.skip(true, 'No JS responses included content-length headers; wire sizes are unmeasurable in this environment (likely chunked encoding on dev server)');
+      test.skip(
+        true,
+        'No JS responses included content-length headers; wire sizes are unmeasurable in this environment (likely chunked encoding on dev server)',
+      );
       return;
     }
 
@@ -355,13 +363,20 @@ test.describe('Performance Budget: JS Bundle Size', () => {
     if (measurableResponseCount === 0) {
       // No /_next/static/ JS responses had content-length headers.
       // Skip — cannot enforce the budget without wire sizes.
-      test.skip(true, 'No /_next/static/ JS responses included content-length headers; likely chunked encoding on dev server');
+      test.skip(
+        true,
+        'No /_next/static/ JS responses included content-length headers; likely chunked encoding on dev server',
+      );
       return;
     }
 
     expect(
       largeChunks,
-      `Found JS chunks with content-length > 100KB: ${JSON.stringify(largeChunks.map((c) => ({ file: c.url.split('/').pop(), sizeKb: c.sizeKb.toFixed(1) })), null, 2)}`,
+      `Found JS chunks with content-length > 100KB: ${JSON.stringify(
+        largeChunks.map((c) => ({ file: c.url.split('/').pop(), sizeKb: c.sizeKb.toFixed(1) })),
+        null,
+        2,
+      )}`,
     ).toHaveLength(0);
   });
 });

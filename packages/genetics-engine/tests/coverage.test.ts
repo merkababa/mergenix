@@ -436,7 +436,12 @@ describe('getCoverageSummary', () => {
       totalDiseases: 2,
       diseasesWithCoverage: 2,
       perDisease: {
-        'Disease A': { variantsTested: 1, variantsTotal: 3, coveragePct: 33.333, isSufficient: true },
+        'Disease A': {
+          variantsTested: 1,
+          variantsTotal: 3,
+          coveragePct: 33.333,
+          isSufficient: true,
+        },
         'Disease B': { variantsTested: 2, variantsTotal: 4, coveragePct: 50, isSufficient: true },
       },
     };
@@ -471,10 +476,10 @@ describe('getCoverageSummary', () => {
       totalDiseases: 4,
       diseasesWithCoverage: 3,
       perDisease: {
-        'Full': { variantsTested: 2, variantsTotal: 2, coveragePct: 100, isSufficient: true },
+        Full: { variantsTested: 2, variantsTotal: 2, coveragePct: 100, isSufficient: true },
         'Partial 1': { variantsTested: 1, variantsTotal: 4, coveragePct: 25, isSufficient: true },
         'Partial 2': { variantsTested: 3, variantsTotal: 5, coveragePct: 60, isSufficient: true },
-        'None': { variantsTested: 0, variantsTotal: 3, coveragePct: 0, isSufficient: false },
+        None: { variantsTested: 0, variantsTotal: 3, coveragePct: 0, isSufficient: false },
       },
     };
 
@@ -508,9 +513,24 @@ describe('getCoverageSummary', () => {
       totalDiseases: 3,
       diseasesWithCoverage: 3,
       perDisease: {
-        'Disease A': { variantsTested: 1, variantsTotal: 3, coveragePct: 33.333, isSufficient: true },
-        'Disease B': { variantsTested: 1, variantsTotal: 3, coveragePct: 33.333, isSufficient: true },
-        'Disease C': { variantsTested: 1, variantsTotal: 3, coveragePct: 33.333, isSufficient: true },
+        'Disease A': {
+          variantsTested: 1,
+          variantsTotal: 3,
+          coveragePct: 33.333,
+          isSufficient: true,
+        },
+        'Disease B': {
+          variantsTested: 1,
+          variantsTotal: 3,
+          coveragePct: 33.333,
+          isSufficient: true,
+        },
+        'Disease C': {
+          variantsTested: 1,
+          variantsTotal: 3,
+          coveragePct: 33.333,
+          isSufficient: true,
+        },
       },
     };
 
@@ -529,9 +549,7 @@ describe('getCoverageSummary', () => {
 
     const summary = getCoverageSummary(metrics);
 
-    expect(summary.summaryText).toBe(
-      'Your DNA file covers variants for 1847 of 2697 conditions',
-    );
+    expect(summary.summaryText).toBe('Your DNA file covers variants for 1847 of 2697 conditions');
   });
 
   it('should handle empty perDisease (no diseases in panel)', () => {
@@ -548,9 +566,7 @@ describe('getCoverageSummary', () => {
     expect(summary.partiallyCovered).toBe(0);
     expect(summary.notCovered).toBe(0);
     expect(summary.overallCoveragePct).toBe(0);
-    expect(summary.summaryText).toBe(
-      'Your DNA file covers variants for 0 of 0 conditions',
-    );
+    expect(summary.summaryText).toBe('Your DNA file covers variants for 0 of 0 conditions');
   });
 
   it('should use totalDiseases from metrics, not from perDisease keys count', () => {
@@ -608,8 +624,6 @@ describe('coverage integration', () => {
     expect(summary.overallCoveragePct).toBeCloseTo(44.4, 1);
 
     // Summary text reflects diseasesWithCoverage from metrics
-    expect(summary.summaryText).toBe(
-      'Your DNA file covers variants for 2 of 3 conditions',
-    );
+    expect(summary.summaryText).toBe('Your DNA file covers variants for 2 of 3 conditions');
   });
 });

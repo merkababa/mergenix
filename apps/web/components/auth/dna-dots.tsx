@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * Animated 5-dot DNA helix header.
@@ -15,12 +15,9 @@ export function DnaDots() {
           style={{
             background:
               i % 2 === 0
-                ? "linear-gradient(135deg, var(--accent-teal), var(--accent-cyan))"
-                : "linear-gradient(135deg, var(--accent-violet), var(--glow-violet))",
-            boxShadow:
-              i % 2 === 0
-                ? "0 0 12px var(--glow-teal)"
-                : "0 0 12px var(--glow-violet)",
+                ? 'linear-gradient(135deg, var(--accent-teal), var(--accent-cyan))'
+                : 'linear-gradient(135deg, var(--accent-violet), var(--glow-violet))',
+            boxShadow: i % 2 === 0 ? '0 0 12px var(--glow-teal)' : '0 0 12px var(--glow-violet)',
             animation: `helixFloat 2.2s ease-in-out infinite ${delay}s`,
           }}
         />

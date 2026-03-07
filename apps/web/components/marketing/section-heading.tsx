@@ -1,23 +1,22 @@
-import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from '@/lib/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-const headingGradientVariants = cva("", {
+const headingGradientVariants = cva('', {
   variants: {
     gradient: {
-      default: "gradient-text",
-      teal: "gradient-text-teal",
-      none: "text-(--text-heading)",
+      default: 'gradient-text',
+      teal: 'gradient-text-teal',
+      none: 'text-(--text-heading)',
     },
   },
   defaultVariants: {
     // Changed from "default" (gradient) to "none" (solid) to prevent mass gradient
     // overuse. Gradient must now be opted-in explicitly — one CTA per page max.
-    gradient: "none",
+    gradient: 'none',
   },
 });
 
-interface SectionHeadingProps
-  extends VariantProps<typeof headingGradientVariants> {
+interface SectionHeadingProps extends VariantProps<typeof headingGradientVariants> {
   title: string;
   subtitle?: string;
   className?: string;
@@ -29,28 +28,20 @@ interface SectionHeadingProps
  * Consistent section heading with optional gradient text
  * and subtitle. Centered by default with standardized spacing.
  */
-export function SectionHeading({
-  title,
-  subtitle,
-  gradient,
-  className,
-  id,
-}: SectionHeadingProps) {
+export function SectionHeading({ title, subtitle, gradient, className, id }: SectionHeadingProps) {
   return (
-    <div className={cn("mx-auto max-w-2xl text-center", className)}>
+    <div className={cn('mx-auto max-w-2xl text-center', className)}>
       <h2
         id={id}
         className={cn(
-          "font-heading text-3xl font-bold tracking-tight sm:text-4xl",
+          'font-heading text-3xl font-bold tracking-tight sm:text-4xl',
           headingGradientVariants({ gradient }),
         )}
       >
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-base leading-relaxed text-(--text-body) sm:text-lg">
-          {subtitle}
-        </p>
+        <p className="text-(--text-body) mt-4 text-base leading-relaxed sm:text-lg">{subtitle}</p>
       )}
     </div>
   );

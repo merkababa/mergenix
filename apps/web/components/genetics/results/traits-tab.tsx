@@ -1,45 +1,48 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useState, useMemo, memo, useCallback, useDeferredValue, useEffect, useRef } from "react";
-import { AlertCircle, Sparkles, ChevronDown, ChevronRight } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Badge } from "@/components/ui/badge";
-import { MedicalDisclaimer } from "@/components/genetics/medical-disclaimer";
-import { TierUpgradePrompt } from "@/components/genetics/tier-upgrade-prompt";
-import { LimitationsSection } from "@/components/genetics/results/limitations-section";
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { useFocusTrap } from "@/hooks/use-focus-trap";
-import { TRAIT_CATEGORIES } from "@mergenix/genetics-data";
-import type { TraitResult } from "@mergenix/shared-types";
+import { useState, useMemo, memo, useCallback, useDeferredValue, useEffect, useRef } from 'react';
+import { AlertCircle, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Badge } from '@/components/ui/badge';
+import { MedicalDisclaimer } from '@/components/genetics/medical-disclaimer';
+import { TierUpgradePrompt } from '@/components/genetics/tier-upgrade-prompt';
+import { LimitationsSection } from '@/components/genetics/results/limitations-section';
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
+import { TRAIT_CATEGORIES } from '@mergenix/genetics-data';
+import type { TraitResult } from '@mergenix/shared-types';
 
 /** Categories containing health-related genetic information. */
 const HEALTH_CATEGORIES = new Set([
-  "Cancer Risk",
-  "Neurological/Brain",
-  "Pharmacogenomic",
-  "Cardiovascular/Metabolic",
+  'Cancer Risk',
+  'Neurological/Brain',
+  'Pharmacogenomic',
+  'Cardiovascular/Metabolic',
 ]);
 
 /** Convert category name to a stable slug for DOM IDs. */
 function slugify(str: string): string {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
 /** Map confidence level to Badge variant — hoisted to module scope to avoid per-call allocation. */
 const CONFIDENCE_VARIANT_MAP = {
-  high: "confidence-high",
-  medium: "confidence-medium",
-  low: "confidence-low",
+  high: 'confidence-high',
+  medium: 'confidence-medium',
+  low: 'confidence-low',
 } as const;
 
-function confidenceVariant(confidence: TraitResult["confidence"]) {
+function confidenceVariant(confidence: TraitResult['confidence']) {
   return CONFIDENCE_VARIANT_MAP[confidence];
 }
 
-const HEALTH_CONSENT_KEY = "mergenix_health_trait_consent";
+const HEALTH_CONSENT_KEY = 'mergenix_health_trait_consent';
 
 /** One-time consent interstitial for health-related genetic results. */
 function HealthConsentInterstitial({
@@ -70,7 +73,7 @@ function HealthConsentInterstitial({
   // Body scroll lock while the dialog is mounted
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -79,7 +82,7 @@ function HealthConsentInterstitial({
   // Escape key dismisses the dialog (equivalent to "Not Now")
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         e.preventDefault();
         onDecline();
       }
@@ -98,38 +101,34 @@ function HealthConsentInterstitial({
         aria-modal="true"
         aria-labelledby="health-consent-title"
         tabIndex={-1}
-        className="w-full max-w-lg rounded-xl border border-amber-500/30 bg-(--bg-glass) p-6 shadow-2xl outline-hidden"
+        className="bg-(--bg-glass) outline-hidden w-full max-w-lg rounded-xl border border-amber-500/30 p-6 shadow-2xl"
         onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2
-          id="health-consent-title"
-          className="font-heading text-lg font-bold text-amber-300"
-        >
+        <h2 id="health-consent-title" className="font-heading text-lg font-bold text-amber-300">
           Health-Related Genetic Results
         </h2>
-        <div className="mt-3 space-y-3 text-sm text-(--text-body)">
+        <div className="text-(--text-body) mt-3 space-y-3 text-sm">
           <p>
-            You are about to view genetic trait predictions related to health
-            conditions including cancer risk, neurological conditions, and
-            pharmacogenomics.
+            You are about to view genetic trait predictions related to health conditions including
+            cancer risk, neurological conditions, and pharmacogenomics.
           </p>
           <p>
-            These results are for <strong>educational purposes only</strong> and
-            are <strong>NOT diagnostic</strong>. They should not replace clinical
-            genetic testing or medical advice.
+            These results are for <strong>educational purposes only</strong> and are{' '}
+            <strong>NOT diagnostic</strong>. They should not replace clinical genetic testing or
+            medical advice.
           </p>
           <p>
-            Under GINA, health insurers and employers generally cannot use
-            genetic information for coverage or employment decisions. However,
-            GINA does not cover life, disability, or long-term care insurance.
+            Under GINA, health insurers and employers generally cannot use genetic information for
+            coverage or employment decisions. However, GINA does not cover life, disability, or
+            long-term care insurance.
           </p>
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
             onClick={onDecline}
-            className="min-h-[44px] rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm text-(--text-body) transition-colors hover:bg-white/10"
+            className="text-(--text-body) min-h-[44px] rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm transition-colors hover:bg-white/10"
           >
             Not Now
           </button>
@@ -158,17 +157,13 @@ const TraitCard = memo(function TraitCard({
     <GlassCard variant="medium" hover="glow" className="p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="font-heading text-sm font-semibold text-(--text-heading)">
-            {trait.trait}
-          </p>
-          <p className="mt-0.5 text-xs text-(--text-muted)">
+          <p className="font-heading text-(--text-heading) text-sm font-semibold">{trait.trait}</p>
+          <p className="text-(--text-muted) mt-0.5 text-xs">
             {trait.gene} &middot; {trait.rsid}
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
-          <Badge variant={confidenceVariant(trait.confidence)}>
-            {trait.confidence}
-          </Badge>
+          <Badge variant={confidenceVariant(trait.confidence)}>{trait.confidence}</Badge>
           {trait.chipCoverage === false && (
             <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-medium text-slate-400">
               Not on chip
@@ -179,52 +174,41 @@ const TraitCard = memo(function TraitCard({
 
       {/* Show description and notes for health traits */}
       {isHealthTrait && trait.description && (
-        <p className="mt-2 text-xs text-(--text-muted)">
-          {trait.description}
-        </p>
+        <p className="text-(--text-muted) mt-2 text-xs">{trait.description}</p>
       )}
       {isHealthTrait && trait.note && (
-        <p className="mt-1 text-xs italic text-(--text-muted)">
-          {trait.note}
-        </p>
+        <p className="text-(--text-muted) mt-1 text-xs italic">{trait.note}</p>
       )}
 
       {/* Offspring probability bars */}
       <div className="mt-3 space-y-1.5">
-        {Object.entries(trait.offspringProbabilities).map(
-          ([phenotype, pct]) => (
-            <div key={phenotype} className="flex items-center gap-2">
-              <div className="w-20 truncate text-xs text-(--text-muted)">
-                {phenotype}
-              </div>
+        {Object.entries(trait.offspringProbabilities).map(([phenotype, pct]) => (
+          <div key={phenotype} className="flex items-center gap-2">
+            <div className="text-(--text-muted) w-20 truncate text-xs">{phenotype}</div>
+            <div
+              role="progressbar"
+              aria-valuenow={pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${phenotype}: ${pct}%`}
+              className="bg-(--bg-glass) h-2 flex-1 rounded-full"
+            >
               <div
-                role="progressbar"
-                aria-valuenow={pct}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label={`${phenotype}: ${pct}%`}
-                className="h-2 flex-1 rounded-full bg-(--bg-glass)"
-              >
-                <div
-                  className={`h-2 rounded-full ${isHealthTrait ? "bg-amber-500/60" : "bg-(--accent-teal)"}`}
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <span className="w-10 text-right text-xs font-medium text-(--text-body)">
-                {pct}%
-              </span>
+                className={`h-2 rounded-full ${isHealthTrait ? 'bg-amber-500/60' : 'bg-(--accent-teal)'}`}
+                style={{ width: `${pct}%` }}
+              />
             </div>
-          ),
-        )}
+            <span className="text-(--text-body) w-10 text-right text-xs font-medium">{pct}%</span>
+          </div>
+        ))}
       </div>
 
       {/* Show phenotype details for health traits */}
       {isHealthTrait && trait.phenotypeDetails && (
         <div className="mt-2 space-y-1 border-t border-white/5 pt-2">
           {Object.entries(trait.phenotypeDetails).map(([key, detail]) => (
-            <p key={key} className="text-xs text-(--text-muted)">
-              <span className="font-medium text-(--text-muted)">{key}:</span>{" "}
-              {detail.description}
+            <p key={key} className="text-(--text-muted) text-xs">
+              <span className="text-(--text-muted) font-medium">{key}:</span> {detail.description}
             </p>
           ))}
         </div>
@@ -238,14 +222,15 @@ function HealthCategoryBanner({ category }: { category: string }) {
   return (
     <div role="note" className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
       <p className="text-sm font-medium text-amber-300">
-        {"\u26A0\uFE0F"} Health-Related Genetic Information
+        {'\u26A0\uFE0F'} Health-Related Genetic Information
       </p>
       <p className="mt-1 text-xs text-amber-200/80">
-        These results examine only one genetic variant per trait and are not diagnostic.
-        They should not replace clinical genetic testing or medical advice.
-        DTC genotyping arrays miss the vast majority of pathogenic variants.
-        {category === "Cancer Risk" && " A normal result does NOT rule out cancer risk."}
-        {category === "Pharmacogenomic" && " Do not change medication without consulting your doctor."}
+        These results examine only one genetic variant per trait and are not diagnostic. They should
+        not replace clinical genetic testing or medical advice. DTC genotyping arrays miss the vast
+        majority of pathogenic variants.
+        {category === 'Cancer Risk' && ' A normal result does NOT rule out cancer risk.'}
+        {category === 'Pharmacogenomic' &&
+          ' Do not change medication without consulting your doctor.'}
       </p>
       <p className="mt-2 text-xs text-amber-200/60">
         We recommend consulting a certified genetic counselor for health-related results.
@@ -257,11 +242,11 @@ function HealthCategoryBanner({ category }: { category: string }) {
 export function TraitsTab() {
   const fullResults = useAnalysisStore((s) => s.fullResults);
   const user = useAuthStore((s) => s.user);
-  const userTier = user?.tier ?? "free";
+  const userTier = user?.tier ?? 'free';
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
-  const [confidenceFilter, setConfidenceFilter] = useState("all");
+  const [confidenceFilter, setConfidenceFilter] = useState('all');
   // Track which categories are expanded — first 3 open by default
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     () => new Set(TRAIT_CATEGORIES.slice(0, 3)),
@@ -269,42 +254,39 @@ export function TraitsTab() {
 
   // Health consent interstitial state
   const [healthConsentGiven, setHealthConsentGiven] = useState<boolean>(
-    () => typeof window !== "undefined" && localStorage.getItem(HEALTH_CONSENT_KEY) === "true",
+    () => typeof window !== 'undefined' && localStorage.getItem(HEALTH_CONSENT_KEY) === 'true',
   );
   const [pendingHealthCategory, setPendingHealthCategory] = useState<string | null>(null);
 
-  const toggleCategory = useCallback((category: string) => {
-    const isHealth = HEALTH_CATEGORIES.has(category);
-    setExpandedCategories((prev) => {
-      const isCurrentlyExpanded = prev.has(category);
-      if (isCurrentlyExpanded) {
-        // Always allow collapsing
+  const toggleCategory = useCallback(
+    (category: string) => {
+      const isHealth = HEALTH_CATEGORIES.has(category);
+      setExpandedCategories((prev) => {
+        const isCurrentlyExpanded = prev.has(category);
+        if (isCurrentlyExpanded) {
+          // Always allow collapsing
+          const next = new Set(prev);
+          next.delete(category);
+          return next;
+        }
+        if (isHealth && !healthConsentGiven) {
+          // Defer expansion until consent given — show interstitial
+          setPendingHealthCategory(category);
+          return prev;
+        }
         const next = new Set(prev);
-        next.delete(category);
+        next.add(category);
         return next;
-      }
-      if (isHealth && !healthConsentGiven) {
-        // Defer expansion until consent given — show interstitial
-        setPendingHealthCategory(category);
-        return prev;
-      }
-      const next = new Set(prev);
-      next.add(category);
-      return next;
-    });
-  }, [healthConsentGiven]);
+      });
+    },
+    [healthConsentGiven],
+  );
 
   const traits = fullResults?.traits ?? [];
   const metadata = fullResults?.metadata;
 
-  const successful = useMemo(
-    () => traits.filter((t) => t.status === "success"),
-    [traits],
-  );
-  const missing = useMemo(
-    () => traits.filter((t) => t.status === "missing"),
-    [traits],
-  );
+  const successful = useMemo(() => traits.filter((t) => t.status === 'success'), [traits]);
+  const missing = useMemo(() => traits.filter((t) => t.status === 'missing'), [traits]);
 
   // Filter + group successful traits by category, following TRAIT_CATEGORIES order
   const groupedCategories = useMemo(() => {
@@ -317,8 +299,7 @@ export function TraitsTab() {
         t.gene.toLowerCase().includes(lowerSearch) ||
         t.rsid.toLowerCase().includes(lowerSearch);
 
-      const matchesConfidence =
-        confidenceFilter === "all" || t.confidence === confidenceFilter;
+      const matchesConfidence = confidenceFilter === 'all' || t.confidence === confidenceFilter;
 
       return matchesSearch && matchesConfidence;
     });
@@ -329,10 +310,10 @@ export function TraitsTab() {
       categoryMap.set(cat, []);
     }
     // Uncategorised traits fall into an "Other" bucket
-    categoryMap.set("Other", []);
+    categoryMap.set('Other', []);
 
     for (const trait of filtered) {
-      const cat = trait.category ?? "Other";
+      const cat = trait.category ?? 'Other';
       if (categoryMap.has(cat)) {
         categoryMap.get(cat)!.push(trait);
       } else {
@@ -341,9 +322,7 @@ export function TraitsTab() {
     }
 
     // Remove empty categories (especially when filtering)
-    return Array.from(categoryMap.entries()).filter(
-      ([, items]) => items.length > 0,
-    );
+    return Array.from(categoryMap.entries()).filter(([, items]) => items.length > 0);
   }, [successful, deferredSearch, confidenceFilter]);
 
   // Detected count per category across ALL successful traits (unaffected by filter),
@@ -351,14 +330,14 @@ export function TraitsTab() {
   const detectedPerCategory = useMemo(() => {
     const map = new Map<string, number>();
     for (const trait of successful) {
-      const cat = trait.category ?? "Other";
+      const cat = trait.category ?? 'Other';
       map.set(cat, (map.get(cat) ?? 0) + 1);
     }
     return map;
   }, [successful]);
 
   const handleConsentAccept = useCallback(() => {
-    localStorage.setItem(HEALTH_CONSENT_KEY, "true");
+    localStorage.setItem(HEALTH_CONSENT_KEY, 'true');
     setHealthConsentGiven(true);
     if (pendingHealthCategory) {
       setExpandedCategories((prev) => {
@@ -379,9 +358,7 @@ export function TraitsTab() {
   if (traits.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-sm text-(--text-muted)">
-          No trait predictions available.
-        </p>
+        <p className="text-(--text-muted) text-sm">No trait predictions available.</p>
       </div>
     );
   }
@@ -398,34 +375,29 @@ export function TraitsTab() {
         />
       )}
       {/* Free-tier banner — traits are included free */}
-      {userTier === "free" && (
+      {userTier === 'free' && (
         <GlassCard
           variant="subtle"
           hover="none"
           className="flex items-center gap-3 border-[rgba(6,214,160,0.15)] bg-[rgba(6,214,160,0.04)] p-4"
         >
-          <Sparkles
-            className="h-5 w-5 shrink-0 text-(--accent-teal)"
-            aria-hidden="true"
-          />
-          <p className="text-sm text-(--text-body)">
+          <Sparkles className="text-(--accent-teal) h-5 w-5 shrink-0" aria-hidden="true" />
+          <p className="text-(--text-body) text-sm">
             Traits are included free. Upgrade to Premium for health insights.
           </p>
         </GlassCard>
       )}
 
-      <h3 className="font-heading text-lg font-bold text-(--text-heading)">
-        Trait Predictions
-      </h3>
+      <h3 className="font-heading text-(--text-heading) text-lg font-bold">Trait Predictions</h3>
 
       {/* Tier upgrade prompts */}
-      {metadata?.tier === "free" && (
+      {metadata?.tier === 'free' && (
         <TierUpgradePrompt
           message="Upgrade to Premium to unlock disease screening, pharmacogenomics, and polygenic risk scores."
           buttonText="Unlock Health Insights"
         />
       )}
-      {metadata?.tier === "premium" && (
+      {metadata?.tier === 'premium' && (
         <TierUpgradePrompt
           message="Upgrade to Pro for couple analysis, offspring predictions, and Virtual Baby."
           buttonText="Upgrade to Pro"
@@ -437,13 +409,13 @@ export function TraitsTab() {
         <input
           type="search"
           placeholder="Search traits..."
-          className="min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-(--text-body) placeholder:text-(--text-muted) focus:border-(--accent-teal) focus:outline-hidden focus:ring-1 focus:ring-(--accent-teal)"
+          className="text-(--text-body) placeholder:text-(--text-muted) focus:border-(--accent-teal) focus:outline-hidden focus:ring-(--accent-teal) min-h-[44px] min-w-[200px] flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm focus:ring-1"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search traits"
         />
         <select
-          className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-(--text-body) focus:border-(--accent-teal) focus:outline-hidden focus:ring-1 focus:ring-(--accent-teal)"
+          className="text-(--text-body) focus:border-(--accent-teal) focus:outline-hidden focus:ring-(--accent-teal) min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm focus:ring-1"
           value={confidenceFilter}
           onChange={(e) => setConfidenceFilter(e.target.value)}
           aria-label="Filter by confidence"
@@ -458,20 +430,21 @@ export function TraitsTab() {
       {/* Coverage summary banner */}
       <div aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 p-4">
         <p className="text-sm text-slate-300">
-          Analyzing{" "}
-          <span className="font-semibold text-white">{successful.length}</span>{" "}
-          of <span className="font-semibold text-white">{traits.length}</span>{" "}
-          traits across{" "}
-          <span className="font-semibold text-white">{categoryCount}</span>{" "}
-          {categoryCount === 1 ? "category" : "categories"}
+          Analyzing <span className="font-semibold text-white">{successful.length}</span> of{' '}
+          <span className="font-semibold text-white">{traits.length}</span> traits across{' '}
+          <span className="font-semibold text-white">{categoryCount}</span>{' '}
+          {categoryCount === 1 ? 'category' : 'categories'}
         </p>
       </div>
 
       {/* Ancestry limitation banner */}
-      <div aria-label="Ancestry limitation notice" className="mb-4 rounded-lg border border-white/10 bg-white/5 p-3">
+      <div
+        aria-label="Ancestry limitation notice"
+        className="mb-4 rounded-lg border border-white/10 bg-white/5 p-3"
+      >
         <p className="text-xs text-slate-400">
-          Trait predictions are based primarily on studies of European-ancestry populations
-          and may have reduced accuracy for other ancestries.
+          Trait predictions are based primarily on studies of European-ancestry populations and may
+          have reduced accuracy for other ancestries.
         </p>
       </div>
 
@@ -489,7 +462,7 @@ export function TraitsTab() {
             return (
               <div
                 key={category}
-                className="overflow-hidden rounded-xl border border-white/10 bg-white/2"
+                className="bg-white/2 overflow-hidden rounded-xl border border-white/10"
               >
                 <button
                   id={headerId}
@@ -502,34 +475,28 @@ export function TraitsTab() {
                   <div className="flex items-center gap-2">
                     {isExpanded ? (
                       <ChevronDown
-                        className="h-4 w-4 shrink-0 text-(--text-muted)"
+                        className="text-(--text-muted) h-4 w-4 shrink-0"
                         aria-hidden="true"
                       />
                     ) : (
                       <ChevronRight
-                        className="h-4 w-4 shrink-0 text-(--text-muted)"
+                        className="text-(--text-muted) h-4 w-4 shrink-0"
                         aria-hidden="true"
                       />
                     )}
-                    <span className="font-heading text-sm font-semibold text-(--text-heading)">
+                    <span className="font-heading text-(--text-heading) text-sm font-semibold">
                       {category}
                     </span>
                   </div>
-                  <span className="shrink-0 text-xs text-(--text-muted)">
+                  <span className="text-(--text-muted) shrink-0 text-xs">
                     {items.length} shown
-                    {items.length !== detectedCount &&
-                      ` / ${detectedCount} detected`}
+                    {items.length !== detectedCount && ` / ${detectedCount} detected`}
                   </span>
                 </button>
 
                 {/* Only render cards when expanded — avoids rendering all 236 traits at once */}
                 {isExpanded && (
-                  <div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={headerId}
-                    className="p-4 pt-0"
-                  >
+                  <div id={panelId} role="region" aria-labelledby={headerId} className="p-4 pt-0">
                     {isHealth && <HealthCategoryBanner category={category} />}
                     <div className="grid gap-4 sm:grid-cols-2">
                       {items.map((trait) => (
@@ -543,10 +510,11 @@ export function TraitsTab() {
           })}
         </div>
       ) : (
-        <div aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 py-10 text-center">
-          <p className="text-sm text-(--text-muted)">
-            No traits match your search.
-          </p>
+        <div
+          aria-live="polite"
+          className="rounded-lg border border-white/10 bg-white/5 py-10 text-center"
+        >
+          <p className="text-(--text-muted) text-sm">No traits match your search.</p>
         </div>
       )}
 
@@ -554,15 +522,18 @@ export function TraitsTab() {
       {missing.length > 0 && (
         <GlassCard variant="subtle" hover="none" className="p-4">
           <div className="flex items-start gap-3">
-            <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-(--text-muted)" />
+            <AlertCircle
+              aria-hidden="true"
+              className="text-(--text-muted) mt-0.5 h-4 w-4 shrink-0"
+            />
             <div>
-              <p className="text-xs font-semibold text-(--text-body)">
+              <p className="text-(--text-body) text-xs font-semibold">
                 Missing Data ({missing.length} trait
-                {missing.length !== 1 ? "s" : ""})
+                {missing.length !== 1 ? 's' : ''})
               </p>
-              <p className="mt-1 text-xs text-(--text-muted)">
-                The following traits could not be predicted because one or both
-                parents are missing genotype data at the required SNP.
+              <p className="text-(--text-muted) mt-1 text-xs">
+                The following traits could not be predicted because one or both parents are missing
+                genotype data at the required SNP.
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {missing.map((trait) => (

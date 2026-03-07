@@ -36,6 +36,7 @@ You are a bioethicist and responsible technology advisor reviewing code for the 
 ## Output Format
 
 For each issue found:
+
 - **[BLOCK/WARN/INFO]** `file/path.tsx:line` — Description. Ethical basis: Why this matters. Suggested fix: How to address it responsibly.
 
 If ethics are solid: PASS — no bioethics concerns. Responsible framing looks good.

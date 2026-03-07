@@ -158,9 +158,7 @@ describe('ComingSoonPage', () => {
   });
 
   it('shows a fallback error when the 401 body has no error field', async () => {
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      buildFetchResponse(401, {}),
-    );
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(buildFetchResponse(401, {}));
 
     render(<ComingSoonPage />);
     await submitForm('badcode');
@@ -216,9 +214,7 @@ describe('ComingSoonPage', () => {
     // Use fake timers BEFORE rendering to capture the 500ms setTimeout
     vi.useFakeTimers();
 
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      buildFetchResponse(200, { ok: true }),
-    );
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(buildFetchResponse(200, { ok: true }));
 
     render(<ComingSoonPage />);
     const input = screen.getByLabelText('Access code for team members');
@@ -241,9 +237,7 @@ describe('ComingSoonPage', () => {
   it('sets window.location.href to "/" on successful submission', async () => {
     vi.useFakeTimers();
 
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      buildFetchResponse(200, { ok: true }),
-    );
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(buildFetchResponse(200, { ok: true }));
 
     render(<ComingSoonPage />);
     const input = screen.getByLabelText('Access code for team members');
@@ -268,9 +262,7 @@ describe('ComingSoonPage', () => {
   it('disables the input and button after a successful submission', async () => {
     vi.useFakeTimers();
 
-    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
-      buildFetchResponse(200, { ok: true }),
-    );
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(buildFetchResponse(200, { ok: true }));
 
     render(<ComingSoonPage />);
     const input = screen.getByLabelText('Access code for team members');

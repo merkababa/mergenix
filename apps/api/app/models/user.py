@@ -94,8 +94,8 @@ class User(Base):
         default=None,
         index=True,
         comment="UTC timestamp of the most recent successful login or token refresh. "
-                "NULL means the user has never logged in (new account). "
-                "Used by the retention service to determine inactivity for purge eligibility.",
+        "NULL means the user has never logged in (new account). "
+        "Used by the retention service to determine inactivity for purge eligibility.",
     )
 
     # ── Relationships ─────────────────────────────────────────────────────

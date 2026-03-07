@@ -19,37 +19,27 @@
           "activity_score": 1.0
         },
         "*2": {
-          "defining_variants": [
-            {"rsid": "rs16947", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs16947", "genotype": "AA" }],
           "function": "normal",
           "activity_score": 1.0
         },
         "*4": {
-          "defining_variants": [
-            {"rsid": "rs3892097", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs3892097", "genotype": "AA" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*9": {
-          "defining_variants": [
-            {"rsid": "rs5030656", "genotype": "del"}
-          ],
+          "defining_variants": [{ "rsid": "rs5030656", "genotype": "del" }],
           "function": "decreased",
           "activity_score": 0.5
         },
         "*10": {
-          "defining_variants": [
-            {"rsid": "rs1065852", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs1065852", "genotype": "TT" }],
           "function": "decreased",
           "activity_score": 0.25
         },
         "*41": {
-          "defining_variants": [
-            {"rsid": "rs28371725", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs28371725", "genotype": "TT" }],
           "function": "decreased",
           "activity_score": 0.5
         }
@@ -179,23 +169,17 @@
           "activity_score": 1.0
         },
         "*2": {
-          "defining_variants": [
-            {"rsid": "rs4244285", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs4244285", "genotype": "AA" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*3": {
-          "defining_variants": [
-            {"rsid": "rs4986893", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs4986893", "genotype": "AA" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*17": {
-          "defining_variants": [
-            {"rsid": "rs12248560", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs12248560", "genotype": "TT" }],
           "function": "increased",
           "activity_score": 1.5
         }
@@ -297,16 +281,12 @@
           "activity_score": 1.0
         },
         "*2": {
-          "defining_variants": [
-            {"rsid": "rs1799853", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs1799853", "genotype": "TT" }],
           "function": "decreased",
           "activity_score": 0.5
         },
         "*3": {
-          "defining_variants": [
-            {"rsid": "rs1057910", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs1057910", "genotype": "CC" }],
           "function": "no_function",
           "activity_score": 0.0
         }
@@ -373,16 +353,12 @@
       "defining_snps": ["rs776746"],
       "star_alleles": {
         "*1": {
-          "defining_variants": [
-            {"rsid": "rs776746", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs776746", "genotype": "CC" }],
           "function": "normal",
           "activity_score": 1.0
         },
         "*3": {
-          "defining_variants": [
-            {"rsid": "rs776746", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs776746", "genotype": "TT" }],
           "function": "no_function",
           "activity_score": 0.0
         }
@@ -426,9 +402,7 @@
           "activity_score": 1.0
         },
         "*1F": {
-          "defining_variants": [
-            {"rsid": "rs762551", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs762551", "genotype": "AA" }],
           "function": "increased",
           "activity_score": 1.5
         }
@@ -471,30 +445,22 @@
           "activity_score": 1.0
         },
         "*2A": {
-          "defining_variants": [
-            {"rsid": "rs3918290", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs3918290", "genotype": "TT" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*13": {
-          "defining_variants": [
-            {"rsid": "rs55886062", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs55886062", "genotype": "AA" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "c.2846A>T": {
-          "defining_variants": [
-            {"rsid": "rs67376798", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs67376798", "genotype": "TT" }],
           "function": "decreased",
           "activity_score": 0.5
         },
         "HapB3": {
-          "defining_variants": [
-            {"rsid": "rs75017182", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs75017182", "genotype": "TT" }],
           "function": "decreased",
           "activity_score": 0.5
         }
@@ -548,24 +514,20 @@
           "activity_score": 1.0
         },
         "*2": {
-          "defining_variants": [
-            {"rsid": "rs1800462", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs1800462", "genotype": "CC" }],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*3A": {
           "defining_variants": [
-            {"rsid": "rs1800460", "genotype": "TT"},
-            {"rsid": "rs1142345", "genotype": "CC"}
+            { "rsid": "rs1800460", "genotype": "TT" },
+            { "rsid": "rs1142345", "genotype": "CC" }
           ],
           "function": "no_function",
           "activity_score": 0.0
         },
         "*3C": {
-          "defining_variants": [
-            {"rsid": "rs1142345", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs1142345", "genotype": "CC" }],
           "function": "no_function",
           "activity_score": 0.0
         }
@@ -629,9 +591,7 @@
           "activity_score": 1.0
         },
         "*3": {
-          "defining_variants": [
-            {"rsid": "rs116855232", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs116855232", "genotype": "TT" }],
           "function": "no_function",
           "activity_score": 0.0
         }
@@ -685,16 +645,12 @@
           "activity_score": 1.0
         },
         "*5": {
-          "defining_variants": [
-            {"rsid": "rs4149056", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs4149056", "genotype": "CC" }],
           "function": "decreased",
           "activity_score": 0.0
         },
         "*15": {
-          "defining_variants": [
-            {"rsid": "rs4149056", "genotype": "TC"}
-          ],
+          "defining_variants": [{ "rsid": "rs4149056", "genotype": "TC" }],
           "function": "decreased",
           "activity_score": 0.5
         }
@@ -753,23 +709,17 @@
       "defining_snps": ["rs9923231"],
       "star_alleles": {
         "GG": {
-          "defining_variants": [
-            {"rsid": "rs9923231", "genotype": "GG"}
-          ],
+          "defining_variants": [{ "rsid": "rs9923231", "genotype": "GG" }],
           "function": "normal",
           "activity_score": 1.0
         },
         "AG": {
-          "defining_variants": [
-            {"rsid": "rs9923231", "genotype": "AG"}
-          ],
+          "defining_variants": [{ "rsid": "rs9923231", "genotype": "AG" }],
           "function": "decreased",
           "activity_score": 0.5
         },
         "AA": {
-          "defining_variants": [
-            {"rsid": "rs9923231", "genotype": "AA"}
-          ],
+          "defining_variants": [{ "rsid": "rs9923231", "genotype": "AA" }],
           "function": "low",
           "activity_score": 0.0
         }
@@ -813,23 +763,17 @@
           "activity_score": 1.0
         },
         "*57:01": {
-          "defining_variants": [
-            {"rsid": "rs2395029", "genotype": "GG"}
-          ],
+          "defining_variants": [{ "rsid": "rs2395029", "genotype": "GG" }],
           "function": "risk",
           "activity_score": 0.0
         },
         "*15:02": {
-          "defining_variants": [
-            {"rsid": "rs3909184", "genotype": "CC"}
-          ],
+          "defining_variants": [{ "rsid": "rs3909184", "genotype": "CC" }],
           "function": "risk",
           "activity_score": 0.0
         },
         "*58:01": {
-          "defining_variants": [
-            {"rsid": "rs2844682", "genotype": "TT"}
-          ],
+          "defining_variants": [{ "rsid": "rs2844682", "genotype": "TT" }],
           "function": "risk",
           "activity_score": 0.0
         }
@@ -886,16 +830,12 @@
           "activity_score": 1.0
         },
         "*28": {
-          "defining_variants": [
-            {"rsid": "rs8175347", "genotype": "7/7"}
-          ],
+          "defining_variants": [{ "rsid": "rs8175347", "genotype": "7/7" }],
           "function": "decreased",
           "activity_score": 0.0
         },
         "*80": {
-          "defining_variants": [
-            {"rsid": "rs8175347", "genotype": "6/7"}
-          ],
+          "defining_variants": [{ "rsid": "rs8175347", "genotype": "6/7" }],
           "function": "intermediate",
           "activity_score": 0.5
         }

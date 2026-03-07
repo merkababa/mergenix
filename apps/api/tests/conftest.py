@@ -76,6 +76,7 @@ def _enable_sqlite_fks(dbapi_connection, connection_record):  # type: ignore[no-
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
+
 TestSessionFactory = async_sessionmaker(
     test_engine,
     class_=AsyncSession,

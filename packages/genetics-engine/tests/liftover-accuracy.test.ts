@@ -192,11 +192,11 @@ describe('Liftover — Known Coordinate Conversions', () => {
    */
   it('chromosome is preserved correctly for each reference SNP', () => {
     const expectedChromosomes: Record<string, string> = {
-      'rs334': '11',
-      'rs429358': '19',
-      'rs7903146': '10',
-      'rs1801133': '1',
-      'rs4680': '22',
+      rs334: '11',
+      rs429358: '19',
+      rs7903146: '10',
+      rs1801133: '1',
+      rs4680: '22',
     };
 
     for (const [rsid, expectedChrom] of Object.entries(expectedChromosomes)) {
@@ -223,7 +223,7 @@ describe('Liftover — Known Coordinate Conversions', () => {
    * This is a regression test ensuring no reference entry is broken.
    */
   it('all reference SNPs lift successfully from GRCh37 to GRCh38 in a batch', () => {
-    const snps = REFERENCE_ENTRIES.map(e => ({
+    const snps = REFERENCE_ENTRIES.map((e) => ({
       rsid: e.rsid,
       position: e.grch37Position,
     }));
@@ -246,7 +246,7 @@ describe('Liftover — Known Coordinate Conversions', () => {
    * GRCh38 back to GRCh37.
    */
   it('all reference SNPs lift successfully from GRCh38 to GRCh37 in a batch', () => {
-    const snps = REFERENCE_ENTRIES.map(e => ({
+    const snps = REFERENCE_ENTRIES.map((e) => ({
       rsid: e.rsid,
       position: e.grch38Position,
     }));
@@ -455,10 +455,10 @@ describe('Liftover — Edge Cases', () => {
    */
   it('batch summary totals are consistent (total = success + failed)', () => {
     const snps = [
-      { rsid: 'rs334', position: 5248232 },         // valid GRCh37 → success
-      { rsid: 'rs_invalid_1', position: 100 },        // not in table → failure
-      { rsid: 'rs429358', position: 45411941 },       // valid GRCh37 → success
-      { rsid: 'rs_invalid_2', position: 200 },        // not in table → failure
+      { rsid: 'rs334', position: 5248232 }, // valid GRCh37 → success
+      { rsid: 'rs_invalid_1', position: 100 }, // not in table → failure
+      { rsid: 'rs429358', position: 45411941 }, // valid GRCh37 → success
+      { rsid: 'rs_invalid_2', position: 200 }, // not in table → failure
     ];
 
     const { summary } = table.liftBatch(snps, 'GRCh37', 'GRCh38');

@@ -330,43 +330,83 @@ describe('calculateOffspringRiskXLinked', () => {
 describe('determineRiskLevel', () => {
   it('should return "high_risk" when offspring affected > 0 for AR', () => {
     expect(
-      determineRiskLevel('carrier', 'carrier', { affected: 25, carrier: 50, normal: 25 }, 'autosomal_recessive'),
+      determineRiskLevel(
+        'carrier',
+        'carrier',
+        { affected: 25, carrier: 50, normal: 25 },
+        'autosomal_recessive',
+      ),
     ).toBe('high_risk');
   });
 
   it('should return "carrier_detected" when parent is carrier but no affected risk (AR)', () => {
     expect(
-      determineRiskLevel('normal', 'carrier', { affected: 0, carrier: 50, normal: 50 }, 'autosomal_recessive'),
+      determineRiskLevel(
+        'normal',
+        'carrier',
+        { affected: 0, carrier: 50, normal: 50 },
+        'autosomal_recessive',
+      ),
     ).toBe('carrier_detected');
   });
 
   it('should return "low_risk" when neither parent is carrier (AR)', () => {
     expect(
-      determineRiskLevel('normal', 'normal', { affected: 0, carrier: 0, normal: 100 }, 'autosomal_recessive'),
+      determineRiskLevel(
+        'normal',
+        'normal',
+        { affected: 0, carrier: 0, normal: 100 },
+        'autosomal_recessive',
+      ),
     ).toBe('low_risk');
   });
 
   it('should return "high_risk" for AD if either parent is carrier/affected', () => {
     expect(
-      determineRiskLevel('carrier', 'normal', { affected: 50, carrier: 0, normal: 50 }, 'autosomal_dominant'),
+      determineRiskLevel(
+        'carrier',
+        'normal',
+        { affected: 50, carrier: 0, normal: 50 },
+        'autosomal_dominant',
+      ),
     ).toBe('high_risk');
     expect(
-      determineRiskLevel('normal', 'affected', { affected: 50, carrier: 0, normal: 50 }, 'autosomal_dominant'),
+      determineRiskLevel(
+        'normal',
+        'affected',
+        { affected: 50, carrier: 0, normal: 50 },
+        'autosomal_dominant',
+      ),
     ).toBe('high_risk');
   });
 
   it('should return "low_risk" for AD when both parents are normal', () => {
     expect(
-      determineRiskLevel('normal', 'normal', { affected: 0, carrier: 0, normal: 100 }, 'autosomal_dominant'),
+      determineRiskLevel(
+        'normal',
+        'normal',
+        { affected: 0, carrier: 0, normal: 100 },
+        'autosomal_dominant',
+      ),
     ).toBe('low_risk');
   });
 
   it('should return "unknown" if either parent is unknown', () => {
     expect(
-      determineRiskLevel('unknown', 'carrier', { affected: 0, carrier: 0, normal: 0 }, 'autosomal_recessive'),
+      determineRiskLevel(
+        'unknown',
+        'carrier',
+        { affected: 0, carrier: 0, normal: 0 },
+        'autosomal_recessive',
+      ),
     ).toBe('unknown');
     expect(
-      determineRiskLevel('carrier', 'unknown', { affected: 0, carrier: 0, normal: 0 }, 'autosomal_dominant'),
+      determineRiskLevel(
+        'carrier',
+        'unknown',
+        { affected: 0, carrier: 0, normal: 0 },
+        'autosomal_dominant',
+      ),
     ).toBe('unknown');
   });
 
@@ -378,9 +418,7 @@ describe('determineRiskLevel', () => {
       carrier: 25,
       normal: 50,
     };
-    expect(
-      determineRiskLevel('carrier', 'normal', xLinkedRisk, 'X-linked'),
-    ).toBe('high_risk');
+    expect(determineRiskLevel('carrier', 'normal', xLinkedRisk, 'X-linked')).toBe('high_risk');
   });
 
   it('should return "carrier_detected" for X-linked with carrier daughters but no affected offspring', () => {
@@ -391,9 +429,9 @@ describe('determineRiskLevel', () => {
       carrier: 50,
       normal: 50,
     };
-    expect(
-      determineRiskLevel('normal', 'affected', xLinkedRisk, 'X-linked'),
-    ).toBe('carrier_detected');
+    expect(determineRiskLevel('normal', 'affected', xLinkedRisk, 'X-linked')).toBe(
+      'carrier_detected',
+    );
   });
 });
 
@@ -407,8 +445,8 @@ describe('analyzeCarrierRisk', () => {
       makePanelEntry({ rsid: 'rs3', condition: 'Disease Carrier' }),
     ];
 
-    const parentA = { rs1: 'CC', rs2: 'CT', rs3: 'CT' };  // normal, carrier, carrier
-    const parentB = { rs1: 'CC', rs2: 'TT', rs3: 'CC' };  // normal, affected, normal
+    const parentA = { rs1: 'CC', rs2: 'CT', rs3: 'CT' }; // normal, carrier, carrier
+    const parentB = { rs1: 'CC', rs2: 'TT', rs3: 'CC' }; // normal, affected, normal
 
     const results = analyzeCarrierRisk(parentA, parentB, panel);
     expect(results).toHaveLength(3);
@@ -573,7 +611,11 @@ describe('RISK_PRIORITY sort order', () => {
     //                low_risk(3) < coverage_insufficient(4) < unknown(5) < not_tested(6)
 
     // Build mock results with all 7 risk levels in REVERSE order to verify sorting
-    type MockResult = { riskLevel: RiskLevel; offspringRisk: { affected: number }; condition: string };
+    type MockResult = {
+      riskLevel: RiskLevel;
+      offspringRisk: { affected: number };
+      condition: string;
+    };
     const mockResults: MockResult[] = [
       { riskLevel: 'not_tested', offspringRisk: { affected: 0 }, condition: 'G' },
       { riskLevel: 'unknown', offspringRisk: { affected: 0 }, condition: 'F' },
@@ -867,8 +909,18 @@ describe('analyzeGeneCarrierStatus', () => {
 
   it('should prefer "normal" over "not_tested" for gene-level status', () => {
     const entries: CarrierPanelEntry[] = [
-      makePanelEntry({ rsid: 'rs1', gene: 'GENE_Y', pathogenic_allele: 'T', reference_allele: 'C' }),
-      makePanelEntry({ rsid: 'rs2', gene: 'GENE_Y', pathogenic_allele: 'A', reference_allele: 'G' }),
+      makePanelEntry({
+        rsid: 'rs1',
+        gene: 'GENE_Y',
+        pathogenic_allele: 'T',
+        reference_allele: 'C',
+      }),
+      makePanelEntry({
+        rsid: 'rs2',
+        gene: 'GENE_Y',
+        pathogenic_allele: 'A',
+        reference_allele: 'G',
+      }),
     ];
 
     // rs1: normal (CC), rs2: not in map -> gene-level: normal (worse than not_tested)
@@ -932,7 +984,10 @@ describe('analyzeGeneCarrierStatus', () => {
 describe('detectCompoundHet', () => {
   it('should return isCompoundHet=false for zero carrier variants', () => {
     const result = detectCompoundHet(
-      [{ rsid: 'rs1', status: 'normal' }, { rsid: 'rs2', status: 'affected' }],
+      [
+        { rsid: 'rs1', status: 'normal' },
+        { rsid: 'rs2', status: 'affected' },
+      ],
       'CFTR',
     );
     expect(result.isCompoundHet).toBe(false);
@@ -942,7 +997,10 @@ describe('detectCompoundHet', () => {
 
   it('should return isCompoundHet=false for a single carrier variant', () => {
     const result = detectCompoundHet(
-      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'normal' }],
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'normal' },
+      ],
       'CFTR',
     );
     expect(result.isCompoundHet).toBe(false);
@@ -952,7 +1010,10 @@ describe('detectCompoundHet', () => {
 
   it('should detect compound het when 2 carrier variants present', () => {
     const result = detectCompoundHet(
-      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'carrier' },
+      ],
       'CFTR',
     );
     expect(result.isCompoundHet).toBe(true);
@@ -979,7 +1040,10 @@ describe('detectCompoundHet', () => {
 
   it('should never label as "Affected" — always "Potential Risk"', () => {
     const result = detectCompoundHet(
-      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'carrier' },
+      ],
       'CFTR',
     );
     // The label must NEVER say "Affected" — DTC data is unphased
@@ -989,7 +1053,10 @@ describe('detectCompoundHet', () => {
 
   it('should include phasing explanation in the result', () => {
     const result = detectCompoundHet(
-      [{ rsid: 'rs1', status: 'carrier' }, { rsid: 'rs2', status: 'carrier' }],
+      [
+        { rsid: 'rs1', status: 'carrier' },
+        { rsid: 'rs2', status: 'carrier' },
+      ],
       'TEST_GENE',
     );
     expect(result.explanation).toContain('phased sequencing');
@@ -1076,8 +1143,20 @@ describe('analyzeCarrierRisk — extended fields (E4/E5/E6)', () => {
 
   it('should include gene-level analysis in results', () => {
     const panel: CarrierPanelEntry[] = [
-      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', condition: 'CF-1', pathogenic_allele: 'T', reference_allele: 'C' }),
-      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', condition: 'CF-2', pathogenic_allele: 'A', reference_allele: 'G' }),
+      makePanelEntry({
+        rsid: 'rs1',
+        gene: 'CFTR',
+        condition: 'CF-1',
+        pathogenic_allele: 'T',
+        reference_allele: 'C',
+      }),
+      makePanelEntry({
+        rsid: 'rs2',
+        gene: 'CFTR',
+        condition: 'CF-2',
+        pathogenic_allele: 'A',
+        reference_allele: 'G',
+      }),
     ];
 
     const parentA = { rs1: 'CT', rs2: 'GG' }; // carrier at rs1, normal at rs2
@@ -1100,8 +1179,20 @@ describe('analyzeCarrierRisk — extended fields (E4/E5/E6)', () => {
 
   it('should detect compound het in gene-level analysis when parent has 2+ carrier variants', () => {
     const panel: CarrierPanelEntry[] = [
-      makePanelEntry({ rsid: 'rs1', gene: 'CFTR', condition: 'CF-1', pathogenic_allele: 'T', reference_allele: 'C' }),
-      makePanelEntry({ rsid: 'rs2', gene: 'CFTR', condition: 'CF-2', pathogenic_allele: 'A', reference_allele: 'G' }),
+      makePanelEntry({
+        rsid: 'rs1',
+        gene: 'CFTR',
+        condition: 'CF-1',
+        pathogenic_allele: 'T',
+        reference_allele: 'C',
+      }),
+      makePanelEntry({
+        rsid: 'rs2',
+        gene: 'CFTR',
+        condition: 'CF-2',
+        pathogenic_allele: 'A',
+        reference_allele: 'G',
+      }),
     ];
 
     // Parent A is carrier at BOTH CFTR variants -> compound het flag

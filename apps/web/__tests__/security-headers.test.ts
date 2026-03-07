@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type {
-  SecurityHeadersConfig,
-  CSPDirectives,
-} from '@/config/security';
+import type { SecurityHeadersConfig, CSPDirectives } from '@/config/security';
 
 // ─── Tests for config/security.ts ────────────────────────────────────────────
 
@@ -107,7 +104,10 @@ describe('config/security', () => {
 
     it('separates directives with semicolons', () => {
       const csp = securityModule.buildCSPString(securityModule.CSP_DIRECTIVES);
-      const parts = csp.split(';').map((s: string) => s.trim()).filter(Boolean);
+      const parts = csp
+        .split(';')
+        .map((s: string) => s.trim())
+        .filter(Boolean);
       // Should have at least 12 directives (11 original + upgrade-insecure-requests)
       expect(parts.length).toBeGreaterThanOrEqual(12);
     });
@@ -152,7 +152,7 @@ describe('config/security', () => {
 
     it('includes Content-Security-Policy header', () => {
       const cspHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy'
+        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy',
       );
       expect(cspHeader).toBeDefined();
       expect(cspHeader!.value).toContain("default-src 'self'");
@@ -161,7 +161,7 @@ describe('config/security', () => {
 
     it('includes Strict-Transport-Security header with correct value', () => {
       const stsHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'Strict-Transport-Security'
+        (h: SecurityHeadersConfig) => h.key === 'Strict-Transport-Security',
       );
       expect(stsHeader).toBeDefined();
       expect(stsHeader!.value).toBe('max-age=63072000; includeSubDomains; preload');
@@ -169,7 +169,7 @@ describe('config/security', () => {
 
     it('includes X-Content-Type-Options header set to nosniff', () => {
       const xctoHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'X-Content-Type-Options'
+        (h: SecurityHeadersConfig) => h.key === 'X-Content-Type-Options',
       );
       expect(xctoHeader).toBeDefined();
       expect(xctoHeader!.value).toBe('nosniff');
@@ -177,7 +177,7 @@ describe('config/security', () => {
 
     it('includes X-Frame-Options header set to DENY', () => {
       const xfoHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'X-Frame-Options'
+        (h: SecurityHeadersConfig) => h.key === 'X-Frame-Options',
       );
       expect(xfoHeader).toBeDefined();
       expect(xfoHeader!.value).toBe('DENY');
@@ -185,7 +185,7 @@ describe('config/security', () => {
 
     it('includes Referrer-Policy header', () => {
       const rpHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'Referrer-Policy'
+        (h: SecurityHeadersConfig) => h.key === 'Referrer-Policy',
       );
       expect(rpHeader).toBeDefined();
       expect(rpHeader!.value).toBe('strict-origin-when-cross-origin');
@@ -193,7 +193,7 @@ describe('config/security', () => {
 
     it('includes Permissions-Policy header disabling sensitive APIs', () => {
       const ppHeader = securityModule.SECURITY_HEADERS.find(
-        (h: SecurityHeadersConfig) => h.key === 'Permissions-Policy'
+        (h: SecurityHeadersConfig) => h.key === 'Permissions-Policy',
       );
       expect(ppHeader).toBeDefined();
       expect(ppHeader!.value).toContain('camera=()');
@@ -294,10 +294,10 @@ describe('config/security', () => {
       const devHeaders = securityModule.getSecurityHeaders(true);
 
       const prodCSP = prodHeaders.find(
-        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy'
+        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy',
       );
       const devCSP = devHeaders.find(
-        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy'
+        (h: SecurityHeadersConfig) => h.key === 'Content-Security-Policy',
       );
 
       expect(prodCSP).toBeDefined();
@@ -313,10 +313,10 @@ describe('config/security', () => {
       const devHeaders = securityModule.getSecurityHeaders(true);
 
       const prodNonCSP = prodHeaders.filter(
-        (h: SecurityHeadersConfig) => h.key !== 'Content-Security-Policy'
+        (h: SecurityHeadersConfig) => h.key !== 'Content-Security-Policy',
       );
       const devNonCSP = devHeaders.filter(
-        (h: SecurityHeadersConfig) => h.key !== 'Content-Security-Policy'
+        (h: SecurityHeadersConfig) => h.key !== 'Content-Security-Policy',
       );
 
       expect(prodNonCSP).toEqual(devNonCSP);

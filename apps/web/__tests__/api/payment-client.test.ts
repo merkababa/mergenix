@@ -9,11 +9,7 @@ vi.mock('@/lib/api/client', () => ({
   post: (...args: unknown[]) => mockPost(...args),
 }));
 
-import {
-  createCheckout,
-  getPaymentHistory,
-  getSubscriptionStatus,
-} from '@/lib/api/payment-client';
+import { createCheckout, getPaymentHistory, getSubscriptionStatus } from '@/lib/api/payment-client';
 import type {
   CheckoutResponse,
   PaymentHistoryItem,

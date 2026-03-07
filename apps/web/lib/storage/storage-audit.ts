@@ -16,16 +16,16 @@
  * Matched case-insensitively.
  */
 const SENSITIVE_KEY_PATTERNS: RegExp[] = [
-  /^rs\d+$/i,         // rsID as the entire key (e.g., "rs12345")
-  /genotype/i,        // genotype data
-  /carrier/i,         // carrier status
-  /genetic/i,         // genetic data
-  /health_data/i,     // health data
-  /allele/i,          // allele information
-  /phenotype/i,       // phenotype data
-  /dna_result/i,      // DNA results
-  /snp_data/i,        // SNP data
-  /variant_data/i,    // variant data
+  /^rs\d+$/i, // rsID as the entire key (e.g., "rs12345")
+  /genotype/i, // genotype data
+  /carrier/i, // carrier status
+  /genetic/i, // genetic data
+  /health_data/i, // health data
+  /allele/i, // allele information
+  /phenotype/i, // phenotype data
+  /dna_result/i, // DNA results
+  /snp_data/i, // SNP data
+  /variant_data/i, // variant data
 ];
 
 /**
@@ -37,13 +37,13 @@ const SENSITIVE_KEY_PATTERNS: RegExp[] = [
  * false positives are preferred over false negatives when detecting sensitive data leakage.
  */
 const SENSITIVE_VALUE_PATTERNS: RegExp[] = [
-  /rs\d{3,}/i,                    // rsID reference (rs followed by 3+ digits)
-  /\b[ACGT]\/[ACGT]\b/,          // genotype allele pattern like A/G, C/T
-  /\bcarrier\b/i,                 // carrier status mention
-  /\bgenotype\b/i,               // genotype mention in values
-  /\bpathogenic\b/i,             // clinical significance
-  /\bhomozygous\b/i,             // zygosity
-  /\bheterozygous\b/i,           // zygosity
+  /rs\d{3,}/i, // rsID reference (rs followed by 3+ digits)
+  /\b[ACGT]\/[ACGT]\b/, // genotype allele pattern like A/G, C/T
+  /\bcarrier\b/i, // carrier status mention
+  /\bgenotype\b/i, // genotype mention in values
+  /\bpathogenic\b/i, // clinical significance
+  /\bhomozygous\b/i, // zygosity
+  /\bheterozygous\b/i, // zygosity
 ];
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -66,7 +66,7 @@ export interface StorageAuditResult {
 export function auditLocalStorageForSensitiveData(): StorageAuditResult {
   const flaggedKeys: string[] = [];
 
-  if (typeof window === "undefined" || !window.localStorage) {
+  if (typeof window === 'undefined' || !window.localStorage) {
     return { clean: true, flaggedKeys: [] };
   }
 

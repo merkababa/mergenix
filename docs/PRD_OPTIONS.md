@@ -5,6 +5,7 @@
 Mergenix is a genetic offspring analysis tool that compares two parents' DNA to predict disease risk and traits in potential children. This document presents three distinct product strategies with different monetization approaches.
 
 **Current State:**
+
 - 1,211 genetic diseases across 15 categories
 - 79 trait SNPs
 - Supports 4 file formats (23andMe, AncestryDNA, MyHeritage, VCF)
@@ -16,15 +17,15 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ### Direct-to-Consumer Genetic Testing
 
-| Competitor | Pricing | Key Features | Weaknesses |
-|------------|---------|--------------|------------|
-| **23andMe** | $119-$499 | Health + Ancestry, FDA-approved reports, 55+ health conditions | No offspring prediction, declining stock, privacy concerns |
-| **AncestryDNA** | $99-$199 | Largest database (20M+), family matching | Limited health features, no carrier screening |
-| **Nebula Genomics** | $99-$999 | Whole genome sequencing, privacy-focused, blockchain | Complex for average users, no partner matching |
-| **Color Genomics** | $249 | Clinical-grade, genetic counseling included | B2B focus, limited consumer features |
-| **Invitae** | $250+ | 280+ genes, clinical reports | Requires physician order, not consumer-friendly |
-| **SelfDecode** | $97-$297/yr | AI recommendations, wellness focus | Subscription fatigue, less clinical validity |
-| **Promethease** | $12 | Cheap, comprehensive SNP analysis | No guidance, overwhelming for users |
+| Competitor          | Pricing     | Key Features                                                   | Weaknesses                                                 |
+| ------------------- | ----------- | -------------------------------------------------------------- | ---------------------------------------------------------- |
+| **23andMe**         | $119-$499   | Health + Ancestry, FDA-approved reports, 55+ health conditions | No offspring prediction, declining stock, privacy concerns |
+| **AncestryDNA**     | $99-$199    | Largest database (20M+), family matching                       | Limited health features, no carrier screening              |
+| **Nebula Genomics** | $99-$999    | Whole genome sequencing, privacy-focused, blockchain           | Complex for average users, no partner matching             |
+| **Color Genomics**  | $249        | Clinical-grade, genetic counseling included                    | B2B focus, limited consumer features                       |
+| **Invitae**         | $250+       | 280+ genes, clinical reports                                   | Requires physician order, not consumer-friendly            |
+| **SelfDecode**      | $97-$297/yr | AI recommendations, wellness focus                             | Subscription fatigue, less clinical validity               |
+| **Promethease**     | $12         | Cheap, comprehensive SNP analysis                              | No guidance, overwhelming for users                        |
 
 ### Key Market Gaps Identified
 
@@ -43,54 +44,56 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ### Free Tier Features
 
-| Feature | Limit | Description |
-|---------|-------|-------------|
-| **Disease Screening** | 25 most common | Cystic Fibrosis, Sickle Cell, Tay-Sachs, PKU, etc. |
-| **Trait Prediction** | 10 basic traits | Eye color, hair color, earwax type, etc. |
-| **Basic Report** | PDF summary | High-level risk overview |
-| **File Formats** | All 4 formats | Full format support |
-| **Analysis Runs** | 3 per month | Re-run with different partners |
+| Feature               | Limit           | Description                                        |
+| --------------------- | --------------- | -------------------------------------------------- |
+| **Disease Screening** | 25 most common  | Cystic Fibrosis, Sickle Cell, Tay-Sachs, PKU, etc. |
+| **Trait Prediction**  | 10 basic traits | Eye color, hair color, earwax type, etc.           |
+| **Basic Report**      | PDF summary     | High-level risk overview                           |
+| **File Formats**      | All 4 formats   | Full format support                                |
+| **Analysis Runs**     | 3 per month     | Re-run with different partners                     |
 
 ### Premium Tier ($29/month or $199/year)
 
-| Feature | Description |
-|---------|-------------|
-| **Full Disease Panel** | All 1,211 diseases, 15 categories |
-| **All 79 Traits** | Complete trait prediction |
-| **Detailed Reports** | Exportable PDF with genetic counselor notes |
-| **Partner Comparison** | Side-by-side carrier status |
-| **Historical Analysis** | Unlimited saved analyses |
-| **Priority Processing** | Faster analysis times |
-| **Email Support** | Dedicated support channel |
+| Feature                 | Description                                 |
+| ----------------------- | ------------------------------------------- |
+| **Full Disease Panel**  | All 1,211 diseases, 15 categories           |
+| **All 79 Traits**       | Complete trait prediction                   |
+| **Detailed Reports**    | Exportable PDF with genetic counselor notes |
+| **Partner Comparison**  | Side-by-side carrier status                 |
+| **Historical Analysis** | Unlimited saved analyses                    |
+| **Priority Processing** | Faster analysis times                       |
+| **Email Support**       | Dedicated support channel                   |
 
 ### Premium+ Tier ($49/month or $349/year)
 
-| Feature | Description |
-|---------|-------------|
-| **Everything in Premium** | Full feature access |
-| **Genetic Counselor Chat** | 1 session/month with certified GC |
-| **Family Tree Integration** | Multi-generational risk assessment |
+| Feature                      | Description                             |
+| ---------------------------- | --------------------------------------- |
+| **Everything in Premium**    | Full feature access                     |
+| **Genetic Counselor Chat**   | 1 session/month with certified GC       |
+| **Family Tree Integration**  | Multi-generational risk assessment      |
 | **Ethnicity-Adjusted Risks** | Population-specific carrier frequencies |
-| **API Access** | For healthcare providers |
-| **White-Label Reports** | Branded reports for clinics |
+| **API Access**               | For healthcare providers                |
+| **White-Label Reports**      | Branded reports for clinics             |
 
 ### Revenue Projections
 
-| Scenario | Free Users | Premium (5%) | Premium+ (1%) | Annual Revenue |
-|----------|------------|--------------|---------------|----------------|
-| Conservative | 10,000 | 500 | 100 | $134,400 |
-| Moderate | 50,000 | 2,500 | 500 | $672,000 |
-| Optimistic | 200,000 | 10,000 | 2,000 | $2,688,000 |
+| Scenario     | Free Users | Premium (5%) | Premium+ (1%) | Annual Revenue |
+| ------------ | ---------- | ------------ | ------------- | -------------- |
+| Conservative | 10,000     | 500          | 100           | $134,400       |
+| Moderate     | 50,000     | 2,500        | 500           | $672,000       |
+| Optimistic   | 200,000    | 10,000       | 2,000         | $2,688,000     |
 
 ### Pros & Cons
 
 **Pros:**
+
 - Low barrier to entry drives viral growth
 - Word-of-mouth from free users
 - Upsell path is natural (want more diseases)
 - Competitive with Promethease ($12) on value
 
 **Cons:**
+
 - High server costs for free users
 - 95% may never convert
 - Support burden from non-paying users
@@ -106,7 +109,8 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 ### Tier Structure
 
 #### Essential ($9.99/month)
-*For curious couples*
+
+_For curious couples_
 
 - 100 most impactful diseases
 - 25 trait predictions
@@ -115,7 +119,8 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 - Email support
 
 #### Plus ($24.99/month)
-*For family planners*
+
+_For family planners_
 
 - 500 diseases (all high + moderate severity)
 - All 79 traits
@@ -126,7 +131,8 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 - Quarterly genetic news digest
 
 #### Pro ($49.99/month)
-*For health-conscious families*
+
+_For health-conscious families_
 
 - All 1,211 diseases
 - Advanced pharmacogenomics
@@ -139,26 +145,29 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ### Annual Discounts
 
-| Tier | Monthly | Annual | Savings |
-|------|---------|--------|---------|
-| Essential | $9.99 | $79.99 | 33% |
-| Plus | $24.99 | $199.99 | 33% |
-| Pro | $49.99 | $399.99 | 33% |
+| Tier      | Monthly | Annual  | Savings |
+| --------- | ------- | ------- | ------- |
+| Essential | $9.99   | $79.99  | 33%     |
+| Plus      | $24.99  | $199.99 | 33%     |
+| Pro       | $49.99  | $399.99 | 33%     |
 
 ### Unique Features by Tier
 
 #### Essential Exclusive
+
 - "Quick Match" - 60-second compatibility check
 - Risk traffic light (Red/Yellow/Green)
 - Shareable social cards (no medical details)
 
 #### Plus Exclusive
+
 - "What If" scenarios - model different partners
 - Extended family carrier tracking
 - Printable clinic reports
 - Condition deep-dives with OMIM links
 
 #### Pro Exclusive
+
 - Multi-generational pedigree charts
 - Sibling risk correlation
 - IVF/PGT guidance integration
@@ -167,21 +176,23 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ### Revenue Projections
 
-| Scenario | Essential | Plus | Pro | Annual Revenue |
-|----------|-----------|------|-----|----------------|
-| Conservative | 2,000 | 500 | 100 | $383,880 |
-| Moderate | 10,000 | 2,500 | 500 | $1,919,400 |
-| Optimistic | 40,000 | 10,000 | 2,000 | $7,677,600 |
+| Scenario     | Essential | Plus   | Pro   | Annual Revenue |
+| ------------ | --------- | ------ | ----- | -------------- |
+| Conservative | 2,000     | 500    | 100   | $383,880       |
+| Moderate     | 10,000    | 2,500  | 500   | $1,919,400     |
+| Optimistic   | 40,000    | 10,000 | 2,000 | $7,677,600     |
 
 ### Pros & Cons
 
 **Pros:**
+
 - Predictable recurring revenue
 - Clear upgrade path
 - Lower churn with annual plans
 - B2B potential with Pro tier
 
 **Cons:**
+
 - Subscription fatigue in market
 - Higher barrier than freemium
 - Requires constant feature development
@@ -210,35 +221,35 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 #### Analysis Packs (One-Time)
 
-| Pack | Price | Contents |
-|------|-------|----------|
-| **Pharmacogenomics Deep Dive** | $29 | 50+ drug response genes, medication guidance |
-| **Ethnic Heritage Pack** | $19 | Population-specific carrier frequencies |
-| **Athletic Potential** | $14 | 30+ sports-related genetic markers |
-| **Nutrition & Metabolism** | $19 | Lactose, caffeine, vitamin absorption |
-| **Longevity Markers** | $24 | Aging-related genetic variants |
-| **Mental Wellness** | $29 | Mood, sleep, stress response genes |
+| Pack                           | Price | Contents                                     |
+| ------------------------------ | ----- | -------------------------------------------- |
+| **Pharmacogenomics Deep Dive** | $29   | 50+ drug response genes, medication guidance |
+| **Ethnic Heritage Pack**       | $19   | Population-specific carrier frequencies      |
+| **Athletic Potential**         | $14   | 30+ sports-related genetic markers           |
+| **Nutrition & Metabolism**     | $19   | Lactose, caffeine, vitamin absorption        |
+| **Longevity Markers**          | $24   | Aging-related genetic variants               |
+| **Mental Wellness**            | $29   | Mood, sleep, stress response genes           |
 
 #### Services (Per-Use)
 
-| Service | Price | Description |
-|---------|-------|-------------|
-| **Genetic Counselor Session** | $75/30min | Video call with certified GC |
-| **Clinical Report Generation** | $25 | HIPAA-compliant provider report |
-| **Family Pedigree Analysis** | $49 | Multi-generational risk chart |
-| **Second Opinion Review** | $99 | Board-certified geneticist review |
+| Service                        | Price     | Description                       |
+| ------------------------------ | --------- | --------------------------------- |
+| **Genetic Counselor Session**  | $75/30min | Video call with certified GC      |
+| **Clinical Report Generation** | $25       | HIPAA-compliant provider report   |
+| **Family Pedigree Analysis**   | $49       | Multi-generational risk chart     |
+| **Second Opinion Review**      | $99       | Board-certified geneticist review |
 
 #### Subscriptions (Optional)
 
-| Service | Price | Description |
-|---------|-------|-------------|
-| **Research Updates** | $4.99/mo | New disease discoveries, updated risks |
-| **Counselor On-Call** | $29/mo | Unlimited text-based GC access |
-| **Family Plan** | $19/mo | Up to 5 family member analyses |
+| Service               | Price    | Description                            |
+| --------------------- | -------- | -------------------------------------- |
+| **Research Updates**  | $4.99/mo | New disease discoveries, updated risks |
+| **Counselor On-Call** | $29/mo   | Unlimited text-based GC access         |
+| **Family Plan**       | $19/mo   | Up to 5 family member analyses         |
 
 ### Partner Matching Feature - $49
 
-*Standalone product for couples*
+_Standalone product for couples_
 
 - Detailed compatibility report
 - Combined carrier risk analysis
@@ -248,15 +259,16 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ### Revenue Projections
 
-| Scenario | Licenses | Avg Add-Ons | Partner Match | Annual Revenue |
-|----------|----------|-------------|---------------|----------------|
-| Conservative | 1,000 | $25/user | 300 | $188,700 |
-| Moderate | 5,000 | $40/user | 1,500 | $1,018,500 |
-| Optimistic | 20,000 | $50/user | 6,000 | $4,294,000 |
+| Scenario     | Licenses | Avg Add-Ons | Partner Match | Annual Revenue |
+| ------------ | -------- | ----------- | ------------- | -------------- |
+| Conservative | 1,000    | $25/user    | 300           | $188,700       |
+| Moderate     | 5,000    | $40/user    | 1,500         | $1,018,500     |
+| Optimistic   | 20,000   | $50/user    | 6,000         | $4,294,000     |
 
 ### Pros & Cons
 
 **Pros:**
+
 - Appeals to privacy-conscious users
 - No subscription fatigue
 - Higher perceived value (own forever)
@@ -264,6 +276,7 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 - Lower support burden
 
 **Cons:**
+
 - Harder to predict revenue
 - Must constantly create new add-ons
 - Users may not return for purchases
@@ -382,18 +395,21 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 ## Go-to-Market Strategy Recommendations
 
 ### Option 1 (Freemium) GTM
+
 - Viral social media campaign ("Check your genetic compatibility!")
 - Influencer partnerships (parenting, wellness)
 - SEO focus on "genetic compatibility test"
 - Reddit/forum community building
 
 ### Option 2 (Subscription) GTM
+
 - Content marketing (genetic education blog)
 - Partnerships with fertility clinics
 - Insurance company discussions
 - Employer wellness program sales
 
 ### Option 3 (One-Time) GTM
+
 - Product Hunt launch
 - Privacy-focused marketing
 - Comparison content vs. subscription competitors
@@ -406,6 +422,7 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 **For Mergenix's current stage, we recommend Option 1 (Freemium)** with a path to Option 2.
 
 **Rationale:**
+
 1. Maximizes user acquisition with zero barrier
 2. Builds brand awareness in underserved market
 3. Free tier creates viral potential
@@ -413,6 +430,7 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 5. Lower initial development cost (simpler billing)
 
 **Phased Approach:**
+
 - **Phase 1 (Months 1-6):** Launch freemium, focus on user acquisition
 - **Phase 2 (Months 6-12):** Add Premium tier, optimize conversion
 - **Phase 3 (Year 2):** Introduce Premium+, explore B2B clinic partnerships
@@ -422,19 +440,19 @@ Mergenix is a genetic offspring analysis tool that compares two parents' DNA to 
 
 ## Appendix: Competitive Feature Matrix
 
-| Feature | 23andMe | Ancestry | Nebula | Color | Invitae | **Mergenix** |
-|---------|---------|----------|--------|-------|---------|------------|
-| Carrier Screening | 44 | No | 30+ | 30 | 280+ | **1,211** |
-| Offspring Prediction | No | No | No | No | No | **Yes** |
-| Partner Matching | No | No | No | No | No | **Yes** |
-| Trait Prediction | 30+ | 35+ | 100+ | No | No | **79** |
-| Bring Your Own Data | No | No | Yes | No | No | **Yes** |
-| Free Tier | No | No | No | No | No | **Yes** |
-| No Subscription | No | No | No | No | Yes | **Optional** |
-| Genetic Counseling | $$ | No | No | Inc. | Inc. | **Add-on** |
+| Feature              | 23andMe | Ancestry | Nebula | Color | Invitae | **Mergenix** |
+| -------------------- | ------- | -------- | ------ | ----- | ------- | ------------ |
+| Carrier Screening    | 44      | No       | 30+    | 30    | 280+    | **1,211**    |
+| Offspring Prediction | No      | No       | No     | No    | No      | **Yes**      |
+| Partner Matching     | No      | No       | No     | No    | No      | **Yes**      |
+| Trait Prediction     | 30+     | 35+      | 100+   | No    | No      | **79**       |
+| Bring Your Own Data  | No      | No       | Yes    | No    | No      | **Yes**      |
+| Free Tier            | No      | No       | No     | No    | No      | **Yes**      |
+| No Subscription      | No      | No       | No     | No    | Yes     | **Optional** |
+| Genetic Counseling   | $$      | No       | No     | Inc.  | Inc.    | **Add-on**   |
 
 ---
 
-*Document Version: 1.0*
-*Created: February 2026*
-*Author: Mergenix Product Team*
+_Document Version: 1.0_
+_Created: February 2026_
+_Author: Mergenix Product Team_

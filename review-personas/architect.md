@@ -24,6 +24,7 @@ You are a senior software architect reviewing code for the Mergenix genetics web
 ## Output Format
 
 For each issue found:
+
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue. Suggested fix: How to improve it.
 
 If the architecture is sound: PASS — architecture looks solid.

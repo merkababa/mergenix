@@ -10,10 +10,10 @@
  */
 
 /** Cookie name used to store the HMAC bypass token. */
-export const BYPASS_COOKIE = "site-bypass";
+export const BYPASS_COOKIE = 'site-bypass';
 
 /** The message signed when deriving the bypass token. */
-export const HMAC_MESSAGE = "mergenix-bypass-token";
+export const HMAC_MESSAGE = 'mergenix-bypass-token';
 
 /**
  * Derives a hex-encoded HMAC-SHA-256 token from `secret`.
@@ -24,16 +24,16 @@ export const HMAC_MESSAGE = "mergenix-bypass-token";
 export async function deriveBypassToken(secret: string): Promise<string> {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
-    "raw",
+    'raw',
     enc.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
+    { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ["sign"],
+    ['sign'],
   );
-  const sig = await crypto.subtle.sign("HMAC", keyMaterial, enc.encode(HMAC_MESSAGE));
+  const sig = await crypto.subtle.sign('HMAC', keyMaterial, enc.encode(HMAC_MESSAGE));
   return Array.from(new Uint8Array(sig))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /**
@@ -44,22 +44,18 @@ export async function deriveBypassToken(secret: string): Promise<string> {
  * length is constant (32 bytes for SHA-256) regardless of the input length,
  * this prevents timing side-channels when comparing password/token values.
  */
-export async function timingSafeEqual(
-  a: string,
-  b: string,
-  secret: string,
-): Promise<boolean> {
+export async function timingSafeEqual(a: string, b: string, secret: string): Promise<boolean> {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
-    "raw",
+    'raw',
     enc.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
+    { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ["sign"],
+    ['sign'],
   );
   const [sigA, sigB] = await Promise.all([
-    crypto.subtle.sign("HMAC", keyMaterial, enc.encode(a)),
-    crypto.subtle.sign("HMAC", keyMaterial, enc.encode(b)),
+    crypto.subtle.sign('HMAC', keyMaterial, enc.encode(a)),
+    crypto.subtle.sign('HMAC', keyMaterial, enc.encode(b)),
   ]);
   const ua = new Uint8Array(sigA);
   const ub = new Uint8Array(sigB);

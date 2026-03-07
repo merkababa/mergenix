@@ -40,7 +40,11 @@ Grade A+ through F with specific evidence. Keep response concise (under 500 word
 
 console.log(`Running legal review (prompt: ${prompt.length} chars)...`);
 const result = spawnSync('cmd', ['/c', 'gemini', '--model', 'gemini-3.1-pro-preview'], {
-  input: prompt, timeout: 250000, maxBuffer: 10 * 1024 * 1024, encoding: 'utf8', env
+  input: prompt,
+  timeout: 250000,
+  maxBuffer: 10 * 1024 * 1024,
+  encoding: 'utf8',
+  env,
 });
 if (result.stdout && result.stdout.length > 100) {
   fs.writeFileSync(basedir + '/legal.md', result.stdout);

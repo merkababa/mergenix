@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import type { ReactNode } from "react";
-import { useLegalStore } from "@/lib/stores/legal-store";
+import type { ReactNode } from 'react';
+import { useLegalStore } from '@/lib/stores/legal-store';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
 export interface ConsentGateProps {
   /** The cookie category that must be consented to before children render. */
-  category: "analytics" | "marketing";
+  category: 'analytics' | 'marketing';
   children: ReactNode;
   /**
    * Optional content to render when consent has NOT been granted.
@@ -55,8 +55,7 @@ export function ConsentGate({ category, children, fallback = null }: ConsentGate
   const analyticsEnabled = useLegalStore((s) => s.analyticsEnabled);
   const marketingEnabled = useLegalStore((s) => s.marketingEnabled);
 
-  const isGranted =
-    category === "analytics" ? analyticsEnabled : marketingEnabled;
+  const isGranted = category === 'analytics' ? analyticsEnabled : marketingEnabled;
 
   if (!isGranted) {
     return <>{fallback}</>;

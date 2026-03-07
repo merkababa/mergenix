@@ -28,7 +28,7 @@ class HealthResponse(BaseModel):
 class PaginatedResponse[T](BaseModel):
     """Generic paginated response wrapper."""
 
-    items: list[T]  # type: ignore[valid-type]
+    items: list[T]
     total: int
     page: int
     per_page: int

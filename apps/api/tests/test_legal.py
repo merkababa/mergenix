@@ -337,9 +337,7 @@ async def test_update_cookie_preferences_upsert(
     assert resp2.json()["essential"] is True
 
     # Verify only one record in the database for this user
-    result = await db_session.execute(
-        select(CookiePreference).where(CookiePreference.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(CookiePreference).where(CookiePreference.user_id == test_user.id))
     rows = result.scalars().all()
     assert len(rows) == 1
     assert rows[0].analytics_enabled is False
@@ -800,9 +798,7 @@ async def test_export_data_rate_limit(
     from slowapi.errors import RateLimitExceeded
 
     # ── 1. Verify the rate limit constant is configured correctly ──────
-    assert LIMIT_DATA_EXPORT == "1/hour", (
-        f"Expected LIMIT_DATA_EXPORT to be '1/hour', got '{LIMIT_DATA_EXPORT}'"
-    )
+    assert LIMIT_DATA_EXPORT == "1/hour", f"Expected LIMIT_DATA_EXPORT to be '1/hour', got '{LIMIT_DATA_EXPORT}'"
 
     # ── 2. Verify the decorator is applied in the source code ──────────
     # Since the conftest replaces limiter.limit with an identity decorator

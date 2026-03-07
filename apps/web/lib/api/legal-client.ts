@@ -8,11 +8,8 @@
  * is responsible for catching and surfacing errors to the UI.
  */
 
-import { get, post } from "./client";
-import type {
-  ConsentRecord,
-  CookiePreferences,
-} from "@mergenix/shared-types";
+import { get, post } from './client';
+import type { ConsentRecord, CookiePreferences } from '@mergenix/shared-types';
 
 // ── API Response Types (snake_case from backend) ────────────────────────
 
@@ -36,7 +33,7 @@ interface RawCookiePreferences {
 function toConsentRecord(raw: RawConsentRecord): ConsentRecord {
   return {
     id: raw.id,
-    consentType: raw.consent_type as ConsentRecord["consentType"],
+    consentType: raw.consent_type as ConsentRecord['consentType'],
     version: raw.version,
     acceptedAt: raw.accepted_at,
   };
@@ -69,7 +66,7 @@ export async function recordConsent(
   options?: LegalRequestOptions,
 ): Promise<ConsentRecord> {
   const raw = await post<RawConsentRecord>(
-    "/legal/consent",
+    '/legal/consent',
     {
       consent_type: consentType,
       version,
@@ -82,10 +79,8 @@ export async function recordConsent(
 /**
  * List all consent records for the current user.
  */
-export async function listConsents(
-  options?: LegalRequestOptions,
-): Promise<ConsentRecord[]> {
-  const raw = await get<RawConsentRecord[]>("/legal/consent", {
+export async function listConsents(options?: LegalRequestOptions): Promise<ConsentRecord[]> {
+  const raw = await get<RawConsentRecord[]>('/legal/consent', {
     signal: options?.signal,
   });
   return raw.map(toConsentRecord);
@@ -100,7 +95,7 @@ export async function updateCookiePreferences(
   options?: LegalRequestOptions,
 ): Promise<CookiePreferences> {
   const raw = await post<RawCookiePreferences>(
-    "/legal/cookies",
+    '/legal/cookies',
     { analytics, marketing },
     { signal: options?.signal },
   );
@@ -113,7 +108,7 @@ export async function updateCookiePreferences(
 export async function getCookiePreferences(
   options?: LegalRequestOptions,
 ): Promise<CookiePreferences> {
-  const raw = await get<RawCookiePreferences>("/legal/cookies", {
+  const raw = await get<RawCookiePreferences>('/legal/cookies', {
     signal: options?.signal,
   });
   return toCookiePreferences(raw);
@@ -125,13 +120,11 @@ export async function getCookiePreferences(
  * Unlike other endpoints, this returns a Blob suitable for download
  * rather than a parsed JSON object.
  */
-export async function exportData(
-  options?: LegalRequestOptions,
-): Promise<Blob> {
-  const response = await get<Record<string, unknown>>("/legal/export-data", {
+export async function exportData(options?: LegalRequestOptions): Promise<Blob> {
+  const response = await get<Record<string, unknown>>('/legal/export-data', {
     signal: options?.signal,
   });
   return new Blob([JSON.stringify(response, null, 2)], {
-    type: "application/json",
+    type: 'application/json',
   });
 }

@@ -5,7 +5,11 @@ const env = { ...process.env, PATH: process.env.PATH + ';C:\\Users\\t2tec\\AppDa
 const prompt = fs.readFileSync(basedir + '/r2_legal.txt', 'utf8');
 console.log('Running legal review (prompt: ' + prompt.length + ' chars)...');
 const result = spawnSync('cmd', ['/c', 'gemini', '--model', 'gemini-3.1-pro-preview'], {
-  input: prompt, timeout: 300000, maxBuffer: 10 * 1024 * 1024, encoding: 'utf8', env
+  input: prompt,
+  timeout: 300000,
+  maxBuffer: 10 * 1024 * 1024,
+  encoding: 'utf8',
+  env,
 });
 if (result.stdout && result.stdout.length > 100) {
   fs.writeFileSync(basedir + '/legal.md', result.stdout);

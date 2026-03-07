@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { Monitor, Smartphone, Globe, Clock, Trash2 } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import type { Session } from "@/lib/api/auth-client";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { Monitor, Smartphone, Globe, Clock, Trash2 } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import type { Session } from '@/lib/api/auth-client';
 
 /** Format a date string as relative time (e.g., "2 hours ago"). */
 function formatRelativeTime(dateStr: string): string {
@@ -16,15 +16,15 @@ function formatRelativeTime(dateStr: string): string {
   const diffMs = now - then;
   const diffSec = Math.floor(diffMs / 1000);
 
-  if (diffSec < 60) return "Just now";
+  if (diffSec < 60) return 'Just now';
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
+  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? '' : 's'} ago`;
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
+  if (diffDay < 30) return `${diffDay} day${diffDay === 1 ? '' : 's'} ago`;
   const diffMonth = Math.floor(diffDay / 30);
-  return `${diffMonth} month${diffMonth === 1 ? "" : "s"} ago`;
+  return `${diffMonth} month${diffMonth === 1 ? '' : 's'} ago`;
 }
 
 /** Skeleton placeholder IDs for loading state. */
@@ -34,11 +34,11 @@ const SKELETON_IDS = [1, 2, 3] as const;
 function isMobileDevice(device: string): boolean {
   const lower = device.toLowerCase();
   return (
-    lower.includes("mobile") ||
-    lower.includes("phone") ||
-    lower.includes("android") ||
-    lower.includes("iphone") ||
-    lower.includes("ipad")
+    lower.includes('mobile') ||
+    lower.includes('phone') ||
+    lower.includes('android') ||
+    lower.includes('iphone') ||
+    lower.includes('ipad')
   );
 }
 
@@ -53,24 +53,27 @@ export function SessionsSection() {
   const revokeSession = useAuthStore((s) => s.revokeSession);
   const revokeAllSessions = useAuthStore((s) => s.revokeAllSessions);
 
-  const fetchSessions = useCallback(async (signal?: AbortSignal) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getSessions();
-      if (!signal?.aborted) {
-        setSessions(data);
+  const fetchSessions = useCallback(
+    async (signal?: AbortSignal) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await getSessions();
+        if (!signal?.aborted) {
+          setSessions(data);
+        }
+      } catch (err) {
+        if (!signal?.aborted) {
+          setError(err instanceof Error ? err.message : 'Failed to load sessions');
+        }
+      } finally {
+        if (!signal?.aborted) {
+          setIsLoading(false);
+        }
       }
-    } catch (err) {
-      if (!signal?.aborted) {
-        setError(err instanceof Error ? err.message : "Failed to load sessions");
-      }
-    } finally {
-      if (!signal?.aborted) {
-        setIsLoading(false);
-      }
-    }
-  }, [getSessions]);
+    },
+    [getSessions],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -85,9 +88,7 @@ export function SessionsSection() {
         await revokeSession(id);
         await fetchSessions();
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to revoke session",
-        );
+        setError(err instanceof Error ? err.message : 'Failed to revoke session');
       } finally {
         setRevokingId(null);
       }
@@ -101,9 +102,7 @@ export function SessionsSection() {
       await revokeAllSessions();
       await fetchSessions();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to revoke sessions",
-      );
+      setError(err instanceof Error ? err.message : 'Failed to revoke sessions');
     } finally {
       setIsRevokingAll(false);
     }
@@ -114,26 +113,26 @@ export function SessionsSection() {
   return (
     <GlassCard variant="medium" hover="none" className="p-7">
       <div className="mb-5 flex items-center gap-3">
-        <Monitor className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
-        <h2 className="font-heading text-lg font-bold text-(--text-heading)">
-          Active Sessions
-        </h2>
+        <Monitor className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+        <h2 className="font-heading text-(--text-heading) text-lg font-bold">Active Sessions</h2>
       </div>
 
       {/* Loading skeleton */}
       {isLoading && (
         <div className="space-y-3" aria-busy="true">
-          <span className="sr-only" role="status">Loading sessions...</span>
+          <span className="sr-only" role="status">
+            Loading sessions...
+          </span>
           {SKELETON_IDS.map((i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
+              className="border-(--border-subtle) bg-(--bg-elevated) animate-pulse rounded-xl border p-4"
             >
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-(--border-subtle)" />
+                <div className="bg-(--border-subtle) h-9 w-9 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-3.5 w-32 rounded-sm bg-(--border-subtle)" />
-                  <div className="h-3 w-48 rounded-sm bg-(--border-subtle)" />
+                  <div className="bg-(--border-subtle) h-3.5 w-32 rounded-sm" />
+                  <div className="bg-(--border-subtle) h-3 w-48 rounded-sm" />
                 </div>
               </div>
             </div>
@@ -149,7 +148,7 @@ export function SessionsSection() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
+            className="text-(--accent-rose) mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
             role="alert"
           >
             {error}
@@ -161,9 +160,7 @@ export function SessionsSection() {
       {!isLoading && !error && sessions.length > 0 && (
         <div className="space-y-3" aria-live="polite">
           {sessions.map((session) => {
-            const DeviceIcon = isMobileDevice(session.device)
-              ? Smartphone
-              : Monitor;
+            const DeviceIcon = isMobileDevice(session.device) ? Smartphone : Monitor;
 
             return (
               <m.div
@@ -171,7 +168,7 @@ export function SessionsSection() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
+                className="border-(--border-subtle) bg-(--bg-elevated) rounded-xl border p-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
@@ -180,19 +177,16 @@ export function SessionsSection() {
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="truncate font-heading text-sm font-semibold text-(--text-heading)">
+                      <p className="font-heading text-(--text-heading) truncate text-sm font-semibold">
                         {session.device}
                       </p>
                       {session.isCurrent && (
-                        <Badge
-                          variant="confidence-high"
-                          className="shrink-0"
-                        >
+                        <Badge variant="confidence-high" className="shrink-0">
                           Current
                         </Badge>
                       )}
                     </div>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-(--text-muted)">
+                    <div className="text-(--text-muted) mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
                       <span className="inline-flex items-center gap-1">
                         <Globe className="h-3 w-3" aria-hidden="true" />
                         {session.ip}
@@ -209,7 +203,7 @@ export function SessionsSection() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="shrink-0 text-(--text-muted) hover:text-(--accent-rose)"
+                      className="text-(--text-muted) hover:text-(--accent-rose) shrink-0"
                       onClick={() => handleRevoke(session.id)}
                       isLoading={revokingId === session.id}
                       disabled={revokingId !== null}
@@ -245,14 +239,14 @@ export function SessionsSection() {
 
       {/* Empty state */}
       {!isLoading && !error && sessions.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-6 py-10 text-center">
+        <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col items-center justify-center rounded-xl border px-6 py-10 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <Clock className="h-6 w-6 text-(--accent-teal)" />
+            <Clock className="text-(--accent-teal) h-6 w-6" />
           </div>
-          <p className="font-heading text-sm font-semibold text-(--text-heading)">
+          <p className="font-heading text-(--text-heading) text-sm font-semibold">
             No other sessions found
           </p>
-          <p className="mt-1.5 max-w-xs text-xs text-(--text-muted)">
+          <p className="text-(--text-muted) mt-1.5 max-w-xs text-xs">
             You are only signed in on this device.
           </p>
         </div>

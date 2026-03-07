@@ -4,7 +4,9 @@ import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory } from '../__h
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => mockLucideIcons('Shield', 'ShieldOff', 'AlertTriangle', 'Check', 'X', 'ShieldCheck'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Shield', 'ShieldOff', 'AlertTriangle', 'Check', 'X', 'ShieldCheck'),
+);
 
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
@@ -23,15 +25,12 @@ let mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: (partial: Record<string, any>) => {
-        Object.assign(mockStoreState, partial);
-      },
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: (partial: Record<string, any>) => {
+      Object.assign(mockStoreState, partial);
     },
-  ),
+  }),
 }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────
@@ -62,44 +61,32 @@ describe('ConsentManagement', () => {
   it('shows withdraw genetic data consent button', () => {
     render(<ConsentManagement />);
 
-    expect(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /withdraw consent/i })).toBeInTheDocument();
   });
 
   it('withdrawal shows confirmation dialog listing consequences', () => {
     render(<ConsentManagement />);
 
     // Click withdraw consent button
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     // Confirmation dialog should appear
     const dialog = screen.getByRole('alertdialog');
     expect(dialog).toBeInTheDocument();
 
     // Should list consequences
-    expect(
-      screen.getByText(/locally saved analysis results will be cleared/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/genetic data consent will be revoked/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/locally saved analysis results will be cleared/i)).toBeInTheDocument();
+    expect(screen.getByText(/genetic data consent will be revoked/i)).toBeInTheDocument();
   });
 
   it('confirming withdrawal updates consent state', () => {
     render(<ConsentManagement />);
 
     // Click withdraw consent button
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     // Click confirm button in the dialog
-    fireEvent.click(
-      screen.getByRole('button', { name: /confirm withdrawal/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /confirm withdrawal/i }));
 
     expect(mockWithdrawGeneticConsent).toHaveBeenCalled();
   });
@@ -108,14 +95,10 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Click withdraw consent button
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     // Click cancel in the dialog
-    fireEvent.click(
-      screen.getByRole('button', { name: /cancel/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
 
     // Dialog should close
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
@@ -150,14 +133,10 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Click withdraw consent button
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     // Confirm withdrawal
-    fireEvent.click(
-      screen.getByRole('button', { name: /confirm withdrawal/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /confirm withdrawal/i }));
 
     // The store's withdrawGeneticConsent should have been called exactly once
     expect(mockWithdrawGeneticConsent).toHaveBeenCalledTimes(1);
@@ -170,9 +149,7 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Click withdraw consent button
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     const dialog = screen.getByRole('alertdialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
@@ -194,9 +171,7 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Open the dialog
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     // Verify dialog is open
     expect(screen.getByRole('alertdialog')).toBeInTheDocument();
@@ -218,9 +193,7 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Open the dialog
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     const dialog = screen.getByRole('alertdialog');
     expect(dialog).toBeInTheDocument();
@@ -244,9 +217,7 @@ describe('ConsentManagement', () => {
     render(<ConsentManagement />);
 
     // Open the dialog
-    fireEvent.click(
-      screen.getByRole('button', { name: /withdraw consent/i }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: /withdraw consent/i }));
 
     const cancelButton = screen.getByRole('button', { name: /cancel/i });
     const confirmButton = screen.getByRole('button', { name: /confirm withdrawal/i });

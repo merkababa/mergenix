@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { GlassCard } from "@/components/ui/glass-card";
-import { buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { cn } from '@/lib/utils';
+import { GlassCard } from '@/components/ui/glass-card';
+import { buttonVariants } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Sparkles,
   ShieldCheck,
@@ -21,10 +21,10 @@ import {
   BarChart2,
   MessageCircle,
   type LucideIcon,
-} from "lucide-react";
-import { m } from "motion/react";
-import Link from "next/link";
-import type { ReactElement } from "react";
+} from 'lucide-react';
+import { m } from 'motion/react';
+import Link from 'next/link';
+import type { ReactElement } from 'react';
 
 // ---------------------------------------------------------------------------
 // Semantic icon map: maps feature text substrings → icon component.
@@ -41,7 +41,7 @@ interface FeatureIconEntry {
   icon: ReactElement;
 }
 
-const FEATURE_ICON_CLASS = "mt-0.5 h-4 w-4 shrink-0 card-icon";
+const FEATURE_ICON_CLASS = 'mt-0.5 h-4 w-4 shrink-0 card-icon';
 
 /** Helper: create a single-line FeatureIconEntry. */
 function iconEntry(match: string, Icon: LucideIcon, color: string): FeatureIconEntry {
@@ -52,24 +52,24 @@ function iconEntry(match: string, Icon: LucideIcon, color: string): FeatureIconE
 }
 
 const FEATURE_ICON_MAP: FeatureIconEntry[] = [
-  iconEntry("disease",                              ShieldCheck,    "text-(--accent-teal)"),
-  iconEntry("trait",                                Dna,            "text-(--accent-cyan)"),
-  iconEntry("file format",                          FileType,       "text-(--accent-violet)"),
-  iconEntry("community",                            Users,          "text-(--text-muted)"),
-  iconEntry("pharmacogenomic",                      Pill,           "text-(--accent-amber)"),
-  iconEntry("polygenic",                            TrendingUp,     "text-(--accent-teal)"),
+  iconEntry('disease', ShieldCheck, 'text-(--accent-teal)'),
+  iconEntry('trait', Dna, 'text-(--accent-cyan)'),
+  iconEntry('file format', FileType, 'text-(--accent-violet)'),
+  iconEntry('community', Users, 'text-(--text-muted)'),
+  iconEntry('pharmacogenomic', Pill, 'text-(--accent-amber)'),
+  iconEntry('polygenic', TrendingUp, 'text-(--accent-teal)'),
   // "email support" and "priority email" share the same icon — combined entry
-  iconEntry("email support|priority email",         Mail,           "text-(--accent-violet)"),
+  iconEntry('email support|priority email', Mail, 'text-(--accent-violet)'),
   // "dedicated support" and "dedicated priority" share the same icon — combined entry
-  iconEntry("dedicated support|dedicated priority", MessageCircle,  "text-(--accent-teal)"),
-  iconEntry("clinvar",                              Database,       "text-(--accent-cyan)"),
-  iconEntry("referral",                             FileText,       "text-(--accent-teal)"),
-  iconEntry("pdf",                                  FileText,       "text-(--accent-amber)"),
-  iconEntry("ethnicity",                            BarChart2,      "text-(--accent-cyan)"),
-  iconEntry("punnett",                              FlaskConical,   "text-(--accent-teal)"),
-  iconEntry("comparison",                           BarChart2,      "text-(--accent-violet)"),
-  iconEntry("everything in",                        Star,           "text-(--accent-amber)"),
-  iconEntry("health",                               HeartPulse,     "text-(--accent-rose)"),
+  iconEntry('dedicated support|dedicated priority', MessageCircle, 'text-(--accent-teal)'),
+  iconEntry('clinvar', Database, 'text-(--accent-cyan)'),
+  iconEntry('referral', FileText, 'text-(--accent-teal)'),
+  iconEntry('pdf', FileText, 'text-(--accent-amber)'),
+  iconEntry('ethnicity', BarChart2, 'text-(--accent-cyan)'),
+  iconEntry('punnett', FlaskConical, 'text-(--accent-teal)'),
+  iconEntry('comparison', BarChart2, 'text-(--accent-violet)'),
+  iconEntry('everything in', Star, 'text-(--accent-amber)'),
+  iconEntry('health', HeartPulse, 'text-(--accent-rose)'),
 ];
 
 /** Returns a semantic icon for the given feature label. Falls back to Sparkles. */
@@ -77,18 +77,13 @@ function getFeatureIcon(feature: string): ReactElement {
   const lower = feature.toLowerCase();
   for (const entry of FEATURE_ICON_MAP) {
     // Support pipe-separated match strings (OR logic) within a single entry
-    const terms = entry.match.split("|");
+    const terms = entry.match.split('|');
     if (terms.some((term) => lower.includes(term))) {
       return entry.icon;
     }
   }
   // Default fallback
-  return (
-    <Sparkles
-      className={cn(FEATURE_ICON_CLASS, "text-(--accent-teal)")}
-      aria-hidden="true"
-    />
-  );
+  return <Sparkles className={cn(FEATURE_ICON_CLASS, 'text-(--accent-teal)')} aria-hidden="true" />;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,8 +100,8 @@ const CARD_VARIANTS = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,
-      when: "beforeChildren" as const,
+      ease: 'easeOut' as const,
+      when: 'beforeChildren' as const,
       staggerChildren: 0.07,
       delayChildren: 0.15,
     },
@@ -124,7 +119,7 @@ const FEATURE_ITEM_VARIANTS = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.3, ease: "easeOut" as const },
+    transition: { duration: 0.3, ease: 'easeOut' as const },
   },
 };
 
@@ -139,7 +134,7 @@ interface PricingCardProps {
   features: string[];
   cta: string;
   ctaHref: string;
-  ctaVariant: "primary" | "violet" | "outline";
+  ctaVariant: 'primary' | 'violet' | 'outline';
   popular?: boolean;
   barGradient: string;
   cardClass?: string;
@@ -176,28 +171,21 @@ export function PricingCard({
     ? {}
     : {
         variants: CARD_VARIANTS,
-        initial: "hidden" as const,
-        whileInView: "visible" as const,
-        viewport: { once: true, margin: "-50px" } as const,
+        initial: 'hidden' as const,
+        whileInView: 'visible' as const,
+        viewport: { once: true, margin: '-50px' } as const,
       };
 
   return (
     <m.div
       {...motionProps}
-      data-popular={popular ? "true" : undefined}
-      className={cn(
-        "relative flex",
-        popular && "lg:scale-[1.03] lg:z-10",
-        className,
-      )}
+      data-popular={popular ? 'true' : undefined}
+      className={cn('relative flex', popular && 'lg:z-10 lg:scale-[1.03]', className)}
     >
       {/* Popular badge — positioned above the card */}
       {popular && (
         <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
-          <Badge
-            variant="premium"
-            className="card-badge whitespace-nowrap px-4 py-1"
-          >
+          <Badge variant="premium" className="card-badge whitespace-nowrap px-4 py-1">
             <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
             Most Popular
           </Badge>
@@ -208,41 +196,33 @@ export function PricingCard({
         variant="medium"
         hover="lift"
         className={cn(
-          "flex w-full flex-col p-8",
-          popular && [
-            "border-2 border-accent-violet",
-            "shadow-lg",
-          ],
+          'flex w-full flex-col p-8',
+          popular && ['border-accent-violet border-2', 'shadow-lg'],
           cardClass,
         )}
       >
         {/* Gradient top bar */}
         <div
-          className={cn(
-            "absolute left-0 right-0 top-0 h-[2px] rounded-t-glass",
-            barGradient,
-          )}
+          className={cn('rounded-t-glass absolute left-0 right-0 top-0 h-[2px]', barGradient)}
           aria-hidden="true"
         />
 
         {/* Tier name */}
-        <h3 className="mb-2 font-heading text-lg font-bold text-(--text-heading)">
-          {tier}
-        </h3>
+        <h3 className="font-heading text-(--text-heading) mb-2 text-lg font-bold">{tier}</h3>
 
         {/* Price */}
         <div className="mb-1 flex items-baseline gap-1">
-          <span className="font-heading text-4xl font-extrabold text-(--text-heading)">
+          <span className="font-heading text-(--text-heading) text-4xl font-extrabold">
             {price}
           </span>
-          <span className="text-sm text-(--text-muted)">{priceNote}</span>
+          <span className="text-(--text-muted) text-sm">{priceNote}</span>
         </div>
 
         {/* Description */}
-        <p className="mb-6 text-sm text-(--text-body)">{description}</p>
+        <p className="text-(--text-body) mb-6 text-sm">{description}</p>
 
         {/* Divider */}
-        <hr className="mb-6 border-(--border-subtle)" />
+        <hr className="border-(--border-subtle) mb-6" />
 
         {/* Feature list — stagger triggered by parent card variant propagation */}
         <m.ul
@@ -254,7 +234,7 @@ export function PricingCard({
             <m.li
               key={feature}
               variants={FEATURE_ITEM_VARIANTS}
-              className="flex items-start gap-2.5 text-sm text-(--text-body)"
+              className="text-(--text-body) flex items-start gap-2.5 text-sm"
             >
               {getFeatureIcon(feature)}
               <span>{feature}</span>
@@ -265,7 +245,7 @@ export function PricingCard({
         {/* CTA button */}
         <Link
           href={ctaHref}
-          className={cn(buttonVariants({ variant: ctaVariant, size: "lg" }), "w-full")}
+          className={cn(buttonVariants({ variant: ctaVariant, size: 'lg' }), 'w-full')}
         >
           {cta}
         </Link>

@@ -4,14 +4,14 @@ Re-ran 5 designer-reviewer agents that hit rate limits on 2026-03-02.
 
 ## Grades Summary
 
-| Agent | Grade | BLOCKs | WARNs | INFOs |
-|-------|-------|--------|-------|-------|
-| Nav & Layout | A- | 0 | 4 | 4 |
-| Design System & Theming | A- | 2 | 6 | 6 |
-| Auth & Account UX | A- | 0 | 6 | 6 |
-| Analysis & Results UI | A- | 2 | 6 | 6 |
-| Legal & Compliance Pages | A- | 0 | 6 | 6 |
-| **TOTAL** | **A-** | **4** | **28** | **28** |
+| Agent                    | Grade  | BLOCKs | WARNs  | INFOs  |
+| ------------------------ | ------ | ------ | ------ | ------ |
+| Nav & Layout             | A-     | 0      | 4      | 4      |
+| Design System & Theming  | A-     | 2      | 6      | 6      |
+| Auth & Account UX        | A-     | 0      | 6      | 6      |
+| Analysis & Results UI    | A-     | 2      | 6      | 6      |
+| Legal & Compliance Pages | A-     | 0      | 6      | 6      |
+| **TOTAL**                | **A-** | **4**  | **28** | **28** |
 
 ## BLOCKs (must fix)
 

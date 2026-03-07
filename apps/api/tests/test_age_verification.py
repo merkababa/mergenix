@@ -160,9 +160,7 @@ async def test_register_creates_age_verification_consent(
     assert response.status_code == 201
 
     # Find the user
-    result = await db_session.execute(
-        select(User).where(User.email == "consent_test@example.com")
-    )
+    result = await db_session.execute(select(User).where(User.email == "consent_test@example.com"))
     user = result.scalar_one()
 
     # Verify age_verification consent record was created
@@ -200,9 +198,7 @@ async def test_register_stores_dob_on_user(
     )
     assert response.status_code == 201
 
-    result = await db_session.execute(
-        select(User).where(User.email == "dob_store@example.com")
-    )
+    result = await db_session.execute(select(User).where(User.email == "dob_store@example.com"))
     user = result.scalar_one()
     assert user.date_of_birth == adult_dob
 

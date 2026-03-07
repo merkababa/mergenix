@@ -48,9 +48,7 @@ test.describe('Disease Catalog', () => {
     await expect(resultsStatus).toContainText(/matching/i);
 
     // The Sickle Cell Disease card should be visible
-    await expect(
-      page.getByRole('heading', { name: /Sickle Cell Disease/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Sickle Cell Disease/i })).toBeVisible();
 
     // Clear the search and verify full list returns
     await searchInput.clear();
@@ -98,13 +96,15 @@ test.describe('Disease Catalog', () => {
     await severityFilter.selectOption('high');
 
     // Wait for the results count to update (it should differ from category-only count)
-    await expect.poll(
-      async () => {
-        const text = await resultsStatus.textContent();
-        return text !== categoryFilteredText;
-      },
-      { timeout: 5_000 },
-    ).toBe(true);
+    await expect
+      .poll(
+        async () => {
+          const text = await resultsStatus.textContent();
+          return text !== categoryFilteredText;
+        },
+        { timeout: 5_000 },
+      )
+      .toBe(true);
 
     // Verify results are further filtered
     const severityFilteredText = await resultsStatus.textContent();
@@ -139,10 +139,7 @@ test.describe('Disease Catalog', () => {
     await expect(firstCard).toBeVisible();
 
     // Get the disease name from the first card
-    const diseaseName = await firstCard
-      .locator('h3')
-      .first()
-      .textContent();
+    const diseaseName = await firstCard.locator('h3').first().textContent();
     expect(diseaseName).toBeTruthy();
 
     // Click on the first disease card
@@ -160,16 +157,12 @@ test.describe('Disease Catalog', () => {
   });
 
   // ── Scenario 5 (P1): Disease detail shows inheritance, severity, SNPs ──
-  test('disease detail shows inheritance, severity, and SNPs', async ({
-    page,
-  }) => {
+  test('disease detail shows inheritance, severity, and SNPs', async ({ page }) => {
     // Navigate to a known disease with SNPs: Sickle Cell Disease
     await page.goto('/diseases/sickle-cell-disease');
 
     // Verify the page heading
-    await expect(
-      page.getByRole('heading', { name: /Sickle Cell Disease/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Sickle Cell Disease/i })).toBeVisible();
 
     // Verify severity card is present
     await expect(page.getByText('Severity').first()).toBeVisible();
@@ -194,18 +187,10 @@ test.describe('Disease Catalog', () => {
     await expect(snpTable).toBeVisible();
 
     // Verify table has correct column headers
-    await expect(
-      snpTable.getByRole('columnheader', { name: /rsID/i }),
-    ).toBeVisible();
-    await expect(
-      snpTable.getByRole('columnheader', { name: /Gene/i }),
-    ).toBeVisible();
-    await expect(
-      snpTable.getByRole('columnheader', { name: /Allele Change/i }),
-    ).toBeVisible();
-    await expect(
-      snpTable.getByRole('columnheader', { name: /Source/i }),
-    ).toBeVisible();
+    await expect(snpTable.getByRole('columnheader', { name: /rsID/i })).toBeVisible();
+    await expect(snpTable.getByRole('columnheader', { name: /Gene/i })).toBeVisible();
+    await expect(snpTable.getByRole('columnheader', { name: /Allele Change/i })).toBeVisible();
+    await expect(snpTable.getByRole('columnheader', { name: /Source/i })).toBeVisible();
 
     // Verify at least one SNP row exists
     const snpRows = snpTable.locator('tbody tr');
@@ -218,29 +203,19 @@ test.describe('Disease Catalog', () => {
   });
 
   // ── Scenario 6 (P2): Medical disclaimer visible on disease detail page ──
-  test('medical disclaimer visible on disease detail page', async ({
-    page,
-  }) => {
+  test('medical disclaimer visible on disease detail page', async ({ page }) => {
     // Navigate to a disease detail page
     await page.goto('/diseases/sickle-cell-disease');
 
     // Verify the page loaded
-    await expect(
-      page.getByRole('heading', { name: /Sickle Cell Disease/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Sickle Cell Disease/i })).toBeVisible();
 
     // Verify the medical disclaimer is visible
     await expect(page.getByText(/Medical Disclaimer/i)).toBeVisible();
 
     // Verify the disclaimer contains key phrases
-    await expect(
-      page.getByText(/educational purposes only/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/not medical advice/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/consult a healthcare professional/i),
-    ).toBeVisible();
+    await expect(page.getByText(/educational purposes only/i)).toBeVisible();
+    await expect(page.getByText(/not medical advice/i)).toBeVisible();
+    await expect(page.getByText(/consult a healthcare professional/i)).toBeVisible();
   });
 });

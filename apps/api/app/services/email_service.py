@@ -67,6 +67,7 @@ _jinja_env = Environment(
 # Low-level send helper
 # ---------------------------------------------------------------------------
 
+
 def _mask_email(email: str) -> str:
     """Mask an email address for safe logging.
 
@@ -121,6 +122,7 @@ async def _send(to: str, subject: str, html: str) -> bool:
 # ---------------------------------------------------------------------------
 # Public email functions
 # ---------------------------------------------------------------------------
+
 
 async def send_verification_email(email: str, token: str) -> bool:
     """Send an email verification link.

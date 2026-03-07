@@ -20,13 +20,9 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] as const;
  * Helper: run axe analysis and return only critical/serious violations.
  */
 async function getCriticalViolations(page: import('@playwright/test').Page) {
-  const results = await new AxeBuilder({ page })
-    .withTags([...WCAG_TAGS])
-    .analyze();
+  const results = await new AxeBuilder({ page }).withTags([...WCAG_TAGS]).analyze();
 
-  return results.violations.filter(
-    (v) => v.impact === 'critical' || v.impact === 'serious',
-  );
+  return results.violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
 }
 
 // ── Page-level scans ─────────────────────────────────────────────────────
@@ -34,9 +30,7 @@ async function getCriticalViolations(page: import('@playwright/test').Page) {
 test.describe('Axe Accessibility Scans', () => {
   test.describe('Homepage', () => {
     // #1 — Homepage dark mode: zero critical/serious violations
-    test('should have zero critical/serious axe violations in dark mode', async ({
-      page,
-    }) => {
+    test('should have zero critical/serious axe violations in dark mode', async ({ page }) => {
       await page.goto('/');
       // Ensure dark theme is active (default theme)
       await page.evaluate(() => {
@@ -50,9 +44,7 @@ test.describe('Axe Accessibility Scans', () => {
     });
 
     // #2 — Homepage light mode: zero critical/serious violations
-    test('should have zero critical/serious axe violations in light mode', async ({
-      page,
-    }) => {
+    test('should have zero critical/serious axe violations in light mode', async ({ page }) => {
       await page.goto('/');
       // Toggle to light mode
       await page.evaluate(() => {
@@ -66,9 +58,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #3 — Login page: zero critical/serious violations
-  test('Login page should have zero critical/serious axe violations', async ({
-    page,
-  }) => {
+  test('Login page should have zero critical/serious axe violations', async ({ page }) => {
     await page.goto('/login');
     await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
 
@@ -77,9 +67,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #4 — Register page: zero critical/serious violations
-  test('Register page should have zero critical/serious axe violations', async ({
-    page,
-  }) => {
+  test('Register page should have zero critical/serious axe violations', async ({ page }) => {
     // Set localStorage before page load to skip the age verification modal
     await page.addInitScript(() => {
       localStorage.setItem('mergenix_age_verified', 'true');
@@ -92,9 +80,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #7 — Products page: zero critical/serious violations
-  test('Products page should have zero critical/serious axe violations', async ({
-    page,
-  }) => {
+  test('Products page should have zero critical/serious axe violations', async ({ page }) => {
     await page.goto('/products');
     await expect(page.locator('h1').first()).toBeVisible();
 
@@ -103,9 +89,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #3b — Login page (dark mode): zero critical/serious violations
-  test('Login page (dark mode) passes axe accessibility scan', async ({
-    page,
-  }) => {
+  test('Login page (dark mode) passes axe accessibility scan', async ({ page }) => {
     await page.goto('/login');
     // Ensure dark theme is active
     await page.evaluate(() => {
@@ -118,9 +102,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #4b — Register page (dark mode): zero critical/serious violations
-  test('Register page (dark mode) passes axe accessibility scan', async ({
-    page,
-  }) => {
+  test('Register page (dark mode) passes axe accessibility scan', async ({ page }) => {
     // Set localStorage before page load to skip the age verification modal
     await page.addInitScript(() => {
       localStorage.setItem('mergenix_age_verified', 'true');
@@ -137,9 +119,7 @@ test.describe('Axe Accessibility Scans', () => {
   });
 
   // #7b — Products page (dark mode): zero critical/serious violations
-  test('Products page (dark mode) passes axe accessibility scan', async ({
-    page,
-  }) => {
+  test('Products page (dark mode) passes axe accessibility scan', async ({ page }) => {
     await page.goto('/products');
     // Ensure dark theme is active
     await page.evaluate(() => {
@@ -205,23 +185,17 @@ authTest.describe('Axe Scans — Authenticated Pages', () => {
 
 test.describe('Cross-cutting Accessibility', () => {
   // #9 — All form controls have programmatic labels
-  test('All form controls on login page should have programmatic labels', async ({
-    page,
-  }) => {
+  test('All form controls on login page should have programmatic labels', async ({ page }) => {
     await page.goto('/login');
     await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
 
-    const results = await new AxeBuilder({ page })
-      .withRules(['label'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withRules(['label']).analyze();
 
     const violations = results.violations;
     expect(violations).toEqual([]);
   });
 
-  test('All form controls on register page should have programmatic labels', async ({
-    page,
-  }) => {
+  test('All form controls on register page should have programmatic labels', async ({ page }) => {
     // Skip age gate via addInitScript so localStorage is set before page load
     await page.addInitScript(() => {
       localStorage.setItem('mergenix_age_verified', 'true');
@@ -229,38 +203,28 @@ test.describe('Cross-cutting Accessibility', () => {
     await page.goto('/register');
     await expect(page.getByRole('heading', { name: /create account/i })).toBeVisible();
 
-    const results = await new AxeBuilder({ page })
-      .withRules(['label'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withRules(['label']).analyze();
 
     const violations = results.violations;
     expect(violations).toEqual([]);
   });
 
   // #10 — All images have appropriate alt text
-  test('All images on the homepage should have appropriate alt text', async ({
-    page,
-  }) => {
+  test('All images on the homepage should have appropriate alt text', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1').first()).toBeVisible();
 
-    const results = await new AxeBuilder({ page })
-      .withRules(['image-alt'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withRules(['image-alt']).analyze();
 
     const violations = results.violations;
     expect(violations).toEqual([]);
   });
 
-  test('All images on the products page should have appropriate alt text', async ({
-    page,
-  }) => {
+  test('All images on the products page should have appropriate alt text', async ({ page }) => {
     await page.goto('/products');
     await expect(page.locator('h1').first()).toBeVisible();
 
-    const results = await new AxeBuilder({ page })
-      .withRules(['image-alt'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withRules(['image-alt']).analyze();
 
     const violations = results.violations;
     expect(violations).toEqual([]);
@@ -275,9 +239,7 @@ test.describe('Cross-cutting Accessibility', () => {
   ];
 
   for (const { name, path } of pagesToCheck) {
-    test(`${name} should have exactly one h1 and no skipped heading levels`, async ({
-      page,
-    }) => {
+    test(`${name} should have exactly one h1 and no skipped heading levels`, async ({ page }) => {
       // Skip age gate on register page
       if (path === '/register') {
         await page.addInitScript(() => {
@@ -293,9 +255,7 @@ test.describe('Cross-cutting Accessibility', () => {
       expect(h1Count).toBe(1);
 
       // Verify no skipped heading levels using axe
-      const results = await new AxeBuilder({ page })
-        .withRules(['heading-order'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withRules(['heading-order']).analyze();
 
       expect(results.violations).toEqual([]);
     });

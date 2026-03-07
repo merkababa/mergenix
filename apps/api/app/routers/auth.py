@@ -88,15 +88,15 @@ from app.utils.cookies import (
 from app.utils.cookies import (
     set_refresh_cookie as _set_refresh_cookie_shared,
 )
+from app.utils.encryption import decrypt_totp_secret, encrypt_totp_secret
 from app.utils.request_helpers import client_ip as _client_ip_shared
 from app.utils.request_helpers import user_agent as _user_agent_shared
-from app.utils.encryption import decrypt_totp_secret, encrypt_totp_secret
 from app.utils.security import constant_time_compare, hash_token
 
 logger = logging.getLogger(__name__)
 
 
-async def _invalidate_all_user_sessions(db: AsyncSession, user_id: int) -> None:
+async def _invalidate_all_user_sessions(db: AsyncSession, user_id: uuid.UUID) -> None:
     """Delete all sessions for a user, forcing re-login on all devices."""
     # TODO(future sprint): Exclude current session from invalidation to avoid
     # logging out the user who just changed their password.
@@ -307,9 +307,7 @@ async def register(
     # Send verification email (failure doesn't roll back)
     await send_verification_email(email, token)
 
-    return MessageResponse(
-        message="Registration successful. Please check your email to verify your account."
-    )
+    return MessageResponse(message="Registration successful. Please check your email to verify your account.")
 
 
 # ── Login ─────────────────────────────────────────────────────────────────
@@ -409,9 +407,7 @@ async def login(
         challenge_nonce = _stdlib_secrets.token_hex(16)
         challenge_ts = str(int(_utcnow().timestamp()))
         challenge_payload = f"{user.id}:{challenge_ts}:{challenge_nonce}"
-        challenge_token = hashlib.sha256(
-            f"{challenge_payload}:{settings.jwt_secret}".encode()
-        ).hexdigest()
+        challenge_token = hashlib.sha256(f"{challenge_payload}:{settings.jwt_secret}".encode()).hexdigest()
 
         # Store the mapping so the 2FA verify endpoint can resolve it.
         # We reuse the Session model with a short expiry as a lightweight store.
@@ -535,7 +531,9 @@ async def login_2fa(
 
     if len(body.code) == 9 and "-" in body.code and user.backup_codes:
         # Attempt backup code verification (SHA-256, constant-time)
-        stored_hashes: list[str] = user.backup_codes if isinstance(user.backup_codes, list) else json.loads(user.backup_codes)
+        stored_hashes: list[str] = (
+            user.backup_codes if isinstance(user.backup_codes, list) else json.loads(user.backup_codes)
+        )
         matched, remaining = verify_and_consume_backup_code(body.code, stored_hashes)
         if matched:
             user.backup_codes = remaining if remaining else None
@@ -1100,10 +1098,7 @@ async def list_sessions(
 
     items: list[SessionResponse] = []
     for s in sessions:
-        is_current = (
-            current_hash is not None
-            and constant_time_compare(s.refresh_token_hash, current_hash)
-        )
+        is_current = current_hash is not None and constant_time_compare(s.refresh_token_hash, current_hash)
         items.append(
             SessionResponse(
                 id=str(s.id),
@@ -1256,10 +1251,7 @@ async def delete_account(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={
-                "error": (
-                    "OAuth-only accounts must use POST /gdpr/request-deletion "
-                    "for email-based account deletion."
-                ),
+                "error": ("OAuth-only accounts must use POST /gdpr/request-deletion for email-based account deletion."),
                 "code": "OAUTH_ACCOUNT",
             },
         )
@@ -1384,9 +1376,7 @@ async def verify_2fa(
     user.totp_enabled = True
 
     # Generate backup codes
-    backup_codes = [
-        f"{_stdlib_secrets.token_hex(2)}-{_stdlib_secrets.token_hex(2)}" for _ in range(10)
-    ]
+    backup_codes = [f"{_stdlib_secrets.token_hex(2)}-{_stdlib_secrets.token_hex(2)}" for _ in range(10)]
 
     # Persist SHA-256-hashed backup codes to the database
     user.backup_codes = hash_backup_codes(backup_codes)
@@ -1540,7 +1530,7 @@ async def verify_age(
     "/oauth/google",
     summary="Redirect to Google OAuth",
 )
-async def oauth_google_redirect(request: Request, response: Response) -> dict:
+async def oauth_google_redirect(request: Request, response: Response) -> dict[str, str]:
     """Generate the Google OAuth authorization URL.
 
     The frontend should redirect the user to the returned URL.
@@ -1690,9 +1680,7 @@ async def oauth_google_callback(
         )
 
     # Look up existing user by OAuth ID
-    result = await db.execute(
-        select(User).where(User.oauth_provider == "google", User.oauth_id == google_id)
-    )
+    result = await db.execute(select(User).where(User.oauth_provider == "google", User.oauth_id == google_id))
     user = result.scalar_one_or_none()
 
     if user is None:

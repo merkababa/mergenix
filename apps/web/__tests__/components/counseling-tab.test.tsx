@@ -152,9 +152,7 @@ describe('CounselingTab', () => {
 
     render(<CounselingTab />);
 
-    expect(
-      screen.getByText('Consider Speaking with a Genetic Counselor'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Consider Speaking with a Genetic Counselor')).toBeInTheDocument();
   });
 
   it('shows "No Urgent Counseling Needed" when recommend=false', () => {
@@ -195,9 +193,7 @@ describe('CounselingTab', () => {
     render(<CounselingTab />);
 
     expect(screen.getByText('Reasons for Recommendation')).toBeInTheDocument();
-    expect(
-      screen.getByText('Both parents are carriers for Cystic Fibrosis.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Both parents are carriers for Cystic Fibrosis.')).toBeInTheDocument();
     expect(
       screen.getByText('Autosomal dominant variant for Familial Hypercholesterolemia detected.'),
     ).toBeInTheDocument();
@@ -314,9 +310,7 @@ describe('CounselingTab', () => {
 
     render(<CounselingTab />);
 
-    expect(
-      screen.queryByText('Reasons for Recommendation'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Reasons for Recommendation')).not.toBeInTheDocument();
   });
 
   it('does not show key findings section when keyFindings is null', () => {
@@ -341,10 +335,7 @@ describe('CounselingTab', () => {
     render(<CounselingTab />);
 
     const nsgcLink = screen.getByText('Find a Genetic Counselor (NSGC)').closest('a')!;
-    expect(nsgcLink).toHaveAttribute(
-      'href',
-      'https://www.nsgc.org/findageneticcounselor',
-    );
+    expect(nsgcLink).toHaveAttribute('href', 'https://www.nsgc.org/findageneticcounselor');
   });
 
   it('NSGC link has target="_blank", rel="noopener noreferrer", and referrerPolicy', () => {
@@ -365,9 +356,7 @@ describe('CounselingTab', () => {
 
     render(<CounselingTab />);
 
-    expect(
-      screen.getByText(/knowledge is a tool that empowers you/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/knowledge is a tool that empowers you/)).toBeInTheDocument();
   });
 
   it('shows empathetic message when urgency is high', () => {
@@ -421,9 +410,7 @@ describe('CounselingTab', () => {
 
     render(<CounselingTab />);
 
-    expect(
-      screen.getByText('Find a Genetic Counselor (NSGC)'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Find a Genetic Counselor (NSGC)')).toBeInTheDocument();
   });
 
   it('referral toggle has aria-controls pointing to content id', () => {

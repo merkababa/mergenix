@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useId, useRef, useEffect, useCallback } from "react";
-import { m, AnimatePresence } from "motion/react";
-import {
-  Shield,
-  ShieldOff,
-  AlertTriangle,
-  ShieldCheck,
-} from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { useLegalStore } from "@/lib/stores/legal-store";
+import { useState, useId, useRef, useEffect, useCallback } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { Shield, ShieldOff, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { useLegalStore } from '@/lib/stores/legal-store';
 
 // ── Component ───────────────────────────────────────────────────────────
 
@@ -83,20 +78,16 @@ export function ConsentManagement() {
     if (showDialog) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = prev; };
+      return () => {
+        document.body.style.overflow = prev;
+      };
     }
   }, [showDialog]);
 
-  const geneticDataConsentGiven = useLegalStore(
-    (state) => state.geneticDataConsentGiven,
-  );
+  const geneticDataConsentGiven = useLegalStore((state) => state.geneticDataConsentGiven);
   const consentWithdrawn = useLegalStore((state) => state.consentWithdrawn);
-  const withdrawGeneticConsent = useLegalStore(
-    (state) => state.withdrawGeneticConsent,
-  );
-  const reGrantGeneticConsent = useLegalStore(
-    (state) => state.reGrantGeneticConsent,
-  );
+  const withdrawGeneticConsent = useLegalStore((state) => state.withdrawGeneticConsent);
+  const reGrantGeneticConsent = useLegalStore((state) => state.reGrantGeneticConsent);
 
   const isActive = geneticDataConsentGiven && !consentWithdrawn;
 
@@ -120,37 +111,34 @@ export function ConsentManagement() {
   return (
     <>
       <GlassCard variant="subtle" hover="none" className="p-7">
-        <div className="flex items-center gap-3 mb-4">
-          <Shield
-            className="h-5 w-5 text-(--accent-teal)"
-            aria-hidden="true"
-          />
-          <h2 className="font-heading text-lg font-bold text-(--text-heading)">
+        <div className="mb-4 flex items-center gap-3">
+          <Shield className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+          <h2 className="font-heading text-(--text-heading) text-lg font-bold">
             Consent Management
           </h2>
         </div>
 
         <div className="mb-5">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium text-(--text-muted)">
+          <div className="mb-2 flex items-center gap-2">
+            <span className="text-(--text-muted) text-sm font-medium">
               Genetic Data Processing Consent:
             </span>
             {isActive ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(6,214,160,0.1)] px-3 py-1 text-xs font-semibold text-(--accent-teal)">
+              <span className="text-(--accent-teal) inline-flex items-center gap-1 rounded-full bg-[rgba(6,214,160,0.1)] px-3 py-1 text-xs font-semibold">
                 <ShieldCheck className="h-3 w-3" aria-hidden="true" />
                 Active
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(244,63,94,0.1)] px-3 py-1 text-xs font-semibold text-(--accent-rose)">
+              <span className="text-(--accent-rose) inline-flex items-center gap-1 rounded-full bg-[rgba(244,63,94,0.1)] px-3 py-1 text-xs font-semibold">
                 <ShieldOff className="h-3 w-3" aria-hidden="true" />
                 Withdrawn
               </span>
             )}
           </div>
-          <p className="text-sm text-(--text-muted)">
+          <p className="text-(--text-muted) text-sm">
             {isActive
-              ? "You have granted consent for genetic data processing. You may withdraw this consent at any time."
-              : "Your genetic data processing consent is no longer active. You may re-consent at any time to use genetic analysis features."}
+              ? 'You have granted consent for genetic data processing. You may withdraw this consent at any time.'
+              : 'Your genetic data processing consent is no longer active. You may re-consent at any time to use genetic analysis features.'}
           </p>
         </div>
 
@@ -185,14 +173,14 @@ export function ConsentManagement() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
+            className="z-60 fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-md"
             role="presentation"
           >
             <m.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md mx-4"
+              className="mx-4 w-full max-w-md"
             >
               <div
                 ref={dialogRef}
@@ -200,20 +188,17 @@ export function ConsentManagement() {
                 aria-modal="true"
                 aria-labelledby={dialogHeadingId}
                 aria-describedby={dialogDescriptionId}
-                className="relative outline-hidden rounded-2xl border border-[rgba(244,63,94,0.2)] bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+                className="outline-hidden bg-(--bg-glass) relative rounded-2xl border border-[rgba(244,63,94,0.2)] p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
               >
                 {/* ── Warning icon ──────────────────────────────────── */}
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]">
-                  <AlertTriangle
-                    className="h-8 w-8 text-(--accent-rose)"
-                    aria-hidden="true"
-                  />
+                  <AlertTriangle className="text-(--accent-rose) h-8 w-8" aria-hidden="true" />
                 </div>
 
                 {/* ── Heading ───────────────────────────────────────── */}
                 <h2
                   id={dialogHeadingId}
-                  className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
+                  className="font-heading text-(--text-heading) mb-2 text-center text-xl font-bold"
                 >
                   Withdraw Genetic Data Consent
                 </h2>
@@ -221,21 +206,18 @@ export function ConsentManagement() {
                 {/* ── Consequences ──────────────────────────────────── */}
                 <div
                   id={dialogDescriptionId}
-                  className="mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm text-(--text-muted)"
+                  className="text-(--text-muted) mb-5 rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.04)] p-4 text-sm"
                 >
-                  <p className="mb-2">
-                    By withdrawing consent, the following will happen:
-                  </p>
-                  <ul className="list-inside list-disc space-y-1 ml-1">
+                  <p className="mb-2">By withdrawing consent, the following will happen:</p>
+                  <ul className="ml-1 list-inside list-disc space-y-1">
                     <li>Your locally saved analysis results will be cleared</li>
                     <li>Your genetic data consent will be revoked</li>
                     <li>
-                      You will not be able to use genetic analysis features
-                      until you re-consent
+                      You will not be able to use genetic analysis features until you re-consent
                     </li>
                     <li>
-                      You will need to re-upload and re-analyze your genetic
-                      data after re-consenting
+                      You will need to re-upload and re-analyze your genetic data after
+                      re-consenting
                     </li>
                   </ul>
                 </div>

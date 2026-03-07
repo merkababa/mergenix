@@ -208,7 +208,13 @@ describe('useAnalysisStore', () => {
 
   it('setParseResults stores parse summaries', () => {
     const summaries = [
-      { format: '23andme' as const, totalSnps: 600000, validSnps: 580000, skippedLines: 20, metadata: {} },
+      {
+        format: '23andme' as const,
+        totalSnps: 600000,
+        validSnps: 580000,
+        skippedLines: 20,
+        metadata: {},
+      },
     ];
     useAnalysisStore.getState().setParseResults(summaries);
     expect(useAnalysisStore.getState().parseResults).toEqual(summaries);
@@ -254,8 +260,12 @@ describe('useAnalysisStore', () => {
   });
 
   it('clearFiles clears parent metadata and files', () => {
-    useAnalysisStore.getState().setParentA({ name: 'a.txt', format: '23andme', size: 100, snpCount: 50 });
-    useAnalysisStore.getState().setParentB({ name: 'b.txt', format: 'vcf', size: 200, snpCount: 100 });
+    useAnalysisStore
+      .getState()
+      .setParentA({ name: 'a.txt', format: '23andme', size: 100, snpCount: 50 });
+    useAnalysisStore
+      .getState()
+      .setParentB({ name: 'b.txt', format: 'vcf', size: 200, snpCount: 100 });
     useAnalysisStore.getState().setParentAFile(new File([''], 'a.txt'));
     useAnalysisStore.getState().setParentBFile(new File([''], 'b.txt'));
 
@@ -269,7 +279,9 @@ describe('useAnalysisStore', () => {
 
   it('reset returns all state to initial values', () => {
     // Mutate several fields first
-    useAnalysisStore.getState().setParentA({ name: 'a.txt', format: '23andme', size: 100, snpCount: 50 });
+    useAnalysisStore
+      .getState()
+      .setParentA({ name: 'a.txt', format: '23andme', size: 100, snpCount: 50 });
     useAnalysisStore.getState().setStep('complete');
     useAnalysisStore.getState().setError('err');
     useAnalysisStore.getState().setFullResults(mockResults);
@@ -313,9 +325,9 @@ describe('useAnalysisStore', () => {
       // saveCurrentResult is blocked until Stream B3 implements the
       // Web Crypto encryption layer (Argon2id + AES-256-GCM).
       // It must always throw regardless of store state.
-      await expect(
-        useAnalysisStore.getState().saveCurrentResult('Test'),
-      ).rejects.toThrow('Encryption layer not yet implemented');
+      await expect(useAnalysisStore.getState().saveCurrentResult('Test')).rejects.toThrow(
+        'Encryption layer not yet implemented',
+      );
 
       // Should never call the API client
       expect(mockSaveResult).not.toHaveBeenCalled();
@@ -324,9 +336,9 @@ describe('useAnalysisStore', () => {
     it('does not call API even when results are present', async () => {
       useAnalysisStore.getState().setFullResults(mockResults);
 
-      await expect(
-        useAnalysisStore.getState().saveCurrentResult('Test'),
-      ).rejects.toThrow('Encryption layer not yet implemented');
+      await expect(useAnalysisStore.getState().saveCurrentResult('Test')).rejects.toThrow(
+        'Encryption layer not yet implemented',
+      );
 
       expect(mockSaveResult).not.toHaveBeenCalled();
       expect(mockListResults).not.toHaveBeenCalled();
@@ -356,9 +368,7 @@ describe('useAnalysisStore', () => {
     it('sets saveError on failure and throws', async () => {
       mockListResults.mockRejectedValue(new Error('Network error'));
 
-      await expect(
-        useAnalysisStore.getState().loadSavedResults(),
-      ).rejects.toThrow('Network error');
+      await expect(useAnalysisStore.getState().loadSavedResults()).rejects.toThrow('Network error');
 
       expect(useAnalysisStore.getState().saveError).toBe('Network error');
     });
@@ -369,9 +379,9 @@ describe('useAnalysisStore', () => {
       // loadSavedResult is blocked until Stream B3 implements the
       // Web Crypto decryption layer (Argon2id + AES-256-GCM).
       // Without decryption, the EncryptedEnvelope cannot be used.
-      await expect(
-        useAnalysisStore.getState().loadSavedResult('id-1'),
-      ).rejects.toThrow('Encryption layer not yet implemented');
+      await expect(useAnalysisStore.getState().loadSavedResult('id-1')).rejects.toThrow(
+        'Encryption layer not yet implemented',
+      );
 
       // Should never call the API client
       expect(mockGetResult).not.toHaveBeenCalled();
@@ -417,9 +427,9 @@ describe('useAnalysisStore', () => {
     it('sets saveError on failure and throws', async () => {
       mockDeleteResult.mockRejectedValue(new Error('RESULT_NOT_FOUND'));
 
-      await expect(
-        useAnalysisStore.getState().deleteSavedResult('bad-id'),
-      ).rejects.toThrow('RESULT_NOT_FOUND');
+      await expect(useAnalysisStore.getState().deleteSavedResult('bad-id')).rejects.toThrow(
+        'RESULT_NOT_FOUND',
+      );
 
       expect(useAnalysisStore.getState().saveError).toBe('RESULT_NOT_FOUND');
     });

@@ -3,9 +3,26 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
-vi.mock('lucide-react', () => mockLucideIcons('Crown', 'Sparkles', 'ChevronRight', 'CreditCard', 'Clock', 'Download', 'AlertCircle', 'Shield'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons(
+    'Crown',
+    'Sparkles',
+    'ChevronRight',
+    'CreditCard',
+    'Clock',
+    'Download',
+    'AlertCircle',
+    'Shield',
+  ),
+);
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 
@@ -218,7 +235,10 @@ describe('SubscriptionPage', () => {
   });
 
   it('should call createCheckout when upgrade button clicked', async () => {
-    mockCreateCheckout.mockResolvedValue({ checkoutUrl: 'https://stripe.com/checkout', sessionId: 'sess_1' });
+    mockCreateCheckout.mockResolvedValue({
+      checkoutUrl: 'https://stripe.com/checkout',
+      sessionId: 'sess_1',
+    });
 
     // Mock window.location.href assignment
     const locationHrefSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

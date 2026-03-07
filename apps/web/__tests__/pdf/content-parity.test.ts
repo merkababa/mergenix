@@ -117,9 +117,27 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Reduced metabolic activity.',
           },
           drugRecommendations: [
-            { drug: 'Codeine', recommendation: 'Consider alternative opioids.', strength: 'strong', source: 'CPIC', category: 'Pain' },
-            { drug: 'Tramadol', recommendation: 'Monitor for reduced efficacy.', strength: 'moderate', source: 'CPIC', category: 'Pain' },
-            { drug: 'Nortriptyline', recommendation: 'Reduce starting dose.', strength: 'moderate', source: 'CPIC', category: 'Antidepressant' },
+            {
+              drug: 'Codeine',
+              recommendation: 'Consider alternative opioids.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Pain',
+            },
+            {
+              drug: 'Tramadol',
+              recommendation: 'Monitor for reduced efficacy.',
+              strength: 'moderate',
+              source: 'CPIC',
+              category: 'Pain',
+            },
+            {
+              drug: 'Nortriptyline',
+              recommendation: 'Reduce starting dose.',
+              strength: 'moderate',
+              source: 'CPIC',
+              category: 'Antidepressant',
+            },
           ],
         },
         parentB: {
@@ -130,7 +148,13 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Normal metabolic activity.',
           },
           drugRecommendations: [
-            { drug: 'Codeine', recommendation: 'Standard dosing applies.', strength: 'strong', source: 'CPIC', category: 'Pain' },
+            {
+              drug: 'Codeine',
+              recommendation: 'Standard dosing applies.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Pain',
+            },
           ],
         },
         offspringPredictions: [],
@@ -147,7 +171,13 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Normal activity.',
           },
           drugRecommendations: [
-            { drug: 'Fluorouracil', recommendation: 'Standard dosing.', strength: 'strong', source: 'CPIC', category: 'Oncology' },
+            {
+              drug: 'Fluorouracil',
+              recommendation: 'Standard dosing.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Oncology',
+            },
           ],
         },
         parentB: {
@@ -158,7 +188,13 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Severely reduced activity — fluorouracil toxicity risk.',
           },
           drugRecommendations: [
-            { drug: 'Fluorouracil', recommendation: 'Avoid or reduce dose by 50%.', strength: 'strong', source: 'CPIC', category: 'Oncology' },
+            {
+              drug: 'Fluorouracil',
+              recommendation: 'Avoid or reduce dose by 50%.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Oncology',
+            },
           ],
         },
         offspringPredictions: [],
@@ -175,7 +211,13 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Reduced activity.',
           },
           drugRecommendations: [
-            { drug: 'Azathioprine', recommendation: 'Start at 30-70% of standard dose.', strength: 'strong', source: 'CPIC', category: 'Immunosuppressant' },
+            {
+              drug: 'Azathioprine',
+              recommendation: 'Start at 30-70% of standard dose.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Immunosuppressant',
+            },
           ],
         },
         parentB: {
@@ -186,14 +228,21 @@ const MOCK_RESULT: FullAnalysisResult = {
             description: 'Normal activity.',
           },
           drugRecommendations: [
-            { drug: 'Azathioprine', recommendation: 'Standard dosing.', strength: 'strong', source: 'CPIC', category: 'Immunosuppressant' },
+            {
+              drug: 'Azathioprine',
+              recommendation: 'Standard dosing.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Immunosuppressant',
+            },
           ],
         },
         offspringPredictions: [],
       },
     },
     upgradeMessage: null,
-    disclaimer: 'PGx results are for informational purposes only and not a substitute for clinical testing.',
+    disclaimer:
+      'PGx results are for informational purposes only and not a substitute for clinical testing.',
   },
   prs: {
     conditions: {

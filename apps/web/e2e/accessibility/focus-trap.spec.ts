@@ -188,101 +188,97 @@ authTest.describe('Focus Trap — Account Modals', () => {
 
 test.describe('Focus Trap — Age Verification Modal', () => {
   // #3 — Age Verification modal: focus trapped within modal
-  test(
-    'Age Verification modal should trap focus within the modal',
-    async ({ page }) => {
-      // Clear any existing age verification to force the modal to appear
-      await page.addInitScript(() => {
-        localStorage.removeItem('mergenix_age_verified');
-        localStorage.removeItem('mergenix_under_18');
-      });
+  test('Age Verification modal should trap focus within the modal', async ({ page }) => {
+    // Clear any existing age verification to force the modal to appear
+    await page.addInitScript(() => {
+      localStorage.removeItem('mergenix_age_verified');
+      localStorage.removeItem('mergenix_under_18');
+    });
 
-      await page.goto('/register');
+    await page.goto('/register');
 
-      // Wait for the age verification modal to appear
-      const dialog = page.getByRole('dialog', { name: /age verification/i });
-      await expect(dialog).toBeVisible({ timeout: 10_000 });
+    // Wait for the age verification modal to appear
+    const dialog = page.getByRole('dialog', { name: /age verification/i });
+    await expect(dialog).toBeVisible({ timeout: 10_000 });
 
-      // Verify focus is inside the dialog
-      // The modal component focuses itself on open (the modal div has tabIndex={-1})
-      // Wait for focus to settle inside the dialog instead of using a fixed timeout
-      await expect.poll(
-        () => page.evaluate(() => document.activeElement?.tagName),
-        { message: 'Expected focus to move away from BODY into the dialog', timeout: 5_000 },
-      ).not.toBe('BODY');
-      const focusedAfterOpen = await page.evaluate(() => {
-        const el = document.activeElement;
-        if (!el) return false;
-        // Check if inside the dialog or the dialog itself
-        return !!el.closest('[role="dialog"]') || el.getAttribute('role') === 'dialog';
-      });
-      expect(focusedAfterOpen).toBe(true);
+    // Verify focus is inside the dialog
+    // The modal component focuses itself on open (the modal div has tabIndex={-1})
+    // Wait for focus to settle inside the dialog instead of using a fixed timeout
+    await expect
+      .poll(() => page.evaluate(() => document.activeElement?.tagName), {
+        message: 'Expected focus to move away from BODY into the dialog',
+        timeout: 5_000,
+      })
+      .not.toBe('BODY');
+    const focusedAfterOpen = await page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el) return false;
+      // Check if inside the dialog or the dialog itself
+      return !!el.closest('[role="dialog"]') || el.getAttribute('role') === 'dialog';
+    });
+    expect(focusedAfterOpen).toBe(true);
 
-      // Verify focus is trapped — Tab should cycle within the modal.
-      // The age verification modal has: a checkbox, Continue button, "I am under 18" link.
-      // Note: The age verification modal does NOT close on Escape (allowEscape=false).
-      await verifyFocusTrap(page, dialog);
+    // Verify focus is trapped — Tab should cycle within the modal.
+    // The age verification modal has: a checkbox, Continue button, "I am under 18" link.
+    // Note: The age verification modal does NOT close on Escape (allowEscape=false).
+    await verifyFocusTrap(page, dialog);
 
-      // Verify Escape does NOT close this modal (it blocks Escape)
-      await page.keyboard.press('Escape');
-      await expect(dialog).toBeVisible();
-    },
-  );
+    // Verify Escape does NOT close this modal (it blocks Escape)
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeVisible();
+  });
 });
 
 // ── Cookie Consent Banner ────────────────────────────────────────────────
 
 test.describe('Focus Trap — Cookie Consent Banner', () => {
   // #4 — Cookie Consent banner: focus management
-  test(
-    'Cookie Consent banner should manage focus correctly',
-    async ({ page }) => {
-      // Clear cookie consent to force the banner to appear
-      await page.addInitScript(() => {
-        localStorage.removeItem('mergenix_cookie_consent');
-      });
+  test('Cookie Consent banner should manage focus correctly', async ({ page }) => {
+    // Clear cookie consent to force the banner to appear
+    await page.addInitScript(() => {
+      localStorage.removeItem('mergenix_cookie_consent');
+    });
 
-      await page.goto('/');
+    await page.goto('/');
 
-      // Wait for the cookie consent banner to appear (it's a dialog)
-      const banner = page.getByRole('dialog', { name: /cookie consent/i });
-      await expect(banner).toBeVisible({ timeout: 10_000 });
+    // Wait for the cookie consent banner to appear (it's a dialog)
+    const banner = page.getByRole('dialog', { name: /cookie consent/i });
+    await expect(banner).toBeVisible({ timeout: 10_000 });
 
-      // Verify focus management — the banner uses useFocusTrap(bannerRef, isVisible, true)
-      // The focus trap is active, with Escape allowed.
+    // Verify focus management — the banner uses useFocusTrap(bannerRef, isVisible, true)
+    // The focus trap is active, with Escape allowed.
 
-      // Verify that interactive elements within the banner are reachable via Tab
-      const bannerButtons = banner.getByRole('button');
-      const buttonCount = await bannerButtons.count();
-      expect(buttonCount).toBeGreaterThanOrEqual(2); // At least "Accept All" and "Essential Only"
+    // Verify that interactive elements within the banner are reachable via Tab
+    const bannerButtons = banner.getByRole('button');
+    const buttonCount = await bannerButtons.count();
+    expect(buttonCount).toBeGreaterThanOrEqual(2); // At least "Accept All" and "Essential Only"
 
-      // Verify focus is trapped within the banner
-      await verifyFocusTrap(page, banner);
+    // Verify focus is trapped within the banner
+    await verifyFocusTrap(page, banner);
 
-      // Verify Escape dismisses the banner (calls acceptEssentialOnly)
-      await page.keyboard.press('Escape');
-      // The banner should close; the cookie consent store handles dismiss via Escape
-      // through the useFocusTrap hook (allowEscape=true means Escape is not blocked).
-      // However, the banner itself doesn't have an explicit Escape handler via the hook —
-      // the hook only blocks Escape when allowEscape=false.
-      // The banner dismisses via the X button. Let's verify the banner can be
-      // dismissed via the dismiss button.
-      // Re-check: the banner might still be visible since Escape is "allowed" (not blocked)
-      // but no explicit Escape handler is wired up for closing. Let's test the actual
-      // buttons work instead.
+    // Verify Escape dismisses the banner (calls acceptEssentialOnly)
+    await page.keyboard.press('Escape');
+    // The banner should close; the cookie consent store handles dismiss via Escape
+    // through the useFocusTrap hook (allowEscape=true means Escape is not blocked).
+    // However, the banner itself doesn't have an explicit Escape handler via the hook —
+    // the hook only blocks Escape when allowEscape=false.
+    // The banner dismisses via the X button. Let's verify the banner can be
+    // dismissed via the dismiss button.
+    // Re-check: the banner might still be visible since Escape is "allowed" (not blocked)
+    // but no explicit Escape handler is wired up for closing. Let's test the actual
+    // buttons work instead.
 
-      // If the banner is still visible, use the "Essential Only" button
-      const isBannerStillVisible = await banner.isVisible();
-      if (isBannerStillVisible) {
-        // Tab to the "Dismiss cookie banner" button (the X button) and activate it
-        const dismissButton = banner.getByRole('button', { name: /dismiss cookie banner/i });
-        await dismissButton.click();
-      }
+    // If the banner is still visible, use the "Essential Only" button
+    const isBannerStillVisible = await banner.isVisible();
+    if (isBannerStillVisible) {
+      // Tab to the "Dismiss cookie banner" button (the X button) and activate it
+      const dismissButton = banner.getByRole('button', { name: /dismiss cookie banner/i });
+      await dismissButton.click();
+    }
 
-      // Verify the banner is now closed
-      await expect(banner).not.toBeVisible();
-    },
-  );
+    // Verify the banner is now closed
+    await expect(banner).not.toBeVisible();
+  });
 });
 
 // ── Save Analysis Dialog ─────────────────────────────────────────────────
@@ -333,7 +329,11 @@ authTest.describe('Focus Trap — Save Analysis Dialog', () => {
           await route.fulfill({
             status: 201,
             contentType: 'application/json',
-            body: JSON.stringify({ id: 'test-id', label: 'Test Analysis', created_at: new Date().toISOString() }),
+            body: JSON.stringify({
+              id: 'test-id',
+              label: 'Test Analysis',
+              created_at: new Date().toISOString(),
+            }),
           });
         } else {
           await route.continue();

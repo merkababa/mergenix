@@ -1,9 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => mockLucideIcons('Monitor', 'Smartphone', 'Globe', 'Clock', 'Trash2', 'Loader2'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Monitor', 'Smartphone', 'Globe', 'Clock', 'Trash2', 'Loader2'),
+);
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
@@ -19,10 +26,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────

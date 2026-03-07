@@ -37,6 +37,7 @@ You are a senior UX engineer and accessibility specialist reviewing code for the
 ## Output Format
 
 For each issue found:
+
 ```
 - **[BLOCK/WARN/INFO]** `file/path.tsx:line` — Description of the issue
   WCAG reference: Which guideline is violated (if applicable)

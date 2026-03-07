@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { m, useTransform } from "motion/react";
-import { Upload, Brain, HeartPulse } from "lucide-react";
-import { ScrollReveal, useScrollProgress } from "@/components/ui/scroll-reveal";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { StepCircle } from "@/components/marketing/step-circle";
-import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import { useRef } from 'react';
+import { m, useTransform } from 'motion/react';
+import { Upload, Brain, HeartPulse } from 'lucide-react';
+import { ScrollReveal, useScrollProgress } from '@/components/ui/scroll-reveal';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { StepCircle } from '@/components/marketing/step-circle';
+import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 // ---------------------------------------------------------------------------
 // Mini SVG illustrations (defined before STEPS_CONFIG that references them)
@@ -23,7 +23,16 @@ function UploadIllustration() {
       className="mx-auto"
     >
       {/* File body */}
-      <rect x="18" y="12" width="44" height="56" rx="6" fill="rgba(6,214,160,0.08)" stroke="rgba(6,214,160,0.25)" strokeWidth="1.5" />
+      <rect
+        x="18"
+        y="12"
+        width="44"
+        height="56"
+        rx="6"
+        fill="rgba(6,214,160,0.08)"
+        stroke="rgba(6,214,160,0.25)"
+        strokeWidth="1.5"
+      />
       {/* File fold corner */}
       <path d="M50 12 L62 24" stroke="rgba(6,214,160,0.25)" strokeWidth="1.5" />
       <rect x="50" y="12" width="12" height="12" rx="2" fill="rgba(6,214,160,0.05)" />
@@ -65,9 +74,33 @@ function DnaIllustration() {
         fill="none"
       />
       {/* Rungs */}
-      <line x1="30" y1="24" x2="50" y2="28" stroke="rgba(139,92,246,0.35)" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="26" y1="36" x2="54" y2="36" stroke="rgba(6,214,160,0.35)" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="30" y1="48" x2="50" y2="52" stroke="rgba(139,92,246,0.35)" strokeWidth="1.5" strokeLinecap="round" />
+      <line
+        x1="30"
+        y1="24"
+        x2="50"
+        y2="28"
+        stroke="rgba(139,92,246,0.35)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1="26"
+        y1="36"
+        x2="54"
+        y2="36"
+        stroke="rgba(6,214,160,0.35)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1="30"
+        y1="48"
+        x2="50"
+        y2="52"
+        stroke="rgba(139,92,246,0.35)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -83,13 +116,53 @@ function ReportIllustration() {
       className="mx-auto"
     >
       {/* Document */}
-      <rect x="14" y="10" width="52" height="60" rx="6" fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.25)" strokeWidth="1.5" />
+      <rect
+        x="14"
+        y="10"
+        width="52"
+        height="60"
+        rx="6"
+        fill="rgba(6,182,212,0.08)"
+        stroke="rgba(6,182,212,0.25)"
+        strokeWidth="1.5"
+      />
       {/* Text lines */}
-      <line x1="24" y1="28" x2="56" y2="28" stroke="rgba(6,182,212,0.35)" strokeWidth="2" strokeLinecap="round" />
-      <line x1="24" y1="36" x2="48" y2="36" stroke="rgba(6,182,212,0.25)" strokeWidth="2" strokeLinecap="round" />
-      <line x1="24" y1="44" x2="52" y2="44" stroke="rgba(6,182,212,0.25)" strokeWidth="2" strokeLinecap="round" />
+      <line
+        x1="24"
+        y1="28"
+        x2="56"
+        y2="28"
+        stroke="rgba(6,182,212,0.35)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="24"
+        y1="36"
+        x2="48"
+        y2="36"
+        stroke="rgba(6,182,212,0.25)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="24"
+        y1="44"
+        x2="52"
+        y2="44"
+        stroke="rgba(6,182,212,0.25)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       {/* Checkmark circle */}
-      <circle cx="52" cy="56" r="10" fill="rgba(6,214,160,0.15)" stroke="rgba(6,214,160,0.5)" strokeWidth="1.5" />
+      <circle
+        cx="52"
+        cy="56"
+        r="10"
+        fill="rgba(6,214,160,0.15)"
+        stroke="rgba(6,214,160,0.5)"
+        strokeWidth="1.5"
+      />
       <path
         d="M47 56 L51 60 L57 53"
         stroke="var(--accent-teal)"
@@ -119,25 +192,24 @@ const STEPS_CONFIG: readonly StepConfig[] = [
   {
     number: 1,
     icon: Upload,
-    title: "Upload DNA Files",
+    title: 'Upload DNA Files',
     description:
-      "Drop your 23andMe, AncestryDNA, MyHeritage, or VCF files. We support all major formats.",
+      'Drop your 23andMe, AncestryDNA, MyHeritage, or VCF files. We support all major formats.',
     Illustration: UploadIllustration,
   },
   {
     number: 2,
     icon: Brain,
-    title: "Instant Analysis",
-    description:
-      `Our engine screens ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predicts ${TRAIT_COUNT_DISPLAY} traits, and runs pharmacogenomic analysis in seconds.`,
+    title: 'Instant Analysis',
+    description: `Our engine screens ${CARRIER_PANEL_COUNT_DISPLAY} diseases, predicts ${TRAIT_COUNT_DISPLAY} traits, and runs pharmacogenomic analysis in seconds.`,
     Illustration: DnaIllustration,
   },
   {
     number: 3,
     icon: HeartPulse,
-    title: "Clear, Understandable Results",
+    title: 'Clear, Understandable Results',
     description:
-      "Get clear, visual results with risk scores, Punnett squares, and genetic counselor referrals.",
+      'Get clear, visual results with risk scores, Punnett squares, and genetic counselor referrals.',
     Illustration: ReportIllustration,
   },
 ];
@@ -153,10 +225,7 @@ export function ScrollTimeline() {
   const lineScaleY = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
 
   return (
-    <section
-      className="relative px-4 py-16 md:px-6 md:py-24"
-      aria-label="How it works"
-    >
+    <section className="relative px-4 py-16 md:px-6 md:py-24" aria-label="How it works">
       <div ref={sectionRef} className="relative mx-auto max-w-5xl">
         <SectionHeading
           title="How It Works"
@@ -172,11 +241,11 @@ export function ScrollTimeline() {
             aria-hidden="true"
           >
             {/* Track line (faded) */}
-            <div className="absolute inset-0 bg-(--border-subtle)" />
+            <div className="bg-(--border-subtle) absolute inset-0" />
             {/* Animated fill line */}
             <m.div
-              className="absolute inset-x-0 top-0 origin-top bg-(--accent-teal)"
-              style={{ scaleY: lineScaleY, height: "100%" }}
+              className="bg-(--accent-teal) absolute inset-x-0 top-0 origin-top"
+              style={{ scaleY: lineScaleY, height: '100%' }}
             />
           </div>
 
@@ -193,22 +262,18 @@ export function ScrollTimeline() {
                 >
                   {/* Text area — alternates sides on desktop */}
                   <div
-                    className={`md:w-1/2 ${isEven ? "md:pr-16 md:text-right" : "md:order-3 md:pl-16"}`}
+                    className={`md:w-1/2 ${isEven ? 'md:pr-16 md:text-right' : 'md:order-3 md:pl-16'}`}
                   >
-                    <ScrollReveal
-                      type="clip"
-                      direction={isEven ? "right" : "left"}
-                      delay={0.1}
-                    >
-                      <div className={`${isEven ? "md:ml-auto" : ""} max-w-xs`}>
+                    <ScrollReveal type="clip" direction={isEven ? 'right' : 'left'} delay={0.1}>
+                      <div className={`${isEven ? 'md:ml-auto' : ''} max-w-xs`}>
                         <h3
-                          className="mb-3 font-heading font-bold text-(--text-heading)"
-                          style={{ fontSize: "var(--font-size-fluid-body)" }}
+                          className="font-heading text-(--text-heading) mb-3 font-bold"
+                          style={{ fontSize: 'var(--font-size-fluid-body)' }}
                         >
                           <span className="sr-only">Step {step.number}: </span>
                           {step.title}
                         </h3>
-                        <p className="text-sm leading-relaxed text-(--text-muted)">
+                        <p className="text-(--text-muted) text-sm leading-relaxed">
                           {step.description}
                         </p>
                       </div>
@@ -223,16 +288,17 @@ export function ScrollTimeline() {
                   {/* Illustration — alternates sides on desktop */}
                   <ScrollReveal
                     type="clip"
-                    direction={isEven ? "left" : "right"}
+                    direction={isEven ? 'left' : 'right'}
                     delay={0.2}
-                    className={`md:w-1/2 ${isEven ? "md:order-3 md:pl-16" : "md:pr-16"}`}
+                    className={`md:w-1/2 ${isEven ? 'md:order-3 md:pl-16' : 'md:pr-16'}`}
                   >
                     <div
                       className="mx-auto flex h-28 w-28 items-center justify-center rounded-2xl"
                       style={{
-                        background: "rgba(12,18,32,0.5)", /* --bg-surface (#0c1220) at 50% opacity */
-                        border: "1px solid var(--border-subtle)",
-                        backdropFilter: "blur(8px)",
+                        background:
+                          'rgba(12,18,32,0.5)' /* --bg-surface (#0c1220) at 50% opacity */,
+                        border: '1px solid var(--border-subtle)',
+                        backdropFilter: 'blur(8px)',
                       }}
                     >
                       <Illustration />

@@ -37,9 +37,7 @@ function makeCarrierResult(overrides: Partial<CarrierResult> = {}): CarrierResul
 /**
  * Create a minimal CounselingProviderEntry for testing.
  */
-function makeProvider(
-  overrides: Partial<CounselingProviderEntry> = {},
-): CounselingProviderEntry {
+function makeProvider(overrides: Partial<CounselingProviderEntry> = {}): CounselingProviderEntry {
   return {
     name: 'Dr. Jane Smith',
     credentials: 'MS, CGC',
@@ -86,9 +84,7 @@ describe('shouldRecommendCounseling', () => {
 
   it('should recommend for high PRS percentile (>90th)', () => {
     const results = [makeCarrierResult()]; // low risk carrier
-    const prsResults = [
-      { percentile: 95, trait: 'Coronary Artery Disease' },
-    ];
+    const prsResults = [{ percentile: 95, trait: 'Coronary Artery Disease' }];
     const [recommend, reasons] = shouldRecommendCounseling(results, prsResults);
     expect(recommend).toBe(true);
     expect(reasons.some((r) => r.includes('Polygenic risk score'))).toBe(true);
@@ -108,11 +104,7 @@ describe('shouldRecommendCounseling', () => {
   it('should recommend for actionable PGx findings', () => {
     const results = [makeCarrierResult()];
     const pgxResults = [{ actionable: true, drug: 'Codeine' }];
-    const [recommend, reasons] = shouldRecommendCounseling(
-      results,
-      undefined,
-      pgxResults,
-    );
+    const [recommend, reasons] = shouldRecommendCounseling(results, undefined, pgxResults);
     expect(recommend).toBe(true);
     expect(reasons.some((r) => r.includes('Actionable pharmacogenomic finding'))).toBe(true);
     expect(reasons.some((r) => r.includes('Codeine'))).toBe(true);
@@ -121,11 +113,7 @@ describe('shouldRecommendCounseling', () => {
   it('should NOT recommend for non-actionable PGx findings', () => {
     const results = [makeCarrierResult()];
     const pgxResults = [{ actionable: false, drug: 'Acetaminophen' }];
-    const [recommend, reasons] = shouldRecommendCounseling(
-      results,
-      undefined,
-      pgxResults,
-    );
+    const [recommend, reasons] = shouldRecommendCounseling(results, undefined, pgxResults);
     expect(recommend).toBe(false);
     expect(reasons).toHaveLength(0);
   });
@@ -156,11 +144,7 @@ describe('shouldRecommendCounseling', () => {
     const prsResults = [{ percentile: 96, trait: 'Heart Disease' }];
     const pgxResults = [{ actionable: true, drug: 'Warfarin' }];
 
-    const [recommend, reasons] = shouldRecommendCounseling(
-      results,
-      prsResults,
-      pgxResults,
-    );
+    const [recommend, reasons] = shouldRecommendCounseling(results, prsResults, pgxResults);
     expect(recommend).toBe(true);
     // Should have: carrier+carrier reason, high_risk for A, high_risk for B, PRS, PGx
     expect(reasons.length).toBeGreaterThanOrEqual(4);

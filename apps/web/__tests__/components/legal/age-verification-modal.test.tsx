@@ -23,10 +23,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── localStorage mock ──────────────────────────────────────────────────────
@@ -40,11 +40,9 @@ function mockLocalStorage(data: Record<string, string> = {}) {
   vi.spyOn(Storage.prototype, 'getItem').mockImplementation(
     (key: string) => localStorageStore[key] ?? null,
   );
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(
-    (key: string, value: string) => {
-      localStorageStore[key] = value;
-    },
-  );
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key: string, value: string) => {
+    localStorageStore[key] = value;
+  });
 }
 
 // ─── Import component + safe-storage fallback (for cleanup) ──────────────────

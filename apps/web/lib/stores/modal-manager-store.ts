@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
+import { create } from 'zustand';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -27,14 +27,14 @@ interface ModalManagerState {
 // ── Helpers ───────────────────────────────────────────────────────────────
 
 function setMainContentHidden(hidden: boolean): void {
-  if (typeof document === "undefined") return;
-  const mainContent = document.getElementById("main-content");
+  if (typeof document === 'undefined') return;
+  const mainContent = document.getElementById('main-content');
   if (!mainContent) return;
 
   if (hidden) {
-    mainContent.setAttribute("aria-hidden", "true");
+    mainContent.setAttribute('aria-hidden', 'true');
   } else {
-    mainContent.removeAttribute("aria-hidden");
+    mainContent.removeAttribute('aria-hidden');
   }
 }
 

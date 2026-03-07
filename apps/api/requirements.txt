@@ -10,7 +10,7 @@ alembic==1.18.4
 # No critical CVEs for JWT signing features currently, but the ecosystem
 # is moving to PyJWT. Plan migration in a future technical debt sprint.
 python-jose[cryptography]==3.5.0
-cryptography==44.0.0
+cryptography==44.0.1
 passlib[bcrypt]==1.7.4
 bcrypt==4.1.3
 pyotp==2.9.0

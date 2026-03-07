@@ -45,16 +45,12 @@ async def wipe_analysis_results(
     """
     # Count first for the audit log
     count_result = await db.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == user_id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == user_id)
     )
     count = count_result.scalar_one()
 
     if count > 0:
-        await db.execute(
-            delete(AnalysisResult).where(AnalysisResult.user_id == user_id)
-        )
+        await db.execute(delete(AnalysisResult).where(AnalysisResult.user_id == user_id))
 
     # Always log the wipe event (even if count is 0, for the audit trail)
     await audit_service.log_event(

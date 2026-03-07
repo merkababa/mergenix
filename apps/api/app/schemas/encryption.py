@@ -70,9 +70,7 @@ def _validate_hex_field(
     Raises ValueError with a clear message if validation fails.
     """
     if not allow_empty and len(value) == 0:
-        raise ValueError(
-            f"{field_name} must not be empty"
-        )
+        raise ValueError(f"{field_name} must not be empty")
 
     if len(value) % 2 != 0:
         raise ValueError(
@@ -81,10 +79,7 @@ def _validate_hex_field(
         )
 
     if not _HEX_PATTERN.match(value):
-        raise ValueError(
-            f"{field_name} must contain only valid hexadecimal characters "
-            f"(0-9, a-f, A-F)"
-        )
+        raise ValueError(f"{field_name} must contain only valid hexadecimal characters (0-9, a-f, A-F)")
 
     if min_hex_chars is not None and len(value) < min_hex_chars:
         raise ValueError(
@@ -137,10 +132,7 @@ class KdfParams(BaseModel):
     def memory_cost_minimum(cls, v: int) -> int:
         """Enforce minimum memory cost of 64 MiB (65536 KiB) for Argon2id."""
         if v < _KDF_MIN_MEMORY_COST:
-            raise ValueError(
-                f"memory_cost must be >= {_KDF_MIN_MEMORY_COST} "
-                f"(64 MiB minimum for Argon2id), got {v}"
-            )
+            raise ValueError(f"memory_cost must be >= {_KDF_MIN_MEMORY_COST} (64 MiB minimum for Argon2id), got {v}")
         return v
 
     @field_validator("time_cost")
@@ -148,9 +140,7 @@ class KdfParams(BaseModel):
     def time_cost_minimum(cls, v: int) -> int:
         """Enforce minimum iteration count of 3."""
         if v < _KDF_MIN_TIME_COST:
-            raise ValueError(
-                f"time_cost must be >= {_KDF_MIN_TIME_COST}, got {v}"
-            )
+            raise ValueError(f"time_cost must be >= {_KDF_MIN_TIME_COST}, got {v}")
         return v
 
     @field_validator("parallelism")
@@ -158,9 +148,7 @@ class KdfParams(BaseModel):
     def parallelism_minimum(cls, v: int) -> int:
         """Enforce minimum parallelism of 1."""
         if v < _KDF_MIN_PARALLELISM:
-            raise ValueError(
-                f"parallelism must be >= {_KDF_MIN_PARALLELISM}, got {v}"
-            )
+            raise ValueError(f"parallelism must be >= {_KDF_MIN_PARALLELISM}, got {v}")
         return v
 
     @field_validator("key_length")
@@ -168,10 +156,7 @@ class KdfParams(BaseModel):
     def key_length_must_be_32(cls, v: int) -> int:
         """Enforce key_length of exactly 32 bytes (AES-256)."""
         if v != _KDF_REQUIRED_KEY_LENGTH:
-            raise ValueError(
-                f"key_length must be exactly {_KDF_REQUIRED_KEY_LENGTH} "
-                f"(AES-256), got {v}"
-            )
+            raise ValueError(f"key_length must be exactly {_KDF_REQUIRED_KEY_LENGTH} (AES-256), got {v}")
         return v
 
 
@@ -245,7 +230,6 @@ class EncryptedEnvelope(BaseModel):
         """Validate version matches the pattern v<digits>:<kdf>:<cipher>."""
         if not _VERSION_PATTERN.match(v):
             raise ValueError(
-                f"version must match pattern 'v<number>:<kdf>:<cipher>' "
-                f"(e.g., 'v1:argon2id:aes-gcm'), got '{v}'"
+                f"version must match pattern 'v<number>:<kdf>:<cipher>' (e.g., 'v1:argon2id:aes-gcm'), got '{v}'"
             )
         return v

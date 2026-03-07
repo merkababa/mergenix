@@ -8,9 +8,9 @@
  * is responsible for catching and surfacing errors to the UI.
  */
 
-import { get, post } from "./client";
-import type { Tier } from "@mergenix/shared-types";
-import { parseTier } from "@/lib/utils/parse-tier";
+import { get, post } from './client';
+import type { Tier } from '@mergenix/shared-types';
+import { parseTier } from '@/lib/utils/parse-tier';
 
 // ── API Response Types (snake_case from backend) ────────────────────────
 
@@ -104,10 +104,8 @@ function toSubscriptionStatus(raw: RawSubscriptionStatus): SubscriptionStatus {
  * @throws ApiError with code "DOWNGRADE_NOT_ALLOWED" if attempting a downgrade.
  * @throws ApiError with code "CHECKOUT_FAILED" for Stripe errors.
  */
-export async function createCheckout(
-  tier: "premium" | "pro",
-): Promise<CheckoutResponse> {
-  const raw = await post<RawCheckoutResponse>("/payments/checkout", { tier });
+export async function createCheckout(tier: 'premium' | 'pro'): Promise<CheckoutResponse> {
+  const raw = await post<RawCheckoutResponse>('/payments/checkout', { tier });
   return toCheckoutResponse(raw);
 }
 
@@ -115,7 +113,7 @@ export async function createCheckout(
  * Fetch the authenticated user's payment history, newest first.
  */
 export async function getPaymentHistory(): Promise<PaymentHistoryItem[]> {
-  const raw = await get<RawPaymentHistoryItem[]>("/payments/history");
+  const raw = await get<RawPaymentHistoryItem[]>('/payments/history');
   return raw.map(toPaymentHistoryItem);
 }
 
@@ -123,6 +121,6 @@ export async function getPaymentHistory(): Promise<PaymentHistoryItem[]> {
  * Fetch the authenticated user's current subscription/tier status.
  */
 export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
-  const raw = await get<RawSubscriptionStatus>("/payments/tier-status");
+  const raw = await get<RawSubscriptionStatus>('/payments/tier-status');
   return toSubscriptionStatus(raw);
 }

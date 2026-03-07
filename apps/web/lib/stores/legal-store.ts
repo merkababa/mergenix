@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
-import type { ConsentRecord } from "@mergenix/shared-types";
-import * as legalClient from "@/lib/api/legal-client";
+import { create } from 'zustand';
+import type { ConsentRecord } from '@mergenix/shared-types';
+import * as legalClient from '@/lib/api/legal-client';
 import {
   COOKIE_CONSENT_KEY,
   AGE_VERIFIED_KEY,
@@ -10,14 +10,14 @@ import {
   ANALYTICS_ENABLED_KEY,
   MARKETING_ENABLED_KEY,
   PENDING_CONSENTS_KEY,
-} from "../constants/legal";
-import { safeLocalStorageGet, safeLocalStorageSet } from "../utils/safe-storage";
-import { useAnalysisStore } from "./analysis-store";
-import { extractErrorMessage } from "../utils/extract-error";
+} from '../constants/legal';
+import { safeLocalStorageGet, safeLocalStorageSet } from '../utils/safe-storage';
+import { useAnalysisStore } from './analysis-store';
+import { extractErrorMessage } from '../utils/extract-error';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
-type CookieConsentStatus = "pending" | "accepted_all" | "essential_only" | "custom";
+type CookieConsentStatus = 'pending' | 'accepted_all' | 'essential_only' | 'custom';
 
 interface LegalState {
   cookieConsent: CookieConsentStatus;
@@ -55,36 +55,36 @@ interface LegalState {
 
 function getInitialCookieConsent(): CookieConsentStatus {
   const stored = safeLocalStorageGet(COOKIE_CONSENT_KEY);
-  if (stored === "accepted_all") return "accepted_all";
-  if (stored === "essential_only") return "essential_only";
-  if (stored === "custom") return "custom";
-  return "pending";
+  if (stored === 'accepted_all') return 'accepted_all';
+  if (stored === 'essential_only') return 'essential_only';
+  if (stored === 'custom') return 'custom';
+  return 'pending';
 }
 
 function getInitialAnalyticsEnabled(): boolean {
   const consent = safeLocalStorageGet(COOKIE_CONSENT_KEY);
-  if (consent === "accepted_all") return true;
-  if (consent === "custom") {
-    return safeLocalStorageGet(ANALYTICS_ENABLED_KEY) === "true";
+  if (consent === 'accepted_all') return true;
+  if (consent === 'custom') {
+    return safeLocalStorageGet(ANALYTICS_ENABLED_KEY) === 'true';
   }
   return false;
 }
 
 function getInitialMarketingEnabled(): boolean {
   const consent = safeLocalStorageGet(COOKIE_CONSENT_KEY);
-  if (consent === "accepted_all") return true;
-  if (consent === "custom") {
-    return safeLocalStorageGet(MARKETING_ENABLED_KEY) === "true";
+  if (consent === 'accepted_all') return true;
+  if (consent === 'custom') {
+    return safeLocalStorageGet(MARKETING_ENABLED_KEY) === 'true';
   }
   return false;
 }
 
 function getInitialAgeVerified(): boolean {
-  return safeLocalStorageGet(AGE_VERIFIED_KEY) === "true";
+  return safeLocalStorageGet(AGE_VERIFIED_KEY) === 'true';
 }
 
 function getInitialChipLimitationAcknowledged(): boolean {
-  return safeLocalStorageGet(CHIP_LIMITATION_ACK_KEY) === "true";
+  return safeLocalStorageGet(CHIP_LIMITATION_ACK_KEY) === 'true';
 }
 
 // ── Store ─────────────────────────────────────────────────────────────────
@@ -104,11 +104,11 @@ export const useLegalStore = create<LegalState>()((set) => ({
   error: null,
 
   acceptAllCookies: async () => {
-    safeLocalStorageSet(COOKIE_CONSENT_KEY, "accepted_all");
-    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, "true");
-    safeLocalStorageSet(MARKETING_ENABLED_KEY, "true");
+    safeLocalStorageSet(COOKIE_CONSENT_KEY, 'accepted_all');
+    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, 'true');
+    safeLocalStorageSet(MARKETING_ENABLED_KEY, 'true');
     set({
-      cookieConsent: "accepted_all",
+      cookieConsent: 'accepted_all',
       analyticsEnabled: true,
       marketingEnabled: true,
       error: null,
@@ -121,11 +121,11 @@ export const useLegalStore = create<LegalState>()((set) => ({
   },
 
   acceptEssentialOnly: async () => {
-    safeLocalStorageSet(COOKIE_CONSENT_KEY, "essential_only");
-    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, "false");
-    safeLocalStorageSet(MARKETING_ENABLED_KEY, "false");
+    safeLocalStorageSet(COOKIE_CONSENT_KEY, 'essential_only');
+    safeLocalStorageSet(ANALYTICS_ENABLED_KEY, 'false');
+    safeLocalStorageSet(MARKETING_ENABLED_KEY, 'false');
     set({
-      cookieConsent: "essential_only",
+      cookieConsent: 'essential_only',
       analyticsEnabled: false,
       marketingEnabled: false,
       error: null,
@@ -139,7 +139,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
 
   updateCookiePrefs: async (analytics: boolean, marketing: boolean) => {
     const hasCustom = analytics || marketing;
-    const status: CookieConsentStatus = hasCustom ? "custom" : "essential_only";
+    const status: CookieConsentStatus = hasCustom ? 'custom' : 'essential_only';
     safeLocalStorageSet(COOKIE_CONSENT_KEY, status);
     safeLocalStorageSet(ANALYTICS_ENABLED_KEY, String(analytics));
     safeLocalStorageSet(MARKETING_ENABLED_KEY, String(marketing));
@@ -162,7 +162,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
     // so calling the authenticated API here would always 401.
     // Use syncAgeVerification() after login/register to persist the
     // audit trail server-side.
-    safeLocalStorageSet(AGE_VERIFIED_KEY, "true");
+    safeLocalStorageSet(AGE_VERIFIED_KEY, 'true');
     set({ ageVerified: true, error: null });
   },
 
@@ -171,10 +171,10 @@ export const useLegalStore = create<LegalState>()((set) => ({
     // age-verification consent record on the server (audit trail).
     // Also a good moment to flush any pending consents from previous failures.
     void useLegalStore.getState().flushPendingConsents();
-    if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== "true") return;
+    if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== 'true') return;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        await legalClient.recordConsent("age_verification", "1.0");
+        await legalClient.recordConsent('age_verification', '1.0');
         return; // success
       } catch {
         if (attempt < 2) await new Promise((r) => setTimeout(r, 1000));
@@ -195,7 +195,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
 
   setChipLimitationAcknowledged: (ack: boolean) => {
     if (ack) {
-      safeLocalStorageSet(CHIP_LIMITATION_ACK_KEY, "true");
+      safeLocalStorageSet(CHIP_LIMITATION_ACK_KEY, 'true');
     }
     set({ chipLimitationAcknowledged: ack, error: null });
   },
@@ -208,8 +208,8 @@ export const useLegalStore = create<LegalState>()((set) => ({
     // Withdraws genetic data consent — sets consentWithdrawn=true, geneticDataConsentGiven=false
     // Also clears any locally-stored analysis results (GDPR right to withdrawal)
     // Clear health consent so the interstitial re-appears if consent is re-granted
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("mergenix_health_trait_consent");
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('mergenix_health_trait_consent');
     }
     set({ consentWithdrawn: true, geneticDataConsentGiven: false, error: null });
     useAnalysisStore.getState().reset();
@@ -229,12 +229,16 @@ export const useLegalStore = create<LegalState>()((set) => ({
         isLoading: false,
       }));
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to record consent");
+      const message = extractErrorMessage(error, 'Failed to record consent');
       // Queue the failed consent record so it can be retried on next opportunity
       // (GDPR Article 7(1) — proof-of-consent must eventually reach the server)
       const existing = safeLocalStorageGet(PENDING_CONSENTS_KEY);
       const queue: Array<{ consentType: string; version: string; timestamp: string }> = existing
-        ? (JSON.parse(existing) as Array<{ consentType: string; version: string; timestamp: string }>)
+        ? (JSON.parse(existing) as Array<{
+            consentType: string;
+            version: string;
+            timestamp: string;
+          }>)
         : [];
       queue.push({ consentType: type, version, timestamp: new Date().toISOString() });
       safeLocalStorageSet(PENDING_CONSENTS_KEY, JSON.stringify(queue));
@@ -247,7 +251,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
     const existing = safeLocalStorageGet(PENDING_CONSENTS_KEY);
     if (!existing) return;
     const queue: Array<{ consentType: string; version: string; timestamp: string }> = JSON.parse(
-      existing
+      existing,
     ) as Array<{ consentType: string; version: string; timestamp: string }>;
     if (queue.length === 0) return;
     const remaining: typeof queue = [];
@@ -260,7 +264,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
       }
     }
     if (remaining.length === 0) {
-      safeLocalStorageSet(PENDING_CONSENTS_KEY, "[]");
+      safeLocalStorageSet(PENDING_CONSENTS_KEY, '[]');
     } else {
       safeLocalStorageSet(PENDING_CONSENTS_KEY, JSON.stringify(remaining));
     }
@@ -274,7 +278,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
       const consents = await legalClient.listConsents();
       set({ consents, isLoading: false });
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to load consents");
+      const message = extractErrorMessage(error, 'Failed to load consents');
       set({ isLoading: false, error: message });
       throw error;
     }
@@ -284,7 +288,7 @@ export const useLegalStore = create<LegalState>()((set) => ({
     try {
       const prefs = await legalClient.getCookiePreferences();
       const hasCustom = prefs.analytics || prefs.marketing;
-      const status: CookieConsentStatus = hasCustom ? "custom" : "essential_only";
+      const status: CookieConsentStatus = hasCustom ? 'custom' : 'essential_only';
       set({
         analyticsEnabled: prefs.analytics,
         marketingEnabled: prefs.marketing,

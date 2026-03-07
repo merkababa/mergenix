@@ -12,12 +12,20 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+  mockInputFactory,
+} from '../../__helpers__';
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
 vi.mock('next/link', () => mockNextLinkFactory());
-vi.mock('lucide-react', () => mockLucideIcons('Dna', 'Shield', 'Heart', 'Github', 'Twitter', 'Mail', 'CheckCircle', 'X'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Dna', 'Shield', 'Heart', 'Github', 'Twitter', 'Mail', 'CheckCircle', 'X'),
+);
 vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 
@@ -41,9 +49,7 @@ describe('Footer — D4.6 Brand Moment', () => {
   it('D4.6: renders a brand tagline in the footer', () => {
     render(<Footer />);
     // Should contain the distinctive brand tagline
-    expect(
-      screen.getByText(/Genetics Meets Insight/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Genetics Meets Insight/i)).toBeInTheDocument();
   });
 
   it('D4.6: footer brand section renders the Mergenix wordmark as visible text', () => {
@@ -65,9 +71,7 @@ describe('Footer — D4.6 Brand Moment', () => {
     // Should have at least a border-t separator in the bottom bar
     const hrElements = footer!.querySelectorAll('hr');
     // Either an <hr> or the existing border-t bottom bar counts
-    const hasSeparator =
-      hrElements.length > 0 ||
-      footer!.innerHTML.includes('border-t');
+    const hasSeparator = hrElements.length > 0 || footer!.innerHTML.includes('border-t');
     expect(hasSeparator).toBe(true);
   });
 });
@@ -109,9 +113,9 @@ describe('Footer — CPRA SPI link', () => {
     const modalText = screen.getByRole('dialog').textContent ?? '';
     expect(
       modalText.toLowerCase().includes('sensitive') ||
-      modalText.toLowerCase().includes('default') ||
-      modalText.toLowerCase().includes('client-side') ||
-      modalText.toLowerCase().includes('privacy')
+        modalText.toLowerCase().includes('default') ||
+        modalText.toLowerCase().includes('client-side') ||
+        modalText.toLowerCase().includes('privacy'),
     ).toBe(true);
   });
 

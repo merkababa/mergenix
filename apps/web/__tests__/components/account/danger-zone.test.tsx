@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+} from '../../__helpers__';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('Trash2', 'ChevronDown', 'AlertTriangle', 'Loader2'));
@@ -41,10 +46,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── Import component after mocks ────────────────────────────────────────────

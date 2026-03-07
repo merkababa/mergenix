@@ -14,7 +14,7 @@
 /** @type {import("eslint").Rule.RuleModule} */
 const rule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
       description:
         'Enforce "use client" directive in privacy-sensitive files that handle genetic/DNA data',
@@ -24,20 +24,19 @@ const rule = {
     messages: {
       missingUseClient:
         'Files in privacy-sensitive paths MUST have "use client" as the first directive. ' +
-        "DNA data must NEVER reach the server. " +
-        "Without this directive, Next.js will treat this as a Server Component.",
+        'DNA data must NEVER reach the server. ' +
+        'Without this directive, Next.js will treat this as a Server Component.',
       addUseClient: 'Add "use client" directive at the top of the file',
     },
     schema: [],
   },
   create(context) {
     // Normalize path separators to forward slashes for cross-platform support
-    const filename = context.filename.replace(/\\/g, "/");
+    const filename = context.filename.replace(/\\/g, '/');
 
     // Check if this file is in a privacy-sensitive path
     const isPrivacySensitive =
-      filename.includes("app/(app)/analysis/") ||
-      filename.includes("components/genetics/");
+      filename.includes('app/(app)/analysis/') || filename.includes('components/genetics/');
 
     if (!isPrivacySensitive) {
       return {};
@@ -49,28 +48,25 @@ const rule = {
       // Check the very first expression statement in the program
       ExpressionStatement(node) {
         if (
-          node.parent.type === "Program" &&
+          node.parent.type === 'Program' &&
           node.parent.body[0] === node &&
-          node.expression.type === "Literal" &&
-          node.expression.value === "use client"
+          node.expression.type === 'Literal' &&
+          node.expression.value === 'use client'
         ) {
           hasUseClientDirective = true;
         }
       },
 
-      "Program:exit"(programNode) {
+      'Program:exit'(programNode) {
         if (!hasUseClientDirective) {
           context.report({
             node: programNode,
-            messageId: "missingUseClient",
+            messageId: 'missingUseClient',
             suggest: [
               {
-                messageId: "addUseClient",
+                messageId: 'addUseClient',
                 fix(fixer) {
-                  return fixer.insertTextBefore(
-                    programNode,
-                    '"use client";\n\n',
-                  );
+                  return fixer.insertTextBefore(programNode, '"use client";\n\n');
                 },
               },
             ],

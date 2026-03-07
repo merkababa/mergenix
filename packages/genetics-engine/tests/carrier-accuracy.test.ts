@@ -44,7 +44,8 @@ const CF_F508DEL: CarrierPanelEntry = {
   carrier_frequency: '1 in 25',
   pathogenic_allele: 'T',
   reference_allele: 'C',
-  description: 'Progressive disorder causing persistent lung infections and limiting breathing ability.',
+  description:
+    'Progressive disorder causing persistent lung infections and limiting breathing ability.',
   severity: 'high',
   prevalence: '1 in 3,500',
   omim_id: '219700',
@@ -126,7 +127,8 @@ const FAMILIAL_HYPERCHOLESTEROLEMIA: CarrierPanelEntry = {
   carrier_frequency: '1 in 250',
   pathogenic_allele: 'T',
   reference_allele: 'C',
-  description: 'Severely elevated LDL cholesterol from birth causing premature cardiovascular disease.',
+  description:
+    'Severely elevated LDL cholesterol from birth causing premature cardiovascular disease.',
   severity: 'high',
   prevalence: '1 in 250',
   omim_id: '143890',
@@ -356,10 +358,30 @@ describe('Carrier Accuracy — Autosomal Dominant (AD)', () => {
   it('AD risk level is always high_risk when any parent has the variant', () => {
     // Verify: for AD, any parent carrier/affected = high_risk
     // Normal × normal only case that produces low_risk
-    const normalNormal = determineRiskLevel('normal', 'normal', { affected: 0, carrier: 0, normal: 100 }, 'autosomal_dominant');
-    const carrierNormal = determineRiskLevel('carrier', 'normal', { affected: 50, carrier: 0, normal: 50 }, 'autosomal_dominant');
-    const affectedNormal = determineRiskLevel('affected', 'normal', { affected: 50, carrier: 0, normal: 50 }, 'autosomal_dominant');
-    const normalCarrier = determineRiskLevel('normal', 'carrier', { affected: 50, carrier: 0, normal: 50 }, 'autosomal_dominant');
+    const normalNormal = determineRiskLevel(
+      'normal',
+      'normal',
+      { affected: 0, carrier: 0, normal: 100 },
+      'autosomal_dominant',
+    );
+    const carrierNormal = determineRiskLevel(
+      'carrier',
+      'normal',
+      { affected: 50, carrier: 0, normal: 50 },
+      'autosomal_dominant',
+    );
+    const affectedNormal = determineRiskLevel(
+      'affected',
+      'normal',
+      { affected: 50, carrier: 0, normal: 50 },
+      'autosomal_dominant',
+    );
+    const normalCarrier = determineRiskLevel(
+      'normal',
+      'carrier',
+      { affected: 50, carrier: 0, normal: 50 },
+      'autosomal_dominant',
+    );
 
     expect(normalNormal).toBe('low_risk');
     expect(carrierNormal).toBe('high_risk');
@@ -671,7 +693,7 @@ describe('Carrier Accuracy — Residual Risk', () => {
     expect(result).not.toBeNull();
     expect(result!.condition).toBe('Cystic Fibrosis');
     expect(result!.ethnicity).toBe('European');
-    expect(result!.detectionRate).toBe(0.90);
+    expect(result!.detectionRate).toBe(0.9);
     expect(result!.priorCarrierFreq).toBe(0.04);
 
     // Verify residual risk is in expected range (~1 in 240)
@@ -750,7 +772,11 @@ describe('Carrier Accuracy — Residual Risk', () => {
 
   it('condition not in COMMON_DETECTION_RATES → getResidualRisk returns null', () => {
     // An unknown condition has no detection rate data
-    const result = getResidualRisk('Nonexistent Rare Condition XYZ', 'European', COMMON_DETECTION_RATES);
+    const result = getResidualRisk(
+      'Nonexistent Rare Condition XYZ',
+      'European',
+      COMMON_DETECTION_RATES,
+    );
     expect(result).toBeNull();
   });
 
@@ -762,8 +788,8 @@ describe('Carrier Accuracy — Residual Risk', () => {
     //         = 0.004 / 0.964
     //         ≈ 0.0041493775933609958
     const priorFreq = 0.04;
-    const detectionRate = 0.90;
-    const expected = priorFreq * (1 - detectionRate) / (1 - priorFreq * detectionRate);
+    const detectionRate = 0.9;
+    const expected = (priorFreq * (1 - detectionRate)) / (1 - priorFreq * detectionRate);
     // Hand-calculated value: 0.004 / 0.964 ≈ 0.004149
     const residual = calculateResidualRisk(detectionRate, priorFreq);
     expect(residual).toBeCloseTo(expected, 4);

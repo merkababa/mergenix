@@ -58,6 +58,7 @@ async def test_save_analysis_with_data_version(client: AsyncClient, auth_headers
     saved_item = next(i for i in items if i["id"] == data["id"])
     assert saved_item["data_version"] == "v2.1.0"
 
+
 @pytest.mark.asyncio
 async def test_save_analysis_without_data_version(client: AsyncClient, auth_headers: dict[str, str]):
     """Test saving an analysis result without data_version (should be null)."""
@@ -71,6 +72,7 @@ async def test_save_analysis_without_data_version(client: AsyncClient, auth_head
     items = list_response.json()
     saved_item = next(i for i in items if i["id"] == data["id"])
     assert saved_item["data_version"] is None
+
 
 @pytest.mark.asyncio
 async def test_get_analysis_includes_data_version(client: AsyncClient, auth_headers: dict[str, str]):
@@ -88,6 +90,7 @@ async def test_get_analysis_includes_data_version(client: AsyncClient, auth_head
     assert get_response.status_code == 200
     detail = get_response.json()
     assert detail["data_version"] == "v3.0.0-beta"
+
 
 @pytest.mark.asyncio
 async def test_data_version_type_validation(client: AsyncClient, auth_headers: dict[str, str]):

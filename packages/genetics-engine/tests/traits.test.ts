@@ -30,8 +30,16 @@ function makeTraitEntry(overrides: Partial<TraitSnpEntry> = {}): TraitSnpEntry {
     inheritance: 'codominant',
     alleles: { ref: 'G', alt: 'A' },
     phenotype_map: {
-      GG: { phenotype: 'Brown Eyes', description: 'Very high likelihood of brown eyes', probability: 'high' },
-      AG: { phenotype: 'Green/Hazel Eyes', description: 'Mixed pigmentation', probability: 'medium' },
+      GG: {
+        phenotype: 'Brown Eyes',
+        description: 'Very high likelihood of brown eyes',
+        probability: 'high',
+      },
+      AG: {
+        phenotype: 'Green/Hazel Eyes',
+        description: 'Mixed pigmentation',
+        probability: 'medium',
+      },
       AA: { phenotype: 'Blue Eyes', description: 'Light eye color', probability: 'high' },
     },
     description: 'Primary determinant of eye color',
@@ -197,11 +205,7 @@ describe('predictTrait', () => {
 
   it('should return "success" with offspring probabilities when both parents have SNP', () => {
     const traitEntry = makeTraitEntry();
-    const result = predictTrait(
-      { rs12913832: 'AG' },
-      { rs12913832: 'AG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'AG' }, { rs12913832: 'AG' }, traitEntry);
     expect(result.status).toBe('success');
     expect(Object.keys(result.offspringProbabilities).length).toBeGreaterThan(0);
     expect(result.parentAGenotype).toBe('AG');
@@ -212,11 +216,7 @@ describe('predictTrait', () => {
     const traitEntry = makeTraitEntry();
     // AG x AG -> AA(25%), AG(50%), GG(25%)
     // AA -> Blue Eyes, AG -> Green/Hazel Eyes, GG -> Brown Eyes
-    const result = predictTrait(
-      { rs12913832: 'AG' },
-      { rs12913832: 'AG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'AG' }, { rs12913832: 'AG' }, traitEntry);
     expect(result.status).toBe('success');
     // Probabilities should be in percentages (multiply by 100, round to 1 decimal)
     // 0.25 -> 25.0, 0.5 -> 50.0, 0.25 -> 25.0
@@ -227,11 +227,7 @@ describe('predictTrait', () => {
 
   it('should include phenotype details from rich format entries', () => {
     const traitEntry = makeTraitEntry();
-    const result = predictTrait(
-      { rs12913832: 'GG' },
-      { rs12913832: 'GG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'GG' }, { rs12913832: 'GG' }, traitEntry);
     expect(result.status).toBe('success');
     expect(result.phenotypeDetails).toBeDefined();
     expect(result.phenotypeDetails!['Brown Eyes']).toBeDefined();
@@ -245,22 +241,14 @@ describe('predictTrait', () => {
       },
     });
     // Parents with GG genotypes but phenotype_map only has CC
-    const result = predictTrait(
-      { rs12913832: 'GG' },
-      { rs12913832: 'GG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'GG' }, { rs12913832: 'GG' }, traitEntry);
     expect(result.status).toBe('error');
     expect(result.note).toContain('Unable to predict this trait');
   });
 
   it('should include base fields (trait, gene, rsid, chromosome)', () => {
     const traitEntry = makeTraitEntry();
-    const result = predictTrait(
-      { rs12913832: 'GG' },
-      { rs12913832: 'GG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'GG' }, { rs12913832: 'GG' }, traitEntry);
     expect(result.trait).toBe('Eye Color');
     expect(result.gene).toBe('HERC2/OCA2');
     expect(result.rsid).toBe('rs12913832');
@@ -276,11 +264,7 @@ describe('predictTrait', () => {
       },
     });
     // AG x AG -> AA(25%), AG(50%), GG(25%) -- AG is unmapped
-    const result = predictTrait(
-      { rs12913832: 'AG' },
-      { rs12913832: 'AG' },
-      traitEntry,
-    );
+    const result = predictTrait({ rs12913832: 'AG' }, { rs12913832: 'AG' }, traitEntry);
     expect(result.status).toBe('success');
     expect(result.note).toContain('could not be mapped');
   });
@@ -318,12 +302,7 @@ describe('predictAllTraits', () => {
       makeTraitEntry({ rsid: 'rs1', trait: 'Trait 1' }),
       makeTraitEntry({ rsid: 'rs999', trait: 'Trait 2' }),
     ];
-    const results = predictAllTraits(
-      { rs1: 'AA' },
-      { rs1: 'AA' },
-      traits,
-      'pro',
-    );
+    const results = predictAllTraits({ rs1: 'AA' }, { rs1: 'AA' }, traits, 'pro');
     expect(results).toHaveLength(2);
     expect(results[0]!.status).toBe('success');
     expect(results[1]!.status).toBe('missing');
@@ -349,7 +328,7 @@ describe('predictAllTraits', () => {
 
     // All 5 traits are returned — no curated-list filtering
     expect(results).toHaveLength(5);
-    const traitNames = results.map(r => r.trait);
+    const traitNames = results.map((r) => r.trait);
     expect(traitNames).toContain('Eye Color');
     expect(traitNames).toContain('Hair Color');
     expect(traitNames).toContain('Earwax Type');
@@ -371,7 +350,7 @@ describe('predictAllTraits', () => {
     // Both tiers return all 3 traits — same traitLimit (Infinity) for both
     expect(freeResults).toHaveLength(3);
     expect(premiumResults).toHaveLength(3);
-    expect(freeResults.map(r => r.trait)).toEqual(premiumResults.map(r => r.trait));
+    expect(freeResults.map((r) => r.trait)).toEqual(premiumResults.map((r) => r.trait));
   });
 
   it('should default to free tier when no tier parameter is provided', () => {
@@ -384,7 +363,7 @@ describe('predictAllTraits', () => {
     const results = predictAllTraits(snps, snps, traits);
 
     expect(results).toHaveLength(2);
-    const traitNames = results.map(r => r.trait);
+    const traitNames = results.map((r) => r.trait);
     expect(traitNames).toContain('Eye Color');
     expect(traitNames).toContain('Dimples');
   });

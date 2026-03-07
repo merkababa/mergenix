@@ -69,7 +69,13 @@ const mockResult: FullAnalysisResult = {
   },
   prs: {
     conditions: {},
-    metadata: { source: 'GWAS Catalog', version: '1.0', conditionsCovered: 3, lastUpdated: '2026-01-01', disclaimer: 'PRS disclaimer text.' },
+    metadata: {
+      source: 'GWAS Catalog',
+      version: '1.0',
+      conditionsCovered: 3,
+      lastUpdated: '2026-01-01',
+      disclaimer: 'PRS disclaimer text.',
+    },
     tier: 'pro',
     conditionsAvailable: 3,
     conditionsTotal: 10,
@@ -122,17 +128,43 @@ const richResult: FullAnalysisResult = {
         chromosome: '22',
         parentA: {
           diplotype: '*1/*4',
-          metabolizerStatus: { status: 'intermediate_metabolizer', activityScore: 1.0, description: 'Reduced activity.' },
+          metabolizerStatus: {
+            status: 'intermediate_metabolizer',
+            activityScore: 1.0,
+            description: 'Reduced activity.',
+          },
           drugRecommendations: [
-            { drug: 'Codeine', recommendation: 'Consider alternative.', strength: 'strong', source: 'CPIC', category: 'Pain' },
-            { drug: 'Tramadol', recommendation: 'Monitor closely.', strength: 'moderate', source: 'CPIC', category: 'Pain' },
+            {
+              drug: 'Codeine',
+              recommendation: 'Consider alternative.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Pain',
+            },
+            {
+              drug: 'Tramadol',
+              recommendation: 'Monitor closely.',
+              strength: 'moderate',
+              source: 'CPIC',
+              category: 'Pain',
+            },
           ],
         },
         parentB: {
           diplotype: '*1/*1',
-          metabolizerStatus: { status: 'normal_metabolizer', activityScore: 2.0, description: 'Normal activity.' },
+          metabolizerStatus: {
+            status: 'normal_metabolizer',
+            activityScore: 2.0,
+            description: 'Normal activity.',
+          },
           drugRecommendations: [
-            { drug: 'Codeine', recommendation: 'Standard dosing.', strength: 'strong', source: 'CPIC', category: 'Pain' },
+            {
+              drug: 'Codeine',
+              recommendation: 'Standard dosing.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Pain',
+            },
           ],
         },
         offspringPredictions: [],
@@ -143,16 +175,36 @@ const richResult: FullAnalysisResult = {
         chromosome: '10',
         parentA: {
           diplotype: '*1/*2',
-          metabolizerStatus: { status: 'intermediate_metabolizer', activityScore: 1.0, description: 'Reduced.' },
+          metabolizerStatus: {
+            status: 'intermediate_metabolizer',
+            activityScore: 1.0,
+            description: 'Reduced.',
+          },
           drugRecommendations: [
-            { drug: 'Clopidogrel', recommendation: 'Consider alternative.', strength: 'strong', source: 'CPIC', category: 'Cardiovascular' },
+            {
+              drug: 'Clopidogrel',
+              recommendation: 'Consider alternative.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Cardiovascular',
+            },
           ],
         },
         parentB: {
           diplotype: '*17/*17',
-          metabolizerStatus: { status: 'ultra_rapid_metabolizer', activityScore: 3.0, description: 'Ultrarapid.' },
+          metabolizerStatus: {
+            status: 'ultra_rapid_metabolizer',
+            activityScore: 3.0,
+            description: 'Ultrarapid.',
+          },
           drugRecommendations: [
-            { drug: 'Clopidogrel', recommendation: 'Standard dosing.', strength: 'strong', source: 'CPIC', category: 'Cardiovascular' },
+            {
+              drug: 'Clopidogrel',
+              recommendation: 'Standard dosing.',
+              strength: 'strong',
+              source: 'CPIC',
+              category: 'Cardiovascular',
+            },
           ],
         },
         offspringPredictions: [],
@@ -165,22 +217,70 @@ const richResult: FullAnalysisResult = {
     conditions: {
       coronary_artery_disease: {
         name: 'Coronary Artery Disease',
-        parentA: { rawScore: 0.85, zScore: 0.42, percentile: 66, riskCategory: 'above_average', snpsFound: 290, snpsTotal: 310, coveragePct: 93.5 },
-        parentB: { rawScore: 0.22, zScore: -0.35, percentile: 36, riskCategory: 'below_average', snpsFound: 298, snpsTotal: 310, coveragePct: 96.1 },
-        offspring: { expectedPercentile: 52, rangeLow: 35, rangeHigh: 68, confidence: 'Moderate confidence.' },
+        parentA: {
+          rawScore: 0.85,
+          zScore: 0.42,
+          percentile: 66,
+          riskCategory: 'above_average',
+          snpsFound: 290,
+          snpsTotal: 310,
+          coveragePct: 93.5,
+        },
+        parentB: {
+          rawScore: 0.22,
+          zScore: -0.35,
+          percentile: 36,
+          riskCategory: 'below_average',
+          snpsFound: 298,
+          snpsTotal: 310,
+          coveragePct: 96.1,
+        },
+        offspring: {
+          expectedPercentile: 52,
+          rangeLow: 35,
+          rangeHigh: 68,
+          confidence: 'Moderate confidence.',
+        },
         ancestryNote: 'PRS weights derived primarily from European-ancestry GWAS.',
         reference: 'Khera AV et al. 2018.',
       },
       type_2_diabetes: {
         name: 'Type 2 Diabetes',
-        parentA: { rawScore: 0.55, zScore: 0.18, percentile: 57, riskCategory: 'average', snpsFound: 200, snpsTotal: 220, coveragePct: 90.9 },
-        parentB: { rawScore: 1.1, zScore: 0.72, percentile: 76, riskCategory: 'above_average', snpsFound: 208, snpsTotal: 220, coveragePct: 94.5 },
-        offspring: { expectedPercentile: 67, rangeLow: 48, rangeHigh: 82, confidence: 'Moderate confidence.' },
+        parentA: {
+          rawScore: 0.55,
+          zScore: 0.18,
+          percentile: 57,
+          riskCategory: 'average',
+          snpsFound: 200,
+          snpsTotal: 220,
+          coveragePct: 90.9,
+        },
+        parentB: {
+          rawScore: 1.1,
+          zScore: 0.72,
+          percentile: 76,
+          riskCategory: 'above_average',
+          snpsFound: 208,
+          snpsTotal: 220,
+          coveragePct: 94.5,
+        },
+        offspring: {
+          expectedPercentile: 67,
+          rangeLow: 48,
+          rangeHigh: 82,
+          confidence: 'Moderate confidence.',
+        },
         ancestryNote: 'PRS weights derived primarily from European-ancestry GWAS.',
         reference: 'Mahajan A et al. 2018.',
       },
     },
-    metadata: { source: 'PGS Catalog', version: '3.0.0', conditionsCovered: 2, lastUpdated: '2025-01-15', disclaimer: 'PRS disclaimer.' },
+    metadata: {
+      source: 'PGS Catalog',
+      version: '3.0.0',
+      conditionsCovered: 2,
+      lastUpdated: '2025-01-15',
+      disclaimer: 'PRS disclaimer.',
+    },
     tier: 'pro',
     conditionsAvailable: 2,
     conditionsTotal: 5,
@@ -278,7 +378,9 @@ describe('buildPdfDocument', () => {
     const jsonStr = JSON.stringify(doc.content);
 
     // Must contain some medical disclaimer text
-    expect(jsonStr).toMatch(/not.*substitute.*medical|informational.*only|clinical.*testing|consult.*healthcare/i);
+    expect(jsonStr).toMatch(
+      /not.*substitute.*medical|informational.*only|clinical.*testing|consult.*healthcare/i,
+    );
   });
 
   it('handles empty carrier results gracefully', () => {
@@ -459,14 +561,15 @@ describe('buildPdfDocument', () => {
     // new Date('not-a-date') returns Invalid Date, whose toLocaleDateString
     // returns 'Invalid Date' — the builder's catch block returns the raw string
     // Either 'Invalid Date' or 'not-a-date' should appear
-    const containsRawOrInvalid =
-      jsonStr.includes('not-a-date') || jsonStr.includes('Invalid Date');
+    const containsRawOrInvalid = jsonStr.includes('not-a-date') || jsonStr.includes('Invalid Date');
     expect(containsRawOrInvalid).toBe(true);
   });
 
   it('formatDate returns raw string when Date constructor throws', () => {
     const originalDate = globalThis.Date;
-    const mockDate = vi.fn(() => { throw new Error('mocked'); }) as unknown as DateConstructor;
+    const mockDate = vi.fn(() => {
+      throw new Error('mocked');
+    }) as unknown as DateConstructor;
     Object.assign(mockDate, originalDate);
     globalThis.Date = mockDate;
 

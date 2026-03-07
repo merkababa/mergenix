@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -8,8 +8,8 @@ import {
   useRef,
   useState,
   type ReactNode,
-} from "react";
-import { useAuthStore } from "@/lib/stores/auth-store";
+} from 'react';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 // ── Constants ────────────────────────────────────────────────────────────
 
@@ -163,24 +163,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       resetIdleTimer();
     };
 
-    window.addEventListener("mousemove", onActivity);
-    window.addEventListener("keydown", onActivity);
-    window.addEventListener("pointerdown", onActivity);
-    window.addEventListener("scroll", onActivity);
+    window.addEventListener('mousemove', onActivity);
+    window.addEventListener('keydown', onActivity);
+    window.addEventListener('pointerdown', onActivity);
+    window.addEventListener('scroll', onActivity);
 
     return () => {
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (absoluteTimerRef.current) clearTimeout(absoluteTimerRef.current);
-      window.removeEventListener("mousemove", onActivity);
-      window.removeEventListener("keydown", onActivity);
-      window.removeEventListener("pointerdown", onActivity);
-      window.removeEventListener("scroll", onActivity);
+      window.removeEventListener('mousemove', onActivity);
+      window.removeEventListener('keydown', onActivity);
+      window.removeEventListener('pointerdown', onActivity);
+      window.removeEventListener('scroll', onActivity);
     };
   }, [isAuthenticated, logout, resetIdleTimer]);
 
-  return (
-    <AuthContext.Provider value={{ isHydrated }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ isHydrated }}>{children}</AuthContext.Provider>;
 }

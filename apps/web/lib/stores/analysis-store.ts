@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
+import { create } from 'zustand';
 import type {
   FullAnalysisResult,
   ParseResultSummary,
@@ -8,12 +8,12 @@ import type {
   AnalysisStage,
   Population,
   FileFormat,
-} from "@mergenix/shared-types";
-import * as analysisClient from "@/lib/api/analysis-client";
-import type { AnalysisListItem } from "@/lib/api/analysis-client";
-import * as indexedDbStore from "@/lib/storage/indexed-db-store";
-import type { StoredResult } from "@/lib/storage/indexed-db-store";
-import { extractErrorMessage } from "@/lib/utils/extract-error";
+} from '@mergenix/shared-types';
+import * as analysisClient from '@/lib/api/analysis-client';
+import type { AnalysisListItem } from '@/lib/api/analysis-client';
+import * as indexedDbStore from '@/lib/storage/indexed-db-store';
+import type { StoredResult } from '@/lib/storage/indexed-db-store';
+import { extractErrorMessage } from '@/lib/utils/extract-error';
 
 // ─── Exported Types ─────────────────────────────────────────────────────────
 
@@ -26,29 +26,23 @@ export type GeneticFileFormat = FileFormat;
  * Extends the engine's `AnalysisStage` with an extra "idle" value
  * representing the pre-analysis state.
  */
-export type AnalysisStep = "idle" | AnalysisStage;
+export type AnalysisStep = 'idle' | AnalysisStage;
 
 /** Tabs available on the results page. */
-export type ResultTab =
-  | "overview"
-  | "carrier"
-  | "traits"
-  | "pgx"
-  | "prs"
-  | "counseling";
+export type ResultTab = 'overview' | 'carrier' | 'traits' | 'pgx' | 'prs' | 'counseling';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 export const STEP_ORDER: AnalysisStep[] = [
-  "idle",
-  "parsing",
-  "carrier_analysis",
-  "trait_prediction",
-  "pharmacogenomics",
-  "polygenic_risk",
-  "ethnicity_adjustment",
-  "counseling_triage",
-  "complete",
+  'idle',
+  'parsing',
+  'carrier_analysis',
+  'trait_prediction',
+  'pharmacogenomics',
+  'polygenic_risk',
+  'ethnicity_adjustment',
+  'counseling_triage',
+  'complete',
 ];
 
 // ─── Internal Types ─────────────────────────────────────────────────────────
@@ -148,7 +142,7 @@ interface AnalysisState {
 
 /** Count carrier results whose riskLevel is "high_risk". */
 function countHighRisk(carrier: CarrierResult[]): number {
-  return carrier.filter((r) => r.riskLevel === "high_risk").length;
+  return carrier.filter((r) => r.riskLevel === 'high_risk').length;
 }
 
 // TODO(B3): buildSummary() was removed because saveCurrentResult is blocked
@@ -161,7 +155,7 @@ const initialState = {
   parentB: null as ParentFile | null,
   parentAFile: null as File | null,
   parentBFile: null as File | null,
-  currentStep: "idle" as AnalysisStep,
+  currentStep: 'idle' as AnalysisStep,
   stepIndex: 0,
   errorMessage: null as string | null,
   fullResults: null as FullAnalysisResult | null,
@@ -169,7 +163,7 @@ const initialState = {
   parseProgress: null as ParseProgress | null,
   analysisProgress: null as AnalysisProgress | null,
   isDemo: false,
-  activeTab: "overview" as ResultTab,
+  activeTab: 'overview' as ResultTab,
   selectedPopulation: null as Population | null,
   highRiskCount: 0,
   savedResults: [] as AnalysisListItem[],
@@ -213,18 +207,16 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
 
   setParseResults: (results) => set({ parseResults: results }),
 
-  setParseProgress: (fileIndex, progress) =>
-    set({ parseProgress: { fileIndex, progress } }),
+  setParseProgress: (fileIndex, progress) => set({ parseProgress: { fileIndex, progress } }),
 
-  setAnalysisProgress: (stage, progress) =>
-    set({ analysisProgress: { stage, progress } }),
+  setAnalysisProgress: (stage, progress) => set({ analysisProgress: { stage, progress } }),
 
   setDemoResults: (results) =>
     set({
       fullResults: results,
       isDemo: true,
-      currentStep: "complete",
-      stepIndex: STEP_ORDER.indexOf("complete"),
+      currentStep: 'complete',
+      stepIndex: STEP_ORDER.indexOf('complete'),
       highRiskCount: countHighRisk(results.carrier),
     }),
 
@@ -244,8 +236,8 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
     // blocked to prevent ZKE (Zero-Knowledge Encryption) violations.
     void _label;
     const error = new Error(
-      "Encryption layer not yet implemented — see Stream B3. " +
-        "Use saveResultToStorage() for client-side IndexedDB persistence.",
+      'Encryption layer not yet implemented — see Stream B3. ' +
+        'Use saveResultToStorage() for client-side IndexedDB persistence.',
     );
     set({ saveError: error.message, isSaving: false });
     throw error;
@@ -256,7 +248,7 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
       const results = await analysisClient.listResults();
       set({ savedResults: results });
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to load saved analyses");
+      const message = extractErrorMessage(error, 'Failed to load saved analyses');
       set({ saveError: message });
       throw error;
     }
@@ -271,8 +263,8 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
     // blocked to prevent ZKE (Zero-Knowledge Encryption) violations.
     void _id;
     const error = new Error(
-      "Encryption layer not yet implemented — see Stream B3. " +
-        "Use loadResultFromStorage() for client-side IndexedDB persistence.",
+      'Encryption layer not yet implemented — see Stream B3. ' +
+        'Use loadResultFromStorage() for client-side IndexedDB persistence.',
     );
     set({ saveError: error.message, isLoadingResult: false });
     throw error;
@@ -285,7 +277,7 @@ export const useAnalysisStore = create<AnalysisState>()((set, get) => ({
       const { savedResults } = get();
       set({ savedResults: savedResults.filter((r) => r.id !== id) });
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to delete analysis");
+      const message = extractErrorMessage(error, 'Failed to delete analysis');
       set({ saveError: message });
       throw error;
     }

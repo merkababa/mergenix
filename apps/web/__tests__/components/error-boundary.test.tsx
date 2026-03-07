@@ -224,9 +224,7 @@ describe('ErrorBoundary', () => {
     );
 
     // UNKNOWN_ERROR action text
-    expect(
-      screen.getByText(/Try refreshing the page/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Try refreshing the page/)).toBeInTheDocument();
   });
 
   it('shows "Copied!" text after successful copy', async () => {

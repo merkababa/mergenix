@@ -225,9 +225,7 @@ describe('OverviewTab', () => {
     render(<OverviewTab />);
 
     // Free tier metadata -> shows TierUpgradePrompt with upgrade message
-    expect(
-      screen.getByText(/Upgrade to Premium to unlock disease screening/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Upgrade to Premium to unlock disease screening/)).toBeInTheDocument();
   });
 
   it('shows upgrade prompt for premium tier', () => {
@@ -240,9 +238,7 @@ describe('OverviewTab', () => {
 
     render(<OverviewTab />);
 
-    expect(
-      screen.getByText(/Upgrade to Pro to unlock all disease screening/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Upgrade to Pro to unlock all disease screening/)).toBeInTheDocument();
   });
 
   it('does NOT show upgrade prompt for pro tier', () => {
@@ -255,12 +251,8 @@ describe('OverviewTab', () => {
 
     render(<OverviewTab />);
 
-    expect(
-      screen.queryByText(/Upgrade to Pro/),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('Upgrade Plan'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Upgrade to Pro/)).not.toBeInTheDocument();
+    expect(screen.queryByText('Upgrade Plan')).not.toBeInTheDocument();
   });
 
   it('renders sr-only h3 heading for accessibility hierarchy', () => {
@@ -278,8 +270,6 @@ describe('OverviewTab', () => {
 
     render(<OverviewTab />);
 
-    expect(
-      screen.getByText(/What Overview Analysis Cannot Tell You/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/What Overview Analysis Cannot Tell You/)).toBeInTheDocument();
   });
 });

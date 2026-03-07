@@ -5,7 +5,20 @@ import { mockLucideIcons, mockNextLinkFactory, mockBadgeFactory } from '../__hel
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => mockLucideIcons('Menu', 'X', 'Dna', 'User', 'CreditCard', 'Activity', 'LogOut', 'ChevronDown', 'Sun', 'Moon'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons(
+    'Menu',
+    'X',
+    'Dna',
+    'User',
+    'CreditCard',
+    'Activity',
+    'LogOut',
+    'ChevronDown',
+    'Sun',
+    'Moon',
+  ),
+);
 
 vi.mock('next/link', () => mockNextLinkFactory());
 
@@ -40,7 +53,9 @@ describe('Navbar', () => {
     // jsdom does not implement window.scrollTo — suppress the error
     window.scrollTo = vi.fn();
     // Default: unauthenticated
-    useAuthStore.setState({ isAuthenticated: false, user: null } as unknown as Parameters<typeof useAuthStore.setState>[0]);
+    useAuthStore.setState({ isAuthenticated: false, user: null } as unknown as Parameters<
+      typeof useAuthStore.setState
+    >[0]);
   });
 
   // ── Logo ──────────────────────────────────────────────────────────────
@@ -131,7 +146,9 @@ describe('Navbar', () => {
   // ── Authenticated state ────────────────────────────────────────────────
 
   it('shows UserMenu when authenticated', () => {
-    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<typeof useAuthStore.setState>[0]);
+    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<
+      typeof useAuthStore.setState
+    >[0]);
 
     render(<Navbar />);
 
@@ -158,9 +175,10 @@ describe('Navbar', () => {
     expect(screen.getByRole('dialog', { name: /Mobile navigation menu/i })).toBeInTheDocument();
 
     // Button label changes to "Close menu" and aria-expanded becomes true
-    expect(
-      screen.getByRole('button', { name: /Close menu/i }),
-    ).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: /Close menu/i })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
   });
 
   it('mobile menu contains Analysis and About nav links when open', () => {
@@ -208,7 +226,9 @@ describe('Navbar', () => {
   });
 
   it('mobile menu shows Account Settings and Subscription links when authenticated', () => {
-    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<typeof useAuthStore.setState>[0]);
+    useAuthStore.setState({ isAuthenticated: true } as unknown as Parameters<
+      typeof useAuthStore.setState
+    >[0]);
 
     render(<Navbar />);
 
@@ -227,9 +247,7 @@ describe('Navbar', () => {
 
     const analysisLinks = screen.getAllByRole('link', { name: 'Analysis' });
     // At least one of the Analysis links should have aria-current="page"
-    const hasCurrent = analysisLinks.some(
-      (link) => link.getAttribute('aria-current') === 'page',
-    );
+    const hasCurrent = analysisLinks.some((link) => link.getAttribute('aria-current') === 'page');
     expect(hasCurrent).toBe(true);
   });
 
@@ -239,9 +257,7 @@ describe('Navbar', () => {
     render(<Navbar />);
 
     const homeLinks = screen.getAllByRole('link', { name: 'Home' });
-    const hasCurrent = homeLinks.some(
-      (link) => link.getAttribute('aria-current') === 'page',
-    );
+    const hasCurrent = homeLinks.some((link) => link.getAttribute('aria-current') === 'page');
     expect(hasCurrent).toBe(true);
   });
 

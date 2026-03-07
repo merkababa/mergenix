@@ -5,7 +5,10 @@
   "sideEffects": false,
   "main": "./index.ts",
   "types": "./index.ts",
-  "files": ["*.json", "*.ts"],
+  "files": [
+    "*.json",
+    "*.ts"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit"
   },

@@ -318,19 +318,16 @@ describe('parseStreaming', () => {
 
   it('should throw for unknown format', async () => {
     const lines = ['random data'];
-    await expect(
-      parseStreaming(linesFromArray(lines), 'unknown'),
-    ).rejects.toThrow('Unrecognized genetic data format');
+    await expect(parseStreaming(linesFromArray(lines), 'unknown')).rejects.toThrow(
+      'Unrecognized genetic data format',
+    );
   });
 
   it('should throw when no valid SNPs found', async () => {
-    const lines = [
-      '# only comments',
-      '# nothing useful here',
-    ];
-    await expect(
-      parseStreaming(linesFromArray(lines), '23andme'),
-    ).rejects.toThrow('No valid SNP data found');
+    const lines = ['# only comments', '# nothing useful here'];
+    await expect(parseStreaming(linesFromArray(lines), '23andme')).rejects.toThrow(
+      'No valid SNP data found',
+    );
   });
 
   it('should skip no-call entries (23andMe --)', async () => {

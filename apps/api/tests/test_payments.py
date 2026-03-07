@@ -165,9 +165,7 @@ async def test_webhook_invalid_signature(
     """Webhook with invalid signature should return 400."""
     from stripe import SignatureVerificationError
 
-    mock_stripe["construct_event"].side_effect = SignatureVerificationError(
-        "Invalid signature", sig_header="bad"
-    )
+    mock_stripe["construct_event"].side_effect = SignatureVerificationError("Invalid signature", sig_header="bad")
 
     response = await client.post(
         "/payments/webhook",
@@ -548,14 +546,15 @@ async def test_webhook_none_payment_intent_rejects(
     assert response.status_code == 200
 
     # No payment should be created (rejected due to missing idempotency key)
-    result = await db_session.execute(
-        select(Payment).where(Payment.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
     payments = list(result.scalars().all())
     assert len(payments) == 0
 
     # Should have logged a warning about the missing payment_intent
-    assert any("payment_intent" in record.message.lower() or "idempotency" in record.message.lower() for record in caplog.records)
+    assert any(
+        "payment_intent" in record.message.lower() or "idempotency" in record.message.lower()
+        for record in caplog.records
+    )
 
 
 @pytest.mark.asyncio
@@ -591,9 +590,7 @@ async def test_webhook_none_payment_intent_uses_event_id_fallback(
     assert response.status_code == 200
 
     # Payment should be created with the event ID as the stripe_payment_intent
-    result = await db_session.execute(
-        select(Payment).where(Payment.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
     payment = result.scalar_one()
     assert payment.stripe_payment_intent == "evt_fallback_123"
     assert payment.tier_granted == "premium"
@@ -648,9 +645,7 @@ async def test_webhook_none_payment_intent_event_id_dedup(
     assert response.status_code == 200
 
     # Should not create a duplicate payment
-    result = await db_session.execute(
-        select(Payment).where(Payment.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
     payments = list(result.scalars().all())
     assert len(payments) == 1
 
@@ -718,9 +713,7 @@ async def test_checkout_premium_correct_amount(
         )
     assert response.status_code == 200
     # No price mismatch warning should be logged when amount is correct (1499)
-    mismatch_warnings = [
-        r for r in caplog.records if "Price mismatch" in r.message
-    ]
+    mismatch_warnings = [r for r in caplog.records if "Price mismatch" in r.message]
     assert len(mismatch_warnings) == 0
 
 
@@ -756,9 +749,7 @@ async def test_checkout_pro_correct_amount(
         )
     assert response.status_code == 200
     # No price mismatch warning should be logged when the amount is correct
-    mismatch_warnings = [
-        r for r in caplog.records if "Price mismatch" in r.message
-    ]
+    mismatch_warnings = [r for r in caplog.records if "Price mismatch" in r.message]
     assert len(mismatch_warnings) == 0
 
 
@@ -1070,9 +1061,7 @@ async def test_webhook_upgrade_amount_no_false_positive_warning(
     assert response.status_code == 200
 
     # No price mismatch warning should be logged for a valid upgrade amount
-    mismatch_warnings = [
-        r for r in caplog.records if "Price mismatch" in r.message
-    ]
+    mismatch_warnings = [r for r in caplog.records if "Price mismatch" in r.message]
     assert len(mismatch_warnings) == 0, (
         f"False positive price mismatch warning for upgrade: {[r.message for r in mismatch_warnings]}"
     )
@@ -1114,12 +1103,8 @@ async def test_webhook_incorrect_amount_triggers_mismatch_warning(
     assert response.status_code == 200
 
     # A price mismatch warning SHOULD be logged for 9999 cents (expected 1499)
-    mismatch_warnings = [
-        r for r in caplog.records if "Price mismatch" in r.message
-    ]
-    assert len(mismatch_warnings) == 1, (
-        f"Expected exactly 1 price mismatch warning, got {len(mismatch_warnings)}"
-    )
+    mismatch_warnings = [r for r in caplog.records if "Price mismatch" in r.message]
+    assert len(mismatch_warnings) == 1, f"Expected exactly 1 price mismatch warning, got {len(mismatch_warnings)}"
     assert "9999" in mismatch_warnings[0].message
     assert "1499" in mismatch_warnings[0].message
 
@@ -1305,9 +1290,7 @@ def test_webhook_handler_single_user_query() -> None:
     source = inspect.getsource(payment_service.handle_webhook_event)
     # Count occurrences of "select(User).where(User.id ==" in the source
     user_query_count = source.count("select(User).where(User.id ==")
-    assert user_query_count == 1, (
-        f"Expected exactly 1 user query, found {user_query_count}"
-    )
+    assert user_query_count == 1, f"Expected exactly 1 user query, found {user_query_count}"
 
 
 # ── Issue 5: Masked email in logs ─────────────────────────────────────
@@ -1568,12 +1551,8 @@ def test_config_has_payment_url_paths() -> None:
         stripe_price_premium="p1",
         stripe_price_pro="p2",
     )
-    assert hasattr(settings, "payment_success_path"), (
-        "Settings should have a payment_success_path attribute"
-    )
-    assert hasattr(settings, "payment_cancel_path"), (
-        "Settings should have a payment_cancel_path attribute"
-    )
+    assert hasattr(settings, "payment_success_path"), "Settings should have a payment_success_path attribute"
+    assert hasattr(settings, "payment_cancel_path"), "Settings should have a payment_cancel_path attribute"
     # Defaults should match the current paths for backward compatibility
     assert settings.payment_success_path == "/payment/success"
     assert settings.payment_cancel_path == "/payment/cancel"

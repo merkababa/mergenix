@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 // ─── Constants (hoisted outside component body — checklist §3) ───────────────
 
-type TraitCategory = "physical" | "health" | "behavioral";
+type TraitCategory = 'physical' | 'health' | 'behavioral';
 
 const CATEGORY_COLORS: Record<TraitCategory, string> = {
-  physical: "bg-(--accent-teal)",
-  health: "bg-amber-500/60",
-  behavioral: "bg-violet-500/60",
+  physical: 'bg-(--accent-teal)',
+  health: 'bg-amber-500/60',
+  behavioral: 'bg-violet-500/60',
 };
 
 const CATEGORY_TEXT_COLORS: Record<TraitCategory, string> = {
-  physical: "text-(--accent-teal)",
-  health: "text-amber-400",
-  behavioral: "text-violet-400",
+  physical: 'text-(--accent-teal)',
+  health: 'text-amber-400',
+  behavioral: 'text-violet-400',
 };
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ interface TraitProbabilityBarProps {
 export function TraitProbabilityBar({
   phenotype,
   probability,
-  category = "physical",
+  category = 'physical',
   className,
 }: TraitProbabilityBarProps) {
   const clamped = Math.min(Math.max(probability, 0), 100);
@@ -46,8 +46,8 @@ export function TraitProbabilityBar({
   const textColor = CATEGORY_TEXT_COLORS[category];
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <div className="w-20 truncate text-xs text-(--text-muted)">{phenotype}</div>
+    <div className={cn('flex items-center gap-2', className)}>
+      <div className="text-(--text-muted) w-20 truncate text-xs">{phenotype}</div>
       <div
         role="meter"
         aria-valuenow={clamped}
@@ -55,19 +55,14 @@ export function TraitProbabilityBar({
         aria-valuemax={100}
         aria-label={`${phenotype}: ${clamped}%`}
         aria-valuetext={`${phenotype}: ${clamped}% probability`}
-        className="h-2 flex-1 rounded-full bg-(--bg-glass)"
+        className="bg-(--bg-glass) h-2 flex-1 rounded-full"
       >
         <div
-          className={cn(
-            "h-2 rounded-full transition-[width] duration-700 ease-out",
-            barColor,
-          )}
+          className={cn('h-2 rounded-full transition-[width] duration-700 ease-out', barColor)}
           style={{ width: `${clamped}%` }}
         />
       </div>
-      <span className={cn("w-10 text-right text-xs font-medium", textColor)}>
-        {clamped}%
-      </span>
+      <span className={cn('w-10 text-right text-xs font-medium', textColor)}>{clamped}%</span>
     </div>
   );
 }

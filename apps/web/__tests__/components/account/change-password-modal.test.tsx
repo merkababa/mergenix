@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockInputFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
 vi.mock('lucide-react', () => mockLucideIcons('X', 'Check', 'Eye', 'EyeOff', 'Loader2'));
@@ -11,7 +17,17 @@ vi.mock('@/components/ui/button', () => mockButtonFactory());
 vi.mock('@/components/ui/input', () => mockInputFactory());
 vi.mock('@/components/auth/password-input', () => ({
   PasswordInput: ({ label, value, onChange, error, ...rest }: any) => (
-    <div><label htmlFor={label?.toLowerCase().replace(/\s+/g, '-')}>{label}</label><input id={label?.toLowerCase().replace(/\s+/g, '-')} type="password" value={value} onChange={onChange} aria-label={label || 'password'} />{error && <span role="alert">{error}</span>}</div>
+    <div>
+      <label htmlFor={label?.toLowerCase().replace(/\s+/g, '-')}>{label}</label>
+      <input
+        id={label?.toLowerCase().replace(/\s+/g, '-')}
+        type="password"
+        value={value}
+        onChange={onChange}
+        aria-label={label || 'password'}
+      />
+      {error && <span role="alert">{error}</span>}
+    </div>
   ),
 }));
 
@@ -36,13 +52,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 import { ChangePasswordModal } from '../../../app/(app)/account/_components/change-password-modal';
@@ -63,17 +76,13 @@ describe('ChangePasswordModal', () => {
   });
 
   it('does not render when isOpen is false', () => {
-    const { container } = render(
-      <ChangePasswordModal isOpen={false} onClose={onClose} />,
-    );
+    const { container } = render(<ChangePasswordModal isOpen={false} onClose={onClose} />);
     expect(container.innerHTML).toBe('');
   });
 
   it('renders "Change Password" heading when isOpen is true', () => {
     render(<ChangePasswordModal isOpen={true} onClose={onClose} />);
-    expect(
-      screen.getByRole('heading', { name: 'Change Password' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Change Password' })).toBeInTheDocument();
   });
 
   it('shows current password, new password, and confirm password fields', () => {
@@ -100,7 +109,9 @@ describe('ChangePasswordModal', () => {
   it('backdrop click calls onClose', () => {
     render(<ChangePasswordModal isOpen={true} onClose={onClose} />);
     // The backdrop is the first div with the bg-[rgba...] class
-    const backdrop = document.querySelector('.absolute.inset-0.bg-\\[rgba\\(0\\,0\\,0\\,0\\.6\\)\\]');
+    const backdrop = document.querySelector(
+      '.absolute.inset-0.bg-\\[rgba\\(0\\,0\\,0\\,0\\.6\\)\\]',
+    );
     if (backdrop) {
       fireEvent.click(backdrop);
       expect(onClose).toHaveBeenCalledTimes(1);
@@ -152,7 +163,9 @@ describe('ChangePasswordModal', () => {
   });
 
   it('shows error on failed password change', async () => {
-    mockStoreState.changePassword = vi.fn().mockRejectedValue(new Error('Current password is incorrect'));
+    mockStoreState.changePassword = vi
+      .fn()
+      .mockRejectedValue(new Error('Current password is incorrect'));
     render(<ChangePasswordModal isOpen={true} onClose={onClose} />);
 
     const currentPw = screen.getByLabelText('Current Password');
@@ -171,9 +184,7 @@ describe('ChangePasswordModal', () => {
   });
 
   it('form resets when modal reopens', () => {
-    const { rerender } = render(
-      <ChangePasswordModal isOpen={true} onClose={onClose} />,
-    );
+    const { rerender } = render(<ChangePasswordModal isOpen={true} onClose={onClose} />);
 
     const currentPw = screen.getByLabelText('Current Password');
     fireEvent.change(currentPw, { target: { value: 'something' } });

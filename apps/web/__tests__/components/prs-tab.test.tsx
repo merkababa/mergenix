@@ -12,9 +12,19 @@ vi.mock('@/components/ui/sensitive-content-guard', () => ({
 }));
 
 // Mock useAuthStore so the component gets a valid user tier
-vi.mock('@/lib/stores/auth-store', () => mockAuthStoreFactory({
-  user: { id: 'user-1', name: 'Test User', email: 'test@example.com', tier: 'pro', is_verified: true, has_2fa: false, created_at: '2025-01-01T00:00:00Z' },
-}));
+vi.mock('@/lib/stores/auth-store', () =>
+  mockAuthStoreFactory({
+    user: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+      tier: 'pro',
+      is_verified: true,
+      has_2fa: false,
+      created_at: '2025-01-01T00:00:00Z',
+    },
+  }),
+);
 
 // Mock next/navigation for SPA navigation (useRouter)
 vi.mock('next/navigation', () => mockNextNavigationFactory());
@@ -75,8 +85,7 @@ const mockResults: FullAnalysisResult = {
           rangeHigh: 89,
           confidence: 'High confidence based on >95% SNP coverage.',
         },
-        ancestryNote:
-          'PRS weights derived primarily from European-ancestry GWAS.',
+        ancestryNote: 'PRS weights derived primarily from European-ancestry GWAS.',
         reference: 'Mavaddat N et al. Am J Hum Genet. 2019.',
       },
       alzheimers_disease: {
@@ -105,8 +114,7 @@ const mockResults: FullAnalysisResult = {
           rangeHigh: 68,
           confidence: 'Low-moderate confidence.',
         },
-        ancestryNote:
-          'APOE status is the strongest single-gene risk factor.',
+        ancestryNote: 'APOE status is the strongest single-gene risk factor.',
         reference: 'Jansen IE et al. Nat Genet. 2019.',
       },
     },
@@ -264,9 +272,7 @@ describe('PrsTab', () => {
 
     // Alzheimer's: low confidence (no European keyword) -> shows generic warning instead of ancestryNote
     // The ancestryNote "APOE status..." is NOT shown; the generic low-confidence message appears instead
-    expect(
-      screen.getByText(/Ancestry could not be determined/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Ancestry could not be determined/)).toBeInTheDocument();
   });
 
   it('shows empty state when no conditions', () => {
@@ -274,9 +280,7 @@ describe('PrsTab', () => {
 
     render(<PrsTab />);
 
-    expect(
-      screen.getByText('No polygenic risk score data available.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('No polygenic risk score data available.')).toBeInTheDocument();
   });
 
   it('shows TierUpgradePrompt when isLimited and upgradeMessage present', () => {
@@ -284,9 +288,7 @@ describe('PrsTab', () => {
 
     render(<PrsTab />);
 
-    expect(
-      screen.getByText('Upgrade to Premium for additional conditions.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Upgrade to Premium for additional conditions.')).toBeInTheDocument();
     expect(screen.getByText('Upgrade Plan')).toBeInTheDocument();
   });
 
@@ -313,9 +315,7 @@ describe('PrsTab', () => {
 
     render(<PrsTab />);
 
-    expect(
-      screen.getByText(/Polygenic risk scores are statistical estimates/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Polygenic risk scores are statistical estimates/)).toBeInTheDocument();
   });
 
   it('shows coverage data (snpsFound/snpsTotal)', () => {
@@ -347,9 +347,7 @@ describe('PrsTab', () => {
     expect(
       screen.getByText(/Polygenic risk scores reflect statistical probabilities/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Offspring scores are averaged estimates/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Offspring scores are averaged estimates/)).toBeInTheDocument();
   });
 
   it('renders AncestryConfidenceBadge for each condition card', () => {
@@ -397,9 +395,7 @@ describe('PrsTab', () => {
 
     // No European keyword => low confidence, ancestry label = "African"
     expect(screen.getByText('Low Confidence')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Accuracy may be reduced for African ancestry/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Accuracy may be reduced for African ancestry/)).toBeInTheDocument();
   });
 
   it('detects "Non-European" as low confidence (not high)', () => {
@@ -450,8 +446,6 @@ describe('PrsTab', () => {
     render(<PrsTab />);
 
     expect(screen.getByText('Low Confidence')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Ancestry could not be determined/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Ancestry could not be determined/)).toBeInTheDocument();
   });
 });

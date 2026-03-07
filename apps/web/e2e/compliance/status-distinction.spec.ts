@@ -33,9 +33,7 @@ import { loadDemoResults, switchToTab } from '../helpers/demo-navigation';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-async function loadDemoAndGoToCarrierTab(
-  page: import('@playwright/test').Page,
-) {
+async function loadDemoAndGoToCarrierTab(page: import('@playwright/test').Page) {
   await loadDemoResults(page);
 
   // Navigate to Carrier Risk tab
@@ -47,9 +45,7 @@ async function loadDemoAndGoToCarrierTab(
   if (await revealButton.isVisible({ timeout: 3_000 }).catch(() => false)) {
     await revealButton.click();
     // Wait for real content to appear after reveal
-    await expect(
-      page.getByText(/carrier screening results/i),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/carrier screening results/i)).toBeVisible({ timeout: 10_000 });
   }
 }
 
@@ -94,10 +90,7 @@ test.describe('Status Distinction — Not Detected vs Not Tested', () => {
       ]
         .filter(Boolean)
         .join(', ');
-      const missing = [
-        !hasLowRisk ? '"low_risk"' : null,
-        !hasNotTested ? '"not_tested"' : null,
-      ]
+      const missing = [!hasLowRisk ? '"low_risk"' : null, !hasNotTested ? '"not_tested"' : null]
         .filter(Boolean)
         .join(', ');
 
@@ -188,12 +181,8 @@ test.describe('Status Distinction — Not Detected vs Not Tested', () => {
     }
 
     // Get computed color of each badge
-    const lowRiskColor = await lowRiskBadge.evaluate(
-      (el) => window.getComputedStyle(el).color,
-    );
-    const notTestedColor = await notTestedBadge.evaluate(
-      (el) => window.getComputedStyle(el).color,
-    );
+    const lowRiskColor = await lowRiskBadge.evaluate((el) => window.getComputedStyle(el).color);
+    const notTestedColor = await notTestedBadge.evaluate((el) => window.getComputedStyle(el).color);
 
     // The two badges must have different computed colors
     expect(lowRiskColor).not.toBe(notTestedColor);
@@ -264,9 +253,7 @@ test.describe('Status Distinction — Not Detected vs Not Tested', () => {
     );
   });
 
-  test('Q14.4 — "Low Risk" and "Not Tested" never share identical badge text', async ({
-    page,
-  }) => {
+  test('Q14.4 — "Low Risk" and "Not Tested" never share identical badge text', async ({ page }) => {
     test.slow();
     await loadDemoAndGoToCarrierTab(page);
 
@@ -318,12 +305,12 @@ test.describe('Status Distinction — Not Detected vs Not Tested', () => {
     const notTestedText = page.getByText(/^Not Tested$/).first();
 
     // At least verify the filter options are accessible
-    const hasLowRiskOption = await lowRiskOption.isVisible({ timeout: 3_000 }).catch(
-      async () => lowRiskText.isVisible({ timeout: 2_000 }).catch(() => false),
-    );
-    const hasNotTestedOption = await notTestedOption.isVisible({ timeout: 3_000 }).catch(
-      async () => notTestedText.isVisible({ timeout: 2_000 }).catch(() => false),
-    );
+    const hasLowRiskOption = await lowRiskOption
+      .isVisible({ timeout: 3_000 })
+      .catch(async () => lowRiskText.isVisible({ timeout: 2_000 }).catch(() => false));
+    const hasNotTestedOption = await notTestedOption
+      .isVisible({ timeout: 3_000 })
+      .catch(async () => notTestedText.isVisible({ timeout: 2_000 }).catch(() => false));
 
     if (!hasLowRiskOption || !hasNotTestedOption) {
       test.fixme(

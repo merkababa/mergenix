@@ -21,7 +21,19 @@ vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 vi.mock('@/components/layout/page-header', () => mockPageHeaderFactory());
 vi.mock('next/link', () => mockNextLinkFactory());
-vi.mock('lucide-react', () => mockLucideIcons('Dna', 'Shield', 'Microscope', 'Brain', 'Heart', 'BookOpen', 'Users', 'Lightbulb', 'ChevronRight'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons(
+    'Dna',
+    'Shield',
+    'Microscope',
+    'Brain',
+    'Heart',
+    'BookOpen',
+    'Users',
+    'Lightbulb',
+    'ChevronRight',
+  ),
+);
 
 vi.mock('@/components/marketing/helix-animation', () => ({
   HelixAnimation: () => <div data-testid="helix-animation" aria-hidden="true" />,
@@ -29,7 +41,9 @@ vi.mock('@/components/marketing/helix-animation', () => ({
 
 vi.mock('@/components/marketing/step-circle', () => ({
   StepCircle: ({ step }: { step: number; size?: string }) => (
-    <div data-testid={`step-circle-${step}`} aria-label={`Step ${step}`}>{step}</div>
+    <div data-testid={`step-circle-${step}`} aria-label={`Step ${step}`}>
+      {step}
+    </div>
   ),
 }));
 
@@ -55,7 +69,9 @@ describe('AboutContent', () => {
   describe('D4.3 — Team section and science cards', () => {
     it('renders the page heading', () => {
       render(<AboutContent />);
-      expect(screen.getByRole('heading', { level: 1, name: /About Mergenix/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 1, name: /About Mergenix/i }),
+      ).toBeInTheDocument();
     });
 
     it('renders the Team section heading', () => {

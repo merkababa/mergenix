@@ -35,10 +35,14 @@ describe('legal-client', () => {
 
       const result = await recordConsent('terms', '1.0');
 
-      expect(mockPost).toHaveBeenCalledWith('/legal/consent', {
-        consent_type: 'terms',
-        version: '1.0',
-      }, { signal: undefined });
+      expect(mockPost).toHaveBeenCalledWith(
+        '/legal/consent',
+        {
+          consent_type: 'terms',
+          version: '1.0',
+        },
+        { signal: undefined },
+      );
       expect(result).toEqual({
         id: 'uuid-consent-1',
         consentType: 'terms',
@@ -113,10 +117,14 @@ describe('legal-client', () => {
 
       const result = await updateCookiePreferences(true, true);
 
-      expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
-        analytics: true,
-        marketing: true,
-      }, { signal: undefined });
+      expect(mockPost).toHaveBeenCalledWith(
+        '/legal/cookies',
+        {
+          analytics: true,
+          marketing: true,
+        },
+        { signal: undefined },
+      );
       expect(result).toEqual({
         essential: true,
         analytics: true,
@@ -133,10 +141,14 @@ describe('legal-client', () => {
 
       const result = await updateCookiePreferences(false, false);
 
-      expect(mockPost).toHaveBeenCalledWith('/legal/cookies', {
-        analytics: false,
-        marketing: false,
-      }, { signal: undefined });
+      expect(mockPost).toHaveBeenCalledWith(
+        '/legal/cookies',
+        {
+          analytics: false,
+          marketing: false,
+        },
+        { signal: undefined },
+      );
       expect(result).toEqual({
         essential: true,
         analytics: false,

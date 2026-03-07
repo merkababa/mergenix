@@ -87,9 +87,7 @@ async def run_retention_purge(
 
     # Guard: CRON_SECRET must be configured
     if not settings.cron_secret:
-        logger.warning(
-            "cron_retention_endpoint_disabled: CRON_SECRET is not configured"
-        )
+        logger.warning("cron_retention_endpoint_disabled: CRON_SECRET is not configured")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail={
@@ -100,9 +98,7 @@ async def run_retention_purge(
 
     # Authenticate via constant-time comparison to prevent timing attacks
     if x_cron_secret is None or not secrets.compare_digest(x_cron_secret, settings.cron_secret):
-        logger.warning(
-            "cron_retention_unauthorized: invalid or missing X-Cron-Secret"
-        )
+        logger.warning("cron_retention_unauthorized: invalid or missing X-Cron-Secret")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
@@ -111,9 +107,7 @@ async def run_retention_purge(
             },
         )
 
-    logger.info(
-        "cron_retention_triggered: dry_run=%s", dry_run
-    )
+    logger.info("cron_retention_triggered: dry_run=%s", dry_run)
 
     svc = RetentionService()
     raw = await svc.run_all_purges(db, dry_run=dry_run)

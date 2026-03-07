@@ -224,12 +224,10 @@ describe('fetchWithRetry', () => {
      */
     beforeEach(() => {
       // Make all setTimeout calls resolve immediately (no actual delay)
-      vi.spyOn(globalThis, 'setTimeout').mockImplementation(
-        (fn: TimerHandler) => {
-          if (typeof fn === 'function') fn();
-          return 0 as unknown as ReturnType<typeof setTimeout>;
-        },
-      );
+      vi.spyOn(globalThis, 'setTimeout').mockImplementation((fn: TimerHandler) => {
+        if (typeof fn === 'function') fn();
+        return 0 as unknown as ReturnType<typeof setTimeout>;
+      });
     });
 
     it('should retry on network failure and succeed on second attempt', async () => {
@@ -260,9 +258,7 @@ describe('fetchWithRetry', () => {
     it('should throw DataLoadError after all retries exhausted', async () => {
       fetchSpy.mockRejectedValue(new Error('Persistent network error'));
 
-      await expect(
-        fetchWithRetry('/data/v1/test.json', 3),
-      ).rejects.toThrow(DataLoadError);
+      await expect(fetchWithRetry('/data/v1/test.json', 3)).rejects.toThrow(DataLoadError);
 
       expect(fetchSpy).toHaveBeenCalledTimes(3);
     });
@@ -270,9 +266,9 @@ describe('fetchWithRetry', () => {
     it('should throw DataLoadError with message containing URL and attempts', async () => {
       fetchSpy.mockRejectedValue(new Error('Persistent network error'));
 
-      await expect(
-        fetchWithRetry('/data/v1/test.json', 3),
-      ).rejects.toThrow('Failed to load /data/v1/test.json after 3 attempts');
+      await expect(fetchWithRetry('/data/v1/test.json', 3)).rejects.toThrow(
+        'Failed to load /data/v1/test.json after 3 attempts',
+      );
     });
 
     it('should throw DataLoadError with correct properties', async () => {
@@ -295,9 +291,7 @@ describe('fetchWithRetry', () => {
     it('should use maxRetries = 3 by default', async () => {
       fetchSpy.mockRejectedValue(new Error('fail'));
 
-      await expect(
-        fetchWithRetry('/data/v1/test.json'),
-      ).rejects.toThrow(DataLoadError);
+      await expect(fetchWithRetry('/data/v1/test.json')).rejects.toThrow(DataLoadError);
 
       expect(fetchSpy).toHaveBeenCalledTimes(3);
     });
@@ -305,9 +299,7 @@ describe('fetchWithRetry', () => {
     it('should work with maxRetries = 1 (no retries)', async () => {
       fetchSpy.mockRejectedValue(new Error('fail'));
 
-      await expect(
-        fetchWithRetry('/data/v1/test.json', 1),
-      ).rejects.toThrow(DataLoadError);
+      await expect(fetchWithRetry('/data/v1/test.json', 1)).rejects.toThrow(DataLoadError);
 
       expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
@@ -316,15 +308,13 @@ describe('fetchWithRetry', () => {
       const setTimeoutSpy = vi.mocked(globalThis.setTimeout);
       fetchSpy.mockRejectedValue(new Error('fail'));
 
-      await expect(
-        fetchWithRetry('/data/v1/test.json', 3),
-      ).rejects.toThrow(DataLoadError);
+      await expect(fetchWithRetry('/data/v1/test.json', 3)).rejects.toThrow(DataLoadError);
 
       // Should have called setTimeout twice (between attempt 1->2 and 2->3)
       // No delay after the last (3rd) attempt.
       const delays = setTimeoutSpy.mock.calls.map((call) => call[1]);
-      expect(delays[0]).toBe(1000);  // 1000 * 2^0 = 1000ms
-      expect(delays[1]).toBe(2000);  // 1000 * 2^1 = 2000ms
+      expect(delays[0]).toBe(1000); // 1000 * 2^0 = 1000ms
+      expect(delays[1]).toBe(2000); // 1000 * 2^1 = 2000ms
     });
   });
 
@@ -378,10 +368,26 @@ describe('loadAllData', () => {
 
   it('should unwrap carrier panel data in wrapped format', async () => {
     const carrierEntries = [
-      { rsid: 'rs1', gene: 'CFTR', condition: 'CF', inheritance: 'AR', severity: 'severe', pathogenic_allele: 'A', reference_allele: 'G', carrier_frequency: '1/25', notes: 'test' },
+      {
+        rsid: 'rs1',
+        gene: 'CFTR',
+        condition: 'CF',
+        inheritance: 'AR',
+        severity: 'severe',
+        pathogenic_allele: 'A',
+        reference_allele: 'G',
+        carrier_frequency: '1/25',
+        notes: 'test',
+      },
     ];
     const wrappedCarrierPanel = {
-      metadata: { version: '2.0.0', lastUpdated: '2024-01-01', totalEntries: 1, source: 'test', description: 'test' },
+      metadata: {
+        version: '2.0.0',
+        lastUpdated: '2024-01-01',
+        totalEntries: 1,
+        source: 'test',
+        description: 'test',
+      },
       entries: carrierEntries,
     };
 
@@ -454,12 +460,10 @@ describe('loadAllData', () => {
 
   it('should propagate DataLoadError if any file fails', async () => {
     // Make setTimeout resolve immediately for retry handling
-    vi.spyOn(globalThis, 'setTimeout').mockImplementation(
-      (fn: TimerHandler) => {
-        if (typeof fn === 'function') fn();
-        return 0 as unknown as ReturnType<typeof setTimeout>;
-      },
-    );
+    vi.spyOn(globalThis, 'setTimeout').mockImplementation((fn: TimerHandler) => {
+      if (typeof fn === 'function') fn();
+      return 0 as unknown as ReturnType<typeof setTimeout>;
+    });
 
     // First two succeed, rest fail
     fetchSpy

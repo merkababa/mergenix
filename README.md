@@ -107,10 +107,10 @@ Mergenix is an educational tool and does not provide medical advice, diagnosis, 
 
 ## Contributors
 
-| Name  | Role           |
-|-------|----------------|
-| kukiz | Developer      |
-| Claude | AI Assistant  |
+| Name   | Role         |
+| ------ | ------------ |
+| kukiz  | Developer    |
+| Claude | AI Assistant |
 
 ## License
 

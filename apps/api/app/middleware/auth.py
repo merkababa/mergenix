@@ -16,8 +16,9 @@ from __future__ import annotations
 
 import json as _json
 import uuid
+from collections.abc import Callable, Coroutine
 from datetime import UTC, datetime
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -50,21 +51,21 @@ _STATE_CHANGING_METHODS = frozenset({b"POST", b"PUT", b"DELETE", b"PATCH"})
 # browser sessions or cookies, so the CSRF header requirement is irrelevant.
 # External cron schedulers (Vercel Cron, GitHub Actions, cron.io) cannot
 # inject browser-only headers such as X-Requested-With.
-_CSRF_EXEMPT_PATH_PREFIXES: tuple[str, ...] = (
-    "/api/v1/admin/cron/",
-)
+_CSRF_EXEMPT_PATH_PREFIXES: tuple[str, ...] = ("/api/v1/admin/cron/",)
 
 # Pre-encoded CSRF rejection response body
-_CSRF_REJECTION_BODY = _json.dumps({
-    "detail": {
-        "error": (
-            "Missing or invalid X-Requested-With header. "
-            "State-changing requests must include "
-            "X-Requested-With: XMLHttpRequest."
-        ),
-        "code": "CSRF_HEADER_MISSING",
+_CSRF_REJECTION_BODY = _json.dumps(
+    {
+        "detail": {
+            "error": (
+                "Missing or invalid X-Requested-With header. "
+                "State-changing requests must include "
+                "X-Requested-With: XMLHttpRequest."
+            ),
+            "code": "CSRF_HEADER_MISSING",
+        }
     }
-}).encode("utf-8")
+).encode("utf-8")
 
 
 class CSRFMiddleware:
@@ -91,7 +92,11 @@ class CSRFMiddleware:
             await self.app(scope, receive, send)
             return
 
-        method = scope.get("method", "").encode("utf-8") if isinstance(scope.get("method"), str) else scope.get("method", b"")
+        method = (
+            scope.get("method", "").encode("utf-8")
+            if isinstance(scope.get("method"), str)
+            else scope.get("method", b"")
+        )
 
         if method in _STATE_CHANGING_METHODS:
             # Allow machine-to-machine endpoints to bypass CSRF validation.
@@ -109,18 +114,22 @@ class CSRFMiddleware:
             xhr_value = headers.get(b"x-requested-with", b"").decode().lower()
             if xhr_value != "xmlhttprequest":
                 # Reject with 403 — send the response directly
-                await send({
-                    "type": "http.response.start",
-                    "status": 403,
-                    "headers": [
-                        [b"content-type", b"application/json"],
-                        [b"content-length", str(len(_CSRF_REJECTION_BODY)).encode()],
-                    ],
-                })
-                await send({
-                    "type": "http.response.body",
-                    "body": _CSRF_REJECTION_BODY,
-                })
+                await send(
+                    {
+                        "type": "http.response.start",
+                        "status": 403,
+                        "headers": [
+                            [b"content-type", b"application/json"],
+                            [b"content-length", str(len(_CSRF_REJECTION_BODY)).encode()],
+                        ],
+                    }
+                )
+                await send(
+                    {
+                        "type": "http.response.body",
+                        "body": _CSRF_REJECTION_BODY,
+                    }
+                )
                 return
 
         await self.app(scope, receive, send)
@@ -235,7 +244,7 @@ async def get_optional_user(
     return result.scalar_one_or_none()
 
 
-def require_tier(minimum_tier: str):
+def require_tier(minimum_tier: str) -> Callable[..., Coroutine[Any, Any, User]]:
     """Dependency factory that enforces a minimum pricing tier.
 
     Usage:

@@ -1,10 +1,18 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockInputFactory,
+  mockBadgeFactory,
+} from '../../__helpers__';
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
-vi.mock('lucide-react', () => mockLucideIcons('X', 'QrCode', 'KeyRound', 'ShieldCheck', 'Copy', 'Download', 'Check', 'Loader2'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('X', 'QrCode', 'KeyRound', 'ShieldCheck', 'Copy', 'Download', 'Check', 'Loader2'),
+);
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 vi.mock('@/components/ui/button', () => mockButtonFactory());
@@ -51,13 +59,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 import { TwoFactorSetupModal } from '../../../app/(app)/account/_components/two-factor-setup-modal';
@@ -79,9 +84,7 @@ describe('TwoFactorSetupModal', () => {
   });
 
   it('does not render when isOpen is false', () => {
-    const { container } = render(
-      <TwoFactorSetupModal isOpen={false} onClose={onClose} />,
-    );
+    const { container } = render(<TwoFactorSetupModal isOpen={false} onClose={onClose} />);
     expect(container.innerHTML).toBe('');
   });
 
@@ -89,7 +92,10 @@ describe('TwoFactorSetupModal', () => {
     // Make setup2FA pending to see loading state
     let resolveSetup!: (val: any) => void;
     mockStoreState.setup2FA = vi.fn(
-      () => new Promise((r) => { resolveSetup = r; }),
+      () =>
+        new Promise((r) => {
+          resolveSetup = r;
+        }),
     );
 
     render(<TwoFactorSetupModal isOpen={true} onClose={onClose} />);
@@ -107,9 +113,7 @@ describe('TwoFactorSetupModal', () => {
       render(<TwoFactorSetupModal isOpen={true} onClose={onClose} />);
     });
 
-    expect(
-      screen.getByRole('heading', { name: 'Scan QR Code' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Scan QR Code' })).toBeInTheDocument();
     expect(screen.getByText('JBSWY3DPEHPK3PXP')).toBeInTheDocument();
   });
 
@@ -133,9 +137,7 @@ describe('TwoFactorSetupModal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
-    expect(
-      screen.getByRole('heading', { name: 'Enter Verification Code' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Enter Verification Code' })).toBeInTheDocument();
   });
 
   it('step 1: shows heading and verification code input', async () => {
@@ -194,9 +196,7 @@ describe('TwoFactorSetupModal', () => {
     });
 
     expect(mockVerify2FA).toHaveBeenCalledWith('123456');
-    expect(
-      screen.getByRole('heading', { name: 'Save Backup Codes' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Save Backup Codes' })).toBeInTheDocument();
   });
 
   it('step 2: backup codes are displayed', async () => {

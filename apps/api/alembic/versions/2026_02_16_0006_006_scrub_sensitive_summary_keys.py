@@ -90,11 +90,7 @@ def upgrade() -> None:
 
             # Write back the scrubbed summary.
             conn.execute(
-                sa.text(
-                    "UPDATE analysis_results "
-                    "SET summary_json = :summary "
-                    "WHERE id = :id"
-                ),
+                sa.text("UPDATE analysis_results SET summary_json = :summary WHERE id = :id"),
                 {"summary": json.dumps(summary), "id": row_id},
             )
 

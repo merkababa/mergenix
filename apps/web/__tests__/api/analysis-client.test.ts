@@ -11,12 +11,7 @@ vi.mock('@/lib/api/client', () => ({
   del: (...args: unknown[]) => mockDel(...args),
 }));
 
-import {
-  saveResult,
-  listResults,
-  getResult,
-  deleteResult,
-} from '@/lib/api/analysis-client';
+import { saveResult, listResults, getResult, deleteResult } from '@/lib/api/analysis-client';
 import type {
   SaveAnalysisResponse,
   AnalysisListItem,
@@ -107,9 +102,9 @@ describe('analysis-client', () => {
     it('should propagate errors from API client', async () => {
       mockPost.mockRejectedValue(new Error('TIER_LIMIT_REACHED'));
 
-      await expect(
-        saveResult('Label', 'a.vcf', 'b.vcf', {}, {}, true),
-      ).rejects.toThrow('TIER_LIMIT_REACHED');
+      await expect(saveResult('Label', 'a.vcf', 'b.vcf', {}, {}, true)).rejects.toThrow(
+        'TIER_LIMIT_REACHED',
+      );
     });
 
     it('should pass consentGiven=false when explicitly set', async () => {
@@ -119,18 +114,14 @@ describe('analysis-client', () => {
         created_at: '2026-01-15T10:00:00Z',
       });
 
-      await saveResult(
-        'Test',
-        'a.vcf',
-        'b.vcf',
-        {},
-        {},
-        false,
-      );
+      await saveResult('Test', 'a.vcf', 'b.vcf', {}, {}, false);
 
-      expect(mockPost).toHaveBeenCalledWith('/analysis/results', expect.objectContaining({
-        consent_given: false,
-      }));
+      expect(mockPost).toHaveBeenCalledWith(
+        '/analysis/results',
+        expect.objectContaining({
+          consent_given: false,
+        }),
+      );
     });
   });
 

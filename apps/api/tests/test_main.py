@@ -24,18 +24,16 @@ def test_sentry_init_includes_before_send_callback() -> None:
         call_kwargs = mock_init.call_args[1] if mock_init.call_args[1] else {}
         # If called with positional + keyword, check kwargs
         if not call_kwargs:
-            call_kwargs = dict(zip(
-                ["dsn", "traces_sample_rate", "profiles_sample_rate", "environment", "before_send"],
-                mock_init.call_args[0] if mock_init.call_args[0] else [],
-                strict=False,
-            ))
+            call_kwargs = dict(
+                zip(
+                    ["dsn", "traces_sample_rate", "profiles_sample_rate", "environment", "before_send"],
+                    mock_init.call_args[0] if mock_init.call_args[0] else [],
+                    strict=False,
+                )
+            )
             call_kwargs.update(mock_init.call_args[1] or {})
-        assert "before_send" in call_kwargs, (
-            "sentry_sdk.init must include a before_send callback for PII scrubbing"
-        )
-        assert callable(call_kwargs["before_send"]), (
-            "before_send must be a callable"
-        )
+        assert "before_send" in call_kwargs, "sentry_sdk.init must include a before_send callback for PII scrubbing"
+        assert callable(call_kwargs["before_send"]), "before_send must be a callable"
 
 
 def test_sentry_before_send_strips_email_from_exception_values() -> None:
@@ -50,12 +48,8 @@ def test_sentry_before_send_strips_email_from_exception_values() -> None:
     hint: dict = {}
     scrubbed = _scrub_pii(event, hint)
     for exc_val in scrubbed["exception"]["values"]:
-        assert "user@example.com" not in exc_val["value"], (
-            "Email should be scrubbed from exception values"
-        )
-        assert "[EMAIL]" in exc_val["value"], (
-            "Email should be replaced with [EMAIL] placeholder"
-        )
+        assert "user@example.com" not in exc_val["value"], "Email should be scrubbed from exception values"
+        assert "[EMAIL]" in exc_val["value"], "Email should be replaced with [EMAIL] placeholder"
 
 
 def test_sentry_before_send_strips_tokens_from_exception_values() -> None:
@@ -63,19 +57,17 @@ def test_sentry_before_send_strips_tokens_from_exception_values() -> None:
     event = {
         "exception": {
             "values": [
-                {"value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U is expired"},
+                {
+                    "value": "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U is expired"
+                },
             ],
         },
     }
     hint: dict = {}
     scrubbed = _scrub_pii(event, hint)
     for exc_val in scrubbed["exception"]["values"]:
-        assert "eyJhbGciOiJIUzI1NiI" not in exc_val["value"], (
-            "JWT token should be scrubbed from exception values"
-        )
-        assert "[TOKEN]" in exc_val["value"], (
-            "Token should be replaced with [TOKEN] placeholder"
-        )
+        assert "eyJhbGciOiJIUzI1NiI" not in exc_val["value"], "JWT token should be scrubbed from exception values"
+        assert "[TOKEN]" in exc_val["value"], "Token should be replaced with [TOKEN] placeholder"
 
 
 def test_sentry_before_send_strips_email_from_breadcrumbs() -> None:
@@ -91,12 +83,8 @@ def test_sentry_before_send_strips_email_from_breadcrumbs() -> None:
     hint: dict = {}
     scrubbed = _scrub_pii(event, hint)
     for bc in scrubbed["breadcrumbs"]["values"]:
-        assert "admin@mergenix.com" not in bc.get("message", ""), (
-            "Email should be scrubbed from breadcrumbs"
-        )
-        assert "test.user+tag@domain.co.uk" not in bc.get("message", ""), (
-            "Email should be scrubbed from breadcrumbs"
-        )
+        assert "admin@mergenix.com" not in bc.get("message", ""), "Email should be scrubbed from breadcrumbs"
+        assert "test.user+tag@domain.co.uk" not in bc.get("message", ""), "Email should be scrubbed from breadcrumbs"
 
 
 def test_sentry_before_send_strips_password_from_exception_values() -> None:
@@ -111,9 +99,7 @@ def test_sentry_before_send_strips_password_from_exception_values() -> None:
     hint: dict = {}
     scrubbed = _scrub_pii(event, hint)
     for exc_val in scrubbed["exception"]["values"]:
-        assert "MySecretP@ss123" not in exc_val["value"], (
-            "Password value should be scrubbed from exception values"
-        )
+        assert "MySecretP@ss123" not in exc_val["value"], "Password value should be scrubbed from exception values"
 
 
 def test_sentry_before_send_handles_events_without_exception() -> None:

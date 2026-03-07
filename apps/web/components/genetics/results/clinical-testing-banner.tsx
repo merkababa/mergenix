@@ -1,27 +1,25 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
-import { AlertTriangle } from "lucide-react";
-import { CLINICAL_TESTING_DISCLAIMER } from "@/lib/constants/disclaimers";
+import { memo } from 'react';
+import { AlertTriangle } from 'lucide-react';
+import { CLINICAL_TESTING_DISCLAIMER } from '@/lib/constants/disclaimers';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 interface ClinicalTestingBannerProps {
   /** Variant controls context-specific messaging. */
-  variant?: "carrier" | "prs" | "pgx";
+  variant?: 'carrier' | 'prs' | 'pgx';
 }
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const VARIANT_MESSAGES: Record<string, string> = {
   carrier:
-    "This is NOT a replacement for clinical carrier screening. Consumer DNA chips test a limited subset of variants. Consult a certified genetic counselor or medical geneticist for comprehensive carrier testing before making reproductive decisions.",
-  prs:
-    "Polygenic risk scores are NOT diagnostic. They reflect statistical associations, not clinical diagnoses. Discuss any concerns with your healthcare provider for proper evaluation.",
-  pgx:
-    "Pharmacogenomic results are NOT a substitute for clinical pharmacogenomic testing. Always consult your prescribing physician or pharmacist before making any medication changes.",
+    'This is NOT a replacement for clinical carrier screening. Consumer DNA chips test a limited subset of variants. Consult a certified genetic counselor or medical geneticist for comprehensive carrier testing before making reproductive decisions.',
+  prs: 'Polygenic risk scores are NOT diagnostic. They reflect statistical associations, not clinical diagnoses. Discuss any concerns with your healthcare provider for proper evaluation.',
+  pgx: 'Pharmacogenomic results are NOT a substitute for clinical pharmacogenomic testing. Always consult your prescribing physician or pharmacist before making any medication changes.',
 };
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -35,20 +33,17 @@ const VARIANT_MESSAGES: Record<string, string> = {
 export const ClinicalTestingBanner = memo(function ClinicalTestingBanner({
   variant,
 }: ClinicalTestingBannerProps) {
-  const message = variant ? VARIANT_MESSAGES[variant] ?? CLINICAL_TESTING_DISCLAIMER : CLINICAL_TESTING_DISCLAIMER;
+  const message = variant
+    ? (VARIANT_MESSAGES[variant] ?? CLINICAL_TESTING_DISCLAIMER)
+    : CLINICAL_TESTING_DISCLAIMER;
 
   return (
     <div
       role="alert"
       className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4"
     >
-      <AlertTriangle
-        className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-amber)"
-        aria-hidden="true"
-      />
-      <p className="text-xs font-medium leading-relaxed text-(--text-body)">
-        {message}
-      </p>
+      <AlertTriangle className="text-(--accent-amber) mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+      <p className="text-(--text-body) text-xs font-medium leading-relaxed">{message}</p>
     </div>
   );
 });

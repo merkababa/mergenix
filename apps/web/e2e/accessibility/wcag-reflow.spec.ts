@@ -43,9 +43,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
 
   test.describe('No horizontal overflow', () => {
     for (const { name, path } of REFLOW_PAGES) {
-      test(`${name} (${path}) has no horizontal scroll at 320px`, async ({
-        page,
-      }) => {
+      test(`${name} (${path}) has no horizontal scroll at 320px`, async ({ page }) => {
         await page.goto(path, { waitUntil: 'networkidle' });
 
         // Wait for the page to be meaningfully rendered
@@ -54,10 +52,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
         // Assert scrollWidth <= clientWidth — any overflow means content
         // requires horizontal scrolling, which violates WCAG 1.4.10.
         const hasHorizontalOverflow = await page.evaluate(() => {
-          return (
-            document.documentElement.scrollWidth >
-            document.documentElement.clientWidth
-          );
+          return document.documentElement.scrollWidth > document.documentElement.clientWidth;
         });
 
         expect(
@@ -72,9 +67,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
   // ── Scenario 2: Tables use stacked/card layout at 320px ───────────────
 
   test.describe('Table linearization', () => {
-    test('products page tables switch to block display at 320px', async ({
-      page,
-    }) => {
+    test('products page tables switch to block display at 320px', async ({ page }) => {
       await page.goto('/products', { waitUntil: 'networkidle' });
 
       // The products page has a comparison table (confirmed by smoke tests)
@@ -91,9 +84,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       // Verify each table element has display: block (globals.css:640-649)
       for (let i = 0; i < tableCount; i++) {
         const table = tables.nth(i);
-        const display = await table.evaluate((el) =>
-          window.getComputedStyle(el).display,
-        );
+        const display = await table.evaluate((el) => window.getComputedStyle(el).display);
         expect(
           display,
           `Table #${i + 1} should have display: block at 320px, got: ${display}`,
@@ -101,9 +92,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       }
     });
 
-    test('table cells are stacked vertically (display: block) at 320px', async ({
-      page,
-    }) => {
+    test('table cells are stacked vertically (display: block) at 320px', async ({ page }) => {
       await page.goto('/products', { waitUntil: 'networkidle' });
 
       const tds = page.locator('td');
@@ -117,13 +106,10 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       // Verify td elements have display: block (globals.css:646-648)
       for (let i = 0; i < Math.min(tdCount, 5); i++) {
         const td = tds.nth(i);
-        const display = await td.evaluate((el) =>
-          window.getComputedStyle(el).display,
+        const display = await td.evaluate((el) => window.getComputedStyle(el).display);
+        expect(display, `td #${i + 1} should have display: block at 320px, got: ${display}`).toBe(
+          'block',
         );
-        expect(
-          display,
-          `td #${i + 1} should have display: block at 320px, got: ${display}`,
-        ).toBe('block');
       }
     });
 
@@ -154,9 +140,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       expect(theadStyles.overflow).toBe('hidden');
     });
 
-    test('table rows have visible row separators at 320px', async ({
-      page,
-    }) => {
+    test('table rows have visible row separators at 320px', async ({ page }) => {
       await page.goto('/products', { waitUntil: 'networkidle' });
 
       const rows = page.locator('tr + tr');
@@ -182,15 +166,11 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
   // ── Scenario 3: Content elements remain visible and readable ──────────
 
   test.describe('Content readability at 320px', () => {
-    test('glass cards on sample report are visible and not clipped', async ({
-      page,
-    }) => {
+    test('glass cards on sample report are visible and not clipped', async ({ page }) => {
       await page.goto('/sample-report', { waitUntil: 'networkidle' });
 
       // Wait for the sample report heading to be visible
-      await expect(
-        page.getByRole('heading', { name: /sample report/i }),
-      ).toBeVisible();
+      await expect(page.getByRole('heading', { name: /sample report/i })).toBeVisible();
 
       // Check that the main sections are visible
       const sections = page.locator('section');
@@ -208,14 +188,8 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
         ).not.toBeNull();
 
         if (box) {
-          expect(
-            box.width,
-            `Section #${i + 1} width should be positive`,
-          ).toBeGreaterThan(0);
-          expect(
-            box.height,
-            `Section #${i + 1} height should be positive`,
-          ).toBeGreaterThan(0);
+          expect(box.width, `Section #${i + 1} width should be positive`).toBeGreaterThan(0);
+          expect(box.height, `Section #${i + 1} height should be positive`).toBeGreaterThan(0);
           // Section should not be wider than the viewport
           expect(
             box.width,
@@ -225,9 +199,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       }
     });
 
-    test('headings on sample report are visible at 320px', async ({
-      page,
-    }) => {
+    test('headings on sample report are visible at 320px', async ({ page }) => {
       await page.goto('/sample-report', { waitUntil: 'networkidle' });
 
       // The sample report has section headings: Carrier Screening, Trait
@@ -247,9 +219,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       }
     });
 
-    test('call-to-action buttons remain visible and tappable at 320px', async ({
-      page,
-    }) => {
+    test('call-to-action buttons remain visible and tappable at 320px', async ({ page }) => {
       await page.goto('/sample-report', { waitUntil: 'networkidle' });
 
       // Sample report has CTA links: "Start Free Analysis" and "View Pro Plans"
@@ -268,14 +238,8 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
         if (box) {
           // Minimum touch target: 44x44px per WCAG 2.5.5 (AAA) or at least
           // 24x24px per WCAG 2.5.8 (AA). We check for reasonable width.
-          expect(
-            box.width,
-            `CTA #${i + 1} should have usable tap width`,
-          ).toBeGreaterThan(40);
-          expect(
-            box.height,
-            `CTA #${i + 1} should have usable tap height`,
-          ).toBeGreaterThan(20);
+          expect(box.width, `CTA #${i + 1} should have usable tap width`).toBeGreaterThan(40);
+          expect(box.height, `CTA #${i + 1} should have usable tap height`).toBeGreaterThan(20);
         }
       }
     });
@@ -284,9 +248,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
   // ── Scenario 4: Grid layouts collapse to single column ────────────────
 
   test.describe('Grid collapse to single column', () => {
-    test('trait predictions grid is single-column at 320px', async ({
-      page,
-    }) => {
+    test('trait predictions grid is single-column at 320px', async ({ page }) => {
       await page.goto('/sample-report', { waitUntil: 'networkidle' });
 
       // The traits section uses className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -302,8 +264,8 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
 
       for (let i = 0; i < gridCount; i++) {
         const grid = grids.nth(i);
-        const gridTemplateColumns = await grid.evaluate((el) =>
-          window.getComputedStyle(el).gridTemplateColumns,
+        const gridTemplateColumns = await grid.evaluate(
+          (el) => window.getComputedStyle(el).gridTemplateColumns,
         );
 
         // At 320px, all grids should have a single column (1fr resolves to
@@ -318,9 +280,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       }
     });
 
-    test('homepage grid layouts are single-column at 320px', async ({
-      page,
-    }) => {
+    test('homepage grid layouts are single-column at 320px', async ({ page }) => {
       await page.goto('/', { waitUntil: 'networkidle' });
 
       const grids = page.locator('.grid');
@@ -334,8 +294,8 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       // Verify all grids on the homepage collapse to 1 column
       for (let i = 0; i < gridCount; i++) {
         const grid = grids.nth(i);
-        const gridTemplateColumns = await grid.evaluate((el) =>
-          window.getComputedStyle(el).gridTemplateColumns,
+        const gridTemplateColumns = await grid.evaluate(
+          (el) => window.getComputedStyle(el).gridTemplateColumns,
         );
 
         const columnValues = gridTemplateColumns.trim().split(/\s+/);
@@ -358,9 +318,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       await expect(h1).toBeVisible();
 
       // globals.css:689 sets h1 { font-size: 1.25rem; } at 320px
-      const fontSize = await h1.evaluate((el) =>
-        window.getComputedStyle(el).fontSize,
-      );
+      const fontSize = await h1.evaluate((el) => window.getComputedStyle(el).fontSize);
 
       // 1.25rem = 20px at default 16px root. But since the root might be
       // different, we just check it's at most 20px (not the desktop 3xl/4xl).
@@ -378,9 +336,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       await expect(h2).toBeVisible();
 
       // globals.css:690 sets h2 { font-size: 1.125rem; } at 320px
-      const fontSize = await h2.evaluate((el) =>
-        window.getComputedStyle(el).fontSize,
-      );
+      const fontSize = await h2.evaluate((el) => window.getComputedStyle(el).fontSize);
 
       const fontSizePx = parseFloat(fontSize);
       // 1.125rem = 18px at 16px root
@@ -397,9 +353,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       await expect(h3).toBeVisible();
 
       // globals.css:691 sets h3 { font-size: 1rem; } at 320px
-      const fontSize = await h3.evaluate((el) =>
-        window.getComputedStyle(el).fontSize,
-      );
+      const fontSize = await h3.evaluate((el) => window.getComputedStyle(el).fontSize);
 
       const fontSizePx = parseFloat(fontSize);
       // 1rem = 16px at 16px root
@@ -417,9 +371,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       await page.goto('/', { waitUntil: 'networkidle' });
 
       // globals.css:610-623 sets overflow-x: hidden on body, main, etc.
-      const overflowX = await page.evaluate(() =>
-        window.getComputedStyle(document.body).overflowX,
-      );
+      const overflowX = await page.evaluate(() => window.getComputedStyle(document.body).overflowX);
 
       expect(overflowX).toBe('hidden');
     });
@@ -478,9 +430,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       }
     });
 
-    test('SVG elements do not overflow viewport at 320px', async ({
-      page,
-    }) => {
+    test('SVG elements do not overflow viewport at 320px', async ({ page }) => {
       await page.goto('/sample-report', { waitUntil: 'networkidle' });
 
       const svgs = page.locator('svg');
@@ -548,9 +498,7 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
   // ── Scenario 9: Reduced padding at 320px ──────────────────────────────
 
   test.describe('Reduced padding', () => {
-    test('mx-auto containers have reduced horizontal padding at 320px', async ({
-      page,
-    }) => {
+    test('mx-auto containers have reduced horizontal padding at 320px', async ({ page }) => {
       await page.goto('/', { waitUntil: 'networkidle' });
 
       const mxAutoElements = page.locator('.mx-auto');
@@ -564,8 +512,8 @@ test.describe('WCAG 1.4.10 Reflow at 320px', () => {
       // globals.css:683-686 sets .mx-auto { padding-left: 0.5rem; padding-right: 0.5rem; }
       // 0.5rem = 8px at 16px root
       const firstElement = mxAutoElements.first();
-      const paddingLeft = await firstElement.evaluate((el) =>
-        window.getComputedStyle(el).paddingLeft,
+      const paddingLeft = await firstElement.evaluate(
+        (el) => window.getComputedStyle(el).paddingLeft,
       );
 
       const paddingPx = parseFloat(paddingLeft);

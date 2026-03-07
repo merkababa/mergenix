@@ -1,55 +1,59 @@
-"use client";
+'use client';
 
-import { AlertTriangle, Save, Microscope, Dna, Pill, BarChart3, Heart } from "lucide-react";
-import dynamic from "next/dynamic";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { ErrorBoundary } from "@/components/error-boundary";
-import { PdfExportButton } from "@/components/genetics/results/pdf-export-button";
-import { StaleResultsBanner } from "@/components/genetics/results/stale-results-banner";
-import type { FullAnalysisResult } from "@mergenix/shared-types";
-import type { ResultTab } from "@/lib/stores/analysis-store";
+import { AlertTriangle, Save, Microscope, Dna, Pill, BarChart3, Heart } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { ErrorBoundary } from '@/components/error-boundary';
+import { PdfExportButton } from '@/components/genetics/results/pdf-export-button';
+import { StaleResultsBanner } from '@/components/genetics/results/stale-results-banner';
+import type { FullAnalysisResult } from '@mergenix/shared-types';
+import type { ResultTab } from '@/lib/stores/analysis-store';
 
 // ─── Lazy Tab Components (M5: code-split with next/dynamic) ─────────────────
 
-const OverviewTab = dynamic(
-  () => import("@/components/genetics/results/overview-tab").then((m) => ({ default: m.OverviewTab })),
+const OverviewTab = dynamic(() =>
+  import('@/components/genetics/results/overview-tab').then((m) => ({ default: m.OverviewTab })),
 );
-const CarrierTab = dynamic(
-  () => import("@/components/genetics/results/carrier-tab").then((m) => ({ default: m.CarrierTab })),
+const CarrierTab = dynamic(() =>
+  import('@/components/genetics/results/carrier-tab').then((m) => ({ default: m.CarrierTab })),
 );
-const TraitsTab = dynamic(
-  () => import("@/components/genetics/results/traits-tab").then((m) => ({ default: m.TraitsTab })),
+const TraitsTab = dynamic(() =>
+  import('@/components/genetics/results/traits-tab').then((m) => ({ default: m.TraitsTab })),
 );
-const PgxTab = dynamic(
-  () => import("@/components/genetics/results/pgx-tab").then((m) => ({ default: m.PgxTab })),
+const PgxTab = dynamic(() =>
+  import('@/components/genetics/results/pgx-tab').then((m) => ({ default: m.PgxTab })),
 );
-const PrsTab = dynamic(
-  () => import("@/components/genetics/results/prs-tab").then((m) => ({ default: m.PrsTab })),
+const PrsTab = dynamic(() =>
+  import('@/components/genetics/results/prs-tab').then((m) => ({ default: m.PrsTab })),
 );
-const CounselingTab = dynamic(
-  () => import("@/components/genetics/results/counseling-tab").then((m) => ({ default: m.CounselingTab })),
+const CounselingTab = dynamic(() =>
+  import('@/components/genetics/results/counseling-tab').then((m) => ({
+    default: m.CounselingTab,
+  })),
 );
 
 // ─── Tab Configuration ──────────────────────────────────────────────────────
 
-export const RESULT_TABS: { key: ResultTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { key: "overview", label: "Overview", icon: BarChart3 },
-  { key: "carrier", label: "Carrier Risk", icon: Microscope },
-  { key: "traits", label: "Traits", icon: Dna },
-  { key: "pgx", label: "PGx", icon: Pill },
-  { key: "prs", label: "PRS", icon: BarChart3 },
-  { key: "counseling", label: "Counseling", icon: Heart },
+export const RESULT_TABS: {
+  key: ResultTab;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  { key: 'overview', label: 'Overview', icon: BarChart3 },
+  { key: 'carrier', label: 'Carrier Risk', icon: Microscope },
+  { key: 'traits', label: 'Traits', icon: Dna },
+  { key: 'pgx', label: 'PGx', icon: Pill },
+  { key: 'prs', label: 'PRS', icon: BarChart3 },
+  { key: 'counseling', label: 'Counseling', icon: Heart },
 ];
 
 // ─── Tab Error Fallback ──────────────────────────────────────────────────────
 
 function TabErrorFallback({ label }: { label: string }) {
   return (
-    <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center">
-      <p className="text-sm text-(--text-muted)">
-        Failed to load {label}.
-      </p>
+    <div className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) border p-6 text-center">
+      <p className="text-(--text-muted) text-sm">Failed to load {label}.</p>
     </div>
   );
 }
@@ -58,37 +62,37 @@ function TabErrorFallback({ label }: { label: string }) {
 
 function TabContent({ tab }: { tab: ResultTab }) {
   switch (tab) {
-    case "overview":
+    case 'overview':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="overview results" />}>
           <OverviewTab />
         </ErrorBoundary>
       );
-    case "carrier":
+    case 'carrier':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="carrier results" />}>
           <CarrierTab />
         </ErrorBoundary>
       );
-    case "traits":
+    case 'traits':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="trait predictions" />}>
           <TraitsTab />
         </ErrorBoundary>
       );
-    case "pgx":
+    case 'pgx':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="pharmacogenomic results" />}>
           <PgxTab />
         </ErrorBoundary>
       );
-    case "prs":
+    case 'prs':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="polygenic risk scores" />}>
           <PrsTab />
         </ErrorBoundary>
       );
-    case "counseling":
+    case 'counseling':
       return (
         <ErrorBoundary fallback={<TabErrorFallback label="counseling recommendations" />}>
           <CounselingTab />
@@ -129,12 +133,12 @@ export function AnalysisResultsSection({
           hover="none"
           className="flex items-center gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
         >
-          <AlertTriangle className="h-5 w-5 shrink-0 text-(--accent-amber)" />
+          <AlertTriangle className="text-(--accent-amber) h-5 w-5 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm text-(--text-body)">
+            <p className="text-(--text-body) text-sm">
               You&apos;re viewing demo results with synthetic data.
             </p>
-            <p className="mt-1 text-sm font-medium text-(--accent-teal)">
+            <p className="text-(--accent-teal) mt-1 text-sm font-medium">
               Ready to analyze your own DNA?
             </p>
           </div>
@@ -150,12 +154,7 @@ export function AnalysisResultsSection({
       {/* Action bar: Save Options + PDF Export + New Analysis */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onSave}
-            className="gap-1.5"
-          >
+          <Button variant="outline" size="sm" onClick={onSave} className="gap-1.5">
             <Save className="h-4 w-4" />
             Save Results
           </Button>
@@ -171,7 +170,7 @@ export function AnalysisResultsSection({
         {/* H3: single onKeyDown on tablist container for event delegation */}
         <div className="relative">
           <div
-            className="flex gap-1 overflow-x-auto scrollbar-none"
+            className="scrollbar-none flex gap-1 overflow-x-auto"
             role="tablist"
             aria-label="Analysis results"
             onKeyDown={onTabKeyDown}
@@ -188,10 +187,10 @@ export function AnalysisResultsSection({
                   aria-controls={`tabpanel-${tab.key}`}
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => onTabChange(tab.key)}
-                  className={`flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 font-heading text-sm font-medium transition-all ${
+                  className={`font-heading flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-linear-to-r from-accent-teal to-day-accent-teal font-bold text-bio-deep shadow-[0_2px_12px_rgba(6,214,160,0.3)]"
-                      : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
+                      ? 'bg-linear-to-r from-accent-teal to-day-accent-teal text-bio-deep font-bold shadow-[0_2px_12px_rgba(6,214,160,0.3)]'
+                      : 'text-(--text-muted) hover:text-(--accent-teal) hover:bg-[rgba(6,214,160,0.06)]'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -201,7 +200,7 @@ export function AnalysisResultsSection({
             })}
           </div>
           <div
-            className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-(--bg-glass) to-transparent"
+            className="bg-linear-to-l from-(--bg-glass) pointer-events-none absolute bottom-0 right-0 top-0 w-8 to-transparent"
             aria-hidden="true"
           />
         </div>
@@ -211,11 +210,7 @@ export function AnalysisResultsSection({
       <h2 className="sr-only">Analysis Results</h2>
 
       {/* Tab content */}
-      <div
-        id={`tabpanel-${activeTab}`}
-        role="tabpanel"
-        aria-labelledby={`tab-${activeTab}`}
-      >
+      <div id={`tabpanel-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
         <TabContent tab={activeTab} />
       </div>
     </div>

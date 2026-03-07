@@ -129,12 +129,13 @@ def create_access_token(user_id: uuid.UUID) -> str:
         "iat": now,
         "exp": expire,
     }
-    return jwt.encode(
+    result: str = jwt.encode(
         payload,
         settings.jwt_secret,
         algorithm=settings.jwt_algorithm,
         headers={"kid": settings.jwt_key_id},
     )
+    return result
 
 
 def create_refresh_token(user_id: uuid.UUID) -> str:
@@ -158,12 +159,13 @@ def create_refresh_token(user_id: uuid.UUID) -> str:
         "iat": now,
         "exp": expire,
     }
-    return jwt.encode(
+    result: str = jwt.encode(
         payload,
         settings.jwt_secret,
         algorithm=settings.jwt_algorithm,
         headers={"kid": settings.jwt_key_id},
     )
+    return result
 
 
 def decode_token(token: str) -> dict[str, Any]:
@@ -198,10 +200,9 @@ def decode_token(token: str) -> dict[str, Any]:
         secret = _resolve_secret_for_kid(kid)
         if secret is None:
             sanitized_kid = str(kid)[:64].replace(chr(10), "")
-            raise JWTError(
-                f"Token signed with unknown key ID: {sanitized_kid}"
-            )
-        return jwt.decode(token, secret, algorithms=algorithms)
+            raise JWTError(f"Token signed with unknown key ID: {sanitized_kid}")
+        decoded: dict[str, Any] = jwt.decode(token, secret, algorithms=algorithms)
+        return decoded
 
     # Step 3: No kid (legacy token) — try each secret in order
     secrets = get_jwt_secrets()
@@ -209,7 +210,8 @@ def decode_token(token: str) -> dict[str, Any]:
 
     for _key_id, secret in secrets:
         try:
-            return jwt.decode(token, secret, algorithms=algorithms)
+            decoded = jwt.decode(token, secret, algorithms=algorithms)
+            return decoded
         except JWTError as exc:
             last_error = exc
             continue

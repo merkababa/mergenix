@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Info } from "lucide-react";
-import { useLegalStore } from "@/lib/stores/legal-store";
-import { PARTNER_CONSENT_LABEL } from "@/lib/constants/legal-placeholders";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Info } from 'lucide-react';
+import { useLegalStore } from '@/lib/stores/legal-store';
+import { PARTNER_CONSENT_LABEL } from '@/lib/constants/legal-placeholders';
 
 // ── Component ────────────────────────────────────────────────────────────
 
@@ -15,9 +15,7 @@ interface PartnerConsentCheckboxProps {
   filesChanged?: unknown;
 }
 
-export function PartnerConsentCheckbox({
-  filesChanged,
-}: PartnerConsentCheckboxProps) {
+export function PartnerConsentCheckbox({ filesChanged }: PartnerConsentCheckboxProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -68,29 +66,29 @@ export function PartnerConsentCheckbox({
   }, []);
 
   return (
-    <div className="rounded-xl border-2 border-(--accent-amber,#f59e0b) bg-[rgba(245,158,11,0.05)] p-4">
+    <div className="border-(--accent-amber,#f59e0b) rounded-xl border-2 bg-[rgba(245,158,11,0.05)] p-4">
       <div className="flex items-start gap-3">
         <input
           type="checkbox"
           id="partner-consent-checkbox"
           checked={partnerConsentGiven}
           onChange={handleChange}
-          className="mt-1 h-4 w-4 shrink-0 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
+          className="border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal) mt-1 h-4 w-4 shrink-0 rounded-sm"
           aria-describedby="partner-consent-explanation"
         />
         <div className="flex-1">
           <label
             htmlFor="partner-consent-checkbox"
-            className="cursor-pointer text-sm font-medium text-(--text-body)"
+            className="text-(--text-body) cursor-pointer text-sm font-medium"
           >
             {PARTNER_CONSENT_LABEL}
           </label>
 
           {/* Info icon with tooltip */}
-          <div className="mt-2 relative inline-block">
+          <div className="relative mt-2 inline-block">
             <button
               type="button"
-              className="inline-flex items-center gap-1 text-xs text-(--text-muted) hover:text-(--text-primary) transition-colors"
+              className="text-(--text-muted) hover:text-(--text-primary) inline-flex items-center gap-1 text-xs transition-colors"
               onMouseEnter={handleInfoMouseEnter}
               onMouseLeave={handleInfoMouseLeave}
               onClick={handleInfoClick}
@@ -104,7 +102,7 @@ export function PartnerConsentCheckbox({
               <div
                 role="tooltip"
                 id="partner-consent-explanation"
-                className="absolute left-0 top-full z-10 mt-1 w-72 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) p-3 text-xs text-(--text-body) shadow-lg"
+                className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) absolute left-0 top-full z-10 mt-1 w-72 rounded-lg border p-3 text-xs shadow-lg"
               >
                 {EXPLANATION_TEXT}
               </div>

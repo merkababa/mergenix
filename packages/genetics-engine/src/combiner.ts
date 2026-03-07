@@ -29,17 +29,9 @@ import type {
 // arithmetic (Item 7 refactor). The functions are re-exported here under the
 // same names so that all existing imports from combiner.ts continue to work
 // without modification.
-export {
-  calculateARRisk,
-  calculateADRisk,
-  calculateXLinkedRisk,
-} from './offspring-risk';
+export { calculateARRisk, calculateADRisk, calculateXLinkedRisk } from './offspring-risk';
 
-import {
-  calculateARRisk,
-  calculateADRisk,
-  calculateXLinkedRisk,
-} from './offspring-risk';
+import { calculateARRisk, calculateADRisk, calculateXLinkedRisk } from './offspring-risk';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 

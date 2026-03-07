@@ -16,6 +16,7 @@ from __future__ import annotations
 import datetime
 import logging
 from datetime import UTC
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request, Response, status
 from sqlalchemy import delete, select
@@ -68,9 +69,7 @@ def _verify_analytics_key(request: Request) -> None:
         )
 
     provided_key = request.headers.get("X-Analytics-Key", "")
-    if not provided_key or not constant_time_compare(
-        provided_key, settings.analytics_api_key
-    ):
+    if not provided_key or not constant_time_compare(provided_key, settings.analytics_api_key):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={
@@ -226,11 +225,10 @@ async def purge_old_analytics(
         Number of records deleted.
     """
     cutoff = datetime.datetime.now(UTC).date() - datetime.timedelta(days=retention_days)
-    result = await db.execute(
-        delete(DailyEventCount).where(DailyEventCount.event_date < cutoff)
-    )
+    result = await db.execute(delete(DailyEventCount).where(DailyEventCount.event_date < cutoff))
     await db.commit()
-    return result.rowcount  # type: ignore[return-value]
+    count: int = result.rowcount  # type: ignore[attr-defined]
+    return count
 
 
 @router.post(
@@ -241,7 +239,7 @@ async def purge_old_analytics(
 async def purge_analytics_endpoint(
     request: Request,
     db: DbSession,
-) -> dict:
+) -> dict[str, Any]:
     """Delete analytics records older than the retention period.
 
     Secured via X-Analytics-Key header (admin-only).  Returns the number

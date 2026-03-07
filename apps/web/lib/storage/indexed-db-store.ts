@@ -9,12 +9,12 @@
  * the entry is treated as stale (returns null) so the UI can prompt re-upload.
  */
 
-import { get, set, del, clear, createStore, entries } from "idb-keyval";
+import { get, set, del, clear, createStore, entries } from 'idb-keyval';
 
 // ── Schema Version ─────────────────────────────────────────────────────────
 
 /** Current storage schema version. Bump this when the encrypted envelope format changes. */
-export const STORAGE_SCHEMA_VERSION = "1";
+export const STORAGE_SCHEMA_VERSION = '1';
 
 // ── Custom Store ───────────────────────────────────────────────────────────
 
@@ -22,7 +22,7 @@ export const STORAGE_SCHEMA_VERSION = "1";
  * Custom idb-keyval store.
  * Database: "mergenix-results-db", Object Store: "mergenix-results"
  */
-const resultsStore = createStore("mergenix-results-db", "mergenix-results");
+const resultsStore = createStore('mergenix-results-db', 'mergenix-results');
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -64,23 +64,23 @@ function validateEncryptedEnvelope(value: string): void {
     parsed = JSON.parse(value);
   } catch {
     throw new Error(
-      "IndexedDB guard: encryptedEnvelope is not valid JSON — refusing to store plaintext health data.",
+      'IndexedDB guard: encryptedEnvelope is not valid JSON — refusing to store plaintext health data.',
     );
   }
 
-  if (typeof parsed !== "object" || parsed === null) {
+  if (typeof parsed !== 'object' || parsed === null) {
     throw new Error(
-      "IndexedDB guard: encryptedEnvelope must be a JSON object — refusing to store plaintext health data.",
+      'IndexedDB guard: encryptedEnvelope must be a JSON object — refusing to store plaintext health data.',
     );
   }
 
-  const requiredFields = ["version", "algorithm", "salt", "iv", "ciphertext"] as const;
+  const requiredFields = ['version', 'algorithm', 'salt', 'iv', 'ciphertext'] as const;
   const obj = parsed as Record<string, unknown>;
   const missingFields = requiredFields.filter((field) => !(field in obj));
 
   if (missingFields.length > 0) {
     throw new Error(
-      `IndexedDB guard: encryptedEnvelope is missing required fields [${missingFields.join(", ")}] — refusing to store plaintext health data.`,
+      `IndexedDB guard: encryptedEnvelope is missing required fields [${missingFields.join(', ')}] — refusing to store plaintext health data.`,
     );
   }
 }
@@ -120,9 +120,7 @@ export async function saveAnalysisResult(
  *
  * When there is a version mismatch, the UI layer should prompt the user to re-upload.
  */
-export async function loadAnalysisResult(
-  resultId: string,
-): Promise<StoredResult | null> {
+export async function loadAnalysisResult(resultId: string): Promise<StoredResult | null> {
   const entry = await get<StoredEntry>(resultId, resultsStore);
 
   if (!entry) {

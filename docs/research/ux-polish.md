@@ -31,18 +31,18 @@ Mergenix has a strong visual foundation (Bioluminescent Laboratory theme, dark/l
 
 The most critical improvements, ranked by user impact:
 
-| Priority | Area | Impact | Effort |
-|----------|------|--------|--------|
-| P0 | Emotional design for high-risk results | Critical | Medium |
-| P0 | First-time user onboarding & sample data | Critical | Medium |
-| P1 | Plain-language result explanations | High | Medium |
-| P1 | Genetic glossary & tooltips | High | Low |
-| P1 | File upload validation feedback | High | Low |
-| P2 | Multi-step progress indicators | Medium | Low |
-| P2 | Mobile responsive layouts | Medium | High |
-| P2 | Interactive guided tour | Medium | Medium |
-| P3 | Dashboard & analysis history | Medium | High |
-| P3 | Shareable/exportable reports | Medium | High |
+| Priority | Area                                     | Impact   | Effort |
+| -------- | ---------------------------------------- | -------- | ------ |
+| P0       | Emotional design for high-risk results   | Critical | Medium |
+| P0       | First-time user onboarding & sample data | Critical | Medium |
+| P1       | Plain-language result explanations       | High     | Medium |
+| P1       | Genetic glossary & tooltips              | High     | Low    |
+| P1       | File upload validation feedback          | High     | Low    |
+| P2       | Multi-step progress indicators           | Medium   | Low    |
+| P2       | Mobile responsive layouts                | Medium   | High   |
+| P2       | Interactive guided tour                  | Medium   | Medium |
+| P3       | Dashboard & analysis history             | Medium   | High   |
+| P3       | Shareable/exportable reports             | Medium   | High   |
 
 ---
 
@@ -51,7 +51,9 @@ The most critical improvements, ranked by user impact:
 ### Page-by-Page Analysis
 
 #### `pages/home.py` (238 LOC)
+
 **Strengths:**
+
 - Clear hero section with animated DNA dots
 - Strong value proposition ("2,715 diseases, 79 traits")
 - Trust signals (encryption, no data stored, HIPAA)
@@ -60,6 +62,7 @@ The most critical improvements, ranked by user impact:
 - Two CTAs (Get Started Free + See How It Works)
 
 **Weaknesses:**
+
 - "See How It Works" button does nothing (L88: `pass` -- scroll anchor comment but no implementation)
 - No sample data demo for first-time visitors
 - No social proof (testimonials, user count, case studies)
@@ -68,7 +71,9 @@ The most critical improvements, ranked by user impact:
 - No explanation of what genetic data IS for newcomers
 
 #### `pages/analysis.py` (637 LOC)
+
 **Strengths:**
+
 - Auth guard redirects to sign-in with return URL
 - Supports single-parent carrier screening (partial analysis)
 - Progress bar during analysis (10% -> 50% -> 100%)
@@ -78,6 +83,7 @@ The most critical improvements, ranked by user impact:
 - Trait categories with icons
 
 **Weaknesses:**
+
 - No explanation of what users should expect before uploading
 - No sample file download or demo mode
 - File upload area has no drag-and-drop visual indicator
@@ -94,7 +100,9 @@ The most critical improvements, ranked by user impact:
 - Individual Reports tab re-runs full carrier screening (performance issue)
 
 #### `pages/disease_catalog.py` (446 LOC)
+
 **Strengths:**
+
 - Rich filtering (search, severity, inheritance, category, frequency slider)
 - Interactive dataframe with sorting
 - Paginated disease detail cards
@@ -102,6 +110,7 @@ The most critical improvements, ranked by user impact:
 - Insights section with fun facts
 
 **Weaknesses:**
+
 - Filters are collapsed by default -- users may not discover them
 - No "popular diseases" or "common questions" quick-filter
 - OMIM links open externally with no warning
@@ -110,7 +119,9 @@ The most critical improvements, ranked by user impact:
 - Carrier frequency slider is confusing ("1 in X" -- lower = more common but slider goes left-to-right)
 
 #### `pages/auth.py` (271 LOC)
+
 **Strengths:**
+
 - Clean tabbed interface (Sign In / Create Account)
 - Google OAuth with CSRF protection
 - Password strength indicator
@@ -119,6 +130,7 @@ The most critical improvements, ranked by user impact:
 - Auto-redirect after login
 
 **Weaknesses:**
+
 - Apple Sign-In shows "Coming Soon" but button is fully visible and clickable -- frustrating
 - "Forgot password?" link goes nowhere (`href="#"`)
 - No email validation feedback (format check) before form submit
@@ -129,13 +141,16 @@ The most critical improvements, ranked by user impact:
 - No email verification flow
 
 #### `pages/account.py` (144 LOC)
+
 **Strengths:**
+
 - Clean profile card with avatar initial
 - Current plan display with disease/trait limits
 - Password change form with validation
 - Logout and account deletion section
 
 **Weaknesses:**
+
 - No edit profile functionality (name change)
 - Account deletion requires emailing support -- no in-app flow
 - No activity history or analysis count
@@ -143,7 +158,9 @@ The most critical improvements, ranked by user impact:
 - No data export option (GDPR compliance)
 
 #### `pages/subscription.py` (226 LOC)
+
 **Strengths:**
+
 - Current plan display with features
 - Side-by-side tier comparison
 - Stripe + PayPal payment options
@@ -151,6 +168,7 @@ The most critical improvements, ranked by user impact:
 - Pricing FAQ
 
 **Weaknesses:**
+
 - Payment flow opens external link in same tab -- could lose session state
 - No money-back guarantee messaging
 - No testimonials on pricing page
@@ -159,35 +177,44 @@ The most critical improvements, ranked by user impact:
 - No savings calculation or value framing
 
 #### `pages/products.py` (90 LOC)
+
 **Strengths:**
+
 - Clean pricing card layout
 - Feature comparison table
 
 **Weaknesses:**
+
 - Nearly identical to subscription page -- confusing redundancy
 - No product descriptions beyond features list
 - No use cases or personas ("Best for couples planning...")
 
 #### `pages/about.py` (116 LOC)
+
 **Strengths:**
+
 - Clear methodology explanation (Mendelian, Punnett, Variant Classification)
 - Data sources with descriptions
 - Important Limitations section (educational tool disclaimer)
 - Supported file formats
 
 **Weaknesses:**
+
 - No team information despite page description mentioning it
 - No contact form
 - No scientific advisory board or credentials
 - Limitations section feels buried at the bottom
 
 #### `pages/legal.py` (129 LOC)
+
 **Strengths:**
+
 - Privacy policy, ToS, HIPAA, Data Handling all covered
 - "What We DO / DON'T Do" visual comparison
 - Last updated date
 
 **Weaknesses:**
+
 - Static content with no search
 - No cookie consent banner
 - HIPAA section should be more prominent (trust builder)
@@ -218,6 +245,7 @@ The most critical improvements, ranked by user impact:
 ```
 
 **Problems Identified:**
+
 1. No sample data or demo mode -- users without genetic data files bounce immediately
 2. "See How It Works" button is non-functional
 3. No guided tour after first sign-up
@@ -252,6 +280,7 @@ The most critical improvements, ranked by user impact:
 ```
 
 **Problems Identified:**
+
 1. High-risk results shown with alarming styling (red borders, "High Risk" labels) but no emotional context
 2. No "What does this mean for us?" plain-language summary
 3. No recommendation to consult a genetic counselor
@@ -275,6 +304,7 @@ The most critical improvements, ranked by user impact:
 ```
 
 **Problems Identified:**
+
 1. Single-parent mode works but feels like a half-feature
 2. No explanation of what carrier status means for an individual
 3. Missing "share with partner" or "invite second parent" flow
@@ -284,6 +314,7 @@ The most critical improvements, ranked by user impact:
 ## 4. User Onboarding
 
 ### Current State
+
 - No onboarding whatsoever
 - After registration, user is dumped onto the analysis page
 - No welcome flow, guided tour, or orientation
@@ -292,9 +323,11 @@ The most critical improvements, ranked by user impact:
 ### Recommended Improvements
 
 #### 4.1 Welcome Flow After Registration
+
 **Implementation:** After successful registration (auth.py L254), redirect to a new welcome interstitial instead of directly to analysis.
 
 **Copy suggestions:**
+
 ```
 Welcome to Mergenix, [Name]!
 
@@ -314,23 +347,29 @@ Here's what you can do:
 ```
 
 #### 4.2 Sample Data Demo Mode
+
 **Implementation:** Provide a "Try Demo" button that loads pre-generated sample parent files (already exist in `data/sample_files/`) without requiring sign-up.
 
 **Benefits:**
+
 - Lets visitors see results before committing to registration
 - Demonstrates value proposition immediately
 - Reduces bounce rate from analysis page
 
 #### 4.3 Progressive Disclosure on Analysis Page
+
 **Current:** All upload instructions, settings, and results on one page
 **Proposed:** Step-by-step wizard:
+
 ```
 Step 1: Upload Files  -->  Step 2: Review Data  -->  Step 3: Run Analysis  -->  Step 4: View Results
      [active]                [locked]                  [locked]                  [locked]
 ```
 
 #### 4.4 "How to Get Your DNA Data" Guide
+
 Many users may not know how to download their raw DNA data. Add an expandable guide:
+
 ```
 How to Download Your Raw DNA Data:
 
@@ -347,13 +386,17 @@ VCF:  From your sequencing provider (Nebula, Dante, etc.)
 ### Current Issues
 
 #### 5.1 File Upload Errors
+
 **Current (analysis.py L282):**
+
 ```python
 st.error(f"... {label}: Invalid file -- {err}")
 ```
+
 This shows raw Python exception text, which is meaningless to users.
 
 **Proposed:**
+
 ```
 We couldn't read this file. Here's what might help:
 
@@ -366,12 +409,15 @@ We couldn't read this file. Here's what might help:
 ```
 
 #### 5.2 Analysis Failure
+
 **Current (analysis.py L369):**
+
 ```python
 st.error(f"Carrier analysis failed: {exc}")
 ```
 
 **Proposed:**
+
 ```
 Analysis encountered an issue.
 
@@ -385,9 +431,11 @@ Try re-downloading your raw data file and uploading again.
 ```
 
 #### 5.3 Empty States
+
 **Current:** When no traits are predicted, shows generic `st.warning("No traits could be predicted.")`
 
 **Proposed:**
+
 ```
 No traits could be predicted from the uploaded data.
 
@@ -401,6 +449,7 @@ Covered platforms: 23andMe typically provides the best SNP overlap.
 ```
 
 #### 5.4 Auth Failures
+
 - "Invalid email or password" -- no guidance on password reset
 - OAuth failures show raw exception text
 - No rate limiting feedback for repeated login attempts
@@ -410,9 +459,11 @@ Covered platforms: 23andMe typically provides the best SNP overlap.
 ## 6. Results Presentation
 
 ### 6.1 Current Problems
+
 The results are presented in a technically accurate but emotionally detached way. For a product dealing with genetic health information, this is a critical gap.
 
 **Key issues:**
+
 1. **No result summary** -- Users see metrics and tabs but no plain-language "Here's what we found"
 2. **Alarming high-risk language** without context or reassurance
 3. **No "what to do next" guidance** after viewing results
@@ -420,6 +471,7 @@ The results are presented in a technically accurate but emotionally detached way
 5. **No risk contextualization** -- "1 in 25 carriers" means nothing without context ("that's about 1 in every classroom")
 
 ### 6.2 Recommended Result Summary Section
+
 Add a summary card above the tabs:
 
 ```
@@ -444,9 +496,11 @@ there is typically a 25% chance an offspring would be affected.
 ```
 
 ### 6.3 Plain-Language Risk Explanations
+
 For each high-risk result, add a "What does this mean?" section:
 
 **Current:**
+
 ```
 Cystic Fibrosis  [HIGH]
 Gene: CFTR | rsID: rs121908769
@@ -456,6 +510,7 @@ Affected: 25.0%  |  Carrier: 50.0%  |  Normal: 25.0%
 ```
 
 **Proposed addition:**
+
 ```
 WHAT THIS MEANS FOR YOUR FAMILY:
 Both you and your partner carry one copy of the CFTR gene variant
@@ -483,6 +538,7 @@ WHAT YOU CAN DO:
 Replace raw percentage bars with more intuitive visualizations:
 
 **Option A: Punnett Square Visual**
+
 ```
          Parent B
           C    c
@@ -502,7 +558,9 @@ Show 4 figures: 1 red (affected), 2 yellow (carrier), 1 green (normal)
 More intuitive than percentage bars for lay users.
 
 ### 6.5 Trait Results Enhancement
+
 Trait results are the "fun" part. Enhance engagement:
+
 - Add comparison context ("Most common eye color worldwide: Brown")
 - Show confidence level with explanation ("High confidence: based on single well-studied gene")
 - Add "fun facts" for each trait
@@ -513,12 +571,14 @@ Trait results are the "fun" part. Enhance engagement:
 ## 7. Progress Indicators
 
 ### Current State
+
 - Single progress bar during analysis: 10% -> 50% -> 100%
 - Three text updates: "Screening carrier risk" -> "Predicting offspring traits" -> "Analysis complete"
 
 ### Recommended Improvements
 
 #### 7.1 Detailed Analysis Steps
+
 ```
 Step 1/4: Validating genetic data files...          [=====     ] 25%
           - Checking file format and integrity
@@ -538,7 +598,9 @@ Step 4/4: Generating your report...                 [==========] 100%
 ```
 
 #### 7.2 File Upload Validation Steps
+
 After upload, show validation steps:
+
 ```
 Validating Parent A file...
   [done] File format detected: 23andMe
@@ -554,24 +616,26 @@ This gives users confidence their file was properly processed and sets expectati
 ## 8. Educational Content
 
 ### 8.1 Genetic Glossary
+
 Add an in-app glossary accessible from any page. Terms to define:
 
-| Term | Plain Language |
-|------|---------------|
-| Carrier | Someone who has one copy of a gene variant. They're healthy but can pass it to children. |
-| Autosomal Recessive | A condition that requires two copies (one from each parent) to be affected. |
-| Autosomal Dominant | A condition that requires only one copy to be affected. |
-| X-linked | A condition linked to the X chromosome, more commonly affecting males. |
-| SNP | A single spot in DNA where people commonly differ (like a "typo" in the genetic code). |
-| Pathogenic Allele | The gene variant known to cause or contribute to a condition. |
-| Genotype | The specific combination of gene variants a person has at a particular location. |
-| Phenotype | The observable trait or condition that results from a genotype. |
-| Heterozygous | Having two different versions of a gene (one from each parent). |
-| Homozygous | Having two identical versions of a gene (one from each parent). |
-| Punnett Square | A grid used to predict the probability of offspring genotypes. |
-| Carrier Frequency | How common it is to carry one copy of a variant in the general population. |
+| Term                | Plain Language                                                                           |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| Carrier             | Someone who has one copy of a gene variant. They're healthy but can pass it to children. |
+| Autosomal Recessive | A condition that requires two copies (one from each parent) to be affected.              |
+| Autosomal Dominant  | A condition that requires only one copy to be affected.                                  |
+| X-linked            | A condition linked to the X chromosome, more commonly affecting males.                   |
+| SNP                 | A single spot in DNA where people commonly differ (like a "typo" in the genetic code).   |
+| Pathogenic Allele   | The gene variant known to cause or contribute to a condition.                            |
+| Genotype            | The specific combination of gene variants a person has at a particular location.         |
+| Phenotype           | The observable trait or condition that results from a genotype.                          |
+| Heterozygous        | Having two different versions of a gene (one from each parent).                          |
+| Homozygous          | Having two identical versions of a gene (one from each parent).                          |
+| Punnett Square      | A grid used to predict the probability of offspring genotypes.                           |
+| Carrier Frequency   | How common it is to carry one copy of a variant in the general population.               |
 
 ### 8.2 Contextual Tooltips
+
 Add `st.help()` or custom tooltip icons next to technical terms throughout results:
 
 ```python
@@ -585,7 +649,9 @@ st.markdown(f"**Inheritance:** {format_inheritance(d['inheritance'])} "
 ```
 
 ### 8.3 "Learn More" Expandable Sections
+
 For each disease in results, add collapsible educational content:
+
 - What is this condition?
 - How common is it?
 - What are the symptoms?
@@ -594,7 +660,9 @@ For each disease in results, add collapsible educational content:
 - Link to OMIM, ClinVar, and MedlinePlus
 
 ### 8.4 Landing Page Education
+
 The home page assumes users understand genetic testing. Add a section:
+
 ```
 NEW TO GENETIC TESTING?
 
@@ -616,11 +684,13 @@ pass on the "error," their child could be affected.
 ## 9. Navigation Flow
 
 ### Current Architecture
+
 ```
 Home -> Products -> Disease Catalog -> Sign In -> Analysis -> Subscription -> About -> Legal -> Account
 ```
 
 ### Issues
+
 1. **Products and Subscription are nearly identical** -- confusing redundancy
 2. **Account page** is only reachable if logged in but not in main nav
 3. **Disease Catalog** is browsable without auth but Analysis requires auth -- inconsistent
@@ -631,21 +701,25 @@ Home -> Products -> Disease Catalog -> Sign In -> Analysis -> Subscription -> Ab
 ### Proposed Navigation Architecture
 
 **Primary Nav (always visible):**
+
 ```
 [Logo] Home | Disease Catalog | Analysis | About  [Theme Toggle]  [Auth/Profile]
 ```
 
 **Secondary Nav (logged in, in dropdown or account menu):**
+
 ```
 Account | Subscription | Logout
 ```
 
 **Footer Nav:**
+
 ```
 Products & Pricing | Legal | Privacy Policy | Terms of Service | Contact
 ```
 
 **Changes:**
+
 1. Merge Products into Subscription (or vice versa) -- one pricing page
 2. Move Legal to footer-only nav
 3. Add Account to user dropdown menu
@@ -653,6 +727,7 @@ Products & Pricing | Legal | Privacy Policy | Terms of Service | Contact
 5. Add "Pricing" as a footer link pointing to subscription
 
 ### User Journey Optimization
+
 ```
 First-time visitor:
   Home -> Disease Catalog (browse) -> Products (see value) -> Sign Up -> Demo/Analysis
@@ -666,7 +741,9 @@ Returning user:
 ## 10. Mobile Experience
 
 ### Streamlit Mobile Limitations
+
 Streamlit has known limitations on mobile:
+
 - `st.columns()` does not automatically stack on narrow screens
 - Multi-column layouts (3-4 cols) become horizontally scrollable on mobile
 - `st.dataframe()` requires horizontal scrolling for wide tables
@@ -684,33 +761,43 @@ Streamlit has known limitations on mobile:
 ### Recommended Mobile Improvements
 
 #### 10.1 Responsive Column Strategy
+
 Use CSS media queries in the global theme to override column layouts:
 
 ```css
 @media (max-width: 768px) {
   /* Force single-column on mobile */
-  [data-testid="stHorizontalBlock"] {
+  [data-testid='stHorizontalBlock'] {
     flex-direction: column !important;
   }
 
   /* Reduce hero text size */
-  .hero-section h1 { font-size: 2rem !important; }
+  .hero-section h1 {
+    font-size: 2rem !important;
+  }
 
   /* Stack pricing cards */
-  .pricing-card { margin-bottom: 1rem; }
+  .pricing-card {
+    margin-bottom: 1rem;
+  }
 
   /* Simplify metrics */
-  .catalog-metric { padding: 12px !important; }
+  .catalog-metric {
+    padding: 12px !important;
+  }
 }
 ```
 
 #### 10.2 Touch Target Sizes
+
 Ensure all interactive elements meet WCAG minimum of 44x44px:
+
 - File upload areas should be larger on mobile
 - Buttons should have adequate padding
 - Expander headers should have touch-friendly hit areas
 
 #### 10.3 Mobile-First Content Strategy
+
 - Collapse "How It Works" into a vertical stepper on mobile
 - Show key metrics as a scrollable horizontal strip
 - Use `st.tabs()` instead of `st.columns()` for multi-card layouts on mobile
@@ -721,6 +808,7 @@ Ensure all interactive elements meet WCAG minimum of 44x44px:
 ## 11. Emotional Design
 
 ### 11.1 The Anxiety Problem
+
 Genetic test results can be deeply anxiety-inducing. Research from ACOG and NCBI shows:
 
 > "Test results may be deeply troubling for those who receive a diagnosis of a genetic disorder or carrier status, raising fundamental questions of medical vulnerability, as well as personal and social image and identity."
@@ -739,7 +827,9 @@ Genetic test results can be deeply anxiety-inducing. Research from ACOG and NCBI
 ### 11.3 Recommended Emotional Design Patterns
 
 #### A. Result Framing
+
 **Before showing results, set expectations:**
+
 ```
 BEFORE YOU VIEW YOUR RESULTS
 
@@ -758,12 +848,15 @@ one pathogenic variant.
 ```
 
 #### B. High-Risk Result Presentation
+
 Instead of:
+
 ```
 RED BORDER | HIGH RISK -- Both Parents Carry Variant
 ```
 
 Use:
+
 ```
 IMPORTANT FINDING | Both Parents Carry a CFTR Variant
 
@@ -772,6 +865,7 @@ for your family planning, and what steps you can take.
 ```
 
 **Design changes:**
+
 - Replace red (#ef4444) borders with a softer amber/orange for "needs attention"
 - Reserve red only for truly critical, life-threatening findings
 - Add a blue "information" icon instead of a red "alert" icon
@@ -779,17 +873,19 @@ for your family planning, and what steps you can take.
 
 #### C. Sensitive Language Guidelines
 
-| Instead of | Use |
-|-----------|-----|
-| "High Risk" | "Important Finding" or "Needs Attention" |
+| Instead of              | Use                                               |
+| ----------------------- | ------------------------------------------------- |
+| "High Risk"             | "Important Finding" or "Needs Attention"          |
 | "Affected" (as a label) | "Both Copies Present" or "Homozygous for Variant" |
-| "Carrier Detected" | "One Copy Found" |
-| "Normal" | "No Variant Detected" |
-| "Pathogenic allele" | "Disease-associated variant" |
-| "Low Risk" | "No Significant Findings" |
+| "Carrier Detected"      | "One Copy Found"                                  |
+| "Normal"                | "No Variant Detected"                             |
+| "Pathogenic allele"     | "Disease-associated variant"                      |
+| "Low Risk"              | "No Significant Findings"                         |
 
 #### D. Post-Result Support
+
 After results are displayed, always show:
+
 ```
 NEXT STEPS FOR YOUR FAMILY
 
@@ -813,6 +909,7 @@ NEXT STEPS FOR YOUR FAMILY
 ```
 
 #### E. Anxiety-Reducing Visual Design
+
 - Use warmer, softer color palette for risk results (amber instead of red)
 - Add breathing room (whitespace) between high-risk cards
 - Use progressive disclosure (show summary first, details on expand)
@@ -827,6 +924,7 @@ NEXT STEPS FOR YOUR FAMILY
 ### 12.1 How 23andMe Presents Results
 
 **Strengths to emulate:**
+
 - Results are presented with extensive educational context
 - Each genetic health report includes "What is [condition]?" section
 - Risk levels are contextualized ("Typical Risk" vs "Slightly Increased" vs "Increased")
@@ -836,6 +934,7 @@ NEXT STEPS FOR YOUR FAMILY
 - Links to scientific studies supporting each result
 
 **Differences to note:**
+
 - 23andMe tests 3 specific BRCA variants; Mergenix screens full panel
 - 23andMe uses genotyping; provides instructional language about limitations
 - 23andMe separates "Health Predispositions" from "Carrier Status" -- clear taxonomoy
@@ -843,6 +942,7 @@ NEXT STEPS FOR YOUR FAMILY
 ### 12.2 How Color Health Presents Results
 
 **Strengths to emulate:**
+
 - Physician-mediated testing model (more trusted)
 - Post-test genetic counseling included for positive results
 - Results are actionable: "work with your healthcare provider to create a personalized screening and prevention plan"
@@ -850,28 +950,31 @@ NEXT STEPS FOR YOUR FAMILY
 
 ### 12.3 Key Competitive Gaps for Mergenix
 
-| Feature | 23andMe | Color Health | Mergenix |
-|---------|---------|-------------|----------|
-| Pre-test education | Required | Physician explains | None |
-| Result context | Extensive | Counselor-provided | Minimal |
-| Plain language | Excellent | Excellent | Technical |
-| Next steps guidance | Good | Excellent | None |
-| Genetic counselor referral | Link provided | Built-in | None |
-| PDF report | Available | Available | Not implemented |
-| Mobile app | Yes | Yes | No (web only) |
-| Progressive result reveal | Yes | N/A | No |
+| Feature                    | 23andMe       | Color Health       | Mergenix        |
+| -------------------------- | ------------- | ------------------ | --------------- |
+| Pre-test education         | Required      | Physician explains | None            |
+| Result context             | Extensive     | Counselor-provided | Minimal         |
+| Plain language             | Excellent     | Excellent          | Technical       |
+| Next steps guidance        | Good          | Excellent          | None            |
+| Genetic counselor referral | Link provided | Built-in           | None            |
+| PDF report                 | Available     | Available          | Not implemented |
+| Mobile app                 | Yes           | Yes                | No (web only)   |
+| Progressive result reveal  | Yes           | N/A                | No              |
 
 ---
 
 ## 13. Gamification & Engagement
 
 ### 13.1 Current Engagement Features
+
 - None. Users run analysis and leave.
 
 ### 13.2 Recommended Engagement Features
 
 #### A. Analysis Dashboard (Priority: P3)
+
 After first analysis, show a persistent dashboard:
+
 ```
 YOUR ANALYSIS HISTORY
 
@@ -885,14 +988,18 @@ Analysis #1 - Feb 8, 2026
 ```
 
 #### B. Shareable Reports (Priority: P3)
+
 Generate a shareable link or PDF:
+
 - Summary page with key findings
 - Visual trait prediction cards (shareable on social media)
 - Punnett square diagrams
 - Doctor-ready PDF with full results
 
 #### C. Trait Comparison Cards (Priority: P3)
+
 Fun, shareable cards for trait predictions:
+
 ```
 +----------------------------------+
 |   YOUR OFFSPRING'S EYE COLOR     |
@@ -911,13 +1018,17 @@ Fun, shareable cards for trait predictions:
 ```
 
 #### D. "What If?" Exploration (Priority: P3)
+
 Allow users to explore hypothetical scenarios:
+
 - "What if only one parent were a carrier?"
 - "What's the population carrier frequency?"
 - Compare risk with general population averages
 
 #### E. Updates & Notifications (Priority: P3)
+
 For Pro users:
+
 - Email when new diseases are added to the panel
 - "Re-analyze" button to run updated analysis with expanded panel
 - Newsletter with genetics education content
@@ -928,53 +1039,53 @@ For Pro users:
 
 ### P0 -- Critical (Must-Have for Launch Quality)
 
-| # | Recommendation | Page(s) | Effort | Impact |
-|---|---------------|---------|--------|--------|
-| 1 | Add emotional framing before showing high-risk results (pre-result context card) | analysis.py | Low | Critical |
-| 2 | Add "What does this mean?" plain-language explanations for each high-risk result | analysis.py | Medium | Critical |
-| 3 | Add "Next Steps" guidance with genetic counselor referral link after results | analysis.py | Low | Critical |
-| 4 | Replace alarming language ("HIGH RISK") with sensitive alternatives ("Important Finding") | analysis.py, components.py | Low | Critical |
-| 5 | Add sample data demo mode so visitors can see results without real genetic data | analysis.py, home.py | Medium | Critical |
-| 6 | Fix non-functional buttons ("See How It Works", "Forgot password?", ToS links) | home.py, auth.py | Low | Critical |
+| #   | Recommendation                                                                            | Page(s)                    | Effort | Impact   |
+| --- | ----------------------------------------------------------------------------------------- | -------------------------- | ------ | -------- |
+| 1   | Add emotional framing before showing high-risk results (pre-result context card)          | analysis.py                | Low    | Critical |
+| 2   | Add "What does this mean?" plain-language explanations for each high-risk result          | analysis.py                | Medium | Critical |
+| 3   | Add "Next Steps" guidance with genetic counselor referral link after results              | analysis.py                | Low    | Critical |
+| 4   | Replace alarming language ("HIGH RISK") with sensitive alternatives ("Important Finding") | analysis.py, components.py | Low    | Critical |
+| 5   | Add sample data demo mode so visitors can see results without real genetic data           | analysis.py, home.py       | Medium | Critical |
+| 6   | Fix non-functional buttons ("See How It Works", "Forgot password?", ToS links)            | home.py, auth.py           | Low    | Critical |
 
 ### P1 -- High Priority (Should-Have)
 
-| # | Recommendation | Page(s) | Effort | Impact |
-|---|---------------|---------|--------|--------|
-| 7 | Add inline genetic glossary with tooltips for technical terms | all result pages | Medium | High |
-| 8 | Improve file upload error messages with friendly, actionable guidance | analysis.py | Low | High |
-| 9 | Add file format detection and validation step with visual feedback | analysis.py | Medium | High |
-| 10 | Add result summary card ("Key Takeaways") above tabs | analysis.py | Low | High |
-| 11 | Add "How to get your DNA data" expandable guide on analysis page | analysis.py | Low | High |
-| 12 | Merge Products and Subscription pages (reduce redundancy) | products.py, subscription.py | Low | Medium |
-| 13 | Add welcome flow after first registration | auth.py | Medium | High |
+| #   | Recommendation                                                        | Page(s)                      | Effort | Impact |
+| --- | --------------------------------------------------------------------- | ---------------------------- | ------ | ------ |
+| 7   | Add inline genetic glossary with tooltips for technical terms         | all result pages             | Medium | High   |
+| 8   | Improve file upload error messages with friendly, actionable guidance | analysis.py                  | Low    | High   |
+| 9   | Add file format detection and validation step with visual feedback    | analysis.py                  | Medium | High   |
+| 10  | Add result summary card ("Key Takeaways") above tabs                  | analysis.py                  | Low    | High   |
+| 11  | Add "How to get your DNA data" expandable guide on analysis page      | analysis.py                  | Low    | High   |
+| 12  | Merge Products and Subscription pages (reduce redundancy)             | products.py, subscription.py | Low    | Medium |
+| 13  | Add welcome flow after first registration                             | auth.py                      | Medium | High   |
 
 ### P2 -- Medium Priority (Nice-to-Have)
 
-| # | Recommendation | Page(s) | Effort | Impact |
-|---|---------------|---------|--------|--------|
-| 14 | Detailed multi-step progress indicator during analysis | analysis.py | Low | Medium |
-| 15 | Mobile responsive CSS overrides for column stacking | theme.py | Medium | Medium |
-| 16 | Punnett square visual diagrams for risk results | analysis.py | Medium | Medium |
-| 17 | Progressive disclosure wizard for analysis (Step 1/2/3/4) | analysis.py | High | Medium |
-| 18 | Add interactive guided tour for first-time users | analysis.py | Medium | Medium |
-| 19 | Carrier frequency context ("1 in 25 -- about one per classroom") | analysis.py | Low | Medium |
-| 20 | Disease catalog quick-filters ("Common Conditions", "High Severity") | disease_catalog.py | Low | Medium |
+| #   | Recommendation                                                       | Page(s)            | Effort | Impact |
+| --- | -------------------------------------------------------------------- | ------------------ | ------ | ------ |
+| 14  | Detailed multi-step progress indicator during analysis               | analysis.py        | Low    | Medium |
+| 15  | Mobile responsive CSS overrides for column stacking                  | theme.py           | Medium | Medium |
+| 16  | Punnett square visual diagrams for risk results                      | analysis.py        | Medium | Medium |
+| 17  | Progressive disclosure wizard for analysis (Step 1/2/3/4)            | analysis.py        | High   | Medium |
+| 18  | Add interactive guided tour for first-time users                     | analysis.py        | Medium | Medium |
+| 19  | Carrier frequency context ("1 in 25 -- about one per classroom")     | analysis.py        | Low    | Medium |
+| 20  | Disease catalog quick-filters ("Common Conditions", "High Severity") | disease_catalog.py | Low    | Medium |
 
 ### P3 -- Low Priority (Future Enhancement)
 
-| # | Recommendation | Page(s) | Effort | Impact |
-|---|---------------|---------|--------|--------|
-| 21 | Analysis history dashboard with saved results | new page | High | Medium |
-| 22 | PDF report generation | new module | High | Medium |
-| 23 | Shareable trait prediction cards | new feature | Medium | Low |
-| 24 | "What If?" exploration mode | analysis.py | High | Low |
-| 25 | Team information on About page | about.py | Low | Low |
-| 26 | Cookie consent banner | legal.py, app.py | Low | Low |
-| 27 | In-app account deletion flow | account.py | Medium | Low |
-| 28 | Data export option (GDPR) | account.py | Medium | Low |
-| 29 | Email verification after registration | auth.py | Medium | Low |
-| 30 | Video/interactive demo on home page | home.py | High | Medium |
+| #   | Recommendation                                | Page(s)          | Effort | Impact |
+| --- | --------------------------------------------- | ---------------- | ------ | ------ |
+| 21  | Analysis history dashboard with saved results | new page         | High   | Medium |
+| 22  | PDF report generation                         | new module       | High   | Medium |
+| 23  | Shareable trait prediction cards              | new feature      | Medium | Low    |
+| 24  | "What If?" exploration mode                   | analysis.py      | High   | Low    |
+| 25  | Team information on About page                | about.py         | Low    | Low    |
+| 26  | Cookie consent banner                         | legal.py, app.py | Low    | Low    |
+| 27  | In-app account deletion flow                  | account.py       | Medium | Low    |
+| 28  | Data export option (GDPR)                     | account.py       | Medium | Low    |
+| 29  | Email verification after registration         | auth.py          | Medium | Low    |
+| 30  | Video/interactive demo on home page           | home.py          | High   | Medium |
 
 ---
 
@@ -990,18 +1101,21 @@ For Pro users:
 ## Appendix B: Specific Copy Recommendations
 
 ### High-Risk Result Card Header
+
 ```
 Before: "HIGH RISK -- Both Parents Carry Variant"
 After:  "Important Finding: Both Parents Carry a [Condition] Variant"
 ```
 
 ### Carrier Result Card Header
+
 ```
 Before: "Carrier Detected -- One Parent Carries Variant"
 After:  "Carrier Status: One Parent Has a [Condition] Variant"
 ```
 
 ### Post-Result CTA
+
 ```
 Before: (nothing)
 After:  "We recommend discussing these results with a genetic counselor.
@@ -1009,6 +1123,7 @@ After:  "We recommend discussing these results with a genetic counselor.
 ```
 
 ### Empty State (No Results)
+
 ```
 Before: "No traits could be predicted."
 After:  "Your DNA files don't contain the specific markers for trait prediction.
@@ -1017,6 +1132,7 @@ After:  "Your DNA files don't contain the specific markers for trait prediction.
 ```
 
 ### File Upload Error
+
 ```
 Before: "Invalid file -- KeyError: 'rsid'"
 After:  "This file doesn't appear to be a raw DNA data file.

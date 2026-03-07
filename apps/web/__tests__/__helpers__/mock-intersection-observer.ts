@@ -29,10 +29,12 @@ export function installStatefulIntersectionObserver() {
   const mockUnobserve = vi.fn();
   const mockDisconnect = vi.fn();
 
-  const mockIntersectionObserver = vi.fn().mockImplementation((callback: IntersectionObserverCallback) => {
-    observerCallback = callback;
-    return { observe: mockObserve, unobserve: mockUnobserve, disconnect: mockDisconnect };
-  });
+  const mockIntersectionObserver = vi
+    .fn()
+    .mockImplementation((callback: IntersectionObserverCallback) => {
+      observerCallback = callback;
+      return { observe: mockObserve, unobserve: mockUnobserve, disconnect: mockDisconnect };
+    });
   vi.stubGlobal('IntersectionObserver', mockIntersectionObserver);
 
   return {
@@ -52,16 +54,18 @@ export function installStatefulIntersectionObserver() {
  * (e.g., useCountUp, scroll-triggered animations).
  */
 export function installImmediateIntersectionObserver() {
-  const mockIntersectionObserver = vi.fn().mockImplementation((callback: IntersectionObserverCallback) => ({
-    observe: vi.fn().mockImplementation((element: Element) => {
-      callback(
-        [{ isIntersecting: true, target: element } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
-    }),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-  }));
+  const mockIntersectionObserver = vi
+    .fn()
+    .mockImplementation((callback: IntersectionObserverCallback) => ({
+      observe: vi.fn().mockImplementation((element: Element) => {
+        callback(
+          [{ isIntersecting: true, target: element } as IntersectionObserverEntry],
+          {} as IntersectionObserver,
+        );
+      }),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   vi.stubGlobal('IntersectionObserver', mockIntersectionObserver);
   return mockIntersectionObserver;
 }

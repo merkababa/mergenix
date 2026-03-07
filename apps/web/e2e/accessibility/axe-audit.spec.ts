@@ -61,9 +61,7 @@ async function runAxeAudit(
   page: import('@playwright/test').Page,
   label: string,
 ): Promise<import('axe-core').Result[]> {
-  const results = await new AxeBuilder({ page })
-    .withTags([...WCAG_TAGS])
-    .analyze();
+  const results = await new AxeBuilder({ page }).withTags([...WCAG_TAGS]).analyze();
 
   const critical = results.violations.filter(
     (v) => v.impact === 'critical' || v.impact === 'serious',
@@ -87,9 +85,7 @@ async function runAxeAudit(
   }
 
   // Minor/moderate violations in the skiplist are not returned as failures
-  const unsuppressedMinorModerate = minorModerate.filter(
-    (v) => !KNOWN_MINOR_RULE_IDS.has(v.id),
-  );
+  const unsuppressedMinorModerate = minorModerate.filter((v) => !KNOWN_MINOR_RULE_IDS.has(v.id));
 
   if (unsuppressedMinorModerate.length > 0) {
     console.warn(
@@ -243,9 +239,7 @@ test.describe('Q17: axe-core Automated A11y Audit', () => {
       await page.goto('/login');
       await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
 
-      const results = await new AxeBuilder({ page })
-        .withRules(['label'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withRules(['label']).analyze();
 
       expect(
         results.violations,
@@ -260,9 +254,7 @@ test.describe('Q17: axe-core Automated A11y Audit', () => {
       await page.goto('/register');
       await expect(page.getByRole('heading', { name: /create account/i })).toBeVisible();
 
-      const results = await new AxeBuilder({ page })
-        .withRules(['label'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withRules(['label']).analyze();
 
       expect(
         results.violations,
@@ -278,28 +270,18 @@ test.describe('Q17: axe-core Automated A11y Audit', () => {
       await page.goto('/');
       await expect(page.locator('h1').first()).toBeVisible();
 
-      const results = await new AxeBuilder({ page })
-        .withRules(['image-alt'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withRules(['image-alt']).analyze();
 
-      expect(
-        results.violations,
-        `Home page contains images missing alt text.`,
-      ).toHaveLength(0);
+      expect(results.violations, `Home page contains images missing alt text.`).toHaveLength(0);
     });
 
     test('all images on the products page have appropriate alt text', async ({ page }) => {
       await page.goto('/products');
       await expect(page.locator('h1').first()).toBeVisible();
 
-      const results = await new AxeBuilder({ page })
-        .withRules(['image-alt'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withRules(['image-alt']).analyze();
 
-      expect(
-        results.violations,
-        `Products page contains images missing alt text.`,
-      ).toHaveLength(0);
+      expect(results.violations, `Products page contains images missing alt text.`).toHaveLength(0);
     });
   });
 });
@@ -322,9 +304,9 @@ authTest.describe('Q17: axe-core Audit — Authenticated Pages', () => {
       await page.getByRole('button', { name: /try demo analysis/i }).click();
 
       // Wait for the results tablist — this confirms results are rendered
-      await authExpect(
-        page.getByRole('tablist', { name: /analysis results/i }),
-      ).toBeVisible({ timeout: 15_000 });
+      await authExpect(page.getByRole('tablist', { name: /analysis results/i })).toBeVisible({
+        timeout: 15_000,
+      });
 
       const critical = await runAxeAudit(page, 'Analysis (results state)');
       authExpect(
@@ -357,20 +339,17 @@ authTest.describe('Q17: axe-core Audit — Authenticated Pages', () => {
 
   // ── Account page ──────────────────────────────────────────────────────
 
-  authTest(
-    'account page has zero critical/serious axe violations',
-    async ({ freeUserPage }) => {
-      authTest.slow();
+  authTest('account page has zero critical/serious axe violations', async ({ freeUserPage }) => {
+    authTest.slow();
 
-      const page = freeUserPage;
-      await page.goto('/account');
-      await authExpect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
+    const page = freeUserPage;
+    await page.goto('/account');
+    await authExpect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
 
-      const critical = await runAxeAudit(page, 'Account');
-      authExpect(
-        critical,
-        `Found ${critical.length} critical/serious axe violation(s) on the account page.`,
-      ).toHaveLength(0);
-    },
-  );
+    const critical = await runAxeAudit(page, 'Account');
+    authExpect(
+      critical,
+      `Found ${critical.length} critical/serious axe violation(s) on the account page.`,
+    ).toHaveLength(0);
+  });
 });

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ConsentModal } from "@/components/legal/consent-modal";
-import { ChipDisclosureModal } from "@/components/legal/chip-disclosure-modal";
-import { SaveOptionsModal } from "@/components/save/save-options-modal";
-import type { Tier } from "@mergenix/shared-types";
+import { ConsentModal } from '@/components/legal/consent-modal';
+import { ChipDisclosureModal } from '@/components/legal/chip-disclosure-modal';
+import { SaveOptionsModal } from '@/components/save/save-options-modal';
+import type { Tier } from '@mergenix/shared-types';
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 

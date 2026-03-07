@@ -383,10 +383,4 @@ export const RESULT_TAB_NAMES = [
 // ── Navbar Link Labels ───────────────────────────────────────────────
 // Expected navigation link labels in the desktop navbar.
 
-export const NAV_LINK_LABELS = [
-  'Home',
-  'Analysis',
-  'Disease Catalog',
-  'Pricing',
-  'About',
-] as const;
+export const NAV_LINK_LABELS = ['Home', 'Analysis', 'Disease Catalog', 'Pricing', 'About'] as const;

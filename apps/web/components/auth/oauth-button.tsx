@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface OAuthButtonProps {
   text?: string;
@@ -15,7 +15,7 @@ interface OAuthButtonProps {
  * Configurable text (default: "Sign in with Google").
  */
 export function OAuthButton({
-  text = "Sign in with Google",
+  text = 'Sign in with Google',
   onClick,
   isLoading,
   className,
@@ -27,10 +27,10 @@ export function OAuthButton({
       disabled={isLoading}
       aria-busy={isLoading || undefined}
       className={cn(
-        "flex w-full items-center justify-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-4 py-2.5 font-heading text-sm font-semibold text-(--text-primary) transition-all duration-200",
-        "hover:border-[rgba(6,214,160,0.25)] hover:bg-[rgba(6,214,160,0.04)] hover:shadow-[0_0_15px_rgba(6,214,160,0.06)]",
-        "disabled:pointer-events-none disabled:opacity-50",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)",
+        'border-(--border-subtle) bg-(--bg-elevated) font-heading text-(--text-primary) flex w-full items-center justify-center gap-3 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all duration-200',
+        'hover:border-[rgba(6,214,160,0.25)] hover:bg-[rgba(6,214,160,0.04)] hover:shadow-[0_0_15px_rgba(6,214,160,0.06)]',
+        'disabled:pointer-events-none disabled:opacity-50',
+        'focus-visible:outline-(--accent-teal) focus-visible:outline-2 focus-visible:outline-offset-2',
         className,
       )}
     >
@@ -40,11 +40,7 @@ export function OAuthButton({
           <span className="sr-only">Loading</span>
         </>
       ) : (
-        <svg
-          className="h-5 w-5"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
+        <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
             fill="#4285F4"

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { m } from "motion/react";
+import { cn } from '@/lib/utils';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { m } from 'motion/react';
 
 interface Breadcrumb {
   label: string;
@@ -17,28 +17,20 @@ interface PageHeaderProps {
   className?: string;
 }
 
-export function PageHeader({
-  title,
-  subtitle,
-  breadcrumbs,
-  className,
-}: PageHeaderProps) {
+export function PageHeader({ title, subtitle, breadcrumbs, className }: PageHeaderProps) {
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={cn("mb-8 text-center", className)}
+      className={cn('mb-8 text-center', className)}
     >
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Breadcrumb"
-          className="mb-4 flex items-center justify-center gap-1 text-sm font-body text-(--text-muted)"
+          className="font-body text-(--text-muted) mb-4 flex items-center justify-center gap-1 text-sm"
         >
-          <Link
-            href="/"
-            className="transition-colors hover:text-(--accent-teal)"
-          >
+          <Link href="/" className="hover:text-(--accent-teal) transition-colors">
             Home
           </Link>
           {breadcrumbs.map((crumb, i) => (
@@ -49,10 +41,7 @@ export function PageHeader({
                   {crumb.label}
                 </span>
               ) : (
-                <Link
-                  href={crumb.href}
-                  className="transition-colors hover:text-(--accent-teal)"
-                >
+                <Link href={crumb.href} className="hover:text-(--accent-teal) transition-colors">
                   {crumb.label}
                 </Link>
               )}
@@ -66,7 +55,7 @@ export function PageHeader({
       </h1>
 
       {subtitle && (
-        <p className="mx-auto mt-3 max-w-2xl font-body text-base text-(--text-muted) md:text-lg">
+        <p className="font-body text-(--text-muted) mx-auto mt-3 max-w-2xl text-base md:text-lg">
           {subtitle}
         </p>
       )}

@@ -13,8 +13,17 @@ interface MockGlassCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export function mockGlassCardFactory() {
   return {
-    GlassCard: ({ children, className, variant: _v, hover: _h, rainbow: _r, ...props }: MockGlassCardProps) => (
-      <div data-testid="glass-card" className={className} {...props}>{children}</div>
+    GlassCard: ({
+      children,
+      className,
+      variant: _v,
+      hover: _h,
+      rainbow: _r,
+      ...props
+    }: MockGlassCardProps) => (
+      <div data-testid="glass-card" className={className} {...props}>
+        {children}
+      </div>
     ),
   };
 }
@@ -31,7 +40,15 @@ interface MockButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function mockButtonFactory() {
   return {
-    Button: ({ children, isLoading, disabled, className, variant: _v, size: _s, ...props }: MockButtonProps) => (
+    Button: ({
+      children,
+      isLoading,
+      disabled,
+      className,
+      variant: _v,
+      size: _s,
+      ...props
+    }: MockButtonProps) => (
       <button disabled={disabled || isLoading} className={className} {...props}>
         {children}
       </button>
@@ -111,7 +128,9 @@ interface MockNextLinkProps extends HTMLAttributes<HTMLAnchorElement> {
 export function mockNextLinkFactory() {
   return {
     default: ({ children, href, className, ...props }: MockNextLinkProps) => (
-      <a href={href} className={className} {...props}>{children}</a>
+      <a href={href} className={className} {...props}>
+        {children}
+      </a>
     ),
   };
 }
@@ -149,10 +168,7 @@ interface MockBadgeProps extends HTMLAttributes<HTMLSpanElement> {
 export function mockBadgeFactory(options?: { includeVariant?: boolean }) {
   return {
     Badge: ({ children, variant, ...props }: MockBadgeProps) => (
-      <span
-        data-testid={options?.includeVariant ? `badge-${variant}` : 'badge'}
-        {...props}
-      >
+      <span data-testid={options?.includeVariant ? `badge-${variant}` : 'badge'} {...props}>
         {children}
       </span>
     ),

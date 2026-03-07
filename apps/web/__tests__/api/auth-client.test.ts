@@ -432,8 +432,22 @@ describe('auth-client', () => {
 
       expect(mockGet).toHaveBeenCalledWith('/auth/sessions');
       expect(sessions).toEqual([
-        { id: 's1', device: 'Chrome', ip: '1.2.3.4', location: 'US', lastActive: '2024-01-01T00:00:00Z', isCurrent: true },
-        { id: 's2', device: 'Firefox', ip: '5.6.7.8', location: 'UK', lastActive: '2024-01-02T00:00:00Z', isCurrent: false },
+        {
+          id: 's1',
+          device: 'Chrome',
+          ip: '1.2.3.4',
+          location: 'US',
+          lastActive: '2024-01-01T00:00:00Z',
+          isCurrent: true,
+        },
+        {
+          id: 's2',
+          device: 'Firefox',
+          ip: '5.6.7.8',
+          location: 'UK',
+          lastActive: '2024-01-02T00:00:00Z',
+          isCurrent: false,
+        },
       ]);
     });
   });

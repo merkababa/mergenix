@@ -21,7 +21,10 @@ describe('Chip Coverage Data', () => {
   describe('coverage completeness', () => {
     it('every trait rsID has a coverage entry', () => {
       for (const trait of traitSnps) {
-        expect(chipCoverage.coverage[trait.rsid], `Missing coverage for ${trait.rsid}`).toBeDefined();
+        expect(
+          chipCoverage.coverage[trait.rsid],
+          `Missing coverage for ${trait.rsid}`,
+        ).toBeDefined();
       }
     });
 
@@ -30,7 +33,7 @@ describe('Chip Coverage Data', () => {
     });
 
     it('no orphan coverage entries (coverage without matching trait)', () => {
-      const traitRsids = new Set(traitSnps.map(t => t.rsid));
+      const traitRsids = new Set(traitSnps.map((t) => t.rsid));
       for (const rsid of Object.keys(chipCoverage.coverage)) {
         expect(traitRsids.has(rsid), `Orphan coverage entry: ${rsid}`).toBe(true);
       }

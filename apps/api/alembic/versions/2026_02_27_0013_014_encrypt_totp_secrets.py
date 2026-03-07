@@ -58,9 +58,7 @@ def upgrade() -> None:
 
     conn = op.get_bind()
 
-    users = conn.execute(
-        sa.text("SELECT id, totp_secret FROM users WHERE totp_secret IS NOT NULL")
-    ).fetchall()
+    users = conn.execute(sa.text("SELECT id, totp_secret FROM users WHERE totp_secret IS NOT NULL")).fetchall()
 
     for user_id, secret in users:
         # Skip rows that are already encrypted (Fernet tokens start with 'gAAAAA').
@@ -79,9 +77,7 @@ def downgrade() -> None:
 
     conn = op.get_bind()
 
-    users = conn.execute(
-        sa.text("SELECT id, totp_secret FROM users WHERE totp_secret IS NOT NULL")
-    ).fetchall()
+    users = conn.execute(sa.text("SELECT id, totp_secret FROM users WHERE totp_secret IS NOT NULL")).fetchall()
 
     for user_id, secret in users:
         # Only decrypt rows that look like Fernet tokens.

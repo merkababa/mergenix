@@ -120,9 +120,7 @@ async def list_consents(
     Records are ordered by most recent first.
     """
     result = await db.execute(
-        select(ConsentRecord)
-        .where(ConsentRecord.user_id == user.id)
-        .order_by(ConsentRecord.created_at.desc())
+        select(ConsentRecord).where(ConsentRecord.user_id == user.id).order_by(ConsentRecord.created_at.desc())
     )
     rows = result.scalars().all()
 
@@ -157,9 +155,7 @@ async def update_cookie_preferences(
     Uses an upsert pattern — creates a new record if none exists,
     otherwise updates the existing one.
     """
-    result = await db.execute(
-        select(CookiePreference).where(CookiePreference.user_id == user.id)
-    )
+    result = await db.execute(select(CookiePreference).where(CookiePreference.user_id == user.id))
     pref = result.scalar_one_or_none()
 
     if pref is None:
@@ -209,9 +205,7 @@ async def get_cookie_preferences(
 
     Returns default (analytics=False) if no preferences have been set.
     """
-    result = await db.execute(
-        select(CookiePreference).where(CookiePreference.user_id == user.id)
-    )
+    result = await db.execute(select(CookiePreference).where(CookiePreference.user_id == user.id))
     pref = result.scalar_one_or_none()
 
     return CookiePreferencesResponse(
@@ -268,10 +262,7 @@ async def export_data(
     # with the relationship back to User (lazy="raise" on Payment.user).
     # Capped to prevent memory pressure for power users.
     payment_result = await db.execute(
-        select(Payment)
-        .where(Payment.user_id == user.id)
-        .order_by(Payment.created_at.desc())
-        .limit(MAX_EXPORT_ROWS)
+        select(Payment).where(Payment.user_id == user.id).order_by(Payment.created_at.desc()).limit(MAX_EXPORT_ROWS)
     )
     payment_rows = payment_result.scalars().all()
 
@@ -287,9 +278,7 @@ async def export_data(
     ]
 
     # Fetch cookie preferences
-    cookie_result = await db.execute(
-        select(CookiePreference).where(CookiePreference.user_id == user.id)
-    )
+    cookie_result = await db.execute(select(CookiePreference).where(CookiePreference.user_id == user.id))
     cookie_pref = cookie_result.scalar_one_or_none()
 
     cookie_preferences = (
@@ -306,10 +295,7 @@ async def export_data(
     # Fetch active sessions (exclude sensitive refresh_token_hash)
     # Capped to prevent memory pressure for power users.
     session_result = await db.execute(
-        select(Session)
-        .where(Session.user_id == user.id)
-        .order_by(Session.created_at.desc())
-        .limit(MAX_EXPORT_ROWS)
+        select(Session).where(Session.user_id == user.id).order_by(Session.created_at.desc()).limit(MAX_EXPORT_ROWS)
     )
     session_rows = session_result.scalars().all()
 

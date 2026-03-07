@@ -19,7 +19,9 @@ class MockWorker {
 
   addEventListener(): void {}
   removeEventListener(): void {}
-  dispatchEvent(): boolean { return false; }
+  dispatchEvent(): boolean {
+    return false;
+  }
 }
 
 // @ts-expect-error -- mock Worker

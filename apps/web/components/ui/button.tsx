@@ -1,13 +1,11 @@
-"use client";
+'use client';
 
-import { forwardRef, type ButtonHTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
-import { buttonVariants, type ButtonVariantProps } from "./button-variants";
+import { forwardRef, type ButtonHTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
+import { buttonVariants, type ButtonVariantProps } from './button-variants';
 
-interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariantProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantProps {
   isLoading?: boolean;
 }
 
@@ -33,7 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 export { Button, buttonVariants };
 export type { ButtonVariantProps };

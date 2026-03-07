@@ -30,9 +30,9 @@ async function loadDemoResults(page: import('@playwright/test').Page) {
   await demoButton.click();
 
   // Wait for the results dashboard to be fully rendered
-  await expect(
-    page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-  ).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+    timeout: 15000,
+  });
 }
 
 /**
@@ -60,9 +60,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
     await selectTab(page, 'Carrier Risk');
 
     // Wait for the carrier screening results heading
-    await expect(
-      page.getByRole('heading', { name: /carrier screening results/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /carrier screening results/i })).toBeVisible();
 
     // Find the Cystic Fibrosis card
     const cfCard = page.getByText('Cystic Fibrosis (F508del)').locator('..');
@@ -111,9 +109,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
     await selectTab(page, 'Traits');
 
     // Wait for trait predictions heading
-    await expect(
-      page.getByRole('heading', { name: /trait predictions/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /trait predictions/i })).toBeVisible();
 
     // From demo-results.ts:
     //   trait: "Eye Color"
@@ -149,9 +145,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
     await selectTab(page, 'PGx');
 
     // Wait for the PGx heading
-    await expect(
-      page.getByRole('heading', { name: /pharmacogenomics/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /pharmacogenomics/i })).toBeVisible();
 
     // From demo-results.ts (CYP2C19):
     //   Parent A: diplotype "*1/*2", status "intermediate_metabolizer"
@@ -169,9 +163,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
 
     // Verify Clopidogrel drug recommendation is present
     await expect(page.getByText('Clopidogrel').first()).toBeVisible();
-    await expect(
-      page.getByText(/alternative antiplatelet therapy/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/alternative antiplatelet therapy/i).first()).toBeVisible();
   });
 
   test('4. Demo: Coronary artery disease PRS — Parent A at 81st percentile, offspring expected 65th', async ({
@@ -181,9 +173,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
     await selectTab(page, 'PRS');
 
     // Wait for the PRS heading
-    await expect(
-      page.getByRole('heading', { name: /polygenic risk scores/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /polygenic risk scores/i })).toBeVisible();
 
     // From demo-results.ts (coronary_artery_disease):
     //   parentA: percentile 81, riskCategory "elevated"
@@ -215,9 +205,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
 
     await selectTab(page, 'Carrier Risk');
 
-    await expect(
-      page.getByRole('heading', { name: /carrier screening results/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /carrier screening results/i })).toBeVisible();
 
     // From demo-results.ts:
     //   condition: "Tay-Sachs Disease"
@@ -241,15 +229,11 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
       await expect(page.getByText('rs387906309')).toBeVisible();
 
       // Verify gene
-      await expect(
-        page.getByText('HEXA').first(),
-      ).toBeVisible();
+      await expect(page.getByText('HEXA').first()).toBeVisible();
     }
   });
 
-  test('9. Counseling triage: Both-carrier parents trigger "High" urgency', async ({
-    page,
-  }) => {
+  test('9. Counseling triage: Both-carrier parents trigger "High" urgency', async ({ page }) => {
     // Navigate to the Counseling tab
     await selectTab(page, 'Counseling');
 
@@ -278,9 +262,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
     await expect(page.getByText('Cystic Fibrosis (F508del)').last()).toBeVisible();
     await expect(page.getByText('Tay-Sachs Disease').last()).toBeVisible();
     await expect(page.getByText('Sickle Cell Disease').last()).toBeVisible();
-    await expect(
-      page.getByText('Familial Hypercholesterolemia').last(),
-    ).toBeVisible();
+    await expect(page.getByText('Familial Hypercholesterolemia').last()).toBeVisible();
 
     // Verify recommended specialties
     await expect(page.getByText('Prenatal')).toBeVisible();
@@ -292,10 +274,7 @@ test.describe('Scientific Spot-Checks — P1 (Demo Data)', () => {
       name: /find a genetic counselor/i,
     });
     await expect(nsgcLink).toBeVisible();
-    await expect(nsgcLink).toHaveAttribute(
-      'href',
-      'https://www.nsgc.org/findageneticcounselor',
-    );
+    await expect(nsgcLink).toHaveAttribute('href', 'https://www.nsgc.org/findageneticcounselor');
 
     // Verify reasons for recommendation
     await expect(page.getByText('Reasons for Recommendation')).toBeVisible();
@@ -319,9 +298,7 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     // Navigate to the Traits tab
     await selectTab(page, 'Traits');
 
-    await expect(
-      page.getByRole('heading', { name: /trait predictions/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /trait predictions/i })).toBeVisible();
 
     // From demo-results.ts:
     //   trait: "Earwax Type"
@@ -351,9 +328,7 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     // Navigate to the PGx tab
     await selectTab(page, 'PGx');
 
-    await expect(
-      page.getByRole('heading', { name: /pharmacogenomics/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /pharmacogenomics/i })).toBeVisible();
 
     // From demo-results.ts (CYP2C9):
     //   Both parents: diplotype "*1/*1", status "normal_metabolizer"
@@ -370,20 +345,14 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
 
     // Verify Warfarin drug recommendation
     await expect(page.getByText('Warfarin').first()).toBeVisible();
-    await expect(
-      page.getByText(/standard dosing/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/standard dosing/i).first()).toBeVisible();
   });
 
-  test('8. Golden file: T2D PRS — Parent B at 87th percentile Elevated risk', async ({
-    page,
-  }) => {
+  test('8. Golden file: T2D PRS — Parent B at 87th percentile Elevated risk', async ({ page }) => {
     // Navigate to the PRS tab
     await selectTab(page, 'PRS');
 
-    await expect(
-      page.getByRole('heading', { name: /polygenic risk scores/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /polygenic risk scores/i })).toBeVisible();
 
     // From demo-results.ts (type_2_diabetes):
     //   parentA: percentile 63, riskCategory "above_average"
@@ -396,14 +365,10 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     await expect(page.getByText('Type 2 Diabetes')).toBeVisible();
 
     // Verify Parent B percentile (87th)
-    await expect(
-      page.getByText('87th percentile').or(page.getByText('87th')),
-    ).toBeVisible();
+    await expect(page.getByText('87th percentile').or(page.getByText('87th'))).toBeVisible();
   });
 
-  test('10. Counseling triage: Urgency badge and reasons display correctly', async ({
-    page,
-  }) => {
+  test('10. Counseling triage: Urgency badge and reasons display correctly', async ({ page }) => {
     // The demo results show "high" urgency (both parents carrier for multiple conditions).
     // For a "moderate" urgency scenario, we would need different demo data.
     // We verify the counseling triage system is functional by checking:
@@ -422,9 +387,7 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     expect(reasonCount).toBeGreaterThanOrEqual(1);
   });
 
-  test('11. Counseling triage: Multiple urgency levels can be rendered', async ({
-    page,
-  }) => {
+  test('11. Counseling triage: Multiple urgency levels can be rendered', async ({ page }) => {
     // Similar to test 10, the demo data shows "high" urgency.
     // We verify the component can render different urgency levels
     // by checking the existing "high" state renders correctly.
@@ -434,7 +397,8 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
 
     // Verify the counseling component renders the urgency system
     // For demo data, this is "High Priority"
-    const urgencyBadge = page.getByText('High Priority')
+    const urgencyBadge = page
+      .getByText('High Priority')
       .or(page.getByText('Moderate Priority'))
       .or(page.getByText('Informational'));
     await expect(urgencyBadge).toBeVisible();
@@ -465,9 +429,7 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     // Navigate to the PGx tab to verify citation sources
     await selectTab(page, 'PGx');
 
-    await expect(
-      page.getByRole('heading', { name: /pharmacogenomics/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /pharmacogenomics/i })).toBeVisible();
 
     // From demo-results.ts (PGx):
     //   Drug recommendations include source fields: "CPIC" and "DPWG"
@@ -485,9 +447,7 @@ test.describe('Scientific Spot-Checks — P2 (Golden File & Edge Cases)', () => 
     //   The ancestry notes mention GWAS derivation
 
     // Verify ancestry notes are present (these reference the underlying studies)
-    await expect(
-      page.getByText(/European-ancestry GWAS/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/European-ancestry GWAS/i).first()).toBeVisible();
 
     // Navigate to the Carrier Risk tab to verify disease references
     await selectTab(page, 'Carrier Risk');

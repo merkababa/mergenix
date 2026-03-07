@@ -29,16 +29,16 @@
 
 Mergenix currently has several performance bottlenecks that affect user experience:
 
-| Issue | Impact | Estimated Savings | Priority |
-|-------|--------|-------------------|----------|
-| Redundant JSON loading in analysis.py | ~200-400ms per page load | ~300ms | CRITICAL |
-| No caching on carrier_panel.json in analysis pipeline | ~150ms per analysis run | ~150ms | CRITICAL |
-| Full-file-to-string parsing for large VCF files | >10s for 1GB files, memory blowup | ~80% memory, ~60% time | HIGH |
-| 973-line CSS injected as raw string per page | ~50-100ms render | ~50ms | MEDIUM |
-| Google Fonts loaded via @import (render-blocking) | 100-500ms FOUT | ~200ms | MEDIUM |
-| Disease catalog renders all 2,715 items for filtering | Wasted compute per rerun | ~100ms | MEDIUM |
-| No precomputed lookup index for rsID matching | O(n) per disease | ~40% time on analysis | MEDIUM |
-| Repeated parse_carrier_freq calls per filter interaction | ~50ms | ~50ms | LOW |
+| Issue                                                    | Impact                            | Estimated Savings      | Priority |
+| -------------------------------------------------------- | --------------------------------- | ---------------------- | -------- |
+| Redundant JSON loading in analysis.py                    | ~200-400ms per page load          | ~300ms                 | CRITICAL |
+| No caching on carrier_panel.json in analysis pipeline    | ~150ms per analysis run           | ~150ms                 | CRITICAL |
+| Full-file-to-string parsing for large VCF files          | >10s for 1GB files, memory blowup | ~80% memory, ~60% time | HIGH     |
+| 973-line CSS injected as raw string per page             | ~50-100ms render                  | ~50ms                  | MEDIUM   |
+| Google Fonts loaded via @import (render-blocking)        | 100-500ms FOUT                    | ~200ms                 | MEDIUM   |
+| Disease catalog renders all 2,715 items for filtering    | Wasted compute per rerun          | ~100ms                 | MEDIUM   |
+| No precomputed lookup index for rsID matching            | O(n) per disease                  | ~40% time on analysis  | MEDIUM   |
+| Repeated parse_carrier_freq calls per filter interaction | ~50ms                             | ~50ms                  | LOW      |
 
 **Top-line estimate:** Addressing CRITICAL and HIGH items would reduce analysis latency by ~500-700ms and make VCF parsing feasible for clinical-grade whole-genome files (which can be 3-10GB).
 
@@ -75,16 +75,16 @@ trait_prediction.py: analyze_traits() -- O(n_traits) loop
 
 ### Key Files & Sizes
 
-| File | Size | Lines | Description |
-|------|------|-------|-------------|
-| `data/carrier_panel.json` | **3.06 MB** | 81,452 | Disease panel (2,715 entries) |
-| `data/trait_snps.json` | 121 KB | ~2,000 | Trait definitions (79 entries) |
-| `Source/parser.py` | ~50 KB | 1,263 | Multi-format parser |
-| `Source/carrier_analysis.py` | ~14 KB | 349 | Carrier risk engine |
-| `Source/trait_prediction.py` | ~13 KB | 324 | Trait predictor |
-| `Source/ui/theme.py` | ~40 KB | 973 | Full CSS theme |
-| `pages/disease_catalog.py` | ~18 KB | 447 | Catalog page |
-| `pages/analysis.py` | ~26 KB | 638 | Analysis dashboard |
+| File                         | Size        | Lines  | Description                    |
+| ---------------------------- | ----------- | ------ | ------------------------------ |
+| `data/carrier_panel.json`    | **3.06 MB** | 81,452 | Disease panel (2,715 entries)  |
+| `data/trait_snps.json`       | 121 KB      | ~2,000 | Trait definitions (79 entries) |
+| `Source/parser.py`           | ~50 KB      | 1,263  | Multi-format parser            |
+| `Source/carrier_analysis.py` | ~14 KB      | 349    | Carrier risk engine            |
+| `Source/trait_prediction.py` | ~13 KB      | 324    | Trait predictor                |
+| `Source/ui/theme.py`         | ~40 KB      | 973    | Full CSS theme                 |
+| `pages/disease_catalog.py`   | ~18 KB      | 447    | Catalog page                   |
+| `pages/analysis.py`          | ~26 KB      | 638    | Analysis dashboard             |
 
 ---
 
@@ -155,6 +155,7 @@ def _parse_23andme_streaming(file: str | Path | BinaryIO) -> dict[str, str]:
 ```
 
 **Impact:**
+
 - Memory: ~50% reduction (no duplicate string copy)
 - Speed: ~15-25% faster for typical files (avoids `.split('\n')` on entire content)
 - VCF files: Makes multi-GB files feasible (constant memory regardless of file size)
@@ -162,6 +163,7 @@ def _parse_23andme_streaming(file: str | Path | BinaryIO) -> dict[str, str]:
 ### Optimization 2: Separate Detection from Parsing
 
 Currently, `parse_genetic_file()` (line 682-735) calls:
+
 1. `_read_file_content()` -- reads entire file
 2. `_detect_format_from_content()` -- scans first 50 lines
 3. `validate_*_from_content()` -- scans first 50 lines again
@@ -170,6 +172,7 @@ Currently, `parse_genetic_file()` (line 682-735) calls:
 Steps 2 and 3 duplicate work (both scan the first 50 lines for format signatures). This can be unified into a single-pass detector+validator that also begins parsing immediately.
 
 **Recommended approach:**
+
 ```python
 def parse_genetic_file_streaming(file):
     """Detect format from header, then stream-parse the rest."""
@@ -238,13 +241,13 @@ def _parse_vcf_mmap(file_path: str) -> dict[str, str]:
 
 The 3.06 MB `carrier_panel.json` is loaded via `json.load()` in multiple locations:
 
-| Location | When | Cached? |
-|----------|------|---------|
-| `disease_catalog.py:31` | Every catalog page view | YES (`@st.cache_data`) |
-| `carrier_analysis.py:38` | Every `load_carrier_panel()` call | NO |
-| `analysis.py:63-67` | `_count_panel()` on every analysis page load | NO |
-| `analysis.py:353-355` | `with open(CARRIER_PANEL_PATH)` inside analyze button | NO |
-| `analysis.py:549-551` | Traits tab re-loads trait_snps.json | NO |
+| Location                 | When                                                  | Cached?                |
+| ------------------------ | ----------------------------------------------------- | ---------------------- |
+| `disease_catalog.py:31`  | Every catalog page view                               | YES (`@st.cache_data`) |
+| `carrier_analysis.py:38` | Every `load_carrier_panel()` call                     | NO                     |
+| `analysis.py:63-67`      | `_count_panel()` on every analysis page load          | NO                     |
+| `analysis.py:353-355`    | `with open(CARRIER_PANEL_PATH)` inside analyze button | NO                     |
+| `analysis.py:549-551`    | Traits tab re-loads trait_snps.json                   | NO                     |
 
 **`analysis.py` opens carrier_panel.json at least 3 times per page render** -- once in `_count_panel()`, once explicitly in the analyze button handler, and once inside `analyze_carrier_risk()` which calls `load_carrier_panel()`.
 
@@ -319,13 +322,13 @@ def analyze_carrier_risk_optimized(parent_a_snps, parent_b_snps, panel, tier=Non
 
 For cold-start optimization, convert JSON to a faster format:
 
-| Format | Load Time (3MB) | Compression | Implementation |
-|--------|-----------------|-------------|----------------|
-| JSON (current) | ~150ms | None | `json.load()` |
-| MessagePack | ~30ms | ~40% smaller | `msgpack.unpackb()` |
-| Pickle | ~10ms | Similar | `pickle.load()` |
-| orjson | ~40ms | None (faster parser) | `orjson.loads()` |
-| Parquet (columnar) | ~20ms | ~70% smaller | `pd.read_parquet()` |
+| Format             | Load Time (3MB) | Compression          | Implementation      |
+| ------------------ | --------------- | -------------------- | ------------------- |
+| JSON (current)     | ~150ms          | None                 | `json.load()`       |
+| MessagePack        | ~30ms           | ~40% smaller         | `msgpack.unpackb()` |
+| Pickle             | ~10ms           | Similar              | `pickle.load()`     |
+| orjson             | ~40ms           | None (faster parser) | `orjson.loads()`    |
+| Parquet (columnar) | ~20ms           | ~70% smaller         | `pd.read_parquet()` |
 
 **Recommended: `orjson`** -- Drop-in replacement for `json`, 3-10x faster parsing, no format migration needed.
 
@@ -346,18 +349,19 @@ def load_carrier_panel_fast(panel_path: str) -> list[dict]:
 
 ### Current Caching Audit
 
-| Decorator | Location | What's Cached | Correct? |
-|-----------|----------|---------------|----------|
-| `@st.cache_data` | `disease_catalog.py:30` | `load_diseases()` | YES |
-| `@st.cache_resource` | `analysis.py:55` | `AuthManager()` | YES |
-| None | `carrier_analysis.py:19` | `load_carrier_panel()` | **NO -- should be cached** |
-| None | `trait_prediction.py:11` | `load_trait_database()` | **NO -- should be cached** |
-| None | `analysis.py:153-166` | `load_traits_corrected()` | **NO -- should be cached** |
-| None | `analysis.py:62-76` | `_count_panel()` / `_count_traits()` | **NO -- should be cached** |
+| Decorator            | Location                 | What's Cached                        | Correct?                   |
+| -------------------- | ------------------------ | ------------------------------------ | -------------------------- |
+| `@st.cache_data`     | `disease_catalog.py:30`  | `load_diseases()`                    | YES                        |
+| `@st.cache_resource` | `analysis.py:55`         | `AuthManager()`                      | YES                        |
+| None                 | `carrier_analysis.py:19` | `load_carrier_panel()`               | **NO -- should be cached** |
+| None                 | `trait_prediction.py:11` | `load_trait_database()`              | **NO -- should be cached** |
+| None                 | `analysis.py:153-166`    | `load_traits_corrected()`            | **NO -- should be cached** |
+| None                 | `analysis.py:62-76`      | `_count_panel()` / `_count_traits()` | **NO -- should be cached** |
 
 ### Recommended Caching Additions
 
 **Rule of thumb from Streamlit docs:**
+
 - `@st.cache_data` -- for serializable data (JSON, DataFrames, dicts, lists). Returns a copy.
 - `@st.cache_resource` -- for singletons (DB connections, ML models, auth managers). Returns same object. Use carefully to avoid mutation issues.
 
@@ -472,17 +476,17 @@ Or add a `_freq_cache` field to each disease dict at load time.
 
 ### Current Pipeline Timing Breakdown (estimated for 2,715 diseases)
 
-| Step | Estimated Time | Notes |
-|------|---------------|-------|
-| File parse (23andMe, ~700K SNPs) | ~500ms | String split + dict build |
-| File parse (VCF, ~5M variants) | ~5-10s | Massive string operations |
-| `json.load(carrier_panel.json)` | ~150ms | If uncached |
-| `analyze_carrier_risk()` loop | ~50-100ms | 2,715 iterations, dict lookups |
-| Sorting results | ~5ms | Timsort on 2,715 items |
-| `load_traits_corrected()` | ~20ms | 79 entries |
-| `run_trait_analysis()` | ~5ms | 79 iterations |
-| **Total (23andMe, uncached)** | **~750-900ms** | |
-| **Total (VCF, uncached)** | **~5-10s** | Dominated by parsing |
+| Step                             | Estimated Time | Notes                          |
+| -------------------------------- | -------------- | ------------------------------ |
+| File parse (23andMe, ~700K SNPs) | ~500ms         | String split + dict build      |
+| File parse (VCF, ~5M variants)   | ~5-10s         | Massive string operations      |
+| `json.load(carrier_panel.json)`  | ~150ms         | If uncached                    |
+| `analyze_carrier_risk()` loop    | ~50-100ms      | 2,715 iterations, dict lookups |
+| Sorting results                  | ~5ms           | Timsort on 2,715 items         |
+| `load_traits_corrected()`        | ~20ms          | 79 entries                     |
+| `run_trait_analysis()`           | ~5ms           | 79 iterations                  |
+| **Total (23andMe, uncached)**    | **~750-900ms** |                                |
+| **Total (VCF, uncached)**        | **~5-10s**     | Dominated by parsing           |
 
 ### Optimization 9: Avoid Re-loading Panel Inside analyze_carrier_risk
 
@@ -504,6 +508,7 @@ carrier_results = analyze_carrier_risk_from_panel(
 ### Optimization 10: Single-Parent Screening Redundancy
 
 `single_parent_carrier_screen()` in analysis.py (line 179-191) is called:
+
 - Once in single-parent mode (line 305)
 - Twice more in the "Individual Reports" tab (line 611 for each parent)
 
@@ -527,22 +532,22 @@ def get_clinvar_client(api_key: str = ""):
 
 ### Current Memory Usage Estimates
 
-| Data Structure | Estimated Size | Notes |
-|---------------|---------------|-------|
-| Parent A SNPs dict (~700K entries) | ~56 MB | Keys avg 10 chars + values avg 2 chars + dict overhead |
-| Parent B SNPs dict (~700K entries) | ~56 MB | Same |
-| carrier_panel (2,715 dicts) | ~8 MB in memory | JSON overhead on Python dicts |
-| Carrier results (2,715 dicts) | ~5 MB | Each has ~10 keys |
-| Trait results (79 dicts) | ~100 KB | Small |
-| Disease catalog DataFrame | ~1 MB | 2,715 rows x 7 columns |
-| **Total per session** | **~126 MB** | |
+| Data Structure                     | Estimated Size  | Notes                                                  |
+| ---------------------------------- | --------------- | ------------------------------------------------------ |
+| Parent A SNPs dict (~700K entries) | ~56 MB          | Keys avg 10 chars + values avg 2 chars + dict overhead |
+| Parent B SNPs dict (~700K entries) | ~56 MB          | Same                                                   |
+| carrier_panel (2,715 dicts)        | ~8 MB in memory | JSON overhead on Python dicts                          |
+| Carrier results (2,715 dicts)      | ~5 MB           | Each has ~10 keys                                      |
+| Trait results (79 dicts)           | ~100 KB         | Small                                                  |
+| Disease catalog DataFrame          | ~1 MB           | 2,715 rows x 7 columns                                 |
+| **Total per session**              | **~126 MB**     |                                                        |
 
 ### Optimization 12: Compact SNP Storage
 
 Currently, SNPs are stored as `dict[str, str]` where keys are rsIDs like `"rs4477212"` and values are genotypes like `"AG"`.
 
 Python dict overhead per entry: ~100 bytes (key str + value str + hash + pointer).
-For 700K entries: 700K * 100 = **70 MB per parent**.
+For 700K entries: 700K \* 100 = **70 MB per parent**.
 
 **Alternative: Use a compact representation:**
 
@@ -661,6 +666,7 @@ def _get_clinvar_client(api_key=""):
 The 973-line CSS in `theme.py` contains extensive whitespace, comments, and could be minified. Current estimated size: ~20KB of CSS text.
 
 Options:
+
 1. **Minify at build time:** Use `cssmin` or `rcssmin` to strip whitespace/comments. Reduces to ~12KB.
 2. **Serve as static file:** Instead of injecting via `st.markdown()`, serve from `.streamlit/static/` directory.
 
@@ -685,6 +691,7 @@ def inject_global_css():
 ### Current External Resource Loading
 
 From `theme.py` line 97:
+
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 ```
@@ -707,6 +714,7 @@ _FONT_PRELOAD = """
 ```
 
 **Also trim font weights:**
+
 - Sora: Remove 300, 500 (only using 400, 600, 700, 800) -- saves ~100KB
 - Lexend: Remove 300, 700 (only using 400, 500, 600) -- saves ~50KB
 - JetBrains Mono: Remove 500, 600 (only using 400 for code) -- saves ~50KB
@@ -717,24 +725,24 @@ _FONT_PRELOAD = """
 
 The CSS contains **17 named keyframe animations**. Many are used on elements that are off-screen or in collapsed expanders:
 
-| Animation | Used On | Can Defer? |
-|-----------|---------|------------|
-| `helixFloat` | DNA dots, navbar, hero | No (visible above fold) |
-| `gradientShift` | Metric bars, hero, headers | No |
-| `biolumPulse` | Hero section, login card | No |
-| `fadeSlideUp` | Block container, cards | No |
-| `shimmer` | Badge hover | Yes -- only on interaction |
-| `borderGlow` | Unused? | **YES -- remove** |
-| `countUp` | Metric cards | Yes -- intersection observer |
-| `cardReveal` | Disease cards | Yes -- intersection observer |
-| `glowPulse` | Insight cards | Yes -- only when visible |
-| `subtleScan` | Hero background | Low priority |
-| `glassFadeIn` | Login card | Yes -- only on auth page |
-| `breathe` | **Unused** | **Remove** |
-| `dnaStrandSpin` | **Unused** | **Remove** |
-| `borderRainbow` | Card hover | Yes -- only on interaction |
-| `noiseShift` | Background noise | Yes -- degrade gracefully |
-| `pulseGlow` | **Unused** | **Remove** |
+| Animation       | Used On                    | Can Defer?                   |
+| --------------- | -------------------------- | ---------------------------- |
+| `helixFloat`    | DNA dots, navbar, hero     | No (visible above fold)      |
+| `gradientShift` | Metric bars, hero, headers | No                           |
+| `biolumPulse`   | Hero section, login card   | No                           |
+| `fadeSlideUp`   | Block container, cards     | No                           |
+| `shimmer`       | Badge hover                | Yes -- only on interaction   |
+| `borderGlow`    | Unused?                    | **YES -- remove**            |
+| `countUp`       | Metric cards               | Yes -- intersection observer |
+| `cardReveal`    | Disease cards              | Yes -- intersection observer |
+| `glowPulse`     | Insight cards              | Yes -- only when visible     |
+| `subtleScan`    | Hero background            | Low priority                 |
+| `glassFadeIn`   | Login card                 | Yes -- only on auth page     |
+| `breathe`       | **Unused**                 | **Remove**                   |
+| `dnaStrandSpin` | **Unused**                 | **Remove**                   |
+| `borderRainbow` | Card hover                 | Yes -- only on interaction   |
+| `noiseShift`    | Background noise           | Yes -- degrade gracefully    |
+| `pulseGlow`     | **Unused**                 | **Remove**                   |
 
 **3 animations are unused** (`breathe`, `dnaStrandSpin`, `pulseGlow`). Removing them saves ~200 bytes of CSS and eliminates unnecessary browser compositor work.
 
@@ -742,11 +750,13 @@ The CSS contains **17 named keyframe animations**. Many are used on elements tha
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 ```
 
@@ -757,6 +767,7 @@ The CSS contains **17 named keyframe animations**. Many are used on elements tha
 ### Current: Everything is Sequential
 
 The analysis pipeline in `analysis.py` runs sequentially:
+
 1. Parse Parent A -- waits for completion
 2. Parse Parent B -- waits for completion
 3. Run carrier analysis -- waits for completion
@@ -930,28 +941,28 @@ def timed_analysis(func):
 
 ### Industry Comparisons
 
-| Tool | Upload + Parse | Analysis | Total UX Time |
-|------|---------------|----------|---------------|
-| 23andMe (in-app analysis) | N/A (internal) | <2s | <2s |
-| Promethease | ~10s | ~30s | ~40s (700K SNPs, 100K+ publications) |
-| Nebula Genomics | ~5s | ~10s | ~15s |
-| **Mergenix (current, 23andMe)** | **~500ms** | **~400ms** | **~900ms** |
-| **Mergenix (current, VCF)** | **~5-10s** | **~400ms** | **~5-10s** |
-| **Mergenix (target, 23andMe)** | **~300ms** | **~200ms** | **~500ms** |
-| **Mergenix (target, VCF)** | **~2s** | **~200ms** | **~2.2s** |
+| Tool                            | Upload + Parse | Analysis   | Total UX Time                        |
+| ------------------------------- | -------------- | ---------- | ------------------------------------ |
+| 23andMe (in-app analysis)       | N/A (internal) | <2s        | <2s                                  |
+| Promethease                     | ~10s           | ~30s       | ~40s (700K SNPs, 100K+ publications) |
+| Nebula Genomics                 | ~5s            | ~10s       | ~15s                                 |
+| **Mergenix (current, 23andMe)** | **~500ms**     | **~400ms** | **~900ms**                           |
+| **Mergenix (current, VCF)**     | **~5-10s**     | **~400ms** | **~5-10s**                           |
+| **Mergenix (target, 23andMe)**  | **~300ms**     | **~200ms** | **~500ms**                           |
+| **Mergenix (target, VCF)**      | **~2s**        | **~200ms** | **~2.2s**                            |
 
 ### Target KPIs
 
-| Metric | Current | Target | Method |
-|--------|---------|--------|--------|
-| Cold start (first page load) | ~1.2s | <800ms | Lazy imports, font preload |
-| Disease catalog load | ~200ms | <100ms | Cached stats, precomputed freqs |
-| 23andMe parse time | ~500ms | ~300ms | Streaming parser |
-| VCF parse time (1GB) | ~10s+ | ~2s | Streaming + mmap |
-| Carrier analysis | ~300ms | ~150ms | Cached panel, avoid re-load |
-| Total analysis (23andMe) | ~900ms | ~500ms | All optimizations |
-| Memory per session | ~126MB | ~80MB | Compact storage |
-| CSS/font render | ~300ms | ~100ms | Preload, minify, trim weights |
+| Metric                       | Current | Target | Method                          |
+| ---------------------------- | ------- | ------ | ------------------------------- |
+| Cold start (first page load) | ~1.2s   | <800ms | Lazy imports, font preload      |
+| Disease catalog load         | ~200ms  | <100ms | Cached stats, precomputed freqs |
+| 23andMe parse time           | ~500ms  | ~300ms | Streaming parser                |
+| VCF parse time (1GB)         | ~10s+   | ~2s    | Streaming + mmap                |
+| Carrier analysis             | ~300ms  | ~150ms | Cached panel, avoid re-load     |
+| Total analysis (23andMe)     | ~900ms  | ~500ms | All optimizations               |
+| Memory per session           | ~126MB  | ~80MB  | Compact storage                 |
+| CSS/font render              | ~300ms  | ~100ms | Preload, minify, trim weights   |
 
 ---
 
@@ -959,64 +970,68 @@ def timed_analysis(func):
 
 ### Phase 1: Quick Wins (1-2 hours, ~500ms savings)
 
-| # | Optimization | Impact | Effort |
-|---|-------------|--------|--------|
-| 1 | Add `@st.cache_data` to `load_carrier_panel()`, `load_trait_database()`, `_count_panel()`, `_count_traits()`, `load_traits_corrected()` | ~400ms | 15 min |
-| 2 | Eliminate redundant `json.load()` in `analysis.py` (lines 353, 549) by reusing cached data | ~150ms | 15 min |
-| 3 | Pre-compute catalog stats with `compute_catalog_stats()` | ~30ms/rerun | 20 min |
-| 4 | Remove 3 unused CSS animations (`breathe`, `dnaStrandSpin`, `pulseGlow`) | Cleaner code | 5 min |
+| #   | Optimization                                                                                                                            | Impact       | Effort |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------ |
+| 1   | Add `@st.cache_data` to `load_carrier_panel()`, `load_trait_database()`, `_count_panel()`, `_count_traits()`, `load_traits_corrected()` | ~400ms       | 15 min |
+| 2   | Eliminate redundant `json.load()` in `analysis.py` (lines 353, 549) by reusing cached data                                              | ~150ms       | 15 min |
+| 3   | Pre-compute catalog stats with `compute_catalog_stats()`                                                                                | ~30ms/rerun  | 20 min |
+| 4   | Remove 3 unused CSS animations (`breathe`, `dnaStrandSpin`, `pulseGlow`)                                                                | Cleaner code | 5 min  |
 
 ### Phase 2: Medium Effort (4-8 hours, ~300ms savings)
 
-| # | Optimization | Impact | Effort |
-|---|-------------|--------|--------|
-| 5 | Centralized `data_loader.py` module with all cached loaders | Architecture | 1 hour |
-| 6 | Replace `@import` with `<link rel="preload">` for Google Fonts | ~200ms render | 30 min |
-| 7 | Trim font weights (14 -> 8) | ~200KB transfer | 30 min |
-| 8 | Single-pass filter function for disease catalog | ~50ms/rerun | 1 hour |
-| 9 | Pre-compute `parse_carrier_freq` at load time | ~50ms/rerun | 30 min |
-| 10 | Switch to `orjson` for JSON parsing | ~100ms cold start | 30 min |
+| #   | Optimization                                                   | Impact            | Effort |
+| --- | -------------------------------------------------------------- | ----------------- | ------ |
+| 5   | Centralized `data_loader.py` module with all cached loaders    | Architecture      | 1 hour |
+| 6   | Replace `@import` with `<link rel="preload">` for Google Fonts | ~200ms render     | 30 min |
+| 7   | Trim font weights (14 -> 8)                                    | ~200KB transfer   | 30 min |
+| 8   | Single-pass filter function for disease catalog                | ~50ms/rerun       | 1 hour |
+| 9   | Pre-compute `parse_carrier_freq` at load time                  | ~50ms/rerun       | 30 min |
+| 10  | Switch to `orjson` for JSON parsing                            | ~100ms cold start | 30 min |
 
 ### Phase 3: Significant Refactoring (1-2 days, enables large VCF support)
 
-| # | Optimization | Impact | Effort |
-|---|-------------|--------|--------|
-| 11 | Streaming line-by-line parser for all formats | ~40% memory, VCF support | 4 hours |
-| 12 | VCF-specific mmap parser | Multi-GB VCF support | 4 hours |
-| 13 | Parallel file parsing (ThreadPoolExecutor) | ~200ms on dual upload | 2 hours |
-| 14 | Batch ClinVar pre-fetch for high-risk results | Instant "Learn More" | 2 hours |
-| 15 | `prefers-reduced-motion` CSS support | Accessibility | 30 min |
+| #   | Optimization                                  | Impact                   | Effort  |
+| --- | --------------------------------------------- | ------------------------ | ------- |
+| 11  | Streaming line-by-line parser for all formats | ~40% memory, VCF support | 4 hours |
+| 12  | VCF-specific mmap parser                      | Multi-GB VCF support     | 4 hours |
+| 13  | Parallel file parsing (ThreadPoolExecutor)    | ~200ms on dual upload    | 2 hours |
+| 14  | Batch ClinVar pre-fetch for high-risk results | Instant "Learn More"     | 2 hours |
+| 15  | `prefers-reduced-motion` CSS support          | Accessibility            | 30 min  |
 
 ### Phase 4: Advanced (Future, if needed)
 
-| # | Optimization | Impact | Effort |
-|---|-------------|--------|--------|
-| 16 | Compact SNP storage (array.array) | ~45MB memory savings | 4 hours |
-| 17 | MessagePack/Parquet for carrier_panel | ~70% smaller, ~3x faster load | 4 hours |
-| 18 | WebAssembly parser (Rust/wasm-pack) | 10x parse speed | 2-3 days |
-| 19 | Server-side pagination for disease catalog | Handles 100K+ diseases | 1 day |
-| 20 | Service worker for offline font caching | Instant repeat loads | 4 hours |
+| #   | Optimization                               | Impact                        | Effort   |
+| --- | ------------------------------------------ | ----------------------------- | -------- |
+| 16  | Compact SNP storage (array.array)          | ~45MB memory savings          | 4 hours  |
+| 17  | MessagePack/Parquet for carrier_panel      | ~70% smaller, ~3x faster load | 4 hours  |
+| 18  | WebAssembly parser (Rust/wasm-pack)        | 10x parse speed               | 2-3 days |
+| 19  | Server-side pagination for disease catalog | Handles 100K+ diseases        | 1 day    |
+| 20  | Service worker for offline font caching    | Instant repeat loads          | 4 hours  |
 
 ---
 
 ## Appendix A: File-by-File Optimization Checklist
 
 ### Source/parser.py
+
 - [ ] Implement streaming parsers for all 4 formats
 - [ ] Add mmap support for on-disk VCF files
 - [ ] Unify format detection + validation into single pass
 - [ ] Consider `cyvcf2` library for production VCF parsing
 
 ### Source/carrier_analysis.py
+
 - [ ] Add `@st.cache_data` to `load_carrier_panel()`
 - [ ] Accept pre-loaded panel instead of file path
 - [ ] Pre-build rsID set for intersection optimization
 
 ### Source/trait_prediction.py
+
 - [ ] Add `@st.cache_data` to `load_trait_database()`
 - [ ] Accept pre-loaded trait data instead of file path
 
 ### pages/analysis.py
+
 - [ ] Cache `_count_panel()` and `_count_traits()`
 - [ ] Cache `load_traits_corrected()`
 - [ ] Remove redundant `json.load()` calls (lines 353, 549)
@@ -1024,12 +1039,14 @@ def timed_analysis(func):
 - [ ] Consider batch ClinVar pre-fetch
 
 ### pages/disease_catalog.py
+
 - [ ] Pre-compute and cache catalog statistics
 - [ ] Pre-compute carrier frequencies
 - [ ] Single-pass filter function
 - [ ] Avoid `.copy()` on disease list
 
 ### Source/ui/theme.py
+
 - [ ] Replace `@import` with `<link>` preload
 - [ ] Trim unused font weights
 - [ ] Remove unused keyframe animations
@@ -1037,6 +1054,7 @@ def timed_analysis(func):
 - [ ] Consider CSS minification
 
 ### data/carrier_panel.json
+
 - [ ] Consider `orjson` for faster parsing
 - [ ] Consider binary format (MessagePack) for cold start
 - [ ] Pre-compute derived fields (parsed frequency) at build time
@@ -1065,6 +1083,7 @@ print(f"Improvement: {improvement_pct:.1f}% ({baseline*1000:.0f}ms -> {optimized
 ```
 
 Always test with:
+
 1. **Small file:** `tests/data/sample_23andme.txt` (~1K SNPs)
 2. **Realistic file:** A real 23andMe export (~700K SNPs)
 3. **Large VCF:** A whole-genome VCF (~5M variants)

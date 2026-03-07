@@ -14,7 +14,7 @@ export const memoryFallback: Record<string, string> = {};
 
 export function safeLocalStorageGet(key: string): string | null {
   try {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const value = localStorage.getItem(key);
       if (value !== null) return value;
     }
@@ -29,7 +29,7 @@ export function safeLocalStorageSet(key: string, value: string): void {
   // localStorage throws or is unavailable.
   memoryFallback[key] = value;
   try {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(key, value);
     }
   } catch {

@@ -1,12 +1,16 @@
-import type { NextConfig } from "next";
-import { getSecurityHeaders } from "./config/security";
+import type { NextConfig } from 'next';
+import { getSecurityHeaders } from './config/security';
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@mergenix/shared-types", "@mergenix/genetics-engine", "@mergenix/genetics-data"],
+  transpilePackages: [
+    '@mergenix/shared-types',
+    '@mergenix/genetics-engine',
+    '@mergenix/genetics-data',
+  ],
   images: {
-    formats: ["image/avif", "image/webp"],
+    formats: ['image/avif', 'image/webp'],
   },
   webpack: (config, { isServer }) => {
     // Ensure Web Worker .ts files from workspace packages are handled
@@ -23,7 +27,7 @@ const nextConfig: NextConfig = {
     return [
       {
         // Apply security headers to all routes
-        source: "/(.*)",
+        source: '/(.*)',
         headers: getSecurityHeaders(isDev),
       },
     ];

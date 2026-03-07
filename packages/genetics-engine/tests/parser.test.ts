@@ -143,11 +143,7 @@ describe('parse23andMe', () => {
   });
 
   it('should skip comment lines starting with #', () => {
-    const content = [
-      '# Comment line 1',
-      '# Comment line 2',
-      'rs4477212\t1\t82154\tAA',
-    ].join('\n');
+    const content = ['# Comment line 1', '# Comment line 2', 'rs4477212\t1\t82154\tAA'].join('\n');
     const result = parse23andMe(content);
     expect(Object.keys(result)).toHaveLength(1);
     expect(result['rs4477212']).toBe('AA');
@@ -183,10 +179,7 @@ describe('parse23andMe', () => {
   });
 
   it('should handle both rs and i prefixed rsIDs', () => {
-    const content = [
-      'rs4477212\t1\t82154\tAA',
-      'i713426\t1\t817186\tCC',
-    ].join('\n');
+    const content = ['rs4477212\t1\t82154\tAA', 'i713426\t1\t817186\tCC'].join('\n');
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('AA');
     expect(result['i713426']).toBe('CC');
@@ -196,10 +189,9 @@ describe('parse23andMe', () => {
     // All common header keywords are skipped before the rsid prefix check
 
     // "snp" header is skipped
-    const contentWithSnp = [
-      'snp\tchromosome\tposition\tgenotype',
-      'rs4477212\t1\t82154\tAA',
-    ].join('\n');
+    const contentWithSnp = ['snp\tchromosome\tposition\tgenotype', 'rs4477212\t1\t82154\tAA'].join(
+      '\n',
+    );
     const resultSnp = parse23andMe(contentWithSnp);
     expect(Object.keys(resultSnp)).toHaveLength(1);
     expect(resultSnp['rs4477212']).toBe('AA');
@@ -214,10 +206,9 @@ describe('parse23andMe', () => {
     expect(resultRsid['rs4477212']).toBe('AA');
 
     // "id" header is skipped
-    const contentWithId = [
-      'id\tchromosome\tposition\tgenotype',
-      'rs4477212\t1\t82154\tAA',
-    ].join('\n');
+    const contentWithId = ['id\tchromosome\tposition\tgenotype', 'rs4477212\t1\t82154\tAA'].join(
+      '\n',
+    );
     const resultId = parse23andMe(contentWithId);
     expect(Object.keys(resultId)).toHaveLength(1);
     expect(resultId['rs4477212']).toBe('AA');
@@ -248,10 +239,7 @@ describe('parseAncestryDNA', () => {
   });
 
   it('should concatenate allele1 + allele2 into genotype', () => {
-    const content = [
-      '# AncestryDNA test',
-      'rs4477212\t1\t82154\tA\tG',
-    ].join('\n');
+    const content = ['# AncestryDNA test', 'rs4477212\t1\t82154\tA\tG'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AG');
   });
@@ -290,18 +278,13 @@ describe('parseAncestryDNA', () => {
   });
 
   it('should uppercase alleles', () => {
-    const content = [
-      '# AncestryDNA test',
-      'rs4477212\t1\t82154\ta\tg',
-    ].join('\n');
+    const content = ['# AncestryDNA test', 'rs4477212\t1\t82154\ta\tg'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AG');
   });
 
   it('should throw on empty file', () => {
-    expect(() => parseAncestryDNA('# comments only')).toThrow(
-      'No valid SNP data found',
-    );
+    expect(() => parseAncestryDNA('# comments only')).toThrow('No valid SNP data found');
   });
 
   it('should skip lines with fewer than 5 columns', () => {
@@ -364,19 +347,13 @@ describe('parseMyHeritage', () => {
   });
 
   it('should skip the header row', () => {
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'rs4477212,1,82154,AA',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', 'rs4477212,1,82154,AA'].join('\n');
     const result = parseMyHeritage(content);
     expect(Object.keys(result)).toHaveLength(1);
   });
 
   it('should accept i-prefixed rsIDs', () => {
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'i713426,1,817186,CC',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', 'i713426,1,817186,CC'].join('\n');
     const result = parseMyHeritage(content);
     expect(result['i713426']).toBe('CC');
   });
@@ -415,9 +392,9 @@ describe('parseVcf', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/0',    // AA (ref/ref)
-      '1\t200\trs200\tA\tG\t30\tPASS\t.\tGT\t0/1',    // AG (ref/alt)
-      '1\t300\trs300\tA\tG\t30\tPASS\t.\tGT\t1/1',    // GG (alt/alt)
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/0', // AA (ref/ref)
+      '1\t200\trs200\tA\tG\t30\tPASS\t.\tGT\t0/1', // AG (ref/alt)
+      '1\t300\trs300\tA\tG\t30\tPASS\t.\tGT\t1/1', // GG (alt/alt)
     ].join('\n');
     const result = parseVcf(content);
     expect(result['rs100']).toBe('AA');
@@ -429,9 +406,9 @@ describe('parseVcf', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1',       // SNP - kept, concatenated
-      '1\t200\trs200\tAT\tG\t30\tPASS\t.\tGT\t0/1',      // Indel REF - kept, "/" format
-      '1\t300\trs300\tA\tGTT\t30\tPASS\t.\tGT\t0/1',     // Indel ALT - kept, "/" format
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1', // SNP - kept, concatenated
+      '1\t200\trs200\tAT\tG\t30\tPASS\t.\tGT\t0/1', // Indel REF - kept, "/" format
+      '1\t300\trs300\tA\tGTT\t30\tPASS\t.\tGT\t0/1', // Indel ALT - kept, "/" format
     ].join('\n');
     const result = parseVcf(content);
     expect(Object.keys(result)).toHaveLength(3);
@@ -458,7 +435,7 @@ describe('parseVcf', () => {
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
       '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1',
-      '1\t200\t.\tA\tG\t30\tPASS\t.\tGT\t0/1',      // "." ID - skipped
+      '1\t200\t.\tA\tG\t30\tPASS\t.\tGT\t0/1', // "." ID - skipped
       '1\t300\tCHR1_300\tA\tG\t30\tPASS\t.\tGT\t0/1', // No rs prefix - skipped
     ].join('\n');
     const result = parseVcf(content);
@@ -470,8 +447,8 @@ describe('parseVcf', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1',   // unphased
-      '1\t200\trs200\tA\tG\t30\tPASS\t.\tGT\t1|0',   // phased
+      '1\t100\trs100\tA\tG\t30\tPASS\t.\tGT\t0/1', // unphased
+      '1\t200\trs200\tA\tG\t30\tPASS\t.\tGT\t1|0', // phased
     ].join('\n');
     const result = parseVcf(content);
     expect(result['rs100']).toBe('AG');
@@ -490,7 +467,7 @@ describe('parseVcf', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs100\tA\tG,C\t30\tPASS\t.\tGT\t1/2',  // G and C alts
+      '1\t100\trs100\tA\tG,C\t30\tPASS\t.\tGT\t1/2', // G and C alts
     ].join('\n');
     const result = parseVcf(content);
     expect(result['rs100']).toBe('GC');
@@ -596,11 +573,11 @@ describe('parseGeneticFile', () => {
 describe('getGenotypeStats', () => {
   it('should correctly count homozygous and heterozygous genotypes', () => {
     const genotypes = {
-      rs1: 'AA',  // homozygous
-      rs2: 'AG',  // heterozygous
-      rs3: 'GG',  // homozygous
-      rs4: 'CT',  // heterozygous
-      rs5: 'TT',  // homozygous
+      rs1: 'AA', // homozygous
+      rs2: 'AG', // heterozygous
+      rs3: 'GG', // homozygous
+      rs4: 'CT', // heterozygous
+      rs5: 'TT', // homozygous
     };
     const stats = getGenotypeStats(genotypes);
     expect(stats.totalSnps).toBe(5);
@@ -618,8 +595,8 @@ describe('getGenotypeStats', () => {
 
   it('should count single-character genotypes as homozygous (chrX/Y males)', () => {
     const genotypes = {
-      rs1: 'A',   // single allele, hemi
-      rs2: 'AG',  // heterozygous
+      rs1: 'A', // single allele, hemi
+      rs2: 'AG', // heterozygous
     };
     const stats = getGenotypeStats(genotypes);
     expect(stats.homozygousCount).toBe(1);
@@ -767,10 +744,7 @@ describe('validation functions', () => {
     });
 
     it('should fail when missing RSID,CHROMOSOME,POSITION,RESULT header', () => {
-      const content = [
-        'random,header,here,values',
-        'notanrsid,1,82154,ZZ',
-      ].join('\n');
+      const content = ['random,header,here,values', 'notanrsid,1,82154,ZZ'].join('\n');
       const [isValid, err] = validateMyHeritage(content);
       expect(isValid).toBe(false);
       expect(err).toContain('missing');
@@ -827,11 +801,7 @@ describe('validation functions', () => {
     });
 
     it('should fail when #CHROM header has insufficient columns', () => {
-      const content = [
-        '##fileformat=VCFv4.1',
-        '#CHROM\tPOS\tID',
-        '1\t100\trs100',
-      ].join('\n');
+      const content = ['##fileformat=VCFv4.1', '#CHROM\tPOS\tID', '1\t100\trs100'].join('\n');
       const [isValid, err] = validateVcf(content);
       expect(isValid).toBe(false);
       expect(err).toContain('columns');

@@ -60,9 +60,7 @@ def upgrade() -> None:
     # ── 3. Populate existing rows with CURRENT_TIMESTAMP as fallback ──────
     # Treat all existing users as active NOW — we have no historical login data,
     # so this is the safest default to prevent accidental purge.
-    op.execute(
-        "UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE last_login_at IS NULL"
-    )
+    op.execute("UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE last_login_at IS NULL")
 
     # ── 4. Change payments.user_id FK: CASCADE → SET NULL ─────────────────
     # Step 4a: Drop the existing FK constraint

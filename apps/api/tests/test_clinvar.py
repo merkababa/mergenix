@@ -37,6 +37,7 @@ os.environ.setdefault("ADMIN_API_KEY", _TEST_ADMIN_KEY)
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _admin_headers(token: str, admin_key: str = _TEST_ADMIN_KEY) -> dict[str, str]:
     """Build request headers with both JWT and admin key."""
     return {
@@ -48,6 +49,7 @@ def _admin_headers(token: str, admin_key: str = _TEST_ADMIN_KEY) -> dict[str, st
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest_asyncio.fixture
 async def admin_token(test_user) -> str:
@@ -76,6 +78,7 @@ async def patched_admin_key():
 # ---------------------------------------------------------------------------
 # POST /clinvar/check
 # ---------------------------------------------------------------------------
+
 
 class TestClinvarCheck:
     """Tests for POST /clinvar/check."""
@@ -246,6 +249,7 @@ class TestClinvarCheck:
 # POST /clinvar/sync
 # ---------------------------------------------------------------------------
 
+
 class TestClinvarSync:
     """Tests for POST /clinvar/sync."""
 
@@ -349,6 +353,7 @@ class TestClinvarSync:
 # GET /clinvar/status
 # ---------------------------------------------------------------------------
 
+
 class TestClinvarStatus:
     """Tests for GET /clinvar/status."""
 
@@ -392,11 +397,13 @@ class TestClinvarStatus:
         patched_admin_key: str,
     ) -> None:
         """GET /clinvar/status returns 200 when a sync metadata file is present."""
-        sync_meta = json.dumps({
-            "last_sync": "2026-02-01T00:00:00+00:00",
-            "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
-            "file_size_bytes": 123456789,
-        })
+        sync_meta = json.dumps(
+            {
+                "last_sync": "2026-02-01T00:00:00+00:00",
+                "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
+                "file_size_bytes": 123456789,
+            }
+        )
 
         with (
             patch("anyio.Path.exists", new_callable=AsyncMock, return_value=True),
@@ -416,11 +423,13 @@ class TestClinvarStatus:
         patched_admin_key: str,
     ) -> None:
         """GET /clinvar/status response includes last_sync, source_url, and file_size_bytes."""
-        sync_meta = json.dumps({
-            "last_sync": "2026-02-01T00:00:00+00:00",
-            "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
-            "file_size_bytes": 123456789,
-        })
+        sync_meta = json.dumps(
+            {
+                "last_sync": "2026-02-01T00:00:00+00:00",
+                "source_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
+                "file_size_bytes": 123456789,
+            }
+        )
 
         with (
             patch("anyio.Path.exists", new_callable=AsyncMock, return_value=True),
@@ -448,11 +457,13 @@ class TestClinvarStatus:
         expected_source_url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
         expected_size = 123456789
 
-        sync_meta = json.dumps({
-            "last_sync": expected_last_sync,
-            "source_url": expected_source_url,
-            "file_size_bytes": expected_size,
-        })
+        sync_meta = json.dumps(
+            {
+                "last_sync": expected_last_sync,
+                "source_url": expected_source_url,
+                "file_size_bytes": expected_size,
+            }
+        )
 
         with (
             patch("anyio.Path.exists", new_callable=AsyncMock, return_value=True),

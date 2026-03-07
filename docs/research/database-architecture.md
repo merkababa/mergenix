@@ -25,23 +25,25 @@
 
 ### Data Files Inventory
 
-| File | Records | Lines | File Size | Purpose |
-|------|---------|-------|-----------|---------|
-| `data/carrier_panel.json` | 2,715 diseases | 81,452 | 3.2 MB | Disease panel (core data) |
-| `data/trait_snps.json` | 79 traits | 3,320 | 124 KB | Trait SNP database |
-| `data/users.json` | 0 (empty) | 0 | -- | User accounts |
-| `data/audit_log.json` | 0 (empty) | 0 | -- | Audit trail |
-| `data/lockouts.json` | 0 (empty) | 0 | -- | Account lockouts |
+| File                      | Records        | Lines  | File Size | Purpose                   |
+| ------------------------- | -------------- | ------ | --------- | ------------------------- |
+| `data/carrier_panel.json` | 2,715 diseases | 81,452 | 3.2 MB    | Disease panel (core data) |
+| `data/trait_snps.json`    | 79 traits      | 3,320  | 124 KB    | Trait SNP database        |
+| `data/users.json`         | 0 (empty)      | 0      | --        | User accounts             |
+| `data/audit_log.json`     | 0 (empty)      | 0      | --        | Audit trail               |
+| `data/lockouts.json`      | 0 (empty)      | 0      | --        | Account lockouts          |
 
 ### Current Data Access Patterns
 
 **Read-heavy, write-rare for scientific data:**
+
 - `carrier_panel.json` is loaded fully into memory on every analysis run and on disease catalog page load
 - `trait_snps.json` is loaded fully into memory on every trait prediction
 - Disease catalog page applies Python-side filtering (category, severity, search, inheritance, frequency range) on the full in-memory list
 - Analysis page iterates all 2,715 diseases per parent pair to compute carrier status
 
 **Read-write for user data:**
+
 - `users.json` loaded/saved on every authentication operation (login, register, password change, tier update)
 - `audit_log.json` and `lockouts.json` appended to on auth events
 - File-level locking is absent -- concurrent writes will corrupt data
@@ -49,6 +51,7 @@
 ### Current Caching
 
 The disease catalog uses `@st.cache_data` on `load_diseases()`:
+
 ```python
 @st.cache_data
 def load_diseases():
@@ -66,7 +69,7 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 2. **Redundant parsing**: The 3.2 MB carrier panel JSON is parsed from disk on every analysis run (not just page load).
 3. **O(n) filtering**: Disease catalog filtering is pure Python list comprehension over 2,715 records on every Streamlit rerun.
 4. **No indexing**: Lookups by rsID, gene, condition, or category require full scan.
-5. **No full-text search**: The search box does substring matching (`q in d["condition"].lower()`), which is O(n * m) per character typed.
+5. **No full-text search**: The search box does substring matching (`q in d["condition"].lower()`), which is O(n \* m) per character typed.
 6. **Flat file user storage**: Passwords, OAuth tokens, and subscription data in a plain JSON file with no encryption at rest.
 7. **No audit integrity**: Audit log is a JSON file that can be trivially edited or deleted.
 8. **Memory pressure at scale**: Loading 81K-line JSON into every Streamlit session adds ~15-25 MB per active user session.
@@ -78,12 +81,14 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 ### Option A: Keep JSON (Status Quo)
 
 **Pros:**
+
 - Zero migration effort
 - Human-readable, git-diffable
 - Works with current Streamlit deployment
 - No additional dependencies
 
 **Cons:**
+
 - No concurrency safety for writes
 - No indexing (full scan for every query)
 - No full-text search
@@ -97,6 +102,7 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 ### Option B: SQLite (RECOMMENDED)
 
 **Pros:**
+
 - Zero-server architecture (single file, like JSON but with ACID guarantees)
 - Ships with Python standard library (`sqlite3`)
 - Full SQL query capability with proper indexing
@@ -110,6 +116,7 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 - 3.2 MB JSON becomes ~1.5 MB SQLite with indexes
 
 **Cons:**
+
 - Single-writer limitation (mitigated by WAL mode for read-heavy workloads)
 - Not ideal for horizontal scaling across multiple app servers
 - No built-in user management or role-based access
@@ -119,6 +126,7 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 ### Option C: PostgreSQL
 
 **Pros:**
+
 - Industry-standard for production web apps
 - True multi-user concurrent write support
 - Advanced indexing (B-tree, GIN, GiST, BRIN)
@@ -128,6 +136,7 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 - Native Streamlit support via `st.connection("sql")`
 
 **Cons:**
+
 - Requires running a database server (added ops complexity)
 - Network latency for every query
 - Overkill for current data volume (2,715 records)
@@ -139,17 +148,17 @@ The ClinVar client has an in-memory dict cache (`self._cache`) that lives only f
 
 ### Recommendation Matrix
 
-| Criterion | JSON | SQLite | PostgreSQL |
-|-----------|------|--------|------------|
-| Setup complexity | None | Minimal | High |
-| Query performance | Poor (O(n)) | Excellent | Excellent |
-| Full-text search | None | FTS5 | tsvector |
-| Concurrency | Unsafe | Good (WAL) | Excellent |
-| Encryption at rest | Manual | SQLCipher | Native |
-| Deployment | Trivial | Trivial | Server needed |
-| Cost | Free | Free | $5-25+/mo |
-| Scalability ceiling | ~5K records | ~1M records | Unlimited |
-| Streamlit integration | Manual | Native | Native |
+| Criterion             | JSON        | SQLite      | PostgreSQL    |
+| --------------------- | ----------- | ----------- | ------------- |
+| Setup complexity      | None        | Minimal     | High          |
+| Query performance     | Poor (O(n)) | Excellent   | Excellent     |
+| Full-text search      | None        | FTS5        | tsvector      |
+| Concurrency           | Unsafe      | Good (WAL)  | Excellent     |
+| Encryption at rest    | Manual      | SQLCipher   | Native        |
+| Deployment            | Trivial     | Trivial     | Server needed |
+| Cost                  | Free        | Free        | $5-25+/mo     |
+| Scalability ceiling   | ~5K records | ~1M records | Unlimited     |
+| Streamlit integration | Manual      | Native      | Native        |
 
 ### VERDICT: Migrate to SQLite for all data stores.
 
@@ -180,6 +189,7 @@ Layer 4: st.session_state (user-specific state: filters, selections, results)
 ### Specific Patterns
 
 **Database connection (global singleton):**
+
 ```python
 @st.cache_resource
 def get_db():
@@ -193,6 +203,7 @@ def get_db():
 ```
 
 **Disease data queries (cached with TTL):**
+
 ```python
 @st.cache_data(ttl=3600)
 def get_diseases_by_category(category: str) -> list[dict]:
@@ -214,6 +225,7 @@ def search_diseases(query: str) -> list[dict]:
 ```
 
 **ClinVar cache (persistent across sessions):**
+
 ```python
 @st.cache_resource
 def get_clinvar_client():
@@ -223,13 +235,13 @@ def get_clinvar_client():
 
 ### Cache Invalidation Strategy
 
-| Data Type | TTL | Invalidation Trigger |
-|-----------|-----|---------------------|
-| Disease panel | 1 hour | App restart, admin action |
-| Trait SNPs | 1 hour | App restart, admin action |
-| User data | None (no cache) | Every read is fresh from DB |
-| ClinVar results | 24 hours | Manual clear |
-| Filter results | 5 minutes | User interaction |
+| Data Type       | TTL             | Invalidation Trigger        |
+| --------------- | --------------- | --------------------------- |
+| Disease panel   | 1 hour          | App restart, admin action   |
+| Trait SNPs      | 1 hour          | App restart, admin action   |
+| User data       | None (no cache) | Every read is fresh from DB |
+| ClinVar results | 24 hours        | Manual clear                |
+| Filter results  | 5 minutes       | User interaction            |
 
 ---
 
@@ -326,16 +338,16 @@ CREATE INDEX idx_traits_trait ON traits(trait);
 
 ### Query Performance Comparison
 
-| Operation | JSON (current) | SQLite (indexed) | Improvement |
-|-----------|---------------|-----------------|-------------|
-| Load all diseases | ~50ms (3.2MB parse) | ~5ms (cached) | 10x |
-| Filter by category | ~5ms (list comp) | <1ms (B-tree) | 5x |
-| Search by name | ~10ms (substring) | <1ms (FTS5) | 10x+ |
-| Lookup by rsID | ~3ms (dict lookup*) | <1ms (index) | 3x |
-| Multi-filter + sort | ~20ms (chained) | <1ms (compound) | 20x |
-| Paginate 30 items | ~5ms (slice) | <1ms (LIMIT/OFFSET) | 5x |
+| Operation           | JSON (current)       | SQLite (indexed)    | Improvement |
+| ------------------- | -------------------- | ------------------- | ----------- |
+| Load all diseases   | ~50ms (3.2MB parse)  | ~5ms (cached)       | 10x         |
+| Filter by category  | ~5ms (list comp)     | <1ms (B-tree)       | 5x          |
+| Search by name      | ~10ms (substring)    | <1ms (FTS5)         | 10x+        |
+| Lookup by rsID      | ~3ms (dict lookup\*) | <1ms (index)        | 3x          |
+| Multi-filter + sort | ~20ms (chained)      | <1ms (compound)     | 20x         |
+| Paginate 30 items   | ~5ms (slice)         | <1ms (LIMIT/OFFSET) | 5x          |
 
-*Note: rsID lookup in analysis is already O(1) via dict. The gains are primarily in the catalog page filtering.
+\*Note: rsID lookup in analysis is already O(1) via dict. The gains are primarily in the catalog page filtering.
 
 ### Carrier Analysis Optimization
 
@@ -425,6 +437,7 @@ Per 2026 HIPAA encryption requirements (now mandatory, no longer "addressable"):
 ### Genetic Privacy Compliance (2026)
 
 Several states have introduced genetic privacy bills in early 2026. While Mergenix does not store raw genetic data server-side (files are processed in-memory and discarded), the application should:
+
 - Add a clear privacy notice that genetic data is NOT stored
 - Implement session cleanup to clear `st.session_state` SNP data on logout
 - Consider GINA (Genetic Information Nondiscrimination Act) implications for any future data retention features
@@ -435,13 +448,13 @@ Several states have introduced genetic privacy bills in early 2026. While Mergen
 
 ### How Genetic Testing Platforms Handle Data
 
-| Platform | Data Scale | Technology | Architecture |
-|----------|-----------|------------|-------------|
-| **23andMe** | 12M+ customers, 2M SNP chip | AWS, proprietary pipeline | Cloud-native, microservices, distributed databases |
-| **Invitae** | 4M+ sequenced, full genome | GCP BigQuery, Dataflow | VCF loading into BigQuery, Apache Beam pipelines |
-| **Color Genomics** | NGS (next-gen sequencing) | Cloud-native | Clinical-grade pipeline with CLIA certification |
-| **OpenSNP** | Open-source, community | PostgreSQL, Ruby on Rails | Traditional web app with relational DB |
-| **Genetic Genie** | Free analysis tool | Likely simple backend | Upload-and-process model (similar to Mergenix) |
+| Platform           | Data Scale                  | Technology                | Architecture                                       |
+| ------------------ | --------------------------- | ------------------------- | -------------------------------------------------- |
+| **23andMe**        | 12M+ customers, 2M SNP chip | AWS, proprietary pipeline | Cloud-native, microservices, distributed databases |
+| **Invitae**        | 4M+ sequenced, full genome  | GCP BigQuery, Dataflow    | VCF loading into BigQuery, Apache Beam pipelines   |
+| **Color Genomics** | NGS (next-gen sequencing)   | Cloud-native              | Clinical-grade pipeline with CLIA certification    |
+| **OpenSNP**        | Open-source, community      | PostgreSQL, Ruby on Rails | Traditional web app with relational DB             |
+| **Genetic Genie**  | Free analysis tool          | Likely simple backend     | Upload-and-process model (similar to Mergenix)     |
 
 ### Key Takeaways for Mergenix
 
@@ -456,30 +469,33 @@ Several states have introduced genetic privacy bills in early 2026. While Mergen
 
 ### Growth Scenarios
 
-| Metric | Current | Medium (1 year) | Large (3 years) |
-|--------|---------|-----------------|-----------------|
-| Disease records | 2,715 | 10,000 | 50,000 |
-| Trait SNPs | 79 | 500 | 2,000 |
-| Concurrent users | <10 | 50-100 | 500-1,000 |
-| User accounts | <50 | 1,000 | 10,000 |
-| carrier_panel.json size | 3.2 MB | 12 MB | 60 MB |
-| Analysis time (per pair) | ~2 sec | ~8 sec (JSON) / ~1 sec (SQLite) | ~30 sec (JSON) / ~2 sec (SQLite) |
+| Metric                   | Current | Medium (1 year)                 | Large (3 years)                  |
+| ------------------------ | ------- | ------------------------------- | -------------------------------- |
+| Disease records          | 2,715   | 10,000                          | 50,000                           |
+| Trait SNPs               | 79      | 500                             | 2,000                            |
+| Concurrent users         | <10     | 50-100                          | 500-1,000                        |
+| User accounts            | <50     | 1,000                           | 10,000                           |
+| carrier_panel.json size  | 3.2 MB  | 12 MB                           | 60 MB                            |
+| Analysis time (per pair) | ~2 sec  | ~8 sec (JSON) / ~1 sec (SQLite) | ~30 sec (JSON) / ~2 sec (SQLite) |
 
 ### Bottleneck Analysis
 
 **At 10,000 diseases (JSON):**
+
 - JSON parse time: ~200ms per load
 - Memory per session: ~50 MB for carrier panel alone
 - Catalog filtering: ~50ms per rerun (still manageable but noticeable)
 - Full panel analysis: ~8 seconds (linear O(n) iteration)
 
 **At 10,000 diseases (SQLite):**
+
 - Cached connection: <1ms
 - Catalog filtering: <5ms (indexed queries)
 - Full panel analysis: ~1 second (indexed rsID lookup, skip unknowns)
 - Memory per session: ~5 MB (only query results cached, not full panel)
 
 **At 50,000 diseases (SQLite):**
+
 - Still manageable with proper indexing
 - FTS5 search: <10ms
 - Full panel analysis: ~5 seconds (but optimized to skip missing rsIDs)
@@ -488,6 +504,7 @@ Several states have introduced genetic privacy bills in early 2026. While Mergen
 ### When to Migrate from SQLite to PostgreSQL
 
 Trigger conditions (any one of these):
+
 1. Concurrent write operations exceed 50/second
 2. Database size exceeds 1 GB
 3. Multiple application servers need to share state
@@ -502,47 +519,47 @@ Trigger conditions (any one of these):
 
 ### HIGH IMPACT, LOW EFFORT
 
-| # | Recommendation | Impact | Effort | Priority |
-|---|---------------|--------|--------|----------|
-| 1 | **Migrate user data to SQLite** | High | Low | P0 -- Critical |
-|   | Eliminates concurrency bugs, adds ACID transactions, enables proper audit logging | | | |
-| 2 | **Add `@st.cache_data` to analysis page data loading** | High | Minimal | P0 -- Quick Win |
-|   | Cache carrier panel and trait DB loads to avoid re-parsing 3.2 MB JSON on every analysis run | | | |
-| 3 | **Load scientific data into SQLite at startup** | High | Medium | P1 |
-|   | Keep JSON as source-of-truth but load into indexed SQLite for catalog queries and analysis | | | |
-| 4 | **Add FTS5 full-text search for disease catalog** | High | Medium | P1 |
-|   | Replace substring matching with proper ranked full-text search | | | |
+| #   | Recommendation                                                                               | Impact | Effort  | Priority        |
+| --- | -------------------------------------------------------------------------------------------- | ------ | ------- | --------------- |
+| 1   | **Migrate user data to SQLite**                                                              | High   | Low     | P0 -- Critical  |
+|     | Eliminates concurrency bugs, adds ACID transactions, enables proper audit logging            |        |         |                 |
+| 2   | **Add `@st.cache_data` to analysis page data loading**                                       | High   | Minimal | P0 -- Quick Win |
+|     | Cache carrier panel and trait DB loads to avoid re-parsing 3.2 MB JSON on every analysis run |        |         |                 |
+| 3   | **Load scientific data into SQLite at startup**                                              | High   | Medium  | P1              |
+|     | Keep JSON as source-of-truth but load into indexed SQLite for catalog queries and analysis   |        |         |                 |
+| 4   | **Add FTS5 full-text search for disease catalog**                                            | High   | Medium  | P1              |
+|     | Replace substring matching with proper ranked full-text search                               |        |         |                 |
 
 ### HIGH IMPACT, MEDIUM EFFORT
 
-| # | Recommendation | Impact | Effort | Priority |
-|---|---------------|--------|--------|----------|
-| 5 | **Optimize carrier analysis with rsID pre-filtering** | High | Medium | P1 |
-|   | Only process diseases where parents have matching rsIDs, reducing work by 60-80% | | | |
-| 6 | **Add database migration system** | Medium | Medium | P1 |
-|   | Simple version-tracked schema migrations for future-proofing | | | |
-| 7 | **Implement ClinVar result caching in SQLite** | Medium | Low | P2 |
-|   | Persist ClinVar API responses to avoid repeated network calls across sessions | | | |
+| #   | Recommendation                                                                   | Impact | Effort | Priority |
+| --- | -------------------------------------------------------------------------------- | ------ | ------ | -------- |
+| 5   | **Optimize carrier analysis with rsID pre-filtering**                            | High   | Medium | P1       |
+|     | Only process diseases where parents have matching rsIDs, reducing work by 60-80% |        |        |          |
+| 6   | **Add database migration system**                                                | Medium | Medium | P1       |
+|     | Simple version-tracked schema migrations for future-proofing                     |        |        |          |
+| 7   | **Implement ClinVar result caching in SQLite**                                   | Medium | Low    | P2       |
+|     | Persist ClinVar API responses to avoid repeated network calls across sessions    |        |        |          |
 
 ### MEDIUM IMPACT, LOW EFFORT
 
-| # | Recommendation | Impact | Effort | Priority |
-|---|---------------|--------|--------|----------|
-| 8 | **Add TTL to all `@st.cache_data` calls** | Medium | Minimal | P1 |
-|   | Prevent stale data by adding `ttl=3600` to disease/trait loading functions | | | |
-| 9 | **Add WAL mode pragma to SQLite** | Medium | Minimal | P1 |
-|   | Enables concurrent reads while writing (essential for Streamlit multi-session) | | | |
-| 10 | **Session cleanup on logout** | Low | Minimal | P2 |
-|    | Clear `st.session_state` SNP data when user logs out for privacy | | | |
+| #   | Recommendation                                                                 | Impact | Effort  | Priority |
+| --- | ------------------------------------------------------------------------------ | ------ | ------- | -------- |
+| 8   | **Add TTL to all `@st.cache_data` calls**                                      | Medium | Minimal | P1       |
+|     | Prevent stale data by adding `ttl=3600` to disease/trait loading functions     |        |         |          |
+| 9   | **Add WAL mode pragma to SQLite**                                              | Medium | Minimal | P1       |
+|     | Enables concurrent reads while writing (essential for Streamlit multi-session) |        |         |          |
+| 10  | **Session cleanup on logout**                                                  | Low    | Minimal | P2       |
+|     | Clear `st.session_state` SNP data when user logs out for privacy               |        |         |          |
 
 ### FUTURE CONSIDERATIONS (Not Needed Now)
 
-| # | Recommendation | When Needed |
-|---|---------------|-------------|
-| 11 | PostgreSQL migration | 500+ concurrent users or multi-server deployment |
-| 12 | Redis caching layer | If ClinVar API becomes a bottleneck with 1000+ analyses/day |
-| 13 | SQLCipher encryption | If storing user health data or pursuing HIPAA compliance |
-| 14 | Read replicas | If database read contention becomes measurable |
+| #   | Recommendation       | When Needed                                                 |
+| --- | -------------------- | ----------------------------------------------------------- |
+| 11  | PostgreSQL migration | 500+ concurrent users or multi-server deployment            |
+| 12  | Redis caching layer  | If ClinVar API becomes a bottleneck with 1000+ analyses/day |
+| 13  | SQLCipher encryption | If storing user health data or pursuing HIPAA compliance    |
+| 14  | Read replicas        | If database read contention becomes measurable              |
 
 ---
 

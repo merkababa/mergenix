@@ -46,35 +46,23 @@ test.describe('Account — P0 Critical', () => {
     await page.goto('/account');
 
     // The account settings heading should be visible
-    await expect(
-      page.getByRole('heading', { name: /account settings/i, level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /account settings/i, level: 1 })).toBeVisible();
 
     // Main sections should be visible
     // Profile section
-    await expect(
-      page.getByRole('heading', { name: /profile/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /profile/i })).toBeVisible();
 
     // Security section
-    await expect(
-      page.getByRole('heading', { name: /security/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /security/i })).toBeVisible();
 
     // Active Sessions section
-    await expect(
-      page.getByRole('heading', { name: /active sessions/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /active sessions/i })).toBeVisible();
 
     // Data Export section
-    await expect(
-      page.getByRole('heading', { name: /export your data/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /export your data/i })).toBeVisible();
 
     // Danger Zone section
-    await expect(
-      page.getByRole('heading', { name: /danger zone/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /danger zone/i })).toBeVisible();
   });
 });
 
@@ -88,9 +76,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // Wait for the profile section to render
-    await expect(
-      page.getByRole('heading', { name: /profile/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /profile/i })).toBeVisible();
 
     // Find the display name input (labeled "Display Name")
     const nameInput = page.getByLabel(/display name/i);
@@ -119,9 +105,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // Find the password section and click "Change"
-    const changePasswordButton = page
-      .getByRole('button', { name: /change/i })
-      .first();
+    const changePasswordButton = page.getByRole('button', { name: /change/i }).first();
     await expect(changePasswordButton).toBeVisible();
     await changePasswordButton.click();
 
@@ -144,15 +128,16 @@ test.describe('Account — P1 Important', () => {
     }
 
     // Submit the password change
-    const submitButton = page.getByRole('button', { name: /update password|save|change password/i });
+    const submitButton = page.getByRole('button', {
+      name: /update password|save|change password/i,
+    });
     if (await submitButton.isVisible()) {
       await submitButton.click();
     }
 
     // Assert success: either a success toast/message appears or the modal closes
     await expect(
-      page.getByText(/password updated|password changed/i)
-        .or(page.getByText(/changes saved/i)),
+      page.getByText(/password updated|password changed/i).or(page.getByText(/changes saved/i)),
     ).toBeVisible({ timeout: 5000 });
   });
 
@@ -164,9 +149,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // Find the 2FA section
-    await expect(
-      page.getByText(/two-factor authentication/i),
-    ).toBeVisible();
+    await expect(page.getByText(/two-factor authentication/i)).toBeVisible();
 
     // Click "Enable" button for 2FA
     const enableButton = page.getByRole('button', { name: /enable/i }).last();
@@ -175,12 +158,11 @@ test.describe('Account — P1 Important', () => {
 
     // The 2FA setup modal should appear
     // It should show a QR code or setup secret and backup codes
-    await expect(
-      page.getByText(/authenticator/i).first(),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/authenticator/i).first()).toBeVisible({ timeout: 5000 });
 
     // Fill in the TOTP verification code
-    const totpInput = page.getByPlaceholder('000000')
+    const totpInput = page
+      .getByPlaceholder('000000')
       .or(page.getByLabel(/verification code|totp code|authenticator code/i));
     await expect(totpInput).toBeVisible({ timeout: 5000 });
     await totpInput.fill('123456');
@@ -192,7 +174,8 @@ test.describe('Account — P1 Important', () => {
 
     // Assert that backup codes are displayed or a success message appears
     await expect(
-      page.getByText(/backup code/i)
+      page
+        .getByText(/backup code/i)
         .or(page.getByText(/2FA enabled/i))
         .or(page.getByText(/ABCD-1234/)),
     ).toBeVisible({ timeout: 5000 });
@@ -205,9 +188,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // With 2FA enabled, the section should say "2FA is enabled"
-    await expect(
-      page.getByText(/2FA is enabled/i),
-    ).toBeVisible();
+    await expect(page.getByText(/2FA is enabled/i)).toBeVisible();
 
     // Click "Disable" button
     const disableButton = page.getByRole('button', { name: /disable/i });
@@ -215,9 +196,7 @@ test.describe('Account — P1 Important', () => {
     await disableButton.click();
 
     // An inline form should appear asking for the authenticator code
-    await expect(
-      page.getByText(/enter your authenticator code/i),
-    ).toBeVisible();
+    await expect(page.getByText(/enter your authenticator code/i)).toBeVisible();
 
     // Enter a 6-digit code
     const codeInput = page.getByPlaceholder('000000');
@@ -231,7 +210,8 @@ test.describe('Account — P1 Important', () => {
 
     // Assert success: 2FA disabled message or status change
     await expect(
-      page.getByText(/2FA disabled|2FA has been disabled|two-factor.*disabled/i)
+      page
+        .getByText(/2FA disabled|2FA has been disabled|two-factor.*disabled/i)
         .or(page.getByText(/2FA is not enabled/i)),
     ).toBeVisible({ timeout: 5000 });
   });
@@ -242,9 +222,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // The sessions section should be visible
-    await expect(
-      page.getByRole('heading', { name: /active sessions/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /active sessions/i })).toBeVisible();
 
     // Wait for sessions to load (mocked data includes 2 sessions)
     // Current session should be marked
@@ -288,9 +266,7 @@ test.describe('Account — P1 Important', () => {
     await page.goto('/account');
 
     // Find the data export section
-    await expect(
-      page.getByRole('heading', { name: /export your data/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /export your data/i })).toBeVisible();
 
     // Verify the export description mentions JSON format
     await expect(
@@ -326,9 +302,7 @@ test.describe('Account — P1 Important', () => {
     await dangerZoneHeader.click();
 
     // Wait for the expanded content to appear
-    await expect(
-      page.getByText(/permanently delete your account/i),
-    ).toBeVisible();
+    await expect(page.getByText(/permanently delete your account/i)).toBeVisible();
 
     // The delete button should be disabled initially
     const deleteButton = page.getByRole('button', {
@@ -360,9 +334,7 @@ test.describe('Account — P1 Important', () => {
 
     // Expand Danger Zone
     await page.getByRole('button', { name: /danger zone/i }).click();
-    await expect(
-      page.getByText(/permanently delete your account/i),
-    ).toBeVisible();
+    await expect(page.getByText(/permanently delete your account/i)).toBeVisible();
 
     // Fill password and check confirmation
     await page.getByLabel(/confirm your password/i).fill(TEST_USERS.free.password);
@@ -379,9 +351,7 @@ test.describe('Account — P1 Important', () => {
     await expect(page).toHaveURL('/', { timeout: 10000 });
   });
 
-  test('11. After deletion, user is logged out and cannot log back in', async ({
-    page,
-  }) => {
+  test('11. After deletion, user is logged out and cannot log back in', async ({ page }) => {
     await setupAuthenticatedPage(page);
     await mockDeleteAccount(page);
     await mockLogout(page);
@@ -390,15 +360,15 @@ test.describe('Account — P1 Important', () => {
 
     // Expand Danger Zone and delete
     await page.getByRole('button', { name: /danger zone/i }).click();
-    await expect(
-      page.getByText(/permanently delete your account/i),
-    ).toBeVisible();
+    await expect(page.getByText(/permanently delete your account/i)).toBeVisible();
 
     await page.getByLabel(/confirm your password/i).fill(TEST_USERS.free.password);
     await page.getByRole('checkbox').check();
-    await page.getByRole('button', {
-      name: /delete my account permanently/i,
-    }).click();
+    await page
+      .getByRole('button', {
+        name: /delete my account permanently/i,
+      })
+      .click();
 
     // After deletion redirect, verify user is logged out
     // Navigating to /account should redirect to /login
@@ -413,9 +383,7 @@ test.describe('Account — P1 Important', () => {
 // ── P2: Nice-to-Have Account Tests ──────────────────────────────────────
 
 test.describe('Account — P2 Nice-to-Have', () => {
-  test('12. Empty states displayed correctly (no sessions, no payments)', async ({
-    page,
-  }) => {
+  test('12. Empty states displayed correctly (no sessions, no payments)', async ({ page }) => {
     // Set up with empty sessions
     await page.addInitScript(() => {
       window.localStorage.setItem('mergenix_access_token', 'mock-access-token');
@@ -428,15 +396,13 @@ test.describe('Account — P2 Nice-to-Have', () => {
     await page.goto('/account');
 
     // Wait for the account page to load
-    await expect(
-      page.getByRole('heading', { name: /account settings/i, level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /account settings/i, level: 1 })).toBeVisible();
 
     // The sessions section should show an empty state message
     await expect(
-      page.getByText(/no other sessions found/i).or(
-        page.getByText(/you are only signed in on this device/i),
-      ),
+      page
+        .getByText(/no other sessions found/i)
+        .or(page.getByText(/you are only signed in on this device/i)),
     ).toBeVisible({ timeout: 5000 });
   });
 });

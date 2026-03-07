@@ -11,6 +11,7 @@
 This report provides a comprehensive analysis of Mergenix's authentication system, identifying critical security vulnerabilities, broken functionality, and opportunities for improvement. The analysis covers password management, OAuth integration, session handling, 2FA implementation, and user experience.
 
 **Key Findings:**
+
 - 3 critical broken functions in auth system
 - Missing 2FA implementation (announced but not built)
 - OAuth 90% complete but untested
@@ -36,11 +37,13 @@ Authentication System (Source/auth/)
 ```
 
 **Data Storage:**
+
 - `data/users.json` - User accounts (email, hashed password, metadata)
 - `data/audit_log.json` - Authentication events (login, logout, password changes)
 - `st.session_state` - Active session data (in-memory, per-user)
 
 **Supported Auth Methods:**
+
 1. Email/password (primary)
 2. Google OAuth (incomplete)
 3. 2FA (announced, not implemented)
@@ -78,6 +81,7 @@ sequenceDiagram
 **Issue:** Function signature mismatch causing crashes.
 
 **Current Code (Broken):**
+
 ```python
 # In manager.py
 def change_password(email, old_password, new_password):
@@ -97,15 +101,18 @@ result = change_password(user_email, new_password)  # ❌ Missing old_password
 ```
 
 **Error:**
+
 ```
 TypeError: change_password() missing 1 required positional argument: 'new_password'
 ```
 
 **Impact:**
+
 - Users cannot change passwords
 - Security issue: password recovery broken
 
 **Fix:**
+
 ```python
 # Option 1: Update caller to pass old_password
 result = change_password(user_email, old_password, new_password)
@@ -135,6 +142,7 @@ def change_password(email, new_password, old_password=None):
 **Issue:** Function missing entirely, but referenced in UI.
 
 **UI Code:**
+
 ```python
 # In pages/5_account.py
 if st.button("Delete Account", type="secondary"):
@@ -147,15 +155,18 @@ if st.button("Delete Account", type="secondary"):
 ```
 
 **Error:**
+
 ```
 NameError: name 'delete_user' is not defined
 ```
 
 **Impact:**
+
 - Users cannot delete their accounts
 - GDPR compliance issue (right to erasure)
 
 **Fix:**
+
 ```python
 # Add to Source/auth/manager.py
 def delete_user(email):
@@ -190,6 +201,7 @@ def delete_user(email):
 **Issue:** Password reset email flow incomplete.
 
 **Current Code (Incomplete):**
+
 ```python
 def reset_password(email):
     users = load_users()
@@ -204,10 +216,12 @@ def reset_password(email):
 ```
 
 **Impact:**
+
 - Users who forget passwords cannot recover accounts
 - Must contact support or create new account
 
 **Fix:**
+
 ```python
 import secrets
 from datetime import datetime, timedelta
@@ -270,6 +284,7 @@ def confirm_password_reset(token, new_password):
 ```
 
 **Dependencies:**
+
 - Email sending capability (SMTP or SendGrid/Mailgun)
 - New Streamlit page: `pages/reset_password.py`
 
@@ -284,6 +299,7 @@ def confirm_password_reset(token, new_password):
 **Status:** Announced in UI but not implemented.
 
 **Current UI Code (False Promise):**
+
 ```python
 # In pages/5_account.py
 st.subheader("Security Settings")
@@ -292,6 +308,7 @@ st.info("🔒 Two-factor authentication available for Premium users")
 ```
 
 **Impact:**
+
 - False advertising (claims feature exists)
 - Security gap (no 2FA protection for accounts)
 
@@ -300,6 +317,7 @@ st.info("🔒 Two-factor authentication available for Premium users")
 **Implementation Plan:**
 
 **Option 1: TOTP (Time-based One-Time Password) - Recommended**
+
 ```python
 # Source/auth/totp.py
 import pyotp
@@ -377,6 +395,7 @@ def authenticate(email, password, totp_code=None):
 ```
 
 **UI Changes:**
+
 ```python
 # pages/5_account.py - 2FA Setup
 if not user_data.get("2fa_enabled"):
@@ -416,12 +435,14 @@ if st.button("Login"):
 ```
 
 **Dependencies:**
+
 - `pyotp` - TOTP implementation
 - `qrcode` - QR code generation
 
 **Priority:** HIGH (Tier 1)
 
 **Option 2: SMS-based 2FA**
+
 - Requires SMS gateway (Twilio, AWS SNS)
 - Higher cost per user
 - Less secure (SIM swapping attacks)
@@ -432,6 +453,7 @@ if st.button("Login"):
 **Status:** Code written but never tested or deployed.
 
 **Current Code:**
+
 ```python
 # Source/auth/oauth.py
 from google.oauth2 import id_token
@@ -486,6 +508,7 @@ def create_or_update_oauth_user(email, name, picture):
 ```
 
 **Missing Pieces:**
+
 1. Google OAuth client ID not configured
 2. No UI for Google Sign-In button
 3. No redirect URI handling
@@ -496,6 +519,7 @@ def create_or_update_oauth_user(email, name, picture):
 **Implementation Steps:**
 
 **Step 1: Get Google OAuth Credentials**
+
 1. Go to Google Cloud Console
 2. Create OAuth 2.0 Client ID
 3. Set authorized redirect URIs: `https://mergenix.com/auth/callback`
@@ -507,6 +531,7 @@ def create_or_update_oauth_user(email, name, picture):
    ```
 
 **Step 2: Add Google Sign-In Button**
+
 ```python
 # pages/4_auth.py
 import streamlit as st
@@ -548,6 +573,7 @@ if st.button("🔐 Sign in with Google"):
 ```
 
 **Step 3: Handle Callback**
+
 ```python
 # pages/auth_callback.py (new file)
 import streamlit as st
@@ -562,6 +588,7 @@ if "code" in query_params:
 ```
 
 **Dependencies:**
+
 - `streamlit-oauth` - OAuth flow for Streamlit
 - Google Cloud project with OAuth configured
 
@@ -572,6 +599,7 @@ if "code" in query_params:
 **Issue:** Sessions never expire (infinite lifetime).
 
 **Current Code:**
+
 ```python
 # Source/auth/session.py
 def create_session(user_data):
@@ -583,12 +611,14 @@ def create_session(user_data):
 ```
 
 **Security Risk:**
+
 - Stolen session tokens valid forever
 - Shared computer risk (session persists after user leaves)
 
 **Recommendation:** Implement session expiration.
 
 **Fix:**
+
 ```python
 # Source/auth/session.py
 from datetime import datetime, timedelta
@@ -673,6 +703,7 @@ if "logged_in" in st.session_state:
 **Issue:** No protection against brute-force login attempts.
 
 **Attack Scenario:**
+
 ```python
 # Attacker script
 import requests
@@ -694,6 +725,7 @@ for password in password_list:
 **Recommendation:** Implement rate limiting.
 
 **Fix:**
+
 ```python
 # Source/auth/rate_limiter.py
 from datetime import datetime, timedelta
@@ -777,6 +809,7 @@ def authenticate(email, password, totp_code=None):
 **Issue:** Current email validation only checks for `@` symbol.
 
 **Current Code:**
+
 ```python
 # Source/auth/validators.py
 def validate_email(email):
@@ -785,6 +818,7 @@ def validate_email(email):
 ```
 
 **Bypasses:**
+
 ```python
 validate_email("user@")        # True (invalid)
 validate_email("@domain.com")  # True (invalid)
@@ -794,6 +828,7 @@ validate_email("user@@x.com")  # True (invalid)
 **Recommendation:** Use proper email validation.
 
 **Fix:**
+
 ```python
 # Source/auth/validators.py
 import re
@@ -824,18 +859,22 @@ def validate_email(email):
 **Issue:** Authentication forms lack CSRF tokens.
 
 **Attack Scenario:**
+
 ```html
 <!-- Attacker's malicious page -->
 <form action="https://mergenix.com/auth" method="POST">
-    <input type="hidden" name="email" value="victim@example.com">
-    <input type="hidden" name="password" value="attacker_password">
+  <input type="hidden" name="email" value="victim@example.com" />
+  <input type="hidden" name="password" value="attacker_password" />
 </form>
-<script>document.forms[0].submit();</script>
+<script>
+  document.forms[0].submit();
+</script>
 ```
 
 **Recommendation:** Add CSRF protection (Streamlit handles this automatically for st.form).
 
 **Verify:**
+
 ```python
 # pages/4_auth.py
 with st.form("login_form"):  # ✓ CSRF token automatically added
@@ -853,6 +892,7 @@ with st.form("login_form"):  # ✓ CSRF token automatically added
 **Issue:** No password complexity requirements.
 
 **Current Code:**
+
 ```python
 # No password validation in create_user()
 def create_user(email, password, tier="free"):
@@ -869,6 +909,7 @@ def create_user(email, password, tier="free"):
 **Recommendation:** Enforce password requirements.
 
 **Fix:**
+
 ```python
 # Source/auth/validators.py
 def validate_password_strength(password):
@@ -926,6 +967,7 @@ def create_user(email, password, tier="free"):
 **Recommendation:** Add "Remember Me" checkbox.
 
 **Implementation:**
+
 ```python
 # pages/4_auth.py
 remember_me = st.checkbox("Remember me for 30 days")
@@ -944,6 +986,7 @@ if st.button("Login"):
 ```
 
 **Note:** Streamlit's session state is in-memory only. True "Remember Me" requires:
+
 1. Custom Streamlit component for cookie management, OR
 2. Database-backed session storage (see database-architecture.md)
 
@@ -954,12 +997,14 @@ if st.button("Login"):
 **Issue:** Users can register with fake emails.
 
 **Impact:**
+
 - Spam accounts
 - No way to recover lost passwords
 
 **Recommendation:** Add email verification flow.
 
 **Implementation:**
+
 ```python
 # Source/auth/manager.py
 def create_user(email, password, tier="free"):
@@ -1040,6 +1085,7 @@ def authenticate(email, password):
 **Recommendation:** Lock account after 10 failed attempts.
 
 **Fix:**
+
 ```python
 # Source/auth/manager.py
 MAX_FAILED_ATTEMPTS = 10
@@ -1089,35 +1135,35 @@ def authenticate(email, password):
 
 ### 6.1 Critical (Tier 0) - Do Immediately
 
-| Priority | Recommendation | Effort | Impact | File |
-|----------|---------------|--------|--------|------|
-| 1 | Fix change_password() signature mismatch | Low | High | Source/auth/manager.py |
-| 2 | Implement delete_user() function | Low | High | Source/auth/manager.py |
-| 3 | Add session expiration (JWT tokens) | Medium | High | Source/auth/session.py |
+| Priority | Recommendation                           | Effort | Impact | File                   |
+| -------- | ---------------------------------------- | ------ | ------ | ---------------------- |
+| 1        | Fix change_password() signature mismatch | Low    | High   | Source/auth/manager.py |
+| 2        | Implement delete_user() function         | Low    | High   | Source/auth/manager.py |
+| 3        | Add session expiration (JWT tokens)      | Medium | High   | Source/auth/session.py |
 
 ### 6.2 High (Tier 1) - Do Soon
 
-| Priority | Recommendation | Effort | Impact | File |
-|----------|---------------|--------|--------|------|
-| 4 | Implement password reset flow | Medium | High | Source/auth/manager.py |
-| 5 | Add rate limiting (5 attempts/15min) | Medium | High | Source/auth/rate_limiter.py |
-| 6 | Implement 2FA (TOTP) | High | High | Source/auth/totp.py |
+| Priority | Recommendation                       | Effort | Impact | File                        |
+| -------- | ------------------------------------ | ------ | ------ | --------------------------- |
+| 4        | Implement password reset flow        | Medium | High   | Source/auth/manager.py      |
+| 5        | Add rate limiting (5 attempts/15min) | Medium | High   | Source/auth/rate_limiter.py |
+| 6        | Implement 2FA (TOTP)                 | High   | High   | Source/auth/totp.py         |
 
 ### 6.3 Medium (Tier 2) - Do Eventually
 
-| Priority | Recommendation | Effort | Impact | File |
-|----------|---------------|--------|--------|------|
-| 7 | Complete OAuth integration (Google) | Medium | Medium | Source/auth/oauth.py |
-| 8 | Add email verification | Medium | Medium | Source/auth/manager.py |
-| 9 | Enforce password strength requirements | Low | Medium | Source/auth/validators.py |
-| 10 | Improve email validation (regex) | Low | Low | Source/auth/validators.py |
-| 11 | Add account lockout after failures | Low | Medium | Source/auth/manager.py |
+| Priority | Recommendation                         | Effort | Impact | File                      |
+| -------- | -------------------------------------- | ------ | ------ | ------------------------- |
+| 7        | Complete OAuth integration (Google)    | Medium | Medium | Source/auth/oauth.py      |
+| 8        | Add email verification                 | Medium | Medium | Source/auth/manager.py    |
+| 9        | Enforce password strength requirements | Low    | Medium | Source/auth/validators.py |
+| 10       | Improve email validation (regex)       | Low    | Low    | Source/auth/validators.py |
+| 11       | Add account lockout after failures     | Low    | Medium | Source/auth/manager.py    |
 
 ### 6.4 Low (Tier 3) - Nice to Have
 
-| Priority | Recommendation | Effort | Impact | File |
-|----------|---------------|--------|--------|------|
-| 12 | Add "Remember Me" option | High | Low | (requires custom component) |
+| Priority | Recommendation           | Effort | Impact | File                        |
+| -------- | ------------------------ | ------ | ------ | --------------------------- |
+| 12       | Add "Remember Me" option | High   | Low    | (requires custom component) |
 
 ---
 
@@ -1128,6 +1174,7 @@ def authenticate(email, password):
 **File:** `tests/test_auth.py`
 
 **Coverage Gaps:**
+
 ```python
 # Critical functions with 0% coverage:
 - authenticate()
@@ -1141,6 +1188,7 @@ def authenticate(email, password):
 ```
 
 **Recommended Tests:**
+
 ```python
 # tests/test_auth.py
 import pytest
@@ -1205,6 +1253,7 @@ def test_2fa_setup_and_verify():
 ### 7.2 Integration Tests Needed
 
 **Scenarios:**
+
 1. Full registration flow (signup → verify email → login)
 2. Password reset flow (request → receive email → set new password → login)
 3. 2FA setup flow (enable → scan QR → verify → login with 2FA)
@@ -1217,11 +1266,11 @@ def test_2fa_setup_and_verify():
 
 ## 8. Related Reports
 
-| Report | Relevance |
-|--------|-----------|
-| `security-audit.md` | Broader security review (auth is 40% of issues) |
-| `database-architecture.md` | Migrate from JSON to SQLite (fixes concurrency) |
-| `MASTER_IMPROVEMENT_PLAN.md` | This report feeds into Tier 0-2 bugs |
+| Report                       | Relevance                                       |
+| ---------------------------- | ----------------------------------------------- |
+| `security-audit.md`          | Broader security review (auth is 40% of issues) |
+| `database-architecture.md`   | Migrate from JSON to SQLite (fixes concurrency) |
+| `MASTER_IMPROVEMENT_PLAN.md` | This report feeds into Tier 0-2 bugs            |
 
 ---
 

@@ -9,23 +9,14 @@ describe('MedicalDisclaimer', () => {
     render(<MedicalDisclaimer />);
 
     expect(
-      screen.getByText(
-        /educational purposes only and are not medical diagnoses/,
-      ),
+      screen.getByText(/educational purposes only and are not medical diagnoses/),
     ).toBeInTheDocument();
   });
 
   it('renders compact variant with custom text prop', () => {
-    render(
-      <MedicalDisclaimer
-        variant="compact"
-        text="Trait predictions use simplified models."
-      />,
-    );
+    render(<MedicalDisclaimer variant="compact" text="Trait predictions use simplified models." />);
 
-    expect(
-      screen.getByText('Trait predictions use simplified models.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Trait predictions use simplified models.')).toBeInTheDocument();
 
     // Default text should NOT appear
     expect(
@@ -36,32 +27,24 @@ describe('MedicalDisclaimer', () => {
   it('renders full variant with heading', () => {
     render(<MedicalDisclaimer variant="full" />);
 
-    expect(
-      screen.getByText('Important Medical Disclaimer'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Important Medical Disclaimer')).toBeInTheDocument();
   });
 
   it('full variant contains DTC limitations text', () => {
     render(<MedicalDisclaimer variant="full" />);
 
     expect(
-      screen.getByText(
-        /Direct-to-consumer \(DTC\) genotyping arrays have inherent limitations/,
-      ),
+      screen.getByText(/Direct-to-consumer \(DTC\) genotyping arrays have inherent limitations/),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByText(/do not detect structural variants/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/do not detect structural variants/)).toBeInTheDocument();
   });
 
   it('full variant contains ancestry bias text', () => {
     render(<MedicalDisclaimer variant="full" />);
 
     expect(
-      screen.getByText(
-        /Accuracy of risk estimates may vary across ancestral populations/,
-      ),
+      screen.getByText(/Accuracy of risk estimates may vary across ancestral populations/),
     ).toBeInTheDocument();
   });
 

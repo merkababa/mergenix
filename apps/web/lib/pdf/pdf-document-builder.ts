@@ -46,15 +46,13 @@ const DATA_TABLE_LAYOUT = {
   hLineWidth: (i: number, node: { table: { body: TableCell[][] } }): number =>
     i === 0 || i === 1 || i === node.table.body.length ? 1 : 0.5,
   vLineWidth: (): number => 0.5,
-  hLineColor: (i: number): string =>
-    i <= 1 ? BRAND_TEAL : BORDER_COLOR,
+  hLineColor: (i: number): string => (i <= 1 ? BRAND_TEAL : BORDER_COLOR),
   vLineColor: (): string => BORDER_COLOR,
   paddingLeft: (): number => 6,
   paddingRight: (): number => 6,
   paddingTop: (): number => 4,
   paddingBottom: (): number => 4,
-  fillColor: (i: number): string | null =>
-    i === 0 ? '#f0fdf4' : i % 2 === 0 ? '#fafafa' : null,
+  fillColor: (i: number): string | null => (i === 0 ? '#f0fdf4' : i % 2 === 0 ? '#fafafa' : null),
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -106,7 +104,12 @@ function buildMetadataSection(result: FullAnalysisResult): Content {
       widths: ['*', '*'],
       body: [
         [
-          { text: 'Report Details', style: 'sectionHeader', colSpan: 2, border: [false, false, false, true] as [boolean, boolean, boolean, boolean] },
+          {
+            text: 'Report Details',
+            style: 'sectionHeader',
+            colSpan: 2,
+            border: [false, false, false, true] as [boolean, boolean, boolean, boolean],
+          },
           {},
         ],
         [
@@ -310,10 +313,11 @@ function buildPgxSection(pgx: PgxAnalysisResult): Content[] {
   ];
 
   for (const g of geneResults) {
-    const drugs = g.parentA.drugRecommendations
-      .map((d) => d.drug)
-      .slice(0, 3)
-      .join(', ') || 'N/A';
+    const drugs =
+      g.parentA.drugRecommendations
+        .map((d) => d.drug)
+        .slice(0, 3)
+        .join(', ') || 'N/A';
 
     tableBody.push([
       { text: g.gene, style: 'tableCell' },
@@ -388,9 +392,15 @@ function buildPrsSection(prs: PrsAnalysisResult): Content[] {
     tableBody.push([
       { text: c.name, style: 'tableCell' },
       { text: `${c.parentA.percentile.toFixed(0)}%`, style: 'tableCell' },
-      { text: RISK_CATEGORY_LABELS[c.parentA.riskCategory] ?? capitalize(c.parentA.riskCategory), style: 'tableCell' },
+      {
+        text: RISK_CATEGORY_LABELS[c.parentA.riskCategory] ?? capitalize(c.parentA.riskCategory),
+        style: 'tableCell',
+      },
       { text: `${c.parentB.percentile.toFixed(0)}%`, style: 'tableCell' },
-      { text: RISK_CATEGORY_LABELS[c.parentB.riskCategory] ?? capitalize(c.parentB.riskCategory), style: 'tableCell' },
+      {
+        text: RISK_CATEGORY_LABELS[c.parentB.riskCategory] ?? capitalize(c.parentB.riskCategory),
+        style: 'tableCell',
+      },
       { text: `${c.offspring.expectedPercentile.toFixed(0)}%`, style: 'tableCell' },
     ]);
 

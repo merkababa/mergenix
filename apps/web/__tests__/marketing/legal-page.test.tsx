@@ -96,9 +96,7 @@ describe('LegalPage', () => {
     const { container } = render(<LegalContent />);
 
     const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    const levels = Array.from(headings).map((h) =>
-      parseInt(h.tagName.replace('H', ''), 10),
-    );
+    const levels = Array.from(headings).map((h) => parseInt(h.tagName.replace('H', ''), 10));
 
     expect(levels).toContain(1);
     for (let i = 0; i < levels.length - 1; i++) {

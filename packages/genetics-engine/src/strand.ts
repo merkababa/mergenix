@@ -71,94 +71,94 @@ const MIN_INFORMATIVE_SNPS = 10;
  */
 export const STRAND_REFERENCE_SNPS: ReferenceAllele[] = [
   // Chromosome 1
-  { rsid: 'rs1801133', chromosome: '1', referenceAllele: 'C' },   // MTHFR C677T
-  { rsid: 'rs1801131', chromosome: '1', referenceAllele: 'A' },   // MTHFR A1298C
-  { rsid: 'rs6025', chromosome: '1', referenceAllele: 'C' },      // Factor V Leiden
+  { rsid: 'rs1801133', chromosome: '1', referenceAllele: 'C' }, // MTHFR C677T
+  { rsid: 'rs1801131', chromosome: '1', referenceAllele: 'A' }, // MTHFR A1298C
+  { rsid: 'rs6025', chromosome: '1', referenceAllele: 'C' }, // Factor V Leiden
 
   // Chromosome 2
-  { rsid: 'rs1799963', chromosome: '11', referenceAllele: 'G' },  // Prothrombin G20210A
-  { rsid: 'rs4988235', chromosome: '2', referenceAllele: 'G' },   // MCM6/LCT lactase
+  { rsid: 'rs1799963', chromosome: '11', referenceAllele: 'G' }, // Prothrombin G20210A
+  { rsid: 'rs4988235', chromosome: '2', referenceAllele: 'G' }, // MCM6/LCT lactase
 
   // Chromosome 3
-  { rsid: 'rs13078960', chromosome: '3', referenceAllele: 'T' },  // CADM2 gene, chr3 tag SNP
-  { rsid: 'rs2187668', chromosome: '3', referenceAllele: 'C' },   // chr3 tag
+  { rsid: 'rs13078960', chromosome: '3', referenceAllele: 'T' }, // CADM2 gene, chr3 tag SNP
+  { rsid: 'rs2187668', chromosome: '3', referenceAllele: 'C' }, // chr3 tag
 
   // Chromosome 4
-  { rsid: 'rs13117307', chromosome: '4', referenceAllele: 'G' },  // chr4 tag SNP
-  { rsid: 'rs6822844', chromosome: '4', referenceAllele: 'G' },   // IL2/IL21 region
+  { rsid: 'rs13117307', chromosome: '4', referenceAllele: 'G' }, // chr4 tag SNP
+  { rsid: 'rs6822844', chromosome: '4', referenceAllele: 'G' }, // IL2/IL21 region
 
   // Chromosome 5
-  { rsid: 'rs2706399', chromosome: '5', referenceAllele: 'A' },   // chr5 tag SNP
-  { rsid: 'rs6897932', chromosome: '5', referenceAllele: 'C' },   // IL7R
+  { rsid: 'rs2706399', chromosome: '5', referenceAllele: 'A' }, // chr5 tag SNP
+  { rsid: 'rs6897932', chromosome: '5', referenceAllele: 'C' }, // IL7R
 
   // Chromosome 6
-  { rsid: 'rs1800629', chromosome: '6', referenceAllele: 'G' },   // TNF promoter 6p21.33
-  { rsid: 'rs3129882', chromosome: '6', referenceAllele: 'A' },   // HLA region
-  { rsid: 'rs9275596', chromosome: '6', referenceAllele: 'C' },   // HLA-DQB1
+  { rsid: 'rs1800629', chromosome: '6', referenceAllele: 'G' }, // TNF promoter 6p21.33
+  { rsid: 'rs3129882', chromosome: '6', referenceAllele: 'A' }, // HLA region
+  { rsid: 'rs9275596', chromosome: '6', referenceAllele: 'C' }, // HLA-DQB1
 
   // Chromosome 7
-  { rsid: 'rs6943474', chromosome: '7', referenceAllele: 'G' },   // chr7 tag SNP
-  { rsid: 'rs4728142', chromosome: '7', referenceAllele: 'A' },   // IRF5 region
+  { rsid: 'rs6943474', chromosome: '7', referenceAllele: 'G' }, // chr7 tag SNP
+  { rsid: 'rs4728142', chromosome: '7', referenceAllele: 'A' }, // IRF5 region
 
   // Chromosome 8
-  { rsid: 'rs2736100', chromosome: '5', referenceAllele: 'A' },   // TERT region proxy
-  { rsid: 'rs7014346', chromosome: '8', referenceAllele: 'A' },   // 8q24 region
+  { rsid: 'rs2736100', chromosome: '5', referenceAllele: 'A' }, // TERT region proxy
+  { rsid: 'rs7014346', chromosome: '8', referenceAllele: 'A' }, // 8q24 region
 
   // Chromosome 9
-  { rsid: 'rs10811661', chromosome: '9', referenceAllele: 'C' },  // CDKN2A/B region
-  { rsid: 'rs10511789', chromosome: '9', referenceAllele: 'A' },  // chr9 tag SNP
+  { rsid: 'rs10811661', chromosome: '9', referenceAllele: 'C' }, // CDKN2A/B region
+  { rsid: 'rs10511789', chromosome: '9', referenceAllele: 'A' }, // chr9 tag SNP
 
   // Chromosome 10
-  { rsid: 'rs7903146', chromosome: '10', referenceAllele: 'C' },  // TCF7L2
-  { rsid: 'rs11187129', chromosome: '10', referenceAllele: 'G' },   // PTEN region
+  { rsid: 'rs7903146', chromosome: '10', referenceAllele: 'C' }, // TCF7L2
+  { rsid: 'rs11187129', chromosome: '10', referenceAllele: 'G' }, // PTEN region
 
   // Chromosome 11
-  { rsid: 'rs1800497', chromosome: '11', referenceAllele: 'G' },  // ANKK1/DRD2 Taq1A
-  { rsid: 'rs7480010', chromosome: '11', referenceAllele: 'A' },  // chr11 tag
+  { rsid: 'rs1800497', chromosome: '11', referenceAllele: 'G' }, // ANKK1/DRD2 Taq1A
+  { rsid: 'rs7480010', chromosome: '11', referenceAllele: 'A' }, // chr11 tag
 
   // Chromosome 12
-  { rsid: 'rs3184504', chromosome: '12', referenceAllele: 'C' },  // SH2B3
+  { rsid: 'rs3184504', chromosome: '12', referenceAllele: 'C' }, // SH2B3
   { rsid: 'rs11171739', chromosome: '12', referenceAllele: 'C' }, // chr12 tag
 
   // Chromosome 13
-  { rsid: 'rs9585056', chromosome: '13', referenceAllele: 'A' },  // chr13 tag SNP
-  { rsid: 'rs7329174', chromosome: '13', referenceAllele: 'G' },  // chr13 tag
+  { rsid: 'rs9585056', chromosome: '13', referenceAllele: 'A' }, // chr13 tag SNP
+  { rsid: 'rs7329174', chromosome: '13', referenceAllele: 'G' }, // chr13 tag
 
   // Chromosome 14
-  { rsid: 'rs2104286', chromosome: '14', referenceAllele: 'A' },  // IL2RA region proxy
-  { rsid: 'rs1950897', chromosome: '14', referenceAllele: 'G' },  // chr14 tag
+  { rsid: 'rs2104286', chromosome: '14', referenceAllele: 'A' }, // IL2RA region proxy
+  { rsid: 'rs1950897', chromosome: '14', referenceAllele: 'G' }, // chr14 tag
 
   // Chromosome 15
   { rsid: 'rs12913832', chromosome: '15', referenceAllele: 'G' }, // HERC2/OCA2 eye color
-  { rsid: 'rs1426654', chromosome: '15', referenceAllele: 'A' },  // SLC24A5 skin pigment
+  { rsid: 'rs1426654', chromosome: '15', referenceAllele: 'A' }, // SLC24A5 skin pigment
 
   // Chromosome 16
   { rsid: 'rs12325489', chromosome: '16', referenceAllele: 'C' }, // FTO region proxy
   { rsid: 'rs12325655', chromosome: '16', referenceAllele: 'C' }, // FTO region, C/T non-palindromic
 
   // Chromosome 17
-  { rsid: 'rs1042522', chromosome: '17', referenceAllele: 'G' },  // TP53 Arg72Pro
-  { rsid: 'rs4680', chromosome: '22', referenceAllele: 'G' },     // COMT Val158Met
+  { rsid: 'rs1042522', chromosome: '17', referenceAllele: 'G' }, // TP53 Arg72Pro
+  { rsid: 'rs4680', chromosome: '22', referenceAllele: 'G' }, // COMT Val158Met
 
   // Chromosome 18
-  { rsid: 'rs7241918', chromosome: '18', referenceAllele: 'G' },  // chr18 tag SNP
-  { rsid: 'rs1893217', chromosome: '18', referenceAllele: 'C' },  // PTPN2
+  { rsid: 'rs7241918', chromosome: '18', referenceAllele: 'G' }, // chr18 tag SNP
+  { rsid: 'rs1893217', chromosome: '18', referenceAllele: 'C' }, // PTPN2
 
   // Chromosome 19
-  { rsid: 'rs429358', chromosome: '19', referenceAllele: 'C' },   // APOE e4 defining
-  { rsid: 'rs7412', chromosome: '19', referenceAllele: 'C' },     // APOE e2 defining
+  { rsid: 'rs429358', chromosome: '19', referenceAllele: 'C' }, // APOE e4 defining
+  { rsid: 'rs7412', chromosome: '19', referenceAllele: 'C' }, // APOE e2 defining
 
   // Chromosome 20
-  { rsid: 'rs6077690', chromosome: '20', referenceAllele: 'A' },  // chr20 tag SNP
-  { rsid: 'rs2236012', chromosome: '20', referenceAllele: 'G' },  // chr20 tag
+  { rsid: 'rs6077690', chromosome: '20', referenceAllele: 'A' }, // chr20 tag SNP
+  { rsid: 'rs2236012', chromosome: '20', referenceAllele: 'G' }, // chr20 tag
 
   // Chromosome 21
-  { rsid: 'rs2837960', chromosome: '21', referenceAllele: 'A' },  // chr21 tag SNP
-  { rsid: 'rs2830585', chromosome: '21', referenceAllele: 'G' },  // chr21 tag
+  { rsid: 'rs2837960', chromosome: '21', referenceAllele: 'A' }, // chr21 tag SNP
+  { rsid: 'rs2830585', chromosome: '21', referenceAllele: 'G' }, // chr21 tag
 
   // Chromosome 22
-  { rsid: 'rs5993883', chromosome: '2', referenceAllele: 'G' },   // UGT1A region
-  { rsid: 'rs738409', chromosome: '22', referenceAllele: 'C' },   // PNPLA3
+  { rsid: 'rs5993883', chromosome: '2', referenceAllele: 'G' }, // UGT1A region
+  { rsid: 'rs738409', chromosome: '22', referenceAllele: 'C' }, // PNPLA3
 ];
 
 // ─── Core Functions ─────────────────────────────────────────────────────────
@@ -341,11 +341,7 @@ export function analyzeStrand(
   }
 
   // Step 2: Sample across chromosomes for even distribution
-  const sampled = sampleAcrossChromosomes(
-    eligible,
-    (item) => item.ref.chromosome,
-    targetSample,
-  );
+  const sampled = sampleAcrossChromosomes(eligible, (item) => item.ref.chromosome, targetSample);
 
   // Step 3: Count forward vs reverse matches
   let forwardMatches = 0;

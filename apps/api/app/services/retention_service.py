@@ -47,6 +47,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from sqlalchemy import and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -72,17 +73,19 @@ logger = logging.getLogger(__name__)
 #   "password_changed"  ← auth.py line ~1051
 #   "2fa_enabled"       ← auth.py line ~1386
 #   "2fa_disabled"      ← auth.py line ~1439
-SECURITY_EVENTS: frozenset[str] = frozenset({
-    "login",
-    "failed_login",
-    "password_changed",
-    "2fa_enabled",
-    "2fa_disabled",
-    "result_saved",
-    "result_viewed",
-    "result_deleted",
-    "result_listed",
-})
+SECURITY_EVENTS: frozenset[str] = frozenset(
+    {
+        "login",
+        "failed_login",
+        "password_changed",
+        "2fa_enabled",
+        "2fa_disabled",
+        "result_saved",
+        "result_viewed",
+        "result_deleted",
+        "result_listed",
+    }
+)
 
 # The following known event types are NOT in SECURITY_EVENTS and therefore
 # fall into the general retention tier (1 year / 365 days).  This is a
@@ -118,12 +121,12 @@ SECURITY_EVENTS: frozenset[str] = frozenset({
 # tier (1 year), which is the safe conservative choice — events are never
 # deleted sooner than intended.
 
-SECURITY_RETENTION_DAYS: int = 730    # 2 years
-GENERAL_RETENTION_DAYS: int = 365     # 1 year
-ORPHANED_RETENTION_DAYS: int = 90     # 90 days
+SECURITY_RETENTION_DAYS: int = 730  # 2 years
+GENERAL_RETENTION_DAYS: int = 365  # 1 year
+ORPHANED_RETENTION_DAYS: int = 90  # 90 days
 
 # Inactive user purge threshold (free tier only)
-USER_INACTIVITY_DAYS: int = 365 * 2   # 2 years
+USER_INACTIVITY_DAYS: int = 365 * 2  # 2 years
 
 # Payment retention threshold (financial compliance)
 PAYMENT_RETENTION_DAYS: int = 365 * 7  # 7 years
@@ -137,8 +140,8 @@ _BATCH_SLEEP_SECONDS: float = 0.1
 
 async def _batched_delete_by_ids(
     db: AsyncSession,
-    model: type,
-    ids: list,
+    model: type[Any],
+    ids: list[Any],
     label: str,
 ) -> int:
     """Delete *model* rows whose primary key is in *ids*, then flush.
@@ -170,7 +173,7 @@ async def _batched_delete_by_ids(
 
 async def _batched_delete(
     db: AsyncSession,
-    where_clause: list,
+    where_clause: list[Any],
 ) -> int:
     """Delete AuditLog records matching *where_clause* in batches.
 
@@ -184,10 +187,7 @@ async def _batched_delete(
     total = 0
     while True:
         id_result = await db.execute(
-            select(AuditLog.id)
-            .where(and_(*where_clause))
-            .order_by(AuditLog.created_at.asc())
-            .limit(_PURGE_BATCH_SIZE)
+            select(AuditLog.id).where(and_(*where_clause)).order_by(AuditLog.created_at.asc()).limit(_PURGE_BATCH_SIZE)
         )
         id_list = [row[0] for row in id_result.fetchall()]
         if not id_list:
@@ -205,15 +205,17 @@ async def _count_expired_audit_logs(db: AsyncSession) -> int:
 
     orphan_cutoff = now - timedelta(days=ORPHANED_RETENTION_DAYS)
     r = await db.execute(
-        select(func.count()).select_from(AuditLog).where(
-            and_(AuditLog.user_id.is_(None), AuditLog.created_at < orphan_cutoff)
-        )
+        select(func.count())
+        .select_from(AuditLog)
+        .where(and_(AuditLog.user_id.is_(None), AuditLog.created_at < orphan_cutoff))
     )
     total += r.scalar() or 0
 
     security_cutoff = now - timedelta(days=SECURITY_RETENTION_DAYS)
     r = await db.execute(
-        select(func.count()).select_from(AuditLog).where(
+        select(func.count())
+        .select_from(AuditLog)
+        .where(
             and_(
                 AuditLog.user_id.is_not(None),
                 AuditLog.event_type.in_(SECURITY_EVENTS),
@@ -225,7 +227,9 @@ async def _count_expired_audit_logs(db: AsyncSession) -> int:
 
     general_cutoff = now - timedelta(days=GENERAL_RETENTION_DAYS)
     r = await db.execute(
-        select(func.count()).select_from(AuditLog).where(
+        select(func.count())
+        .select_from(AuditLog)
+        .where(
             and_(
                 AuditLog.user_id.is_not(None),
                 AuditLog.event_type.not_in(SECURITY_EVENTS),
@@ -324,9 +328,7 @@ class RetentionService:
         )
 
         if dry_run:
-            r = await db.execute(
-                select(func.count()).select_from(User).where(inactive_condition)
-            )
+            r = await db.execute(select(func.count()).select_from(User).where(inactive_condition))
             count = r.scalar() or 0
             logger.info("inactive_user_purge dry_run: would_delete=%d", count)
             return count
@@ -350,17 +352,11 @@ class RetentionService:
             # This ensures the SET NULL semantics hold on both PostgreSQL (FK cascade)
             # and SQLite (which may not always fire FK cascades in batch DELETEs).
             # Payment records must survive for financial compliance (7-year retention).
-            await db.execute(
-                update(Payment)
-                .where(Payment.user_id.in_(id_list))
-                .values(user_id=None)
-            )
+            await db.execute(update(Payment).where(Payment.user_id.in_(id_list)).values(user_id=None))
 
             # Delete AnalysisResult rows first (belt-and-suspenders for SQLite,
             # where FK CASCADE may not fire on core DELETE statements).
-            await db.execute(
-                delete(AnalysisResult).where(AnalysisResult.user_id.in_(id_list))
-            )
+            await db.execute(delete(AnalysisResult).where(AnalysisResult.user_id.in_(id_list)))
 
             # Delete the users via shared helper (delete + flush)
             total += await _batched_delete_by_ids(db, User, id_list, "inactive_user")
@@ -397,9 +393,7 @@ class RetentionService:
         expired_condition = Payment.created_at < cutoff
 
         if dry_run:
-            r = await db.execute(
-                select(func.count()).select_from(Payment).where(expired_condition)
-            )
+            r = await db.execute(select(func.count()).select_from(Payment).where(expired_condition))
             count = r.scalar() or 0
             logger.info("payment_purge dry_run: would_delete=%d", count)
             return count
@@ -407,10 +401,7 @@ class RetentionService:
         total = 0
         while True:
             id_result = await db.execute(
-                select(Payment.id)
-                .where(expired_condition)
-                .order_by(Payment.created_at.asc())
-                .limit(_PURGE_BATCH_SIZE)
+                select(Payment.id).where(expired_condition).order_by(Payment.created_at.asc()).limit(_PURGE_BATCH_SIZE)
             )
             id_list = [row[0] for row in id_result.fetchall()]
             if not id_list:
@@ -493,28 +484,37 @@ async def purge_expired_audit_logs(db: AsyncSession) -> int:
 
     # ── 1. Orphaned records (user_id IS NULL, any event type) ────────
     orphan_cutoff = now - timedelta(days=ORPHANED_RETENTION_DAYS)
-    orphan_deleted = await _batched_delete(db, [
-        AuditLog.user_id.is_(None),
-        AuditLog.created_at < orphan_cutoff,
-    ])
+    orphan_deleted = await _batched_delete(
+        db,
+        [
+            AuditLog.user_id.is_(None),
+            AuditLog.created_at < orphan_cutoff,
+        ],
+    )
     total_deleted += orphan_deleted
 
     # ── 2. Security events (user_id IS NOT NULL, in SECURITY_EVENTS) ─
     security_cutoff = now - timedelta(days=SECURITY_RETENTION_DAYS)
-    security_deleted = await _batched_delete(db, [
-        AuditLog.user_id.is_not(None),
-        AuditLog.event_type.in_(SECURITY_EVENTS),
-        AuditLog.created_at < security_cutoff,
-    ])
+    security_deleted = await _batched_delete(
+        db,
+        [
+            AuditLog.user_id.is_not(None),
+            AuditLog.event_type.in_(SECURITY_EVENTS),
+            AuditLog.created_at < security_cutoff,
+        ],
+    )
     total_deleted += security_deleted
 
     # ── 3. General events (user_id IS NOT NULL, NOT in SECURITY_EVENTS)
     general_cutoff = now - timedelta(days=GENERAL_RETENTION_DAYS)
-    general_deleted = await _batched_delete(db, [
-        AuditLog.user_id.is_not(None),
-        AuditLog.event_type.not_in(SECURITY_EVENTS),
-        AuditLog.created_at < general_cutoff,
-    ])
+    general_deleted = await _batched_delete(
+        db,
+        [
+            AuditLog.user_id.is_not(None),
+            AuditLog.event_type.not_in(SECURITY_EVENTS),
+            AuditLog.created_at < general_cutoff,
+        ],
+    )
     total_deleted += general_deleted
 
     await db.commit()
@@ -587,9 +587,7 @@ async def get_retention_summary(db: AsyncSession) -> dict[str, int]:
     expired_general = general_count_result.scalar() or 0
 
     # Total records
-    total_result = await db.execute(
-        select(func.count()).select_from(AuditLog)
-    )
+    total_result = await db.execute(select(func.count()).select_from(AuditLog))
     total_records = total_result.scalar() or 0
 
     total_expired = expired_security + expired_general + expired_orphaned

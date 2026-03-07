@@ -109,19 +109,13 @@ describe('Parser — Format Detection', () => {
 
   it('detects MyHeritage from CSV header RSID,CHROMOSOME,POSITION,RESULT', () => {
     // MyHeritage: CSV with explicit column names.
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'rs4477212,1,82154,AA',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', 'rs4477212,1,82154,AA'].join('\n');
     expect(detectFormat(content)).toBe('myheritage');
   });
 
   it('detects MyHeritage from lowercase CSV header (case-insensitive match)', () => {
     // The parser lowercases for comparison — lowercase header should still match.
-    const content = [
-      'rsid,chromosome,position,result',
-      'rs4477212,1,82154,AA',
-    ].join('\n');
+    const content = ['rsid,chromosome,position,result', 'rs4477212,1,82154,AA'].join('\n');
     expect(detectFormat(content)).toBe('myheritage');
   });
 
@@ -164,24 +158,21 @@ describe('Parser — Format Detection', () => {
   });
 
   it('returns "unknown" for plain prose text', () => {
-    expect(detectFormat('This is not a genetic data file. It contains only prose.')).toBe('unknown');
+    expect(detectFormat('This is not a genetic data file. It contains only prose.')).toBe(
+      'unknown',
+    );
   });
 
   it('returns "unknown" for content with 4 columns but non-rs IDs (no clear format)', () => {
     // 4-column but IDs don't start with rs or i => not 23andMe heuristic
-    const content = [
-      'GENE001\t1\t100\tAA',
-      'GENE002\t1\t200\tAG',
-      'GENE003\t1\t300\tGG',
-    ].join('\n');
+    const content = ['GENE001\t1\t100\tAA', 'GENE002\t1\t200\tAG', 'GENE003\t1\t300\tGG'].join(
+      '\n',
+    );
     expect(detectFormat(content)).toBe('unknown');
   });
 
   it('returns "unknown" for 3-column tab-separated data (ambiguous)', () => {
-    const content = [
-      'rs4477212\t1\tAA',
-      'rs3094315\t1\tAG',
-    ].join('\n');
+    const content = ['rs4477212\t1\tAA', 'rs3094315\t1\tAG'].join('\n');
     expect(detectFormat(content)).toBe('unknown');
   });
 });
@@ -259,21 +250,14 @@ describe('Parser — 23andMe', () => {
 
   it('correctly extracts rsID (col 0), chromosome (col 1), position (col 2), genotype (col 3)', () => {
     // Confirms that column order: rsid, chr, pos, genotype is correctly parsed.
-    const content = [
-      '# 23andMe test',
-      'rs9999999\t22\t51244106\tCT',
-    ].join('\n');
+    const content = ['# 23andMe test', 'rs9999999\t22\t51244106\tCT'].join('\n');
     const result = parse23andMe(content);
     // Only the rsID and genotype are stored — chromosome and position are not in GenotypeMap.
     expect(result['rs9999999']).toBe('CT');
   });
 
   it('skips lines where genotype is "--" (no-call)', () => {
-    const content = [
-      '# 23andMe',
-      'rs4477212\t1\t82154\tAA',
-      'rs3094315\t1\t752566\t--',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs4477212\t1\t82154\tAA', 'rs3094315\t1\t752566\t--'].join('\n');
     const result = parse23andMe(content);
     expect(result['rs3094315']).toBeUndefined();
     expect(Object.keys(result)).toHaveLength(1);
@@ -281,22 +265,14 @@ describe('Parser — 23andMe', () => {
 
   it('skips lines where genotype is empty string (no-call variant)', () => {
     // Some files have trailing tab with no genotype value.
-    const content = [
-      '# 23andMe',
-      'rs4477212\t1\t82154\tAA',
-      'rs3094315\t1\t752566\t',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs4477212\t1\t82154\tAA', 'rs3094315\t1\t752566\t'].join('\n');
     const result = parse23andMe(content);
     expect(result['rs3094315']).toBeUndefined();
   });
 
   it('handles i-prefixed indel rsIDs (present in 23andMe files)', () => {
     // 23andMe uses "i" prefix for proprietary indel IDs.
-    const content = [
-      '# 23andMe',
-      'i713426\t1\t817186\tCC',
-      'i3000468\t1\t831489\tTT',
-    ].join('\n');
+    const content = ['# 23andMe', 'i713426\t1\t817186\tCC', 'i3000468\t1\t831489\tTT'].join('\n');
     const result = parse23andMe(content);
     expect(result['i713426']).toBe('CC');
     expect(result['i3000468']).toBe('TT');
@@ -317,10 +293,7 @@ describe('Parser — 23andMe', () => {
 
   it('handles MT chromosome entries', () => {
     // Mitochondrial DNA uses "MT" chromosome designation in 23andMe.
-    const content = [
-      '# 23andMe',
-      'rs1234\tMT\t12345\tAA',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs1234\tMT\t12345\tAA'].join('\n');
     const result = parse23andMe(content);
     expect(result['rs1234']).toBe('AA');
   });
@@ -341,10 +314,7 @@ describe('Parser — 23andMe', () => {
 
   it('handles whitespace-padded rsIDs and genotypes (trims correctly)', () => {
     // Some tools export files with extra whitespace in fields.
-    const content = [
-      '# 23andMe',
-      'rs4477212 \t1\t82154\t AA ',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs4477212 \t1\t82154\t AA '].join('\n');
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -417,20 +387,14 @@ describe('Parser — AncestryDNA', () => {
 
   it('combines allele1 and allele2 into a concatenated genotype string', () => {
     // Core behavior: allele1="A" + allele2="G" => genotype="AG".
-    const content = [
-      '#AncestryDNA',
-      'rs4477212\t1\t82154\tA\tG',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs4477212\t1\t82154\tA\tG'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AG');
   });
 
   it('uppercases lowercase allele values before concatenation', () => {
     // Some exports may provide lowercase alleles; parser normalizes to uppercase.
-    const content = [
-      '#AncestryDNA',
-      'rs4477212\t1\t82154\ta\tg',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs4477212\t1\t82154\ta\tg'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AG');
   });
@@ -459,48 +423,34 @@ describe('Parser — AncestryDNA', () => {
 
   it('handles chromosome code "23" (AncestryDNA encoding for X chromosome)', () => {
     // AncestryDNA uses numeric codes: 23=X, 24=Y, 25=MT/PAR.
-    const content = [
-      '#AncestryDNA',
-      'rs9999\t23\t100000\tA\tA',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs9999\t23\t100000\tA\tA'].join('\n');
     const result = parseAncestryDNA(content);
     // Parser does not filter by chromosome, so this should be parsed.
     expect(result['rs9999']).toBe('AA');
   });
 
   it('handles chromosome code "24" (AncestryDNA encoding for Y chromosome)', () => {
-    const content = [
-      '#AncestryDNA',
-      'rs9999\t24\t100000\tA\tA',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs9999\t24\t100000\tA\tA'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs9999']).toBe('AA');
   });
 
   it('handles chromosome code "25" (AncestryDNA encoding for MT/PAR region)', () => {
-    const content = [
-      '#AncestryDNA',
-      'rs9999\t25\t100000\tA\tA',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs9999\t25\t100000\tA\tA'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs9999']).toBe('AA');
   });
 
   it('handles i-prefixed rsIDs in AncestryDNA files', () => {
-    const content = [
-      '#AncestryDNA',
-      'i713426\t1\t817186\tC\tC',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'i713426\t1\t817186\tC\tC'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['i713426']).toBe('CC');
   });
 
   it('skips rsIDs that do not start with rs or i', () => {
-    const content = [
-      '#AncestryDNA',
-      'rs4477212\t1\t82154\tA\tA',
-      'VG00001\t1\t99999\tA\tA',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs4477212\t1\t82154\tA\tA', 'VG00001\t1\t99999\tA\tA'].join(
+      '\n',
+    );
     const result = parseAncestryDNA(content);
     expect(result['VG00001']).toBeUndefined();
     expect(Object.keys(result)).toHaveLength(1);
@@ -520,10 +470,7 @@ describe('Parser — AncestryDNA', () => {
   });
 
   it('throws when file has only header/comment lines and no SNP data', () => {
-    const content = [
-      '#AncestryDNA',
-      'rsid\tchromosome\tposition\tallele1\tallele2',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rsid\tchromosome\tposition\tallele1\tallele2'].join('\n');
     expect(() => parseAncestryDNA(content)).toThrow('No valid SNP data found');
   });
 });
@@ -562,10 +509,7 @@ describe('Parser — MyHeritage', () => {
   });
 
   it('handles quotes around only some fields (mixed quoting)', () => {
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      '"rs4477212",1,82154,"AA"',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', '"rs4477212",1,82154,"AA"'].join('\n');
     const result = parseMyHeritage(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -639,16 +583,15 @@ describe('Parser — MyHeritage', () => {
   });
 
   it('accepts i-prefixed rsIDs in MyHeritage files', () => {
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'i713426,1,817186,CC',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', 'i713426,1,817186,CC'].join('\n');
     const result = parseMyHeritage(content);
     expect(result['i713426']).toBe('CC');
   });
 
   it('throws when file has header but no data rows', () => {
-    expect(() => parseMyHeritage('RSID,CHROMOSOME,POSITION,RESULT')).toThrow('No valid SNP data found');
+    expect(() => parseMyHeritage('RSID,CHROMOSOME,POSITION,RESULT')).toThrow(
+      'No valid SNP data found',
+    );
   });
 });
 
@@ -666,37 +609,32 @@ describe('Parser — VCF', () => {
   ].join('\n');
 
   it('parses a standard SNP with GT=0/0 (homozygous REF)', () => {
-    const content = VCF_HEADER + '\n' +
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/0';
+    const content = VCF_HEADER + '\n' + '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/0';
     const result = parseVcf(content);
     expect(result['rs4477212']).toBe('AA');
   });
 
   it('parses a standard SNP with GT=0/1 (heterozygous REF/ALT)', () => {
-    const content = VCF_HEADER + '\n' +
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/1';
+    const content = VCF_HEADER + '\n' + '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
     expect(result['rs4477212']).toBe('AG');
   });
 
   it('parses a standard SNP with GT=1/1 (homozygous ALT)', () => {
-    const content = VCF_HEADER + '\n' +
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t1/1';
+    const content = VCF_HEADER + '\n' + '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t1/1';
     const result = parseVcf(content);
     expect(result['rs4477212']).toBe('GG');
   });
 
   it('handles phased genotype with "|" separator (GT=0|1)', () => {
-    const content = VCF_HEADER + '\n' +
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0|1';
+    const content = VCF_HEADER + '\n' + '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0|1';
     const result = parseVcf(content);
     expect(result['rs4477212']).toBe('AG');
   });
 
   it('handles phased genotype with "|" separator (GT=1|0)', () => {
     // Phased: allele order matters for indexing, but result is same alleles.
-    const content = VCF_HEADER + '\n' +
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t1|0';
+    const content = VCF_HEADER + '\n' + '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t1|0';
     const result = parseVcf(content);
     expect(result['rs4477212']).toBe('GA');
   });
@@ -706,7 +644,7 @@ describe('Parser — VCF', () => {
     const content = [
       '##fileformat=VCFv4.1',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1\tSAMPLE2',
-      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/0\t1/1',  // SAMPLE1=AA, SAMPLE2=GG
+      '1\t82154\trs4477212\tA\tG\t.\tPASS\t.\tGT\t0/0\t1/1', // SAMPLE1=AA, SAMPLE2=GG
     ].join('\n');
     const result = parseVcf(content);
     // Only SAMPLE1 (AA) should be used.
@@ -714,7 +652,9 @@ describe('Parser — VCF', () => {
   });
 
   it('skips no-call genotype "." (single dot half-call)', () => {
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t.';
     const result = parseVcf(content);
@@ -724,7 +664,9 @@ describe('Parser — VCF', () => {
 
   it('skips half-call genotype "./1" (one allele missing)', () => {
     // "./1" has NaN for index 0 — should be skipped.
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t./1';
     const result = parseVcf(content);
@@ -733,7 +675,9 @@ describe('Parser — VCF', () => {
   });
 
   it('skips half-call genotype "1/." (second allele missing)', () => {
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t1/.';
     const result = parseVcf(content);
@@ -744,7 +688,9 @@ describe('Parser — VCF', () => {
   it('skips variants where allele index is out of bounds', () => {
     // GT=2/1 with ALT="G" (only one ALT allele, index 0=REF, 1=G).
     // Index 2 is out of bounds for alleleList [A, G].
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t2/1';
     const result = parseVcf(content);
@@ -754,7 +700,9 @@ describe('Parser — VCF', () => {
 
   it('skips REF alleles containing invalid nucleotide characters', () => {
     // REF must match /^[ACGTN]+$/. Structural variant notation like "<DEL>" is skipped.
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\t<DEL>\tG\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
@@ -764,7 +712,9 @@ describe('Parser — VCF', () => {
 
   it('skips ALT alleles containing invalid nucleotide characters', () => {
     // ALT "." means monomorphic ref-only — skipped.
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\t.\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
@@ -774,8 +724,10 @@ describe('Parser — VCF', () => {
 
   it('skips alleles exceeding MAX_INDEL_LENGTH (>50bp)', () => {
     // Structural variants longer than 50bp are excluded.
-    const longAllele = 'A'.repeat(51);  // 51 nucleotides — exceeds 50bp limit
-    const content = VCF_HEADER + '\n' +
+    const longAllele = 'A'.repeat(51); // 51 nucleotides — exceeds 50bp limit
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       `1\t200\trs200\t${longAllele}\tG\t.\tPASS\t.\tGT\t0/1`;
     const result = parseVcf(content);
@@ -785,9 +737,8 @@ describe('Parser — VCF', () => {
 
   it('accepts alleles exactly at MAX_INDEL_LENGTH (50bp)', () => {
     // 50bp allele is on the boundary — should be accepted.
-    const allele50 = 'A'.repeat(50);   // exactly 50 nucleotides
-    const content = VCF_HEADER + '\n' +
-      `1\t200\trs200\t${allele50}\tG\t.\tPASS\t.\tGT\t0/1`;
+    const allele50 = 'A'.repeat(50); // exactly 50 nucleotides
+    const content = VCF_HEADER + '\n' + `1\t200\trs200\t${allele50}\tG\t.\tPASS\t.\tGT\t0/1`;
     const result = parseVcf(content);
     // 50bp REF allele, 1bp ALT => indel format with '/' separator.
     expect(result['rs200']).toBe(`${allele50}/G`);
@@ -795,37 +746,35 @@ describe('Parser — VCF', () => {
 
   it('parses multi-allelic site with GT=1/2 (two non-REF alleles)', () => {
     // REF=A, ALT=G,C. alleleList=[A,G,C]. GT=1/2 => G and C => "GC".
-    const content = VCF_HEADER + '\n' +
-      '1\t100\trs100\tA\tG,C\t.\tPASS\t.\tGT\t1/2';
+    const content = VCF_HEADER + '\n' + '1\t100\trs100\tA\tG,C\t.\tPASS\t.\tGT\t1/2';
     const result = parseVcf(content);
     expect(result['rs100']).toBe('GC');
   });
 
   it('parses multi-allelic site with GT=0/2 (REF and second ALT)', () => {
     // REF=A, ALT=G,C. GT=0/2 => A and C => "AC".
-    const content = VCF_HEADER + '\n' +
-      '1\t100\trs100\tA\tG,C\t.\tPASS\t.\tGT\t0/2';
+    const content = VCF_HEADER + '\n' + '1\t100\trs100\tA\tG,C\t.\tPASS\t.\tGT\t0/2';
     const result = parseVcf(content);
     expect(result['rs100']).toBe('AC');
   });
 
   it('formats indel genotypes with "/" separator instead of concatenation', () => {
     // When REF or ALT has >1 character, separator "/" is used.
-    const content = VCF_HEADER + '\n' +
-      '1\t200\trs200\tAT\tG\t.\tPASS\t.\tGT\t0/1';
+    const content = VCF_HEADER + '\n' + '1\t200\trs200\tAT\tG\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
     expect(result['rs200']).toBe('AT/G');
   });
 
   it('formats indel genotype for ALT longer than REF with "/" separator', () => {
-    const content = VCF_HEADER + '\n' +
-      '1\t200\trs200\tA\tGTT\t.\tPASS\t.\tGT\t0/1';
+    const content = VCF_HEADER + '\n' + '1\t200\trs200\tA\tGTT\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
     expect(result['rs200']).toBe('A/GTT');
   });
 
   it('skips variants without rsID (ID column is ".")', () => {
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\t.\tA\tG\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
@@ -834,7 +783,9 @@ describe('Parser — VCF', () => {
   });
 
   it('skips variants with non-rs-prefixed ID (e.g., "." or "chrX_123")', () => {
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\tCHR1_200\tA\tG\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
@@ -844,15 +795,16 @@ describe('Parser — VCF', () => {
 
   it('finds GT in FORMAT at a non-zero index (GT is not first field)', () => {
     // FORMAT="DP:GT:GQ" — GT is at index 1.
-    const content = VCF_HEADER + '\n' +
-      '1\t100\trs100\tA\tG\t.\tPASS\t.\tDP:GT:GQ\t30:0/1:99';
+    const content = VCF_HEADER + '\n' + '1\t100\trs100\tA\tG\t.\tPASS\t.\tDP:GT:GQ\t30:0/1:99';
     const result = parseVcf(content);
     expect(result['rs100']).toBe('AG');
   });
 
   it('skips lines with no GT field in FORMAT', () => {
     // FORMAT="DP:GQ" — no GT field at all.
-    const content = VCF_HEADER + '\n' +
+    const content =
+      VCF_HEADER +
+      '\n' +
       '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1\n' +
       '1\t200\trs200\tA\tG\t.\tPASS\t.\tDP:GQ\t30:99';
     const result = parseVcf(content);
@@ -864,9 +816,9 @@ describe('Parser — VCF', () => {
     // Lines before #CHROM are ignored even if they look like data.
     const content = [
       '##fileformat=VCFv4.1',
-      '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1',   // before #CHROM — skipped
+      '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT\t0/1', // before #CHROM — skipped
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1',
-      '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t0/1',   // after #CHROM — parsed
+      '1\t200\trs200\tA\tG\t.\tPASS\t.\tGT\t0/1', // after #CHROM — parsed
     ].join('\n');
     const result = parseVcf(content);
     expect(result['rs100']).toBeUndefined();
@@ -875,20 +827,18 @@ describe('Parser — VCF', () => {
 
   it('skips data lines with fewer than 10 tab-separated columns', () => {
     // VCF requires at least 10 columns to have a sample GT column.
-    const content = VCF_HEADER + '\n' +
-      '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT';  // only 9 cols — skipped
+    const content = VCF_HEADER + '\n' + '1\t100\trs100\tA\tG\t.\tPASS\t.\tGT'; // only 9 cols — skipped
     expect(() => parseVcf(content)).toThrow('No valid SNP data found');
   });
 
   it('throws when file has ##fileformat and #CHROM but no data lines', () => {
-    const content = VCF_HEADER;  // header only, no data
+    const content = VCF_HEADER; // header only, no data
     expect(() => parseVcf(content)).toThrow('No valid SNP data found');
   });
 
   it('handles "N" as a valid ambiguous nucleotide in REF/ALT', () => {
     // N is a valid IUPAC code for "any nucleotide" and passes VALID_NUCLEOTIDE_CHARS.
-    const content = VCF_HEADER + '\n' +
-      '1\t100\trs100\tN\tA\t.\tPASS\t.\tGT\t0/1';
+    const content = VCF_HEADER + '\n' + '1\t100\trs100\tN\tA\t.\tPASS\t.\tGT\t0/1';
     const result = parseVcf(content);
     expect(result['rs100']).toBe('NA');
   });
@@ -910,11 +860,9 @@ describe('Parser — Edge Cases', () => {
     // becomes part of the comment prefix and the line is skipped. Data lines
     // should still be parsed correctly because BOM only affects the first line.
     const bom = '\uFEFF';
-    const content = bom + [
-      '# 23andMe data file',
-      'rs4477212\t1\t82154\tAA',
-      'rs3094315\t1\t752566\tAG',
-    ].join('\n');
+    const content =
+      bom +
+      ['# 23andMe data file', 'rs4477212\t1\t82154\tAA', 'rs3094315\t1\t752566\tAG'].join('\n');
     const result = parse23andMe(content);
     // The BOM is on the comment line — data lines are parsed normally.
     expect(result['rs4477212']).toBe('AA');
@@ -923,11 +871,13 @@ describe('Parser — Edge Cases', () => {
 
   it('parses AncestryDNA file with UTF-8 BOM on the comment line', () => {
     const bom = '\uFEFF';
-    const content = bom + [
-      '#AncestryDNA',
-      'rsid\tchromosome\tposition\tallele1\tallele2',
-      'rs4477212\t1\t82154\tA\tA',
-    ].join('\n');
+    const content =
+      bom +
+      [
+        '#AncestryDNA',
+        'rsid\tchromosome\tposition\tallele1\tallele2',
+        'rs4477212\t1\t82154\tA\tA',
+      ].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -935,10 +885,7 @@ describe('Parser — Edge Cases', () => {
   it('parses MyHeritage file with UTF-8 BOM prefix', () => {
     const bom = '\uFEFF';
     // BOM is prepended to the header row — header contains "rsid" so it's skipped.
-    const content = bom + [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'rs4477212,1,82154,AA',
-    ].join('\n');
+    const content = bom + ['RSID,CHROMOSOME,POSITION,RESULT', 'rs4477212,1,82154,AA'].join('\n');
     const result = parseMyHeritage(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -991,10 +938,10 @@ describe('Parser — Edge Cases', () => {
   it('parses 23andMe file with mixed CRLF and LF line endings', () => {
     // Some files have inconsistent line endings (editor-mixed).
     const content =
-      '# 23andMe\r\n' +   // CRLF
-      'rs4477212\t1\t82154\tAA\n' +   // LF
-      'rs3094315\t1\t752566\tAG\r\n' +   // CRLF
-      'rs3131972\t1\t752721\tGG\n';   // LF
+      '# 23andMe\r\n' + // CRLF
+      'rs4477212\t1\t82154\tAA\n' + // LF
+      'rs3094315\t1\t752566\tAG\r\n' + // CRLF
+      'rs3131972\t1\t752721\tGG\n'; // LF
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('AA');
     expect(result['rs3094315']).toBe('AG');
@@ -1005,29 +952,21 @@ describe('Parser — Edge Cases', () => {
 
   it('parses 23andMe file with no trailing newline (truncated last line)', () => {
     // File does not end with \n — last line must still be yielded.
-    const content =
-      '# 23andMe\n' +
-      'rs4477212\t1\t82154\tAA\n' +
-      'rs3131972\t1\t752721\tGG';  // <-- no trailing newline
+    const content = '# 23andMe\n' + 'rs4477212\t1\t82154\tAA\n' + 'rs3131972\t1\t752721\tGG'; // <-- no trailing newline
     const result = parse23andMe(content);
     expect(result['rs3131972']).toBe('GG');
     expect(Object.keys(result)).toHaveLength(2);
   });
 
   it('parses AncestryDNA file with no trailing newline', () => {
-    const content =
-      '#AncestryDNA\n' +
-      'rs4477212\t1\t82154\tA\tA\n' +
-      'rs3094315\t1\t752566\tA\tG';  // no trailing newline
+    const content = '#AncestryDNA\n' + 'rs4477212\t1\t82154\tA\tA\n' + 'rs3094315\t1\t752566\tA\tG'; // no trailing newline
     const result = parseAncestryDNA(content);
     expect(result['rs3094315']).toBe('AG');
   });
 
   it('parses MyHeritage file with no trailing newline', () => {
     const content =
-      'RSID,CHROMOSOME,POSITION,RESULT\n' +
-      'rs4477212,1,82154,AA\n' +
-      'rs3094315,1,752566,AG';  // no trailing newline
+      'RSID,CHROMOSOME,POSITION,RESULT\n' + 'rs4477212,1,82154,AA\n' + 'rs3094315,1,752566,AG'; // no trailing newline
     const result = parseMyHeritage(content);
     expect(result['rs3094315']).toBe('AG');
   });
@@ -1039,8 +978,8 @@ describe('Parser — Edge Cases', () => {
     // Later assignments overwrite earlier ones => last occurrence wins.
     const content = [
       '# 23andMe',
-      'rs4477212\t1\t82154\tAA',  // first occurrence: AA
-      'rs4477212\t1\t82154\tGG',  // second occurrence: GG — overwrites AA
+      'rs4477212\t1\t82154\tAA', // first occurrence: AA
+      'rs4477212\t1\t82154\tGG', // second occurrence: GG — overwrites AA
     ].join('\n');
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('GG');
@@ -1050,8 +989,8 @@ describe('Parser — Edge Cases', () => {
   it('last entry wins when duplicate rsIDs appear in an AncestryDNA file', () => {
     const content = [
       '#AncestryDNA',
-      'rs4477212\t1\t82154\tA\tA',  // first: AA
-      'rs4477212\t1\t82154\tA\tG',  // second: AG — overwrites
+      'rs4477212\t1\t82154\tA\tA', // first: AA
+      'rs4477212\t1\t82154\tA\tG', // second: AG — overwrites
     ].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AG');
@@ -1112,10 +1051,7 @@ describe('Parser — Edge Cases', () => {
 
   it('parses 23andMe entries with "M" chromosome (mitochondria alternative)', () => {
     // Some files use "M" instead of "MT" for mitochondrial chromosome.
-    const content = [
-      '# 23andMe',
-      'rs1234\tM\t12345\tAA',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs1234\tM\t12345\tAA'].join('\n');
     const result = parse23andMe(content);
     // Parser does not filter by chromosome name — "M" is accepted.
     expect(result['rs1234']).toBe('AA');
@@ -1124,10 +1060,7 @@ describe('Parser — Edge Cases', () => {
   it('parses 23andMe entries with "chr1" style chromosome names', () => {
     // Some custom exports use "chr" prefix on chromosome names.
     // Parser does not validate chromosome values — they pass through.
-    const content = [
-      '# 23andMe',
-      'rs4477212\tchr1\t82154\tAA',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs4477212\tchr1\t82154\tAA'].join('\n');
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -1135,10 +1068,7 @@ describe('Parser — Edge Cases', () => {
   it('parses AncestryDNA entries with non-numeric chromosome names', () => {
     // Parser does not validate chromosome values in parseAncestryDNA;
     // the validation function (validateAncestryDNA) does, but not the parser.
-    const content = [
-      '#AncestryDNA',
-      'rs4477212\tchrX\t82154\tA\tA',
-    ].join('\n');
+    const content = ['#AncestryDNA', 'rs4477212\tchrX\t82154\tA\tA'].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBe('AA');
   });
@@ -1149,10 +1079,7 @@ describe('Parser — Edge Cases', () => {
     // detectFormat only reads the first 4000 chars, but the parser reads all lines.
     // 200 comment lines should be skipped without error.
     const comments = Array.from({ length: 200 }, (_, i) => `# Comment line ${i + 1}`);
-    const data = [
-      'rs4477212\t1\t82154\tAA',
-      'rs3094315\t1\t752566\tAG',
-    ];
+    const data = ['rs4477212\t1\t82154\tAA', 'rs3094315\t1\t752566\tAG'];
     // Include "23andMe" in one of the first few comments for format detection.
     comments[0] = '# This data file generated by 23andMe';
     const content = [...comments, ...data].join('\n');
@@ -1167,11 +1094,7 @@ describe('Parser — Edge Cases', () => {
     // The parser explicitly checks for "--" and "". "00" is NOT in that list.
     // This test documents the ACTUAL behavior: "00" is stored as-is.
     // TODO: If "00" should be treated as a no-call, the parser needs updating.
-    const content = [
-      '# 23andMe',
-      'rs4477212\t1\t82154\tAA',
-      'rs3094315\t1\t752566\t00',
-    ].join('\n');
+    const content = ['# 23andMe', 'rs4477212\t1\t82154\tAA', 'rs3094315\t1\t752566\t00'].join('\n');
     const result = parse23andMe(content);
     // "00" passes through — it is not filtered as a no-call.
     expect(result['rs3094315']).toBe('00');
@@ -1206,11 +1129,7 @@ describe('Parser — Streaming (iterateLines behavior)', () => {
   });
 
   it('handles content with trailing blank lines after data', () => {
-    const content =
-      '# 23andMe\n' +
-      'rs4477212\t1\t82154\tAA\n' +
-      '\n' +
-      '\n';
+    const content = '# 23andMe\n' + 'rs4477212\t1\t82154\tAA\n' + '\n' + '\n';
     const result = parse23andMe(content);
     expect(result['rs4477212']).toBe('AA');
     expect(Object.keys(result)).toHaveLength(1);
@@ -1242,10 +1161,7 @@ describe('Parser — Streaming (iterateLines behavior)', () => {
 
   it('handles MyHeritage content where lines have trailing spaces', () => {
     // Trailing whitespace after the last column value.
-    const content = [
-      'RSID,CHROMOSOME,POSITION,RESULT',
-      'rs4477212,1,82154,AA   ',
-    ].join('\n');
+    const content = ['RSID,CHROMOSOME,POSITION,RESULT', 'rs4477212,1,82154,AA   '].join('\n');
     // The genotype "AA   " would have trailing spaces — trimEnd() in iterateLines
     // strips trailing whitespace from lines (including spaces after the last column).
     // But parseCsvLine splits on comma, so the last field is "AA   " which is
@@ -1281,15 +1197,17 @@ describe('Parser — Performance', () => {
     const elapsed = performance.now() - start;
 
     expect(Object.keys(result)).toHaveLength(10000);
-    expect(elapsed).toBeLessThan(1000);  // must complete within 1 second
+    expect(elapsed).toBeLessThan(1000); // must complete within 1 second
   });
 
   it('parses a 10,000-line AncestryDNA file in under 1 second', () => {
-    const lines: string[] = [
-      '#AncestryDNA',
-      'rsid\tchromosome\tposition\tallele1\tallele2',
+    const lines: string[] = ['#AncestryDNA', 'rsid\tchromosome\tposition\tallele1\tallele2'];
+    const ALLELE_PAIRS: [string, string][] = [
+      ['A', 'A'],
+      ['A', 'G'],
+      ['G', 'G'],
+      ['C', 'T'],
     ];
-    const ALLELE_PAIRS: [string, string][] = [['A', 'A'], ['A', 'G'], ['G', 'G'], ['C', 'T']];
     for (let i = 0; i < 10000; i++) {
       const chr = ((i % 22) + 1).toString();
       const pos = (82154 + i * 100).toString();
@@ -1438,7 +1356,11 @@ describe('Parser — detectChipVersion', () => {
       ['myheritage', 700000],
     ];
     for (const [format, snpCount] of cases) {
-      const result = detectChipVersion(format as 'myheritage' | '23andme' | 'ancestrydna', snpCount, {});
+      const result = detectChipVersion(
+        format as 'myheritage' | '23andme' | 'ancestrydna',
+        snpCount,
+        {},
+      );
       expect(result).not.toBeNull();
       expect(result!.confidence).toBeGreaterThanOrEqual(0);
       expect(result!.confidence).toBeLessThanOrEqual(1);
@@ -1456,9 +1378,9 @@ describe('Parser — getGenotypeStats (extended)', () => {
     // Indel genotypes like "DDII" or "AT/G" have length != 2, so they fall into
     // the "else" branch in the classifier and are not counted in either bucket.
     const genotypes = {
-      rs1: 'AA',     // homozygous (length 2, [0]===[1])
-      rs2: 'AT/G',   // indel (length 4 — neither counted)
-      rs3: 'AG',     // heterozygous (length 2, [0]!==[1])
+      rs1: 'AA', // homozygous (length 2, [0]===[1])
+      rs2: 'AT/G', // indel (length 4 — neither counted)
+      rs3: 'AG', // heterozygous (length 2, [0]!==[1])
     };
     const stats = getGenotypeStats(genotypes);
     expect(stats.totalSnps).toBe(3);
@@ -1487,7 +1409,7 @@ describe('Parser — getGenotypeStats (extended)', () => {
     expect(stats.genotypeDistribution['AA']).toBe(3);
     expect(stats.genotypeDistribution['AG']).toBe(1);
     expect(stats.genotypeDistribution['GG']).toBe(1);
-    expect(stats.homozygousCount).toBe(4);   // AA×3 + GG×1
+    expect(stats.homozygousCount).toBe(4); // AA×3 + GG×1
     expect(stats.heterozygousCount).toBe(1); // AG×1
   });
 

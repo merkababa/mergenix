@@ -54,12 +54,8 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        op.f("ix_consent_records_user_id"), "consent_records", ["user_id"]
-    )
-    op.create_index(
-        op.f("ix_consent_records_consent_type"), "consent_records", ["consent_type"]
-    )
+    op.create_index(op.f("ix_consent_records_user_id"), "consent_records", ["user_id"])
+    op.create_index(op.f("ix_consent_records_consent_type"), "consent_records", ["consent_type"])
 
     # ── cookie_preferences ───────────────────────────────────────────────
     op.create_table(

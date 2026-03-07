@@ -53,7 +53,9 @@ interface MockNextNavigationOverrides {
  *   router: { push: customPushMock },
  * }));
  */
-export function mockNextNavigationFactory(overrides?: MockNextNavigationOverrides): MockNextNavigation {
+export function mockNextNavigationFactory(
+  overrides?: MockNextNavigationOverrides,
+): MockNextNavigation {
   const defaultRouter: MockRouter = {
     push: vi.fn(),
     replace: vi.fn(),

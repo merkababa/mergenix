@@ -12,9 +12,19 @@ vi.mock('@/components/ui/sensitive-content-guard', () => ({
 }));
 
 // Mock useAuthStore so the component gets a valid user tier
-vi.mock('@/lib/stores/auth-store', () => mockAuthStoreFactory({
-  user: { id: 'user-1', name: 'Test User', email: 'test@example.com', tier: 'pro', is_verified: true, has_2fa: false, created_at: '2025-01-01T00:00:00Z' },
-}));
+vi.mock('@/lib/stores/auth-store', () =>
+  mockAuthStoreFactory({
+    user: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+      tier: 'pro',
+      is_verified: true,
+      has_2fa: false,
+      created_at: '2025-01-01T00:00:00Z',
+    },
+  }),
+);
 
 // Mock next/navigation for SPA navigation (useRouter)
 vi.mock('next/navigation', () => mockNextNavigationFactory());
@@ -253,7 +263,9 @@ describe('PgxTab', () => {
 
     expect(screen.getByText('CYP2D6')).toBeInTheDocument();
     expect(screen.getByText('CYP2C19')).toBeInTheDocument();
-    expect(screen.getByText(/Metabolizes approximately 25% of commonly prescribed drugs/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Metabolizes approximately 25% of commonly prescribed drugs/),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Metabolizes proton pump inhibitors/)).toBeInTheDocument();
   });
 
@@ -362,9 +374,7 @@ describe('PgxTab', () => {
 
     render(<PgxTab />);
 
-    expect(
-      screen.getByText(/should not be used to make medication changes/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/should not be used to make medication changes/)).toBeInTheDocument();
   });
 
   it('shows warning icon for non-normal metabolizers', () => {

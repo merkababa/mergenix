@@ -24,7 +24,9 @@ import { ProductDemo } from '../../app/_components/product-demo';
 describe('ProductDemo', () => {
   it('renders the section heading', () => {
     render(<ProductDemo />);
-    expect(screen.getByRole('heading', { name: /See Your Results Come to Life/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /See Your Results Come to Life/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders the "Sample Data" badge so users know values are not real', () => {

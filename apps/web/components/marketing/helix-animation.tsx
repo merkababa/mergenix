@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface HelixAnimationProps {
   dotCount?: number;
@@ -10,12 +10,9 @@ interface HelixAnimationProps {
  * Uses the `helixFloat` keyframe animation defined in globals.css.
  * Purely decorative — hidden from assistive technologies.
  */
-export function HelixAnimation({
-  dotCount = 5,
-  className,
-}: HelixAnimationProps) {
+export function HelixAnimation({ dotCount = 5, className }: HelixAnimationProps) {
   return (
-    <div className={cn("relative", className)} aria-hidden="true">
+    <div className={cn('relative', className)} aria-hidden="true">
       {Array.from({ length: dotCount }, (_, i) => {
         const isEven = i % 2 === 0;
         const delay = `${i * 0.6}s`;
@@ -26,15 +23,15 @@ export function HelixAnimation({
           <span
             key={i}
             className={cn(
-              "absolute h-1.5 w-1.5 rounded-full",
+              'absolute h-1.5 w-1.5 rounded-full',
               isEven
-                ? "bg-[#0EA5E9] shadow-[0_0_8px_rgba(14,165,233,0.3)]"
-                : "bg-[#94A3B8] shadow-[0_0_8px_rgba(148,163,184,0.3)]",
+                ? 'bg-[#0EA5E9] shadow-[0_0_8px_rgba(14,165,233,0.3)]'
+                : 'bg-[#94A3B8] shadow-[0_0_8px_rgba(148,163,184,0.3)]',
             )}
             style={{
               left: horizontalOffset,
-              top: "50%",
-              transform: "translateY(-50%)",
+              top: '50%',
+              transform: 'translateY(-50%)',
               animation: `helixFloat ${duration} ease-in-out ${delay} infinite`,
             }}
           />

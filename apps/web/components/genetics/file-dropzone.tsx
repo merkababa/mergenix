@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useState, useCallback, useRef } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { Shield, FileCheck, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { GeneticFileFormat } from "@/lib/stores/analysis-store";
+import { useState, useCallback, useRef } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { Shield, FileCheck, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { GeneticFileFormat } from '@/lib/stores/analysis-store';
 // NOTE: GinaNotice should be rendered once by the parent page, not inside each FileDropzone
 
 interface FileDropzoneProps {
@@ -17,27 +17,22 @@ interface FileDropzoneProps {
 }
 
 const SUPPORTED_FORMATS = [
-  { name: "23andMe", ext: ".txt", desc: "23andMe raw data" },
-  { name: "AncestryDNA", ext: ".txt", desc: "AncestryDNA raw data" },
-  { name: "MyHeritage", ext: ".csv", desc: "MyHeritage raw data" },
-  { name: "VCF", ext: ".vcf", desc: "Variant Call Format" },
+  { name: '23andMe', ext: '.txt', desc: '23andMe raw data' },
+  { name: 'AncestryDNA', ext: '.txt', desc: 'AncestryDNA raw data' },
+  { name: 'MyHeritage', ext: '.csv', desc: 'MyHeritage raw data' },
+  { name: 'VCF', ext: '.vcf', desc: 'Variant Call Format' },
 ] as const;
 
 function detectFormat(file: File): GeneticFileFormat {
   const name = file.name.toLowerCase();
-  if (name.endsWith(".vcf") || name.endsWith(".vcf.gz")) return "vcf";
-  if (name.includes("ancestry")) return "ancestrydna";
-  if (name.includes("myheritage") || name.endsWith(".csv")) return "myheritage";
-  if (name.endsWith(".txt")) return "23andme";
-  return "unknown";
+  if (name.endsWith('.vcf') || name.endsWith('.vcf.gz')) return 'vcf';
+  if (name.includes('ancestry')) return 'ancestrydna';
+  if (name.includes('myheritage') || name.endsWith('.csv')) return 'myheritage';
+  if (name.endsWith('.txt')) return '23andme';
+  return 'unknown';
 }
 
-export function FileDropzone({
-  label,
-  onFileSelect,
-  selectedFile,
-  className,
-}: FileDropzoneProps) {
+export function FileDropzone({ label, onFileSelect, selectedFile, className }: FileDropzoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,9 +41,9 @@ export function FileDropzone({
     (file: File) => {
       setError(null);
       const format = detectFormat(file);
-      if (format === "unknown") {
+      if (format === 'unknown') {
         setError(
-          "Unsupported file format. Please upload a 23andMe, AncestryDNA, MyHeritage, or VCF file.",
+          'Unsupported file format. Please upload a 23andMe, AncestryDNA, MyHeritage, or VCF file.',
         );
         return;
       }
@@ -86,8 +81,8 @@ export function FileDropzone({
   );
 
   return (
-    <div className={cn("w-full", className)}>
-      <label className="mb-2 block font-heading text-sm font-semibold text-(--text-primary)">
+    <div className={cn('w-full', className)}>
+      <label className="font-heading text-(--text-primary) mb-2 block text-sm font-semibold">
         {label}
       </label>
 
@@ -97,7 +92,7 @@ export function FileDropzone({
         onDragLeave={handleDragLeave}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             inputRef.current?.click();
           }
@@ -107,17 +102,17 @@ export function FileDropzone({
         aria-label={`${label} - Drop genetic file or click to browse`}
         aria-roledescription="File upload dropzone"
         className={cn(
-          "group relative cursor-pointer overflow-hidden rounded-glass border-2 border-dashed p-8 text-center transition-all duration-300",
-          "bg-(--bg-glass) [backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]",
-          "focus-visible:border-solid focus-visible:border-(--accent-teal) focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.25)] focus-visible:outline-hidden",
+          'rounded-glass group relative cursor-pointer overflow-hidden border-2 border-dashed p-8 text-center transition-all duration-300',
+          'bg-(--bg-glass) [-webkit-backdrop-filter:blur(12px)] [backdrop-filter:blur(12px)]',
+          'focus-visible:border-(--accent-teal) focus-visible:outline-hidden focus-visible:border-solid focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.25)]',
           selectedFile
-            ? "border-[rgba(6,214,160,0.3)] shadow-[0_0_20px_rgba(6,214,160,0.1)]"
-            : "border-[rgba(6,214,160,0.18)]",
+            ? 'border-[rgba(6,214,160,0.3)] shadow-[0_0_20px_rgba(6,214,160,0.1)]'
+            : 'border-[rgba(6,214,160,0.18)]',
           isDragOver &&
-            "border-[rgba(6,214,160,0.6)] bg-[rgba(6,214,160,0.05)] shadow-[0_0_40px_rgba(6,214,160,0.15)]",
+            'border-[rgba(6,214,160,0.6)] bg-[rgba(6,214,160,0.05)] shadow-[0_0_40px_rgba(6,214,160,0.15)]',
           !selectedFile &&
             !isDragOver &&
-            "hover:border-[rgba(6,214,160,0.45)] hover:shadow-[0_0_30px_rgba(6,214,160,0.08)]",
+            'hover:border-[rgba(6,214,160,0.45)] hover:shadow-[0_0_30px_rgba(6,214,160,0.08)]',
         )}
       >
         <input
@@ -139,13 +134,13 @@ export function FileDropzone({
               className="flex flex-col items-center gap-3"
             >
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-                <FileCheck className="h-7 w-7 text-(--accent-teal)" />
+                <FileCheck className="text-(--accent-teal) h-7 w-7" />
               </div>
               <div>
-                <p className="font-heading text-base font-semibold text-(--text-heading)">
+                <p className="font-heading text-(--text-heading) text-base font-semibold">
                   {selectedFile.name}
                 </p>
-                <p className="mt-0.5 text-sm text-(--accent-teal)">
+                <p className="text-(--accent-teal) mt-0.5 text-sm">
                   Detected: {selectedFile.format}
                 </p>
               </div>
@@ -160,7 +155,7 @@ export function FileDropzone({
             >
               {/* DNA helix animation */}
               <div className="relative flex items-center justify-center">
-                <div className="absolute h-20 w-20 rounded-full bg-(--glow-teal) opacity-40 blur-xl group-hover:opacity-60" />
+                <div className="bg-(--glow-teal) absolute h-20 w-20 rounded-full opacity-40 blur-xl group-hover:opacity-60" />
                 <div className="relative flex gap-1.5">
                   {[0, 0.2, 0.4, 0.6, 0.8].map((delay, i) => (
                     <m.div
@@ -169,12 +164,12 @@ export function FileDropzone({
                       style={{
                         background:
                           i % 2 === 0
-                            ? "linear-gradient(135deg, #06d6a0, #06b6d4)"
-                            : "linear-gradient(135deg, #8b5cf6, #a78bfa)",
+                            ? 'linear-gradient(135deg, #06d6a0, #06b6d4)'
+                            : 'linear-gradient(135deg, #8b5cf6, #a78bfa)',
                         boxShadow:
                           i % 2 === 0
-                            ? "0 0 10px rgba(6, 214, 160, 0.4)"
-                            : "0 0 10px rgba(139, 92, 246, 0.4)",
+                            ? '0 0 10px rgba(6, 214, 160, 0.4)'
+                            : '0 0 10px rgba(139, 92, 246, 0.4)',
                       }}
                       animate={{
                         y: [0, -10, 0],
@@ -185,7 +180,7 @@ export function FileDropzone({
                         duration: 2.2,
                         repeat: Infinity,
                         delay,
-                        ease: "easeInOut" as const,
+                        ease: 'easeInOut' as const,
                       }}
                     />
                   ))}
@@ -193,16 +188,11 @@ export function FileDropzone({
               </div>
 
               <div>
-                <p className="font-heading text-base font-semibold text-(--text-heading)">
-                  {isDragOver
-                    ? "Release to upload"
-                    : "Drop your genetic file here"}
+                <p className="font-heading text-(--text-heading) text-base font-semibold">
+                  {isDragOver ? 'Release to upload' : 'Drop your genetic file here'}
                 </p>
-                <p className="mt-1 text-sm text-(--text-muted)">
-                  or{" "}
-                  <span className="font-medium text-(--accent-teal)">
-                    click to browse
-                  </span>
+                <p className="text-(--text-muted) mt-1 text-sm">
+                  or <span className="text-(--accent-teal) font-medium">click to browse</span>
                 </p>
               </div>
 
@@ -211,7 +201,7 @@ export function FileDropzone({
                 {SUPPORTED_FORMATS.map((fmt) => (
                   <span
                     key={fmt.name}
-                    className="rounded-lg border border-(--glass-border) bg-[rgba(148,163,184,0.06)] px-2.5 py-1 text-xs text-(--text-muted) backdrop-blur-xs"
+                    className="border-(--glass-border) text-(--text-muted) backdrop-blur-xs rounded-lg border bg-[rgba(148,163,184,0.06)] px-2.5 py-1 text-xs"
                   >
                     {fmt.name}
                   </span>
@@ -223,10 +213,8 @@ export function FileDropzone({
 
         {/* Privacy badge */}
         <div className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-[rgba(6,214,160,0.12)] bg-[rgba(6,214,160,0.05)] px-3 py-1.5">
-          <Shield className="h-3.5 w-3.5 text-(--accent-teal)" />
-          <span className="text-xs text-(--text-muted)">
-            Files never leave your device
-          </span>
+          <Shield className="text-(--accent-teal) h-3.5 w-3.5" />
+          <span className="text-(--text-muted) text-xs">Files never leave your device</span>
         </div>
       </div>
 
@@ -237,7 +225,7 @@ export function FileDropzone({
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            className="mt-2 flex items-center gap-2 text-sm text-(--accent-rose)"
+            className="text-(--accent-rose) mt-2 flex items-center gap-2 text-sm"
             role="alert"
           >
             <AlertCircle className="h-4 w-4 shrink-0" />

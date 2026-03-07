@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Shield,
   Lock,
@@ -14,94 +14,97 @@ import {
   HardDrive,
   Workflow,
   XCircle,
-} from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { PageHeader } from "@/components/layout/page-header";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
+} from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { PageHeader } from '@/components/layout/page-header';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 // ── Data ────────────────────────────────────────────────────────────────
 
 const DATA_FLOW_STEPS = [
   {
     icon: HardDrive,
-    title: "Upload DNA files",
+    title: 'Upload DNA files',
     description:
-      "You select your raw DNA files from 23andMe, AncestryDNA, MyHeritage, or VCF format. Files are read directly into browser memory.",
+      'You select your raw DNA files from 23andMe, AncestryDNA, MyHeritage, or VCF format. Files are read directly into browser memory.',
   },
   {
     icon: Workflow,
-    title: "Web Worker parses",
+    title: 'Web Worker parses',
     description:
-      "A dedicated background thread parses your genetic data entirely within your browser. No data is sent to any server.",
+      'A dedicated background thread parses your genetic data entirely within your browser. No data is sent to any server.',
   },
   {
     icon: Cpu,
-    title: "Analysis runs client-side",
+    title: 'Analysis runs client-side',
     description:
-      "Carrier screening, trait prediction, and risk scoring all execute in your browser using our genetics engine. Results never leave your device.",
+      'Carrier screening, trait prediction, and risk scoring all execute in your browser using our genetics engine. Results never leave your device.',
   },
 ] as const;
 
 const PRIVACY_PROMISES = [
   {
     icon: EyeOff,
-    text: "We never see your DNA data",
+    text: 'We never see your DNA data',
   },
   {
     icon: Server,
-    text: "No server-side genetic processing",
+    text: 'No server-side genetic processing',
   },
   {
     icon: XCircle,
-    text: "No data selling or sharing",
+    text: 'No data selling or sharing',
   },
   {
     icon: Lock,
-    text: "You control deletion",
+    text: 'You control deletion',
   },
   {
     icon: ShieldCheck,
-    text: "Open-source genetics engine for full transparency",
+    text: 'Open-source genetics engine for full transparency',
   },
   {
     icon: Globe,
-    text: "GDPR, GINA, and HIPAA-aware by design",
+    text: 'GDPR, GINA, and HIPAA-aware by design',
   },
 ] as const;
 
 const FAQ_ITEMS = [
   {
-    question: "Can you see my DNA data?",
+    question: 'Can you see my DNA data?',
     answer:
-      "No. All genetic processing happens in your browser using dedicated background threads. Your raw DNA files are never uploaded to our servers. We architecturally cannot access your genetic data.",
+      'No. All genetic processing happens in your browser using dedicated background threads. Your raw DNA files are never uploaded to our servers. We architecturally cannot access your genetic data.',
   },
   {
-    question: "What data do you store on your servers?",
+    question: 'What data do you store on your servers?',
     answer:
-      "We store only your account information (email, tier status) and encrypted analysis result summaries if you choose to save them. Raw genetic data is never stored server-side.",
+      'We store only your account information (email, tier status) and encrypted analysis result summaries if you choose to save them. Raw genetic data is never stored server-side.',
   },
   {
-    question: "How are saved results protected?",
+    question: 'How are saved results protected?',
     answer:
-      "Client-side AES-256-GCM encryption with Argon2id key derivation is planned for a future release. Until that feature is live, saved analysis results are protected using standard server-side encryption in transit and at rest.",
+      'Client-side AES-256-GCM encryption with Argon2id key derivation is planned for a future release. Until that feature is live, saved analysis results are protected using standard server-side encryption in transit and at rest.',
   },
   {
-    question: "Can I delete all my data?",
+    question: 'Can I delete all my data?',
     answer:
-      "Yes. You can delete your account and all associated data at any time from your account settings. Deletion is immediate and irreversible. Since we never store raw DNA files, there is nothing to delete on that front.",
+      'Yes. You can delete your account and all associated data at any time from your account settings. Deletion is immediate and irreversible. Since we never store raw DNA files, there is nothing to delete on that front.',
   },
   {
-    question: "Is Mergenix HIPAA compliant?",
+    question: 'Is Mergenix HIPAA compliant?',
     answer:
-      "Mergenix is HIPAA-aware in its design principles, meaning we follow data minimization and security best practices aligned with HIPAA standards. However, as a consumer genetics tool (not a covered entity), formal HIPAA certification is not applicable.",
+      'Mergenix is HIPAA-aware in its design principles, meaning we follow data minimization and security best practices aligned with HIPAA standards. However, as a consumer genetics tool (not a covered entity), formal HIPAA certification is not applicable.',
   },
 ] as const;
 
 const COMPLIANCE_BADGES = [
-  { label: "GDPR", description: "EU General Data Protection Regulation" },
-  { label: "GINA", description: "Genetic Information Nondiscrimination Act" },
-  { label: "HIPAA-aware", description: "Health Insurance Portability and Accountability Act aligned" },
+  { label: 'GDPR', description: 'EU General Data Protection Regulation' },
+  { label: 'GINA', description: 'Genetic Information Nondiscrimination Act' },
+  {
+    label: 'HIPAA-aware',
+    description: 'Health Insurance Portability and Accountability Act aligned',
+  },
 ] as const;
 
 // ── Component ───────────────────────────────────────────────────────────
@@ -114,7 +117,7 @@ export function SecurityContent() {
       <PageHeader
         title="Your Genetic Data Never Leaves Your Browser"
         subtitle="Built on a privacy-first foundation where your DNA stays on your device. Always."
-        breadcrumbs={[{ label: "Security", href: "/security" }]}
+        breadcrumbs={[{ label: 'Security', href: '/security' }]}
       />
 
       {/* ── Zero-Knowledge Architecture ──────────────────────────────── */}
@@ -131,17 +134,16 @@ export function SecurityContent() {
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                <Shield className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
+                <Shield className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="mb-2 font-heading text-lg font-semibold text-(--text-heading)">
+                <h3 className="font-heading text-(--text-heading) mb-2 text-lg font-semibold">
                   Client-Side Only Processing
                 </h3>
-                <p className="text-sm leading-relaxed text-(--text-muted)">
-                  Your genetic data is parsed and analyzed entirely within a dedicated
-                  background thread in your browser. This means your DNA data never touches
-                  our servers, is never transmitted over the network, and is never accessible
-                  to our team.
+                <p className="text-(--text-muted) text-sm leading-relaxed">
+                  Your genetic data is parsed and analyzed entirely within a dedicated background
+                  thread in your browser. This means your DNA data never touches our servers, is
+                  never transmitted over the network, and is never accessible to our team.
                 </p>
               </div>
             </div>
@@ -165,18 +167,16 @@ export function SecurityContent() {
             return (
               <ScrollReveal key={step.title}>
                 <GlassCard variant="medium" hover="glow" className="h-full p-7">
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] text-sm font-bold text-(--accent-teal)">
+                  <div className="text-(--accent-teal) mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] text-sm font-bold">
                     {index + 1}
                   </div>
                   <div className="mb-2 flex items-center gap-2">
-                    <Icon className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
-                    <h3 className="font-heading text-base font-semibold text-(--text-heading)">
+                    <Icon className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+                    <h3 className="font-heading text-(--text-heading) text-base font-semibold">
                       {step.title}
                     </h3>
                   </div>
-                  <p className="text-sm leading-relaxed text-(--text-muted)">
-                    {step.description}
-                  </p>
+                  <p className="text-(--text-muted) text-sm leading-relaxed">{step.description}</p>
                 </GlassCard>
               </ScrollReveal>
             );
@@ -199,33 +199,31 @@ export function SecurityContent() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                  <KeyRound className="h-6 w-6 text-(--accent-violet)" aria-hidden="true" />
+                  <KeyRound className="text-(--accent-violet) h-6 w-6" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
+                  <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
                     AES-256-GCM — Planned
                   </h3>
-                  <p className="text-sm leading-relaxed text-(--text-muted)">
-                    We plan to protect saved analysis results using AES-256-GCM
-                    client-side encryption — the same standard used by governments
-                    and financial institutions worldwide. This feature is not yet
-                    active and is planned for a future release.
+                  <p className="text-(--text-muted) text-sm leading-relaxed">
+                    We plan to protect saved analysis results using AES-256-GCM client-side
+                    encryption — the same standard used by governments and financial institutions
+                    worldwide. This feature is not yet active and is planned for a future release.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
-                  <Lock className="h-6 w-6 text-(--accent-cyan)" aria-hidden="true" />
+                  <Lock className="text-(--accent-cyan) h-6 w-6" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
+                  <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
                     Argon2id Key Derivation — Planned
                   </h3>
-                  <p className="text-sm leading-relaxed text-(--text-muted)">
-                    When client-side encryption launches, cryptographic keys will be
-                    derived from your password using Argon2id, a memory-hard key
-                    derivation function that resists brute-force and side-channel
-                    attacks. Your password will never be stored.
+                  <p className="text-(--text-muted) text-sm leading-relaxed">
+                    When client-side encryption launches, cryptographic keys will be derived from
+                    your password using Argon2id, a memory-hard key derivation function that resists
+                    brute-force and side-channel attacks. Your password will never be stored.
                   </p>
                 </div>
               </div>
@@ -252,11 +250,9 @@ export function SecurityContent() {
                 <GlassCard variant="subtle" hover="glow" className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
+                      <Icon className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
                     </div>
-                    <p className="text-sm font-medium text-(--text-heading)">
-                      {promise.text}
-                    </p>
+                    <p className="text-(--text-heading) text-sm font-medium">{promise.text}</p>
                   </div>
                 </GlassCard>
               </ScrollReveal>
@@ -282,18 +278,16 @@ export function SecurityContent() {
                 <button
                   type="button"
                   className="flex w-full items-center justify-between px-6 py-4 text-left"
-                  onClick={() =>
-                    setExpandedFaq(expandedFaq === index ? null : index)
-                  }
+                  onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                   aria-expanded={expandedFaq === index}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="pr-4 font-heading text-sm font-semibold text-(--text-heading)">
+                  <span className="font-heading text-(--text-heading) pr-4 text-sm font-semibold">
                     {item.question}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 shrink-0 text-(--text-muted) transition-transform ${
-                      expandedFaq === index ? "rotate-180" : ""
+                    className={`text-(--text-muted) h-4 w-4 shrink-0 transition-transform ${
+                      expandedFaq === index ? 'rotate-180' : ''
                     }`}
                     aria-hidden="true"
                   />
@@ -301,11 +295,9 @@ export function SecurityContent() {
                 {expandedFaq === index && (
                   <div
                     id={`faq-answer-${index}`}
-                    className="border-t border-(--border-subtle) px-6 py-4"
+                    className="border-(--border-subtle) border-t px-6 py-4"
                   >
-                    <p className="text-sm leading-relaxed text-(--text-muted)">
-                      {item.answer}
-                    </p>
+                    <p className="text-(--text-muted) text-sm leading-relaxed">{item.answer}</p>
                   </div>
                 )}
               </GlassCard>
@@ -315,7 +307,7 @@ export function SecurityContent() {
       </section>
 
       {/* ── Compliance Badges ─────────────────────────────────────────── */}
-      <section className="mt-16 mb-16" aria-labelledby="compliance-heading">
+      <section className="mb-16 mt-16" aria-labelledby="compliance-heading">
         <ScrollReveal>
           <SectionHeading
             id="compliance-heading"
@@ -329,14 +321,12 @@ export function SecurityContent() {
             <ScrollReveal key={badge.label}>
               <GlassCard variant="medium" hover="glow" className="px-6 py-4 text-center">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
-                  <span className="font-heading text-sm font-bold text-(--text-heading)">
+                  <ShieldCheck className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+                  <span className="font-heading text-(--text-heading) text-sm font-bold">
                     {badge.label}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-(--text-muted)">
-                  {badge.description}
-                </p>
+                <p className="text-(--text-muted) mt-1 text-xs">{badge.description}</p>
               </GlassCard>
             </ScrollReveal>
           ))}

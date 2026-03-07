@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useMemo, useEffect, useRef, type RefObject } from "react";
-import { m, AnimatePresence } from "motion/react";
-import Link from "next/link";
-import { Save, X, Crown, AlertTriangle } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import type { Tier } from "@mergenix/shared-types";
+import { useState, useCallback, useMemo, useEffect, useRef, type RefObject } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import Link from 'next/link';
+import { Save, X, Crown, AlertTriangle } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import type { Tier } from '@mergenix/shared-types';
 
 // ── Constants (hoisted outside component) ──────────────────────────────────
 
@@ -19,7 +19,7 @@ const TIER_SAVE_LIMITS: Record<Tier, number> = {
   pro: Infinity,
 };
 
-const CONSENT_KEY = "mergenix_analysis_save_consent";
+const CONSENT_KEY = 'mergenix_analysis_save_consent';
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])';
@@ -28,7 +28,7 @@ const FOCUSABLE_SELECTOR =
 
 function createFocusTrapHandler(ref: RefObject<HTMLDivElement | null>) {
   return (e: KeyboardEvent) => {
-    if (e.key !== "Tab" || !ref.current) return;
+    if (e.key !== 'Tab' || !ref.current) return;
     const focusable = ref.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     if (focusable.length === 0) return;
     const first = focusable[0];
@@ -50,7 +50,7 @@ function createFocusTrapHandler(ref: RefObject<HTMLDivElement | null>) {
 /** Safe localStorage.getItem — returns null on SecurityError (strict privacy settings). */
 function safeLocalStorageGet(key: string): string | null {
   try {
-    return typeof window !== "undefined" ? localStorage.getItem(key) : null;
+    return typeof window !== 'undefined' ? localStorage.getItem(key) : null;
   } catch {
     return null;
   }
@@ -59,7 +59,7 @@ function safeLocalStorageGet(key: string): string | null {
 /** Safe localStorage.setItem — silently fails on SecurityError. */
 function safeLocalStorageSet(key: string, value: string): void {
   try {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(key, value);
     }
   } catch {
@@ -71,7 +71,7 @@ function safeLocalStorageSet(key: string, value: string): void {
 
 export function SaveResultDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [label, setLabel] = useState("");
+  const [label, setLabel] = useState('');
   const [showConsent, setShowConsent] = useState(false);
 
   const consentModalRef = useRef<HTMLDivElement>(null);
@@ -91,7 +91,7 @@ export function SaveResultDialog() {
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
-  const userTier = user?.tier ?? "free";
+  const userTier = user?.tier ?? 'free';
   const tierLimit = TIER_SAVE_LIMITS[userTier];
   const savedCount = savedResults.length;
   const isAtLimit = savedCount >= tierLimit;
@@ -100,7 +100,7 @@ export function SaveResultDialog() {
     triggerRef.current = document.activeElement as HTMLElement;
     clearSaveError();
     // Check if consent was previously given
-    const hasConsent = safeLocalStorageGet(CONSENT_KEY) === "true";
+    const hasConsent = safeLocalStorageGet(CONSENT_KEY) === 'true';
     if (!hasConsent) {
       setShowConsent(true);
     } else {
@@ -109,7 +109,7 @@ export function SaveResultDialog() {
   }, [clearSaveError]);
 
   const handleConsent = useCallback(() => {
-    safeLocalStorageSet(CONSENT_KEY, "true");
+    safeLocalStorageSet(CONSENT_KEY, 'true');
     setShowConsent(false);
     setIsOpen(true);
   }, []);
@@ -121,7 +121,7 @@ export function SaveResultDialog() {
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    setLabel("");
+    setLabel('');
     clearSaveError();
     triggerRef.current?.focus();
   }, [clearSaveError]);
@@ -131,22 +131,19 @@ export function SaveResultDialog() {
     try {
       await saveCurrentResult(label.trim());
       setIsOpen(false);
-      setLabel("");
+      setLabel('');
       triggerRef.current?.focus();
     } catch {
       // Error is already set in the store
     }
   }, [label, saveCurrentResult]);
 
-  const handleConsentBackdropClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        setShowConsent(false);
-        triggerRef.current?.focus();
-      }
-    },
-    [],
-  );
+  const handleConsentBackdropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setShowConsent(false);
+      triggerRef.current?.focus();
+    }
+  }, []);
 
   const handleSaveBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -158,13 +155,13 @@ export function SaveResultDialog() {
   );
 
   const tierLimitText = useMemo(() => {
-    if (userTier === "pro") return null;
-    return `${savedCount} of ${tierLimit} saved ${tierLimit === 1 ? "analysis" : "analyses"} used`;
+    if (userTier === 'pro') return null;
+    return `${savedCount} of ${tierLimit} saved ${tierLimit === 1 ? 'analysis' : 'analyses'} used`;
   }, [userTier, savedCount, tierLimit]);
 
   const upgradeCTAText = useMemo(() => {
-    if (userTier === "free") return "Upgrade to Premium for 10 saved analyses";
-    if (userTier === "premium") return "Upgrade to Pro for unlimited saved analyses";
+    if (userTier === 'free') return 'Upgrade to Premium for 10 saved analyses';
+    if (userTier === 'premium') return 'Upgrade to Pro for unlimited saved analyses';
     return null;
   }, [userTier]);
 
@@ -174,14 +171,14 @@ export function SaveResultDialog() {
     if (!showConsent) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         setShowConsent(false);
         triggerRef.current?.focus();
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [showConsent]);
 
   useEffect(() => {
@@ -190,15 +187,15 @@ export function SaveResultDialog() {
     consentModalRef.current.focus();
 
     const handleFocusTrap = createFocusTrapHandler(consentModalRef);
-    document.addEventListener("keydown", handleFocusTrap);
-    return () => document.removeEventListener("keydown", handleFocusTrap);
+    document.addEventListener('keydown', handleFocusTrap);
+    return () => document.removeEventListener('keydown', handleFocusTrap);
   }, [showConsent]);
 
   // Prevent body scroll when consent modal is open
   useEffect(() => {
     if (!showConsent) return;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -210,13 +207,13 @@ export function SaveResultDialog() {
     if (!isOpen) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         handleClose();
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleClose]);
 
   useEffect(() => {
@@ -228,22 +225,22 @@ export function SaveResultDialog() {
     });
 
     const handleFocusTrap = createFocusTrapHandler(saveDialogRef);
-    document.addEventListener("keydown", handleFocusTrap);
-    return () => document.removeEventListener("keydown", handleFocusTrap);
+    document.addEventListener('keydown', handleFocusTrap);
+    return () => document.removeEventListener('keydown', handleFocusTrap);
   }, [isOpen]);
 
   // Prevent body scroll when save dialog is open
   useEffect(() => {
     if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
 
   // Don't render if conditions aren't met
-  if (!fullResults || currentStep !== "complete") return null;
+  if (!fullResults || currentStep !== 'complete') return null;
 
   // Demo results can't be saved
   if (isDemo) return null;
@@ -251,7 +248,7 @@ export function SaveResultDialog() {
   // Not authenticated — prompt to sign in
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center gap-2 text-sm text-(--text-muted)">
+      <div className="text-(--text-muted) flex items-center gap-2 text-sm">
         <Save className="h-4 w-4" aria-hidden="true" />
         <span>Sign in to save your analysis</span>
       </div>
@@ -262,24 +259,19 @@ export function SaveResultDialog() {
     <>
       {/* Save button */}
       <div className="flex items-center gap-3">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleOpen}
-          disabled={isAtLimit || isSaving}
-        >
+        <Button variant="outline" size="sm" onClick={handleOpen} disabled={isAtLimit || isSaving}>
           <Save className="h-4 w-4" />
           Save Analysis
         </Button>
         {tierLimitText && (
-          <span className="text-xs text-(--text-muted)" aria-live="polite">
+          <span className="text-(--text-muted) text-xs" aria-live="polite">
             {tierLimitText}
           </span>
         )}
-        {isAtLimit && userTier !== "pro" && upgradeCTAText && (
+        {isAtLimit && userTier !== 'pro' && upgradeCTAText && (
           <a
             href="/subscription"
-            className="inline-flex items-center gap-1 text-xs font-medium text-(--accent-teal) hover:underline"
+            className="text-(--accent-teal) inline-flex items-center gap-1 text-xs font-medium hover:underline"
           >
             <Crown className="h-3 w-3" aria-hidden="true" />
             {upgradeCTAText}
@@ -291,7 +283,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {showConsent && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
+            className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             onClick={handleConsentBackdropClick}
             role="presentation"
           >
@@ -300,7 +292,7 @@ export function SaveResultDialog() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-md mx-4"
+              className="mx-4 w-full max-w-md"
             >
               <div
                 ref={consentModalRef}
@@ -312,45 +304,35 @@ export function SaveResultDialog() {
               >
                 <GlassCard variant="medium" hover="none" className="p-6">
                   <div className="mb-4 flex items-center gap-3">
-                    <AlertTriangle className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
+                    <AlertTriangle className="text-(--accent-amber) h-5 w-5" aria-hidden="true" />
                     <h2
                       id="consent-dialog-title"
-                      className="font-heading text-lg font-bold text-(--text-heading)"
+                      className="font-heading text-(--text-heading) text-lg font-bold"
                     >
                       Save Analysis
                     </h2>
                   </div>
 
-                  <p className="text-sm text-(--text-body)">
-                    Your analysis results will be encrypted and stored on our servers.
-                    Your raw genetic files are never uploaded — only the processed results.
+                  <p className="text-(--text-body) text-sm">
+                    Your analysis results will be encrypted and stored on our servers. Your raw
+                    genetic files are never uploaded — only the processed results.
                   </p>
-                  <p className="mt-2 text-sm text-(--text-muted)">
-                    You can delete your saved analyses at any time from your account.
-                    See our{" "}
+                  <p className="text-(--text-muted) mt-2 text-sm">
+                    You can delete your saved analyses at any time from your account. See our{' '}
                     <Link
                       href="/legal#privacy"
-                      className="font-medium text-(--accent-teal) underline hover:no-underline"
+                      className="text-(--accent-teal) font-medium underline hover:no-underline"
                     >
                       Privacy Policy
-                    </Link>{" "}
+                    </Link>{' '}
                     for details.
                   </p>
 
                   <div className="mt-6 flex gap-3">
-                    <Button
-                      variant="primary"
-                      size="md"
-                      onClick={handleConsent}
-                      className="flex-1"
-                    >
+                    <Button variant="primary" size="md" onClick={handleConsent} className="flex-1">
                       I Understand
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="md"
-                      onClick={handleConsentCancel}
-                    >
+                    <Button variant="ghost" size="md" onClick={handleConsentCancel}>
                       Cancel
                     </Button>
                   </div>
@@ -365,7 +347,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {isOpen && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
+            className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             onClick={handleSaveBackdropClick}
             role="presentation"
           >
@@ -374,7 +356,7 @@ export function SaveResultDialog() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-md mx-4"
+              className="mx-4 w-full max-w-md"
             >
               <div
                 ref={saveDialogRef}
@@ -388,14 +370,14 @@ export function SaveResultDialog() {
                   <div className="mb-4 flex items-center justify-between">
                     <h2
                       id="save-dialog-title"
-                      className="font-heading text-lg font-bold text-(--text-heading)"
+                      className="font-heading text-(--text-heading) text-lg font-bold"
                     >
                       Save Analysis
                     </h2>
                     <button
                       type="button"
                       onClick={handleClose}
-                      className="rounded-lg p-1 text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary)"
+                      className="text-(--text-muted) hover:text-(--text-primary) rounded-lg p-1 transition-colors hover:bg-[rgba(6,214,160,0.06)]"
                       aria-label="Close save dialog"
                     >
                       <X className="h-5 w-5" />
@@ -412,9 +394,7 @@ export function SaveResultDialog() {
                   />
 
                   {tierLimitText && (
-                    <p className="mt-2 text-xs text-(--text-muted)">
-                      {tierLimitText}
-                    </p>
+                    <p className="text-(--text-muted) mt-2 text-xs">{tierLimitText}</p>
                   )}
 
                   {/* Save error */}
@@ -425,7 +405,7 @@ export function SaveResultDialog() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
+                        className="text-(--accent-rose) mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
                         role="alert"
                       >
                         {saveError}
@@ -445,12 +425,7 @@ export function SaveResultDialog() {
                       <Save className="h-4 w-4" />
                       Save
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="md"
-                      onClick={handleClose}
-                      disabled={isSaving}
-                    >
+                    <Button variant="ghost" size="md" onClick={handleClose} disabled={isSaving}>
                       Cancel
                     </Button>
                   </div>

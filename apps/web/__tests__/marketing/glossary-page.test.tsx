@@ -3,17 +3,12 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 // ─── Hoisted shared mock factories ────────────────────────────────────────────
-const {
-  createIconMock,
-  glassCardModule,
-  sectionHeadingModule,
-  pageHeaderModule,
-  nextLinkModule,
-} = vi.hoisted(() => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createMarketingMocks } = require('../__helpers__/mock-marketing.ts');
-  return createMarketingMocks();
-});
+const { createIconMock, glassCardModule, sectionHeadingModule, pageHeaderModule, nextLinkModule } =
+  vi.hoisted(() => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createMarketingMocks } = require('../__helpers__/mock-marketing.ts');
+    return createMarketingMocks();
+  });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -62,7 +57,9 @@ describe('GlossaryPage', () => {
   it('renders the Genetic Glossary heading', () => {
     render(<GlossaryContent />);
 
-    expect(screen.getByRole('heading', { level: 1, name: /Genetic Glossary/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: /Genetic Glossary/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders glossary terms in GlassCard components', () => {
@@ -106,9 +103,7 @@ describe('GlossaryPage', () => {
     const { container } = render(<GlossaryContent />);
 
     const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    const levels = Array.from(headings).map((h) =>
-      parseInt(h.tagName.replace('H', ''), 10),
-    );
+    const levels = Array.from(headings).map((h) => parseInt(h.tagName.replace('H', ''), 10));
 
     expect(levels).toContain(1);
     for (let i = 0; i < levels.length - 1; i++) {

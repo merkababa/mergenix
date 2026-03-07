@@ -10,11 +10,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  detectCompression,
-  DecompressionError,
-  decompress,
-} from '../src/decompression';
+import { detectCompression, DecompressionError, decompress } from '../src/decompression';
 import type { CompressionFormat } from '../src/decompression';
 
 // ─── detectCompression ──────────────────────────────────────────────────────
@@ -97,13 +93,9 @@ describe('DecompressionError', () => {
   });
 
   it('should support all error codes', () => {
-    const codes: Array<'SIZE_EXCEEDED' | 'RATIO_EXCEEDED' | 'TIMEOUT' | 'UNSUPPORTED_FORMAT' | 'CORRUPT'> = [
-      'SIZE_EXCEEDED',
-      'RATIO_EXCEEDED',
-      'TIMEOUT',
-      'UNSUPPORTED_FORMAT',
-      'CORRUPT',
-    ];
+    const codes: Array<
+      'SIZE_EXCEEDED' | 'RATIO_EXCEEDED' | 'TIMEOUT' | 'UNSUPPORTED_FORMAT' | 'CORRUPT'
+    > = ['SIZE_EXCEEDED', 'RATIO_EXCEEDED', 'TIMEOUT', 'UNSUPPORTED_FORMAT', 'CORRUPT'];
 
     for (const code of codes) {
       const err = new DecompressionError(code, `Error: ${code}`);
@@ -120,10 +112,7 @@ describe('decompress', () => {
     const blob = new Blob([content], { type: 'text/plain' });
     const file = new File([blob], 'test.txt');
 
-    const result = await decompress(
-      file,
-      { maxSize: 1024 * 1024, maxRatio: 100, timeout: 5000 },
-    );
+    const result = await decompress(file, { maxSize: 1024 * 1024, maxRatio: 100, timeout: 5000 });
 
     expect(result.format).toBe('raw');
     expect(result.originalSize).toBe(file.size);
@@ -140,8 +129,8 @@ describe('decompress', () => {
     }
 
     const decoder = new TextDecoder();
-    const decoded = chunks.map(c => decoder.decode(c, { stream: true })).join('') +
-      decoder.decode();
+    const decoded =
+      chunks.map((c) => decoder.decode(c, { stream: true })).join('') + decoder.decode();
     expect(decoded).toBe(content);
   });
 
@@ -165,18 +154,41 @@ describe('decompress', () => {
     // Create a minimal ZIP-like file (just the magic bytes, not valid)
     // The ZIP handler reads the full file and tries to find genetic data
     const zipData = new Uint8Array([
-      0x50, 0x4b, 0x03, 0x04, // PK signature
-      0x00, 0x00, // version
-      0x00, 0x00, // flags
-      0x00, 0x00, // compression method (stored)
-      0x00, 0x00, // mod time
-      0x00, 0x00, // mod date
-      0x00, 0x00, 0x00, 0x00, // crc32
-      0x00, 0x00, 0x00, 0x00, // compressed size = 0
-      0x00, 0x00, 0x00, 0x00, // uncompressed size = 0
-      0x05, 0x00, // filename length = 5
-      0x00, 0x00, // extra length = 0
-      0x61, 0x2e, 0x74, 0x78, 0x74, // "a.txt"
+      0x50,
+      0x4b,
+      0x03,
+      0x04, // PK signature
+      0x00,
+      0x00, // version
+      0x00,
+      0x00, // flags
+      0x00,
+      0x00, // compression method (stored)
+      0x00,
+      0x00, // mod time
+      0x00,
+      0x00, // mod date
+      0x00,
+      0x00,
+      0x00,
+      0x00, // crc32
+      0x00,
+      0x00,
+      0x00,
+      0x00, // compressed size = 0
+      0x00,
+      0x00,
+      0x00,
+      0x00, // uncompressed size = 0
+      0x05,
+      0x00, // filename length = 5
+      0x00,
+      0x00, // extra length = 0
+      0x61,
+      0x2e,
+      0x74,
+      0x78,
+      0x74, // "a.txt"
       // No data follows since compressed size = 0
     ]);
 
@@ -185,9 +197,9 @@ describe('decompress', () => {
 
     // The ZIP handler looks for genetic data files with size > 0
     // This entry has compressedSize=0, so it should be skipped and throw CORRUPT
-    await expect(
-      decompress(file, { maxSize: 1024, maxRatio: 100, timeout: 5000 }),
-    ).rejects.toThrow('No genetic data file');
+    await expect(decompress(file, { maxSize: 1024, maxRatio: 100, timeout: 5000 })).rejects.toThrow(
+      'No genetic data file',
+    );
   });
 });
 

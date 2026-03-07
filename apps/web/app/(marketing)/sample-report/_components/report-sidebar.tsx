@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 // ─── Constants (hoisted outside component body — checklist §3) ───────────────
 
@@ -12,11 +12,11 @@ interface SectionLink {
 }
 
 const SECTION_LINKS: SectionLink[] = [
-  { id: "carrier-section", label: "Carrier Screening", icon: "🧬" },
-  { id: "traits-section", label: "Trait Predictions", icon: "⚗️" },
-  { id: "pgx-section", label: "Pharmacogenomics", icon: "💊" },
-  { id: "prs-section", label: "Polygenic Risk", icon: "📊" },
-  { id: "counseling-section", label: "Counseling", icon: "🏥" },
+  { id: 'carrier-section', label: 'Carrier Screening', icon: '🧬' },
+  { id: 'traits-section', label: 'Trait Predictions', icon: '⚗️' },
+  { id: 'pgx-section', label: 'Pharmacogenomics', icon: '💊' },
+  { id: 'prs-section', label: 'Polygenic Risk', icon: '📊' },
+  { id: 'counseling-section', label: 'Counseling', icon: '🏥' },
 ];
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -33,7 +33,7 @@ export function ReportSidebar() {
 
   // Scroll-spy via Intersection Observer (guarded for SSR/jsdom environments)
   useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
+    if (typeof IntersectionObserver === 'undefined') return;
 
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
       // Find the topmost visible section
@@ -46,7 +46,7 @@ export function ReportSidebar() {
     };
 
     observerRef.current = new IntersectionObserver(handleIntersect, {
-      rootMargin: "-20% 0px -60% 0px",
+      rootMargin: '-20% 0px -60% 0px',
       threshold: 0,
     });
 
@@ -60,18 +60,15 @@ export function ReportSidebar() {
     };
   }, []);
 
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-      e.preventDefault();
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        el.focus({ preventScroll: true });
-        setActiveSection(id);
-      }
-    },
-    [],
-  );
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.focus({ preventScroll: true });
+      setActiveSection(id);
+    }
+  }, []);
 
   return (
     <>
@@ -88,12 +85,12 @@ export function ReportSidebar() {
                   href={`#${id}`}
                   onClick={(e) => handleNavClick(e, id)}
                   className={cn(
-                    "flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-all duration-200",
+                    'flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-all duration-200',
                     activeSection === id
-                      ? "bg-[rgba(6,214,160,0.12)] text-(--accent-teal)"
-                      : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-body)",
+                      ? 'text-(--accent-teal) bg-[rgba(6,214,160,0.12)]'
+                      : 'text-(--text-muted) hover:text-(--text-body) hover:bg-[rgba(6,214,160,0.06)]',
                   )}
-                  aria-current={activeSection === id ? "location" : undefined}
+                  aria-current={activeSection === id ? 'location' : undefined}
                 >
                   <span aria-hidden="true">{icon}</span>
                   {label}
@@ -107,7 +104,7 @@ export function ReportSidebar() {
       {/* Mobile horizontal tab bar — sticky at top */}
       <div className="relative lg:hidden">
         <nav
-          className="sticky top-0 z-30 -mx-4 mb-6 overflow-x-auto border-b border-(--border-subtle) bg-(--bg-base) px-4 pb-2 pt-2"
+          className="border-(--border-subtle) bg-(--bg-base) sticky top-0 z-30 -mx-4 mb-6 overflow-x-auto border-b px-4 pb-2 pt-2"
           aria-label="Report sections"
         >
           <ul className="flex gap-1 whitespace-nowrap" role="list">
@@ -117,12 +114,12 @@ export function ReportSidebar() {
                   href={`#${id}`}
                   onClick={(e) => handleNavClick(e, id)}
                   className={cn(
-                    "inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200",
+                    'inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200',
                     activeSection === id
-                      ? "bg-[rgba(6,214,160,0.12)] text-(--accent-teal)"
-                      : "text-(--text-muted) hover:text-(--text-body)",
+                      ? 'text-(--accent-teal) bg-[rgba(6,214,160,0.12)]'
+                      : 'text-(--text-muted) hover:text-(--text-body)',
                   )}
-                  aria-current={activeSection === id ? "location" : undefined}
+                  aria-current={activeSection === id ? 'location' : undefined}
                 >
                   <span aria-hidden="true">{icon}</span>
                   {label}
@@ -132,7 +129,7 @@ export function ReportSidebar() {
           </ul>
         </nav>
         <div
-          className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-(--bg-glass) to-transparent"
+          className="bg-linear-to-l from-(--bg-glass) pointer-events-none absolute bottom-0 right-0 top-0 w-8 to-transparent"
           aria-hidden="true"
         />
       </div>

@@ -20,7 +20,9 @@ vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
 vi.mock('@/components/marketing/section-heading', () => mockSectionHeadingFactory());
 vi.mock('next/link', () => mockNextLinkFactory());
 // Mock lucide-react icons used by BentoFeatures
-vi.mock('lucide-react', () => mockLucideIcons('Microscope', 'Dna', 'Pill', 'BarChart3', 'ArrowRight'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('Microscope', 'Dna', 'Pill', 'BarChart3', 'ArrowRight'),
+);
 
 // ─── Import under test ────────────────────────────────────────────────────────
 
@@ -31,7 +33,9 @@ import { BentoFeatures } from '../../app/_components/bento-features';
 describe('BentoFeatures', () => {
   it('renders the section heading', () => {
     render(<BentoFeatures />);
-    expect(screen.getByRole('heading', { name: /Comprehensive Genetic Intelligence/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Comprehensive Genetic Intelligence/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders the hero feature card with disease screening title', () => {

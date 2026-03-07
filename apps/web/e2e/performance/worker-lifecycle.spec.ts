@@ -70,16 +70,11 @@ async function installWorkerSpy(page: import('@playwright/test').Page): Promise<
         (window as any).__workerSpy.instances.push(this);
 
         // Intercept messages FROM the worker
-        const originalOnMessage = Object.getOwnPropertyDescriptor(
-          this,
-          'onmessage',
-        );
+        const originalOnMessage = Object.getOwnPropertyDescriptor(this, 'onmessage');
 
         // Use an event listener to capture all messages
         this.addEventListener('message', (event: MessageEvent) => {
-          (window as any).__workerSpy.receivedMessages.push(
-            JSON.parse(JSON.stringify(event.data)),
-          );
+          (window as any).__workerSpy.receivedMessages.push(JSON.parse(JSON.stringify(event.data)));
         });
 
         // Override terminate
@@ -93,9 +88,7 @@ async function installWorkerSpy(page: import('@playwright/test').Page): Promise<
         // Override postMessage to spy on messages TO the worker
         const originalPostMessage = this.postMessage.bind(this);
         this.postMessage = (msg: any, ...rest: any[]) => {
-          (window as any).__workerSpy.postMessages.push(
-            JSON.parse(JSON.stringify(msg)),
-          );
+          (window as any).__workerSpy.postMessages.push(JSON.parse(JSON.stringify(msg)));
           return (originalPostMessage as any)(msg, ...rest);
         };
       }
@@ -112,11 +105,8 @@ async function uploadSyntheticFile(
   content: string,
   filename: string,
 ): Promise<void> {
-  const dropzoneLabel =
-    slot === 'A' ? /parent a.*mother/i : /parent b.*father/i;
-  const fileInput = page
-    .getByRole('button', { name: dropzoneLabel })
-    .locator('input[type="file"]');
+  const dropzoneLabel = slot === 'A' ? /parent a.*mother/i : /parent b.*father/i;
+  const fileInput = page.getByRole('button', { name: dropzoneLabel }).locator('input[type="file"]');
 
   await fileInput.setInputFiles({
     name: filename,
@@ -135,18 +125,14 @@ test.describe('Performance: Worker Lifecycle', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('worker initializes on analysis page load when analysis starts', async ({
-    page,
-  }) => {
+  test('worker initializes on analysis page load when analysis starts', async ({ page }) => {
     // Install the worker spy BEFORE navigating
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
 
     // Wait for the page to be interactive
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // The worker is LAZILY instantiated (only on first startAnalysis call).
     // Verify no worker exists before starting analysis.
@@ -168,20 +154,15 @@ test.describe('Performance: Worker Lifecycle', () => {
 
     // Wait for the worker to be created
     await expect
-      .poll(
-        () => page.evaluate(() => (window as any).__workerSpy.instances.length),
-        { message: 'Worker should be instantiated after starting analysis' },
-      )
+      .poll(() => page.evaluate(() => (window as any).__workerSpy.instances.length), {
+        message: 'Worker should be instantiated after starting analysis',
+      })
       .toBeGreaterThanOrEqual(1);
 
     // Verify a 'parse' message was sent to the worker
-    const postMessages = await page.evaluate(
-      () => (window as any).__workerSpy.postMessages,
-    );
+    const postMessages = await page.evaluate(() => (window as any).__workerSpy.postMessages);
 
-    const parseMessages = postMessages.filter(
-      (msg: any) => msg.type === 'parse',
-    );
+    const parseMessages = postMessages.filter((msg: any) => msg.type === 'parse');
     expect(parseMessages.length).toBeGreaterThanOrEqual(1);
 
     // Verify the parse message contains two files
@@ -195,15 +176,11 @@ test.describe('Performance: Worker Lifecycle', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('worker terminates on navigation away from analysis', async ({
-    page,
-  }) => {
+  test('worker terminates on navigation away from analysis', async ({ page }) => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files and start analysis to instantiate the worker
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
@@ -213,10 +190,9 @@ test.describe('Performance: Worker Lifecycle', () => {
 
     // Wait for the worker to be instantiated
     await expect
-      .poll(
-        () => page.evaluate(() => (window as any).__workerSpy.instances.length),
-        { message: 'Worker should be instantiated' },
-      )
+      .poll(() => page.evaluate(() => (window as any).__workerSpy.instances.length), {
+        message: 'Worker should be instantiated',
+      })
       .toBeGreaterThanOrEqual(1);
 
     // Navigate away from the analysis page — this triggers useEffect cleanup
@@ -227,17 +203,13 @@ test.describe('Performance: Worker Lifecycle', () => {
     await page.waitForLoadState('domcontentloaded');
 
     // Verify the worker was terminated
-    const terminated = await page.evaluate(
-      () => (window as any).__workerSpy?.terminated ?? false,
-    );
+    const terminated = await page.evaluate(() => (window as any).__workerSpy?.terminated ?? false);
 
     // Note: After navigation, the spy may be gone if it was a full page load.
     // So we also check that no workers are actively running.
     // The key verification is that we observed terminate being called
     // OR the spy is gone (meaning the page unloaded).
-    expect(
-      terminated || !(await page.evaluate(() => !!(window as any).__workerSpy)),
-    ).toBeTruthy();
+    expect(terminated || !(await page.evaluate(() => !!(window as any).__workerSpy))).toBeTruthy();
   });
 
   // -------------------------------------------------------------------------
@@ -245,15 +217,11 @@ test.describe('Performance: Worker Lifecycle', () => {
   // Priority: P1 | Reviewers: Technologist, Scientist
   // -------------------------------------------------------------------------
 
-  test('valid file parse produces parse_complete with correct SNP count', async ({
-    page,
-  }) => {
+  test('valid file parse produces parse_complete with correct SNP count', async ({ page }) => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
@@ -312,25 +280,13 @@ test.describe('Performance: Worker Lifecycle', () => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload one valid file and one invalid file
     // The dropzone format detection happens client-side, so we need to
     // use a .txt extension to get past the format check
-    await uploadSyntheticFile(
-      page,
-      'A',
-      MINIMAL_DNA_CONTENT,
-      'valid-parentA.txt',
-    );
-    await uploadSyntheticFile(
-      page,
-      'B',
-      INVALID_DNA_CONTENT,
-      'invalid-parentB.txt',
-    );
+    await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'valid-parentA.txt');
+    await uploadSyntheticFile(page, 'B', INVALID_DNA_CONTENT, 'invalid-parentB.txt');
 
     // Start analysis
     await page.getByRole('button', { name: /start analysis/i }).click();
@@ -357,8 +313,7 @@ test.describe('Performance: Worker Lifecycle', () => {
             );
           }),
         {
-          message:
-            'Worker should send an error or parse_complete for invalid file',
+          message: 'Worker should send an error or parse_complete for invalid file',
           timeout: 15000,
         },
       )
@@ -390,9 +345,7 @@ test.describe('Performance: Worker Lifecycle', () => {
       // Verify the error has an appropriate code
       const parseError = errorMsgs.find(
         (m: any) =>
-          m.code === 'PARSE_ERROR' ||
-          m.code === 'MISSING_DATA' ||
-          m.code === 'ANALYSIS_ERROR',
+          m.code === 'PARSE_ERROR' || m.code === 'MISSING_DATA' || m.code === 'ANALYSIS_ERROR',
       );
       expect(parseError).toBeTruthy();
     }
@@ -444,17 +397,13 @@ test.describe('Performance: Worker Lifecycle', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('worker analysis completes and posts analysis_complete', async ({
-    page,
-  }) => {
+  test('worker analysis completes and posts analysis_complete', async ({ page }) => {
     test.slow(); // Analysis may take time
 
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files and start
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
@@ -509,21 +458,17 @@ test.describe('Performance: Worker Lifecycle', () => {
     expect(stages).toContain('complete');
 
     // Verify the analyze message was auto-chained after parse_complete
-    const postMessages = await page.evaluate(
-      () => (window as any).__workerSpy.postMessages,
-    );
-    const analyzeMsgs = postMessages.filter(
-      (m: any) => m.type === 'analyze',
-    );
+    const postMessages = await page.evaluate(() => (window as any).__workerSpy.postMessages);
+    const analyzeMsgs = postMessages.filter((m: any) => m.type === 'analyze');
     expect(analyzeMsgs.length).toBeGreaterThanOrEqual(1);
 
     // The analyze message should include a tier
     expect(analyzeMsgs[0].tier).toBeTruthy();
 
     // Verify UI shows results — tab list should be visible
-    await expect(
-      page.getByRole('tablist', { name: /analysis results/i }),
-    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('tablist', { name: /analysis results/i })).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   // -------------------------------------------------------------------------
@@ -535,9 +480,7 @@ test.describe('Performance: Worker Lifecycle', () => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files and start analysis
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
@@ -590,9 +533,7 @@ test.describe('Performance: Worker Lifecycle', () => {
     const cancelMsgs = await page.evaluate(() => {
       const msgs = (window as any).__workerSpy?.receivedMessages ?? [];
       return msgs.filter(
-        (m: any) =>
-          m.type === 'error' &&
-          (m.code === 'CANCELLED' || m.code === 'CANCEL_ACK'),
+        (m: any) => m.type === 'error' && (m.code === 'CANCELLED' || m.code === 'CANCEL_ACK'),
       );
     });
 
@@ -610,9 +551,7 @@ test.describe('Performance: Worker Lifecycle', () => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
@@ -623,13 +562,9 @@ test.describe('Performance: Worker Lifecycle', () => {
 
     // Wait for the worker to be instantiated and processing to start
     await expect
-      .poll(
-        () =>
-          page.evaluate(
-            () => (window as any).__workerSpy?.instances?.length ?? 0,
-          ),
-        { message: 'Worker should be instantiated' },
-      )
+      .poll(() => page.evaluate(() => (window as any).__workerSpy?.instances?.length ?? 0), {
+        message: 'Worker should be instantiated',
+      })
       .toBeGreaterThanOrEqual(1);
 
     // Directly send a second parse request to the worker while it's busy
@@ -640,9 +575,7 @@ test.describe('Performance: Worker Lifecycle', () => {
       if (worker) {
         worker.postMessage({
           type: 'parse',
-          files: [
-            { name: 'extra.txt', content: 'rs1234\t1\t100\tAG' },
-          ],
+          files: [{ name: 'extra.txt', content: 'rs1234\t1\t100\tAG' }],
         });
       }
     });
@@ -653,9 +586,7 @@ test.describe('Performance: Worker Lifecycle', () => {
         () =>
           page.evaluate(() => {
             const msgs = (window as any).__workerSpy?.receivedMessages ?? [];
-            return msgs.some(
-              (m: any) => m.type === 'error' && m.code === 'WORKER_BUSY',
-            );
+            return msgs.some((m: any) => m.type === 'error' && m.code === 'WORKER_BUSY');
           }),
         {
           message: 'Worker should respond with WORKER_BUSY when sent a second request',
@@ -667,9 +598,7 @@ test.describe('Performance: Worker Lifecycle', () => {
     // Verify the WORKER_BUSY error message content
     const busyMsgs = await page.evaluate(() => {
       const msgs = (window as any).__workerSpy.receivedMessages;
-      return msgs.filter(
-        (m: any) => m.type === 'error' && m.code === 'WORKER_BUSY',
-      );
+      return msgs.filter((m: any) => m.type === 'error' && m.code === 'WORKER_BUSY');
     });
 
     expect(busyMsgs.length).toBeGreaterThanOrEqual(1);
@@ -681,24 +610,18 @@ test.describe('Performance: Worker Lifecycle', () => {
   // Priority: P1 | Reviewer: Technologist
   // -------------------------------------------------------------------------
 
-  test('rapid clicks on "Run Analysis" trigger only one analysis', async ({
-    page,
-  }) => {
+  test('rapid clicks on "Run Analysis" trigger only one analysis', async ({ page }) => {
     await installWorkerSpy(page);
 
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: 'Genetic Analysis' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
     // Upload files
     await uploadSyntheticFile(page, 'A', MINIMAL_DNA_CONTENT, 'parentA.txt');
     await uploadSyntheticFile(page, 'B', MINIMAL_DNA_CONTENT, 'parentB.txt');
 
     // Wait for files to be displayed and Start Analysis to appear
-    await expect(
-      page.getByRole('button', { name: /start analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /start analysis/i })).toBeVisible();
 
     // Rapidly click the Start Analysis button 5 times
     const startButton = page.getByRole('button', { name: /start analysis/i });
@@ -717,10 +640,7 @@ test.describe('Performance: Worker Lifecycle', () => {
             const msgs = (window as any).__workerSpy?.receivedMessages ?? [];
             return (
               msgs.some((m: any) => m.type === 'analysis_complete') ||
-              msgs.some(
-                (m: any) =>
-                  m.type === 'error' && m.code === 'WORKER_BUSY',
-              ) ||
+              msgs.some((m: any) => m.type === 'error' && m.code === 'WORKER_BUSY') ||
               msgs.some((m: any) => m.type === 'parse_complete')
             );
           }),
@@ -746,9 +666,7 @@ test.describe('Performance: Worker Lifecycle', () => {
 
     const workerBusyMessages = await page.evaluate(() => {
       const msgs = (window as any).__workerSpy.receivedMessages;
-      return msgs.filter(
-        (m: any) => m.type === 'error' && m.code === 'WORKER_BUSY',
-      );
+      return msgs.filter((m: any) => m.type === 'error' && m.code === 'WORKER_BUSY');
     });
 
     // Either only 1 parse was sent (UI-level debouncing), or extras got WORKER_BUSY

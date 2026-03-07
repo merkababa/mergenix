@@ -117,7 +117,10 @@ export function mockAuthStoreFactory(overrides?: Partial<MockAuthStoreState>) {
     setup2FA: vi.fn().mockResolvedValue({ qrCode: 'mock-qr', secret: 'mock-secret' }),
     verify2FA: vi.fn().mockResolvedValue(undefined),
     disable2FA: vi.fn().mockResolvedValue(undefined),
-    getGoogleOAuthUrl: vi.fn().mockResolvedValue({ authorizationUrl: 'https://accounts.google.com/o/oauth2', state: 'mock-state' }),
+    getGoogleOAuthUrl: vi.fn().mockResolvedValue({
+      authorizationUrl: 'https://accounts.google.com/o/oauth2',
+      state: 'mock-state',
+    }),
     googleCallback: vi.fn().mockResolvedValue(undefined),
     clearError: vi.fn(),
     ...overrides,

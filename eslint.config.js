@@ -22,7 +22,7 @@ export default tseslint.config(
       'apps/web/components/genetics/**/*.{ts,tsx}',
     ],
     plugins: {
-      'privacy': {
+      privacy: {
         rules: {
           'enforce-use-client': enforceUseClient,
         },

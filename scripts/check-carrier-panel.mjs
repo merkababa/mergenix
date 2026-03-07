@@ -103,7 +103,9 @@ function main() {
   try {
     rawData = readFileSync(CARRIER_PANEL_PATH, 'utf-8');
   } catch (err) {
-    console.error(`check-carrier-panel: ERROR — cannot read carrier panel at ${CARRIER_PANEL_PATH}`);
+    console.error(
+      `check-carrier-panel: ERROR — cannot read carrier panel at ${CARRIER_PANEL_PATH}`,
+    );
     console.error(`  ${err.message}`);
     process.exit(1);
   }
@@ -134,7 +136,7 @@ function main() {
 
   if (allViolations.length === 0) {
     console.warn(
-      `check-carrier-panel: PASS — ${entries.length} entries scanned, 0 CNV/SV violations found.`
+      `check-carrier-panel: PASS — ${entries.length} entries scanned, 0 CNV/SV violations found.`,
     );
     process.exit(0);
   }

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
-import { AlertTriangle } from "lucide-react";
-import { CYP2D6_ARRAY_LIMITATION } from "@/lib/constants/disclaimers";
+import { memo } from 'react';
+import { AlertTriangle } from 'lucide-react';
+import { CYP2D6_ARRAY_LIMITATION } from '@/lib/constants/disclaimers';
 
 interface CYP2D6WarningProps {
   gene: string;
@@ -27,16 +27,16 @@ export const CYP2D6Warning = memo(function CYP2D6Warning({
       aria-label={`${gene} testing limitation`}
       className="flex items-start gap-2 rounded-lg border px-3 py-2"
       style={{
-        backgroundColor: "rgba(245, 158, 11, 0.06)",
-        borderColor: "rgba(245, 158, 11, 0.2)",
+        backgroundColor: 'rgba(245, 158, 11, 0.06)',
+        borderColor: 'rgba(245, 158, 11, 0.2)',
       }}
     >
       <AlertTriangle
         className="mt-0.5 h-4 w-4 shrink-0"
-        style={{ color: "var(--accent-amber)" }}
+        style={{ color: 'var(--accent-amber)' }}
         aria-hidden="true"
       />
-      <p className="text-[11px] leading-relaxed text-(--text-body)">
+      <p className="text-(--text-body) text-[11px] leading-relaxed">
         <span className="font-semibold">{gene}:</span> {message}
       </p>
     </div>

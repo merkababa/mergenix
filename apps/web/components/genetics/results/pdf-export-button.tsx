@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import Link from "next/link";
-import { FileDown, AlertCircle, RefreshCw, Lock } from "lucide-react";
-import { usePdfExport } from "@/lib/pdf/use-pdf-export";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import type { FullAnalysisResult } from "@mergenix/shared-types";
+import Link from 'next/link';
+import { FileDown, AlertCircle, RefreshCw, Lock } from 'lucide-react';
+import { usePdfExport } from '@/lib/pdf/use-pdf-export';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import type { FullAnalysisResult } from '@mergenix/shared-types';
 
 interface PdfExportButtonProps {
   result: FullAnalysisResult;
@@ -20,21 +20,20 @@ interface PdfExportButtonProps {
  * - Displays progress during generation, error state with retry, and download link when ready
  */
 export function PdfExportButton({ result }: PdfExportButtonProps) {
-  const userTier = useAuthStore((s) => s.user?.tier ?? "free");
-  const { isGenerating, progress, error, blobUrl, generatePdf, reset } =
-    usePdfExport();
+  const userTier = useAuthStore((s) => s.user?.tier ?? 'free');
+  const { isGenerating, progress, error, blobUrl, generatePdf, reset } = usePdfExport();
 
   // ── Non-pro users: show upgrade prompt ──────────────────────────────
-  if (userTier !== "pro") {
+  if (userTier !== 'pro') {
     return (
       <div className="flex items-center gap-3 rounded-xl border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] px-4 py-3">
-        <Lock className="h-4 w-4 shrink-0 text-accent-violet" aria-hidden="true" />
-        <p className="flex-1 text-sm text-(--text-body)">
+        <Lock className="text-accent-violet h-4 w-4 shrink-0" aria-hidden="true" />
+        <p className="text-(--text-body) flex-1 text-sm">
           PDF export is available on the Pro plan.
         </p>
         <Link
           href="/subscription"
-          className="text-sm font-medium text-accent-violet underline hover:text-day-accent-violet"
+          className="text-accent-violet hover:text-day-accent-violet text-sm font-medium underline"
         >
           Upgrade
         </Link>
@@ -46,7 +45,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
   if (error) {
     return (
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 text-sm text-(--accent-rose)" role="alert">
+        <div className="text-(--accent-rose) flex items-center gap-2 text-sm" role="alert">
           <AlertCircle className="h-4 w-4" aria-hidden="true" />
           <span>{error}</span>
         </div>
@@ -56,7 +55,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
             reset();
             generatePdf(result);
           }}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-3 py-1.5 text-sm font-medium text-(--text-body) transition-colors hover:bg-(--bg-surface)"
+          className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) hover:bg-(--bg-surface) inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors"
           aria-label="Retry PDF generation"
         >
           <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -72,7 +71,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
       <a
         href={blobUrl}
         download="mergenix-report.pdf"
-        className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-accent-teal to-day-accent-teal px-4 py-2 text-sm font-semibold text-bio-deep shadow-[0_2px_8px_rgba(6,214,160,0.25)] transition-all hover:shadow-[0_4px_16px_rgba(6,214,160,0.35)]"
+        className="bg-linear-to-r from-accent-teal to-day-accent-teal text-bio-deep inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-[0_2px_8px_rgba(6,214,160,0.25)] transition-all hover:shadow-[0_4px_16px_rgba(6,214,160,0.35)]"
         aria-label="Download PDF report"
       >
         <FileDown className="h-4 w-4" aria-hidden="true" />
@@ -90,7 +89,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
           disabled
           aria-busy="true"
           aria-label="Generating PDF report"
-          className="inline-flex items-center gap-2 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-4 py-2 text-sm font-medium text-(--text-muted) opacity-70"
+          className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium opacity-70"
         >
           <FileDown className="h-4 w-4 animate-pulse" aria-hidden="true" />
           Generating...
@@ -102,14 +101,16 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={100}
-            className="h-2 w-24 overflow-hidden rounded-full bg-(--bg-surface)"
+            className="bg-(--bg-surface) h-2 w-24 overflow-hidden rounded-full"
           >
             <div
-              className="h-full rounded-full bg-linear-to-r from-accent-teal to-day-accent-teal transition-all duration-300"
+              className="bg-linear-to-r from-accent-teal to-day-accent-teal h-full rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <span className="text-xs text-(--text-muted)" aria-live="polite">{progress}%</span>
+          <span className="text-(--text-muted) text-xs" aria-live="polite">
+            {progress}%
+          </span>
         </div>
       </div>
     );
@@ -121,7 +122,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
       type="button"
       onClick={() => generatePdf(result)}
       aria-label="Download PDF report"
-      className="inline-flex items-center gap-2 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-4 py-2 text-sm font-medium text-(--text-body) transition-colors hover:bg-(--bg-surface) hover:text-(--accent-teal)"
+      className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) hover:bg-(--bg-surface) hover:text-(--accent-teal) inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
     >
       <FileDown className="h-4 w-4" aria-hidden="true" />
       Download PDF

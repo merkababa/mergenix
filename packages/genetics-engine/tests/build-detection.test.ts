@@ -79,9 +79,7 @@ describe('detectBuildFromHeaders', () => {
     });
 
     it('should detect from a reference line with a full path containing GRCh38', () => {
-      const result = detectBuildFromHeaders([
-        '##reference=file:///path/to/GRCh38/reference.fa',
-      ]);
+      const result = detectBuildFromHeaders(['##reference=file:///path/to/GRCh38/reference.fa']);
 
       expect(result).not.toBeNull();
       expect(result!.build).toBe('GRCh38');
@@ -90,9 +88,7 @@ describe('detectBuildFromHeaders', () => {
 
   describe('VCF ##contig= line with chr1 length', () => {
     it('should detect GRCh37 from chr1 length 249250621', () => {
-      const result = detectBuildFromHeaders([
-        '##contig=<ID=1,length=249250621>',
-      ]);
+      const result = detectBuildFromHeaders(['##contig=<ID=1,length=249250621>']);
 
       expect(result).not.toBeNull();
       expect(result!.build).toBe('GRCh37');
@@ -101,9 +97,7 @@ describe('detectBuildFromHeaders', () => {
     });
 
     it('should detect GRCh38 from chr1 length 248956422', () => {
-      const result = detectBuildFromHeaders([
-        '##contig=<ID=chr1,length=248956422>',
-      ]);
+      const result = detectBuildFromHeaders(['##contig=<ID=chr1,length=248956422>']);
 
       expect(result).not.toBeNull();
       expect(result!.build).toBe('GRCh38');
@@ -112,18 +106,14 @@ describe('detectBuildFromHeaders', () => {
     });
 
     it('should not match contig lines for non-chr1 chromosomes', () => {
-      const result = detectBuildFromHeaders([
-        '##contig=<ID=2,length=249250621>',
-      ]);
+      const result = detectBuildFromHeaders(['##contig=<ID=2,length=249250621>']);
 
       // ID=2 does not match ID=1 or ID=chr1, so no detection
       expect(result).toBeNull();
     });
 
     it('should not match contig lines with unknown chr1 length', () => {
-      const result = detectBuildFromHeaders([
-        '##contig=<ID=1,length=999999999>',
-      ]);
+      const result = detectBuildFromHeaders(['##contig=<ID=1,length=999999999>']);
 
       expect(result).toBeNull();
     });
@@ -149,9 +139,7 @@ describe('detectBuildFromHeaders', () => {
     });
 
     it('should detect from longer 23andMe comment containing build number', () => {
-      const result = detectBuildFromHeaders([
-        '# This data was generated using build 37 positions',
-      ]);
+      const result = detectBuildFromHeaders(['# This data was generated using build 37 positions']);
 
       expect(result).not.toBeNull();
       expect(result!.build).toBe('GRCh37');
@@ -214,10 +202,7 @@ describe('detectBuildFromHeaders', () => {
 
   describe('priority (first match wins)', () => {
     it('should return the first matching header line', () => {
-      const result = detectBuildFromHeaders([
-        '##reference=GRCh38',
-        '# build 37',
-      ]);
+      const result = detectBuildFromHeaders(['##reference=GRCh38', '# build 37']);
 
       // ##reference= is checked first in the loop iteration,
       // so GRCh38 should win
@@ -476,10 +461,7 @@ describe('detectGenomeBuild', () => {
 
   describe('result structure', () => {
     it('should return all required BuildDetectionResult fields', () => {
-      const result = detectGenomeBuild(
-        ['##reference=GRCh37'],
-        new Map(),
-      );
+      const result = detectGenomeBuild(['##reference=GRCh37'], new Map());
 
       expect(result).toHaveProperty('build');
       expect(result).toHaveProperty('confidence');
@@ -507,7 +489,7 @@ describe('SENTINEL_SNPS', () => {
   });
 
   it('should have unique rsids', () => {
-    const rsids = SENTINEL_SNPS.map(s => s.rsid);
+    const rsids = SENTINEL_SNPS.map((s) => s.rsid);
     const unique = new Set(rsids);
     expect(unique.size).toBe(rsids.length);
   });
@@ -526,7 +508,7 @@ describe('SENTINEL_SNPS', () => {
   });
 
   it('should cover multiple chromosomes', () => {
-    const chromosomes = new Set(SENTINEL_SNPS.map(s => s.chromosome));
+    const chromosomes = new Set(SENTINEL_SNPS.map((s) => s.chromosome));
     expect(chromosomes.size).toBeGreaterThanOrEqual(10);
   });
 });

@@ -458,8 +458,8 @@ describe('analyzeStrand — edge cases', () => {
       { rsid: 'rs2', chromosome: '2', referenceAllele: 'C' },
     ];
     const genotypes: Record<string, string> = {
-      rs1: 'A',     // length 1 — skip
-      rs2: 'CCC',   // length 3 — skip
+      rs1: 'A', // length 1 — skip
+      rs2: 'CCC', // length 3 — skip
     };
 
     const result = analyzeStrand(genotypes, refs);
@@ -470,7 +470,7 @@ describe('analyzeStrand — edge cases', () => {
 
   it('should skip variant sites (allele is neither ref nor complement)', () => {
     const refs: ReferenceAllele[] = [
-      { rsid: 'rs1', chromosome: '1', referenceAllele: 'A' },  // complement = T
+      { rsid: 'rs1', chromosome: '1', referenceAllele: 'A' }, // complement = T
     ];
     // Genotype is CC — neither A (forward) nor T (reverse) — this is a variant
     const genotypes: Record<string, string> = {

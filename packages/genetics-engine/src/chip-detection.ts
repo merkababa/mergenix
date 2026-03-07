@@ -195,9 +195,7 @@ export function detectChipVersion(
   }
 
   // Filter profiles to the relevant provider based on format
-  const candidateProfiles = CHIP_PROFILES.filter(
-    (p) => p.format === format,
-  );
+  const candidateProfiles = CHIP_PROFILES.filter((p) => p.format === format);
 
   if (candidateProfiles.length === 0) {
     return null;
@@ -317,10 +315,7 @@ export function getChipNotes(chip: ChipVersion): string {
  * @param genotypes - Optional genotype map for marker checking
  * @returns Confidence score between 0.0 and 1.0
  */
-function calculateConfidence(
-  profile: ChipProfile,
-  genotypes?: Record<string, string>,
-): number {
+function calculateConfidence(profile: ChipProfile, genotypes?: Record<string, string>): number {
   const baseConfidence = 0.6;
 
   // If no markers are defined, confidence is based on SNP count alone

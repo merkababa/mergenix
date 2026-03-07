@@ -80,9 +80,7 @@ class TestMaskEmailUtility:
             "",
         ]
         for email in test_emails:
-            assert _mask_email(email) == mask_email(email), (
-                f"_mask_email and mask_email disagree on {email!r}"
-            )
+            assert _mask_email(email) == mask_email(email), f"_mask_email and mask_email disagree on {email!r}"
 
 
 # ── F1: Partner email PII masked in logs ─────────────────────────────────
@@ -94,21 +92,19 @@ class TestPartnerEmailMasking:
     def test_safe_send_does_not_log_plaintext_email(self) -> None:
         """The exception handler in _safe_send_partner_notification should mask the email."""
         source = inspect.getsource(
-            __import__("app.routers.analysis", fromlist=["_safe_send_partner_notification"])._safe_send_partner_notification
+            __import__(
+                "app.routers.analysis", fromlist=["_safe_send_partner_notification"]
+            )._safe_send_partner_notification
         )
         # The source should NOT contain a bare format string with partner_email/to_email
         # It should use mask_email (from utils) to mask the address
-        assert "mask_email" in source, (
-            "_safe_send_partner_notification should use mask_email to mask emails in logs"
-        )
+        assert "mask_email" in source, "_safe_send_partner_notification should use mask_email to mask emails in logs"
 
     def test_analysis_router_imports_mask_email(self) -> None:
         """analysis.py should import mask_email from app.utils.masking."""
         import app.routers.analysis as analysis_mod
 
-        assert hasattr(analysis_mod, "mask_email"), (
-            "analysis.py should import mask_email from app.utils.masking"
-        )
+        assert hasattr(analysis_mod, "mask_email"), "analysis.py should import mask_email from app.utils.masking"
 
 
 # ── F3: OAuth HTTP client cleanup on shutdown ────────────────────────────
@@ -128,12 +124,8 @@ class TestOAuthClientCleanup:
 
     def test_main_lifespan_calls_close_oauth_client(self) -> None:
         """main.py lifespan should call close_oauth_client on shutdown."""
-        source = inspect.getsource(
-            __import__("app.main", fromlist=["lifespan"]).lifespan
-        )
-        assert "close_oauth_client" in source, (
-            "main.py lifespan must call close_oauth_client on shutdown"
-        )
+        source = inspect.getsource(__import__("app.main", fromlist=["lifespan"]).lifespan)
+        assert "close_oauth_client" in source, "main.py lifespan must call close_oauth_client on shutdown"
 
 
 # ── F7: Analytics uses dialect-agnostic upsert ───────────────────────────
@@ -232,12 +224,8 @@ class TestAnalyticsPurge:
         old_date = today - datetime.timedelta(days=400)
         recent_date = today - datetime.timedelta(days=30)
 
-        db_session.add(
-            DailyEventCount(event_type="page_view", event_date=old_date, count=100)
-        )
-        db_session.add(
-            DailyEventCount(event_type="page_view", event_date=recent_date, count=50)
-        )
+        db_session.add(DailyEventCount(event_type="page_view", event_date=old_date, count=100))
+        db_session.add(DailyEventCount(event_type="page_view", event_date=recent_date, count=50))
         await db_session.commit()
 
         deleted_count = await purge_old_analytics(db_session, retention_days=365)
@@ -260,9 +248,7 @@ class TestAnalyticsPurge:
         from app.routers.analytics import purge_old_analytics
 
         today = datetime.datetime.now(UTC).date()
-        db_session.add(
-            DailyEventCount(event_type="page_view", event_date=today, count=5)
-        )
+        db_session.add(DailyEventCount(event_type="page_view", event_date=today, count=5))
         await db_session.commit()
 
         deleted_count = await purge_old_analytics(db_session, retention_days=365)
@@ -270,9 +256,7 @@ class TestAnalyticsPurge:
 
     def test_model_todo_removed(self) -> None:
         """The TODO comment about purge cron in the analytics model should be removed."""
-        source = inspect.getsource(
-            __import__("app.models.analytics", fromlist=["DailyEventCount"])
-        )
+        source = inspect.getsource(__import__("app.models.analytics", fromlist=["DailyEventCount"]))
         assert "TODO: implement purge cron" not in source, (
             "The TODO about purge cron should be removed now that purge is implemented"
         )
@@ -287,12 +271,8 @@ class TestAnalyticsPurge:
         today = datetime.datetime.now(UTC).date()
         old_date = today - datetime.timedelta(days=400)
 
-        db_session.add(
-            DailyEventCount(event_type="page_view", event_date=old_date, count=100)
-        )
-        db_session.add(
-            DailyEventCount(event_type="page_view", event_date=today, count=5)
-        )
+        db_session.add(DailyEventCount(event_type="page_view", event_date=old_date, count=100))
+        db_session.add(DailyEventCount(event_type="page_view", event_date=today, count=5))
         await db_session.commit()
 
         response = await client.post(
@@ -434,7 +414,9 @@ class TestDeletionTokenUrlEncoded:
     async def test_deletion_email_url_encoding_consistent_with_others(self) -> None:
         """Deletion email should use the same quote(token, safe='') pattern as verification and reset."""
         source = inspect.getsource(
-            __import__("app.services.email_service", fromlist=["send_deletion_confirmation_email"]).send_deletion_confirmation_email
+            __import__(
+                "app.services.email_service", fromlist=["send_deletion_confirmation_email"]
+            ).send_deletion_confirmation_email
         )
         assert "quote(token" in source, (
             "send_deletion_confirmation_email should use quote(token, safe='') like other email functions"
@@ -472,9 +454,7 @@ class TestStripeApiKeyNotPerCall:
         mod_source = inspect.getsource(ps_mod)
         # Check that stripe.api_key is set at the top level (outside function bodies)
         # It should appear in the module source but NOT inside function definitions
-        assert "stripe.api_key" in mod_source, (
-            "payment_service must set stripe.api_key somewhere (module level)"
-        )
+        assert "stripe.api_key" in mod_source, "payment_service must set stripe.api_key somewhere (module level)"
 
 
 # ── F5: Redundant resend.api_key set per-call ────────────────────────
@@ -485,9 +465,7 @@ class TestResendApiKeyNotPerCall:
 
     def test_resend_api_key_not_in_send_function(self) -> None:
         """_send should NOT set resend.api_key per-call — should use lazy init."""
-        source = inspect.getsource(
-            __import__("app.services.email_service", fromlist=["_send"])._send
-        )
+        source = inspect.getsource(__import__("app.services.email_service", fromlist=["_send"])._send)
         assert "resend.api_key" not in source, (
             "_send should not set resend.api_key per-call — use lazy init or module-level setter"
         )
@@ -497,9 +475,7 @@ class TestResendApiKeyNotPerCall:
         import app.services.email_service as es_mod
 
         mod_source = inspect.getsource(es_mod)
-        assert "resend.api_key" in mod_source, (
-            "email_service must set resend.api_key somewhere"
-        )
+        assert "resend.api_key" in mod_source, "email_service must set resend.api_key somewhere"
 
 
 # ── F6: Payment count uses SQL COUNT, not over-fetch ─────────────────
@@ -517,14 +493,14 @@ class TestPaymentCountQuery:
     def test_get_succeeded_payment_count_uses_sql_count(self) -> None:
         """get_succeeded_payment_count should use func.count, not len()."""
         source = inspect.getsource(
-            __import__("app.services.payment_service", fromlist=["get_succeeded_payment_count"]).get_succeeded_payment_count
+            __import__(
+                "app.services.payment_service", fromlist=["get_succeeded_payment_count"]
+            ).get_succeeded_payment_count
         )
         assert "func.count" in source, (
             "get_succeeded_payment_count should use SQL COUNT (func.count), not fetch all rows"
         )
-        assert "len(" not in source, (
-            "get_succeeded_payment_count should not use len() — use SQL COUNT"
-        )
+        assert "len(" not in source, "get_succeeded_payment_count should not use len() — use SQL COUNT"
 
     @pytest.mark.asyncio
     async def test_tier_status_endpoint_returns_correct_count(
@@ -539,15 +515,17 @@ class TestPaymentCountQuery:
 
         # Create 3 payments: 2 succeeded, 1 failed
         for i, status in enumerate(["succeeded", "succeeded", "failed"]):
-            db_session.add(Payment(
-                user_id=test_user.id,
-                stripe_customer_id=f"cus_count_{i}",
-                stripe_payment_intent=f"pi_count_{i}",
-                amount=1499,
-                currency="usd",
-                status=status,
-                tier_granted="premium",
-            ))
+            db_session.add(
+                Payment(
+                    user_id=test_user.id,
+                    stripe_customer_id=f"cus_count_{i}",
+                    stripe_payment_intent=f"pi_count_{i}",
+                    amount=1499,
+                    currency="usd",
+                    status=status,
+                    tier_granted="premium",
+                )
+            )
         await db_session.commit()
 
         response = await client.get("/payments/tier-status", headers=auth_headers)
@@ -600,6 +578,4 @@ class TestPriceMapNotFrozenAtImport:
         source = inspect.getsource(
             __import__("app.services.payment_service", fromlist=["_get_price_map"])._get_price_map
         )
-        assert "settings" in source or "get_settings" in source, (
-            "_get_price_map should read from settings dynamically"
-        )
+        assert "settings" in source or "get_settings" in source, "_get_price_map should read from settings dynamically"

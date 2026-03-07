@@ -4,4 +4,4 @@
  * to align with the stores/ convention. This file is kept for backward
  * compatibility with existing imports and test mocks.
  */
-export { useModalManager } from "@/lib/stores/modal-manager-store";
+export { useModalManager } from '@/lib/stores/modal-manager-store';

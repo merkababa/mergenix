@@ -35,10 +35,7 @@ def test_get_settings_warns_on_empty_stripe_prices_in_production(
             get_settings()
 
         # Should have logged a warning about empty Stripe price IDs
-        stripe_warnings = [
-            r for r in caplog.records
-            if "stripe" in r.message.lower() and "price" in r.message.lower()
-        ]
+        stripe_warnings = [r for r in caplog.records if "stripe" in r.message.lower() and "price" in r.message.lower()]
         assert len(stripe_warnings) >= 1, (
             f"Expected at least 1 Stripe price warning, got {len(stripe_warnings)}. "
             f"All warnings: {[r.message for r in caplog.records]}"
@@ -65,13 +62,9 @@ def test_get_settings_no_stripe_warning_in_development(
             get_settings()
 
         # Should NOT have logged a Stripe price warning in development
-        stripe_warnings = [
-            r for r in caplog.records
-            if "stripe" in r.message.lower() and "price" in r.message.lower()
-        ]
+        stripe_warnings = [r for r in caplog.records if "stripe" in r.message.lower() and "price" in r.message.lower()]
         assert len(stripe_warnings) == 0, (
-            f"Should not warn about Stripe prices in development. "
-            f"Warnings: {[r.message for r in stripe_warnings]}"
+            f"Should not warn about Stripe prices in development. Warnings: {[r.message for r in stripe_warnings]}"
         )
 
     # Restore settings for other tests
@@ -95,13 +88,9 @@ def test_get_settings_no_stripe_warning_when_prices_configured(
             get_settings()
 
         # Should NOT have logged a Stripe price warning when prices are configured
-        stripe_warnings = [
-            r for r in caplog.records
-            if "stripe" in r.message.lower() and "price" in r.message.lower()
-        ]
+        stripe_warnings = [r for r in caplog.records if "stripe" in r.message.lower() and "price" in r.message.lower()]
         assert len(stripe_warnings) == 0, (
-            f"Should not warn when Stripe prices are configured. "
-            f"Warnings: {[r.message for r in stripe_warnings]}"
+            f"Should not warn when Stripe prices are configured. Warnings: {[r.message for r in stripe_warnings]}"
         )
 
     # Restore settings for other tests

@@ -8,36 +8,38 @@
 
 ## Current State Summary
 
-| Item | Value |
-|------|-------|
-| Current version | `^3.4.0` |
-| Target version | `4.2.0` (latest stable, released 2026-02-18) |
-| Config | `apps/web/tailwind.config.ts` (TypeScript) |
-| PostCSS | `tailwindcss` + `autoprefixer` |
-| CSS entry | `apps/web/app/globals.css` (1,059 lines) |
-| CSS variables | 131 custom properties |
-| Files with classes | 132 files |
-| Custom animations | 11 in config + duplicates in CSS |
-| Custom colors | 13+ theme extensions (bio, accent, text-dark, text-light, day, day-accent) |
-| UI components | 10 custom CVA-based (no shadcn/ui) |
-| `cn()` usage | 70 occurrences across 36 files |
-| Arbitrary values | 200+ instances |
-| Dark mode | `selector` strategy with `[data-theme="dark"]` |
-| Plugins | None (@tailwindcss/*) — vanilla Tailwind |
-| PostCSS plugins | tailwindcss, autoprefixer |
-| Other TW deps | tailwind-merge ^2.6.0, clsx ^2.1.1, CVA ^0.7.1, prettier-plugin-tailwindcss ^0.6.9 |
+| Item               | Value                                                                              |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| Current version    | `^3.4.0`                                                                           |
+| Target version     | `4.2.0` (latest stable, released 2026-02-18)                                       |
+| Config             | `apps/web/tailwind.config.ts` (TypeScript)                                         |
+| PostCSS            | `tailwindcss` + `autoprefixer`                                                     |
+| CSS entry          | `apps/web/app/globals.css` (1,059 lines)                                           |
+| CSS variables      | 131 custom properties                                                              |
+| Files with classes | 132 files                                                                          |
+| Custom animations  | 11 in config + duplicates in CSS                                                   |
+| Custom colors      | 13+ theme extensions (bio, accent, text-dark, text-light, day, day-accent)         |
+| UI components      | 10 custom CVA-based (no shadcn/ui)                                                 |
+| `cn()` usage       | 70 occurrences across 36 files                                                     |
+| Arbitrary values   | 200+ instances                                                                     |
+| Dark mode          | `selector` strategy with `[data-theme="dark"]`                                     |
+| Plugins            | None (@tailwindcss/\*) — vanilla Tailwind                                          |
+| PostCSS plugins    | tailwindcss, autoprefixer                                                          |
+| Other TW deps      | tailwind-merge ^2.6.0, clsx ^2.1.1, CVA ^0.7.1, prettier-plugin-tailwindcss ^0.6.9 |
 
 ---
 
 ## Architecture Notes
 
 ### Design System
+
 - **Bioluminescent Laboratory** (dark) + **Daylight Laboratory** (light)
 - Custom color palette with CSS variables as source of truth
 - All 10 UI components are custom-built with CVA (not shadcn/ui)
 - globals.css is the single source of truth for custom utilities (`.glass`, `.glow-*`, `.text-fluid-*`)
 
 ### Theme Config (tailwind.config.ts)
+
 - **Custom Colors (13+):** `bio.{deep, surface, elevated, glass}`, `accent.{teal, violet, cyan, amber, rose}`, `text-dark.*`, `text-light.*`, `day.*`, `day-accent.*`
 - **Border Radius (4):** `glass: 20px`, `card: 18px`, `btn: 14px`, `pill: 9999px`
 - **Box Shadows (7):** `glow`, `glow-strong`, `glow-violet`, `ambient`, `elevated`, `glass-border`, `light-ambient`, `light-elevated`
@@ -47,6 +49,7 @@
 - **Animations (11):** Matching keyframes with durations and easing
 
 ### globals.css Structure (1,059 lines)
+
 - Lines 1-3: `@tailwind base/components/utilities`
 - 131 CSS custom property declarations in `:root` and `[data-theme="light"]`
 - 20+ `@keyframes` definitions (some duplicate config)
@@ -57,20 +60,19 @@
 - `@layer components`: `.glass` variants, `.glow-*`, `.text-fluid-*`, `.section-glow-*`, `.gradient-text*`, GlassCard micro-interactions, utility patterns
 
 ### Content Paths (current)
+
 ```typescript
-content: [
-  "./app/**/*.{ts,tsx}",
-  "./components/**/*.{ts,tsx}",
-  "./lib/**/*.{ts,tsx}",
-]
+content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'];
 ```
 
 ### Dark Mode (current)
+
 - Strategy: `selector` with custom data attribute `[data-theme="dark"]`
 - Default: Light mode (inverted from typical Tailwind pattern)
 - next-themes ^0.4.4 used for theme persistence
 
 ### Fonts (next/font)
+
 - `--font-lexend`, `--font-sora`, `--font-jetbrains`
 
 ---
@@ -78,6 +80,7 @@ content: [
 ## Breaking Changes Reference (v3.4 → v4.x)
 
 ### Import System
+
 ```css
 /* v3 — REMOVED */
 @tailwind base;
@@ -85,66 +88,67 @@ content: [
 @tailwind utilities;
 
 /* v4 */
-@import "tailwindcss";
+@import 'tailwindcss';
 ```
 
 ### Deprecated Utilities Removed
 
-| Removed (v3) | Replacement (v4) |
-|---|---|
-| `bg-opacity-*` | `bg-black/50` (opacity modifiers) |
-| `text-opacity-*` | `text-black/50` |
-| `border-opacity-*` | `border-black/50` |
-| `divide-opacity-*` | `divide-black/50` |
-| `ring-opacity-*` | `ring-black/50` |
-| `placeholder-opacity-*` | `placeholder-black/50` |
-| `flex-shrink-*` | `shrink-*` |
-| `flex-grow-*` | `grow-*` |
-| `overflow-ellipsis` | `text-ellipsis` |
-| `decoration-slice` | `box-decoration-slice` |
-| `decoration-clone` | `box-decoration-clone` |
+| Removed (v3)            | Replacement (v4)                  |
+| ----------------------- | --------------------------------- |
+| `bg-opacity-*`          | `bg-black/50` (opacity modifiers) |
+| `text-opacity-*`        | `text-black/50`                   |
+| `border-opacity-*`      | `border-black/50`                 |
+| `divide-opacity-*`      | `divide-black/50`                 |
+| `ring-opacity-*`        | `ring-black/50`                   |
+| `placeholder-opacity-*` | `placeholder-black/50`            |
+| `flex-shrink-*`         | `shrink-*`                        |
+| `flex-grow-*`           | `grow-*`                          |
+| `overflow-ellipsis`     | `text-ellipsis`                   |
+| `decoration-slice`      | `box-decoration-slice`            |
+| `decoration-clone`      | `box-decoration-clone`            |
 
 ### Renamed Utilities (Scale Shift)
 
-| v3 class | v4 class |
-|---|---|
-| `shadow-sm` | `shadow-xs` |
-| `shadow` (default) | `shadow-sm` |
-| `drop-shadow-sm` | `drop-shadow-xs` |
-| `drop-shadow` | `drop-shadow-sm` |
-| `blur-sm` | `blur-xs` |
-| `blur` | `blur-sm` |
-| `backdrop-blur-sm` | `backdrop-blur-xs` |
-| `backdrop-blur` | `backdrop-blur-sm` |
-| `rounded-sm` | `rounded-xs` |
-| `rounded` (default) | `rounded-sm` |
-| `outline-none` | `outline-hidden` |
-| `ring` (3px default) | `ring-3` (default ring now 1px) |
-| `bg-gradient-to-r` etc. | `bg-linear-to-r` etc. |
+| v3 class                | v4 class                        |
+| ----------------------- | ------------------------------- |
+| `shadow-sm`             | `shadow-xs`                     |
+| `shadow` (default)      | `shadow-sm`                     |
+| `drop-shadow-sm`        | `drop-shadow-xs`                |
+| `drop-shadow`           | `drop-shadow-sm`                |
+| `blur-sm`               | `blur-xs`                       |
+| `blur`                  | `blur-sm`                       |
+| `backdrop-blur-sm`      | `backdrop-blur-xs`              |
+| `backdrop-blur`         | `backdrop-blur-sm`              |
+| `rounded-sm`            | `rounded-xs`                    |
+| `rounded` (default)     | `rounded-sm`                    |
+| `outline-none`          | `outline-hidden`                |
+| `ring` (3px default)    | `ring-3` (default ring now 1px) |
+| `bg-gradient-to-r` etc. | `bg-linear-to-r` etc.           |
 
 ### Default Value Changes
 
-| Property | v3 default | v4 default |
-|---|---|---|
-| `border-color` | `gray-200` | `currentColor` |
-| `ring-width` | 3px | 1px |
-| `ring-color` | `blue-500` | `currentColor` |
+| Property            | v3 default | v4 default                        |
+| ------------------- | ---------- | --------------------------------- |
+| `border-color`      | `gray-200` | `currentColor`                    |
+| `ring-width`        | 3px        | 1px                               |
+| `ring-color`        | `blue-500` | `currentColor`                    |
 | `placeholder-color` | `gray-400` | current text color at 50% opacity |
-| `button` cursor | `pointer` | `default` (browser default) |
+| `button` cursor     | `pointer`  | `default` (browser default)       |
 
 ### Syntax Changes
 
-| Change | v3 | v4 |
-|---|---|---|
-| `!important` modifier | `!flex` | `flex!` |
-| Variant stacking | `first:*:pt-0` (right-to-left) | `*:first:pt-0` (left-to-right) |
-| CSS variable arbitrary | `bg-[--var]` | `bg-(--var)` |
-| Grid commas in arbitrary | `grid-cols-[max-content,auto]` | `grid-cols-[max-content_auto]` |
-| Prefix syntax | `tw-flex` | `tw:flex` |
-| Transform none | `transform-none` | `scale-none` / `rotate-none` / `translate-none` |
-| Transition transform | `transition-[opacity,transform]` | `transition-[opacity,scale]` |
+| Change                   | v3                               | v4                                              |
+| ------------------------ | -------------------------------- | ----------------------------------------------- |
+| `!important` modifier    | `!flex`                          | `flex!`                                         |
+| Variant stacking         | `first:*:pt-0` (right-to-left)   | `*:first:pt-0` (left-to-right)                  |
+| CSS variable arbitrary   | `bg-[--var]`                     | `bg-(--var)`                                    |
+| Grid commas in arbitrary | `grid-cols-[max-content,auto]`   | `grid-cols-[max-content_auto]`                  |
+| Prefix syntax            | `tw-flex`                        | `tw:flex`                                       |
+| Transform none           | `transform-none`                 | `scale-none` / `rotate-none` / `translate-none` |
+| Transition transform     | `transition-[opacity,transform]` | `transition-[opacity,scale]`                    |
 
 ### Behavioral Changes
+
 - **Hover** scoped to pointer devices (`@media (hover: hover)`)
 - **Gradient** values persist across variants (use `via-none` to clear)
 - **Space-between/divide** selector changed from `> :not([hidden]) ~ :not([hidden])` to `> :not(:last-child)`
@@ -153,15 +157,18 @@ content: [
 - **`transition`/`transition-colors`** now includes `outline-color`
 
 ### Removed Config Options
+
 - `corePlugins` — no v4 equivalent
 - `safelist` — use `@source inline("class1 class2")` instead
 - `separator` — no v4 equivalent
 - `resolveConfig` JS API — use `getComputedStyle(document.documentElement).getPropertyValue()` instead
 
 ### Browser Requirements
+
 - Chrome 111+, Safari 16.4+, Firefox 128+
 
 ### Preprocessor Support
+
 - **Sass, Less, Stylus NOT supported in v4** (Lightning CSS replaces them)
 
 ---
@@ -169,6 +176,7 @@ content: [
 ## Migration Phases
 
 ### Phase 1: Pre-Migration Prep
+
 1. Create branch `refactor/tailwind-v4-migration`
 2. Verify Node.js ≥ 20 (required by upgrade tool)
 3. Run `pnpm build` and confirm green
@@ -176,11 +184,13 @@ content: [
 5. Run full test suite as baseline
 
 ### Phase 2: Run Official Upgrade Tool
+
 ```bash
 npx @tailwindcss/upgrade
 ```
 
 **Auto-migrates (~90%):**
+
 - Package version bumps in `package.json`
 - `postcss.config.js` → `postcss.config.mjs` with `@tailwindcss/postcss`
 - Removes `autoprefixer`
@@ -189,6 +199,7 @@ npx @tailwindcss/upgrade
 - Renames deprecated utilities across all 132 files
 
 **Cannot auto-migrate (manual work):**
+
 - Inline JavaScript plugin functions
 - Dynamic theme functions (`theme => ({ ... })`)
 - Complex screen objects
@@ -197,6 +208,7 @@ npx @tailwindcss/upgrade
 ### Phase 3: Manual Migration
 
 #### 3A. PostCSS Config
+
 ```js
 // FROM: postcss.config.js
 { plugins: { tailwindcss: {}, autoprefixer: {} } }
@@ -206,6 +218,7 @@ export default { plugins: { "@tailwindcss/postcss": {} } }
 ```
 
 #### 3B. Package Changes
+
 ```
 REMOVE: autoprefixer, postcss-import (if present)
 ADD:    @tailwindcss/postcss
@@ -215,7 +228,9 @@ CHECK:  tailwind-merge → must support v4 class names
 ```
 
 #### 3C. CSS Entry Point (`globals.css`)
+
 Replace directives:
+
 ```css
 /* FROM */
 @tailwind base;
@@ -223,10 +238,11 @@ Replace directives:
 @tailwind utilities;
 
 /* TO */
-@import "tailwindcss";
+@import 'tailwindcss';
 ```
 
 #### 3D. Theme Migration (`tailwind.config.ts` → `@theme {}`)
+
 Move all custom theme extensions to `@theme {}` in globals.css:
 
 ```css
@@ -281,13 +297,18 @@ Move all custom theme extensions to `@theme {}` in globals.css:
   --animate-slide-in-right: slide-in-right 0.5s ease-out;
   --animate-float: float 3s ease-in-out infinite;
 
-  @keyframes helix-float { /* ... */ }
-  @keyframes gradient-shift { /* ... */ }
+  @keyframes helix-float {
+    /* ... */
+  }
+  @keyframes gradient-shift {
+    /* ... */
+  }
   /* ... all keyframes ... */
 }
 ```
 
 #### 3E. Dark Mode Config
+
 ```css
 /* FROM: tailwind.config.ts darkMode: ['selector', '[data-theme="dark"]'] */
 /* TO: in globals.css */
@@ -295,6 +316,7 @@ Move all custom theme extensions to `@theme {}` in globals.css:
 ```
 
 #### 3F. Font Integration (next/font)
+
 ```css
 @theme inline {
   --font-sans: var(--font-lexend);
@@ -304,28 +326,37 @@ Move all custom theme extensions to `@theme {}` in globals.css:
 ```
 
 #### 3G. Content Detection
+
 Remove `content: [...]` from config. V4 auto-detects via `.gitignore`.
 For the monorepo, add explicit sources if needed:
+
 ```css
 @source "../../packages/shared-types";
 @source "../../packages/genetics-engine";
 ```
 
 #### 3H. Custom Layers → v4 Patterns
+
 - `@layer components { .glass { ... } }` → stays as `@layer base` or becomes `@utility` blocks
 - `@layer utilities { ... }` → `@utility name { ... }` blocks
 - Evaluate which custom classes should become `@utility` vs remain in `@layer base`
 
 #### 3I. Behavioral Defaults to Restore
+
 ```css
 @layer base {
   /* Restore v3 border color default */
-  *, ::after, ::before, ::backdrop, ::file-selector-button {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
 
   /* Restore v3 button cursor */
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
 }
@@ -335,18 +366,18 @@ For the monorepo, add explicit sources if needed:
 
 The upgrade tool handles most, but grep and verify:
 
-| Pattern to search | Expected v4 replacement | Priority |
-|---|---|---|
-| `shadow-sm` (not `shadow-xs`) | `shadow-xs` | High |
-| bare `shadow` class | `shadow-sm` | High |
-| bare `rounded` class | `rounded-sm` | High |
-| `rounded-sm` | `rounded-xs` | Medium |
-| `outline-none` | `outline-hidden` | Medium |
-| bare `ring` class | `ring-3` | Low |
-| bare `blur` class | `blur-sm` | Low |
-| `!` prefix (e.g. `!flex`) | suffix (e.g. `flex!`) | Grep needed |
-| `bg-[--` pattern | `bg-(--` | Check 200+ arbitrary values |
-| `bg-gradient-to-` | `bg-linear-to-` | Grep needed |
+| Pattern to search             | Expected v4 replacement | Priority                    |
+| ----------------------------- | ----------------------- | --------------------------- |
+| `shadow-sm` (not `shadow-xs`) | `shadow-xs`             | High                        |
+| bare `shadow` class           | `shadow-sm`             | High                        |
+| bare `rounded` class          | `rounded-sm`            | High                        |
+| `rounded-sm`                  | `rounded-xs`            | Medium                      |
+| `outline-none`                | `outline-hidden`        | Medium                      |
+| bare `ring` class             | `ring-3`                | Low                         |
+| bare `blur` class             | `blur-sm`               | Low                         |
+| `!` prefix (e.g. `!flex`)     | suffix (e.g. `flex!`)   | Grep needed                 |
+| `bg-[--` pattern              | `bg-(--`                | Check 200+ arbitrary values |
+| `bg-gradient-to-`             | `bg-linear-to-`         | Grep needed                 |
 
 ### Phase 5: Special Concerns for This Codebase
 
@@ -393,16 +424,16 @@ The upgrade tool handles most, but grep and verify:
 
 ## Risk Assessment
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Shadow/rounded scale shift breaks visual design | **High** | Screenshot comparison before/after |
-| `tailwind-merge` doesn't recognize v4 classes | **Medium** | Check twMerge version compatibility, update if needed |
-| Monorepo content auto-detection misses packages | **Medium** | Add explicit `@source` directives |
-| Next.js 15 + Turbopack + TW4 issues | **Medium** | Use PostCSS path, avoid Turbopack for now |
-| `prettier-plugin-tailwindcss` incompatibility | **Low** | Update to latest version |
-| 1,059-line globals.css becomes unwieldy with `@theme` | **Low** | Consider splitting into partials with `@import` |
-| `[[data-theme='light']_&]:` variant breaks | **Medium** | Test early, convert to `@custom-variant` if needed |
-| Browser compat (Chrome 111+, Safari 16.4+, Firefox 128+) | **Low** | Our target audience uses modern browsers |
+| Risk                                                     | Severity   | Mitigation                                            |
+| -------------------------------------------------------- | ---------- | ----------------------------------------------------- |
+| Shadow/rounded scale shift breaks visual design          | **High**   | Screenshot comparison before/after                    |
+| `tailwind-merge` doesn't recognize v4 classes            | **Medium** | Check twMerge version compatibility, update if needed |
+| Monorepo content auto-detection misses packages          | **Medium** | Add explicit `@source` directives                     |
+| Next.js 15 + Turbopack + TW4 issues                      | **Medium** | Use PostCSS path, avoid Turbopack for now             |
+| `prettier-plugin-tailwindcss` incompatibility            | **Low**    | Update to latest version                              |
+| 1,059-line globals.css becomes unwieldy with `@theme`    | **Low**    | Consider splitting into partials with `@import`       |
+| `[[data-theme='light']_&]:` variant breaks               | **Medium** | Test early, convert to `@custom-variant` if needed    |
+| Browser compat (Chrome 111+, Safari 16.4+, Firefox 128+) | **Low**    | Our target audience uses modern browsers              |
 
 ## Estimated Scope
 

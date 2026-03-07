@@ -1,47 +1,47 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface PunnettSquareProps {
   parentAAlleles: [string, string];
   parentBAlleles: [string, string];
-  riskType?: "carrier" | "trait";
+  riskType?: 'carrier' | 'trait';
   className?: string;
 }
 
-type CellType = "normal" | "carrier" | "affected";
+type CellType = 'normal' | 'carrier' | 'affected';
 
 function getCellType(
   a1: string,
   a2: string,
   allAlleles: Set<string>,
-  riskType: "carrier" | "trait",
+  riskType: 'carrier' | 'trait',
 ): CellType {
-  if (a1 === a2 && allAlleles.size === 1) return "normal";
+  if (a1 === a2 && allAlleles.size === 1) return 'normal';
   if (a1 === a2) {
-    return riskType === "carrier" ? "affected" : "normal";
+    return riskType === 'carrier' ? 'affected' : 'normal';
   }
-  return "carrier";
+  return 'carrier';
 }
 
-function getCellLabel(type: CellType, riskType: "carrier" | "trait"): string {
-  if (type === "normal") return "Unaffected";
-  if (type === "affected") return riskType === "carrier" ? "Affected" : "Homozygous";
-  return riskType === "carrier" ? "Carrier" : "Heterozygous";
+function getCellLabel(type: CellType, riskType: 'carrier' | 'trait'): string {
+  if (type === 'normal') return 'Unaffected';
+  if (type === 'affected') return riskType === 'carrier' ? 'Affected' : 'Homozygous';
+  return riskType === 'carrier' ? 'Carrier' : 'Heterozygous';
 }
 
 const CELL_STYLES: Record<CellType, string> = {
-  normal: "bg-[rgba(6,214,160,0.1)] text-accent-teal",
-  carrier: "bg-[rgba(245,158,11,0.1)] text-accent-amber",
-  affected: "bg-[rgba(244,63,94,0.1)] text-accent-rose",
+  normal: 'bg-[rgba(6,214,160,0.1)] text-accent-teal',
+  carrier: 'bg-[rgba(245,158,11,0.1)] text-accent-amber',
+  affected: 'bg-[rgba(244,63,94,0.1)] text-accent-rose',
 };
 
 export function PunnettSquare({
   parentAAlleles,
   parentBAlleles,
-  riskType = "carrier",
+  riskType = 'carrier',
   className,
 }: PunnettSquareProps) {
   const [a1, a2] = parentAAlleles;
@@ -57,7 +57,7 @@ export function PunnettSquare({
 
   for (const aAllele of parentAAlleles) {
     for (const bAllele of parentBAlleles) {
-      const genotype = [aAllele, bAllele].sort().join("");
+      const genotype = [aAllele, bAllele].sort().join('');
       const type = getCellType(aAllele, bAllele, allAlleles, riskType);
       const label = getCellLabel(type, riskType);
       cells.push({ genotype, type, label });
@@ -76,22 +76,22 @@ export function PunnettSquare({
 
   return (
     <div
-      className={cn("mx-auto max-w-[320px]", className)}
+      className={cn('mx-auto max-w-[320px]', className)}
       role="table"
       aria-label="Punnett square showing offspring genotype probabilities"
     >
-      <div className="flex flex-col gap-0.5 overflow-hidden rounded-xl border border-(--border-subtle) bg-(--bg-elevated)">
+      <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col gap-0.5 overflow-hidden rounded-xl border">
         {/* Header row: corner + column headers */}
         <div role="row" className="flex gap-0.5">
           <div className="w-1/3 bg-transparent" role="cell" />
           <div
-            className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
+            className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
             role="columnheader"
           >
             {b1}
           </div>
           <div
-            className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
+            className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
             role="columnheader"
           >
             {b2}
@@ -100,12 +100,12 @@ export function PunnettSquare({
 
         {/* Data rows — one per parent-A allele */}
         {[
-          { header: a1, rowCells: cells.slice(0, 2), key: "r1" },
-          { header: a2, rowCells: cells.slice(2, 4), key: "r2" },
+          { header: a1, rowCells: cells.slice(0, 2), key: 'r1' },
+          { header: a2, rowCells: cells.slice(2, 4), key: 'r2' },
         ].map(({ header, rowCells, key }) => (
           <div key={key} role="row" className="flex gap-0.5">
             <div
-              className="flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 font-heading text-sm font-bold text-(--text-heading)"
+              className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
               role="rowheader"
             >
               {header}
@@ -114,13 +114,13 @@ export function PunnettSquare({
               <div
                 key={`${key}-${i}`}
                 className={cn(
-                  "w-1/3 rounded-sm p-2.5 text-center transition-transform hover:scale-[1.04]",
+                  'w-1/3 rounded-sm p-2.5 text-center transition-transform hover:scale-[1.04]',
                   CELL_STYLES[cell.type],
                 )}
                 role="cell"
               >
                 <div className="font-mono text-base font-bold">{cell.genotype}</div>
-                <div className="mt-0.5 text-xs text-(--text-muted)">
+                <div className="text-(--text-muted) mt-0.5 text-xs">
                   {probabilities.get(cell.genotype)}%
                 </div>
                 <div className="mt-0.5 text-xs opacity-80">{cell.label}</div>

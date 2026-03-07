@@ -71,9 +71,9 @@ import { PDF_HEADING_FONT_SIZES } from '../../lib/pdf/pdf-document-builder';
 async function getAnalysisPageWithResults(page: import('@playwright/test').Page) {
   await page.goto('/analysis');
   await page.getByRole('button', { name: /try demo analysis/i }).click();
-  await expect(
-    page.getByRole('tablist', { name: /analysis results/i }),
-  ).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole('tablist', { name: /analysis results/i })).toBeVisible({
+    timeout: 15_000,
+  });
   return page;
 }
 
@@ -92,53 +92,47 @@ test.describe('Q21: PDF/UA Structural Accessibility Audit', () => {
   // we inject and evaluate the check via page.evaluate with a dynamic import.
 
   test.describe('Document title metadata', () => {
-    test.fixme(
-      'PDF document definition includes info.title metadata for screen readers',
-      async () => {
-        // FIXME: This test verifies that buildPdfDocument() includes
-        // `info: { title: 'Mergenix Genetic Analysis Report' }` in the
-        // returned TDocumentDefinitions object.
-        //
-        // Automation path: Use a Vitest unit test instead of Playwright,
-        // since buildPdfDocument is a pure function. Add a test case to
-        // apps/web/__tests__/pdf-document-builder.test.ts:
-        //
-        //   it('includes info.title in document definition', () => {
-        //     const doc = buildPdfDocument(mockResult);
-        //     expect(doc.info?.title).toBe('Mergenix Genetic Analysis Report');
-        //   });
-        //
-        // Current status: buildPdfDocument does NOT yet include the `info`
-        // field. The report title is only present as visible `text` content
-        // (the first item in `doc.content`), not as PDF metadata.
-        //
-        // Implementation required (apps/web/lib/pdf/pdf-document-builder.ts):
-        //   Add to the returned object:
-        //     info: {
-        //       title: 'Mergenix Genetic Analysis Report',
-        //       author: 'Mergenix',
-        //       subject: 'Genetic offspring analysis report',
-        //       keywords: 'genetics, carrier screening, pharmacogenomics, polygenic risk',
-        //     },
-        //
-        // Tracked in: issue TODO(stream-ops) — PDF/UA metadata
-      },
-    );
+    test.fixme('PDF document definition includes info.title metadata for screen readers', async () => {
+      // FIXME: This test verifies that buildPdfDocument() includes
+      // `info: { title: 'Mergenix Genetic Analysis Report' }` in the
+      // returned TDocumentDefinitions object.
+      //
+      // Automation path: Use a Vitest unit test instead of Playwright,
+      // since buildPdfDocument is a pure function. Add a test case to
+      // apps/web/__tests__/pdf-document-builder.test.ts:
+      //
+      //   it('includes info.title in document definition', () => {
+      //     const doc = buildPdfDocument(mockResult);
+      //     expect(doc.info?.title).toBe('Mergenix Genetic Analysis Report');
+      //   });
+      //
+      // Current status: buildPdfDocument does NOT yet include the `info`
+      // field. The report title is only present as visible `text` content
+      // (the first item in `doc.content`), not as PDF metadata.
+      //
+      // Implementation required (apps/web/lib/pdf/pdf-document-builder.ts):
+      //   Add to the returned object:
+      //     info: {
+      //       title: 'Mergenix Genetic Analysis Report',
+      //       author: 'Mergenix',
+      //       subject: 'Genetic offspring analysis report',
+      //       keywords: 'genetics, carrier screening, pharmacogenomics, polygenic risk',
+      //     },
+      //
+      // Tracked in: issue TODO(stream-ops) — PDF/UA metadata
+    });
 
-    test.fixme(
-      'PDF document includes DisplayDocTitle setting for AT announcement',
-      async () => {
-        // FIXME: PDF/UA-1 §7.1 requires /ViewerPreferences /DisplayDocTitle true.
-        // pdfmake does not expose this as a document definition option in v0.3.x.
-        // Resolution options:
-        //   a. Post-process the PDF binary to inject the ViewerPreferences dict.
-        //   b. Wait for pdfmake to expose this option in a future release.
-        //   c. Use pdf-lib to post-process the blob after pdfmake generates it.
-        //
-        // This test is a fixme placeholder until one of the above is implemented.
-        // Tracked in: issue TODO(stream-ops) — PDF/UA DisplayDocTitle
-      },
-    );
+    test.fixme('PDF document includes DisplayDocTitle setting for AT announcement', async () => {
+      // FIXME: PDF/UA-1 §7.1 requires /ViewerPreferences /DisplayDocTitle true.
+      // pdfmake does not expose this as a document definition option in v0.3.x.
+      // Resolution options:
+      //   a. Post-process the PDF binary to inject the ViewerPreferences dict.
+      //   b. Wait for pdfmake to expose this option in a future release.
+      //   c. Use pdf-lib to post-process the blob after pdfmake generates it.
+      //
+      // This test is a fixme placeholder until one of the above is implemented.
+      // Tracked in: issue TODO(stream-ops) — PDF/UA DisplayDocTitle
+    });
   });
 
   // ── Logical heading structure ─────────────────────────────────────────
@@ -199,29 +193,26 @@ test.describe('Q21: PDF/UA Structural Accessibility Audit', () => {
       expect(h2).toBeGreaterThan(h3);
     });
 
-    test.fixme(
-      'PDF contains tagged heading structure (H1, H2, H3 structure elements)',
-      async () => {
-        // FIXME: True PDF/UA heading tags (H1, H2, H3 structure elements in
-        // the PDF's structure tree) require tagged PDF support.
-        //
-        // pdfmake v0.3.x does not support tagged PDF output. This means the
-        // generated PDF does not include the structure tree required by
-        // PDF/UA-1 §7.4.2. The visual heading hierarchy (verified in the
-        // preceding test) is correct, but it is not machine-readable by
-        // assistive technologies that rely on PDF structure tags.
-        //
-        // Resolution: Either upgrade to a PDF library that supports tagged
-        // output (e.g., PDFKit with pdf-lib post-processing, or wait for
-        // pdfmake to implement ISO 32000-1 marked content).
-        //
-        // Manual verification: Use Adobe Acrobat Pro "Reading Order" tool
-        // or PAC 2024 to confirm no structure tree exists and document the
-        // known gap in WCAG conformance statement.
-        //
-        // Tracked in: issue TODO(stream-ops) — Tagged PDF / PDF/UA structure tree
-      },
-    );
+    test.fixme('PDF contains tagged heading structure (H1, H2, H3 structure elements)', async () => {
+      // FIXME: True PDF/UA heading tags (H1, H2, H3 structure elements in
+      // the PDF's structure tree) require tagged PDF support.
+      //
+      // pdfmake v0.3.x does not support tagged PDF output. This means the
+      // generated PDF does not include the structure tree required by
+      // PDF/UA-1 §7.4.2. The visual heading hierarchy (verified in the
+      // preceding test) is correct, but it is not machine-readable by
+      // assistive technologies that rely on PDF structure tags.
+      //
+      // Resolution: Either upgrade to a PDF library that supports tagged
+      // output (e.g., PDFKit with pdf-lib post-processing, or wait for
+      // pdfmake to implement ISO 32000-1 marked content).
+      //
+      // Manual verification: Use Adobe Acrobat Pro "Reading Order" tool
+      // or PAC 2024 to confirm no structure tree exists and document the
+      // known gap in WCAG conformance statement.
+      //
+      // Tracked in: issue TODO(stream-ops) — Tagged PDF / PDF/UA structure tree
+    });
   });
 
   // ── Alt text for images and charts ────────────────────────────────────
@@ -233,53 +224,47 @@ test.describe('Q21: PDF/UA Structural Accessibility Audit', () => {
   // untagged image XObjects in the generated PDF binary.
 
   test.describe('Alt text for images and charts', () => {
-    test.fixme(
-      'PDF image XObjects have /Alt text entries (PDF/UA §7.3)',
-      async () => {
-        // FIXME: If the PDF is updated to include chart images (e.g.,
-        // Recharts SVG → PNG rasterization), each image must include an
-        // /Alt text entry in the marked-content sequence or in the
-        // corresponding MCID dictionary.
-        //
-        // Current state: No image XObjects are present in the Mergenix PDF.
-        // All data is represented in text tables, so this requirement is
-        // trivially met.
-        //
-        // When charts are added:
-        //   - Each chart must be accompanied by a text description either
-        //     as PDF alt text or as an adjacent visible text summary.
-        //   - pdfmake supports the 'svg' content type but does not tag it
-        //     with /Alt. Use 'stack' with a visually hidden text item to
-        //     provide the alternative.
-        //
-        // Verification command:
-        //   pdfinfo report.pdf | grep Images
-        //   verapdf --flavour ua1 report.pdf | grep 'Figure'
-        //
-        // Tracked in: issue TODO(stream-ops) — PDF image alt text when charts added
-      },
-    );
+    test.fixme('PDF image XObjects have /Alt text entries (PDF/UA §7.3)', async () => {
+      // FIXME: If the PDF is updated to include chart images (e.g.,
+      // Recharts SVG → PNG rasterization), each image must include an
+      // /Alt text entry in the marked-content sequence or in the
+      // corresponding MCID dictionary.
+      //
+      // Current state: No image XObjects are present in the Mergenix PDF.
+      // All data is represented in text tables, so this requirement is
+      // trivially met.
+      //
+      // When charts are added:
+      //   - Each chart must be accompanied by a text description either
+      //     as PDF alt text or as an adjacent visible text summary.
+      //   - pdfmake supports the 'svg' content type but does not tag it
+      //     with /Alt. Use 'stack' with a visually hidden text item to
+      //     provide the alternative.
+      //
+      // Verification command:
+      //   pdfinfo report.pdf | grep Images
+      //   verapdf --flavour ua1 report.pdf | grep 'Figure'
+      //
+      // Tracked in: issue TODO(stream-ops) — PDF image alt text when charts added
+    });
 
-    test.fixme(
-      'PDF document definition contains no untagged image content blocks',
-      async () => {
-        // FIXME: This test is a placeholder confirming that the current
-        // buildPdfDocument implementation uses only text and table content types
-        // (no 'image' content type without accompanying alt text).
-        //
-        // The actual PDF document inspection should be done via Vitest unit tests
-        // in apps/web/__tests__/pdf-document-builder.test.ts, which already verifies:
-        //   - 'returns valid pdfmake document definition object'
-        //   - 'includes report title...'
-        //   - 'includes carrier risk table with disease names'
-        //
-        // To automate this E2E check: add a test hook that exposes the document
-        // definition via window.__PDF_DOC_DEFINITION__ (gated by NEXT_PUBLIC_TEST_MODE),
-        // then assert that no content item has type 'image' without an alt property.
-        //
-        // Tracked in: issue TODO(stream-ops) — PDF image alt text E2E verification
-      },
-    );
+    test.fixme('PDF document definition contains no untagged image content blocks', async () => {
+      // FIXME: This test is a placeholder confirming that the current
+      // buildPdfDocument implementation uses only text and table content types
+      // (no 'image' content type without accompanying alt text).
+      //
+      // The actual PDF document inspection should be done via Vitest unit tests
+      // in apps/web/__tests__/pdf-document-builder.test.ts, which already verifies:
+      //   - 'returns valid pdfmake document definition object'
+      //   - 'includes report title...'
+      //   - 'includes carrier risk table with disease names'
+      //
+      // To automate this E2E check: add a test hook that exposes the document
+      // definition via window.__PDF_DOC_DEFINITION__ (gated by NEXT_PUBLIC_TEST_MODE),
+      // then assert that no content item has type 'image' without an alt property.
+      //
+      // Tracked in: issue TODO(stream-ops) — PDF image alt text E2E verification
+    });
   });
 
   // ── Text selectability (not rasterized) ──────────────────────────────
@@ -292,33 +277,30 @@ test.describe('Q21: PDF/UA Structural Accessibility Audit', () => {
   //      (indicating pdfmake generated a real PDF, not a fallback).
 
   test.describe('Text content selectability (not rasterized)', () => {
-    test.fixme(
-      'generated PDF blob contains selectable text (not rasterized image)',
-      async () => {
-        // FIXME: This test requires intercepting the PDF blob URL created by
-        // usePdfExport() in apps/web/lib/pdf/use-pdf-export.ts after the
-        // user clicks the "Export PDF" button on the analysis page.
-        //
-        // Automation steps (requires authenticated session + demo results):
-        //   1. Load analysis page with demo results.
-        //   2. Click "Export PDF" / "Download Report" button.
-        //   3. Intercept the blob URL via page.on('download') or
-        //      page.evaluate(() => window._lastPdfBlobUrl).
-        //   4. Fetch the blob and check that it contains the %PDF- header.
-        //   5. Search for the /Font or /FontDescriptor PDF object — its
-        //      presence confirms embedded font text (not a rasterized scan).
-        //
-        // Expected: PDF binary contains /FontDescriptor and text streams.
-        //
-        // pdfmake always embeds Roboto fonts, so the /FontDescriptor check
-        // should reliably pass for any non-trivial document.
-        //
-        // Manual verification: Open in Acrobat Reader → Ctrl+A → Ctrl+C.
-        // The copied text should match the visible content of the PDF.
-        //
-        // Tracked in: issue TODO(stream-ops) — PDF text-selectability E2E test
-      },
-    );
+    test.fixme('generated PDF blob contains selectable text (not rasterized image)', async () => {
+      // FIXME: This test requires intercepting the PDF blob URL created by
+      // usePdfExport() in apps/web/lib/pdf/use-pdf-export.ts after the
+      // user clicks the "Export PDF" button on the analysis page.
+      //
+      // Automation steps (requires authenticated session + demo results):
+      //   1. Load analysis page with demo results.
+      //   2. Click "Export PDF" / "Download Report" button.
+      //   3. Intercept the blob URL via page.on('download') or
+      //      page.evaluate(() => window._lastPdfBlobUrl).
+      //   4. Fetch the blob and check that it contains the %PDF- header.
+      //   5. Search for the /Font or /FontDescriptor PDF object — its
+      //      presence confirms embedded font text (not a rasterized scan).
+      //
+      // Expected: PDF binary contains /FontDescriptor and text streams.
+      //
+      // pdfmake always embeds Roboto fonts, so the /FontDescriptor check
+      // should reliably pass for any non-trivial document.
+      //
+      // Manual verification: Open in Acrobat Reader → Ctrl+A → Ctrl+C.
+      // The copied text should match the visible content of the PDF.
+      //
+      // Tracked in: issue TODO(stream-ops) — PDF text-selectability E2E test
+    });
 
     // What we CAN test: the export button is present and has correct ARIA
     // semantics on the authenticated analysis page.
@@ -330,54 +312,52 @@ test.describe('Q21: PDF/UA Structural Accessibility Audit', () => {
 authTest.describe('Q21: PDF Export UI Accessibility', () => {
   // ── Export button accessible name ─────────────────────────────────────
 
-  authTest(
-    'PDF export button has a descriptive accessible name',
-    async ({ freeUserPage }) => {
-      const page = freeUserPage;
-      await getAnalysisPageWithResults(page);
+  authTest('PDF export button has a descriptive accessible name', async ({ freeUserPage }) => {
+    const page = freeUserPage;
+    await getAnalysisPageWithResults(page);
 
-      // The export/download button must have an accessible name that
-      // communicates its purpose to screen reader users.
-      // Acceptable patterns: "Export PDF", "Download Report", "Download PDF",
-      // "Generate PDF Report", etc.
-      const exportButton = page.getByRole('button', {
-        name: /export pdf|download report|download pdf|generate pdf|pdf report/i,
+    // The export/download button must have an accessible name that
+    // communicates its purpose to screen reader users.
+    // Acceptable patterns: "Export PDF", "Download Report", "Download PDF",
+    // "Generate PDF Report", etc.
+    const exportButton = page.getByRole('button', {
+      name: /export pdf|download report|download pdf|generate pdf|pdf report/i,
+    });
+
+    // If the button exists, assert it is visible and focusable.
+    // If no such button exists yet, mark as a known gap.
+    const count = await exportButton.count();
+
+    if (count === 0) {
+      // The export button might use a different label — check for any
+      // button that contains "pdf" or "export" or "download".
+      const fallbackButton = page.getByRole('button', {
+        name: /pdf|export|download/i,
       });
+      const fallbackCount = await fallbackButton.count();
 
-      // If the button exists, assert it is visible and focusable.
-      // If no such button exists yet, mark as a known gap.
-      const count = await exportButton.count();
+      if (fallbackCount > 0) {
+        // A button exists — verify it is accessible
+        await authExpect(fallbackButton.first()).toBeVisible();
+        await authExpect(fallbackButton.first()).toBeEnabled();
 
-      if (count === 0) {
-        // The export button might use a different label — check for any
-        // button that contains "pdf" or "export" or "download".
-        const fallbackButton = page.getByRole('button', {
-          name: /pdf|export|download/i,
-        });
-        const fallbackCount = await fallbackButton.count();
-
-        if (fallbackCount > 0) {
-          // A button exists — verify it is accessible
-          await authExpect(fallbackButton.first()).toBeVisible();
-          await authExpect(fallbackButton.first()).toBeEnabled();
-
-          const buttonName = await fallbackButton.first().getAttribute('aria-label')
-            ?? await fallbackButton.first().textContent();
-          authExpect(buttonName?.trim().length ?? 0).toBeGreaterThan(0);
-        }
-        // If no export button is found at all, skip gracefully —
-        // the feature may not be visible to free-tier users.
-        return;
+        const buttonName =
+          (await fallbackButton.first().getAttribute('aria-label')) ??
+          (await fallbackButton.first().textContent());
+        authExpect(buttonName?.trim().length ?? 0).toBeGreaterThan(0);
       }
+      // If no export button is found at all, skip gracefully —
+      // the feature may not be visible to free-tier users.
+      return;
+    }
 
-      await authExpect(exportButton.first()).toBeVisible();
-      await authExpect(exportButton.first()).toBeEnabled();
+    await authExpect(exportButton.first()).toBeVisible();
+    await authExpect(exportButton.first()).toBeEnabled();
 
-      // Verify the button is keyboard-focusable (not disabled via tabIndex=-1)
-      const tabIndex = await exportButton.first().getAttribute('tabindex');
-      authExpect(tabIndex).not.toBe('-1');
-    },
-  );
+    // Verify the button is keyboard-focusable (not disabled via tabIndex=-1)
+    const tabIndex = await exportButton.first().getAttribute('tabindex');
+    authExpect(tabIndex).not.toBe('-1');
+  });
 
   // ── Export button keyboard activation ─────────────────────────────────
 
@@ -451,29 +431,26 @@ authTest.describe('Q21: PDF Export UI Accessibility', () => {
   //
   // Currently fixme because buildPdfDocument does not set info.title yet.
 
-  authTest.fixme(
-    'generated PDF includes document title in metadata (info.title)',
-    async () => {
-      // FIXME: After implementing the info field in buildPdfDocument
-      // (apps/web/lib/pdf/pdf-document-builder.ts), this test should:
-      //
-      //   1. Navigate to analysis page with demo results.
-      //   2. Expose the document definition via window.__PDF_DOC_DEFINITION__
-      //      (add a test hook in the usePdfExport hook, gated by
-      //      process.env.NEXT_PUBLIC_TEST_MODE).
-      //   3. page.evaluate(() => window.__PDF_DOC_DEFINITION__)
-      //   4. Assert that result.info?.title === 'Mergenix Genetic Analysis Report'
-      //   5. Assert that result.info?.author === 'Mergenix'
-      //
-      // Implementation required in pdf-document-builder.ts:
-      //   info: {
-      //     title: 'Mergenix Genetic Analysis Report',
-      //     author: 'Mergenix',
-      //     subject: 'Genetic offspring analysis report',
-      //     keywords: 'genetics, carrier screening, pharmacogenomics',
-      //   },
-      //
-      // Tracked in: issue TODO(stream-ops) — Add info.title to PDF document definition
-    },
-  );
+  authTest.fixme('generated PDF includes document title in metadata (info.title)', async () => {
+    // FIXME: After implementing the info field in buildPdfDocument
+    // (apps/web/lib/pdf/pdf-document-builder.ts), this test should:
+    //
+    //   1. Navigate to analysis page with demo results.
+    //   2. Expose the document definition via window.__PDF_DOC_DEFINITION__
+    //      (add a test hook in the usePdfExport hook, gated by
+    //      process.env.NEXT_PUBLIC_TEST_MODE).
+    //   3. page.evaluate(() => window.__PDF_DOC_DEFINITION__)
+    //   4. Assert that result.info?.title === 'Mergenix Genetic Analysis Report'
+    //   5. Assert that result.info?.author === 'Mergenix'
+    //
+    // Implementation required in pdf-document-builder.ts:
+    //   info: {
+    //     title: 'Mergenix Genetic Analysis Report',
+    //     author: 'Mergenix',
+    //     subject: 'Genetic offspring analysis report',
+    //     keywords: 'genetics, carrier screening, pharmacogenomics',
+    //   },
+    //
+    // Tracked in: issue TODO(stream-ops) — Add info.title to PDF document definition
+  });
 });

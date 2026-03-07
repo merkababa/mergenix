@@ -36,6 +36,7 @@ You are a senior full-stack engineer specializing in Next.js and Python performa
 ## Output Format
 
 For each issue found:
+
 ```
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue
   Performance impact: Estimated severity

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import JSON, ForeignKey, LargeBinary, String, func
 from sqlalchemy.orm import Mapped, mapped_column
@@ -64,7 +65,7 @@ class AnalysisResult(Base):
         nullable=True,
         comment="Version of the analysis engine/data used to generate this result",
     )
-    summary_json: Mapped[dict | None] = mapped_column(
+    summary_json: Mapped[dict[str, Any] | None] = mapped_column(
         JSON,
         nullable=True,
         comment="Unencrypted summary for listing (counts/stats only, no genetic data)",
@@ -82,7 +83,4 @@ class AnalysisResult(Base):
     )
 
     def __repr__(self) -> str:
-        return (
-            f"<AnalysisResult id={self.id} user_id={self.user_id} "
-            f"label={self.label!r} tier={self.tier_at_time!r}>"
-        )
+        return f"<AnalysisResult id={self.id} user_id={self.user_id} label={self.label!r} tier={self.tier_at_time!r}>"

@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+} from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -20,13 +25,10 @@ const mockStoreState: Record<string, unknown> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/components/auth/dna-dots', () => ({
@@ -61,7 +63,12 @@ vi.mock('@/components/auth/password-strength-display', () => ({
 
 vi.mock('@/lib/password-utils', () => ({
   validatePassword: (pw: string) => ({
-    valid: pw.length >= 12 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw),
+    valid:
+      pw.length >= 12 &&
+      /[A-Z]/.test(pw) &&
+      /[a-z]/.test(pw) &&
+      /[0-9]/.test(pw) &&
+      /[^A-Za-z0-9]/.test(pw),
     errors: pw.length < 12 ? ['Password must be at least 12 characters'] : [],
   }),
   getPasswordStrength: (pw: string) => ({
@@ -122,19 +129,29 @@ describe('ResetPasswordContent', () => {
   it('submit button disabled when passwords do not match', () => {
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: 'DifferentPass1!' } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: 'DifferentPass1!' },
+    });
 
     // The submit button is "Reset Password" with type="submit"
-    const submitBtn = screen.getAllByText('Reset Password').find((el) => el.tagName === 'BUTTON' && el.getAttribute('type') === 'submit');
+    const submitBtn = screen
+      .getAllByText('Reset Password')
+      .find((el) => el.tagName === 'BUTTON' && el.getAttribute('type') === 'submit');
     expect(submitBtn).toBeDisabled();
   });
 
   it('shows "Passwords do not match" error', () => {
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: 'DifferentPass1!' } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: 'DifferentPass1!' },
+    });
 
     expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
   });
@@ -142,8 +159,12 @@ describe('ResetPasswordContent', () => {
   it('shows "Password Reset!" success state on successful reset', async () => {
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: STRONG_PASSWORD } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
 
     const form = screen.getByTestId('password-new-password').closest('form')!;
     await act(async () => {
@@ -158,8 +179,12 @@ describe('ResetPasswordContent', () => {
   it('success state has "Sign In" link to /login', async () => {
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: STRONG_PASSWORD } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
 
     const form = screen.getByTestId('password-new-password').closest('form')!;
     await act(async () => {
@@ -177,8 +202,12 @@ describe('ResetPasswordContent', () => {
 
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: STRONG_PASSWORD } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
 
     const form = screen.getByTestId('password-new-password').closest('form')!;
     await act(async () => {
@@ -196,8 +225,12 @@ describe('ResetPasswordContent', () => {
 
     render(<ResetPasswordContent />);
 
-    fireEvent.change(screen.getByTestId('password-new-password'), { target: { value: STRONG_PASSWORD } });
-    fireEvent.change(screen.getByTestId('password-confirm-password'), { target: { value: STRONG_PASSWORD } });
+    fireEvent.change(screen.getByTestId('password-new-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
+    fireEvent.change(screen.getByTestId('password-confirm-password'), {
+      target: { value: STRONG_PASSWORD },
+    });
 
     const form = screen.getByTestId('password-new-password').closest('form')!;
     await act(async () => {

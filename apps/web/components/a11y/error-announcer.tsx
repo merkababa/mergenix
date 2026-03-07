@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useAnnouncerStore } from "@/lib/stores/announcer-store";
+import { useAnnouncerStore } from '@/lib/stores/announcer-store';
 
 /**
  * Globally-mounted aria-live regions for screen reader announcements.
@@ -17,12 +17,12 @@ export function ErrorAnnouncer() {
   const politeMessage = useAnnouncerStore((s) => s.politeMessage);
 
   const srOnlyStyle: React.CSSProperties = {
-    position: "absolute",
-    width: "1px",
-    height: "1px",
-    overflow: "hidden",
-    clip: "rect(0, 0, 0, 0)",
-    whiteSpace: "nowrap",
+    position: 'absolute',
+    width: '1px',
+    height: '1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap',
   };
 
   return (

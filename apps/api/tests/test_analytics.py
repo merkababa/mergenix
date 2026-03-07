@@ -256,9 +256,7 @@ async def test_track_event_upsert_uses_on_conflict(
     from app.routers.analytics import track_event
 
     source = inspect.getsource(track_event)
-    assert "IntegrityError" not in source, (
-        "track_event should use ON CONFLICT upsert, not try/except IntegrityError"
-    )
+    assert "IntegrityError" not in source, "track_event should use ON CONFLICT upsert, not try/except IntegrityError"
 
 
 @pytest.mark.asyncio

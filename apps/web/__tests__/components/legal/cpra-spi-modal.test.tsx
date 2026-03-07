@@ -59,9 +59,7 @@ describe('CpraSpiModal', () => {
 
   it('renders CPRA subtitle', () => {
     render(<CpraSpiModal onClose={onClose} />);
-    expect(
-      screen.getByText('California Privacy Rights Act (CPRA)'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('California Privacy Rights Act (CPRA)')).toBeInTheDocument();
   });
 
   // ── Close behaviour ──────────────────────────────────────────────────────
@@ -108,9 +106,7 @@ describe('CpraSpiModal', () => {
     expect(activeEl).not.toBeNull();
     expect(activeEl).not.toBe(document.body);
     // Active element should be inside the dialog container or be the dialog itself
-    expect(
-      dialog.contains(activeEl) || activeEl === dialog,
-    ).toBe(true);
+    expect(dialog.contains(activeEl) || activeEl === dialog).toBe(true);
   });
 
   it('Tab key wraps focus from last focusable element to first (focus trap)', () => {

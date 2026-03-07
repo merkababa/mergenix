@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
-import * as paymentClient from "@/lib/api/payment-client";
+import { create } from 'zustand';
+import * as paymentClient from '@/lib/api/payment-client';
 import type {
   CheckoutResponse,
   PaymentHistoryItem,
   SubscriptionStatus,
-} from "@/lib/api/payment-client";
-import { extractErrorMessage } from "@/lib/utils/extract-error";
+} from '@/lib/api/payment-client';
+import { extractErrorMessage } from '@/lib/utils/extract-error';
 
 // ── Payment Store State & Actions ───────────────────────────────────────
 
@@ -29,7 +29,7 @@ interface PaymentState {
    * Create a Stripe checkout session and redirect to the checkout URL.
    * Returns the checkout response for the caller to handle the redirect.
    */
-  createCheckout: (tier: "premium" | "pro") => Promise<CheckoutResponse>;
+  createCheckout: (tier: 'premium' | 'pro') => Promise<CheckoutResponse>;
   /** Fetch the user's payment history. */
   fetchPaymentHistory: () => Promise<void>;
   /** Fetch the user's subscription/tier status. */
@@ -58,7 +58,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       set({ isCheckoutLoading: false });
       return response;
     } catch (error) {
-      const message = extractErrorMessage(error, "Checkout failed");
+      const message = extractErrorMessage(error, 'Checkout failed');
       set({ isCheckoutLoading: false, error: message });
       throw error;
     }
@@ -70,7 +70,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       const history = await paymentClient.getPaymentHistory();
       set({ paymentHistory: history, isLoading: false });
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to load payment history");
+      const message = extractErrorMessage(error, 'Failed to load payment history');
       set({ isLoading: false, error: message });
       throw error;
     }
@@ -82,7 +82,7 @@ export const usePaymentStore = create<PaymentState>()((set) => ({
       const status = await paymentClient.getSubscriptionStatus();
       set({ subscriptionStatus: status, isLoading: false });
     } catch (error) {
-      const message = extractErrorMessage(error, "Failed to load subscription status");
+      const message = extractErrorMessage(error, 'Failed to load subscription status');
       set({ isLoading: false, error: message });
       throw error;
     }

@@ -9,6 +9,7 @@ import json
 import logging
 from datetime import UTC
 from pathlib import Path
+from typing import Any
 
 import anyio
 from fastapi import APIRouter, HTTPException, status
@@ -41,7 +42,7 @@ _SYNC_META_PATH = Path("data/clinvar_cache/last_sync.json")
 async def check_clinvar_updates(
     user: AdminUser,
     db: DbSession,
-) -> dict:
+) -> dict[str, Any]:
     """Check if the local carrier panel is stale relative to ClinVar.
 
     Returns freshness metadata including days since last sync and
@@ -119,7 +120,7 @@ async def trigger_clinvar_sync(
 async def get_sync_status(
     user: AdminUser,
     db: DbSession,
-) -> dict:
+) -> dict[str, Any]:
     """Return the last ClinVar sync metadata.
 
     Includes timestamp, source URL, and downloaded file size.

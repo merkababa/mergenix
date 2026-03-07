@@ -4,9 +4,7 @@ import { CYP2D6Warning } from '../../../../components/genetics/results/cyp2d6-wa
 
 describe('CYP2D6Warning', () => {
   it('renders nothing when hasWarning is false', () => {
-    const { container } = render(
-      <CYP2D6Warning gene="CYP2D6" hasWarning={false} />,
-    );
+    const { container } = render(<CYP2D6Warning gene="CYP2D6" hasWarning={false} />);
     expect(container.innerHTML).toBe('');
   });
 
@@ -24,16 +22,10 @@ describe('CYP2D6Warning', () => {
 
   it('uses custom warningMessage when provided', () => {
     render(
-      <CYP2D6Warning
-        gene="CYP2D6"
-        hasWarning={true}
-        warningMessage="Custom warning text here."
-      />,
+      <CYP2D6Warning gene="CYP2D6" hasWarning={true} warningMessage="Custom warning text here." />,
     );
     expect(screen.getByText(/Custom warning text here/)).toBeInTheDocument();
-    expect(
-      screen.queryByText(/Array-based testing cannot detect/),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Array-based testing cannot detect/)).not.toBeInTheDocument();
   });
 
   it('has role="note" with aria-label', () => {
@@ -45,9 +37,6 @@ describe('CYP2D6Warning', () => {
   it('renders with a different gene name', () => {
     render(<CYP2D6Warning gene="CYP2C19" hasWarning={true} />);
     expect(screen.getByText('CYP2C19:')).toBeInTheDocument();
-    expect(screen.getByRole('note')).toHaveAttribute(
-      'aria-label',
-      'CYP2C19 testing limitation',
-    );
+    expect(screen.getByRole('note')).toHaveAttribute('aria-label', 'CYP2C19 testing limitation');
   });
 });

@@ -67,9 +67,7 @@ describe('CounselingContent (counseling page)', () => {
 
   it('shows the info banner about genetic counselors', () => {
     render(<CounselingContent />);
-    expect(
-      screen.getByText(/Genetic counselors are healthcare professionals/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Genetic counselors are healthcare professionals/)).toBeInTheDocument();
   });
 
   it('shows the "Why See a Genetic Counselor?" section', () => {
@@ -80,9 +78,7 @@ describe('CounselingContent (counseling page)', () => {
   it('does NOT contain a search input (search UI removed)', () => {
     render(<CounselingContent />);
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
-    expect(
-      screen.queryByPlaceholderText(/search by name/i),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByPlaceholderText(/search by name/i)).not.toBeInTheDocument();
   });
 
   it('shows the NSGC domain in a disclosure note', () => {

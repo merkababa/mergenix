@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { X, QrCode, KeyRound, ShieldCheck, Copy, Download, Check, Loader2 } from "lucide-react";
-import QRCodeLib from "qrcode";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/lib/stores/auth-store";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { X, QrCode, KeyRound, ShieldCheck, Copy, Download, Check, Loader2 } from 'lucide-react';
+import QRCodeLib from 'qrcode';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 interface TwoFactorSetupModalProps {
   isOpen: boolean;
@@ -15,9 +15,9 @@ interface TwoFactorSetupModalProps {
 }
 
 const STEPS = [
-  { label: "Scan QR Code", icon: QrCode },
-  { label: "Verify Code", icon: KeyRound },
-  { label: "Backup Codes", icon: ShieldCheck },
+  { label: 'Scan QR Code', icon: QrCode },
+  { label: 'Verify Code', icon: KeyRound },
+  { label: 'Backup Codes', icon: ShieldCheck },
 ] as const;
 
 const FOCUSABLE_SELECTOR =
@@ -25,10 +25,10 @@ const FOCUSABLE_SELECTOR =
 
 export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProps) {
   const [step, setStep] = useState(0);
-  const [qrUri, setQrUri] = useState("");
-  const [secret, setSecret] = useState("");
+  const [qrUri, setQrUri] = useState('');
+  const [secret, setSecret] = useState('');
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState('');
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isSettingUp, setIsSettingUp] = useState(false);
@@ -44,9 +44,9 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
   useEffect(() => {
     if (!isOpen) return;
     const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
       window.scrollTo(0, scrollY);
     };
   }, [isOpen]);
@@ -55,7 +55,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
   useEffect(() => {
     if (!isOpen) return;
     setStep(0);
-    setCode("");
+    setCode('');
     setError(null);
     setBackupCodes([]);
     setCopiedSecret(false);
@@ -69,7 +69,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
         setQrUri(result.qrUri);
         setSecret(result.secret);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to start 2FA setup");
+        setError(err instanceof Error ? err.message : 'Failed to start 2FA setup');
       } finally {
         setIsSettingUp(false);
       }
@@ -93,11 +93,11 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose();
         return;
       }
-      if (e.key !== "Tab") return;
+      if (e.key !== 'Tab') return;
 
       const modal = modalRef.current;
       if (!modal) return;
@@ -121,13 +121,13 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   const handleVerify = useCallback(async () => {
     if (code.length !== 6) {
-      setError("Please enter a 6-digit code");
+      setError('Please enter a 6-digit code');
       return;
     }
     setIsVerifying(true);
@@ -137,7 +137,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
       setBackupCodes(result.backupCodes);
       setStep(2);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Verification failed");
+      setError(err instanceof Error ? err.message : 'Verification failed');
     } finally {
       setIsVerifying(false);
     }
@@ -155,7 +155,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
 
   const handleCopyCodes = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(backupCodes.join("\n"));
+      await navigator.clipboard.writeText(backupCodes.join('\n'));
       setCopiedCodes(true);
       setTimeout(() => setCopiedCodes(false), 2000);
     } catch {
@@ -165,21 +165,21 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
 
   const handleDownloadCodes = useCallback(() => {
     const content = [
-      "Mergenix 2FA Backup Codes",
-      "=========================",
-      "",
-      "Store these codes safely. Each can be used once.",
-      "",
+      'Mergenix 2FA Backup Codes',
+      '=========================',
+      '',
+      'Store these codes safely. Each can be used once.',
+      '',
       ...backupCodes.map((c, i) => `${i + 1}. ${c}`),
-      "",
+      '',
       `Generated: ${new Date().toISOString()}`,
-    ].join("\n");
+    ].join('\n');
 
-    const blob = new Blob([content], { type: "text/plain" });
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = "mergenix-backup-codes.txt";
+    a.download = 'mergenix-backup-codes.txt';
     a.click();
     URL.revokeObjectURL(url);
   }, [backupCodes]);
@@ -198,7 +198,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-xs"
+            className="backdrop-blur-xs absolute inset-0 bg-[rgba(0,0,0,0.6)]"
             onClick={onClose}
           />
 
@@ -215,7 +215,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-(--accent-rose) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
+                className="text-(--text-dim) hover:text-(--accent-rose) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(244,63,94,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -228,10 +228,10 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     <div
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
                         i === step
-                          ? "bg-linear-to-br from-(--accent-teal) to-(--accent-cyan) text-(--bg-deep)"
+                          ? 'bg-linear-to-br from-(--accent-teal) to-(--accent-cyan) text-(--bg-deep)'
                           : i < step
-                            ? "bg-[rgba(6,214,160,0.2)] text-(--accent-teal)"
-                            : "bg-(--bg-elevated) text-(--text-dim)"
+                            ? 'text-(--accent-teal) bg-[rgba(6,214,160,0.2)]'
+                            : 'bg-(--bg-elevated) text-(--text-dim)'
                       }`}
                     >
                       <s.icon className="h-4 w-4" />
@@ -239,7 +239,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     {i < STEPS.length - 1 && (
                       <div
                         className={`h-0.5 w-8 rounded-full transition-colors duration-300 ${
-                          i < step ? "bg-(--accent-teal)" : "bg-(--border-subtle)"
+                          i < step ? 'bg-(--accent-teal)' : 'bg-(--border-subtle)'
                         }`}
                       />
                     )}
@@ -257,16 +257,16 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
+                    <h2 className="font-heading text-(--text-heading) mb-1 text-center text-lg font-bold">
                       Scan QR Code
                     </h2>
-                    <p className="mb-5 text-center text-sm text-(--text-muted)">
+                    <p className="text-(--text-muted) mb-5 text-center text-sm">
                       Scan with your authenticator app (Google Authenticator, Authy, etc.)
                     </p>
 
                     {isSettingUp ? (
                       <div className="flex h-48 items-center justify-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-(--accent-teal)" />
+                        <Loader2 className="text-(--accent-teal) h-8 w-8 animate-spin" />
                       </div>
                     ) : (
                       <>
@@ -288,21 +288,21 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                         </div>
 
                         {/* Secret key backup */}
-                        <div className="mb-5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-3">
-                          <p className="mb-1.5 text-xs font-medium text-(--text-muted)">
+                        <div className="border-(--border-subtle) bg-(--bg-elevated) mb-5 rounded-xl border p-3">
+                          <p className="text-(--text-muted) mb-1.5 text-xs font-medium">
                             Or enter this key manually:
                           </p>
                           <div className="flex items-center gap-2">
-                            <code className="flex-1 break-all font-mono text-xs text-(--text-primary)">
+                            <code className="text-(--text-primary) flex-1 break-all font-mono text-xs">
                               {secret}
                             </code>
                             <button
                               onClick={handleCopySecret}
-                              className="shrink-0 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(6,214,160,0.1)] hover:text-(--accent-teal)"
+                              className="text-(--text-dim) hover:text-(--accent-teal) shrink-0 rounded-lg p-1.5 transition-colors hover:bg-[rgba(6,214,160,0.1)]"
                               aria-label="Copy secret key"
                             >
                               {copiedSecret ? (
-                                <Check className="h-3.5 w-3.5 text-(--accent-teal)" />
+                                <Check className="text-(--accent-teal) h-3.5 w-3.5" />
                               ) : (
                                 <Copy className="h-3.5 w-3.5" />
                               )}
@@ -332,10 +332,10 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
+                    <h2 className="font-heading text-(--text-heading) mb-1 text-center text-lg font-bold">
                       Enter Verification Code
                     </h2>
-                    <p className="mb-5 text-center text-sm text-(--text-muted)">
+                    <p className="text-(--text-muted) mb-5 text-center text-sm">
                       Enter the 6-digit code from your authenticator app
                     </p>
 
@@ -345,7 +345,7 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                         placeholder="000000"
                         value={code}
                         onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+                          const val = e.target.value.replace(/\D/g, '').slice(0, 6);
                           setCode(val);
                           setError(null);
                         }}
@@ -392,20 +392,21 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h2 className="mb-1 text-center font-heading text-lg font-bold text-(--text-heading)">
+                    <h2 className="font-heading text-(--text-heading) mb-1 text-center text-lg font-bold">
                       Save Backup Codes
                     </h2>
-                    <p className="mb-5 text-center text-sm text-(--text-muted)">
-                      Save these codes somewhere safe. Each can be used once if you lose access to your authenticator.
+                    <p className="text-(--text-muted) mb-5 text-center text-sm">
+                      Save these codes somewhere safe. Each can be used once if you lose access to
+                      your authenticator.
                     </p>
 
                     {/* Backup codes grid */}
-                    <div className="mb-4 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4">
+                    <div className="border-(--border-subtle) bg-(--bg-elevated) mb-4 rounded-xl border p-4">
                       <div className="grid grid-cols-2 gap-2">
                         {backupCodes.map((bCode) => (
                           <div
                             key={bCode}
-                            className="rounded-lg bg-[rgba(6,214,160,0.05)] px-3 py-1.5 text-center font-mono text-sm text-(--text-primary)"
+                            className="text-(--text-primary) rounded-lg bg-[rgba(6,214,160,0.05)] px-3 py-1.5 text-center font-mono text-sm"
                           >
                             {bCode}
                           </div>
@@ -417,30 +418,25 @@ export function TwoFactorSetupModal({ isOpen, onClose }: TwoFactorSetupModalProp
                     <div className="mb-5 flex gap-2">
                       <button
                         onClick={handleCopyCodes}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-3 py-2 text-xs font-medium text-(--text-muted) transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-(--accent-teal)"
+                        className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) hover:text-(--accent-teal) flex flex-1 items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition-colors hover:border-[rgba(6,214,160,0.25)]"
                       >
                         {copiedCodes ? (
-                          <Check className="h-3.5 w-3.5 text-(--accent-teal)" />
+                          <Check className="text-(--accent-teal) h-3.5 w-3.5" />
                         ) : (
                           <Copy className="h-3.5 w-3.5" />
                         )}
-                        {copiedCodes ? "Copied" : "Copy All"}
+                        {copiedCodes ? 'Copied' : 'Copy All'}
                       </button>
                       <button
                         onClick={handleDownloadCodes}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-3 py-2 text-xs font-medium text-(--text-muted) transition-colors hover:border-[rgba(6,214,160,0.25)] hover:text-(--accent-teal)"
+                        className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) hover:text-(--accent-teal) flex flex-1 items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition-colors hover:border-[rgba(6,214,160,0.25)]"
                       >
                         <Download className="h-3.5 w-3.5" />
                         Download
                       </button>
                     </div>
 
-                    <Button
-                      variant="primary"
-                      size="md"
-                      className="w-full"
-                      onClick={onClose}
-                    >
+                    <Button variant="primary" size="md" className="w-full" onClick={onClose}>
                       I&apos;ve Saved My Codes
                     </Button>
                   </m.div>

@@ -15,11 +15,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // ─── 1. Shared crypto utilities ──────────────────────────────────────────────
 
-import {
-  deriveBypassToken,
-  timingSafeEqual,
-  HMAC_MESSAGE,
-} from '@/lib/coming-soon-crypto';
+import { deriveBypassToken, timingSafeEqual, HMAC_MESSAGE } from '@/lib/coming-soon-crypto';
 
 describe('coming-soon-crypto — deriveBypassToken', () => {
   it('returns a hex string', async () => {
@@ -66,8 +62,7 @@ describe('coming-soon-crypto — timingSafeEqual', () => {
   });
 
   it('returns true when both inputs are identical non-trivial strings', async () => {
-    const a =
-      'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2';
+    const a = 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2';
     const result = await timingSafeEqual(a, a, 'some-key');
     expect(result).toBe(true);
   });
@@ -218,9 +213,10 @@ function buildRequest(opts: {
     cookies: {
       get: (_name: string) => undefined,
     },
-    json: opts.noBody || opts.malformedBody
-      ? () => Promise.reject(new SyntaxError('invalid JSON'))
-      : () => Promise.resolve(jsonBody),
+    json:
+      opts.noBody || opts.malformedBody
+        ? () => Promise.reject(new SyntaxError('invalid JSON'))
+        : () => Promise.resolve(jsonBody),
   } as any;
 }
 
@@ -450,9 +446,7 @@ describe('POST /api/coming-soon-bypass — route handler', () => {
     expect(blocked.status).toBe(429);
 
     // cleanIp is in a fresh window and must not be blocked
-    const clean = await POST(
-      buildRequest({ password: 'rate-limit-ip-test', ip: cleanIp }),
-    );
+    const clean = await POST(buildRequest({ password: 'rate-limit-ip-test', ip: cleanIp }));
     expect(clean.status).toBe(200);
   });
 });
@@ -583,9 +577,9 @@ describe('middleware — coming-soon gate', () => {
 
     // Must redirect, not pass through
     expect((result as any).type).not.toBe('next');
-    expect(
-      (result as any).url?.pathname ?? (result as any).url?.toString(),
-    ).toContain('/coming-soon');
+    expect((result as any).url?.pathname ?? (result as any).url?.toString()).toContain(
+      '/coming-soon',
+    );
   });
 
   it('allows requests with a valid bypass cookie through', async () => {
@@ -615,9 +609,9 @@ describe('middleware — coming-soon gate', () => {
     const request = await buildMiddlewareRequest('/', invalidToken);
     const result = await middleware(request);
 
-    expect(
-      (result as any).url?.pathname ?? (result as any).url?.toString(),
-    ).toContain('/coming-soon');
+    expect((result as any).url?.pathname ?? (result as any).url?.toString()).toContain(
+      '/coming-soon',
+    );
   });
 
   it('redirects when bypass cookie is an empty string', async () => {
@@ -629,9 +623,9 @@ describe('middleware — coming-soon gate', () => {
     const request = await buildMiddlewareRequest('/', '');
     const result = await middleware(request);
 
-    expect(
-      (result as any).url?.pathname ?? (result as any).url?.toString(),
-    ).toContain('/coming-soon');
+    expect((result as any).url?.pathname ?? (result as any).url?.toString()).toContain(
+      '/coming-soon',
+    );
   });
 
   it('redirects everyone to /coming-soon when secret is not configured', async () => {
@@ -642,9 +636,9 @@ describe('middleware — coming-soon gate', () => {
     const request = await buildMiddlewareRequest('/');
     const result = await middleware(request);
 
-    expect(
-      (result as any).url?.pathname ?? (result as any).url?.toString(),
-    ).toContain('/coming-soon');
+    expect((result as any).url?.pathname ?? (result as any).url?.toString()).toContain(
+      '/coming-soon',
+    );
   });
 
   it('passes through normally when SITE_COMING_SOON is not set', async () => {
@@ -681,8 +675,7 @@ describe('middleware — coming-soon gate', () => {
     const result = await middleware(request);
 
     // Should redirect to /login (auth gate), not /coming-soon
-    const redirectTarget =
-      (result as any).url?.pathname ?? (result as any).url?.toString() ?? '';
+    const redirectTarget = (result as any).url?.pathname ?? (result as any).url?.toString() ?? '';
     expect(redirectTarget).toContain('/login');
     expect(redirectTarget).not.toContain('/coming-soon');
   });

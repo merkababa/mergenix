@@ -109,10 +109,7 @@ export class AnalysisPage {
    * @param slot - Which parent slot: 'A' or 'B'
    * @param filePath - Absolute or relative path to the file to upload
    */
-  async uploadFile(
-    slot: 'A' | 'B',
-    filePath: string,
-  ): Promise<void> {
+  async uploadFile(slot: 'A' | 'B', filePath: string): Promise<void> {
     const dropzone = slot === 'A' ? this.parentADropzone : this.parentBDropzone;
 
     // The dropzone has a hidden file input inside it. We use setInputFiles

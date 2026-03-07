@@ -23,11 +23,9 @@ beforeEach(() => {
   vi.spyOn(Storage.prototype, 'getItem').mockImplementation(
     (key: string) => localStorageStore[key] ?? null,
   );
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(
-    (key: string, value: string) => {
-      localStorageStore[key] = value;
-    },
-  );
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key: string, value: string) => {
+    localStorageStore[key] = value;
+  });
 
   // Clear the in-memory fallback used by safeLocalStorageGet/Set so that
   // values from prior tests (e.g. verifyAge setting 'mergenix_age_verified')
@@ -72,7 +70,11 @@ describe('useLegalStore', () => {
 
   describe('acceptAllCookies', () => {
     it('sets cookieConsent to accepted_all, analyticsEnabled and marketingEnabled to true', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: true,
+        marketing: true,
+      });
 
       await useLegalStore.getState().acceptAllCookies();
 
@@ -84,7 +86,11 @@ describe('useLegalStore', () => {
     });
 
     it('saves to localStorage', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: true,
+        marketing: true,
+      });
 
       await useLegalStore.getState().acceptAllCookies();
 
@@ -95,7 +101,11 @@ describe('useLegalStore', () => {
     });
 
     it('calls API to update cookie preferences with both analytics=true and marketing=true', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: true,
+        marketing: true,
+      });
 
       await useLegalStore.getState().acceptAllCookies();
 
@@ -119,7 +129,11 @@ describe('useLegalStore', () => {
 
   describe('acceptEssentialOnly', () => {
     it('sets cookieConsent to essential_only and both flags to false', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: false,
+      });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
@@ -131,7 +145,11 @@ describe('useLegalStore', () => {
     });
 
     it('saves to localStorage', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: false,
+      });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
@@ -142,7 +160,11 @@ describe('useLegalStore', () => {
     });
 
     it('calls API with analytics=false and marketing=false', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: false,
+      });
 
       await useLegalStore.getState().acceptEssentialOnly();
 
@@ -154,7 +176,11 @@ describe('useLegalStore', () => {
 
   describe('updateCookiePrefs', () => {
     it('with analytics=true, marketing=false sets cookieConsent to custom', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: false });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: true,
+        marketing: false,
+      });
 
       await useLegalStore.getState().updateCookiePrefs(true, false);
 
@@ -165,7 +191,11 @@ describe('useLegalStore', () => {
     });
 
     it('with analytics=false, marketing=true sets cookieConsent to custom', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: true });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: true,
+      });
 
       await useLegalStore.getState().updateCookiePrefs(false, true);
 
@@ -176,7 +206,11 @@ describe('useLegalStore', () => {
     });
 
     it('with analytics=false, marketing=false sets cookieConsent to essential_only', async () => {
-      mockUpdateCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+      mockUpdateCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: false,
+      });
 
       await useLegalStore.getState().updateCookiePrefs(false, false);
 
@@ -194,10 +228,7 @@ describe('useLegalStore', () => {
       useLegalStore.getState().verifyAge();
 
       expect(useLegalStore.getState().ageVerified).toBe(true);
-      expect(Storage.prototype.setItem).toHaveBeenCalledWith(
-        'mergenix_age_verified',
-        'true',
-      );
+      expect(Storage.prototype.setItem).toHaveBeenCalledWith('mergenix_age_verified', 'true');
     });
 
     it('does not call the API (no server request)', () => {
@@ -276,9 +307,9 @@ describe('useLegalStore', () => {
     it('sets error on API failure', async () => {
       mockRecordConsent.mockRejectedValue(new Error('Failed to record'));
 
-      await expect(
-        useLegalStore.getState().recordConsent('terms', '1.0'),
-      ).rejects.toThrow('Failed to record');
+      await expect(useLegalStore.getState().recordConsent('terms', '1.0')).rejects.toThrow(
+        'Failed to record',
+      );
 
       const state = useLegalStore.getState();
       expect(state.error).toBe('Failed to record');
@@ -292,7 +323,12 @@ describe('useLegalStore', () => {
     it('fetches consents from API and stores them', async () => {
       const mockConsents = [
         { id: 'uuid-1', consentType: 'terms', version: '1.0', acceptedAt: '2026-01-01T00:00:00Z' },
-        { id: 'uuid-2', consentType: 'privacy', version: '2.0', acceptedAt: '2026-01-02T00:00:00Z' },
+        {
+          id: 'uuid-2',
+          consentType: 'privacy',
+          version: '2.0',
+          acceptedAt: '2026-01-02T00:00:00Z',
+        },
       ];
       mockListConsents.mockResolvedValue(mockConsents);
 
@@ -306,9 +342,7 @@ describe('useLegalStore', () => {
     it('sets error on API failure', async () => {
       mockListConsents.mockRejectedValue(new Error('Network error'));
 
-      await expect(
-        useLegalStore.getState().loadConsents(),
-      ).rejects.toThrow('Network error');
+      await expect(useLegalStore.getState().loadConsents()).rejects.toThrow('Network error');
 
       expect(useLegalStore.getState().error).toBe('Network error');
       expect(useLegalStore.getState().isLoading).toBe(false);
@@ -319,7 +353,11 @@ describe('useLegalStore', () => {
 
   describe('loadCookiePreferences', () => {
     it('fetches preferences from API and updates state (analytics=true, marketing=true)', async () => {
-      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: true, marketing: true });
+      mockGetCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: true,
+        marketing: true,
+      });
 
       await useLegalStore.getState().loadCookiePreferences();
 
@@ -330,7 +368,11 @@ describe('useLegalStore', () => {
     });
 
     it('fetches preferences from API and updates state (analytics=false, marketing=false)', async () => {
-      mockGetCookiePreferences.mockResolvedValue({ essential: true, analytics: false, marketing: false });
+      mockGetCookiePreferences.mockResolvedValue({
+        essential: true,
+        analytics: false,
+        marketing: false,
+      });
 
       await useLegalStore.getState().loadCookiePreferences();
 

@@ -1,50 +1,45 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import {
-  Shield,
-  ChevronRight,
-  Lock,
-  Server,
-  Eye,
-} from "lucide-react";
-import { m } from "motion/react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { buttonVariants } from "@/components/ui/button";
-import { HelixAnimation } from "@/components/marketing/helix-animation";
-import { PricingCard } from "@/components/marketing/pricing-card";
-import { Accordion } from "@/components/ui/accordion";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { staggerContainer, staggerItem } from "@/lib/animation-variants";
-import { MARKETING_TIERS } from "@/lib/pricing-data";
-import { HOME_FAQ } from "@/lib/faq-data";
-import { cn } from "@/lib/utils";
-import { BentoFeatures } from "@/app/_components/bento-features";
-import { ScrollTimeline } from "@/app/_components/scroll-timeline";
-import { SocialProof } from "@/app/_components/social-proof";
-import { ProductDemo } from "@/app/_components/product-demo";
-import { HeroSection } from "@/app/_components/hero-section";
+import Link from 'next/link';
+import { Shield, ChevronRight, Lock, Server, Eye } from 'lucide-react';
+import { m } from 'motion/react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { buttonVariants } from '@/components/ui/button';
+import { HelixAnimation } from '@/components/marketing/helix-animation';
+import { PricingCard } from '@/components/marketing/pricing-card';
+import { Accordion } from '@/components/ui/accordion';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { staggerContainer, staggerItem } from '@/lib/animation-variants';
+import { MARKETING_TIERS } from '@/lib/pricing-data';
+import { HOME_FAQ } from '@/lib/faq-data';
+import { cn } from '@/lib/utils';
+import { BentoFeatures } from '@/app/_components/bento-features';
+import { ScrollTimeline } from '@/app/_components/scroll-timeline';
+import { SocialProof } from '@/app/_components/social-proof';
+import { ProductDemo } from '@/app/_components/product-demo';
+import { HeroSection } from '@/app/_components/hero-section';
 
 const PRIVACY_FEATURES = [
   {
     icon: Lock,
-    title: "Client-Side Processing",
-    description: "All genetic analysis runs in your browser. Files never touch our servers.",
+    title: 'Client-Side Processing',
+    description: 'All genetic analysis runs in your browser. Files never touch our servers.',
   },
   {
     icon: Server,
-    title: "No Cloud Storage",
-    description: "We never store your DNA data. Period. No databases, no backups, no exceptions.",
+    title: 'No Cloud Storage',
+    description: 'We never store your DNA data. Period. No databases, no backups, no exceptions.',
   },
   {
     icon: Eye,
-    title: "No Third-Party Sharing",
-    description: "Your genetic data is never shared with advertisers, insurers, or any third party.",
+    title: 'No Third-Party Sharing',
+    description:
+      'Your genetic data is never shared with advertisers, insurers, or any third party.',
   },
   {
     icon: Shield,
-    title: "Healthcare-Grade Privacy",
-    description: "Built with healthcare privacy standards in mind from day one.",
+    title: 'Healthcare-Grade Privacy',
+    description: 'Built with healthcare privacy standards in mind from day one.',
   },
 ] as const;
 
@@ -58,8 +53,8 @@ export function HomeContent() {
       <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" as const }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Privacy and security"
       >
@@ -74,25 +69,21 @@ export function HomeContent() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
+            viewport={{ once: true, margin: '-60px' }}
             className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
           >
             {PRIVACY_FEATURES.map((feature) => {
               const Icon = feature.icon;
               return (
                 <m.div key={feature.title} variants={staggerItem}>
-                  <GlassCard
-                    variant="medium"
-                    hover="lift"
-                    className="h-full p-6"
-                  >
+                  <GlassCard variant="medium" hover="lift" className="h-full p-6">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
+                      <Icon className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
                     </div>
-                    <h3 className="mb-2 font-heading text-base font-semibold text-(--text-heading)">
+                    <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-(--text-muted)">
+                    <p className="text-(--text-muted) text-sm leading-relaxed">
                       {feature.description}
                     </p>
                   </GlassCard>
@@ -119,8 +110,8 @@ export function HomeContent() {
       <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" as const }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Pricing"
       >
@@ -135,7 +126,7 @@ export function HomeContent() {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
+            viewport={{ once: true, margin: '-60px' }}
             className="grid gap-6 pt-4 sm:grid-cols-2 md:grid-cols-3"
           >
             {MARKETING_TIERS.map((plan) => (
@@ -165,16 +156,13 @@ export function HomeContent() {
       <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" as const }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="relative px-4 py-16 md:px-6 md:py-24"
         aria-label="Frequently asked questions"
       >
         <div className="mx-auto max-w-3xl">
-          <SectionHeading
-            title="Frequently Asked Questions"
-            className="mb-12"
-          />
+          <SectionHeading title="Frequently Asked Questions" className="mb-12" />
 
           <Accordion items={HOME_FAQ} />
         </div>
@@ -184,8 +172,8 @@ export function HomeContent() {
       <m.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: "easeOut" as const }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="px-4 py-16 md:px-6 md:py-24"
         aria-label="Call to action"
       >
@@ -198,26 +186,23 @@ export function HomeContent() {
             {/* DNA helix animation */}
             <HelixAnimation dotCount={3} className="relative mx-auto mb-6 h-6 w-24" />
 
-            <h2 className="text-(--text-heading) relative font-heading text-3xl font-extrabold md:text-4xl">
+            <h2 className="text-(--text-heading) font-heading relative text-3xl font-extrabold md:text-4xl">
               Ready to Know?
             </h2>
-            <p className="relative mx-auto mt-4 max-w-lg text-(--text-muted)">
-              Create a free account and start your genetic analysis today.
-              Your DNA stays on your device — always.
+            <p className="text-(--text-muted) relative mx-auto mt-4 max-w-lg">
+              Create a free account and start your genetic analysis today. Your DNA stays on your
+              device — always.
             </p>
 
             <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/analysis"
-                className={cn(buttonVariants({ variant: "primary", size: "xl" }))}
+                className={cn(buttonVariants({ variant: 'primary', size: 'xl' }))}
               >
                 Start Free Analysis
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />
               </Link>
-              <Link
-                href="/about"
-                className={cn(buttonVariants({ variant: "ghost", size: "xl" }))}
-              >
+              <Link href="/about" className={cn(buttonVariants({ variant: 'ghost', size: 'xl' }))}>
                 Learn More
               </Link>
             </div>

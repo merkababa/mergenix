@@ -8,12 +8,12 @@
 
 ## Gemini Planning Team Results
 
-| Persona | Risk Level | Top Concern |
-|---------|-----------|-------------|
-| **Architect** | Medium | Turbopack + Web Worker compatibility |
+| Persona          | Risk Level  | Top Concern                                             |
+| ---------------- | ----------- | ------------------------------------------------------- |
+| **Architect**    | Medium      | Turbopack + Web Worker compatibility                    |
 | **Technologist** | Medium-High | Webpack fallbacks (`fs: false`) may fail with Turbopack |
-| **QA** | Medium | middleware.test.ts rename + async params in E2E |
-| **Security** | High | Auth bypass if proxy.ts migration fails silently |
+| **QA**           | Medium      | middleware.test.ts rename + async params in E2E         |
+| **Security**     | High        | Auth bypass if proxy.ts migration fails silently        |
 
 ---
 
@@ -47,6 +47,7 @@
 ### 1. Turbopack + Web Workers (HIGH)
 
 All 4 personas flagged this. Our `next.config.ts` has `config.resolve.fallback = { fs: false }` for the genetics engine Web Worker. Turbopack doesn't support custom webpack configs — the build will **fail** unless we:
+
 - Migrate to Turbopack `resolveAlias` configuration, OR
 - Add `browser` field to `@mergenix/genetics-engine`'s `package.json` to shim Node modules, OR
 - Opt out with `--webpack` flag (temporary fallback)
@@ -134,28 +135,28 @@ Technologist suggests enabling React Compiler and removing manual `useCallback`/
 
 ## Optional Enhancements (Post-Migration)
 
-| Enhancement | Effort | Benefit |
-|------------|--------|---------|
-| Enable React Compiler (`reactCompiler: true`) | Low | Auto-memoization, remove manual `useCallback`/`React.memo` |
-| Adopt `<Activity>` for result tabs | Medium | Keep chart state when switching tabs |
-| Enable Turbopack FS caching | Low | Faster dev restarts |
-| View Transitions for navigation | Medium | Smooth page transitions |
-| `useEffectEvent` adoption | Low | Cleaner effect patterns |
-| Upgrade proxy.ts to verify JWT | Medium | Stronger auth at network boundary |
+| Enhancement                                   | Effort | Benefit                                                    |
+| --------------------------------------------- | ------ | ---------------------------------------------------------- |
+| Enable React Compiler (`reactCompiler: true`) | Low    | Auto-memoization, remove manual `useCallback`/`React.memo` |
+| Adopt `<Activity>` for result tabs            | Medium | Keep chart state when switching tabs                       |
+| Enable Turbopack FS caching                   | Low    | Faster dev restarts                                        |
+| View Transitions for navigation               | Medium | Smooth page transitions                                    |
+| `useEffectEvent` adoption                     | Low    | Cleaner effect patterns                                    |
+| Upgrade proxy.ts to verify JWT                | Medium | Stronger auth at network boundary                          |
 
 ---
 
 ## Files Affected (Estimated)
 
-| Category | Files | Notes |
-|----------|-------|-------|
-| `proxy.ts` rename | 2-3 | middleware.ts, test, config |
-| Async API migration | 5-15 | All pages/layouts using params/cookies/headers |
-| next.config.ts | 1 | Turbopack config, removed options |
-| package.json | 1-2 | Dependencies, lint scripts |
-| ESLint config | 1 | Flat config migration |
-| Test updates | 3-5 | proxy test, auth E2E, search params mocks |
-| **Total estimate** | **15-30 files** | |
+| Category            | Files           | Notes                                          |
+| ------------------- | --------------- | ---------------------------------------------- |
+| `proxy.ts` rename   | 2-3             | middleware.ts, test, config                    |
+| Async API migration | 5-15            | All pages/layouts using params/cookies/headers |
+| next.config.ts      | 1               | Turbopack config, removed options              |
+| package.json        | 1-2             | Dependencies, lint scripts                     |
+| ESLint config       | 1               | Flat config migration                          |
+| Test updates        | 3-5             | proxy test, auth E2E, search params mocks      |
+| **Total estimate**  | **15-30 files** |                                                |
 
 ---
 

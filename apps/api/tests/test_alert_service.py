@@ -228,9 +228,7 @@ class TestSendSecurityAlert:
             mock_send.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_dedup_prevents_duplicate_alert_within_cooldown(
-        self, db: AsyncSession
-    ) -> None:
+    async def test_dedup_prevents_duplicate_alert_within_cooldown(self, db: AsyncSession) -> None:
         """Same alert type + IP within cooldown period is NOT re-sent."""
         from app.services.alert_service import (
             ALERT_AUTH_SPIKE,
@@ -259,9 +257,7 @@ class TestSendSecurityAlert:
             assert mock_send.call_count == 1  # Still 1, not 2
 
     @pytest.mark.asyncio
-    async def test_dedup_allows_alert_after_cooldown_expires(
-        self, db: AsyncSession
-    ) -> None:
+    async def test_dedup_allows_alert_after_cooldown_expires(self, db: AsyncSession) -> None:
         """Alert is re-sent after the cooldown period has elapsed."""
         from app.services.alert_service import (
             ALERT_AUTH_SPIKE,
@@ -367,9 +363,7 @@ class TestRunSecurityChecks:
             # Should have sent at least one alert
             assert mock_send.call_count >= 1
             # Verify at least one call was for rate_limit_breach
-            alert_types = [
-                call.kwargs["alert_type"] for call in mock_send.call_args_list
-            ]
+            alert_types = [call.kwargs["alert_type"] for call in mock_send.call_args_list]
             assert ALERT_RATE_LIMIT_BREACH in alert_types
 
     @pytest.mark.asyncio

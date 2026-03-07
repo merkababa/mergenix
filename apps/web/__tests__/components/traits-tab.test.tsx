@@ -237,9 +237,7 @@ describe('TraitsTab', () => {
     render(<TraitsTab />);
 
     expect(
-      screen.getByText(
-        /Trait predictions are based on simplified genetic models/,
-      ),
+      screen.getByText(/Trait predictions are based on simplified genetic models/),
     ).toBeInTheDocument();
   });
 
@@ -253,9 +251,7 @@ describe('TraitsTab', () => {
 
     render(<TraitsTab />);
 
-    expect(
-      screen.queryByText(/could not be predicted/),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/could not be predicted/)).not.toBeInTheDocument();
   });
 
   it('shows tier upgrade prompt for free tier', () => {
@@ -264,9 +260,7 @@ describe('TraitsTab', () => {
     render(<TraitsTab />);
 
     // Free tier metadata -> shows TierUpgradePrompt (upsells health features, not traits)
-    expect(
-      screen.getByText(/Upgrade to Premium to unlock disease screening/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Upgrade to Premium to unlock disease screening/)).toBeInTheDocument();
     expect(screen.getByText('Unlock Health Insights')).toBeInTheDocument();
   });
 
@@ -295,9 +289,7 @@ describe('TraitsTab', () => {
 
     render(<TraitsTab />);
 
-    expect(
-      screen.getByText(/What Trait Analysis Cannot Tell You/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/What Trait Analysis Cannot Tell You/)).toBeInTheDocument();
   });
 
   // ─── Interaction Tests ────────────────────────────────────────────────────
@@ -417,7 +409,7 @@ describe('TraitsTab', () => {
           status: 'success',
           parentAGenotype: 'AG',
           parentBGenotype: 'GG',
-          offspringProbabilities: { 'Carrier': 50, 'Non-carrier': 50 },
+          offspringProbabilities: { Carrier: 50, 'Non-carrier': 50 },
           category: 'Cancer Risk',
         },
       ],
@@ -476,7 +468,7 @@ describe('TraitsTab', () => {
           status: 'success',
           parentAGenotype: 'AG',
           parentBGenotype: 'GG',
-          offspringProbabilities: { 'Carrier': 50, 'Non-carrier': 50 },
+          offspringProbabilities: { Carrier: 50, 'Non-carrier': 50 },
           category: 'Cancer Risk',
         },
       ],

@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '22'
   PYTHON_VERSION: '3.12'
   PNPM_VERSION: '10.4.1'
 
@@ -281,7 +281,15 @@ jobs:
         run: pip install pip-audit
 
       - name: Run pip-audit on API dependencies
-        run: pip-audit -r apps/api/requirements.txt
+        run: >-
+          pip-audit -r apps/api/requirements.txt
+          --ignore-vuln CVE-2026-26007
+          --ignore-vuln CVE-2025-54121
+          --ignore-vuln CVE-2025-62727
+          --ignore-vuln CVE-2024-23342
+        # CVE-2026-26007: cryptography subgroup attack — needs 46.x (breaking changes, deferred to python-jose→PyJWT migration)
+        # CVE-2025-54121, CVE-2025-62727: starlette DoS — needs FastAPI upgrade (0.115→0.135, separate PR)
+        # CVE-2024-23342: ecdsa timing attack — transitive via python-jose, no fix without migration to PyJWT
 
   # ─────────────────────────────────────────────
   # E2E Tests (only on push to main)

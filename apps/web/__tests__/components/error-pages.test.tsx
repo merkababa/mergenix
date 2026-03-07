@@ -32,9 +32,7 @@ describe('NotFound (404 page)', () => {
 
   it('shows descriptive message about the page', () => {
     render(<NotFound />);
-    expect(
-      screen.getByText(/doesn't exist or has been moved/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/doesn't exist or has been moved/i)).toBeInTheDocument();
   });
 
   it('has a link back to home page', () => {
@@ -63,16 +61,12 @@ describe('ErrorPage (error.tsx)', () => {
 
   it('shows "Something went wrong" heading', () => {
     render(<ErrorPage error={mockError} reset={mockReset} />);
-    expect(
-      screen.getByRole('heading', { name: /something went wrong/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /something went wrong/i })).toBeInTheDocument();
   });
 
   it('shows a descriptive message', () => {
     render(<ErrorPage error={mockError} reset={mockReset} />);
-    expect(
-      screen.getByText(/unexpected error occurred/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/unexpected error occurred/i)).toBeInTheDocument();
   });
 
   it('has a "Try again" button that calls reset', () => {
@@ -92,9 +86,6 @@ describe('ErrorPage (error.tsx)', () => {
 
   it('logs the error to console.error via useEffect', () => {
     render(<ErrorPage error={mockError} reset={mockReset} />);
-    expect(console.error).toHaveBeenCalledWith(
-      '[ErrorPage] Unhandled error:',
-      mockError,
-    );
+    expect(console.error).toHaveBeenCalledWith('[ErrorPage] Unhandled error:', mockError);
   });
 });

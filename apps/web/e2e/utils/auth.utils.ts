@@ -64,10 +64,7 @@ export async function loginViaUI(
  * @param user - Test user to log in as
  * @returns The access token (useful for subsequent direct API calls)
  */
-export async function loginProgrammatically(
-  page: Page,
-  user: TestUser,
-): Promise<string> {
+export async function loginProgrammatically(page: Page, user: TestUser): Promise<string> {
   const loginResponse = await fetch(`${API_BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

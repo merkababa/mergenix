@@ -1,17 +1,17 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { ClinicalTestingBanner } from "../../../../components/genetics/results/clinical-testing-banner";
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { ClinicalTestingBanner } from '../../../../components/genetics/results/clinical-testing-banner';
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
-describe("ClinicalTestingBanner", () => {
-  it("renders with role=alert", () => {
+describe('ClinicalTestingBanner', () => {
+  it('renders with role=alert', () => {
     render(<ClinicalTestingBanner />);
 
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
-  it("renders default message when no variant specified", () => {
+  it('renders default message when no variant specified', () => {
     render(<ClinicalTestingBanner />);
 
     expect(
@@ -19,7 +19,7 @@ describe("ClinicalTestingBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders carrier-specific message", () => {
+  it('renders carrier-specific message', () => {
     render(<ClinicalTestingBanner variant="carrier" />);
 
     expect(
@@ -27,15 +27,13 @@ describe("ClinicalTestingBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders PRS-specific message", () => {
+  it('renders PRS-specific message', () => {
     render(<ClinicalTestingBanner variant="prs" />);
 
-    expect(
-      screen.getByText(/Polygenic risk scores are NOT diagnostic/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Polygenic risk scores are NOT diagnostic/)).toBeInTheDocument();
   });
 
-  it("renders PGx-specific message", () => {
+  it('renders PGx-specific message', () => {
     render(<ClinicalTestingBanner variant="pgx" />);
 
     expect(
@@ -43,7 +41,7 @@ describe("ClinicalTestingBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("contains an AlertTriangle icon (aria-hidden)", () => {
+  it('contains an AlertTriangle icon (aria-hidden)', () => {
     const { container } = render(<ClinicalTestingBanner variant="carrier" />);
 
     // lucide-react renders SVG with aria-hidden="true"
@@ -51,10 +49,10 @@ describe("ClinicalTestingBanner", () => {
     expect(svg).toBeInTheDocument();
   });
 
-  it("does not re-render with identical props (React.memo)", () => {
+  it('does not re-render with identical props (React.memo)', () => {
     const { rerender } = render(<ClinicalTestingBanner variant="carrier" />);
     rerender(<ClinicalTestingBanner variant="carrier" />);
 
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 });

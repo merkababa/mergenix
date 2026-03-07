@@ -74,7 +74,7 @@ export const GOLDEN_EDGE_CASES: GoldenDataset = {
     rs3131972: 'GG',
     rs12124819: 'AA',
     rs2268119: 'CC',
-    rs2905035: 'AA',   // trailing whitespace stripped
+    rs2905035: 'AA', // trailing whitespace stripped
     // RS3748816 NOT present (wrong case)
     // rs9442372 NOT present (no-call)
     rs10458597: 'AA',

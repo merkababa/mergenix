@@ -18,6 +18,7 @@ Yes. Hardcoding 476+ in a comment is an anti-pattern that guarantees stale docum
 ---
 
 ### Grade: B (Moderate Issues)
+
 The data structures and performance profiles are well-suited for the immediate requirements, but the domain model introduces significant risk by commingling medical and recreational data without explicit architectural boundaries.
 
 ### Issue Log

@@ -10,11 +10,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import {
-  detectDevice,
-  getArgon2Params,
-  MemoryGovernor,
-} from '../src/device';
+import { detectDevice, getArgon2Params, MemoryGovernor } from '../src/device';
 import type { DeviceProfile } from '../src/device';
 
 // ─── Navigator Mocking Utilities ──────────────────────────────────────────────

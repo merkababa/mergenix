@@ -61,9 +61,10 @@ export class NavigationComponent {
 
     this.navbar = page.locator('nav[aria-label="Main navigation"]');
     this.logoLink = page.getByRole('link', { name: /mergenix home/i });
-    this.desktopNavLinks = this.navbar.locator('[data-testid="desktop-nav"]').or(
-      this.navbar.locator('.hidden.md\\:flex'),
-    ).first();
+    this.desktopNavLinks = this.navbar
+      .locator('[data-testid="desktop-nav"]')
+      .or(this.navbar.locator('.hidden.md\\:flex'))
+      .first();
     this.mobileMenuButton = page.getByRole('button', { name: /open menu|close menu/i });
     this.mobileMenu = page.getByRole('dialog', { name: /mobile navigation/i });
     this.signInLink = page.getByRole('link', { name: 'Sign In' }).first();
@@ -72,9 +73,9 @@ export class NavigationComponent {
     this.userMenuButton = page.getByRole('button', { name: 'User menu' });
     this.userMenuDropdown = page.getByRole('menu', { name: 'User menu' });
     this.signOutButton = page.getByRole('menuitem', { name: /sign out/i });
-    this.skipToMainLink = page.locator('a[href="#main-content"]').or(
-      page.locator('a.skip-to-main'),
-    );
+    this.skipToMainLink = page
+      .locator('a[href="#main-content"]')
+      .or(page.locator('a.skip-to-main'));
     this.footer = page.locator('footer');
   }
 
@@ -127,9 +128,7 @@ export class NavigationComponent {
    * Returns an object with the isOpen state.
    */
   async getUserMenuState(): Promise<{ isOpen: boolean }> {
-    const expanded = await this.userMenuButton
-      .getAttribute('aria-expanded')
-      .catch(() => null);
+    const expanded = await this.userMenuButton.getAttribute('aria-expanded').catch(() => null);
     return { isOpen: expanded === 'true' };
   }
 

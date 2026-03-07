@@ -146,9 +146,7 @@ describe('Carrier Panel — Data Integrity (ported from test_carrier_panel.py)',
 
   // Ported from legacy tests/test_carrier_panel.py::test_condition_non_empty
   it('every condition name is a non-empty string', () => {
-    const empty = carrierPanel.filter(
-      (e) => !e.condition || e.condition.trim().length === 0,
-    );
+    const empty = carrierPanel.filter((e) => !e.condition || e.condition.trim().length === 0);
     expect(empty).toHaveLength(0);
   });
 
@@ -306,7 +304,7 @@ describe('Real Panel RSIDs — Disease-Specific Checks (ported from test_carrier
     const entry = findEntry('rs334');
     if (!entry) return;
     const parentA = { rs334: 'AT' }; // carrier
-    const parentB = {};              // no genotype data at all
+    const parentB = {}; // no genotype data at all
     const results = analyzeCarrierRisk(parentA, parentB, [entry]);
     expect(results).toHaveLength(1);
     expect(results[0]!.parentAStatus).toBe('carrier');
@@ -516,8 +514,8 @@ describe('AncestryDNA — Partial No-Call (one allele is 0) (ported from test_pa
     const content = [
       '#AncestryDNA raw data download',
       'rsid\tchromosome\tposition\tallele1\tallele2',
-      'rs4477212\t1\t82154\tA\t0',   // allele2 is zero → skip
-      'rs3094315\t1\t752566\tA\tG',  // both valid → keep
+      'rs4477212\t1\t82154\tA\t0', // allele2 is zero → skip
+      'rs3094315\t1\t752566\tA\tG', // both valid → keep
     ].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBeUndefined(); // partial no-call skipped
@@ -530,8 +528,8 @@ describe('AncestryDNA — Partial No-Call (one allele is 0) (ported from test_pa
     const content = [
       '#AncestryDNA raw data download',
       'rsid\tchromosome\tposition\tallele1\tallele2',
-      'rs4477212\t1\t82154\t0\tA',   // allele1 is zero → skip
-      'rs3094315\t1\t752566\tG\tG',  // both valid → keep
+      'rs4477212\t1\t82154\t0\tA', // allele1 is zero → skip
+      'rs3094315\t1\t752566\tG\tG', // both valid → keep
     ].join('\n');
     const result = parseAncestryDNA(content);
     expect(result['rs4477212']).toBeUndefined();
@@ -555,9 +553,9 @@ describe('getGenotypeStats — Hemizygous Single-Allele Classification (ported f
   // Ported from: tests/test_parser.py::TestGenotypeStats::test_get_genotype_stats_single_allele
   it('single-character genotypes (hemizygous X/Y) count as homozygous in stats', () => {
     const snps = {
-      rs1: 'A',   // single allele → homozygous (hemizygous male)
-      rs2: 'T',   // single allele → homozygous (hemizygous male)
-      rs3: 'AG',  // two alleles → heterozygous
+      rs1: 'A', // single allele → homozygous (hemizygous male)
+      rs2: 'T', // single allele → homozygous (hemizygous male)
+      rs3: 'AG', // two alleles → heterozygous
     };
     const stats = getGenotypeStats(snps);
     expect(stats.homozygousCount).toBe(2);
@@ -612,7 +610,7 @@ describe('VCF Parser — Out-of-Bounds Allele Index (ported from test_parser.py)
     const content = [
       '##fileformat=VCFv4.2',
       '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE',
-      '1\t100\trs123\tA\tG\t.\tPASS\tNS=1\tGT\t.',   // single dot → skip
+      '1\t100\trs123\tA\tG\t.\tPASS\tNS=1\tGT\t.', // single dot → skip
       '1\t200\trs456\tC\tT\t.\tPASS\tNS=1\tGT\t0/1', // valid → keep
     ].join('\n');
     const result = parseVcf(content);
@@ -639,7 +637,7 @@ describe('MyHeritage Parser — Empty Result Field (ported from test_parser.py)'
   it('skips MyHeritage CSV rows where RESULT column is empty, keeps valid siblings', () => {
     const content = [
       'RSID,CHROMOSOME,POSITION,RESULT',
-      'rs4477212,1,82154,',  // empty RESULT → skip
+      'rs4477212,1,82154,', // empty RESULT → skip
       'rs3094315,1,752566,AG', // valid → keep
     ].join('\n');
     const result = parseMyHeritage(content);
@@ -669,11 +667,11 @@ describe('23andMe Parser — Extra Whitespace in Fields (ported from test_parser
     const content = [
       '# 23andMe data',
       '# rsid\tchromosome\tposition\tgenotype',
-      'rs4477212 \t 1 \t 82154 \t AA ',  // spaces around fields
+      'rs4477212 \t 1 \t 82154 \t AA ', // spaces around fields
       'rs3094315\t1\t752566\tAG',
     ].join('\n');
     const result = parse23andMe(content);
-    expect(result['rs4477212']).toBe('AA');  // rsid trimmed, genotype trimmed
+    expect(result['rs4477212']).toBe('AA'); // rsid trimmed, genotype trimmed
     expect(result['rs3094315']).toBe('AG');
     expect(Object.keys(result)).toHaveLength(2);
   });

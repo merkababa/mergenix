@@ -1,6 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory, mockInputFactory, mockNextNavigationFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+  mockInputFactory,
+  mockNextNavigationFactory,
+} from '../../__helpers__';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -22,13 +29,10 @@ const mockStoreState: Record<string, unknown> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/components/auth/dna-dots', () => ({
@@ -72,7 +76,12 @@ vi.mock('@/components/auth/password-strength-display', () => ({
 
 vi.mock('@/lib/password-utils', () => ({
   validatePassword: (pw: string) => ({
-    valid: pw.length >= 12 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw),
+    valid:
+      pw.length >= 12 &&
+      /[A-Z]/.test(pw) &&
+      /[a-z]/.test(pw) &&
+      /[0-9]/.test(pw) &&
+      /[^A-Za-z0-9]/.test(pw),
     errors: pw.length < 12 ? ['Password must be at least 12 characters'] : [],
   }),
 }));
@@ -99,8 +108,15 @@ import { RegisterContent } from '../../../app/(auth)/register/_components/regist
 
 const STRONG_PASSWORD = 'MyStr0ng!Pass1';
 
-function fillForm(overrides: { name?: string; email?: string; password?: string; terms?: boolean } = {}) {
-  const { name = 'John Doe', email = 'john@example.com', password = STRONG_PASSWORD, terms = true } = overrides;
+function fillForm(
+  overrides: { name?: string; email?: string; password?: string; terms?: boolean } = {},
+) {
+  const {
+    name = 'John Doe',
+    email = 'john@example.com',
+    password = STRONG_PASSWORD,
+    terms = true,
+  } = overrides;
 
   fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: name } });
   fireEvent.change(screen.getByLabelText('Email'), { target: { value: email } });
@@ -122,7 +138,10 @@ describe('RegisterContent', () => {
     mockStoreState.isLoading = false;
     mockRegister.mockResolvedValue(undefined);
     mockResendVerification.mockResolvedValue(undefined);
-    mockGetGoogleOAuthUrl.mockResolvedValue({ authorizationUrl: 'https://accounts.google.com/o/oauth2', state: 'rand-state' });
+    mockGetGoogleOAuthUrl.mockResolvedValue({
+      authorizationUrl: 'https://accounts.google.com/o/oauth2',
+      state: 'rand-state',
+    });
   });
 
   it('renders "Create Account" heading', () => {

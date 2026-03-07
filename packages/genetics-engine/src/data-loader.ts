@@ -240,29 +240,25 @@ export async function fetchWithRetry<T>(
 export async function loadAllData(manifest?: DataManifest): Promise<GeneticsData> {
   const m = manifest ?? DEFAULT_MANIFEST;
 
-  const [
-    carrierPanel,
-    traitSnps,
-    pgxPanel,
-    prsWeights,
-    ethnicity,
-    counselingProviders,
-  ] = await Promise.all([
-    fetchWithRetry<CarrierPanelEntry[] | CarrierPanelData>(m.carrierPanel).then(
-      (raw) => {
+  const [carrierPanel, traitSnps, pgxPanel, prsWeights, ethnicity, counselingProviders] =
+    await Promise.all([
+      fetchWithRetry<CarrierPanelEntry[] | CarrierPanelData>(m.carrierPanel).then((raw) => {
         if (Array.isArray(raw)) return raw;
         if (raw && typeof raw === 'object' && 'entries' in raw && Array.isArray(raw.entries)) {
           return raw.entries;
         }
-        throw new DataLoadError(m.carrierPanel, 1, new Error('Invalid carrier panel format: expected array or {entries: [...]}'));
-      },
-    ),
-    fetchWithRetry<TraitSnpEntry[]>(m.traitSnps),
-    fetchWithRetry<PgxPanel>(m.pgxPanel),
-    fetchWithRetry<PrsWeightsData>(m.prsWeights),
-    fetchWithRetry<EthnicityFrequenciesData>(m.ethnicity),
-    fetchWithRetry<CounselingProviderEntry[]>(m.counselingProviders),
-  ]);
+        throw new DataLoadError(
+          m.carrierPanel,
+          1,
+          new Error('Invalid carrier panel format: expected array or {entries: [...]}'),
+        );
+      }),
+      fetchWithRetry<TraitSnpEntry[]>(m.traitSnps),
+      fetchWithRetry<PgxPanel>(m.pgxPanel),
+      fetchWithRetry<PrsWeightsData>(m.prsWeights),
+      fetchWithRetry<EthnicityFrequenciesData>(m.ethnicity),
+      fetchWithRetry<CounselingProviderEntry[]>(m.counselingProviders),
+    ]);
 
   return {
     carrierPanel,

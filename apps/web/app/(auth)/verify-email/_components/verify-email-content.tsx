@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { m, AnimatePresence } from "motion/react";
-import { CheckCircle, XCircle, Mail, ArrowLeft } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DnaDots } from "@/components/auth/dna-dots";
-import { TrustSignals } from "@/components/auth/trust-signals";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { fadeUp } from "@/lib/animation-variants";
+import { useEffect, useRef, useState, useCallback } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { m, AnimatePresence } from 'motion/react';
+import { CheckCircle, XCircle, Mail, ArrowLeft } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DnaDots } from '@/components/auth/dna-dots';
+import { TrustSignals } from '@/components/auth/trust-signals';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { fadeUp } from '@/lib/animation-variants';
 
-type VerifyState = "loading" | "success" | "error";
+type VerifyState = 'loading' | 'success' | 'error';
 
 export function VerifyEmailContent() {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get('token');
 
-  const [state, setState] = useState<VerifyState>(token ? "loading" : "error");
+  const [state, setState] = useState<VerifyState>(token ? 'loading' : 'error');
   const [errorMessage, setErrorMessage] = useState(
-    token ? "" : "No verification token found. Please check your email link.",
+    token ? '' : 'No verification token found. Please check your email link.',
   );
   const hasRun = useRef(false);
 
   // Resend state (#8)
-  const [resendEmail, setResendEmail] = useState("");
+  const [resendEmail, setResendEmail] = useState('');
   const [resendSent, setResendSent] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resendError, setResendError] = useState<string | null>(null);
@@ -39,14 +39,12 @@ export function VerifyEmailContent() {
     hasRun.current = true;
 
     verifyEmail(token)
-      .then(() => setState("success"))
+      .then(() => setState('success'))
       .catch((err: unknown) => {
         setErrorMessage(
-          err instanceof Error
-            ? err.message
-            : "Verification failed. The link may have expired.",
+          err instanceof Error ? err.message : 'Verification failed. The link may have expired.',
         );
-        setState("error");
+        setState('error');
       });
   }, [token, verifyEmail]);
 
@@ -80,7 +78,7 @@ export function VerifyEmailContent() {
         {/* GlassCard variant="strong" with glow-pulse (#6) */}
         <GlassCard variant="strong" hover="none" className="glow-pulse w-full max-w-md p-8">
           <AnimatePresence mode="wait">
-            {state === "loading" && (
+            {state === 'loading' && (
               <m.div
                 key="loading"
                 initial={{ opacity: 0 }}
@@ -93,16 +91,14 @@ export function VerifyEmailContent() {
               >
                 {/* DNA helix loading — reusable component (#1), removed Loader2 (#10) */}
                 <DnaDots />
-                <h1 className="font-heading text-xl font-bold text-(--text-primary)">
+                <h1 className="font-heading text-(--text-primary) text-xl font-bold">
                   Verifying your email...
                 </h1>
-                <p className="mt-2 text-sm text-(--text-muted)">
-                  This will only take a moment.
-                </p>
+                <p className="text-(--text-muted) mt-2 text-sm">This will only take a moment.</p>
               </m.div>
             )}
 
-            {state === "success" && (
+            {state === 'success' && (
               <m.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -115,31 +111,37 @@ export function VerifyEmailContent() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
-                    type: "spring" as const,
+                    type: 'spring' as const,
                     stiffness: 300,
                     damping: 15,
                     delay: 0.1,
                   }}
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]"
                 >
-                  <CheckCircle className="h-9 w-9 text-(--accent-teal)" />
+                  <CheckCircle className="text-(--accent-teal) h-9 w-9" />
                 </m.div>
                 <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Email Verified!
                 </h1>
-                <p className="mt-3 text-sm text-(--text-muted)">
-                  Your email address has been confirmed. You can now sign in to
-                  your account.
+                <p className="text-(--text-muted) mt-3 text-sm">
+                  Your email address has been confirmed. You can now sign in to your account.
                 </p>
                 <div className="mt-6">
-                  <Link href="/login" className={buttonVariants({ variant: "primary", size: "lg", className: "w-full" })}>
+                  <Link
+                    href="/login"
+                    className={buttonVariants({
+                      variant: 'primary',
+                      size: 'lg',
+                      className: 'w-full',
+                    })}
+                  >
                     Continue to Sign In
                   </Link>
                 </div>
               </m.div>
             )}
 
-            {state === "error" && (
+            {state === 'error' && (
               <m.div
                 key="error"
                 role="alert"
@@ -153,25 +155,23 @@ export function VerifyEmailContent() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{
-                    type: "spring" as const,
+                    type: 'spring' as const,
                     stiffness: 300,
                     damping: 15,
                     delay: 0.1,
                   }}
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]"
                 >
-                  <XCircle className="h-9 w-9 text-(--accent-rose)" />
+                  <XCircle className="text-(--accent-rose) h-9 w-9" />
                 </m.div>
-                <h1 className="font-heading text-2xl font-extrabold text-(--text-primary)">
+                <h1 className="font-heading text-(--text-primary) text-2xl font-extrabold">
                   Verification Failed
                 </h1>
-                <p className="mt-3 text-sm text-(--text-muted)">
-                  {errorMessage}
-                </p>
+                <p className="text-(--text-muted) mt-3 text-sm">{errorMessage}</p>
 
                 {/* Resend verification — email input instead of /register link (#8) */}
                 <div className="mt-6 space-y-3 text-left">
-                  <p className="text-center text-xs text-(--text-dim)">
+                  <p className="text-(--text-dim) text-center text-xs">
                     Enter your email to resend the verification link:
                   </p>
                   <Input
@@ -183,9 +183,7 @@ export function VerifyEmailContent() {
                     value={resendEmail}
                     onChange={(e) => setResendEmail(e.target.value)}
                   />
-                  {resendError && (
-                    <p className="text-xs text-(--accent-rose)">{resendError}</p>
-                  )}
+                  {resendError && <p className="text-(--accent-rose) text-xs">{resendError}</p>}
                   <Button
                     variant="primary"
                     size="lg"
@@ -197,14 +195,14 @@ export function VerifyEmailContent() {
                     {resendCooldown > 0
                       ? `Resend (${resendCooldown}s)`
                       : resendSent
-                        ? "Link Sent"
-                        : "Resend Verification Email"}
+                        ? 'Link Sent'
+                        : 'Resend Verification Email'}
                   </Button>
                   {/* Touch target padding (#16) */}
                   <div className="text-center">
                     <Link
                       href="/login"
-                      className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
+                      className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
                     >
                       <ArrowLeft className="h-3.5 w-3.5" />
                       Back to Login
@@ -218,12 +216,7 @@ export function VerifyEmailContent() {
       </m.div>
 
       {/* Trust footer — reusable component */}
-      <m.div
-        variants={fadeUp}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.15 }}
-      >
+      <m.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.15 }}>
         <TrustSignals />
       </m.div>
     </>

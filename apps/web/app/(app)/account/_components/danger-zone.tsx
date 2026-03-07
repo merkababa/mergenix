@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { m, AnimatePresence } from "motion/react";
-import { Trash2, ChevronDown, AlertTriangle } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { PasswordInput } from "@/components/auth/password-input";
-import { useAuthStore } from "@/lib/stores/auth-store";
+import { useState, useCallback } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { m, AnimatePresence } from 'motion/react';
+import { Trash2, ChevronDown, AlertTriangle } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { PasswordInput } from '@/components/auth/password-input';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 export function DangerZone() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -27,11 +27,9 @@ export function DangerZone() {
     try {
       await deleteAccount(password);
       await logout();
-      router.push("/");
+      router.push('/');
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Account deletion failed",
-      );
+      setError(err instanceof Error ? err.message : 'Account deletion failed');
       setIsDeleting(false);
     }
   }, [deleteAccount, logout, password, router]);
@@ -47,11 +45,7 @@ export function DangerZone() {
       exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
       transition={{ duration: 0.3 }}
     >
-      <GlassCard
-        variant="subtle"
-        hover="none"
-        className="border-[rgba(244,63,94,0.15)] p-7"
-      >
+      <GlassCard variant="subtle" hover="none" className="border-[rgba(244,63,94,0.15)] p-7">
         {/* Header with toggle */}
         <button
           type="button"
@@ -60,15 +54,12 @@ export function DangerZone() {
           aria-expanded={isExpanded}
           aria-controls="danger-zone-content"
         >
-          <Trash2 className="h-5 w-5 text-(--accent-rose)" />
-          <h2 className="flex-1 font-heading text-lg font-bold text-(--accent-rose)">
+          <Trash2 className="text-(--accent-rose) h-5 w-5" />
+          <h2 className="font-heading text-(--accent-rose) flex-1 text-lg font-bold">
             Danger Zone
           </h2>
-          <m.div
-            animate={{ rotate: isExpanded ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ChevronDown className="h-5 w-5 text-(--text-muted)" />
+          <m.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+            <ChevronDown className="text-(--text-muted) h-5 w-5" />
           </m.div>
         </button>
 
@@ -78,21 +69,24 @@ export function DangerZone() {
             <m.div
               id="danger-zone-content"
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
+              animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" as const }}
+              transition={{ duration: 0.25, ease: 'easeInOut' as const }}
               className="overflow-hidden"
             >
-              <div className="pt-5 space-y-4">
-                <p className="text-sm text-(--text-muted)">
-                  Permanently delete your account and all associated data. This action
-                  cannot be undone.
+              <div className="space-y-4 pt-5">
+                <p className="text-(--text-muted) text-sm">
+                  Permanently delete your account and all associated data. This action cannot be
+                  undone.
                 </p>
                 {/* Warning banner */}
-                <div id="danger-zone-warning" className="flex items-start gap-2.5 rounded-xl border border-[rgba(245,158,11,0.15)] bg-[rgba(245,158,11,0.04)] p-3.5">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-amber)" />
-                  <div className="text-xs text-(--text-muted)">
-                    <p className="font-semibold text-(--text-heading)">
+                <div
+                  id="danger-zone-warning"
+                  className="flex items-start gap-2.5 rounded-xl border border-[rgba(245,158,11,0.15)] bg-[rgba(245,158,11,0.04)] p-3.5"
+                >
+                  <AlertTriangle className="text-(--accent-amber) mt-0.5 h-4 w-4 shrink-0" />
+                  <div className="text-(--text-muted) text-xs">
+                    <p className="text-(--text-heading) font-semibold">
                       This will permanently delete:
                     </p>
                     <ul className="mt-1 list-inside list-disc space-y-0.5">
@@ -116,15 +110,15 @@ export function DangerZone() {
                 />
 
                 {/* Checkbox confirmation */}
-                <label className="flex items-start gap-3 cursor-pointer">
+                <label className="flex cursor-pointer items-start gap-3">
                   <input
                     type="checkbox"
                     checked={confirmed}
                     onChange={(e) => setConfirmed(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) accent-(--accent-rose)"
+                    className="border-(--border-subtle) accent-(--accent-rose) mt-0.5 h-4 w-4 rounded-sm"
                     aria-describedby="danger-zone-warning"
                   />
-                  <span className="text-sm text-(--text-muted)">
+                  <span className="text-(--text-muted) text-sm">
                     I understand this action is permanent and irreversible
                   </span>
                 </label>
@@ -137,7 +131,7 @@ export function DangerZone() {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
+                      className="text-(--accent-rose) rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
                       role="alert"
                     >
                       {error}
@@ -161,10 +155,10 @@ export function DangerZone() {
           )}
         </AnimatePresence>
 
-        <p className="mt-4 text-xs text-(--text-dim)">
+        <p className="text-(--text-dim) mt-4 text-xs">
           <Link
             href="/legal#privacy"
-            className="text-(--text-muted) transition-colors hover:text-(--accent-teal) hover:underline"
+            className="text-(--text-muted) hover:text-(--accent-teal) transition-colors hover:underline"
           >
             Learn more about our data practices
           </Link>

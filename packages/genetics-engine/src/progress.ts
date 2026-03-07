@@ -102,11 +102,7 @@ export class ProgressReporter {
    */
   report(stage: AnalysisStage, progress: number, message?: string): void {
     const now = Date.now();
-    if (
-      now - this.lastEmitTime >= this.throttleMs ||
-      progress === 0 ||
-      progress === 100
-    ) {
+    if (now - this.lastEmitTime >= this.throttleMs || progress === 0 || progress === 100) {
       this.emit({ stage, progress, displayName: getStageDisplayName(stage), message });
       this.lastEmitTime = now;
     }

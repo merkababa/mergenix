@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { SecurityContent } from "./_components/security-content";
+import type { Metadata } from 'next';
+import { SecurityContent } from './_components/security-content';
 
 export const metadata: Metadata = {
-  title: "Security",
+  title: 'Security',
   description:
-    "Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.",
+    'Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.',
   openGraph: {
-    title: "Security — Mergenix",
+    title: 'Security — Mergenix',
     description:
-      "Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.",
-    type: "website",
-    siteName: "Mergenix",
+      'Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.',
+    type: 'website',
+    siteName: 'Mergenix',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Security — Mergenix",
+    card: 'summary_large_image',
+    title: 'Security — Mergenix',
     description:
-      "Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.",
+      'Learn how Mergenix protects your genetic data with zero-knowledge architecture. Your DNA never leaves your browser.',
   },
 };
 

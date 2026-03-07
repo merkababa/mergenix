@@ -102,11 +102,7 @@ async def create_checkout_session(
     _ensure_stripe_api_key()
 
     # Determine if this is an upgrade (Premium → Pro) and calculate the amount
-    is_upgrade = (
-        user.tier == "premium"
-        and tier == "pro"
-        and _TIER_RANK.get(user.tier, 0) < _TIER_RANK.get(tier, 0)
-    )
+    is_upgrade = user.tier == "premium" and tier == "pro" and _TIER_RANK.get(user.tier, 0) < _TIER_RANK.get(tier, 0)
 
     if is_upgrade:
         # Charge the difference: Pro price - Premium price
@@ -134,7 +130,7 @@ async def create_checkout_session(
     session = await asyncio.to_thread(
         stripe.checkout.Session.create,
         payment_method_types=["card"],
-        line_items=line_items,
+        line_items=line_items,  # type: ignore[arg-type]  # Stripe SDK stubs don't model price_data dict shape
         mode="payment",
         success_url=f"{settings.frontend_url}{settings.payment_success_path}?session_id={{CHECKOUT_SESSION_ID}}",
         cancel_url=f"{settings.frontend_url}{settings.payment_cancel_path}",
@@ -150,6 +146,9 @@ async def create_checkout_session(
         tier,
         is_upgrade,
     )
+
+    if session.url is None:
+        raise ValueError("Stripe returned a checkout session without a URL")
 
     return session.url, session.id
 
@@ -250,16 +249,13 @@ async def handle_webhook_event(
 
         if not payment_intent_id and event_id:
             logger.warning(
-                "Webhook for user %s has no payment_intent — "
-                "using Stripe event ID %s as idempotency fallback",
+                "Webhook for user %s has no payment_intent — using Stripe event ID %s as idempotency fallback",
                 user_id,
                 event_id,
             )
 
         # Idempotency: check if a payment with this key already exists
-        existing_result = await db.execute(
-            select(Payment).where(Payment.stripe_payment_intent == idempotency_key)
-        )
+        existing_result = await db.execute(select(Payment).where(Payment.stripe_payment_intent == idempotency_key))
         existing_payment = existing_result.scalar_one_or_none()
 
         if existing_payment is not None:
@@ -375,11 +371,7 @@ async def get_payment_history(
     Returns:
         List of Payment model instances ordered by created_at descending.
     """
-    result = await db.execute(
-        select(Payment)
-        .where(Payment.user_id == user_id)
-        .order_by(Payment.created_at.desc())
-    )
+    result = await db.execute(select(Payment).where(Payment.user_id == user_id).order_by(Payment.created_at.desc()))
     return list(result.scalars().all())
 
 

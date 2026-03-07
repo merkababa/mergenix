@@ -34,6 +34,7 @@ You are a product manager and business analyst reviewing code for the Mergenix g
 ## Output Format
 
 For each issue found:
+
 ```
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue
   Business impact: How this affects users/revenue

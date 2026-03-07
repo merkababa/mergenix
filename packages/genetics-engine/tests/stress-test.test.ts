@@ -45,141 +45,190 @@ function heapUsedMb(): number | null {
 // ─── Stress Tests ─────────────────────────────────────────────────────────────
 
 describe.runIf(runStressTests)('Stress Tests: Large File Parsing (STRESS_TEST=1)', () => {
-  it('parses a 500K-variant 23andMe file without timeout', () => {
-    const VARIANT_COUNT = 500_000;
+  it(
+    'parses a 500K-variant 23andMe file without timeout',
+    () => {
+      const VARIANT_COUNT = 500_000;
 
-    const content = generateSyntheticGenome({
-      format: '23andme',
-      seed: 42,
-      variantCount: VARIANT_COUNT,
-    });
+      const content = generateSyntheticGenome({
+        format: '23andme',
+        seed: 42,
+        variantCount: VARIANT_COUNT,
+      });
 
-    const heapBefore = heapUsedMb();
+      const heapBefore = heapUsedMb();
 
-    const start = performance.now();
-    const [genotypes, format] = parseGeneticFile(content);
-    const elapsed = performance.now() - start;
+      const start = performance.now();
+      const [genotypes, format] = parseGeneticFile(content);
+      const elapsed = performance.now() - start;
 
-    const heapAfter = heapUsedMb();
+      const heapAfter = heapUsedMb();
 
-    // Format detection must be correct
-    expect(format).toBe('23andme');
+      // Format detection must be correct
+      expect(format).toBe('23andme');
 
-    // Parsed count must be within 5% of the target (factory is approximate)
-    const parsedCount = Object.keys(genotypes).length;
-    expect(parsedCount, `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`).toBeGreaterThan(VARIANT_COUNT * 0.95);
-    expect(parsedCount).toBeLessThanOrEqual(VARIANT_COUNT * 1.05);
+      // Parsed count must be within 5% of the target (factory is approximate)
+      const parsedCount = Object.keys(genotypes).length;
+      expect(
+        parsedCount,
+        `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`,
+      ).toBeGreaterThan(VARIANT_COUNT * 0.95);
+      expect(parsedCount).toBeLessThanOrEqual(VARIANT_COUNT * 1.05);
 
-    // Must complete within 30s (well within our 60s test timeout)
-    expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(30_000);
+      // Must complete within 30s (well within our 60s test timeout)
+      expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(
+        30_000,
+      );
 
-    // Heap check (optional — only when available)
-    if (heapBefore !== null && heapAfter !== null) {
-      const heapGrowthMb = heapAfter - heapBefore;
-      // 500K variants as a string map should fit well within 200MB of heap growth
-      expect(heapGrowthMb, `Heap grew ${heapGrowthMb.toFixed(1)}MB, expected < 200MB`).toBeLessThan(200);
-    }
-  }, STRESS_TIMEOUT_MS);
+      // Heap check (optional — only when available)
+      if (heapBefore !== null && heapAfter !== null) {
+        const heapGrowthMb = heapAfter - heapBefore;
+        // 500K variants as a string map should fit well within 200MB of heap growth
+        expect(
+          heapGrowthMb,
+          `Heap grew ${heapGrowthMb.toFixed(1)}MB, expected < 200MB`,
+        ).toBeLessThan(200);
+      }
+    },
+    STRESS_TIMEOUT_MS,
+  );
 
-  it('parses a 500K-variant AncestryDNA file without timeout', () => {
-    const VARIANT_COUNT = 500_000;
+  it(
+    'parses a 500K-variant AncestryDNA file without timeout',
+    () => {
+      const VARIANT_COUNT = 500_000;
 
-    const content = generateSyntheticGenome({
-      format: 'ancestrydna',
-      seed: 43,
-      variantCount: VARIANT_COUNT,
-    });
+      const content = generateSyntheticGenome({
+        format: 'ancestrydna',
+        seed: 43,
+        variantCount: VARIANT_COUNT,
+      });
 
-    const start = performance.now();
-    const [genotypes, format] = parseGeneticFile(content);
-    const elapsed = performance.now() - start;
+      const start = performance.now();
+      const [genotypes, format] = parseGeneticFile(content);
+      const elapsed = performance.now() - start;
 
-    expect(format).toBe('ancestrydna');
+      expect(format).toBe('ancestrydna');
 
-    const parsedCount = Object.keys(genotypes).length;
-    expect(parsedCount, `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`).toBeGreaterThan(VARIANT_COUNT * 0.95);
+      const parsedCount = Object.keys(genotypes).length;
+      expect(
+        parsedCount,
+        `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`,
+      ).toBeGreaterThan(VARIANT_COUNT * 0.95);
 
-    expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(30_000);
-  }, STRESS_TIMEOUT_MS);
+      expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(
+        30_000,
+      );
+    },
+    STRESS_TIMEOUT_MS,
+  );
 
-  it('parses a 500K-variant VCF file without timeout', () => {
-    const VARIANT_COUNT = 500_000;
+  it(
+    'parses a 500K-variant VCF file without timeout',
+    () => {
+      const VARIANT_COUNT = 500_000;
 
-    const content = generateSyntheticGenome({
-      format: 'vcf',
-      seed: 44,
-      variantCount: VARIANT_COUNT,
-    });
+      const content = generateSyntheticGenome({
+        format: 'vcf',
+        seed: 44,
+        variantCount: VARIANT_COUNT,
+      });
 
-    const start = performance.now();
-    const [genotypes, format] = parseGeneticFile(content);
-    const elapsed = performance.now() - start;
+      const start = performance.now();
+      const [genotypes, format] = parseGeneticFile(content);
+      const elapsed = performance.now() - start;
 
-    expect(format).toBe('vcf');
+      expect(format).toBe('vcf');
 
-    const parsedCount = Object.keys(genotypes).length;
-    expect(parsedCount, `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`).toBeGreaterThan(VARIANT_COUNT * 0.95);
+      const parsedCount = Object.keys(genotypes).length;
+      expect(
+        parsedCount,
+        `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`,
+      ).toBeGreaterThan(VARIANT_COUNT * 0.95);
 
-    expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(30_000);
-  }, STRESS_TIMEOUT_MS);
+      expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 30s`).toBeLessThan(
+        30_000,
+      );
+    },
+    STRESS_TIMEOUT_MS,
+  );
 
-  it('parses a 750K-variant file and heap growth stays reasonable', () => {
-    const VARIANT_COUNT = 750_000;
+  it(
+    'parses a 750K-variant file and heap growth stays reasonable',
+    () => {
+      const VARIANT_COUNT = 750_000;
 
-    const content = generateSyntheticGenome({
-      format: '23andme',
-      seed: 99,
-      variantCount: VARIANT_COUNT,
-    });
+      const content = generateSyntheticGenome({
+        format: '23andme',
+        seed: 99,
+        variantCount: VARIANT_COUNT,
+      });
 
-    const heapBefore = heapUsedMb();
+      const heapBefore = heapUsedMb();
 
-    const start = performance.now();
-    const [genotypes] = parseGeneticFile(content);
-    const elapsed = performance.now() - start;
+      const start = performance.now();
+      const [genotypes] = parseGeneticFile(content);
+      const elapsed = performance.now() - start;
 
-    const heapAfter = heapUsedMb();
+      const heapAfter = heapUsedMb();
 
-    const parsedCount = Object.keys(genotypes).length;
-    expect(parsedCount, `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`).toBeGreaterThan(VARIANT_COUNT * 0.95);
+      const parsedCount = Object.keys(genotypes).length;
+      expect(
+        parsedCount,
+        `Expected ~${VARIANT_COUNT} variants, got ${parsedCount}`,
+      ).toBeGreaterThan(VARIANT_COUNT * 0.95);
 
-    // Should still complete in a reasonable time even at 750K
-    expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 45s`).toBeLessThan(45_000);
+      // Should still complete in a reasonable time even at 750K
+      expect(elapsed, `Parse took ${(elapsed / 1000).toFixed(1)}s, budget is 45s`).toBeLessThan(
+        45_000,
+      );
 
-    if (heapBefore !== null && heapAfter !== null) {
-      const heapGrowthMb = heapAfter - heapBefore;
-      // 750K variants should not exceed ~300MB of heap growth
-      expect(heapGrowthMb, `Heap grew ${heapGrowthMb.toFixed(1)}MB, expected < 300MB`).toBeLessThan(300);
-    }
-  }, STRESS_TIMEOUT_MS);
+      if (heapBefore !== null && heapAfter !== null) {
+        const heapGrowthMb = heapAfter - heapBefore;
+        // 750K variants should not exceed ~300MB of heap growth
+        expect(
+          heapGrowthMb,
+          `Heap grew ${heapGrowthMb.toFixed(1)}MB, expected < 300MB`,
+        ).toBeLessThan(300);
+      }
+    },
+    STRESS_TIMEOUT_MS,
+  );
 });
 
 // ─── Smoke tests that always run: factory correctness ────────────────────────
 
 describe('Stress Test Preconditions (always run)', () => {
-  it('synthetic factory generates 500K variants deterministically', () => {
-    // This test only generates — it does NOT parse. Just verifies factory output size.
-    const VARIANT_COUNT = 500_000;
+  it(
+    'synthetic factory generates 500K variants deterministically',
+    () => {
+      // This test only generates — it does NOT parse. Just verifies factory output size.
+      const VARIANT_COUNT = 500_000;
 
-    const content = generateSyntheticGenome({
-      format: '23andme',
-      seed: 42,
-      variantCount: VARIANT_COUNT,
-    });
+      const content = generateSyntheticGenome({
+        format: '23andme',
+        seed: 42,
+        variantCount: VARIANT_COUNT,
+      });
 
-    // The content should be a non-empty string
-    expect(typeof content).toBe('string');
-    expect(content.length).toBeGreaterThan(0);
+      // The content should be a non-empty string
+      expect(typeof content).toBe('string');
+      expect(content.length).toBeGreaterThan(0);
 
-    // Count data lines (non-comment, non-empty) to verify factory output
-    const dataLines = content
-      .split('\n')
-      .filter((line) => line.length > 0 && !line.startsWith('#'));
+      // Count data lines (non-comment, non-empty) to verify factory output
+      const dataLines = content
+        .split('\n')
+        .filter((line) => line.length > 0 && !line.startsWith('#'));
 
-    // Should be approximately VARIANT_COUNT lines
-    expect(dataLines.length, `Expected ~${VARIANT_COUNT} data lines, got ${dataLines.length}`).toBeGreaterThan(VARIANT_COUNT * 0.95);
-    expect(dataLines.length).toBeLessThanOrEqual(VARIANT_COUNT * 1.05);
-  }, STRESS_TIMEOUT_MS);
+      // Should be approximately VARIANT_COUNT lines
+      expect(
+        dataLines.length,
+        `Expected ~${VARIANT_COUNT} data lines, got ${dataLines.length}`,
+      ).toBeGreaterThan(VARIANT_COUNT * 0.95);
+      expect(dataLines.length).toBeLessThanOrEqual(VARIANT_COUNT * 1.05);
+    },
+    STRESS_TIMEOUT_MS,
+  );
 
   it('factory is deterministic: same seed produces identical output', () => {
     const opts = { format: '23andme' as const, seed: 12345, variantCount: 1_000 };

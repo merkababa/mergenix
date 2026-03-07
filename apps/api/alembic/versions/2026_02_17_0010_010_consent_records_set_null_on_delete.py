@@ -28,9 +28,7 @@ def upgrade() -> None:
     # Drop the existing foreign key constraint, make column nullable,
     # and recreate with SET NULL behavior.
     with op.batch_alter_table("consent_records") as batch_op:
-        batch_op.drop_constraint(
-            "consent_records_user_id_fkey", type_="foreignkey"
-        )
+        batch_op.drop_constraint("consent_records_user_id_fkey", type_="foreignkey")
         batch_op.alter_column("user_id", nullable=True)
         batch_op.create_foreign_key(
             "consent_records_user_id_fkey",
@@ -43,9 +41,7 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     with op.batch_alter_table("consent_records") as batch_op:
-        batch_op.drop_constraint(
-            "consent_records_user_id_fkey", type_="foreignkey"
-        )
+        batch_op.drop_constraint("consent_records_user_id_fkey", type_="foreignkey")
         batch_op.alter_column("user_id", nullable=False)
         batch_op.create_foreign_key(
             "consent_records_user_id_fkey",

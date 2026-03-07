@@ -1,15 +1,11 @@
-"use client";
+'use client';
 
-import { useRef, useCallback, useEffect } from "react";
-import type {
-  WorkerRequest,
-  WorkerResponse,
-  Population,
-} from "@mergenix/shared-types";
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { MAX_GENETIC_FILE_SIZE } from "@/lib/genetics-constants";
-import { parseTier } from "@/lib/utils/parse-tier";
+import { useRef, useCallback, useEffect } from 'react';
+import type { WorkerRequest, WorkerResponse, Population } from '@mergenix/shared-types';
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { MAX_GENETIC_FILE_SIZE } from '@/lib/genetics-constants';
+import { parseTier } from '@/lib/utils/parse-tier';
 
 // ─── Hook ──────────────────────────────────────────────────────────────────
 
@@ -36,10 +32,9 @@ export function useGeneticsWorker() {
   function ensureWorker(): Worker {
     if (workerRef.current) return workerRef.current;
 
-    const worker = new Worker(
-      new URL("../lib/workers/genetics.worker.ts", import.meta.url),
-      { type: "module" },
-    );
+    const worker = new Worker(new URL('../lib/workers/genetics.worker.ts', import.meta.url), {
+      type: 'module',
+    });
 
     worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
       const data = event.data;
@@ -47,24 +42,23 @@ export function useGeneticsWorker() {
 
       switch (data.type) {
         // ── Parsing progress ───────────────────────────────────────────
-        case "parse_progress": {
+        case 'parse_progress': {
           store.setParseProgress(data.fileIndex, data.progress);
           break;
         }
 
         // ── Parsing complete — auto-chain to analysis ──────────────────
-        case "parse_complete": {
+        case 'parse_complete': {
           store.setParseResults(data.results);
 
           // Read tier from auth store (outside React tree, so use getState)
           const tier = parseTier(useAuthStore.getState().user?.tier);
-          const population =
-            useAnalysisStore.getState().selectedPopulation;
+          const population = useAnalysisStore.getState().selectedPopulation;
 
           // The worker uses its internally stored parsed genotypes when
           // the request genotype maps are empty.
           const analyzeMsg: WorkerRequest = {
-            type: "analyze",
+            type: 'analyze',
             parent1Genotypes: {},
             parent2Genotypes: {},
             tier,
@@ -72,36 +66,36 @@ export function useGeneticsWorker() {
           };
           post(analyzeMsg);
 
-          store.setStep("carrier_analysis");
+          store.setStep('carrier_analysis');
           break;
         }
 
         // ── Analysis progress ──────────────────────────────────────────
-        case "analysis_progress": {
+        case 'analysis_progress': {
           store.setAnalysisProgress(data.stage, data.progress);
 
           // AnalysisStage values align with AnalysisStep values except
           // for "complete", which is handled by analysis_complete below.
-          if (data.stage !== "complete") {
+          if (data.stage !== 'complete') {
             store.setStep(data.stage);
           }
           break;
         }
 
         // ── Analysis complete ──────────────────────────────────────────
-        case "analysis_complete": {
+        case 'analysis_complete': {
           store.setFullResults(data.results);
-          store.setStep("complete");
+          store.setStep('complete');
           break;
         }
 
         // ── Errors ─────────────────────────────────────────────────────
-        case "error": {
-          if (data.code === "CANCELLED" || data.code === "CANCEL_ACK") {
+        case 'error': {
+          if (data.code === 'CANCELLED' || data.code === 'CANCEL_ACK') {
             store.reset();
           } else {
             store.setError(data.message);
-            store.setStep("idle");
+            store.setStep('idle');
           }
           break;
         }
@@ -110,8 +104,8 @@ export function useGeneticsWorker() {
 
     worker.onerror = (event: ErrorEvent) => {
       const store = useAnalysisStore.getState();
-      store.setError(event.message || "Worker encountered an unexpected error");
-      store.setStep("idle");
+      store.setError(event.message || 'Worker encountered an unexpected error');
+      store.setStep('idle');
     };
 
     workerRef.current = worker;
@@ -129,7 +123,7 @@ export function useGeneticsWorker() {
    */
   const startAnalysis = useCallback(
     async (parentAFile: File, parentBFile: File): Promise<void> => {
-      if (typeof window === "undefined") return;
+      if (typeof window === 'undefined') return;
 
       const store = useAnalysisStore.getState();
 
@@ -138,23 +132,20 @@ export function useGeneticsWorker() {
 
       // ── Validate file sizes ──────────────────────────────────────────
       if (parentAFile.size > MAX_GENETIC_FILE_SIZE) {
-        store.setError("File too large (max 200MB)");
+        store.setError('File too large (max 200MB)');
         return;
       }
       if (parentBFile.size > MAX_GENETIC_FILE_SIZE) {
-        store.setError("File too large (max 200MB)");
+        store.setError('File too large (max 200MB)');
         return;
       }
 
       // ── Transition to parsing step ───────────────────────────────────
-      store.setStep("parsing");
+      store.setStep('parsing');
 
       try {
         // ── Read file contents in parallel ─────────────────────────────
-        const [contentA, contentB] = await Promise.all([
-          parentAFile.text(),
-          parentBFile.text(),
-        ]);
+        const [contentA, contentB] = await Promise.all([parentAFile.text(), parentBFile.text()]);
 
         // ── Release File objects from store to free memory ─────────────
         store.setParentAFile(null);
@@ -164,7 +155,7 @@ export function useGeneticsWorker() {
         ensureWorker();
 
         const parseMsg: WorkerRequest = {
-          type: "parse",
+          type: 'parse',
           files: [
             { name: parentAFile.name, content: contentA },
             { name: parentBFile.name, content: contentB },
@@ -172,10 +163,9 @@ export function useGeneticsWorker() {
         };
         post(parseMsg);
       } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : "Failed to read genetic files";
-        store.setError(message || "Failed to read genetic files");
-        store.setStep("idle");
+        const message = err instanceof Error ? err.message : 'Failed to read genetic files';
+        store.setError(message || 'Failed to read genetic files');
+        store.setStep('idle');
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- stable: only refs used
@@ -189,7 +179,7 @@ export function useGeneticsWorker() {
    * code, which the message handler translates into a store reset.
    */
   const cancel = useCallback((): void => {
-    post({ type: "cancel" });
+    post({ type: 'cancel' });
   }, []);
 
   // ── Cleanup on unmount ─────────────────────────────────────────────────

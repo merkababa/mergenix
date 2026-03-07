@@ -128,15 +128,11 @@ async def test_purge_deletes_expired_security_events(
     assert deleted_count == 1
 
     # Verify the expired one is gone
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == expired_login.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == expired_login.id))
     assert result.scalar_one_or_none() is None
 
     # Verify the recent one still exists
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == recent_login.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == recent_login.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -197,9 +193,7 @@ async def test_purge_keeps_security_events_within_retention(
 
     assert deleted_count == 0
 
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == boundary_login.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == boundary_login.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -237,15 +231,11 @@ async def test_purge_deletes_expired_general_events(
     assert deleted_count == 1
 
     # Verify the expired one is gone
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == expired_register.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == expired_register.id))
     assert result.scalar_one_or_none() is None
 
     # Verify the recent one still exists
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == recent_register.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == recent_register.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -331,15 +321,11 @@ async def test_purge_deletes_expired_orphaned_records(
     assert deleted_count == 1
 
     # Verify the expired one is gone
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == expired_orphan.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == expired_orphan.id))
     assert result.scalar_one_or_none() is None
 
     # Verify the recent one still exists
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == recent_orphan.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == recent_orphan.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -438,14 +424,16 @@ async def test_purge_mixed_events_deletes_correct_subset(
         created_at=now - timedelta(days=60),
     )
 
-    db_session.add_all([
-        expired_security,
-        expired_general,
-        expired_orphan,
-        live_security,
-        live_general,
-        live_orphan,
-    ])
+    db_session.add_all(
+        [
+            expired_security,
+            expired_general,
+            expired_orphan,
+            live_security,
+            live_general,
+            live_orphan,
+        ]
+    )
     await db_session.commit()
 
     deleted_count = await purge_expired_audit_logs(db_session)
@@ -613,31 +601,39 @@ async def test_get_retention_summary_returns_counts(
     now = datetime.now(UTC)
     # 2 expired security events
     for _ in range(2):
-        db_session.add(_make_audit_log(
-            user_id=test_user.id,
-            event_type="login",
-            created_at=now - timedelta(days=731),
-        ))
+        db_session.add(
+            _make_audit_log(
+                user_id=test_user.id,
+                event_type="login",
+                created_at=now - timedelta(days=731),
+            )
+        )
     # 3 expired general events
     for _ in range(3):
-        db_session.add(_make_audit_log(
-            user_id=test_user.id,
-            event_type="register",
-            created_at=now - timedelta(days=400),
-        ))
+        db_session.add(
+            _make_audit_log(
+                user_id=test_user.id,
+                event_type="register",
+                created_at=now - timedelta(days=400),
+            )
+        )
     # 1 expired orphan
-    db_session.add(_make_audit_log(
-        user_id=None,
-        event_type="account_deleted",
-        created_at=now - timedelta(days=91),
-    ))
+    db_session.add(
+        _make_audit_log(
+            user_id=None,
+            event_type="account_deleted",
+            created_at=now - timedelta(days=91),
+        )
+    )
     # 4 non-expired
     for _ in range(4):
-        db_session.add(_make_audit_log(
-            user_id=test_user.id,
-            event_type="login",
-            created_at=now - timedelta(days=10),
-        ))
+        db_session.add(
+            _make_audit_log(
+                user_id=test_user.id,
+                event_type="login",
+                created_at=now - timedelta(days=10),
+            )
+        )
     await db_session.commit()
 
     summary = await get_retention_summary(db_session)

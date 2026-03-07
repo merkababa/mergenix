@@ -11,6 +11,7 @@
 **Vision:** Become the "buy once, own forever" alternative in a market saturated with subscriptions, appealing to privacy-conscious users who value data ownership.
 
 **Target Users:**
+
 - Privacy-conscious individuals
 - Subscription-fatigued consumers
 - One-time planners (having kids soon)
@@ -23,39 +24,42 @@
 
 ### 2.1 Pricing
 
-| License Type | Price | Use Case |
-|--------------|-------|----------|
-| **Personal** | $149 | Individual/couple use |
-| **Family** | $249 | Up to 5 family members |
-| **Clinic** | $999 | Healthcare provider, unlimited patients |
+| License Type | Price | Use Case                                |
+| ------------ | ----- | --------------------------------------- |
+| **Personal** | $149  | Individual/couple use                   |
+| **Family**   | $249  | Up to 5 family members                  |
+| **Clinic**   | $999  | Healthcare provider, unlimited patients |
 
 ### 2.2 What's Included (Forever)
 
-| Feature | Description |
-|---------|-------------|
-| **Full Disease Panel** | All 1,211 diseases, all categories |
-| **Full Trait Panel** | All 79 trait predictions |
-| **Unlimited Analyses** | No monthly limits, ever |
-| **Unlimited Partners** | Compare as many as you want |
-| **PDF Report Generation** | Download anytime |
-| **Lifetime Updates** | New diseases added quarterly |
-| **Local Processing Option** | Keep data on your machine |
-| **No Account Required** | Use offline if preferred |
-| **Email Support** | Included for 1 year |
+| Feature                     | Description                        |
+| --------------------------- | ---------------------------------- |
+| **Full Disease Panel**      | All 1,211 diseases, all categories |
+| **Full Trait Panel**        | All 79 trait predictions           |
+| **Unlimited Analyses**      | No monthly limits, ever            |
+| **Unlimited Partners**      | Compare as many as you want        |
+| **PDF Report Generation**   | Download anytime                   |
+| **Lifetime Updates**        | New diseases added quarterly       |
+| **Local Processing Option** | Keep data on your machine          |
+| **No Account Required**     | Use offline if preferred           |
+| **Email Support**           | Included for 1 year                |
 
 ### 2.3 Technical Delivery
 
 **Option A: Web App with License Key**
+
 ```
 Purchase → Receive License Key → Enter on Web App → Unlocked Forever
 ```
 
 **Option B: Downloadable Desktop App**
+
 ```
 Purchase → Download Installer → Activate with Key → Runs Locally
 ```
 
 **Option C: Both (Recommended)**
+
 - Web app for convenience
 - Desktop app for privacy purists
 - Same license works for both
@@ -63,14 +67,14 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 ### 2.4 Privacy-First Features
 
-| Feature | Description |
-|---------|-------------|
-| **Local Processing** | Analysis runs entirely on your device |
-| **No Cloud Storage** | Data never leaves your machine |
-| **Zero Telemetry** | No usage tracking |
-| **Encrypted Exports** | Password-protected reports |
-| **Data Deletion** | One-click wipe all data |
-| **Open Algorithms** | Published methodology |
+| Feature               | Description                           |
+| --------------------- | ------------------------------------- |
+| **Local Processing**  | Analysis runs entirely on your device |
+| **No Cloud Storage**  | Data never leaves your machine        |
+| **Zero Telemetry**    | No usage tracking                     |
+| **Encrypted Exports** | Password-protected reports            |
+| **Data Deletion**     | One-click wipe all data               |
+| **Open Algorithms**   | Published methodology                 |
 
 ---
 
@@ -78,31 +82,32 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 ### 3.1 Analysis Packs (One-Time Purchase)
 
-| Pack | Price | Contents |
-|------|-------|----------|
-| **Pharmacogenomics Pro** | $29 | 100+ drug response genes, medication guidance, drug interaction warnings |
-| **Ethnic Heritage Pack** | $19 | 15 population-specific carrier frequencies, ancestry-adjusted risks |
-| **Athletic Potential** | $14 | 40 sports genes, muscle fiber type, endurance vs power, injury risk |
-| **Nutrition & Metabolism** | $19 | Lactose, gluten, caffeine, vitamin absorption, obesity risk genes |
-| **Longevity Markers** | $24 | Telomere-related genes, aging markers, disease prevention insights |
-| **Mental Wellness** | $29 | Mood regulation, sleep patterns, stress response, addiction risk |
-| **Skin & Beauty** | $14 | Skin aging, sun sensitivity, hair loss prediction |
-| **Pregnancy Health** | $24 | Prenatal vitamin needs, morning sickness, preeclampsia risk |
+| Pack                       | Price | Contents                                                                 |
+| -------------------------- | ----- | ------------------------------------------------------------------------ |
+| **Pharmacogenomics Pro**   | $29   | 100+ drug response genes, medication guidance, drug interaction warnings |
+| **Ethnic Heritage Pack**   | $19   | 15 population-specific carrier frequencies, ancestry-adjusted risks      |
+| **Athletic Potential**     | $14   | 40 sports genes, muscle fiber type, endurance vs power, injury risk      |
+| **Nutrition & Metabolism** | $19   | Lactose, gluten, caffeine, vitamin absorption, obesity risk genes        |
+| **Longevity Markers**      | $24   | Telomere-related genes, aging markers, disease prevention insights       |
+| **Mental Wellness**        | $29   | Mood regulation, sleep patterns, stress response, addiction risk         |
+| **Skin & Beauty**          | $14   | Skin aging, sun sensitivity, hair loss prediction                        |
+| **Pregnancy Health**       | $24   | Prenatal vitamin needs, morning sickness, preeclampsia risk              |
 
 ### 3.2 Pack Details
 
 #### Pharmacogenomics Pro ($29)
 
-| Category | Genes | Drugs Covered |
-|----------|-------|---------------|
-| Cardiovascular | CYP2C19, VKORC1, SLCO1B1 | Warfarin, Clopidogrel, Statins |
-| Psychiatry | CYP2D6, CYP2C9, CYP1A2 | SSRIs, SNRIs, Antipsychotics |
-| Pain Management | OPRM1, COMT, CYP2D6 | Opioids, NSAIDs |
-| Oncology | DPYD, TPMT, UGT1A1 | 5-FU, Thiopurines, Irinotecan |
-| Anesthesia | RYR1, CACNA1S, BCHE | General anesthetics, Succinylcholine |
-| Infectious Disease | HLA-B*57:01, HLA-B*15:02 | Abacavir, Carbamazepine |
+| Category           | Genes                    | Drugs Covered                        |
+| ------------------ | ------------------------ | ------------------------------------ |
+| Cardiovascular     | CYP2C19, VKORC1, SLCO1B1 | Warfarin, Clopidogrel, Statins       |
+| Psychiatry         | CYP2D6, CYP2C9, CYP1A2   | SSRIs, SNRIs, Antipsychotics         |
+| Pain Management    | OPRM1, COMT, CYP2D6      | Opioids, NSAIDs                      |
+| Oncology           | DPYD, TPMT, UGT1A1       | 5-FU, Thiopurines, Irinotecan        |
+| Anesthesia         | RYR1, CACNA1S, BCHE      | General anesthetics, Succinylcholine |
+| Infectious Disease | HLA-B*57:01, HLA-B*15:02 | Abacavir, Carbamazepine              |
 
 **Report includes:**
+
 - Drug response predictions
 - Dosage adjustment recommendations
 - Alternative medication suggestions
@@ -111,16 +116,17 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 #### Athletic Potential Pack ($14)
 
-| Gene | Trait | Sport Relevance |
-|------|-------|-----------------|
-| ACTN3 | Muscle fiber type | Sprinting vs endurance |
-| ACE | Endurance capacity | Marathon, cycling |
-| PPARGC1A | Aerobic capacity | Cardiovascular sports |
-| COL5A1 | Tendon flexibility | Gymnastics, dance |
-| VEGFA | Oxygen delivery | High-altitude sports |
-| MSTN | Muscle growth | Strength sports |
+| Gene     | Trait              | Sport Relevance        |
+| -------- | ------------------ | ---------------------- |
+| ACTN3    | Muscle fiber type  | Sprinting vs endurance |
+| ACE      | Endurance capacity | Marathon, cycling      |
+| PPARGC1A | Aerobic capacity   | Cardiovascular sports  |
+| COL5A1   | Tendon flexibility | Gymnastics, dance      |
+| VEGFA    | Oxygen delivery    | High-altitude sports   |
+| MSTN     | Muscle growth      | Strength sports        |
 
 **Report includes:**
+
 - Sport suitability scores
 - Training recommendations
 - Injury risk assessment
@@ -129,16 +135,17 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 #### Pregnancy Health Pack ($24)
 
-| Gene | Relevance |
-|------|-----------|
-| MTHFR | Folate metabolism, neural tube defects |
-| Factor V Leiden | Blood clot risk during pregnancy |
-| HLA-DQA1 | Celiac disease risk for baby |
-| GDF15 | Morning sickness severity |
-| ACE | Preeclampsia risk |
-| SLC6A4 | Postpartum depression risk |
+| Gene            | Relevance                              |
+| --------------- | -------------------------------------- |
+| MTHFR           | Folate metabolism, neural tube defects |
+| Factor V Leiden | Blood clot risk during pregnancy       |
+| HLA-DQA1        | Celiac disease risk for baby           |
+| GDF15           | Morning sickness severity              |
+| ACE             | Preeclampsia risk                      |
+| SLC6A4          | Postpartum depression risk             |
 
 **Report includes:**
+
 - Prenatal vitamin recommendations
 - Risk factors to discuss with OB
 - Genetic conditions to screen for
@@ -146,23 +153,23 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 ### 3.3 Services (Per-Use)
 
-| Service | Price | Description |
-|---------|-------|-------------|
-| **Genetic Counselor Session** | $75/30min | Video call with certified GC |
-| **Clinical Report Generation** | $25 | HIPAA-compliant, provider-ready PDF |
-| **Family Pedigree Analysis** | $49 | 3+ generation risk chart with narrative |
-| **Second Opinion Review** | $99 | Board-certified geneticist letter |
-| **Priority Processing** | $5 | Skip queue, instant results |
-| **Rush Report** | $15 | PDF generated within 1 hour |
+| Service                        | Price     | Description                             |
+| ------------------------------ | --------- | --------------------------------------- |
+| **Genetic Counselor Session**  | $75/30min | Video call with certified GC            |
+| **Clinical Report Generation** | $25       | HIPAA-compliant, provider-ready PDF     |
+| **Family Pedigree Analysis**   | $49       | 3+ generation risk chart with narrative |
+| **Second Opinion Review**      | $99       | Board-certified geneticist letter       |
+| **Priority Processing**        | $5        | Skip queue, instant results             |
+| **Rush Report**                | $15       | PDF generated within 1 hour             |
 
 ### 3.4 Optional Subscriptions
 
-| Service | Price | Description |
-|---------|-------|-------------|
-| **Research Updates** | $4.99/mo | Monthly digest of new discoveries |
-| **Counselor On-Call** | $29/mo | Unlimited text-based GC access |
-| **Family Plan** | $19/mo | Up to 5 additional family members |
-| **Clinic Dashboard** | $99/mo | Provider tools, patient management |
+| Service               | Price    | Description                        |
+| --------------------- | -------- | ---------------------------------- |
+| **Research Updates**  | $4.99/mo | Monthly digest of new discoveries  |
+| **Counselor On-Call** | $29/mo   | Unlimited text-based GC access     |
+| **Family Plan**       | $19/mo   | Up to 5 additional family members  |
+| **Clinic Dashboard**  | $99/mo   | Provider tools, patient management |
 
 ---
 
@@ -174,14 +181,14 @@ Purchase → Download Installer → Activate with Key → Runs Locally
 
 A focused product for couples:
 
-| Feature | Description |
-|---------|-------------|
-| **Combined Analysis** | Both partners' carrier status |
-| **Compatibility Score** | 0-100 genetic compatibility |
-| **Risk Matrix** | Side-by-side disease comparison |
-| **Offspring Predictions** | Punnett squares for each condition |
-| **Conversation Guide** | How to discuss results |
-| **Anonymous Mode** | No partner data stored after analysis |
+| Feature                   | Description                           |
+| ------------------------- | ------------------------------------- |
+| **Combined Analysis**     | Both partners' carrier status         |
+| **Compatibility Score**   | 0-100 genetic compatibility           |
+| **Risk Matrix**           | Side-by-side disease comparison       |
+| **Offspring Predictions** | Punnett squares for each condition    |
+| **Conversation Guide**    | How to discuss results                |
+| **Anonymous Mode**        | No partner data stored after analysis |
 
 ### 4.2 Anonymous Partner Mode
 
@@ -204,6 +211,7 @@ Partner A:                     Partner B:
 ```
 
 **Privacy guarantees:**
+
 - Raw genetic data never uploaded
 - Only cryptographic hashes compared
 - Cannot reverse-engineer partner's data
@@ -211,11 +219,11 @@ Partner A:                     Partner B:
 
 ### 4.3 Bundle Options
 
-| Bundle | Contents | Price | Savings |
-|--------|----------|-------|---------|
-| **Couple Starter** | 2x Personal License + Partner Match | $299 | $48 (14%) |
-| **Family Planning** | 2x Personal + Partner + Pregnancy Pack | $369 | $52 (12%) |
-| **Complete Couple** | 2x Personal + All Packs + Partner Match | $449 | $131 (23%) |
+| Bundle              | Contents                                | Price | Savings    |
+| ------------------- | --------------------------------------- | ----- | ---------- |
+| **Couple Starter**  | 2x Personal License + Partner Match     | $299  | $48 (14%)  |
+| **Family Planning** | 2x Personal + Partner + Pregnancy Pack  | $369  | $52 (12%)  |
+| **Complete Couple** | 2x Personal + All Packs + Partner Match | $449  | $131 (23%) |
 
 ---
 
@@ -224,6 +232,7 @@ Partner A:                     Partner B:
 ### 5.1 Core Pricing Philosophy
 
 **"Pay once, own forever"** appeals to:
+
 - Subscription fatigue (avg person has 12 subscriptions)
 - Privacy concerns (one-time = less data retention)
 - Budget planning (known cost, no surprises)
@@ -231,25 +240,25 @@ Partner A:                     Partner B:
 
 ### 5.2 Price Anchoring
 
-| Competitor | Model | Annual Cost | Mergenix Comparison |
-|------------|-------|-------------|-------------------|
-| 23andMe Health | One-time | $229 | Mergenix Personal cheaper, more focused |
-| Nebula WGS | One-time | $249-999 | Mergenix cheaper, carrier-focused |
-| Color | One-time | $249 | Mergenix comparable, no physician needed |
-| SelfDecode | Subscription | $297/yr | Mergenix = 6 months of SelfDecode |
-| Promethease | One-time | $12 | Mergenix has guidance, offspring focus |
+| Competitor     | Model        | Annual Cost | Mergenix Comparison                      |
+| -------------- | ------------ | ----------- | ---------------------------------------- |
+| 23andMe Health | One-time     | $229        | Mergenix Personal cheaper, more focused  |
+| Nebula WGS     | One-time     | $249-999    | Mergenix cheaper, carrier-focused        |
+| Color          | One-time     | $249        | Mergenix comparable, no physician needed |
+| SelfDecode     | Subscription | $297/yr     | Mergenix = 6 months of SelfDecode        |
+| Promethease    | One-time     | $12         | Mergenix has guidance, offspring focus   |
 
 **Positioning:** More than Promethease, less than clinical. The "Goldilocks" option.
 
 ### 5.3 Promotional Pricing
 
-| Promotion | Discount | Trigger |
-|-----------|----------|---------|
-| **Launch Sale** | 30% off | First 500 customers |
-| **Holiday Bundle** | 25% off bundles | Black Friday, Valentine's |
-| **Referral Reward** | $20 credit | Per successful referral |
-| **Education Discount** | 25% off | .edu email |
-| **Healthcare Worker** | 20% off | Verified credentials |
+| Promotion              | Discount        | Trigger                   |
+| ---------------------- | --------------- | ------------------------- |
+| **Launch Sale**        | 30% off         | First 500 customers       |
+| **Holiday Bundle**     | 25% off bundles | Black Friday, Valentine's |
+| **Referral Reward**    | $20 credit      | Per successful referral   |
+| **Education Discount** | 25% off         | .edu email                |
+| **Healthcare Worker**  | 20% off         | Verified credentials      |
 
 ---
 
@@ -418,49 +427,49 @@ CREATE TABLE service_bookings (
 
 ### 8.1 Revenue Streams
 
-| Stream | % of Revenue | Description |
-|--------|--------------|-------------|
-| Core Licenses | 60% | Personal, Family, Clinic |
-| Add-On Packs | 25% | Analysis packs |
-| Services | 10% | GC sessions, reports |
-| Subscriptions | 5% | Optional recurring |
+| Stream        | % of Revenue | Description              |
+| ------------- | ------------ | ------------------------ |
+| Core Licenses | 60%          | Personal, Family, Clinic |
+| Add-On Packs  | 25%          | Analysis packs           |
+| Services      | 10%          | GC sessions, reports     |
+| Subscriptions | 5%           | Optional recurring       |
 
 ### 8.2 Projections
 
 #### Year 1
 
-| Product | Units | Avg Price | Revenue |
-|---------|-------|-----------|---------|
-| Personal License | 2,000 | $149 | $298,000 |
-| Family License | 200 | $249 | $49,800 |
-| Clinic License | 10 | $999 | $9,990 |
-| Add-On Packs | 1,500 | $22 avg | $33,000 |
-| Services | 300 | $60 avg | $18,000 |
-| Subscriptions | 100 | $180/yr | $18,000 |
-| **Total Year 1** | - | - | **$426,790** |
+| Product          | Units | Avg Price | Revenue      |
+| ---------------- | ----- | --------- | ------------ |
+| Personal License | 2,000 | $149      | $298,000     |
+| Family License   | 200   | $249      | $49,800      |
+| Clinic License   | 10    | $999      | $9,990       |
+| Add-On Packs     | 1,500 | $22 avg   | $33,000      |
+| Services         | 300   | $60 avg   | $18,000      |
+| Subscriptions    | 100   | $180/yr   | $18,000      |
+| **Total Year 1** | -     | -         | **$426,790** |
 
 #### Year 2
 
-| Product | Units | Revenue |
-|---------|-------|---------|
-| Personal License | 8,000 | $1,192,000 |
-| Family License | 800 | $199,200 |
-| Clinic License | 50 | $49,950 |
-| Add-On Packs | 6,000 | $132,000 |
-| Services | 1,200 | $72,000 |
-| Subscriptions | 500 | $90,000 |
-| **Total Year 2** | - | **$1,735,150** |
+| Product          | Units | Revenue        |
+| ---------------- | ----- | -------------- |
+| Personal License | 8,000 | $1,192,000     |
+| Family License   | 800   | $199,200       |
+| Clinic License   | 50    | $49,950        |
+| Add-On Packs     | 6,000 | $132,000       |
+| Services         | 1,200 | $72,000        |
+| Subscriptions    | 500   | $90,000        |
+| **Total Year 2** | -     | **$1,735,150** |
 
 ### 8.3 Unit Economics
 
-| Metric | Value |
-|--------|-------|
-| Average Order Value | $178 |
-| Add-On Attach Rate | 35% |
-| Average Add-Ons/User | 1.5 |
-| Service Conversion | 8% |
-| Cost per Acquisition | $25 |
-| Gross Margin | 88% |
+| Metric               | Value |
+| -------------------- | ----- |
+| Average Order Value  | $178  |
+| Add-On Attach Rate   | 35%   |
+| Average Add-Ons/User | 1.5   |
+| Service Conversion   | 8%    |
+| Cost per Acquisition | $25   |
+| Gross Margin         | 88%   |
 
 ---
 
@@ -470,14 +479,15 @@ CREATE TABLE service_bookings (
 
 Allow developers to create add-on packs:
 
-| Requirement | Description |
-|-------------|-------------|
-| API Access | Read user genetic data (with permission) |
-| Review Process | Medical accuracy review |
-| Revenue Share | 70% developer, 30% Mergenix |
-| Quality Standards | Peer-reviewed sources required |
+| Requirement       | Description                              |
+| ----------------- | ---------------------------------------- |
+| API Access        | Read user genetic data (with permission) |
+| Review Process    | Medical accuracy review                  |
+| Revenue Share     | 70% developer, 30% Mergenix              |
+| Quality Standards | Peer-reviewed sources required           |
 
 **Example third-party packs:**
+
 - Pet genetics (for breeders)
 - Genealogy deep-dive
 - Regional disease focus (e.g., Finland)
@@ -485,13 +495,13 @@ Allow developers to create add-on packs:
 
 ### 9.2 Partner Integrations
 
-| Partner Type | Integration | Revenue Model |
-|--------------|-------------|---------------|
-| **Fertility Clinics** | Patient onboarding | B2B licensing |
-| **OB/GYN Offices** | Report sharing | Per-report fee |
-| **Genetic Counselors** | Referral program | Revenue share |
-| **Health Apps** | Data export | API fees |
-| **Life Insurance** | Risk assessment | Enterprise license |
+| Partner Type           | Integration        | Revenue Model      |
+| ---------------------- | ------------------ | ------------------ |
+| **Fertility Clinics**  | Patient onboarding | B2B licensing      |
+| **OB/GYN Offices**     | Report sharing     | Per-report fee     |
+| **Genetic Counselors** | Referral program   | Revenue share      |
+| **Health Apps**        | Data export        | API fees           |
+| **Life Insurance**     | Risk assessment    | Enterprise license |
 
 ---
 
@@ -499,54 +509,58 @@ Allow developers to create add-on packs:
 
 ### 10.1 vs. Subscription Products
 
-| Advantage | Description |
-|-----------|-------------|
-| **No Recurring Costs** | Pay once, use forever |
-| **No FOMO** | All core features included |
-| **Budget-Friendly** | Known cost, gift-able |
-| **Privacy** | Less ongoing data retention |
+| Advantage              | Description                 |
+| ---------------------- | --------------------------- |
+| **No Recurring Costs** | Pay once, use forever       |
+| **No FOMO**            | All core features included  |
+| **Budget-Friendly**    | Known cost, gift-able       |
+| **Privacy**            | Less ongoing data retention |
 
 ### 10.2 vs. Clinical Products
 
-| Advantage | Description |
-|-----------|-------------|
-| **Self-Service** | No physician order needed |
-| **Faster** | Instant results, no lab wait |
-| **Cheaper** | 40-60% less than clinical |
-| **Convenient** | Use your existing DNA data |
+| Advantage        | Description                  |
+| ---------------- | ---------------------------- |
+| **Self-Service** | No physician order needed    |
+| **Faster**       | Instant results, no lab wait |
+| **Cheaper**      | 40-60% less than clinical    |
+| **Convenient**   | Use your existing DNA data   |
 
 ### 10.3 vs. Cheap Tools (Promethease)
 
-| Advantage | Description |
-|-----------|-------------|
-| **Guided Experience** | Not just raw data |
-| **Offspring Focus** | Unique partner matching |
-| **Professional Reports** | Clinic-ready PDFs |
-| **Support** | Email support included |
+| Advantage                | Description             |
+| ------------------------ | ----------------------- |
+| **Guided Experience**    | Not just raw data       |
+| **Offspring Focus**      | Unique partner matching |
+| **Professional Reports** | Clinic-ready PDFs       |
+| **Support**              | Email support included  |
 
 ---
 
 ## 11. Launch Plan
 
 ### Phase 1: Core Product (Months 1-2)
+
 - Personal License launch
 - Web app + desktop app
 - Basic PDF reports
 - Email support
 
 ### Phase 2: Marketplace (Months 3-4)
+
 - First 4 add-on packs
 - GC session booking
 - Clinical report service
 - Family License tier
 
 ### Phase 3: Partner Match (Months 5-6)
+
 - Standalone Partner Match product
 - Anonymous mode
 - Bundle offerings
 - Referral program
 
 ### Phase 4: Expansion (Months 7-12)
+
 - Remaining add-on packs
 - Clinic License + dashboard
 - Optional subscriptions
@@ -556,13 +570,13 @@ Allow developers to create add-on packs:
 
 ## 12. Risk Mitigation
 
-| Risk | Mitigation |
-|------|------------|
-| Lower recurring revenue | Strong add-on ecosystem, services |
-| Users don't return | Quarterly updates, email engagement |
-| Price too high upfront | Payment plans, promotional pricing |
-| Piracy/key sharing | Device limits, online validation |
-| Competition undercuts | Focus on privacy, offspring niche |
+| Risk                    | Mitigation                          |
+| ----------------------- | ----------------------------------- |
+| Lower recurring revenue | Strong add-on ecosystem, services   |
+| Users don't return      | Quarterly updates, email engagement |
+| Price too high upfront  | Payment plans, promotional pricing  |
+| Piracy/key sharing      | Device limits, online validation    |
+| Competition undercuts   | Focus on privacy, offspring niche   |
 
 ---
 
@@ -570,25 +584,25 @@ Allow developers to create add-on packs:
 
 ### 13.1 Sales Metrics
 
-| Metric | Year 1 Target | Year 2 Target |
-|--------|---------------|---------------|
-| Licenses Sold | 2,500 | 10,000 |
-| Add-On Attach Rate | 30% | 45% |
-| Service Conversion | 5% | 10% |
-| Average Order Value | $160 | $195 |
+| Metric              | Year 1 Target | Year 2 Target |
+| ------------------- | ------------- | ------------- |
+| Licenses Sold       | 2,500         | 10,000        |
+| Add-On Attach Rate  | 30%           | 45%           |
+| Service Conversion  | 5%            | 10%           |
+| Average Order Value | $160          | $195          |
 
 ### 13.2 Engagement Metrics
 
-| Metric | Target |
-|--------|--------|
-| 30-Day Activation | 90% |
-| Analyses per User | 3+ |
-| Add-On Purchase (6 mo) | 40% |
-| NPS Score | 50+ |
-| Support Ticket Rate | <5% |
+| Metric                 | Target |
+| ---------------------- | ------ |
+| 30-Day Activation      | 90%    |
+| Analyses per User      | 3+     |
+| Add-On Purchase (6 mo) | 40%    |
+| NPS Score              | 50+    |
+| Support Ticket Rate    | <5%    |
 
 ---
 
-*Document Version: 1.0*
-*Model: One-Time Purchase + Marketplace*
-*Last Updated: February 2026*
+_Document Version: 1.0_
+_Model: One-Time Purchase + Marketplace_
+_Last Updated: February 2026_

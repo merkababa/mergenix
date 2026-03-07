@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useCallback, useRef, useState } from "react";
-import { Upload, File as FileIcon, X, ArrowRight } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { PartnerConsentCheckbox } from "@/components/legal/partner-consent-checkbox";
-import { cn } from "@/lib/utils";
-import { MAX_GENETIC_FILE_SIZE } from "@/lib/genetics-constants";
+import { useCallback, useRef, useState } from 'react';
+import { Upload, File as FileIcon, X, ArrowRight } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { PartnerConsentCheckbox } from '@/components/legal/partner-consent-checkbox';
+import { cn } from '@/lib/utils';
+import { MAX_GENETIC_FILE_SIZE } from '@/lib/genetics-constants';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const ACCEPTED_EXTENSIONS = [".txt", ".csv", ".vcf", ".gz"];
-const ACCEPT_STRING = ".txt,.csv,.vcf,.gz";
+const ACCEPTED_EXTENSIONS = ['.txt', '.csv', '.vcf', '.gz'];
+const ACCEPT_STRING = '.txt,.csv,.vcf,.gz';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -48,7 +48,7 @@ function isSameFile(a: File, b: File): boolean {
 // ── Upload Zone Sub-Component ────────────────────────────────────────────────
 
 interface UploadZoneProps {
-  person: "A" | "B";
+  person: 'A' | 'B';
   file: File | null;
   otherFile: File | null;
   onFileSelect: (file: File | null) => void;
@@ -79,16 +79,12 @@ function UploadZone({
       clearSameFileError();
 
       if (!hasValidExtension(incoming)) {
-        setError(
-          "Unsupported file format. Accepted: .txt, .csv, .vcf, .gz",
-        );
+        setError('Unsupported file format. Accepted: .txt, .csv, .vcf, .gz');
         return;
       }
 
       if (incoming.size > MAX_GENETIC_FILE_SIZE) {
-        setError(
-          `File exceeds 200 MB limit (${formatFileSize(incoming.size)}).`,
-        );
+        setError(`File exceeds 200 MB limit (${formatFileSize(incoming.size)}).`);
         return;
       }
 
@@ -131,7 +127,7 @@ function UploadZone({
       const selected = e.target.files?.[0];
       if (selected) validateAndAccept(selected);
       // Reset the input so the same file can be re-selected
-      if (inputRef.current) inputRef.current.value = "";
+      if (inputRef.current) inputRef.current.value = '';
     },
     [validateAndAccept],
   );
@@ -140,7 +136,7 @@ function UploadZone({
     setError(null);
     clearSameFileError();
     onFileSelect(null);
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) inputRef.current.value = '';
   }, [onFileSelect, clearSameFileError]);
 
   const handleBrowseClick = useCallback(() => {
@@ -151,9 +147,7 @@ function UploadZone({
 
   return (
     <div>
-      <p className="mb-2 font-heading text-sm font-semibold text-(--text-primary)">
-        {label}
-      </p>
+      <p className="font-heading text-(--text-primary) mb-2 text-sm font-semibold">{label}</p>
 
       {file ? (
         /* ── File Selected State ── */
@@ -163,18 +157,16 @@ function UploadZone({
         >
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-              <FileIcon className="h-5 w-5 text-(--accent-teal)" />
+              <FileIcon className="text-(--accent-teal) h-5 w-5" />
             </div>
             <div className="min-w-0">
               <p
-                className="truncate font-heading text-sm font-semibold text-(--text-heading)"
+                className="font-heading text-(--text-heading) truncate text-sm font-semibold"
                 data-testid={`filename-${person}`}
               >
                 {file.name}
               </p>
-              <p className="text-xs text-(--text-muted)">
-                {formatFileSize(file.size)}
-              </p>
+              <p className="text-(--text-muted) text-xs">{formatFileSize(file.size)}</p>
             </div>
           </div>
           <Button
@@ -196,15 +188,15 @@ function UploadZone({
           aria-label={ariaLabel}
           aria-describedby={formatDescriptionId}
           className={cn(
-            "flex min-h-[120px] cursor-pointer flex-col items-center justify-center gap-3 rounded-[16px] border-2 border-dashed p-6 text-center transition-all duration-200",
-            "bg-(--bg-glass) [backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]",
+            'flex min-h-[120px] cursor-pointer flex-col items-center justify-center gap-3 rounded-[16px] border-2 border-dashed p-6 text-center transition-all duration-200',
+            'bg-(--bg-glass) [-webkit-backdrop-filter:blur(8px)] [backdrop-filter:blur(8px)]',
             isDragOver
-              ? "border-[rgba(6,214,160,0.6)] bg-[rgba(6,214,160,0.06)]"
-              : "border-[rgba(148,163,184,0.15)] hover:border-[rgba(6,214,160,0.4)]",
-            disabled && "pointer-events-none opacity-50",
+              ? 'border-[rgba(6,214,160,0.6)] bg-[rgba(6,214,160,0.06)]'
+              : 'border-[rgba(148,163,184,0.15)] hover:border-[rgba(6,214,160,0.4)]',
+            disabled && 'pointer-events-none opacity-50',
           )}
         >
-          <Upload className="h-6 w-6 text-(--text-muted)" />
+          <Upload className="text-(--text-muted) h-6 w-6" />
 
           <div>
             <Button
@@ -219,10 +211,7 @@ function UploadZone({
             </Button>
           </div>
 
-          <p
-            id={formatDescriptionId}
-            className="text-xs text-(--text-dim)"
-          >
+          <p id={formatDescriptionId} className="text-(--text-dim) text-xs">
             .txt, .csv, .vcf, .gz &mdash; max 200 MB
           </p>
 
@@ -240,10 +229,7 @@ function UploadZone({
 
       {/* ── Error message ── */}
       {error && (
-        <p
-          role="alert"
-          className="mt-2 text-sm text-(--accent-rose)"
-        >
+        <p role="alert" className="text-(--accent-rose) mt-2 text-sm">
           {error}
         </p>
       )}
@@ -282,7 +268,7 @@ export function CoupleUploadCard({
       {/* ── Heading ── */}
       <h2
         id="couple-upload-heading"
-        className="mb-6 font-heading text-lg font-bold text-(--text-heading)"
+        className="font-heading text-(--text-heading) mb-6 text-lg font-bold"
       >
         Upload DNA Files
       </h2>
@@ -300,9 +286,12 @@ export function CoupleUploadCard({
         />
 
         {/* ── Desktop Arrow Connector ── */}
-        <div className="pointer-events-none absolute inset-0 hidden items-center justify-center md:flex" aria-hidden="true">
+        <div
+          className="pointer-events-none absolute inset-0 hidden items-center justify-center md:flex"
+          aria-hidden="true"
+        >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <ArrowRight className="h-4 w-4 text-(--accent-teal)" />
+            <ArrowRight className="text-(--accent-teal) h-4 w-4" />
           </div>
         </div>
 
@@ -319,19 +308,14 @@ export function CoupleUploadCard({
 
       {/* ── Same-file error ── */}
       {sameFileError && (
-        <p
-          role="alert"
-          className="mt-4 text-center text-sm text-(--accent-rose)"
-        >
+        <p role="alert" className="text-(--accent-rose) mt-4 text-center text-sm">
           Please upload files from two different individuals
         </p>
       )}
 
       {/* ── Partner Consent ── */}
       <div className="mt-6">
-        <PartnerConsentCheckbox
-          filesChanged={parentBFile?.name}
-        />
+        <PartnerConsentCheckbox filesChanged={parentBFile?.name} />
       </div>
     </GlassCard>
   );

@@ -35,7 +35,7 @@ class Payment(Base):
         index=True,
         nullable=True,
         comment="NULL after user account deletion — payment records are retained "
-                "for financial/legal compliance (7-year retention policy).",
+        "for financial/legal compliance (7-year retention policy).",
     )
     stripe_customer_id: Mapped[str | None] = mapped_column(
         String(255),
@@ -80,7 +80,4 @@ class Payment(Base):
     )
 
     def __repr__(self) -> str:
-        return (
-            f"<Payment id={self.id} user_id={self.user_id} "
-            f"amount={self.amount} status={self.status!r}>"
-        )
+        return f"<Payment id={self.id} user_id={self.user_id} amount={self.amount} status={self.status!r}>"

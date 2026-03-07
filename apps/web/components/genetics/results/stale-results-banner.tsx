@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useState } from "react";
-import { AlertTriangle, X } from "lucide-react";
-import { CURRENT_DATA_VERSION } from "@mergenix/genetics-engine";
+import { useState } from 'react';
+import { AlertTriangle, X } from 'lucide-react';
+import { CURRENT_DATA_VERSION } from '@mergenix/genetics-engine';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -41,32 +41,28 @@ export function StaleResultsBanner({ dataVersion }: StaleResultsBannerProps) {
       role="alert"
       className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4"
     >
-      <AlertTriangle
-        className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-amber)"
-        aria-hidden="true"
-      />
+      <AlertTriangle className="text-(--accent-amber) mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
       <div className="flex-1">
-        <p className="text-sm font-medium leading-relaxed text-(--text-body)">
-          Results may not reflect the latest genetic data.{" "}
+        <p className="text-(--text-body) text-sm font-medium leading-relaxed">
+          Results may not reflect the latest genetic data.{' '}
           {dataVersion ? (
             <>
-              These results were generated with data version{" "}
-              <strong>{dataVersion}</strong>, but the current version is{" "}
-              <strong>{CURRENT_DATA_VERSION}</strong>.
+              These results were generated with data version <strong>{dataVersion}</strong>, but the
+              current version is <strong>{CURRENT_DATA_VERSION}</strong>.
             </>
           ) : (
             <>
-              The data version could not be determined. The current version is{" "}
+              The data version could not be determined. The current version is{' '}
               <strong>{CURRENT_DATA_VERSION}</strong>.
             </>
-          )}{" "}
+          )}{' '}
           Consider re-running your analysis for the most up-to-date results.
         </p>
       </div>
       <button
         type="button"
         onClick={() => setDismissed(true)}
-        className="flex shrink-0 items-center justify-center rounded-lg p-1 text-(--text-muted) transition-colors hover:bg-[rgba(245,158,11,0.1)] hover:text-(--accent-amber) min-h-[44px] min-w-[44px]"
+        className="text-(--text-muted) hover:text-(--accent-amber) flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg p-1 transition-colors hover:bg-[rgba(245,158,11,0.1)]"
         aria-label="Dismiss stale results warning"
       >
         <X className="h-4 w-4" aria-hidden="true" />

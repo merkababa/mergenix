@@ -46,21 +46,18 @@ test.describe('Disclaimer Visibility — Results Tabs', () => {
 
     // Overview is the default active tab after demo loads
     const tablist = page.getByRole('tablist', { name: /analysis results/i });
-    await expect(
-      tablist.getByRole('tab', { name: 'Overview' }),
-    ).toHaveAttribute('aria-selected', 'true');
+    await expect(tablist.getByRole('tab', { name: 'Overview' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
 
     // MedicalDisclaimer (full variant) is rendered at the bottom of OverviewTab
     const disclaimer = page.locator(DISCLAIMER_SELECTOR).first();
     await expect(disclaimer).toBeVisible({ timeout: 10_000 });
 
     // Verify it contains the expected disclaimer language
-    await expect(
-      disclaimer.getByText(/educational purposes only/i),
-    ).toBeVisible();
-    await expect(
-      disclaimer.getByText(/genetic counselor/i),
-    ).toBeVisible();
+    await expect(disclaimer.getByText(/educational purposes only/i)).toBeVisible();
+    await expect(disclaimer.getByText(/genetic counselor/i)).toBeVisible();
   });
 
   test('Q5.2 — Disclaimer present on Carrier tab', async ({ page }) => {
@@ -103,9 +100,7 @@ test.describe('Disclaimer Visibility — Results Tabs', () => {
     await expect(disclaimer).toBeVisible({ timeout: 10_000 });
 
     // The compact variant text mentions educational purposes
-    await expect(
-      disclaimer.getByText(/educational purposes only/i),
-    ).toBeVisible();
+    await expect(disclaimer.getByText(/educational purposes only/i)).toBeVisible();
   });
 
   test('Q5.4 — Disclaimer present on PGx tab', async ({ page }) => {
@@ -141,9 +136,7 @@ test.describe('Disclaimer Visibility — Results Tabs', () => {
     const disclaimer = page.locator(DISCLAIMER_SELECTOR).first();
     await expect(disclaimer).toBeVisible({ timeout: 10_000 });
 
-    await expect(
-      disclaimer.getByText(/educational purposes only/i),
-    ).toBeVisible();
+    await expect(disclaimer.getByText(/educational purposes only/i)).toBeVisible();
   });
 
   test('Q5.6 — Disclaimer present on Counseling tab', async ({ page }) => {
@@ -164,15 +157,18 @@ test.describe('Disclaimer Visibility — Results Tabs', () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test('Q5.7 — Medical disclaimer text is not hidden by CSS (not display:none or visibility:hidden)', async ({ page }) => {
+  test('Q5.7 — Medical disclaimer text is not hidden by CSS (not display:none or visibility:hidden)', async ({
+    page,
+  }) => {
     test.slow();
 
     // On Overview tab (default), the full MedicalDisclaimer is present.
     // Verify it is actually in the accessibility tree (not aria-hidden).
     const tablist = page.getByRole('tablist', { name: /analysis results/i });
-    await expect(
-      tablist.getByRole('tab', { name: 'Overview' }),
-    ).toHaveAttribute('aria-selected', 'true');
+    await expect(tablist.getByRole('tab', { name: 'Overview' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
 
     const disclaimer = page.locator(DISCLAIMER_SELECTOR).first();
     await expect(disclaimer).toBeVisible({ timeout: 10_000 });
@@ -189,7 +185,9 @@ test.describe('Disclaimer Visibility — Results Tabs', () => {
     expect(ariaHidden).not.toBe('true');
   });
 
-  test('Q5.8 — Disclaimer visible on Traits tab without excessive scrolling (within 2 viewport heights)', async ({ page }) => {
+  test('Q5.8 — Disclaimer visible on Traits tab without excessive scrolling (within 2 viewport heights)', async ({
+    page,
+  }) => {
     test.slow();
 
     await switchToTab(page, 'Traits');

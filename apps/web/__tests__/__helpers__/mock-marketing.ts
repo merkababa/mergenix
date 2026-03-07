@@ -80,8 +80,12 @@ interface NextLinkMockProps {
 export interface MarketingMocks {
   createIconMock: (testId: string) => (props: React.SVGProps<SVGSVGElement>) => React.ReactElement;
   glassCardModule: () => { GlassCard: (props: GlassCardMockProps) => React.ReactElement };
-  scrollRevealModule: () => { ScrollReveal: (props: { children?: React.ReactNode }) => React.ReactElement };
-  sectionHeadingModule: () => { SectionHeading: (props: SectionHeadingMockProps) => React.ReactElement };
+  scrollRevealModule: () => {
+    ScrollReveal: (props: { children?: React.ReactNode }) => React.ReactElement;
+  };
+  sectionHeadingModule: () => {
+    SectionHeading: (props: SectionHeadingMockProps) => React.ReactElement;
+  };
   pageHeaderModule: () => { PageHeader: (props: PageHeaderMockProps) => React.ReactElement };
   nextLinkModule: () => { default: (props: NextLinkMockProps) => React.ReactElement };
 }
@@ -117,11 +121,7 @@ export function createMarketingMocks(): MarketingMocks {
   });
 
   const sectionHeadingModule = () => ({
-    SectionHeading: ({
-      title,
-      subtitle,
-      id,
-    }: SectionHeadingMockProps): React.ReactElement =>
+    SectionHeading: ({ title, subtitle, id }: SectionHeadingMockProps): React.ReactElement =>
       React.createElement(
         'div',
         { 'data-testid': 'section-heading', id },
@@ -131,10 +131,7 @@ export function createMarketingMocks(): MarketingMocks {
   });
 
   const pageHeaderModule = () => ({
-    PageHeader: ({
-      title,
-      subtitle,
-    }: PageHeaderMockProps): React.ReactElement =>
+    PageHeader: ({ title, subtitle }: PageHeaderMockProps): React.ReactElement =>
       React.createElement(
         'div',
         { 'data-testid': 'page-header' },
@@ -144,11 +141,7 @@ export function createMarketingMocks(): MarketingMocks {
   });
 
   const nextLinkModule = () => ({
-    default: ({
-      children,
-      href,
-      ...props
-    }: NextLinkMockProps): React.ReactElement =>
+    default: ({ children, href, ...props }: NextLinkMockProps): React.ReactElement =>
       React.createElement('a', { href, ...props }, children),
   });
 

@@ -43,21 +43,13 @@ test.describe('Cookie Consent', () => {
     // Verify the banner contains expected content
     await expect(banner.getByText(/Cookie Preferences/i)).toBeVisible();
     await expect(
-      banner.getByText(
-        /We use essential cookies for authentication and theme/i,
-      ),
+      banner.getByText(/We use essential cookies for authentication and theme/i),
     ).toBeVisible();
 
     // Verify action buttons are present
-    await expect(
-      banner.getByRole('button', { name: /Accept All/i }),
-    ).toBeVisible();
-    await expect(
-      banner.getByRole('button', { name: /Essential Only/i }),
-    ).toBeVisible();
-    await expect(
-      banner.getByRole('button', { name: /Customize/i }),
-    ).toBeVisible();
+    await expect(banner.getByRole('button', { name: /Accept All/i })).toBeVisible();
+    await expect(banner.getByRole('button', { name: /Essential Only/i })).toBeVisible();
+    await expect(banner.getByRole('button', { name: /Customize/i })).toBeVisible();
   });
 
   // ── Scenario 2 (P0): No analytics cookies set before consent ──
@@ -89,8 +81,7 @@ test.describe('Cookie Consent', () => {
 
     const analyticsCookies = cookies.filter((cookie) =>
       analyticsCookieNames.some(
-        (name) =>
-          cookie.name.startsWith(name) || cookie.name.includes('analytics'),
+        (name) => cookie.name.startsWith(name) || cookie.name.includes('analytics'),
       ),
     );
 
@@ -146,8 +137,7 @@ test.describe('Cookie Consent', () => {
     ];
     const analyticsCookies = cookies.filter((cookie) =>
       analyticsCookieNames.some(
-        (name) =>
-          cookie.name.startsWith(name) || cookie.name.includes('analytics'),
+        (name) => cookie.name.startsWith(name) || cookie.name.includes('analytics'),
       ),
     );
     expect(analyticsCookies).toHaveLength(0);
@@ -202,9 +192,7 @@ test.describe('Cookie Consent', () => {
     // The banner should NOT reappear after reload
     // Wait for page to settle, then verify banner does not reappear
     await page.waitForLoadState('domcontentloaded');
-    await expect(
-      page.getByRole('dialog', { name: /Cookie consent/i }),
-    ).toBeHidden();
+    await expect(page.getByRole('dialog', { name: /Cookie consent/i })).toBeHidden();
 
     // Verify localStorage still has the consent
     const consentAfter = await page.evaluate(
@@ -216,9 +204,7 @@ test.describe('Cookie Consent', () => {
     // Navigate to a different page and verify banner still doesn't appear
     await page.goto('/about');
     await page.waitForLoadState('domcontentloaded');
-    await expect(
-      page.getByRole('dialog', { name: /Cookie consent/i }),
-    ).toBeHidden();
+    await expect(page.getByRole('dialog', { name: /Cookie consent/i })).toBeHidden();
   });
 
   // ── Scenario 6 (P2): Customize button opens granular consent controls ──
@@ -235,9 +221,7 @@ test.describe('Cookie Consent', () => {
 
     // Granular category toggles should appear inside the banner dialog
     // (scoped to the dialog to avoid matching page content elsewhere)
-    await expect(
-      banner.getByText(/analytics|performance|functional/i).first(),
-    ).toBeVisible();
+    await expect(banner.getByText(/analytics|performance|functional/i).first()).toBeVisible();
   });
 
   // ── Scenario 7 (P2): User can withdraw cookie consent after accepting all (GDPR Art. 7(3)) ──
@@ -265,7 +249,8 @@ test.describe('Cookie Consent', () => {
     expect(consentBefore).toBe('accepted_all');
 
     // Look for a "Cookie Settings" or "Manage Cookies" link to re-open preferences
-    const cookieSettingsLink = page.getByRole('button', { name: /cookie settings|manage cookies/i })
+    const cookieSettingsLink = page
+      .getByRole('button', { name: /cookie settings|manage cookies/i })
       .or(page.getByRole('link', { name: /cookie settings|manage cookies/i }));
 
     // Click the cookie settings link to re-open the consent dialog

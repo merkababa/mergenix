@@ -1,6 +1,7 @@
 # Mergenix Project Memory
 
 ## Project Overview
+
 - **Name:** Mergenix (rebranded from Tortit in PR #14)
 - **Version:** 3.0.0-alpha (V3 Rewrite)
 - Genetic offspring analysis platform — compares two parents' DNA
@@ -8,6 +9,7 @@
 - V3: Next.js 15 + FastAPI + TypeScript genetics engine in Web Workers
 
 ## V3 Rewrite Status (Active Development)
+
 - **Phase 1:** Monorepo scaffolding (PR #28 — Merged)
 - **Phase 2:** Frontend pages (PR #30 — Merged)
 - **Phase 3:** Genetics engine TypeScript port (PR #31 — Merged, 6/6 A+)
@@ -18,12 +20,14 @@
 - **Phase 8:** Polish & Launch
 
 ## V3 Test Coverage
+
 - Genetics engine: 366 tests (8 suites)
 - Web app: 503 tests (37 suites)
 - Backend API: 60 tests (3 suites)
 - **Total: 929 tests passing**
 
 ## V3 Key Files
+
 - `apps/web/` — Next.js 15 frontend (React 19, Tailwind, Zustand)
 - `apps/api/` — FastAPI backend (24 endpoints, 60 tests, cookie auth, Stripe, async)
 - `packages/genetics-engine/` — TypeScript engine (~5,500 LOC, 366 tests)
@@ -31,6 +35,7 @@
 - `packages/genetics-data/` — JSON data files
 
 ## Git Workflow
+
 - Never push code to main (only PROGRESS.md/PROJECT_STATUS.md)
 - Rewrite branches: `rewrite/phase-N-description` targeting `rewrite/main`
 - `gh` CLI: `"C:\Program Files\GitHub CLI\gh.exe"` (not in PATH for bash)
@@ -38,6 +43,7 @@
 - CI has pre-existing failures (backend lint/mypy/tests) — use `--admin` to merge
 
 ## User Preferences
+
 - **Multi-agent status table (MANDATORY):** Always show final summary table
 - **8/8 A+ target:** All review rounds must reach A+ from all 8 reviewers
 - **Use proper TeamCreate** for multi-agent work (not fire-and-forget Tasks)
@@ -49,7 +55,9 @@
 - **Fix flow:** 3+ issues → Dev Team Leader + executor team; 1-2 → single executor
 
 ## CONDUCTOR-ONLY Protocol (ABSOLUTE — NEVER VIOLATE)
+
 See `conductor-protocol.md` for full details. Key rules:
+
 1. **NEVER write/edit code files** — always delegate to executor agents
 2. **NEVER read large source files** — delegate to explore/architect agents
 3. **NEVER run tests/builds directly** — delegate to qa-tester/build-fixer agents
@@ -59,23 +67,28 @@ See `conductor-protocol.md` for full details. Key rules:
 7. **Only touch**: git commands, status files (PROGRESS.md, PROJECT_STATUS.md, CLAUDE.md), memory files, task orchestration
 
 ## Orchestration Model (MANDATORY)
+
 See `conductor-protocol.md` for full details.
 
 ### Execution Flow
+
 1. **Conductor** spawns **Dev Team Leader** via TeamCreate
 2. **Dev Team Leader** does NOT write code — orchestrates executor agents with file ownership
 3. **Executors** write code, each owns specific files
 4. Dev Team Leader can delegate to Gemini where appropriate
 
 ### Review Flow (Two-Stage, Independent Agents)
+
 **Stage 1 — Gemini:** Gemini Review Coordinator spawns separate Gemini instances per reviewer role (with FULL code + diff). Iterate to all A+.
 **Stage 2 — Claude Opus:** Separate Claude Opus agents per reviewer (each with own context). Iterate to all A+.
 **Fix flow:** 3+ issues → Dev Team Leader + executor team; 1-2 → single executor
 
 ### Planning Flow
+
 Separate planning agents per perspective (ask user which roles each time, default all 8).
 
 ### The 8 Reviewer Roles
+
 1. Architect — architecture, types, separation of concerns
 2. QA — test coverage, edge cases, assertions
 3. Scientist — rsID accuracy, genetics correctness, citations
@@ -90,6 +103,7 @@ Separate planning agents per perspective (ask user which roles each time, defaul
 **PR grades table:** `| Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |`
 
 ## Gemini Delegation
+
 - **MCP is BROKEN on Windows** — never use MCP tools for Gemini
 - Use Bash: `gemini -p "prompt" --model gemini-3-pro-preview 2>&1`
 - Always `run_in_background: true` (10-30s responses)
@@ -98,6 +112,7 @@ Separate planning agents per perspective (ask user which roles each time, defaul
 - **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude. Don't delegate just to delegate — save tokens by using Gemini where it genuinely matches or exceeds Claude's output
 
 ## Gemini Review Enhancement (from Claude-Gemini conversation 2026-02-10)
+
 - See `docs/GEMINI_REVIEW_PROTOCOL.md` for full protocol
 - **Key insight:** Gemini is a pattern-matcher, not a runtime simulator — misses async/concurrency/ORM interaction bugs
 - **Fix:** Enhanced prompts with adversarial questions + mandatory checklists + grading calibration
@@ -109,6 +124,7 @@ Separate planning agents per perspective (ask user which roles each time, defaul
 - **gemini-3-pro-preview capacity issues:** NEVER fall back to weaker models. Wait and retry (60s, 120s, 300s). Inform user if still failing after 3 retries.
 
 ## Lessons Learned
+
 - Multi-agent file ownership boundaries prevent merge conflicts
 - Squash merge + rebase causes conflicts; use `git merge` instead
 - Pre-existing CI failures in rewrite/main (backend Python code) — not blocking

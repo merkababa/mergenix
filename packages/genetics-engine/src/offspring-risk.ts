@@ -17,11 +17,7 @@
  * @module offspring-risk
  */
 
-import type {
-  CarrierStatus,
-  OffspringRisk,
-  XLinkedOffspringRisk,
-} from '@mergenix/shared-types';
+import type { CarrierStatus, OffspringRisk, XLinkedOffspringRisk } from '@mergenix/shared-types';
 
 import {
   calculateOffspringRiskAR,
@@ -45,10 +41,7 @@ import {
  * @param parent2 - Carrier status of parent 2
  * @returns Offspring risk percentages (0-100 scale, sums to 100 for valid inputs)
  */
-export function calculateARRisk(
-  parent1: CarrierStatus,
-  parent2: CarrierStatus,
-): OffspringRisk {
+export function calculateARRisk(parent1: CarrierStatus, parent2: CarrierStatus): OffspringRisk {
   return calculateOffspringRiskAR(parent1, parent2);
 }
 
@@ -68,10 +61,7 @@ export function calculateARRisk(
  * @param parent2 - Carrier status of parent 2
  * @returns Offspring risk percentages (carrier is always 0 for AD)
  */
-export function calculateADRisk(
-  parent1: CarrierStatus,
-  parent2: CarrierStatus,
-): OffspringRisk {
+export function calculateADRisk(parent1: CarrierStatus, parent2: CarrierStatus): OffspringRisk {
   return calculateOffspringRiskAD(parent1, parent2);
 }
 

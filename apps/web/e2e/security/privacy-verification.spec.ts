@@ -111,7 +111,7 @@ const BLOCKED_THIRD_PARTY_DOMAINS = [
   'intercom.com',
   'heap.io',
   'heap.com',
-  'sentry.io',  // Error reporter — tested separately below
+  'sentry.io', // Error reporter — tested separately below
   'datadog-browser-agent',
   'newrelic.com',
   'bugsnag.com',
@@ -225,9 +225,7 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
 
     // ── Phase 2: Navigate and upload DNA files ───────────────────────────
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: /genetic analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /genetic analysis/i })).toBeVisible();
 
     await uploadPrivacyTestFiles(page);
 
@@ -282,18 +280,16 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
     // We use demo mode here because it exercises the same result-rendering
     // code paths without requiring a running backend for file parsing.
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: /genetic analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /genetic analysis/i })).toBeVisible();
 
     const demoButton = page.getByRole('button', { name: /try demo analysis/i });
     await expect(demoButton).toBeVisible();
     await demoButton.click();
 
     // Wait for results to render — this exercises the full analysis UI
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15_000,
+    });
 
     // ── Phase 3: Assert zero tracking requests ───────────────────────────
     expect(
@@ -320,9 +316,7 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
 
     // Navigate first and wait for initial page load to settle
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: /genetic analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /genetic analysis/i })).toBeVisible();
 
     // Allow some time for auth-store initialization requests to complete
     // before we start the "clean" monitoring window.
@@ -431,9 +425,7 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
 
     // ── Phase 2: Trigger an analysis with a malformed file ───────────────
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: /genetic analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /genetic analysis/i })).toBeVisible();
 
     // Upload one valid file and one malformed file to provoke an error
     const fileInputs = page.locator('input[type="file"]');
@@ -540,9 +532,7 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
 
     // ── Phase 2: Upload files and start analysis ─────────────────────────
     await page.goto('/analysis');
-    await expect(
-      page.getByRole('heading', { name: /genetic analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /genetic analysis/i })).toBeVisible();
 
     await uploadPrivacyTestFiles(page);
 
@@ -569,7 +559,9 @@ test.describe('Privacy — Zero Network Calls During Analysis', () => {
     expect(
       beaconViolations,
       `PRIVACY VIOLATION: ${beaconViolations.length} sendBeacon/POST request(s) contained genetic data on unload:\n` +
-        beaconViolations.map((v) => `  [POST] ${v.url}\n  Body: ${v.body.slice(0, 300)}`).join('\n'),
+        beaconViolations
+          .map((v) => `  [POST] ${v.url}\n  Body: ${v.body.slice(0, 300)}`)
+          .join('\n'),
     ).toHaveLength(0);
   });
 });

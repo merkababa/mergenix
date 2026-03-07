@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { X, Check } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { PasswordInput } from "@/components/auth/password-input";
-import { useAuthStore } from "@/lib/stores/auth-store";
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { X, Check } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { PasswordInput } from '@/components/auth/password-input';
+import { useAuthStore } from '@/lib/stores/auth-store';
 import {
   validatePassword,
   PASSWORD_REQUIREMENTS,
   getPasswordStrength,
   STRENGTH_TEXT_COLORS,
-} from "@/lib/password-utils";
+} from '@/lib/password-utils';
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -23,9 +23,9 @@ const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProps) {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,9 +37,9 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
   // Reset on open
   useEffect(() => {
     if (isOpen) {
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
       setError(null);
       setSuccess(false);
     }
@@ -49,9 +49,9 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
   useEffect(() => {
     if (!isOpen) return;
     const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
       window.scrollTo(0, scrollY);
     };
   }, [isOpen]);
@@ -61,11 +61,11 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose();
         return;
       }
-      if (e.key !== "Tab") return;
+      if (e.key !== 'Tab') return;
 
       const modal = modalRef.current;
       if (!modal) return;
@@ -89,8 +89,8 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   const handleSubmit = useCallback(
@@ -104,7 +104,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
         return;
       }
       if (newPassword !== confirmPassword) {
-        setError("Passwords do not match");
+        setError('Passwords do not match');
         return;
       }
 
@@ -114,7 +114,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
         setSuccess(true);
         setTimeout(onClose, 1500);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to change password");
+        setError(err instanceof Error ? err.message : 'Failed to change password');
       } finally {
         setIsSubmitting(false);
       }
@@ -136,7 +136,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-xs"
+            className="backdrop-blur-xs absolute inset-0 bg-[rgba(0,0,0,0.6)]"
             onClick={onClose}
           />
 
@@ -153,16 +153,16 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-(--accent-rose) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
+                className="text-(--text-dim) hover:text-(--accent-rose) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(244,63,94,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              <h2 className="mb-1 font-heading text-lg font-bold text-(--text-heading)">
+              <h2 className="font-heading text-(--text-heading) mb-1 text-lg font-bold">
                 Change Password
               </h2>
-              <p className="mb-5 text-sm text-(--text-muted)">
+              <p className="text-(--text-muted) mb-5 text-sm">
                 Enter your current password and choose a new one.
               </p>
 
@@ -173,11 +173,17 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   className="py-8 text-center"
                 >
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-                    <svg className="h-6 w-6 text-(--accent-teal)" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      className="text-(--accent-teal) h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="font-heading text-sm font-semibold text-(--accent-teal)">
+                  <p className="font-heading text-(--accent-teal) text-sm font-semibold">
                     Password changed successfully
                   </p>
                 </m.div>
@@ -203,12 +209,12 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   {/* Password strength meter */}
                   {newPassword && (
                     <div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-(--border-subtle)">
+                      <div className="bg-(--border-subtle) h-1.5 overflow-hidden rounded-full">
                         <m.div
                           className="h-full rounded-full"
                           initial={{ width: 0 }}
                           animate={{ width: `${strength.widthPercent}%` }}
-                          transition={{ duration: 0.3, ease: "easeOut" as const }}
+                          transition={{ duration: 0.3, ease: 'easeOut' as const }}
                           style={{ background: strength.color }}
                         />
                       </div>
@@ -227,25 +233,13 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                     {PASSWORD_REQUIREMENTS.map(({ check, text }) => {
                       const met = check(newPassword);
                       return (
-                        <div
-                          key={text}
-                          className="flex items-center gap-2 text-xs"
-                          role="listitem"
-                        >
+                        <div key={text} className="flex items-center gap-2 text-xs" role="listitem">
                           <Check
                             className={`h-3.5 w-3.5 ${
-                              met
-                                ? "text-(--accent-teal)"
-                                : "text-(--text-dim)"
+                              met ? 'text-(--accent-teal)' : 'text-(--text-dim)'
                             }`}
                           />
-                          <span
-                            className={
-                              met
-                                ? "text-(--text-body)"
-                                : "text-(--text-dim)"
-                            }
-                          >
+                          <span className={met ? 'text-(--text-body)' : 'text-(--text-dim)'}>
                             {text}
                           </span>
                         </div>
@@ -260,7 +254,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     error={
                       confirmPassword && newPassword !== confirmPassword
-                        ? "Passwords do not match"
+                        ? 'Passwords do not match'
                         : undefined
                     }
                     autoComplete="new-password"
@@ -273,7 +267,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
+                        className="text-(--accent-rose) rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
                         role="alert"
                       >
                         {error}
@@ -297,9 +291,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                       size="md"
                       className="flex-1"
                       isLoading={isSubmitting}
-                      disabled={
-                        !currentPassword || !newPassword || !confirmPassword
-                      }
+                      disabled={!currentPassword || !newPassword || !confirmPassword}
                     >
                       Change Password
                     </Button>

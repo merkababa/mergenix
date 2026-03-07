@@ -228,9 +228,7 @@ async def test_purge_inactive_user_cascade_deletes_analysis_results(
     assert count == 1
 
     # AnalysisResult rows should be gone (CASCADE)
-    result = await db_session.execute(
-        select(AnalysisResult).where(AnalysisResult.user_id == user.id)
-    )
+    result = await db_session.execute(select(AnalysisResult).where(AnalysisResult.user_id == user.id))
     assert result.scalars().all() == []
 
 
@@ -256,9 +254,7 @@ async def test_purge_inactive_user_does_not_delete_payment_rows(
     assert count == 1
 
     # Payment should survive with user_id NULLed out (SET NULL FK)
-    result = await db_session.execute(
-        select(Payment).where(Payment.id == payment.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.id == payment.id))
     surviving_payment = result.scalar_one_or_none()
     assert surviving_payment is not None
     assert surviving_payment.user_id is None
@@ -324,9 +320,7 @@ async def test_purge_payment_at_7yr_plus_1day(
 
     assert count == 1
 
-    result = await db_session.execute(
-        select(Payment).where(Payment.id == old_payment.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.id == old_payment.id))
     assert result.scalar_one_or_none() is None
 
 
@@ -351,9 +345,7 @@ async def test_purge_payment_at_6yr_364days_retained(
 
     assert count == 0
 
-    result = await db_session.execute(
-        select(Payment).where(Payment.id == recent_payment.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.id == recent_payment.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -379,9 +371,7 @@ async def test_purge_payment_dry_run_returns_count_without_deleting(
     assert count == 1
 
     # Payment should still exist
-    result = await db_session.execute(
-        select(Payment).where(Payment.id == old_payment.id)
-    )
+    result = await db_session.execute(select(Payment).where(Payment.id == old_payment.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -477,9 +467,7 @@ async def test_retention_service_purge_audit_logs_dry_run(
     assert count == 1
 
     # Log should still be there
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == old_log.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == old_log.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -553,14 +541,10 @@ async def test_run_all_purges_dry_run(
     assert summary["inactive_users_purged"] == 1
 
     # Nothing actually deleted
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == old_log.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == old_log.id))
     assert result.scalar_one_or_none() is not None
 
-    result = await db_session.execute(
-        select(User).where(User.id == inactive_user.id)
-    )
+    result = await db_session.execute(select(User).where(User.id == inactive_user.id))
     assert result.scalar_one_or_none() is not None
 
 
@@ -696,8 +680,7 @@ async def test_cron_endpoint_accessible_without_csrf_header(
 
     # Must NOT get 403 (CSRF rejection) — should get 202 (authenticated cron call)
     assert response.status_code != 403, (
-        "CSRF middleware is incorrectly blocking the cron endpoint. "
-        "External schedulers cannot send X-Requested-With."
+        "CSRF middleware is incorrectly blocking the cron endpoint. External schedulers cannot send X-Requested-With."
     )
     assert response.status_code == 202
 
@@ -791,9 +774,7 @@ def test_payment_model_fk_has_set_null_on_delete() -> None:
     fks = list(col.foreign_keys)
     assert len(fks) == 1, "Expected exactly one FK on user_id"
     fk = fks[0]
-    assert fk.ondelete == "SET NULL", (
-        f"Expected ON DELETE SET NULL, got {fk.ondelete!r}"
-    )
+    assert fk.ondelete == "SET NULL", f"Expected ON DELETE SET NULL, got {fk.ondelete!r}"
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -838,12 +819,8 @@ def test_security_events_contains_2fa_enabled_and_disabled() -> None:
         "'2fa_disabled' missing from SECURITY_EVENTS. auth.py emits event_type='2fa_disabled'."
     )
     # Old incorrect names must NOT be present
-    assert "2fa_enable" not in SECURITY_EVENTS, (
-        "'2fa_enable' (without 'd') should not be in SECURITY_EVENTS."
-    )
-    assert "2fa_disable" not in SECURITY_EVENTS, (
-        "'2fa_disable' (without 'd') should not be in SECURITY_EVENTS."
-    )
+    assert "2fa_enable" not in SECURITY_EVENTS, "'2fa_enable' (without 'd') should not be in SECURITY_EVENTS."
+    assert "2fa_disable" not in SECURITY_EVENTS, "'2fa_disable' (without 'd') should not be in SECURITY_EVENTS."
 
 
 @pytest.mark.asyncio
@@ -885,9 +862,7 @@ async def test_password_changed_audit_log_gets_2yr_retention(
     )
 
     # Confirm the record still exists
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.id == log.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.id == log.id))
     assert result.scalar_one_or_none() is not None, (
         "'password_changed' audit log was deleted when it should be retained for 2 years."
     )

@@ -7,11 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  detectChipVersion,
-  getChipNotes,
-  ENGINE_VERSION,
-} from '../src/chip-detection';
+import { detectChipVersion, getChipNotes, ENGINE_VERSION } from '../src/chip-detection';
 
 // ─── ENGINE_VERSION ──────────────────────────────────────────────────────────
 

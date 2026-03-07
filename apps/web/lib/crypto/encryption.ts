@@ -41,9 +41,9 @@
 
 /** Argon2id parameter set. memory is in KiB. */
 export interface Argon2Params {
-  memory: number;      // KiB; 65536 = 64 MB (desktop), 19456 = 19 MB (mobile)
+  memory: number; // KiB; 65536 = 64 MB (desktop), 19456 = 19 MB (mobile)
   parallelism: number; // p; 4 (desktop), 1 (mobile)
-  iterations: number;  // t; 3 (desktop), 4 (mobile)
+  iterations: number; // t; 3 (desktop), 4 (mobile)
 }
 
 /**
@@ -51,18 +51,18 @@ export interface Argon2Params {
  * Stored as a JSON string in IndexedDB; the server never sees plaintext.
  */
 export interface EncryptedEnvelope {
-  version: string;     // "1"
-  algorithm: string;   // "AES-256-GCM"
-  kdf: string;         // "argon2id"
-  salt: string;        // base64-encoded random KDF salt
-  iv: string;          // base64-encoded 96-bit IV
-  ciphertext: string;  // base64-encoded ciphertext + 16-byte GCM auth tag
+  version: string; // "1"
+  algorithm: string; // "AES-256-GCM"
+  kdf: string; // "argon2id"
+  salt: string; // base64-encoded random KDF salt
+  iv: string; // base64-encoded 96-bit IV
+  ciphertext: string; // base64-encoded ciphertext + 16-byte GCM auth tag
 }
 
 // ── Stubs (NOT_IMPLEMENTED — to be replaced by Stream B3) ─────────────────
 
 const NOT_IMPLEMENTED = (_name: string): never => {
-  throw new Error("NOT_IMPLEMENTED: Encryption not available.");
+  throw new Error('NOT_IMPLEMENTED: Encryption not available.');
 };
 
 /**
@@ -71,11 +71,9 @@ const NOT_IMPLEMENTED = (_name: string): never => {
  * @param deviceMemoryGb - navigator.deviceMemory (undefined on Firefox)
  * @returns Argon2id parameter set (desktop or mobile)
  */
-export function selectArgon2Params(
-  deviceMemoryGb: number | undefined,
-): Argon2Params {
+export function selectArgon2Params(deviceMemoryGb: number | undefined): Argon2Params {
   void deviceMemoryGb;
-  return NOT_IMPLEMENTED("selectArgon2Params");
+  return NOT_IMPLEMENTED('selectArgon2Params');
 }
 
 /**
@@ -86,13 +84,10 @@ export function selectArgon2Params(
  * @param salt     - Random 16-byte salt (generated per user/save, stored in envelope)
  * @returns Non-extractable CryptoKey suitable for AES-256-GCM encrypt/decrypt
  */
-export async function deriveKey(
-  password: string,
-  salt: Uint8Array,
-): Promise<CryptoKey> {
+export async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
   void password;
   void salt;
-  return NOT_IMPLEMENTED("deriveKey");
+  return NOT_IMPLEMENTED('deriveKey');
 }
 
 /**
@@ -102,13 +97,10 @@ export async function deriveKey(
  * @param data - Any JSON-serialisable data (FullAnalysisResult)
  * @returns JSON string of an EncryptedEnvelope (safe to store in IndexedDB)
  */
-export async function encryptEnvelope(
-  key: CryptoKey,
-  data: unknown,
-): Promise<string> {
+export async function encryptEnvelope(key: CryptoKey, data: unknown): Promise<string> {
   void key;
   void data;
-  return NOT_IMPLEMENTED("encryptEnvelope");
+  return NOT_IMPLEMENTED('encryptEnvelope');
 }
 
 /**
@@ -122,13 +114,10 @@ export async function encryptEnvelope(
  * @param envelopeJson - JSON string of an EncryptedEnvelope
  * @returns Decrypted data object
  */
-export async function decryptEnvelope(
-  key: CryptoKey,
-  envelopeJson: string,
-): Promise<unknown> {
+export async function decryptEnvelope(key: CryptoKey, envelopeJson: string): Promise<unknown> {
   void key;
   void envelopeJson;
-  return NOT_IMPLEMENTED("decryptEnvelope");
+  return NOT_IMPLEMENTED('decryptEnvelope');
 }
 
 /**
@@ -137,5 +126,5 @@ export async function decryptEnvelope(
  * @returns 64-character hex string (256 bits of entropy)
  */
 export function generateRecoveryKey(): string {
-  return NOT_IMPLEMENTED("generateRecoveryKey");
+  return NOT_IMPLEMENTED('generateRecoveryKey');
 }

@@ -59,8 +59,7 @@ class ConsentRecord(Base):
 
     def __repr__(self) -> str:
         return (
-            f"<ConsentRecord id={self.id} user_id={self.user_id} "
-            f"type={self.consent_type!r} version={self.version!r}>"
+            f"<ConsentRecord id={self.id} user_id={self.user_id} type={self.consent_type!r} version={self.version!r}>"
         )
 
 

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Dna, ChevronRight, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { CoupleUploadCard } from "@/components/genetics/couple-upload-card";
-import { PopulationSelector } from "@/components/genetics/population-selector";
-import { ErrorBoundary } from "@/components/error-boundary";
+import { Dna, ChevronRight, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CoupleUploadCard } from '@/components/genetics/couple-upload-card';
+import { PopulationSelector } from '@/components/genetics/population-selector';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ export function AnalysisUploadSection({
       {/* ── File Upload Card ── */}
       <ErrorBoundary
         fallback={
-          <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center text-sm text-(--text-muted)">
+          <div className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) border p-6 text-center text-sm">
             Failed to load file upload. Please refresh.
           </div>
         }
@@ -59,7 +59,7 @@ export function AnalysisUploadSection({
       {/* ── Population Selector ── */}
       {bothFilesSelected && (
         <div className="mt-6">
-          <label className="mb-2 block text-sm font-medium text-(--text-body)">
+          <label className="text-(--text-body) mb-2 block text-sm font-medium">
             Ancestral Population (optional)
           </label>
           <PopulationSelector />
@@ -79,8 +79,8 @@ export function AnalysisUploadSection({
             <ChevronRight className="h-5 w-5" />
           </Button>
           {/* Privacy trust badge (Business #7) */}
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-(--text-dim)">
-            <Shield className="h-3.5 w-3.5 text-(--accent-teal)" />
+          <p className="text-(--text-dim) mt-3 flex items-center justify-center gap-1.5 text-xs">
+            <Shield className="text-(--accent-teal) h-3.5 w-3.5" />
             Analysis runs entirely in your browser. No data is sent to our servers.
           </p>
         </div>
@@ -93,7 +93,7 @@ export function AnalysisUploadSection({
             <Dna className="h-4 w-4" />
             Try Demo Analysis
           </Button>
-          <p className="mt-2 text-xs text-(--text-dim)">
+          <p className="text-(--text-dim) mt-2 text-xs">
             See sample results with synthetic DNA data
           </p>
         </div>

@@ -81,6 +81,7 @@ pnpm db:migrate  # Run migrations first
 The API runs at [http://localhost:8000](http://localhost:8000).
 
 API docs available at:
+
 - Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 - ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 

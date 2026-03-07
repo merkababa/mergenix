@@ -5,7 +5,7 @@
 
 // ── Consent ──────────────────────────────────────────────────────────────
 
-export type ConsentType = "terms" | "privacy" | "cookies" | "age_verification";
+export type ConsentType = 'terms' | 'privacy' | 'cookies' | 'age_verification';
 
 export interface ConsentRecord {
   id: string;

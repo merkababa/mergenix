@@ -10,13 +10,7 @@
  * Ported from Source/trait_prediction.py (366 lines).
  */
 
-import type {
-  TraitResult,
-  GenotypeMap,
-  TraitSnpEntry,
-  PhenotypeMapValue,
-  Tier,
-} from './types';
+import type { TraitResult, GenotypeMap, TraitSnpEntry, PhenotypeMapValue, Tier } from './types';
 import { TIER_GATING } from './types';
 // NOTE: TOP_10_FREE_TRAITS (from @mergenix/genetics-data) was previously used to
 // filter free tier traits to a curated 10-item list. Free tier now has traitLimit: Infinity
@@ -287,7 +281,8 @@ export function predictTrait(
 
   // Add note if some genotypes were unmapped
   if (unmappedGenotypes.length > 0) {
-    result.note = 'Some genetic variants could not be mapped to known phenotypes. Results may be partial.';
+    result.note =
+      'Some genetic variants could not be mapped to known phenotypes. Results may be partial.';
   }
 
   return result;

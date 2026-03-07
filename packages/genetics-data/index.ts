@@ -148,7 +148,8 @@ export const chipCoverage: ChipCoverageMap = chipCoverageRaw as unknown as ChipC
  * Maps rsIDs to genomic coordinates in both GRCh37 (hg19) and GRCh38 (hg38).
  * PLACEHOLDER — to be populated via Ensembl batch query.
  */
-export const liftoverCoordinates: LiftoverTable = liftoverCoordinatesRaw as unknown as LiftoverTable;
+export const liftoverCoordinates: LiftoverTable =
+  liftoverCoordinatesRaw as unknown as LiftoverTable;
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -220,13 +221,7 @@ export const PGX_GENES: string[] = [
  * Premium tier PGx genes (first 5 most clinically impactful).
  * Sourced from Source/pharmacogenomics.py _PREMIUM_GENES.
  */
-export const PREMIUM_PGX_GENES: string[] = [
-  'CYP2D6',
-  'CYP2C19',
-  'CYP2C9',
-  'DPYD',
-  'TPMT',
-];
+export const PREMIUM_PGX_GENES: string[] = ['CYP2D6', 'CYP2C19', 'CYP2C9', 'DPYD', 'TPMT'];
 
 /**
  * Supported PRS conditions (ordered by clinical relevance).

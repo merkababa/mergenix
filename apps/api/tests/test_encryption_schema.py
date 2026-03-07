@@ -111,9 +111,7 @@ class TestKdfParams:
             with pytest.raises(ValidationError) as exc_info:
                 KdfParams(**data)
             errors = exc_info.value.errors()
-            assert any("key_length" in str(e) for e in errors), (
-                f"key_length={bad_length} should have been rejected"
-            )
+            assert any("key_length" in str(e) for e in errors), f"key_length={bad_length} should have been rejected"
 
     def test_key_length_exactly_32(self) -> None:
         """key_length of exactly 32 should be accepted."""
@@ -213,10 +211,7 @@ class TestEncryptedEnvelope:
         with pytest.raises(ValidationError) as exc_info:
             EncryptedEnvelope(**data)
         errors = exc_info.value.errors()
-        assert any(
-            "ciphertext" in str(e).lower() or "hex" in str(e).lower()
-            for e in errors
-        )
+        assert any("ciphertext" in str(e).lower() or "hex" in str(e).lower() for e in errors)
 
     def test_ciphertext_too_large(self) -> None:
         """Ciphertext exceeding 40MB (hex) must be rejected (~20MB binary)."""

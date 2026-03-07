@@ -109,10 +109,7 @@ export class AccountPage {
    * Open the change password modal and fill in the fields.
    * The modal has "Current Password" and "New Password" inputs.
    */
-  async changePassword(
-    currentPassword: string,
-    newPassword: string,
-  ): Promise<void> {
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     await this.changePasswordButton.click();
 
     // Wait for the modal to appear

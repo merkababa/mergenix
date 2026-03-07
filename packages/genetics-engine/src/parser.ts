@@ -33,9 +33,7 @@ export async function* iterateStreamLines(
   const decoder = new TextDecoderStream();
   // Type assertion needed: TextDecoderStream's writable accepts BufferSource,
   // but pipeThrough expects exact Uint8Array match. Safe at runtime.
-  const readable = stream.pipeThrough(
-    decoder as unknown as TransformStream<Uint8Array, string>,
-  );
+  const readable = stream.pipeThrough(decoder as unknown as TransformStream<Uint8Array, string>);
   const reader = readable.getReader();
 
   let buffer = '';
@@ -168,7 +166,7 @@ export async function parseStreaming(
     default:
       throw new Error(
         'Unrecognized genetic data format for streaming. ' +
-        'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
+          'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
       );
   }
 }
@@ -274,9 +272,7 @@ async function parseStreamingGeneric(
  * @param lineIterator - Async generator of lines
  * @returns Genotype map
  */
-async function parseStreamingVcf(
-  lineIterator: AsyncGenerator<string>,
-): Promise<GenotypeMap> {
+async function parseStreamingVcf(lineIterator: AsyncGenerator<string>): Promise<GenotypeMap> {
   const snps: GenotypeMap = {};
   let pastHeader = false;
   let snpCount = 0;
@@ -358,7 +354,7 @@ async function parseStreamingVcf(
   if (snpCount === 0) {
     throw new Error(
       'No valid SNP data found in VCF file (streaming parser). ' +
-      'Ensure the file contains variants with rsIDs and GT genotype data.',
+        'Ensure the file contains variants with rsIDs and GT genotype data.',
     );
   }
 
@@ -382,7 +378,12 @@ const VALID_ALLELES = new Set(['A', 'C', 'G', 'T']);
 /** Valid chromosome values for AncestryDNA files. */
 const ANCESTRY_VALID_CHROMOSOMES = new Set([
   ...Array.from({ length: 22 }, (_, i) => String(i + 1)),
-  'X', 'Y', 'MT', '23', '24', '25',  // 23=X, 24=Y, 25=MT/PAR in AncestryDNA
+  'X',
+  'Y',
+  'MT',
+  '23',
+  '24',
+  '25', // 23=X, 24=Y, 25=MT/PAR in AncestryDNA
 ]);
 
 /** Valid chromosome values for MyHeritage/FTDNA files. */
@@ -495,7 +496,7 @@ function checkSnpLimit(count: number): void {
   if (count > MAX_SNP_COUNT) {
     throw new Error(
       `SNP count exceeds maximum (${MAX_SNP_COUNT.toLocaleString()}). ` +
-      'File may be corrupted or not a genetic data file.'
+        'File may be corrupted or not a genetic data file.',
     );
   }
 }
@@ -576,7 +577,11 @@ export function detectFormat(content: string): FileFormat {
     const headerCandidate = firstDataLines[0]!;
     const headerParts = headerCandidate.split('\t');
     const headerLower = headerCandidate.toLowerCase();
-    if (headerParts.length === 5 && headerLower.includes('allele1') && headerLower.includes('allele2')) {
+    if (
+      headerParts.length === 5 &&
+      headerLower.includes('allele1') &&
+      headerLower.includes('allele2')
+    ) {
       return 'ancestrydna';
     }
   }
@@ -585,7 +590,9 @@ export function detectFormat(content: string): FileFormat {
   if (firstDataLines.length > 0) {
     const headerCandidate = firstDataLines[0]!;
     // Strip quotes for comparison; MyHeritage uses comma-separated fields
-    const commaParts = headerCandidate.split(',').map(p => p.trim().replace(/"/g, '').toLowerCase());
+    const commaParts = headerCandidate
+      .split(',')
+      .map((p) => p.trim().replace(/"/g, '').toLowerCase());
     if (
       commaParts.length >= 4 &&
       (commaParts[0] ?? '').includes('rsid') &&
@@ -600,7 +607,7 @@ export function detectFormat(content: string): FileFormat {
     let mhHits = 0;
     let mhChecked = 0;
     for (const dline of firstDataLines) {
-      const cparts = dline.split(',').map(p => p.trim().replace(/"/g, ''));
+      const cparts = dline.split(',').map((p) => p.trim().replace(/"/g, ''));
       if (cparts.length === 4) {
         const rsid = cparts[0] ?? '';
         const result = cparts[3] ?? '';
@@ -751,7 +758,10 @@ export function validate23andMe(content: string): [boolean, string] {
 
     // Look for column header
     if (line.startsWith('#')) {
-      if (lineLower.includes('rsid') && (lineLower.includes('chromosome') || lineLower.includes('position'))) {
+      if (
+        lineLower.includes('rsid') &&
+        (lineLower.includes('chromosome') || lineLower.includes('position'))
+      ) {
         hasRsidHeader = true;
       }
     } else {
@@ -797,7 +807,10 @@ export function validate23andMe(content: string): [boolean, string] {
 
   // At least 50% of checked data lines should be valid
   if (validDataLines / dataLineCount < 0.5) {
-    return [false, `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`];
+    return [
+      false,
+      `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`,
+    ];
   }
 
   return [true, ''];
@@ -956,7 +969,10 @@ export function validateAncestryDNA(content: string): [boolean, string] {
   }
 
   if (validDataLines / dataLineCount < 0.5) {
-    return [false, `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`];
+    return [
+      false,
+      `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`,
+    ];
   }
 
   return [true, ''];
@@ -1065,7 +1081,7 @@ export function validateMyHeritage(content: string): [boolean, string] {
 
     // Check for header row
     if ((row[0] ?? '').trim().toLowerCase() === 'rsid') {
-      const headerLower = row.map(f => f.trim().toLowerCase());
+      const headerLower = row.map((f) => f.trim().toLowerCase());
       if (
         headerLower.includes('chromosome') &&
         headerLower.includes('position') &&
@@ -1100,7 +1116,10 @@ export function validateMyHeritage(content: string): [boolean, string] {
   if (!hasHeader) {
     // Also accept if data lines look right even without a recognizable header
     if (dataLineCount === 0 || validDataLines === 0) {
-      return [false, 'File does not appear to be a MyHeritage/FTDNA file (missing RSID,CHROMOSOME,POSITION,RESULT header)'];
+      return [
+        false,
+        'File does not appear to be a MyHeritage/FTDNA file (missing RSID,CHROMOSOME,POSITION,RESULT header)',
+      ];
     }
   }
 
@@ -1113,7 +1132,10 @@ export function validateMyHeritage(content: string): [boolean, string] {
   }
 
   if (validDataLines / dataLineCount < 0.5) {
-    return [false, `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`];
+    return [
+      false,
+      `File format appears incorrect (only ${validDataLines}/${dataLineCount} lines are valid)`,
+    ];
   }
 
   return [true, ''];
@@ -1207,9 +1229,9 @@ export function parseVcf(content: string): GenotypeMap {
       continue;
     }
 
-    const variantId = parts[2] ?? '';   // ID column (rsid or '.')
-    const ref = parts[3] ?? '';         // REF allele
-    const alt = parts[4] ?? '';         // ALT allele(s), comma-separated
+    const variantId = parts[2] ?? ''; // ID column (rsid or '.')
+    const ref = parts[3] ?? ''; // REF allele
+    const alt = parts[4] ?? ''; // ALT allele(s), comma-separated
     const formatField = parts[8] ?? ''; // FORMAT column
     const sampleField = parts[9] ?? ''; // First sample column
 
@@ -1305,7 +1327,7 @@ export function parseVcf(content: string): GenotypeMap {
   if (snpCount === 0) {
     throw new Error(
       'No valid SNP data found in VCF file. ' +
-      'Ensure the file contains variants with rsIDs and GT genotype data.'
+        'Ensure the file contains variants with rsIDs and GT genotype data.',
     );
   }
 
@@ -1383,7 +1405,10 @@ export function validateVcf(content: string): [boolean, string] {
   }
 
   if (chromColCount < 10) {
-    return [false, `#CHROM header has only ${chromColCount} columns (expected at least 10 tab-separated columns)`];
+    return [
+      false,
+      `#CHROM header has only ${chromColCount} columns (expected at least 10 tab-separated columns)`,
+    ];
   }
 
   if (dataLineCount === 0) {
@@ -1418,16 +1443,16 @@ export function parseGeneticFile(content: string): [GenotypeMap, FileFormat] {
 
   const parserMap: Partial<Record<FileFormat, (c: string) => GenotypeMap>> = {
     '23andme': parse23andMe,
-    'ancestrydna': parseAncestryDNA,
-    'myheritage': parseMyHeritage,
-    'vcf': parseVcf,
+    ancestrydna: parseAncestryDNA,
+    myheritage: parseMyHeritage,
+    vcf: parseVcf,
   };
 
   const parser = parserMap[detectedFormat];
   if (!parser) {
     throw new Error(
       'Unrecognized genetic data format. ' +
-      'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.'
+        'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
     );
   }
 
@@ -1468,7 +1493,7 @@ export function validateGeneticFile(content: string): [boolean, string, FileForm
   return [
     false,
     'Unrecognized genetic data format. ' +
-    'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
+      'Please upload a 23andMe, AncestryDNA, MyHeritage/FTDNA, or VCF raw data file.',
     'unknown',
   ];
 }
@@ -1542,7 +1567,7 @@ const CHIP_MARKERS: Record<string, string[]> = {
   // 23andMe v3 (OmniExpress Plus): high-density markers not on later chips
   '23andme_v3': ['rs4851251', 'rs2296442', 'rs2032582'],
   // AncestryDNA v2 (GSA-based): GSA-specific markers
-  'ancestry_v2': ['rs548049170', 'rs13354714'],
+  ancestry_v2: ['rs548049170', 'rs13354714'],
 };
 
 /**
@@ -1596,17 +1621,14 @@ export function detectChipVersion(
  * - v4 (Illumina HumanOmniExpress-24): ~570K SNPs
  * - v5 (Illumina GSA): ~640K SNPs
  */
-function detect23andMeChipVersion(
-  snpCount: number,
-  genotypes: GenotypeMap,
-): ChipVersionInfo {
+function detect23andMeChipVersion(snpCount: number, genotypes: GenotypeMap): ChipVersionInfo {
   const base: ChipVersionInfo = { provider: '23andMe', version: 'unknown', confidence: 0 };
 
   // Check marker SNPs for definitive version identification
   const v5Markers = CHIP_MARKERS['23andme_v5'] ?? [];
   const v3Markers = CHIP_MARKERS['23andme_v3'] ?? [];
-  const v5MarkerCount = v5Markers.filter(m => m in genotypes).length;
-  const v3MarkerCount = v3Markers.filter(m => m in genotypes).length;
+  const v5MarkerCount = v5Markers.filter((m) => m in genotypes).length;
+  const v3MarkerCount = v3Markers.filter((m) => m in genotypes).length;
 
   // SNP count ranges (with overlap tolerance of ~15%)
   if (snpCount >= 850000) {
@@ -1645,14 +1667,11 @@ function detect23andMeChipVersion(
  * - v1 (Illumina OmniExpress): ~700K SNPs
  * - v2 (Illumina GSA): ~670K SNPs
  */
-function detectAncestryChipVersion(
-  snpCount: number,
-  genotypes: GenotypeMap,
-): ChipVersionInfo {
+function detectAncestryChipVersion(snpCount: number, genotypes: GenotypeMap): ChipVersionInfo {
   const base: ChipVersionInfo = { provider: 'AncestryDNA', version: 'unknown', confidence: 0 };
 
   const v2Markers = CHIP_MARKERS['ancestry_v2'] ?? [];
-  const v2MarkerCount = v2Markers.filter(m => m in genotypes).length;
+  const v2MarkerCount = v2Markers.filter((m) => m in genotypes).length;
 
   if (snpCount >= 680000) {
     // ~700K = v1
@@ -1720,9 +1739,7 @@ export function buildParseResultSummary(
   // Compute skipped lines from raw content line count when available.
   // Includes comments, headers, blank lines, no-calls, and malformed lines.
   const skippedLines =
-    rawLineCount !== undefined && rawLineCount > totalSnps
-      ? rawLineCount - totalSnps
-      : 0;
+    rawLineCount !== undefined && rawLineCount > totalSnps ? rawLineCount - totalSnps : 0;
 
   return {
     format,

@@ -23,11 +23,7 @@ import {
 } from '../src/combiner';
 import type { OffspringPrediction, ParentConditionInput } from '../src/combiner';
 import type { XLinkedOffspringRisk } from '@mergenix/shared-types';
-import {
-  predictOffspringPrsClt,
-  predictOffspringPrsRange,
-  normalCdf,
-} from '../src/prs';
+import { predictOffspringPrsClt, predictOffspringPrsRange, normalCdf } from '../src/prs';
 
 // ─── Q7: Offspring Risk — Autosomal Recessive ────────────────────────────────
 
@@ -503,13 +499,7 @@ describe('Offspring Risk — X-Linked', () => {
    * Carrier mother × normal father via combineForCondition.
    */
   it('real-world Hemophilia A: carrier mother × normal father via combineForCondition', () => {
-    const prediction = combineForCondition(
-      'Hemophilia A',
-      'F8',
-      'X-linked',
-      'carrier',
-      'normal',
-    );
+    const prediction = combineForCondition('Hemophilia A', 'F8', 'X-linked', 'carrier', 'normal');
     const risk = prediction.offspringRisk as XLinkedOffspringRisk;
     expect(prediction.isSexLinked).toBe(true);
     expect(risk.sons.affected).toBe(50);
@@ -532,13 +522,17 @@ describe('Offspring Risk — Edge Cases', () => {
    */
   it('unknown parent status returns zero risk for AR', () => {
     expect(calculateARRisk('unknown', 'carrier')).toEqual({
-      affected: 0, carrier: 0, normal: 0,
+      affected: 0,
+      carrier: 0,
+      normal: 0,
     });
   });
 
   it('unknown parent status returns zero risk for AD', () => {
     expect(calculateADRisk('unknown', 'normal')).toEqual({
-      affected: 0, carrier: 0, normal: 0,
+      affected: 0,
+      carrier: 0,
+      normal: 0,
     });
   });
 
@@ -603,9 +597,9 @@ describe('Offspring Risk — Edge Cases', () => {
   it('AR risk percentages are expressed in 0-100 range (not fractions)', () => {
     // carrier × carrier is the strongest test: produces 25/50/25
     const risk = calculateARRisk('carrier', 'carrier');
-    expect(risk.affected).toBe(25);   // not 0.25
-    expect(risk.carrier).toBe(50);    // not 0.50
-    expect(risk.normal).toBe(25);     // not 0.25
+    expect(risk.affected).toBe(25); // not 0.25
+    expect(risk.carrier).toBe(50); // not 0.50
+    expect(risk.normal).toBe(25); // not 0.25
     // All values should be >= 1 when there is any risk (not fractional)
     expect(risk.affected).toBeGreaterThanOrEqual(1);
   });
@@ -615,8 +609,8 @@ describe('Offspring Risk — Edge Cases', () => {
    */
   it('AD risk percentages are expressed in 0-100 range (not fractions)', () => {
     const risk = calculateADRisk('carrier', 'normal');
-    expect(risk.affected).toBe(50);   // not 0.50
-    expect(risk.normal).toBe(50);     // not 0.50
+    expect(risk.affected).toBe(50); // not 0.50
+    expect(risk.normal).toBe(50); // not 0.50
   });
 
   /**
@@ -624,7 +618,7 @@ describe('Offspring Risk — Edge Cases', () => {
    */
   it('X-linked risk percentages are expressed in 0-100 range (not fractions)', () => {
     const risk = calculateXLinkedRisk('carrier', 'normal');
-    expect(risk.sons.affected).toBe(50);     // not 0.50
+    expect(risk.sons.affected).toBe(50); // not 0.50
     expect(risk.daughters.carrier).toBe(50); // not 0.50
   });
 
@@ -634,12 +628,32 @@ describe('Offspring Risk — Edge Cases', () => {
    */
   it('combineAllConditions omits conditions not present in both parents', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'Common Disease', gene: 'GENE_C', inheritance: 'autosomal_recessive', status: 'carrier' },
-      { condition: 'Only In Parent1', gene: 'GENE_P1', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Common Disease',
+        gene: 'GENE_C',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
+      {
+        condition: 'Only In Parent1',
+        gene: 'GENE_P1',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'Common Disease', gene: 'GENE_C', inheritance: 'autosomal_recessive', status: 'normal' },
-      { condition: 'Only In Parent2', gene: 'GENE_P2', inheritance: 'autosomal_recessive', status: 'carrier' },
+      {
+        condition: 'Common Disease',
+        gene: 'GENE_C',
+        inheritance: 'autosomal_recessive',
+        status: 'normal',
+      },
+      {
+        condition: 'Only In Parent2',
+        gene: 'GENE_P2',
+        inheritance: 'autosomal_recessive',
+        status: 'carrier',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -653,10 +667,20 @@ describe('Offspring Risk — Edge Cases', () => {
    */
   it('combineAllConditions with both parents unknown → zero risk for that condition', () => {
     const parent1: ParentConditionInput[] = [
-      { condition: 'Mystery Disease', gene: 'MYSTERY', inheritance: 'autosomal_recessive', status: 'unknown' },
+      {
+        condition: 'Mystery Disease',
+        gene: 'MYSTERY',
+        inheritance: 'autosomal_recessive',
+        status: 'unknown',
+      },
     ];
     const parent2: ParentConditionInput[] = [
-      { condition: 'Mystery Disease', gene: 'MYSTERY', inheritance: 'autosomal_recessive', status: 'unknown' },
+      {
+        condition: 'Mystery Disease',
+        gene: 'MYSTERY',
+        inheritance: 'autosomal_recessive',
+        status: 'unknown',
+      },
     ];
 
     const results = combineAllConditions(parent1, parent2);
@@ -917,8 +941,21 @@ describe('Offspring PRS — Statistical Properties', () => {
     const parentBZ = 2.0;
     const popStd = 0.2;
 
-    const resultDefault = predictOffspringPrsClt(parentAPrs, parentBPrs, parentAZ, parentBZ, popStd);
-    const resultHeight = predictOffspringPrsClt(parentAPrs, parentBPrs, parentAZ, parentBZ, popStd, 0.8);
+    const resultDefault = predictOffspringPrsClt(
+      parentAPrs,
+      parentBPrs,
+      parentAZ,
+      parentBZ,
+      popStd,
+    );
+    const resultHeight = predictOffspringPrsClt(
+      parentAPrs,
+      parentBPrs,
+      parentAZ,
+      parentBZ,
+      popStd,
+      0.8,
+    );
 
     // h²=0.8 offspring should be closer to parents (higher expected percentile)
     // than h²=0.5 offspring, because height has higher heritability
@@ -940,13 +977,13 @@ describe('Offspring PRS — Statistical Properties', () => {
    */
   it('predictOffspringPrsRange: h²=0.8 offspring expected percentile is higher than h²=0.5', () => {
     const parentZ = 2.0;
-    const resultDefault = predictOffspringPrsRange(parentZ, parentZ);          // h²=0.5
-    const resultHeight = predictOffspringPrsRange(parentZ, parentZ, 0.8);     // h²=0.8
+    const resultDefault = predictOffspringPrsRange(parentZ, parentZ); // h²=0.5
+    const resultHeight = predictOffspringPrsRange(parentZ, parentZ, 0.8); // h²=0.8
 
     expect(resultHeight.expectedPercentile).toBeGreaterThan(resultDefault.expectedPercentile);
 
     // Spot-check percentile values
     expect(resultDefault.expectedPercentile).toBeCloseTo(normalCdf(1.0) * 100, 1); // z=1.0
-    expect(resultHeight.expectedPercentile).toBeCloseTo(normalCdf(1.6) * 100, 1);  // z=1.6
+    expect(resultHeight.expectedPercentile).toBeCloseTo(normalCdf(1.6) * 100, 1); // z=1.6
   });
 });

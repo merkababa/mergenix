@@ -39,9 +39,7 @@ test.describe('Performance: Memory Leak Detection', () => {
       await page.goto('/analysis');
 
       // Wait for the page to be fully loaded and interactive
-      await expect(
-        page.getByRole('heading', { name: 'Genetic Analysis' }),
-      ).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Genetic Analysis' })).toBeVisible();
 
       // Trigger demo analysis — this exercises:
       // - Zustand store state updates (setDemoResults)
@@ -57,9 +55,9 @@ test.describe('Performance: Memory Leak Detection', () => {
         await demoButton.click();
 
         // Wait for demo results to load — tab list appears when complete
-        await expect(
-          page.getByRole('tablist', { name: /analysis results/i }),
-        ).toBeVisible({ timeout: 10000 });
+        await expect(page.getByRole('tablist', { name: /analysis results/i })).toBeVisible({
+          timeout: 10000,
+        });
 
         // Interact with a few tabs to exercise more component rendering
         const tabKeys = ['Carrier Risk', 'Traits', 'Overview'];
@@ -139,10 +137,8 @@ test.describe('Performance: Memory Leak Detection', () => {
     const firstThree = validHeaps.slice(0, 3);
     const lastThree = validHeaps.slice(-3);
 
-    const firstThreeAvg =
-      firstThree.reduce((a, b) => a + b, 0) / firstThree.length;
-    const lastThreeAvg =
-      lastThree.reduce((a, b) => a + b, 0) / lastThree.length;
+    const firstThreeAvg = firstThree.reduce((a, b) => a + b, 0) / firstThree.length;
+    const lastThreeAvg = lastThree.reduce((a, b) => a + b, 0) / lastThree.length;
 
     // Log detailed measurements for debugging
     const formatMB = (bytes: number) => (bytes / (1024 * 1024)).toFixed(2);
@@ -150,9 +146,7 @@ test.describe('Performance: Memory Leak Detection', () => {
     console.log('Heap measurements (MB) per cycle:');
     for (let i = 0; i < heapSizes.length; i++) {
       // eslint-disable-next-line no-console
-      console.log(
-        `  Cycle ${i + 1}: ${formatMB(heapSizes[i])} MB (${cycleTimes[i]}ms)`,
-      );
+      console.log(`  Cycle ${i + 1}: ${formatMB(heapSizes[i])} MB (${cycleTimes[i]}ms)`);
     }
     // eslint-disable-next-line no-console
     console.log(`  First 3 avg: ${formatMB(firstThreeAvg)} MB`);
@@ -184,10 +178,12 @@ test.describe('Performance: Memory Leak Detection', () => {
 
     // If 80%+ of transitions are growth, that is suspicious
     const growthRatio = monotonicallyGrowingCount / (validHeaps.length - 1);
-    expect.soft(
-      growthRatio,
-      `${(growthRatio * 100).toFixed(0)}% of cycles showed heap growth. ` +
-        `Monotonic growth suggests a memory leak.`,
-    ).toBeLessThan(0.8);
+    expect
+      .soft(
+        growthRatio,
+        `${(growthRatio * 100).toFixed(0)}% of cycles showed heap growth. ` +
+          `Monotonic growth suggests a memory leak.`,
+      )
+      .toBeLessThan(0.8);
   });
 });

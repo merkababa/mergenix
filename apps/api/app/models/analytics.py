@@ -33,9 +33,7 @@ class DailyEventCount(Base):
 
     __tablename__ = "daily_event_counts"
 
-    __table_args__ = (
-        UniqueConstraint("event_type", "event_date", name="uq_event_type_date"),
-    )
+    __table_args__ = (UniqueConstraint("event_type", "event_date", name="uq_event_type_date"),)
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -63,7 +61,4 @@ class DailyEventCount(Base):
     )
 
     def __repr__(self) -> str:
-        return (
-            f"<DailyEventCount id={self.id} type={self.event_type!r} "
-            f"date={self.event_date} count={self.count}>"
-        )
+        return f"<DailyEventCount id={self.id} type={self.event_type!r} date={self.event_date} count={self.count}>"

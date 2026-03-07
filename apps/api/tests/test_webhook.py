@@ -32,6 +32,7 @@ import json
 import logging
 import time
 import uuid
+from collections.abc import Callable
 from datetime import UTC, datetime
 
 import pytest
@@ -40,34 +41,34 @@ from app.models.user import User
 from httpx import AsyncClient
 from sqlalchemy import select
 
-
 # ── Helper: poll until a condition is true (replaces fragile fixed sleeps) ─
 
 
 async def wait_for_condition(
-    condition_fn,
-    timeout: float = 2.0,
+    condition_fn: Callable[[], bool],
+    max_wait: float = 2.0,
     interval: float = 0.01,
 ) -> None:
-    """Poll ``condition_fn()`` until it returns True or ``timeout`` seconds elapse.
+    """Poll ``condition_fn()`` until it returns True or ``max_wait`` seconds elapse.
 
     Replaces ``await asyncio.sleep(<fixed_value>)`` calls that are fragile on
     slow CI machines. Polls at ``interval``-second intervals, which is fast in
-    the happy path while still giving the system up to ``timeout`` seconds to
+    the happy path while still giving the system up to ``max_wait`` seconds to
     satisfy the condition.
 
     Raises:
-        TimeoutError: If the condition is not satisfied within ``timeout`` seconds.
+        TimeoutError: If the condition is not satisfied within ``max_wait`` seconds.
     """
-    deadline = asyncio.get_event_loop().time() + timeout
-    while asyncio.get_event_loop().time() < deadline:
+    deadline = asyncio.get_running_loop().time() + max_wait
+    while asyncio.get_running_loop().time() < deadline:
         if condition_fn():
             return
         await asyncio.sleep(interval)
-    raise TimeoutError(f"Condition not met within {timeout}s")
+    raise TimeoutError(f"Condition not met within {max_wait}s")
 
 
 # ── Helper: build a real Stripe webhook signature ─────────────────────────
+
 
 def _build_stripe_signature(payload: bytes, secret: str) -> str:
     """Construct a valid Stripe-Signature header value.
@@ -307,9 +308,7 @@ class TestWebhookEventHandling:
         assert test_user.tier == "premium"
 
         # A Payment record MUST be created
-        result = await db_session.execute(
-            select(Payment).where(Payment.stripe_payment_intent == "pi_test_wh_prem")
-        )
+        result = await db_session.execute(select(Payment).where(Payment.stripe_payment_intent == "pi_test_wh_prem"))
         payment = result.scalar_one_or_none()
         assert payment is not None
         assert payment.tier_granted == "premium"
@@ -400,13 +399,9 @@ class TestWebhookEventHandling:
         assert test_user.tier == initial_tier  # still "free"
 
         # No Payment record should be created for invoice.paid
-        result = await db_session.execute(
-            select(Payment).where(Payment.user_id == test_user.id)
-        )
+        result = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
         payments = list(result.scalars().all())
-        assert len(payments) == 0, (
-            f"Expected 0 payments created for invoice.paid, got {len(payments)}"
-        )
+        assert len(payments) == 0, f"Expected 0 payments created for invoice.paid, got {len(payments)}"
 
     @pytest.mark.asyncio
     async def test_invoice_payment_succeeded_event_acknowledged(
@@ -538,13 +533,9 @@ class TestWebhookIdempotency:
         assert response2.status_code == 200
 
         # Only ONE payment record must exist
-        result = await db_session.execute(
-            select(Payment).where(Payment.user_id == test_user.id)
-        )
+        result = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
         payments = list(result.scalars().all())
-        assert len(payments) == 1, (
-            f"Expected exactly 1 payment after duplicate delivery, got {len(payments)}"
-        )
+        assert len(payments) == 1, f"Expected exactly 1 payment after duplicate delivery, got {len(payments)}"
 
     @pytest.mark.asyncio
     async def test_duplicate_event_with_unsent_receipt_retries_email(
@@ -812,9 +803,7 @@ class TestWebhookReceiptGeneration:
         await db_session.refresh(test_user)
         assert test_user.tier == "premium"
 
-        result = await db_session.execute(
-            select(Payment).where(Payment.stripe_payment_intent == "pi_email_fail")
-        )
+        result = await db_session.execute(select(Payment).where(Payment.stripe_payment_intent == "pi_email_fail"))
         payment = result.scalar_one_or_none()
         assert payment is not None
         assert payment.status == "succeeded"
@@ -874,8 +863,7 @@ class TestWebhookErrorSanitization:
         from stripe import SignatureVerificationError
 
         mock_stripe["construct_event"].side_effect = SignatureVerificationError(
-            "Webhook signature verification failed. Expected signatures for "
-            "payload 'evt_...' to match 'whsec_...'",
+            "Webhook signature verification failed. Expected signatures for payload 'evt_...' to match 'whsec_...'",
             sig_header="t=123,v1=bad",
         )
 

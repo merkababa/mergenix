@@ -18,10 +18,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── Import component after mocks ─────────────────────────────────────────────
@@ -39,7 +39,9 @@ describe('PartnerConsentCheckbox', () => {
   it('renders with the partner consent label', () => {
     render(<PartnerConsentCheckbox />);
 
-    expect(screen.getByText(/I confirm that I have obtained explicit, informed consent/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/I confirm that I have obtained explicit, informed consent/),
+    ).toBeInTheDocument();
   });
 
   it('checkbox starts unchecked', () => {

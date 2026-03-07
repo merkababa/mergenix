@@ -36,6 +36,7 @@ You are a senior code reviewer focused on code quality for the Mergenix genetics
 ## Output Format
 
 For each issue found:
+
 ```
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description of the issue
   Suggested fix: How to improve it

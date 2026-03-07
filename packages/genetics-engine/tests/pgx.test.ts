@@ -46,16 +46,12 @@ function makePgxPanel(): PgxPanel {
             activity_score: 1.0,
           },
           '*4': {
-            defining_variants: [
-              { rsid: 'rs3892097', genotype: 'AA' },
-            ],
+            defining_variants: [{ rsid: 'rs3892097', genotype: 'AA' }],
             function: 'no_function',
             activity_score: 0.0,
           },
           '*2': {
-            defining_variants: [
-              { rsid: 'rs16947', genotype: 'AA' },
-            ],
+            defining_variants: [{ rsid: 'rs16947', genotype: 'AA' }],
             function: 'normal',
             activity_score: 1.0,
           },
@@ -122,9 +118,7 @@ function makePgxPanel(): PgxPanel {
             activity_score: 1.0,
           },
           '*2': {
-            defining_variants: [
-              { rsid: 'rs4244285', genotype: 'AA' },
-            ],
+            defining_variants: [{ rsid: 'rs4244285', genotype: 'AA' }],
             function: 'no_function',
             activity_score: 0.0,
           },

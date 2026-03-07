@@ -131,8 +131,6 @@ export class DiseaseCatalogPage {
    * Returns the container with severity, inheritance, and confidence cards.
    */
   getDiseaseDetail(): Locator {
-    return this.page.locator('[data-testid="disease-detail"]').or(
-      this.page.locator('.max-w-4xl'),
-    );
+    return this.page.locator('[data-testid="disease-detail"]').or(this.page.locator('.max-w-4xl'));
   }
 }

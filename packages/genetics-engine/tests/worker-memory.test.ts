@@ -14,10 +14,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  clearSensitiveMemory,
-  __test__ as __testMaybeUndefined__,
-} from '../src/worker';
+import { clearSensitiveMemory, __test__ as __testMaybeUndefined__ } from '../src/worker';
 
 // In test environments (NODE_ENV !== 'production'), __test__ is always defined.
 // The non-null assertion here is safe and avoids optional chaining on every call.
@@ -253,6 +250,8 @@ describe('cancel message triggers memory clearing', () => {
     expect(state.parsedFormats).toEqual([]);
 
     // Verify cancel_ack response posted (sent as error with CANCEL_ACK code)
-    expect(responses.some(r => r.type === 'error' && 'code' in r && r.code === 'CANCEL_ACK')).toBe(true);
+    expect(
+      responses.some((r) => r.type === 'error' && 'code' in r && r.code === 'CANCEL_ACK'),
+    ).toBe(true);
   });
 });

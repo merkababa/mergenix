@@ -75,10 +75,7 @@ test.describe('Site Navigation', () => {
           timeout: 10_000,
         });
         expect(new URL(page.url()).pathname).toBe(linkInfo.expectedPath);
-      } else if (
-        'expectedPathContains' in linkInfo &&
-        linkInfo.expectedPathContains
-      ) {
+      } else if ('expectedPathContains' in linkInfo && linkInfo.expectedPathContains) {
         await page.waitForURL(`**${linkInfo.expectedPathContains}*`, {
           timeout: 10_000,
         });
@@ -114,24 +111,14 @@ test.describe('Site Navigation', () => {
       await expect(closeButton).toBeVisible();
 
       // Verify all nav links are visible in the mobile menu
-      const navLabels = [
-        'Home',
-        'Analysis',
-        'Disease Catalog',
-        'Pricing',
-        'About',
-      ];
+      const navLabels = ['Home', 'Analysis', 'Disease Catalog', 'Pricing', 'About'];
       for (const label of navLabels) {
         await expect(mobileMenu.getByRole('link', { name: label })).toBeVisible();
       }
 
       // Verify auth links are visible (anonymous state: Sign In + Get Started)
-      await expect(
-        mobileMenu.getByRole('link', { name: /Sign In/i }),
-      ).toBeVisible();
-      await expect(
-        mobileMenu.getByRole('link', { name: /Get Started/i }),
-      ).toBeVisible();
+      await expect(mobileMenu.getByRole('link', { name: /Sign In/i })).toBeVisible();
+      await expect(mobileMenu.getByRole('link', { name: /Get Started/i })).toBeVisible();
 
       // Close the menu
       await closeButton.click();
@@ -175,7 +162,7 @@ test.describe('Site Navigation', () => {
 
       // Verify a key link is reachable — if hamburger is the visible element, open it first
       const hamburgerCount = await hamburger.count();
-      const hamburgerIsVisible = hamburgerCount > 0 && await hamburger.isVisible();
+      const hamburgerIsVisible = hamburgerCount > 0 && (await hamburger.isVisible());
 
       if (hamburgerIsVisible) {
         await hamburger.click();
@@ -225,9 +212,7 @@ test.describe('Site Navigation', () => {
     }
 
     // Verify localStorage stores the theme preference
-    const storedTheme = await page.evaluate(() =>
-      localStorage.getItem('theme'),
-    );
+    const storedTheme = await page.evaluate(() => localStorage.getItem('theme'));
     expect(storedTheme).toBeTruthy();
     if (initialIsDark) {
       expect(storedTheme).toBe('light');
@@ -243,26 +228,18 @@ test.describe('Site Navigation', () => {
     expect(persistedChecked).toBe(newChecked);
 
     // Verify localStorage still has the correct theme
-    const persistedTheme = await page.evaluate(() =>
-      localStorage.getItem('theme'),
-    );
+    const persistedTheme = await page.evaluate(() => localStorage.getItem('theme'));
     expect(persistedTheme).toBe(storedTheme);
   });
 
   // ── Scenario 5 (P1): Anonymous vs authenticated nav items ──
-  test('anonymous user sees Sign In and Get Started buttons', async ({
-    page,
-  }) => {
+  test('anonymous user sees Sign In and Get Started buttons', async ({ page }) => {
     await page.goto('/');
 
     // Desktop nav should show Sign In and Get Started
     const nav = page.getByRole('navigation', { name: /Main navigation/i });
-    await expect(
-      nav.getByRole('link', { name: /Sign In/i }),
-    ).toBeVisible();
-    await expect(
-      nav.getByRole('link', { name: /Get Started/i }),
-    ).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Sign In/i })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Get Started/i })).toBeVisible();
   });
 });
 
@@ -281,12 +258,8 @@ authTest.describe('Authenticated Navigation', () => {
       });
 
       // Sign In / Get Started should not be visible for authenticated users
-      await authExpect(
-        nav.getByRole('link', { name: /Sign In/i }),
-      ).toBeHidden();
-      await authExpect(
-        nav.getByRole('link', { name: /Get Started/i }),
-      ).toBeHidden();
+      await authExpect(nav.getByRole('link', { name: /Sign In/i })).toBeHidden();
+      await authExpect(nav.getByRole('link', { name: /Get Started/i })).toBeHidden();
 
       // User menu trigger button should be visible (the UserMenu component)
       // The user menu shows the user's avatar/icon and opens a dropdown
@@ -298,15 +271,9 @@ authTest.describe('Authenticated Navigation', () => {
       // Open the user menu and verify it contains expected links
       await userMenuTrigger.click();
 
-      await authExpect(
-        freeUserPage.getByRole('link', { name: /Account Settings/i }),
-      ).toBeVisible();
-      await authExpect(
-        freeUserPage.getByRole('link', { name: /Subscription/i }),
-      ).toBeVisible();
-      await authExpect(
-        freeUserPage.getByText(/Sign Out/i),
-      ).toBeVisible();
+      await authExpect(freeUserPage.getByRole('link', { name: /Account Settings/i })).toBeVisible();
+      await authExpect(freeUserPage.getByRole('link', { name: /Subscription/i })).toBeVisible();
+      await authExpect(freeUserPage.getByText(/Sign Out/i)).toBeVisible();
     },
   );
 });

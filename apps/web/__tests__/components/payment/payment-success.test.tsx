@@ -3,7 +3,12 @@ import { render, screen, act } from '@testing-library/react';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-import { mockLucideIcons, mockGlassCardFactory, mockButtonFactory, mockNextLinkFactory } from '../../__helpers__';
+import {
+  mockLucideIcons,
+  mockGlassCardFactory,
+  mockButtonFactory,
+  mockNextLinkFactory,
+} from '../../__helpers__';
 
 vi.mock('lucide-react', () => mockLucideIcons('CheckCircle2', 'ChevronRight', 'Loader2'));
 vi.mock('@/components/ui/glass-card', () => mockGlassCardFactory());
@@ -28,13 +33,10 @@ const mockStoreState: Record<string, unknown> = {
 };
 
 vi.mock('@/lib/stores/auth-store', () => ({
-  useAuthStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    {
-      getState: () => mockStoreState,
-      setState: vi.fn(),
-    },
-  ),
+  useAuthStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 vi.mock('@/lib/utils', () => ({

@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
-import { useRef } from "react";
-import { useFocusTrap } from "../../hooks/use-focus-trap";
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useRef } from 'react';
+import { useFocusTrap } from '../../hooks/use-focus-trap';
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
 /** Create a container div with focusable buttons and attach it to the DOM. */
 function createTestContainer(): HTMLDivElement {
-  const container = document.createElement("div");
+  const container = document.createElement('div');
   container.innerHTML = `
     <button id="btn-first">First</button>
     <button id="btn-second">Second</button>
@@ -23,14 +23,12 @@ function getButton(id: string): HTMLElement {
 
 /** Dispatch a keydown event on the document. */
 function pressKey(key: string, shiftKey = false) {
-  document.dispatchEvent(
-    new KeyboardEvent("keydown", { key, shiftKey, bubbles: true }),
-  );
+  document.dispatchEvent(new KeyboardEvent('keydown', { key, shiftKey, bubbles: true }));
 }
 
 // ── Tests ────────────────────────────────────────────────────────────────
 
-describe("useFocusTrap", () => {
+describe('useFocusTrap', () => {
   let container: HTMLDivElement;
 
   beforeEach(() => {
@@ -43,7 +41,7 @@ describe("useFocusTrap", () => {
 
   // ── Tab wrapping ────────────────────────────────────────────────────
 
-  it("wraps focus from last to first focusable element on Tab", () => {
+  it('wraps focus from last to first focusable element on Tab', () => {
     const { unmount } = renderHook(() => {
       const ref = useRef<HTMLDivElement>(container);
       useFocusTrap(ref, true);
@@ -51,23 +49,23 @@ describe("useFocusTrap", () => {
     });
 
     // Focus the last button
-    const lastBtn = getButton("btn-last");
+    const lastBtn = getButton('btn-last');
     lastBtn.focus();
     expect(document.activeElement).toBe(lastBtn);
 
     // Press Tab (no shift) while last element is focused — should wrap to first
     act(() => {
-      pressKey("Tab", false);
+      pressKey('Tab', false);
     });
 
-    expect(document.activeElement).toBe(getButton("btn-first"));
+    expect(document.activeElement).toBe(getButton('btn-first'));
 
     unmount();
   });
 
   // ── Shift+Tab wrapping ──────────────────────────────────────────────
 
-  it("wraps focus from first to last focusable element on Shift+Tab", () => {
+  it('wraps focus from first to last focusable element on Shift+Tab', () => {
     const { unmount } = renderHook(() => {
       const ref = useRef<HTMLDivElement>(container);
       useFocusTrap(ref, true);
@@ -75,23 +73,23 @@ describe("useFocusTrap", () => {
     });
 
     // Focus the first button
-    const firstBtn = getButton("btn-first");
+    const firstBtn = getButton('btn-first');
     firstBtn.focus();
     expect(document.activeElement).toBe(firstBtn);
 
     // Press Shift+Tab while first element is focused — should wrap to last
     act(() => {
-      pressKey("Tab", true);
+      pressKey('Tab', true);
     });
 
-    expect(document.activeElement).toBe(getButton("btn-last"));
+    expect(document.activeElement).toBe(getButton('btn-last'));
 
     unmount();
   });
 
   // ── Escape key blocked when allowEscape=false ───────────────────────
 
-  it("blocks Escape key when allowEscape is false", () => {
+  it('blocks Escape key when allowEscape is false', () => {
     const { unmount } = renderHook(() => {
       const ref = useRef<HTMLDivElement>(container);
       useFocusTrap(ref, true, false);
@@ -102,13 +100,13 @@ describe("useFocusTrap", () => {
     const stopPropagationSpy = vi.fn();
 
     // Manually create and dispatch a KeyboardEvent, spy on preventDefault/stopPropagation
-    const event = new KeyboardEvent("keydown", {
-      key: "Escape",
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
       bubbles: true,
       cancelable: true,
     });
-    Object.defineProperty(event, "preventDefault", { value: preventDefaultSpy });
-    Object.defineProperty(event, "stopPropagation", { value: stopPropagationSpy });
+    Object.defineProperty(event, 'preventDefault', { value: preventDefaultSpy });
+    Object.defineProperty(event, 'stopPropagation', { value: stopPropagationSpy });
 
     act(() => {
       document.dispatchEvent(event);
@@ -122,7 +120,7 @@ describe("useFocusTrap", () => {
 
   // ── Escape key allowed when allowEscape=true ────────────────────────
 
-  it("allows Escape key when allowEscape is true (default)", () => {
+  it('allows Escape key when allowEscape is true (default)', () => {
     const { unmount } = renderHook(() => {
       const ref = useRef<HTMLDivElement>(container);
       useFocusTrap(ref, true, true);
@@ -132,13 +130,13 @@ describe("useFocusTrap", () => {
     const preventDefaultSpy = vi.fn();
     const stopPropagationSpy = vi.fn();
 
-    const event = new KeyboardEvent("keydown", {
-      key: "Escape",
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
       bubbles: true,
       cancelable: true,
     });
-    Object.defineProperty(event, "preventDefault", { value: preventDefaultSpy });
-    Object.defineProperty(event, "stopPropagation", { value: stopPropagationSpy });
+    Object.defineProperty(event, 'preventDefault', { value: preventDefaultSpy });
+    Object.defineProperty(event, 'stopPropagation', { value: stopPropagationSpy });
 
     act(() => {
       document.dispatchEvent(event);
@@ -153,11 +151,11 @@ describe("useFocusTrap", () => {
 
   // ── Focus restoration on deactivation ───────────────────────────────
 
-  it("restores focus to previously focused element on deactivation", () => {
+  it('restores focus to previously focused element on deactivation', () => {
     // Create an external button that was focused before the trap activated
-    const externalButton = document.createElement("button");
-    externalButton.id = "btn-external";
-    externalButton.textContent = "External";
+    const externalButton = document.createElement('button');
+    externalButton.id = 'btn-external';
+    externalButton.textContent = 'External';
     document.body.appendChild(externalButton);
     externalButton.focus();
     expect(document.activeElement).toBe(externalButton);
@@ -184,7 +182,7 @@ describe("useFocusTrap", () => {
 
   // ── Does not trap when inactive ─────────────────────────────────────
 
-  it("does not trap focus when isActive is false", () => {
+  it('does not trap focus when isActive is false', () => {
     const { unmount } = renderHook(() => {
       const ref = useRef<HTMLDivElement>(container);
       useFocusTrap(ref, false);
@@ -192,7 +190,7 @@ describe("useFocusTrap", () => {
     });
 
     // Focus the last button
-    const lastBtn = getButton("btn-last");
+    const lastBtn = getButton('btn-last');
     lastBtn.focus();
     expect(document.activeElement).toBe(lastBtn);
 
@@ -200,7 +198,7 @@ describe("useFocusTrap", () => {
     // Since the hook is inactive, the handler was never registered,
     // so the browser's default behavior applies (nothing happens in jsdom).
     act(() => {
-      pressKey("Tab", false);
+      pressKey('Tab', false);
     });
 
     // activeElement should still be lastBtn (jsdom doesn't move focus on Tab naturally)

@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { m } from "motion/react";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { staggerContainer, staggerItem } from "@/lib/animation-variants";
-import { GlassCard } from "@/components/ui/glass-card";
-import { ProfileSection } from "./profile-section";
-import { SecuritySection } from "./security-section";
-import { SessionsSection } from "./sessions-section";
-import { DataExportCard } from "@/components/account/data-export-card";
-import { ConsentManagement } from "@/components/account/consent-management";
-import { DangerZone } from "./danger-zone";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { m } from 'motion/react';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { staggerContainer, staggerItem } from '@/lib/animation-variants';
+import { GlassCard } from '@/components/ui/glass-card';
+import { ProfileSection } from './profile-section';
+import { SecuritySection } from './security-section';
+import { SessionsSection } from './sessions-section';
+import { DataExportCard } from '@/components/account/data-export-card';
+import { ConsentManagement } from '@/components/account/consent-management';
+import { DangerZone } from './danger-zone';
 
 function AccountSkeleton() {
   return (
     <>
       <div className="mb-8 text-center">
-        <div className="mx-auto h-9 w-56 animate-pulse rounded-xl bg-(--bg-elevated)" />
-        <div className="mx-auto mt-3 h-5 w-80 animate-pulse rounded-lg bg-(--bg-elevated)" />
+        <div className="bg-(--bg-elevated) mx-auto h-9 w-56 animate-pulse rounded-xl" />
+        <div className="bg-(--bg-elevated) mx-auto mt-3 h-5 w-80 animate-pulse rounded-lg" />
       </div>
       <div className="mx-auto max-w-2xl space-y-6">
         {[1, 2, 3, 4].map((i) => (
           <GlassCard key={i} variant="medium" hover="none" className="p-7">
             <div className="mb-5 flex items-center gap-3">
-              <div className="h-5 w-5 animate-pulse rounded-sm bg-(--bg-elevated)" />
-              <div className="h-5 w-24 animate-pulse rounded-lg bg-(--bg-elevated)" />
+              <div className="bg-(--bg-elevated) h-5 w-5 animate-pulse rounded-sm" />
+              <div className="bg-(--bg-elevated) h-5 w-24 animate-pulse rounded-lg" />
             </div>
             <div className="space-y-3">
-              <div className="h-16 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
-              <div className="h-10 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
+              <div className="bg-(--bg-elevated) h-16 w-full animate-pulse rounded-xl" />
+              <div className="bg-(--bg-elevated) h-10 w-full animate-pulse rounded-xl" />
               {i <= 2 && (
-                <div className="h-10 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
+                <div className="bg-(--bg-elevated) h-10 w-full animate-pulse rounded-xl" />
               )}
             </div>
           </GlassCard>
@@ -50,7 +50,7 @@ export function AccountContent() {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login?returnUrl=/account");
+      router.replace('/login?returnUrl=/account');
     }
   }, [isAuthenticated, router]);
 
@@ -76,7 +76,7 @@ export function AccountContent() {
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Account Settings
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
+        <p className="text-(--text-muted) mx-auto mt-3 max-w-xl">
           Manage your profile, security, and session settings
         </p>
       </div>

@@ -1,19 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { m, AnimatePresence } from "motion/react";
-import { ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLegalStore } from "@/lib/stores/legal-store";
-import { useFocusTrap } from "@/hooks/use-focus-trap";
-import { useModalManager } from "@/hooks/use-modal-manager";
-import { overlayVariants, modalVariants } from "@/lib/animations/modal-variants";
-import { AGE_VERIFIED_KEY, UNDER_18_KEY } from "@/lib/constants/legal";
-import {
-  safeLocalStorageGet,
-  safeLocalStorageSet,
-} from "@/lib/utils/safe-storage";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { m, AnimatePresence } from 'motion/react';
+import { ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLegalStore } from '@/lib/stores/legal-store';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
+import { useModalManager } from '@/hooks/use-modal-manager';
+import { overlayVariants, modalVariants } from '@/lib/animations/modal-variants';
+import { AGE_VERIFIED_KEY, UNDER_18_KEY } from '@/lib/constants/legal';
+import { safeLocalStorageGet, safeLocalStorageSet } from '@/lib/utils/safe-storage';
 
 // ── Under-18 expiry (6 months = 182 days) ────────────────────────────────
 
@@ -34,9 +31,7 @@ interface AgeVerificationModalProps {
   onVerified?: () => void;
 }
 
-export function AgeVerificationModal({
-  onVerified,
-}: AgeVerificationModalProps) {
+export function AgeVerificationModal({ onVerified }: AgeVerificationModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -50,10 +45,10 @@ export function AgeVerificationModal({
   // Also redirect immediately if the user previously indicated under-18 (within 6 months)
   useEffect(() => {
     if (isUnder18Blocked()) {
-      router.push("/");
+      router.push('/');
       return;
     }
-    if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== "true" && !ageVerified) {
+    if (safeLocalStorageGet(AGE_VERIFIED_KEY) !== 'true' && !ageVerified) {
       // Save the currently focused element so we can restore focus on close
       triggerRef.current = document.activeElement;
       setIsOpen(true);
@@ -64,7 +59,7 @@ export function AgeVerificationModal({
   useEffect(() => {
     if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -73,11 +68,11 @@ export function AgeVerificationModal({
   // Register with modal manager for aria-hidden coordination
   useEffect(() => {
     if (isOpen) {
-      useModalManager.getState().openModal("age-verification");
+      useModalManager.getState().openModal('age-verification');
     } else {
-      useModalManager.getState().closeModal("age-verification");
+      useModalManager.getState().closeModal('age-verification');
     }
-    return () => useModalManager.getState().closeModal("age-verification");
+    return () => useModalManager.getState().closeModal('age-verification');
   }, [isOpen]);
 
   // Focus trap — Escape does NOT close (using extracted hook)
@@ -121,14 +116,14 @@ export function AgeVerificationModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
+          className="z-60 fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
           <m.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="w-full max-w-md mx-4"
+            className="mx-4 w-full max-w-md"
           >
             <div
               ref={modalRef}
@@ -137,41 +132,38 @@ export function AgeVerificationModal({
               aria-labelledby="age-verify-title"
               aria-describedby="age-verify-description"
               tabIndex={-1}
-              className="outline-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+              className="outline-hidden border-(--glass-border) bg-(--bg-glass) rounded-2xl border p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* Icon */}
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                <ShieldCheck
-                  className="h-8 w-8 text-(--accent-teal)"
-                  aria-hidden="true"
-                />
+                <ShieldCheck className="text-(--accent-teal) h-8 w-8" aria-hidden="true" />
               </div>
 
               <h2
                 id="age-verify-title"
-                className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
+                className="font-heading text-(--text-heading) mb-2 text-center text-xl font-bold"
               >
                 Age Verification Required
               </h2>
 
               <p
                 id="age-verify-description"
-                className="mb-6 text-center text-sm text-(--text-muted)"
+                className="text-(--text-muted) mb-6 text-center text-sm"
               >
-                Mergenix provides genetic health information. You must be at
-                least 18 years old to use this service.
+                Mergenix provides genetic health information. You must be at least 18 years old to
+                use this service.
               </p>
 
               {/* Checkbox */}
-              <label className="mb-6 flex cursor-pointer items-start gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
+              <label className="border-(--border-subtle) bg-(--bg-elevated) mb-6 flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors hover:border-[rgba(6,214,160,0.2)]">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
+                  className="border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal) mt-0.5 h-4 w-4 rounded-sm"
                   aria-label="I confirm that I am 18 years of age or older"
                 />
-                <span className="text-sm text-(--text-body)">
+                <span className="text-(--text-body) text-sm">
                   I confirm that I am 18 years of age or older
                 </span>
               </label>
@@ -193,17 +185,17 @@ export function AgeVerificationModal({
                   type="button"
                   onClick={() => {
                     safeLocalStorageSet(UNDER_18_KEY, Date.now().toString());
-                    router.push("/");
+                    router.push('/');
                   }}
-                  className="text-sm text-(--text-muted) underline hover:text-(--text-primary)"
+                  className="text-(--text-muted) hover:text-(--text-primary) text-sm underline"
                 >
                   I am under 18
                 </button>
               </p>
 
-              <p className="mt-3 text-center text-xs text-(--text-dim)">
-                This verification is required by applicable regulations
-                governing genetic health information services.
+              <p className="text-(--text-dim) mt-3 text-center text-xs">
+                This verification is required by applicable regulations governing genetic health
+                information services.
               </p>
             </div>
           </m.div>

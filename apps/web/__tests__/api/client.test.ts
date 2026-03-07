@@ -138,7 +138,13 @@ describe('HTTP client', () => {
       });
 
       mockFetch
-        .mockResolvedValueOnce(mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'))
+        .mockResolvedValueOnce(
+          mockResponse(
+            { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+            401,
+            'Unauthorized',
+          ),
+        )
         .mockResolvedValueOnce(mockResponse({ data: 'success' }));
 
       const result = await clientModule.get('/protected');
@@ -152,7 +158,11 @@ describe('HTTP client', () => {
       clientModule.setUnauthorizedHandler(async () => false);
 
       mockFetch.mockResolvedValue(
-        mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+        mockResponse(
+          { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+          401,
+          'Unauthorized',
+        ),
       );
 
       await expect(clientModule.get('/protected')).rejects.toThrow();
@@ -162,12 +172,14 @@ describe('HTTP client', () => {
       clientModule.setUnauthorizedHandler(async () => true);
 
       mockFetch.mockResolvedValue(
-        mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+        mockResponse(
+          { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+          401,
+          'Unauthorized',
+        ),
       );
 
-      await expect(
-        clientModule.post('/auth/login', {}, { skipAuth: true }),
-      ).rejects.toThrow();
+      await expect(clientModule.post('/auth/login', {}, { skipAuth: true })).rejects.toThrow();
 
       // Should only call fetch once (no retry)
       expect(mockFetch).toHaveBeenCalledTimes(1);
@@ -254,9 +266,7 @@ describe('HTTP client', () => {
     });
 
     it('parses plain string detail', async () => {
-      mockFetch.mockResolvedValue(
-        mockResponse({ detail: 'Not found' }, 404),
-      );
+      mockFetch.mockResolvedValue(mockResponse({ detail: 'Not found' }, 404));
 
       try {
         await clientModule.get('/missing');
@@ -454,13 +464,25 @@ describe('HTTP client', () => {
       //   calls 3,4,5 → 200 (retried attempts after refresh)
       mockFetch
         .mockResolvedValueOnce(
-          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+          mockResponse(
+            { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+            401,
+            'Unauthorized',
+          ),
         )
         .mockResolvedValueOnce(
-          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+          mockResponse(
+            { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+            401,
+            'Unauthorized',
+          ),
         )
         .mockResolvedValueOnce(
-          mockResponse({ detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } }, 401, 'Unauthorized'),
+          mockResponse(
+            { detail: { error: 'Unauthorized', code: 'UNAUTHORIZED' } },
+            401,
+            'Unauthorized',
+          ),
         )
         .mockResolvedValueOnce(mockResponse({ data: 'result-1' }))
         .mockResolvedValueOnce(mockResponse({ data: 'result-2' }))

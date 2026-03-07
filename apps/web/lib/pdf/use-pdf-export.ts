@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import type { FullAnalysisResult } from "@mergenix/shared-types";
-import { buildPdfDocument } from "@/lib/pdf/pdf-document-builder";
+import { useState, useCallback, useRef, useEffect } from 'react';
+import type { FullAnalysisResult } from '@mergenix/shared-types';
+import { buildPdfDocument } from '@/lib/pdf/pdf-document-builder';
 
 interface PdfExportState {
   isGenerating: boolean;
@@ -42,7 +42,7 @@ export function usePdfExport(): PdfExportState {
     // Low-memory mobile fallback: if the device reports < 2 GB of memory,
     // skip pdfmake (which is heavy) and fall back to the browser print dialog.
     const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
-    if (typeof deviceMemory === "number" && deviceMemory < 2) {
+    if (typeof deviceMemory === 'number' && deviceMemory < 2) {
       window.print();
       return;
     }
@@ -66,8 +66,8 @@ export function usePdfExport(): PdfExportState {
       setProgress(30);
 
       // Import pdfmake
-      const pdfMakeModule = await import("pdfmake/build/pdfmake");
-      const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
+      const pdfMakeModule = await import('pdfmake/build/pdfmake');
+      const pdfFontsModule = await import('pdfmake/build/vfs_fonts');
       setProgress(50);
 
       // Set up virtual file system for fonts
@@ -75,7 +75,9 @@ export function usePdfExport(): PdfExportState {
       const pdfMake = pdfMakeModule.default;
       const pdfFonts = pdfFontsModule.default as Record<string, unknown>;
       if (pdfFonts?.pdfMake) {
-        (pdfMake as Record<string, unknown>).vfs = (pdfFonts.pdfMake as Record<string, unknown>).vfs;
+        (pdfMake as Record<string, unknown>).vfs = (
+          pdfFonts.pdfMake as Record<string, unknown>
+        ).vfs;
       }
 
       setProgress(70);
@@ -104,8 +106,7 @@ export function usePdfExport(): PdfExportState {
       setProgress(100);
       setIsGenerating(false);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "PDF generation failed";
+      const message = err instanceof Error ? err.message : 'PDF generation failed';
       setError(message);
       setIsGenerating(false);
       setBlobUrl(null);

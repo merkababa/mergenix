@@ -7,7 +7,11 @@
  */
 
 import type { Tier } from './genetics';
-import { CARRIER_PANEL_COUNT, CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from '@mergenix/genetics-data';
+import {
+  CARRIER_PANEL_COUNT,
+  CARRIER_PANEL_COUNT_DISPLAY,
+  TRAIT_COUNT_DISPLAY,
+} from '@mergenix/genetics-data';
 
 /**
  * Payment processing status.

@@ -11,8 +11,17 @@ describe('Trait Data Validation', () => {
 
     it('every trait has all required fields', () => {
       const requiredFields: (keyof TraitSnpEntry)[] = [
-        'rsid', 'trait', 'gene', 'chromosome', 'inheritance',
-        'alleles', 'phenotype_map', 'description', 'confidence', 'sources', 'notes'
+        'rsid',
+        'trait',
+        'gene',
+        'chromosome',
+        'inheritance',
+        'alleles',
+        'phenotype_map',
+        'description',
+        'confidence',
+        'sources',
+        'notes',
       ];
       for (const trait of traitSnps) {
         for (const field of requiredFields) {
@@ -24,7 +33,9 @@ describe('Trait Data Validation', () => {
     it('every trait has a valid category', () => {
       const validCategories = TRAIT_CATEGORIES as readonly string[];
       for (const trait of traitSnps) {
-        expect(validCategories, `${trait.rsid} has invalid category: ${trait.category}`).toContain(trait.category);
+        expect(validCategories, `${trait.rsid} has invalid category: ${trait.category}`).toContain(
+          trait.category,
+        );
       }
     });
   });
@@ -38,7 +49,7 @@ describe('Trait Data Validation', () => {
     });
 
     it('no duplicate rsIDs', () => {
-      const rsids = traitSnps.map(t => t.rsid);
+      const rsids = traitSnps.map((t) => t.rsid);
       const unique = new Set(rsids);
       expect(rsids.length).toBe(unique.size);
     });
@@ -88,7 +99,7 @@ describe('Trait Data Validation', () => {
         ]);
         // Normalize actual keys the same way
         const actualGenotypes = new Set(
-          Object.keys(trait.phenotype_map).map(k => k.split('').sort().join(''))
+          Object.keys(trait.phenotype_map).map((k) => k.split('').sort().join('')),
         );
         expect(actualGenotypes, `${trait.rsid} genotypes mismatch`).toEqual(expectedGenotypes);
       }
@@ -99,7 +110,10 @@ describe('Trait Data Validation', () => {
         for (const [genotype, entry] of Object.entries(trait.phenotype_map)) {
           expect(entry.phenotype, `${trait.rsid}/${genotype} missing phenotype`).toBeTruthy();
           expect(entry.description, `${trait.rsid}/${genotype} missing description`).toBeTruthy();
-          expect(['high', 'medium', 'low'], `${trait.rsid}/${genotype} invalid probability`).toContain(entry.probability);
+          expect(
+            ['high', 'medium', 'low'],
+            `${trait.rsid}/${genotype} invalid probability`,
+          ).toContain(entry.probability);
         }
       }
     });
@@ -146,9 +160,15 @@ describe('Trait Data Validation', () => {
   // ---- Chromosome ----
   describe('chromosome', () => {
     it('every trait has valid chromosome', () => {
-      const validChromosomes = Array.from({ length: 22 }, (_, i) => String(i + 1)).concat(['X', 'Y', 'MT']);
+      const validChromosomes = Array.from({ length: 22 }, (_, i) => String(i + 1)).concat([
+        'X',
+        'Y',
+        'MT',
+      ]);
       for (const trait of traitSnps) {
-        expect(validChromosomes, `${trait.rsid}: chr ${trait.chromosome}`).toContain(trait.chromosome);
+        expect(validChromosomes, `${trait.rsid}: chr ${trait.chromosome}`).toContain(
+          trait.chromosome,
+        );
       }
     });
   });
@@ -156,7 +176,7 @@ describe('Trait Data Validation', () => {
   // ---- Category coverage ----
   describe('category coverage', () => {
     it('traits span at least 10 different categories', () => {
-      const categories = new Set(traitSnps.map(t => t.category));
+      const categories = new Set(traitSnps.map((t) => t.category));
       expect(categories.size).toBeGreaterThanOrEqual(10);
     });
   });

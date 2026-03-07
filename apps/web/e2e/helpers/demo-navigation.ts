@@ -21,9 +21,9 @@ export async function loadDemoResults(page: Page): Promise<void> {
   await demoButton.click();
 
   // Wait for the results dashboard heading to confirm render
-  await expect(
-    page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-  ).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+    timeout: 20_000,
+  });
 }
 
 /**

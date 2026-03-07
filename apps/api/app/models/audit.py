@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import JSON, ForeignKey, Index, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -75,7 +76,7 @@ class AuditLog(Base):
             "tier_change | failed_login | 2fa_enable | 2fa_disable"
         ),
     )
-    metadata_json: Mapped[dict | None] = mapped_column(
+    metadata_json: Mapped[dict[str, Any] | None] = mapped_column(
         JSON,
         nullable=True,
     )
@@ -196,7 +197,4 @@ class EmailVerification(Base):
     )
 
     def __repr__(self) -> str:
-        return (
-            f"<EmailVerification id={self.id} user_id={self.user_id} "
-            f"verified={self.verified_at is not None}>"
-        )
+        return f"<EmailVerification id={self.id} user_id={self.user_id} verified={self.verified_at is not None}>"

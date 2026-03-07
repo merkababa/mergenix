@@ -128,11 +128,7 @@ export class RegisterPage {
   }
 
   /** Complete the full registration flow. */
-  async register(
-    name: string,
-    email: string,
-    password: string,
-  ): Promise<void> {
+  async register(name: string, email: string, password: string): Promise<void> {
     await this.fillName(name);
     await this.fillEmail(email);
     await this.fillPassword(password);

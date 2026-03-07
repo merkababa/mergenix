@@ -206,10 +206,19 @@ describe('ProgressReporter', () => {
 
   it('STAGE_DISPLAY_NAMES should cover all 13 AnalysisStage values', () => {
     const expectedStages = [
-      'initializing', 'decompressing', 'parsing', 'build_detection',
-      'strand_harmonization', 'liftover', 'carrier_analysis', 'trait_prediction',
-      'pharmacogenomics', 'polygenic_risk', 'ethnicity_adjustment',
-      'counseling_triage', 'complete',
+      'initializing',
+      'decompressing',
+      'parsing',
+      'build_detection',
+      'strand_harmonization',
+      'liftover',
+      'carrier_analysis',
+      'trait_prediction',
+      'pharmacogenomics',
+      'polygenic_risk',
+      'ethnicity_adjustment',
+      'counseling_triage',
+      'complete',
     ];
     for (const stage of expectedStages) {
       expect(STAGE_DISPLAY_NAMES).toHaveProperty(stage);

@@ -78,7 +78,7 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Cystic Fibrosis',
     ethnicity: 'European',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.04,
     source: 'ACMG 2017',
   },
@@ -129,14 +129,14 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Sickle Cell Disease',
     ethnicity: 'Hispanic',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.014,
     source: 'ACOG 2017',
   },
   {
     condition: 'Sickle Cell Disease',
     ethnicity: 'Unknown/Mixed',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.083,
     source: 'ACOG 2017 (conservative)',
   },
@@ -152,14 +152,14 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Tay-Sachs Disease',
     ethnicity: 'French Canadian',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.033,
     source: 'ACMG 2017',
   },
   {
     condition: 'Tay-Sachs Disease',
     ethnicity: 'Unknown/Mixed',
-    detectionRate: 0.80,
+    detectionRate: 0.8,
     priorCarrierFreq: 0.003,
     source: 'ACMG 2017 (conservative)',
   },
@@ -182,7 +182,7 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Spinal Muscular Atrophy',
     ethnicity: 'Ashkenazi Jewish',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.02,
     source: 'ACMG 2017',
   },
@@ -221,7 +221,7 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
   {
     condition: 'Canavan Disease',
     ethnicity: 'Unknown/Mixed',
-    detectionRate: 0.90,
+    detectionRate: 0.9,
     priorCarrierFreq: 0.005,
     source: 'ACMG 2017 (conservative)',
   },
@@ -253,19 +253,12 @@ export const COMMON_DETECTION_RATES: DetectionRateEntry[] = [
  * // No detection capability
  * calculateResidualRisk(0.0, 0.04) // 0.04 (unchanged from prior)
  */
-export function calculateResidualRisk(
-  detectionRate: number,
-  priorCarrierFreq: number,
-): number {
+export function calculateResidualRisk(detectionRate: number, priorCarrierFreq: number): number {
   if (detectionRate < 0 || detectionRate > 1) {
-    throw new Error(
-      `detectionRate must be between 0 and 1, got ${detectionRate}`,
-    );
+    throw new Error(`detectionRate must be between 0 and 1, got ${detectionRate}`);
   }
   if (priorCarrierFreq < 0 || priorCarrierFreq > 1) {
-    throw new Error(
-      `priorCarrierFreq must be between 0 and 1, got ${priorCarrierFreq}`,
-    );
+    throw new Error(`priorCarrierFreq must be between 0 and 1, got ${priorCarrierFreq}`);
   }
 
   // Edge case: 100% detection rate means zero residual risk
@@ -322,8 +315,7 @@ export function getResidualRisk(
   // First, try exact ethnicity match
   let entry = detectionRates.find(
     (e) =>
-      e.condition.toLowerCase() === conditionLower &&
-      e.ethnicity.toLowerCase() === ethnicityLower,
+      e.condition.toLowerCase() === conditionLower && e.ethnicity.toLowerCase() === ethnicityLower,
   );
 
   // If not found, fall back to "Unknown/Mixed"
@@ -340,16 +332,10 @@ export function getResidualRisk(
     return null;
   }
 
-  const residualRisk = calculateResidualRisk(
-    entry.detectionRate,
-    entry.priorCarrierFreq,
-  );
+  const residualRisk = calculateResidualRisk(entry.detectionRate, entry.priorCarrierFreq);
 
   // Risk reduction: how much the test reduced carrier probability
-  const riskReduction =
-    entry.priorCarrierFreq > 0
-      ? 1 - residualRisk / entry.priorCarrierFreq
-      : 0;
+  const riskReduction = entry.priorCarrierFreq > 0 ? 1 - residualRisk / entry.priorCarrierFreq : 0;
 
   const interpretation = `~${formatResidualRisk(residualRisk)} residual carrier risk`;
 

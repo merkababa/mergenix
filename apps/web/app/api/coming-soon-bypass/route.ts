@@ -1,9 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
-import {
-  deriveBypassToken,
-  timingSafeEqual,
-  BYPASS_COOKIE,
-} from "@/lib/coming-soon-crypto";
+import { NextResponse, type NextRequest } from 'next/server';
+import { deriveBypassToken, timingSafeEqual, BYPASS_COOKIE } from '@/lib/coming-soon-crypto';
 
 // ── In-memory rate limiter ─────────────────────────────────────────────────
 // Simple Map-based limiter — acceptable for Edge single-instance / cold-start
@@ -55,11 +51,11 @@ function checkRateLimit(ip: string): boolean {
  */
 async function hashIp(ip: string): Promise<string> {
   const encoded = new TextEncoder().encode(ip);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("")
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
     .slice(0, 16);
 }
 
@@ -67,26 +63,23 @@ async function hashIp(ip: string): Promise<string> {
 
 export async function POST(request: NextRequest) {
   // ── CSRF: validate Origin matches the expected host ──────────────────────
-  const origin = request.headers.get("origin");
+  const origin = request.headers.get('origin');
   if (origin !== null && origin !== request.nextUrl.origin) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   // ── Rate limiting ─────────────────────────────────────────────────────────
   const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-    request.headers.get("x-real-ip") ??
-    "unknown";
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown';
 
   if (!checkRateLimit(ip)) {
     const ipHash = await hashIp(ip);
     console.warn(
       `[coming-soon-bypass] Rate limit exceeded from IP hash: ${ipHash} at ${new Date().toISOString()}`,
     );
-    return NextResponse.json(
-      { error: "Too many attempts. Try again later." },
-      { status: 429 },
-    );
+    return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
   }
 
   // ── Parse body ────────────────────────────────────────────────────────────
@@ -94,25 +87,25 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
   }
 
   if (
-    typeof body !== "object" ||
+    typeof body !== 'object' ||
     body === null ||
-    !("password" in body) ||
-    typeof (body as Record<string, unknown>).password !== "string"
+    !('password' in body) ||
+    typeof (body as Record<string, unknown>).password !== 'string'
   ) {
-    return NextResponse.json({ error: "Missing password field" }, { status: 400 });
+    return NextResponse.json({ error: 'Missing password field' }, { status: 400 });
   }
 
   const submitted = (body as { password: string }).password;
 
   if (submitted.length > 256) {
-    return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid password' }, { status: 400 });
   }
 
-  const secret = process.env.SITE_BYPASS_SECRET ?? "";
+  const secret = process.env.SITE_BYPASS_SECRET ?? '';
 
   // ── Validate password (constant-time) ─────────────────────────────────────
   if (!secret || !(await timingSafeEqual(submitted, secret, secret))) {
@@ -120,17 +113,17 @@ export async function POST(request: NextRequest) {
     console.warn(
       `[coming-soon-bypass] Failed attempt from IP hash: ${ipHash} at ${new Date().toISOString()}`,
     );
-    return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+    return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
   // ── Derive HMAC token — raw secret never touches the cookie ──────────────
   const token = await deriveBypassToken(secret);
 
   // ── Build Set-Cookie header manually to add Secure in production ─────────
-  const isProduction = process.env.NODE_ENV === "production";
-  const cookieValue = `${BYPASS_COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${isProduction ? "; Secure" : ""}`;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieValue = `${BYPASS_COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${isProduction ? '; Secure' : ''}`;
 
   const response = NextResponse.json({ ok: true }, { status: 200 });
-  response.headers.set("Set-Cookie", cookieValue);
+  response.headers.set('Set-Cookie', cookieValue);
   return response;
 }

@@ -277,7 +277,9 @@ describe('useGeneticsWorker', () => {
     const fileB = createMockFile('b.txt', 100);
 
     // Make File.text() reject
-    (fileA as unknown as { text: ReturnType<typeof vi.fn> }).text = vi.fn().mockRejectedValue(new Error('Disk read error'));
+    (fileA as unknown as { text: ReturnType<typeof vi.fn> }).text = vi
+      .fn()
+      .mockRejectedValue(new Error('Disk read error'));
 
     await act(async () => {
       await result.current.startAnalysis(fileA, fileB);
@@ -318,9 +320,7 @@ describe('useGeneticsWorker', () => {
     // A second postMessage with type 'analyze' should have been sent
     const newCalls = lastWorkerInstance!.postMessage.mock.calls.slice(parseCallCount);
     expect(newCalls.length).toBe(1);
-    expect(newCalls[0][0]).toEqual(
-      expect.objectContaining({ type: 'analyze' }),
-    );
+    expect(newCalls[0][0]).toEqual(expect.objectContaining({ type: 'analyze' }));
 
     // currentStep should be carrier_analysis (first analysis stage)
     expect(useAnalysisStore.getState().currentStep).toBe('carrier_analysis');
@@ -339,7 +339,12 @@ describe('useGeneticsWorker', () => {
     // Simulate trait_prediction progress
     act(() => {
       const event = new MessageEvent('message', {
-        data: { type: 'analysis_progress', stage: 'trait_prediction', progress: 60, displayName: 'Trait Prediction' },
+        data: {
+          type: 'analysis_progress',
+          stage: 'trait_prediction',
+          progress: 60,
+          displayName: 'Trait Prediction',
+        },
       });
       lastWorkerInstance!.onmessage?.(event);
     });
@@ -353,7 +358,12 @@ describe('useGeneticsWorker', () => {
     // Simulate "complete" stage — should NOT update currentStep
     act(() => {
       const event = new MessageEvent('message', {
-        data: { type: 'analysis_progress', stage: 'complete', progress: 100, displayName: 'Complete' },
+        data: {
+          type: 'analysis_progress',
+          stage: 'complete',
+          progress: 100,
+          displayName: 'Complete',
+        },
       });
       lastWorkerInstance!.onmessage?.(event);
     });

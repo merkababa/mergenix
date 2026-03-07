@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useCallback, useId, useRef, useState } from "react";
-import { AnimatePresence, m } from "motion/react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { useFocusTrap } from "@/hooks/use-focus-trap";
-import { useModalManager } from "@/hooks/use-modal-manager";
-import { modalVariants, overlayVariants } from "@/lib/animations/modal-variants";
+import { useCallback, useId, useRef, useState } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
+import { useModalManager } from '@/hooks/use-modal-manager';
+import { modalVariants, overlayVariants } from '@/lib/animations/modal-variants';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type ContentCategory = "carrier" | "prs" | "pgx";
-type TierLevel = "free" | "premium" | "pro";
+type ContentCategory = 'carrier' | 'prs' | 'pgx';
+type TierLevel = 'free' | 'premium' | 'pro';
 
 export interface SensitiveContentGuardProps {
   /** Content to protect behind the guard. */
@@ -23,7 +23,7 @@ export interface SensitiveContentGuardProps {
   /** The user's current subscription tier. */
   tier: TierLevel;
   /** The minimum tier required to view this content. */
-  requiredTier: "premium" | "pro";
+  requiredTier: 'premium' | 'pro';
   /** Callback fired when the user clicks the upgrade CTA. */
   onUpgrade?: () => void;
 }
@@ -43,17 +43,17 @@ const TIER_RANK: Record<TierLevel, number> = {
 };
 
 const CATEGORY_LABELS: Record<ContentCategory, string> = {
-  carrier: "Carrier Screening",
-  prs: "Polygenic Risk Scores",
-  pgx: "Pharmacogenomics",
+  carrier: 'Carrier Screening',
+  prs: 'Polygenic Risk Scores',
+  pgx: 'Pharmacogenomics',
 };
 
-const TIER_DISPLAY_NAMES: Record<"premium" | "pro", string> = {
-  premium: "Premium",
-  pro: "Pro",
+const TIER_DISPLAY_NAMES: Record<'premium' | 'pro', string> = {
+  premium: 'Premium',
+  pro: 'Pro',
 };
 
-const AD_WARNING_MODAL_ID = "sensitive-content-ad-warning";
+const AD_WARNING_MODAL_ID = 'sensitive-content-ad-warning';
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -102,7 +102,7 @@ export function SensitiveContentGuard({
 
   const handleAdKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         handleAdGoBack();
       }
     },
@@ -113,30 +113,25 @@ export function SensitiveContentGuard({
 
   if (!hasSufficientTier) {
     return (
-      <GlassCard
-        variant="medium"
-        hover="none"
-        className="relative p-8"
-      >
+      <GlassCard variant="medium" hover="none" className="relative p-8">
         {/* Decorative blurred placeholder — NOT the real content */}
         <div
           className="pointer-events-none select-none"
-          style={{ filter: "blur(8px)" }}
+          style={{ filter: 'blur(8px)' }}
           aria-hidden="true"
         >
           <div className="space-y-3">
-            <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
-            <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
-            <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
-            <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="bg-(--text-muted) h-4 w-3/4 rounded-sm opacity-20" />
+            <div className="bg-(--text-muted) h-4 w-1/2 rounded-sm opacity-20" />
+            <div className="bg-(--text-muted) h-4 w-5/6 rounded-sm opacity-20" />
+            <div className="bg-(--text-muted) h-4 w-2/3 rounded-sm opacity-20" />
           </div>
         </div>
 
         {/* Upgrade overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-glass bg-[rgba(5,8,16,0.7)] p-6 text-center">
-          <p className="text-sm font-medium text-(--text-body)">
-            {CATEGORY_LABELS[category]} results require{" "}
-            {TIER_DISPLAY_NAMES[requiredTier]}
+        <div className="rounded-glass absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[rgba(5,8,16,0.7)] p-6 text-center">
+          <p className="text-(--text-body) text-sm font-medium">
+            {CATEGORY_LABELS[category]} results require {TIER_DISPLAY_NAMES[requiredTier]}
           </p>
           <Button
             variant="primary"
@@ -158,22 +153,18 @@ export function SensitiveContentGuard({
       <div className="relative">
         {!isRevealed ? (
           // Blurred state: real content is NOT in the DOM
-          <GlassCard
-            variant="medium"
-            hover="none"
-            className="relative p-8"
-          >
+          <GlassCard variant="medium" hover="none" className="relative p-8">
             {/* Decorative blurred placeholder */}
             <div
               className="pointer-events-none select-none"
-              style={{ filter: "blur(8px)" }}
+              style={{ filter: 'blur(8px)' }}
               aria-hidden="true"
             >
               <div className="space-y-3">
-                <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
-                <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
-                <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
-                <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="bg-(--text-muted) h-4 w-3/4 rounded-sm opacity-20" />
+                <div className="bg-(--text-muted) h-4 w-1/2 rounded-sm opacity-20" />
+                <div className="bg-(--text-muted) h-4 w-5/6 rounded-sm opacity-20" />
+                <div className="bg-(--text-muted) h-4 w-2/3 rounded-sm opacity-20" />
               </div>
             </div>
 
@@ -194,11 +185,7 @@ export function SensitiveContentGuard({
           </GlassCard>
         ) : (
           // Revealed state: actual content is rendered
-          <div
-            id={contentId}
-          >
-            {children}
-          </div>
+          <div id={contentId}>{children}</div>
         )}
       </div>
 
@@ -225,7 +212,7 @@ export function SensitiveContentGuard({
               aria-modal="true"
               aria-labelledby={`ad-warning-title-${uniqueId}`}
               aria-describedby={`ad-warning-desc-${uniqueId}`}
-              className="relative z-10 mx-4 max-w-md rounded-glass border border-[rgba(244,63,94,0.3)] bg-[rgba(12,18,32,0.95)] p-6 shadow-[0_4px_30px_rgba(244,63,94,0.15)]"
+              className="rounded-glass relative z-10 mx-4 max-w-md border border-[rgba(244,63,94,0.3)] bg-[rgba(12,18,32,0.95)] p-6 shadow-[0_4px_30px_rgba(244,63,94,0.15)]"
               variants={modalVariants}
               initial="hidden"
               animate="visible"
@@ -235,18 +222,18 @@ export function SensitiveContentGuard({
             >
               <h2
                 id={`ad-warning-title-${uniqueId}`}
-                className="mb-3 text-lg font-heading font-semibold text-(--text-primary)"
+                className="font-heading text-(--text-primary) mb-3 text-lg font-semibold"
               >
                 Important: Autosomal Dominant Condition
               </h2>
 
               <p
                 id={`ad-warning-desc-${uniqueId}`}
-                className="mb-6 text-sm leading-relaxed text-(--text-body)"
+                className="text-(--text-body) mb-6 text-sm leading-relaxed"
               >
-                This result relates to an autosomal dominant condition. It has
-                direct medical implications for you. We recommend reviewing with
-                a genetic counselor before viewing.
+                This result relates to an autosomal dominant condition. It has direct medical
+                implications for you. We recommend reviewing with a genetic counselor before
+                viewing.
               </p>
 
               <div className="flex gap-3">

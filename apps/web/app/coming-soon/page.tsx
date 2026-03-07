@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function ComingSoonPage() {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [shake, setShake] = useState(false);
@@ -13,13 +13,13 @@ export default function ComingSoonPage() {
     e.preventDefault();
     if (isLoading || isSuccess) return;
 
-    setError("");
+    setError('');
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/coming-soon-bypass", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/coming-soon-bypass', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       });
 
@@ -27,16 +27,16 @@ export default function ComingSoonPage() {
         setIsSuccess(true);
         setTimeout(() => {
           // Full reload to pick up bypass cookie in middleware
-          window.location.href = "/";
+          window.location.href = '/';
         }, 500);
       } else {
         const data = (await res.json()) as { error?: string };
-        setError(data.error ?? "Invalid access code");
+        setError(data.error ?? 'Invalid access code');
         // Trigger shake animation — reset is handled via onAnimationEnd
         setShake(true);
       }
     } catch {
-      setError("Network error — please try again");
+      setError('Network error — please try again');
       setShake(true);
     } finally {
       setIsLoading(false);
@@ -47,19 +47,16 @@ export default function ComingSoonPage() {
     <>
       {/* Full-viewport layout — no card, elements float in the gradient */}
       <main
-        className={`relative flex min-h-screen flex-col items-center justify-center px-4 py-16${isSuccess ? " page-fade-out" : ""}`}
+        className={`relative flex min-h-screen flex-col items-center justify-center px-4 py-16${isSuccess ? 'page-fade-out' : ''}`}
         aria-label="Coming soon page"
       >
         {/* DNA helix — delay 0s */}
-        <div
-          className="fade-slide-up mb-8 flex justify-center"
-          style={{ animationDelay: "0s" }}
-        >
+        <div className="fade-slide-up mb-8 flex justify-center" style={{ animationDelay: '0s' }}>
           <div className="relative flex items-center justify-center">
             {/* Teal halo */}
             <div
-              className="absolute rounded-full bg-accent-teal opacity-20"
-              style={{ width: "11rem", height: "11rem", filter: "blur(32px)" }}
+              className="bg-accent-teal absolute rounded-full opacity-20"
+              style={{ width: '11rem', height: '11rem', filter: 'blur(32px)' }}
               aria-hidden="true"
             />
             {/* DNA SVG — big, rotating, glowing */}
@@ -91,53 +88,41 @@ export default function ComingSoonPage() {
         </div>
 
         {/* Mergenix wordmark — delay 0.15s */}
-        <div
-          className="fade-slide-up mb-6 text-center"
-          style={{ animationDelay: "0.15s" }}
-        >
+        <div className="fade-slide-up mb-6 text-center" style={{ animationDelay: '0.15s' }}>
           <span
             className="brand-text font-heading text-5xl font-extrabold tracking-tight sm:text-7xl"
-            style={{ fontFamily: "var(--font-sora), sans-serif" }}
+            style={{ fontFamily: 'var(--font-sora), sans-serif' }}
           >
             Mergenix
           </span>
         </div>
 
         {/* "Coming Soon" headline — delay 0.3s */}
-        <div
-          className="fade-slide-up mb-4 text-center"
-          style={{ animationDelay: "0.3s" }}
-        >
+        <div className="fade-slide-up mb-4 text-center" style={{ animationDelay: '0.3s' }}>
           <h1
             className="headline-gradient text-3xl font-bold sm:text-4xl"
-            style={{ fontFamily: "var(--font-sora), sans-serif" }}
+            style={{ fontFamily: 'var(--font-sora), sans-serif' }}
           >
             Coming Soon
           </h1>
         </div>
 
         {/* Tagline — delay 0.4s */}
-        <div
-          className="fade-slide-up mb-10 text-center"
-          style={{ animationDelay: "0.4s" }}
-        >
+        <div className="fade-slide-up mb-10 text-center" style={{ animationDelay: '0.4s' }}>
           <p
             className="text-lg text-white/50 sm:text-xl"
-            style={{ fontFamily: "var(--font-lexend), sans-serif" }}
+            style={{ fontFamily: 'var(--font-lexend), sans-serif' }}
           >
             Explore Your Genetic Potential
           </p>
         </div>
 
         {/* Password input — delay 0.6s */}
-        <div
-          className="fade-slide-up w-full max-w-sm"
-          style={{ animationDelay: "0.6s" }}
-        >
+        <div className="fade-slide-up w-full max-w-sm" style={{ animationDelay: '0.6s' }}>
           <form onSubmit={handleSubmit} noValidate>
             {/* Input container */}
             <div
-              className={`input-wrapper flex items-center rounded-xl border border-white/10 bg-white/6 backdrop-blur-xl${shake ? " shake" : ""}`}
+              className={`input-wrapper bg-white/6 flex items-center rounded-xl border border-white/10 backdrop-blur-xl${shake ? 'shake' : ''}`}
               onAnimationEnd={() => setShake(false)}
             >
               {/* Lock icon */}
@@ -163,13 +148,13 @@ export default function ComingSoonPage() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if (error) setError("");
+                  if (error) setError('');
                 }}
                 placeholder="Enter access code..."
                 autoComplete="current-password"
-                className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-white placeholder:text-white/30 outline-hidden"
+                className="outline-hidden min-w-0 flex-1 bg-transparent py-3.5 text-sm text-white placeholder:text-white/30"
                 aria-label="Access code for team members"
-                aria-describedby={error ? "password-error password-hint" : "password-hint"}
+                aria-describedby={error ? 'password-error password-hint' : 'password-hint'}
                 aria-invalid={!!error}
                 disabled={isLoading || isSuccess}
               />
@@ -178,7 +163,7 @@ export default function ComingSoonPage() {
               <button
                 type="submit"
                 disabled={isLoading || isSuccess || !password}
-                className="submit-btn m-1 flex shrink-0 items-center justify-center rounded-lg bg-accent-teal px-4 py-2.5 text-bio-deep disabled:opacity-50 disabled:cursor-not-allowed"
+                className="submit-btn bg-accent-teal text-bio-deep m-1 flex shrink-0 items-center justify-center rounded-lg px-4 py-2.5 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Submit access code"
               >
                 {isLoading ? (
@@ -237,26 +222,25 @@ export default function ComingSoonPage() {
             )}
 
             {/* Helper text */}
-            <p id="password-hint" className="mt-2 text-center text-xs text-white/50">Team members only</p>
+            <p id="password-hint" className="mt-2 text-center text-xs text-white/50">
+              Team members only
+            </p>
           </form>
 
           {/* Screen reader live region for status announcements */}
           <div aria-live="polite" className="sr-only">
-            {isLoading && "Verifying access code..."}
-            {isSuccess && "Access granted. Redirecting..."}
+            {isLoading && 'Verifying access code...'}
+            {isSuccess && 'Access granted. Redirecting...'}
           </div>
         </div>
 
         {/* Contact link — delay 0.8s */}
-        <div
-          className="fade-slide-up mt-6 text-center"
-          style={{ animationDelay: "0.8s" }}
-        >
+        <div className="fade-slide-up mt-6 text-center" style={{ animationDelay: '0.8s' }}>
           <p className="text-sm text-white/40">
-            Need to get in touch?{" "}
+            Need to get in touch?{' '}
             <a
               href="mailto:contact@mergenix.com"
-              className="text-accent-teal transition-colors hover:text-accent-teal/75"
+              className="text-accent-teal hover:text-accent-teal/75 transition-colors"
             >
               Contact Us
             </a>
@@ -266,14 +250,11 @@ export default function ComingSoonPage() {
         {/* Footer */}
         <footer className="absolute bottom-0 left-0 right-0 pb-6">
           <div className="flex items-center justify-center gap-4 text-center">
-            <p className="text-xs text-white/50">
-              &copy; {new Date().getFullYear()} Mergenix
-            </p>
-            <span className="text-xs text-white/50" aria-hidden="true">|</span>
-            <a
-              href="/privacy"
-              className="text-xs text-white/50 underline hover:text-white/75"
-            >
+            <p className="text-xs text-white/50">&copy; {new Date().getFullYear()} Mergenix</p>
+            <span className="text-xs text-white/50" aria-hidden="true">
+              |
+            </span>
+            <a href="/privacy" className="text-xs text-white/50 underline hover:text-white/75">
               Privacy Policy
             </a>
           </div>

@@ -1,7 +1,8 @@
 """Tests for TOTP secret encryption utility."""
-import os
+
 import pytest
-from app.utils.encryption import encrypt_totp_secret, decrypt_totp_secret
+from app.utils.encryption import decrypt_totp_secret, encrypt_totp_secret
+from cryptography.fernet import InvalidToken
 
 
 class TestEncryption:
@@ -28,7 +29,7 @@ class TestEncryption:
 
     def test_decrypt_corrupt_ciphertext_raises(self):
         """Decrypting corrupted ciphertext raises an exception."""
-        with pytest.raises(Exception):  # Fernet raises InvalidToken
+        with pytest.raises(InvalidToken):
             decrypt_totp_secret("not-a-valid-fernet-token")
 
     def test_empty_string_round_trip(self):
@@ -40,6 +41,7 @@ class TestEncryption:
         """Missing TOTP_ENCRYPTION_KEY raises RuntimeError."""
         # Clear the lru_cache and env var
         from app.utils.encryption import _get_fernet
+
         _get_fernet.cache_clear()
         monkeypatch.delenv("TOTP_ENCRYPTION_KEY", raising=False)
 

@@ -118,22 +118,16 @@ class TestRateLimiting:
         LIMIT_LOGIN is "5/minute". We send 5 allowed requests, then
         verify the 6th is rejected with 429 Too Many Requests.
         """
-        assert LIMIT_LOGIN == "5/minute", (
-            f"Expected LIMIT_LOGIN='5/minute', got '{LIMIT_LOGIN}'"
-        )
+        assert LIMIT_LOGIN == "5/minute", f"Expected LIMIT_LOGIN='5/minute', got '{LIMIT_LOGIN}'"
 
         # First 5 requests should all succeed (200 OK)
         for i in range(5):
             resp = await rate_limited_client.post("/test-login")
-            assert resp.status_code == 200, (
-                f"Request {i + 1}/5 failed unexpectedly: {resp.status_code}"
-            )
+            assert resp.status_code == 200, f"Request {i + 1}/5 failed unexpectedly: {resp.status_code}"
 
         # The 6th request exceeds the limit → 429
         resp = await rate_limited_client.post("/test-login")
-        assert resp.status_code == 429, (
-            f"Expected HTTP 429 on request 6, got {resp.status_code}"
-        )
+        assert resp.status_code == 429, f"Expected HTTP 429 on request 6, got {resp.status_code}"
 
     @pytest.mark.asyncio
     async def test_rate_limit_response_body_contains_error(
@@ -150,9 +144,7 @@ class TestRateLimiting:
 
         # slowapi returns a JSON body with an "error" key describing the limit
         body = resp.json()
-        assert "error" in body, (
-            f"429 response body should contain 'error', got: {body}"
-        )
+        assert "error" in body, f"429 response body should contain 'error', got: {body}"
 
     @pytest.mark.asyncio
     async def test_rate_limit_resets_after_limiter_reset(
@@ -172,9 +164,7 @@ class TestRateLimiting:
 
         # Should be allowed again
         resp = await rate_limited_client.post("/test-login")
-        assert resp.status_code == 200, (
-            f"Expected 200 after reset, got {resp.status_code}"
-        )
+        assert resp.status_code == 200, f"Expected 200 after reset, got {resp.status_code}"
 
 
 class TestRateLimitHeaders:
@@ -190,8 +180,7 @@ class TestRateLimitHeaders:
         assert resp.status_code == 200
 
         assert "x-ratelimit-limit" in resp.headers, (
-            f"Response should include X-RateLimit-Limit header. "
-            f"Headers: {dict(resp.headers)}"
+            f"Response should include X-RateLimit-Limit header. Headers: {dict(resp.headers)}"
         )
         # LIMIT_LOGIN is "5/minute", so the limit should be 5
         assert resp.headers["x-ratelimit-limit"] == "5", (
@@ -208,14 +197,11 @@ class TestRateLimitHeaders:
         assert resp.status_code == 200
 
         assert "x-ratelimit-remaining" in resp.headers, (
-            f"Response should include X-RateLimit-Remaining header. "
-            f"Headers: {dict(resp.headers)}"
+            f"Response should include X-RateLimit-Remaining header. Headers: {dict(resp.headers)}"
         )
         # After 1 request out of 5, remaining should be 4
         remaining = int(resp.headers["x-ratelimit-remaining"])
-        assert remaining == 4, (
-            f"Expected X-RateLimit-Remaining=4, got {remaining}"
-        )
+        assert remaining == 4, f"Expected X-RateLimit-Remaining=4, got {remaining}"
 
     @pytest.mark.asyncio
     async def test_response_includes_x_ratelimit_reset_header(
@@ -227,14 +213,11 @@ class TestRateLimitHeaders:
         assert resp.status_code == 200
 
         assert "x-ratelimit-reset" in resp.headers, (
-            f"Response should include X-RateLimit-Reset header. "
-            f"Headers: {dict(resp.headers)}"
+            f"Response should include X-RateLimit-Reset header. Headers: {dict(resp.headers)}"
         )
         # Reset is a UTC epoch timestamp (may be float or int)
         reset_value = float(resp.headers["x-ratelimit-reset"])
-        assert reset_value > 0, (
-            f"Expected X-RateLimit-Reset > 0, got {reset_value}"
-        )
+        assert reset_value > 0, f"Expected X-RateLimit-Reset > 0, got {reset_value}"
 
     @pytest.mark.asyncio
     async def test_remaining_decreases_with_multiple_requests(
@@ -250,9 +233,7 @@ class TestRateLimitHeaders:
             remaining_values.append(int(resp.headers["x-ratelimit-remaining"]))
 
         # Remaining should be 4, 3, 2 (decreasing by 1 each time)
-        assert remaining_values == [4, 3, 2], (
-            f"Expected remaining to decrease [4, 3, 2], got {remaining_values}"
-        )
+        assert remaining_values == [4, 3, 2], f"Expected remaining to decrease [4, 3, 2], got {remaining_values}"
 
     @pytest.mark.asyncio
     async def test_429_response_includes_retry_after_header(
@@ -268,14 +249,11 @@ class TestRateLimitHeaders:
         assert resp.status_code == 429
 
         assert "retry-after" in resp.headers, (
-            f"429 response should include Retry-After header. "
-            f"Headers: {dict(resp.headers)}"
+            f"429 response should include Retry-After header. Headers: {dict(resp.headers)}"
         )
         # Retry-After should be a positive integer (seconds until reset)
         retry_after = int(resp.headers["retry-after"])
-        assert retry_after > 0, (
-            f"Expected Retry-After > 0, got {retry_after}"
-        )
+        assert retry_after > 0, f"Expected Retry-After > 0, got {retry_after}"
 
     @pytest.mark.asyncio
     async def test_429_response_includes_all_rate_limit_headers(
@@ -298,14 +276,12 @@ class TestRateLimitHeaders:
         ]
         for header in required_headers:
             assert header in resp.headers, (
-                f"429 response missing required header '{header}'. "
-                f"Headers: {dict(resp.headers)}"
+                f"429 response missing required header '{header}'. Headers: {dict(resp.headers)}"
             )
 
         # Remaining should be 0 when rate limited
         assert resp.headers["x-ratelimit-remaining"] == "0", (
-            f"Expected X-RateLimit-Remaining=0 on 429, "
-            f"got {resp.headers['x-ratelimit-remaining']}"
+            f"Expected X-RateLimit-Remaining=0 on 429, got {resp.headers['x-ratelimit-remaining']}"
         )
 
 
@@ -322,9 +298,7 @@ class TestRateLimitConfiguration:
         get_settings.cache_clear()
         settings = get_settings()
 
-        assert hasattr(settings, "rate_limit_storage_uri"), (
-            "Settings must have a 'rate_limit_storage_uri' field"
-        )
+        assert hasattr(settings, "rate_limit_storage_uri"), "Settings must have a 'rate_limit_storage_uri' field"
         assert settings.rate_limit_storage_uri == "memory://", (
             f"Expected default 'memory://', got '{settings.rate_limit_storage_uri}'"
         )

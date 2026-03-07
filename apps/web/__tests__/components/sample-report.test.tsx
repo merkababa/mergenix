@@ -8,7 +8,17 @@ import { mockLucideIcons, mockNextLinkFactory } from '../__helpers__';
 vi.mock('next/link', () => mockNextLinkFactory());
 
 // Mock lucide-react icons to avoid SVG rendering complexity
-vi.mock('lucide-react', () => mockLucideIcons('AlertTriangle', 'Dna', 'FlaskConical', 'Pill', 'Activity', 'Stethoscope', 'Lock'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons(
+    'AlertTriangle',
+    'Dna',
+    'FlaskConical',
+    'Pill',
+    'Activity',
+    'Stethoscope',
+    'Lock',
+  ),
+);
 
 import { SampleReportContent } from '../../app/(marketing)/sample-report/_components/sample-report-content';
 
@@ -66,9 +76,7 @@ describe('SampleReportPage', () => {
 
   it('includes disclaimer that this is sample data', () => {
     render(<SampleReportContent />);
-    expect(
-      screen.getByText(/sample report with fictional data/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/sample report with fictional data/i)).toBeInTheDocument();
   });
 });
 
@@ -176,9 +184,7 @@ describe('D3.5 — Sidebar Navigation', () => {
   it('renders sidebar navigation with section links', () => {
     render(<SampleReportContent />);
     const allLinks = screen.getAllByRole('link');
-    const sectionLinks = allLinks.filter((link) =>
-      link.getAttribute('href')?.startsWith('#'),
-    );
+    const sectionLinks = allLinks.filter((link) => link.getAttribute('href')?.startsWith('#'));
     expect(sectionLinks.length).toBeGreaterThan(0);
   });
 
@@ -209,9 +215,7 @@ describe('D3.6 — Tier-Gate Overlay', () => {
 
   it('tier-gate overlay has screen reader text explaining gated content', () => {
     render(<SampleReportContent />);
-    expect(
-      screen.getByText(/additional carrier screening results/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/additional carrier screening results/i)).toBeInTheDocument();
   });
 
   it('blurred gated content has aria-hidden="true"', () => {

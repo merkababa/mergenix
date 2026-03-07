@@ -101,9 +101,7 @@ export const CSP_DIRECTIVES: CSPDirectives = {
 export function buildCSPString(directives: CSPDirectives): string {
   return Object.entries(directives)
     .filter((entry): entry is [string, string[]] => Array.isArray(entry[1]))
-    .map(([key, values]) =>
-      values.length > 0 ? `${key} ${values.join(' ')}` : key,
-    )
+    .map(([key, values]) => (values.length > 0 ? `${key} ${values.join(' ')}` : key))
     .join('; ');
 }
 

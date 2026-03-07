@@ -151,7 +151,9 @@ describe('DiseaseCatalogPage', () => {
     render(<CatalogContent />);
 
     expect(screen.getByRole('combobox', { name: /Filter by category/i })).toBeInTheDocument();
-    expect(screen.getByRole('combobox', { name: /Filter by inheritance model/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('combobox', { name: /Filter by inheritance model/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: /Filter by severity/i })).toBeInTheDocument();
   });
 
@@ -165,9 +167,7 @@ describe('DiseaseCatalogPage', () => {
     const { container } = render(<CatalogContent />);
 
     const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    const levels = Array.from(headings).map((h) =>
-      parseInt(h.tagName.replace('H', ''), 10),
-    );
+    const levels = Array.from(headings).map((h) => parseInt(h.tagName.replace('H', ''), 10));
 
     expect(levels).toContain(1);
     for (let i = 0; i < levels.length - 1; i++) {

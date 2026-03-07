@@ -1,17 +1,20 @@
 # Mergenix - Project Rules
 
 ## Conductor-Only Protocol (ABSOLUTE — NEVER VIOLATE)
+
 **You are a CONDUCTOR, not a performer. Your context window is sacred.**
 
 Long sessions = context compaction = lost memory = hallucination. Protect your context at all costs.
 
 ### NEVER do these directly:
+
 - **NEVER write/edit code files** (.ts, .tsx, .py, .js, .css) — delegate to executor agents
 - **NEVER read large source files** (>50 lines) — delegate to explore agents
 - **NEVER run tests/builds** — delegate to qa-tester or build-fixer agents
 - **NEVER paste code blocks in responses** — describe what was done + file path
 
 ### ALWAYS do these:
+
 - **Orchestrate agents** — spawn, assign, track, summarize
 - **Summarize agent output in 2-3 lines** — never paste full results into your context
 - **Batch work into agents** — one agent with 5 steps beats 5 tool calls in your context
@@ -19,11 +22,13 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 - **Background long tasks** — Gemini reviews, test runs, builds
 
 ### You MAY directly edit:
+
 - `PROGRESS.md`, `docs/PROJECT_STATUS.md`, `CLAUDE.md` — status/rules files
 - Memory files (`~/.claude/projects/*/memory/*.md`)
 - Git commands (commit, push, branch, PR creation via `gh`)
 
 ### Orchestration Layers (MANDATORY for all real work):
+
 1. **Conductor (you)** — top-level orchestrator, never writes code
 2. **Dev Team Leader** — spawned via TeamCreate, orchestrates executor agents (does NOT write code)
 3. **Executor agents** — actual code writers under Dev Team Leader, with file ownership boundaries
@@ -31,6 +36,7 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 5. **Claude Opus Reviewers** — separate independent agents per reviewer (Stage 2, after Gemini all A+)
 
 ### Team-First Rule:
+
 - **Default to TeamCreate** for any real work (phases, multi-file changes, code+tests)
 - Fire-and-forget Task agents only for single quick lookups or one-off Gemini calls
 - Teams let teammates coordinate, message when blocked, and keep context out of conductor
@@ -38,11 +44,13 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 - **Gemini Review Coordinator spawns separate Gemini instances** — one per reviewer role, with full code context
 
 ### Planning Team (MANDATORY for phase planning):
+
 - Before starting any phase, spawn **separate planning agents** per perspective (default: all 8 reviewers)
 - **Ask user which perspectives to include each time**
 - Each agent analyzes the phase from their perspective, then Conductor aggregates into unified plan
 
 ### Red flags (you're doing it wrong):
+
 - Reading a .ts/.tsx/.py file → delegate to explore agent
 - Writing code in Edit/Write → delegate to executor agent
 - Tool output >100 lines → should have delegated
@@ -57,6 +65,7 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 ---
 
 ## Session Start Protocol (MANDATORY — every session, every PC)
+
 1. **ALWAYS run `git pull origin main`** at the start of every session
 2. **Check for open PRs** before starting new work: `gh pr list --state open`
    - If there are open PRs, review them first — they may need to be merged before branching
@@ -71,6 +80,7 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
 ## Git Workflow
 
 ### Branching Strategy
+
 - **Never push directly to `main`** (exception: PROGRESS.md updates only)
 - Always create feature branches from latest `main`
 - Branch naming convention:
@@ -81,7 +91,9 @@ Long sessions = context compaction = lost memory = hallucination. Protect your c
   - `test/short-description` — test additions/changes
 
 ### Commit Messages
+
 Use conventional commits:
+
 - `feat: add login page with OAuth support`
 - `fix: resolve VCF parser edge case for multi-allelic sites`
 - `refactor: extract carrier analysis into separate module`
@@ -90,6 +102,7 @@ Use conventional commits:
 - `chore: update dependencies in requirements.txt`
 
 ### Pull Request Workflow
+
 1. Create a PR from your feature branch to `main`
 2. Write a clear PR description: what changed and why
 3. Request review from the team
@@ -98,6 +111,7 @@ Use conventional commits:
 6. Delete the branch after merge
 
 ## Conflict Prevention
+
 - **Check PROGRESS.md** before starting any work to see what others are doing
 - **Claim your task** by updating PROGRESS.md with your name and "In Progress"
 - Keep PRs small and focused — one feature/fix per PR
@@ -105,6 +119,7 @@ Use conventional commits:
 - Pull and rebase frequently: `git pull origin main --rebase`
 
 ## Quality Gates (Before Every Commit)
+
 ```bash
 # Run linting
 ruff check Source/ pages/ tests/ app.py
@@ -119,24 +134,26 @@ pytest tests/ -v
 ## Multi-Perspective Code Review (MANDATORY — before every PR)
 
 ### Review Panel (8 Reviewers)
-| # | Reviewer | Focus Area |
-|---|----------|------------|
-| 1 | **Architect** | System design, modularity, separation of concerns, scalability, design patterns, type safety |
-| 2 | **QA** | Test coverage, edge cases, assertions, error handling, regression risk, logging/observability |
-| 3 | **Scientist** | rsID accuracy, genetics correctness, citations, scientific methodology, data integrity |
-| 4 | **Technologist** | Performance, React/Next.js patterns, bundle size, memory, async correctness, modern practices |
-| 5 | **Business** | Tier gating, conversion funnel, upgrade CTAs, copy quality, naming accuracy, market fit |
-| 6 | **Designer** | Accessibility (ARIA), responsive design, heading hierarchy, keyboard navigation, UX flow |
-| 7 | **Security Analyst** | OWASP top 10, injection, CSRF, token handling, encoding, secrets, timing attacks |
-| 8 | **Code Reviewer** | Readability, naming, DRY/SOLID, style consistency, dead code, import hygiene |
-| 9 | **Legal + Privacy** | GDPR, GINA, data retention, consent, right to deletion, cookie consent, age verification, data flow mapping, encryption adequacy, cross-border transfers |
-| 10 | **Ethics / Bioethics** | Population bias in genetic data, responsible result framing, emotional harm prevention, informed consent UX, eugenics guardrails, disclaimers |
+
+| #   | Reviewer               | Focus Area                                                                                                                                               |
+| --- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Architect**          | System design, modularity, separation of concerns, scalability, design patterns, type safety                                                             |
+| 2   | **QA**                 | Test coverage, edge cases, assertions, error handling, regression risk, logging/observability                                                            |
+| 3   | **Scientist**          | rsID accuracy, genetics correctness, citations, scientific methodology, data integrity                                                                   |
+| 4   | **Technologist**       | Performance, React/Next.js patterns, bundle size, memory, async correctness, modern practices                                                            |
+| 5   | **Business**           | Tier gating, conversion funnel, upgrade CTAs, copy quality, naming accuracy, market fit                                                                  |
+| 6   | **Designer**           | Accessibility (ARIA), responsive design, heading hierarchy, keyboard navigation, UX flow                                                                 |
+| 7   | **Security Analyst**   | OWASP top 10, injection, CSRF, token handling, encoding, secrets, timing attacks                                                                         |
+| 8   | **Code Reviewer**      | Readability, naming, DRY/SOLID, style consistency, dead code, import hygiene                                                                             |
+| 9   | **Legal + Privacy**    | GDPR, GINA, data retention, consent, right to deletion, cookie consent, age verification, data flow mapping, encryption adequacy, cross-border transfers |
+| 10  | **Ethics / Bioethics** | Population bias in genetic data, responsible result framing, emotional harm prevention, informed consent UX, eugenics guardrails, disclaimers            |
 
 **Ask user each time which roles to include (default: all 10). Skip only clearly irrelevant roles.**
 
 ### Two-Stage Review Process (MANDATORY)
 
 #### Stage 1: Gemini Reviews (iterate to all A+)
+
 1. Conductor spawns a **Gemini Review Coordinator** team member
 2. Coordinator reads changed files and prepares review prompts
 3. Coordinator spawns **separate Gemini instances** per reviewer role (one Gemini call = one reviewer)
@@ -146,6 +163,7 @@ pytest tests/ -v
 7. Re-review only failed roles. Iterate until all Gemini reviewers give A+
 
 #### Stage 2: Claude Opus Independent Reviews (iterate to all A+)
+
 1. After Gemini all A+, Conductor spawns **separate Claude Opus agents** per reviewer role
 2. Each agent has its OWN context — fully independent, never combined
 3. Agents READ files themselves (they have tool access)
@@ -154,12 +172,14 @@ pytest tests/ -v
 6. Re-review only failed roles. Iterate until all Claude reviewers give A+
 
 ### Fix Flow After Reviews
+
 - **3+ issues:** Conductor → Dev Team Leader → executor team with file ownership
 - **1-2 issues:** Conductor → single executor agent
 - **NEVER spawn a single agent to fix 3+ review issues — always use the team flow**
 - After fixes: re-review ONLY the roles that were below A+
 
 ### Grades Table Format
+
 ```
 | Reviewer | Gemini R1 | Gemini R2 | Claude Final | Key Fixes |
 |----------|-----------|-----------|--------------|-----------|
@@ -167,6 +187,7 @@ pytest tests/ -v
 ```
 
 ### Rules
+
 - **No skipping reviewers** — all selected reviewers must weigh in
 - **No hand-waving grades** — each grade must cite specific evidence from the code
 - **Not-applicable = A+** with "N/A — no [domain] impact" but still explicitly stated
@@ -174,6 +195,7 @@ pytest tests/ -v
 - This review happens **before** the PR is created, not after
 
 ## PROGRESS.md Rules
+
 - This is the **one file** that can be pushed directly to `main` (along with CLAUDE.md)
 - Update it when you: start a task, finish a task, or hit a blocker
 - Format: who did what, when, current status
@@ -181,6 +203,7 @@ pytest tests/ -v
 - **ALWAYS update PROGRESS.md at the END of every session** — so the next session on any PC knows exactly where we left off
 
 ## File Organization
+
 ```
 Mergenix/
 ├── app.py                  # Main Streamlit app
@@ -202,19 +225,22 @@ Mergenix/
 ```
 
 ## Security Rules
+
 - **Never commit** `.env`, API keys, secrets, or credentials
 - Use `.env.example` for template (already exists)
 - Sensitive config goes in `.streamlit/secrets.toml` (gitignored)
 - User data files (`data/users.json`, `data/audit_log.json`) should not contain real user data in git
 
 ## Contributors
-| Name | Role | Notes |
-|------|------|-------|
-| kukiz | Developer | Works from work room & living room computers |
-| Maayan | Developer / Reviewer | Codes, reviews PRs, uses Claude Code |
-| Claude | AI Assistant | Creates PRs for review, pushes PROGRESS.md directly |
+
+| Name   | Role                 | Notes                                               |
+| ------ | -------------------- | --------------------------------------------------- |
+| kukiz  | Developer            | Works from work room & living room computers        |
+| Maayan | Developer / Reviewer | Codes, reviews PRs, uses Claude Code                |
+| Claude | AI Assistant         | Creates PRs for review, pushes PROGRESS.md directly |
 
 ## Session End Protocol (MANDATORY — before ending every session)
+
 1. **Update `PROGRESS.md`** with what was done, current status, and next steps
 2. **Update `docs/PROJECT_STATUS.md`** if any bugs were fixed, features added, or known issues changed
 3. **Push both files to `main`** so the next session on ANY PC starts with full context
@@ -223,10 +249,13 @@ Mergenix/
 ## Gemini Delegation (MANDATORY — all PCs)
 
 ### CRITICAL: DO NOT use MCP tools for Gemini
+
 **The MCP tool is BROKEN on Windows.** `mcp__gemini-cli__ask-gemini`, `mcp_g_ask_gemini`, and ANY Gemini MCP tool will fail with ENOENT. **Do NOT attempt to use them. Do NOT suggest installing or configuring them. They do not work.**
 
 ### ONLY use Bash to call Gemini (ALWAYS pass `--model gemini-3-pro-preview`)
+
 The default model without `--model` is gemini-2.0-flash (much weaker). Always specify the model explicitly.
+
 ```bash
 # Simple prompt
 gemini -p "Your prompt here" --model gemini-3-pro-preview 2>&1
@@ -250,9 +279,11 @@ gemini -p "prompt" --model gemini-2.5-flash 2>&1
 - **Code delegation rule:** Only delegate code to Gemini if it can do equal or better quality than Claude. Don't delegate just to delegate — save tokens by using Gemini where it genuinely matches or exceeds Claude's output
 
 ### Before delegating, read `docs/GEMINI_DELEGATION_GUIDE.md`
+
 That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** that determine when and how to use Gemini. Do not delegate without consulting it first.
 
 ## Claude-Specific Rules
+
 - Always pull before starting work
 - **Always check for open PRs** (`gh pr list --state open`) before starting new work
 - Always create work on feature branches, never push code to main
@@ -263,6 +294,7 @@ That file contains the **A/B/C/D task tier matrix** and **8 delegation rules** t
 - If unsure about a design decision, ask — don't guess
 
 ## PR Summary Format (MANDATORY)
+
 Every PR description MUST include a summary table. Use this format:
 
 ```

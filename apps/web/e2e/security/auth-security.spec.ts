@@ -16,14 +16,16 @@ import { API_BASE, mockConsentSync, mockTokenResponse } from '../utils/mock-api.
 /**
  * Build a mock user profile matching the backend shape.
  */
-function buildUserProfile(overrides?: Partial<{
-  id: string;
-  email: string;
-  name: string;
-  tier: string;
-  email_verified: boolean;
-  totp_enabled: boolean;
-}>) {
+function buildUserProfile(
+  overrides?: Partial<{
+    id: string;
+    email: string;
+    name: string;
+    tier: string;
+    email_verified: boolean;
+    totp_enabled: boolean;
+  }>,
+) {
   return {
     id: overrides?.id ?? 'user-sec-001',
     email: overrides?.email ?? TEST_USERS.free.email,
@@ -38,7 +40,9 @@ function buildUserProfile(overrides?: Partial<{
 // ── P0: Critical Security Tests ──────────────────────────────────────────
 
 test.describe('Auth Security — P0 Critical', () => {
-  test('1. Unauthenticated user accessing /account is redirected to /login', async ({ browser }) => {
+  test('1. Unauthenticated user accessing /account is redirected to /login', async ({
+    browser,
+  }) => {
     // Use a fresh browser context with NO stored auth state
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -58,7 +62,9 @@ test.describe('Auth Security — P0 Critical', () => {
     }
   });
 
-  test('2. Unauthenticated user accessing /subscription is redirected to /login', async ({ browser }) => {
+  test('2. Unauthenticated user accessing /subscription is redirected to /login', async ({
+    browser,
+  }) => {
     // Use a fresh browser context with NO stored auth state
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -214,7 +220,6 @@ test.describe('Auth Security — P1 Important', () => {
 
     // Authorization header should be present with Bearer token
     expect(meRequest!.headers['authorization']).toMatch(/^Bearer .+/);
-
   });
 
   test('5. Auth tokens are HttpOnly cookies, not in localStorage', async ({ page }) => {
@@ -227,8 +232,7 @@ test.describe('Auth Security — P1 Important', () => {
         headers: {
           'Content-Type': 'application/json',
           // Simulate the httpOnly refresh token cookie set by the backend
-          'Set-Cookie':
-            'refresh_token=mock-refresh-jwt; Path=/auth; HttpOnly; SameSite=Lax',
+          'Set-Cookie': 'refresh_token=mock-refresh-jwt; Path=/auth; HttpOnly; SameSite=Lax',
         },
       });
     });
@@ -263,9 +267,7 @@ test.describe('Auth Security — P1 Important', () => {
     // Verify no refresh/access tokens are stored in localStorage
     const localStorageKeys = await page.evaluate(() => {
       return Object.keys(localStorage).filter(
-        (k) =>
-          k.toLowerCase().includes('refresh') ||
-          k.toLowerCase().includes('access_token'),
+        (k) => k.toLowerCase().includes('refresh') || k.toLowerCase().includes('access_token'),
       );
     });
     expect(localStorageKeys).toHaveLength(0);
@@ -360,16 +362,20 @@ test.describe('Auth Security — P1 Important', () => {
     await page.goto('/account');
 
     // Wait for the token refresh cycle to complete by polling for the expected state
-    await expect.poll(
-      () => refreshCalled,
-      { message: 'Expected /auth/refresh to be called after 401 response', timeout: 10_000 },
-    ).toBe(true);
+    await expect
+      .poll(() => refreshCalled, {
+        message: 'Expected /auth/refresh to be called after 401 response',
+        timeout: 10_000,
+      })
+      .toBe(true);
 
     // Verify that /auth/me was called at least twice (original 401 + retry)
-    await expect.poll(
-      () => meCallCount,
-      { message: 'Expected /auth/me to be retried after token refresh', timeout: 5_000 },
-    ).toBeGreaterThanOrEqual(2);
+    await expect
+      .poll(() => meCallCount, {
+        message: 'Expected /auth/me to be retried after token refresh',
+        timeout: 5_000,
+      })
+      .toBeGreaterThanOrEqual(2);
   });
 });
 

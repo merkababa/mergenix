@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { GlassCard } from "@/components/ui/glass-card";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { useCountUp } from "@/hooks/use-count-up";
-import { CARRIER_PANEL_COUNT } from "@mergenix/genetics-data";
+import { GlassCard } from '@/components/ui/glass-card';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { useCountUp } from '@/hooks/use-count-up';
+import { CARRIER_PANEL_COUNT } from '@mergenix/genetics-data';
 
 // ---------------------------------------------------------------------------
 // Constants (hoisted)
@@ -17,30 +17,30 @@ const DISEASE_DB_COUNT = CARRIER_PANEL_COUNT;
 const TESTIMONIALS = [
   {
     quote:
-      "Finally, a genetic analysis tool that explains results in plain language. We felt empowered, not scared.",
-    name: "Sarah K.",
-    role: "Expecting Parent",
-    initials: "SK",
-    avatarColor: "rgba(6,214,160,0.2)",
-    accentColor: "var(--accent-teal)",
+      'Finally, a genetic analysis tool that explains results in plain language. We felt empowered, not scared.',
+    name: 'Sarah K.',
+    role: 'Expecting Parent',
+    initials: 'SK',
+    avatarColor: 'rgba(6,214,160,0.2)',
+    accentColor: 'var(--accent-teal)',
   },
   {
     quote:
-      "The carrier screening was incredibly thorough. Our genetic counselor was impressed with the detail.",
-    name: "Dr. James L.",
-    role: "Clinical Geneticist",
-    initials: "JL",
-    avatarColor: "rgba(139,92,246,0.2)",
-    accentColor: "var(--accent-violet)",
+      'The carrier screening was incredibly thorough. Our genetic counselor was impressed with the detail.',
+    name: 'Dr. James L.',
+    role: 'Clinical Geneticist',
+    initials: 'JL',
+    avatarColor: 'rgba(139,92,246,0.2)',
+    accentColor: 'var(--accent-violet)',
   },
   {
     quote:
-      "Beautiful interface, scientifically rigorous, and the privacy-first approach sealed the deal for us.",
-    name: "Maria & David R.",
-    role: "Planning Parents",
-    initials: "MR",
-    avatarColor: "rgba(6,182,212,0.2)",
-    accentColor: "var(--accent-cyan)",
+      'Beautiful interface, scientifically rigorous, and the privacy-first approach sealed the deal for us.',
+    name: 'Maria & David R.',
+    role: 'Planning Parents',
+    initials: 'MR',
+    avatarColor: 'rgba(6,182,212,0.2)',
+    accentColor: 'var(--accent-cyan)',
   },
 ] as const;
 
@@ -82,21 +82,21 @@ export function SocialProof() {
                   the final value — that is sufficient. */}
               <span
                 ref={ref}
-                className="font-heading font-extrabold text-(--accent-teal)"
-                style={{ fontSize: "var(--font-size-fluid-stats)" }}
-                aria-label={`${DISEASE_DB_COUNT.toLocaleString("en-US")} diseases in database`}
+                className="font-heading text-(--accent-teal) font-extrabold"
+                style={{ fontSize: 'var(--font-size-fluid-stats)' }}
+                aria-label={`${DISEASE_DB_COUNT.toLocaleString('en-US')} diseases in database`}
               >
-                {count.toLocaleString("en-US")}
+                {count.toLocaleString('en-US')}
               </span>
               <span
-                className="font-heading font-extrabold text-(--accent-teal)"
-                style={{ fontSize: "var(--font-size-fluid-stats)" }}
+                className="font-heading text-(--accent-teal) font-extrabold"
+                style={{ fontSize: 'var(--font-size-fluid-stats)' }}
                 aria-hidden="true"
               >
                 +
               </span>
             </div>
-            <p className="text-sm font-medium uppercase tracking-widest text-(--text-dim)">
+            <p className="text-(--text-dim) text-sm font-medium uppercase tracking-widest">
               Diseases in Database
             </p>
           </div>
@@ -117,7 +117,7 @@ export function SocialProof() {
                 <StarRating />
 
                 {/* Quote */}
-                <blockquote className="mt-4 text-sm leading-relaxed text-(--text-body)">
+                <blockquote className="text-(--text-body) mt-4 text-sm leading-relaxed">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
 
@@ -136,8 +136,8 @@ export function SocialProof() {
                     {t.initials}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-(--text-heading)">{t.name}</p>
-                    <p className="text-xs text-(--text-dim)">{t.role}</p>
+                    <p className="text-(--text-heading) text-sm font-semibold">{t.name}</p>
+                    <p className="text-(--text-dim) text-xs">{t.role}</p>
                   </div>
                 </div>
               </GlassCard>
@@ -146,7 +146,9 @@ export function SocialProof() {
         </div>
 
         {/* Placeholder testimonials — replace with real customer quotes post-launch */}
-        <p className="text-center text-xs text-muted-foreground mt-8 opacity-60">Based on beta tester feedback. Names changed for privacy.</p>
+        <p className="text-muted-foreground mt-8 text-center text-xs opacity-60">
+          Based on beta tester feedback. Names changed for privacy.
+        </p>
       </div>
     </section>
   );

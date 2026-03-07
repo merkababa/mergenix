@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { getErrorMessage } from "@/lib/constants/error-messages";
+import React from 'react';
+import { getErrorMessage } from '@/lib/constants/error-messages';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback?:
-    | React.ReactNode
-    | ((error: Error, reset: () => void) => React.ReactNode);
+  fallback?: React.ReactNode | ((error: Error, reset: () => void) => React.ReactNode);
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
@@ -29,20 +27,17 @@ interface ErrorBoundaryState {
 function extractErrorCode(error: Error): string {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const code = (error as any).code;
-  if (typeof code === "string" && code.length > 0) return code;
+  if (typeof code === 'string' && code.length > 0) return code;
 
   const match = error.message.match(/^\[([A-Z_]+)\]/);
   if (match) return match[1];
 
-  return "UNKNOWN_ERROR";
+  return 'UNKNOWN_ERROR';
 }
 
 // ─── Error Boundary ──────────────────────────────────────────────────────────
 
-export class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   private copyTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(props: ErrorBoundaryProps) {
@@ -56,8 +51,8 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     // Log in non-production environments only
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[ErrorBoundary] Caught error:", error, errorInfo);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('[ErrorBoundary] Caught error:', error, errorInfo);
     }
 
     // Notify custom handler
@@ -66,14 +61,10 @@ export class ErrorBoundary extends React.Component<
     // Announce to screen readers via announcer store (async import, may not exist yet)
     void (async () => {
       try {
-        const { useAnnouncerStore } = await import(
-          "@/lib/stores/announcer-store"
-        );
+        const { useAnnouncerStore } = await import('@/lib/stores/announcer-store');
         const code = extractErrorCode(error);
         const msg = getErrorMessage(code);
-        useAnnouncerStore
-          .getState()
-          .announce(`Error: ${msg.title}. ${msg.message}`, "assertive");
+        useAnnouncerStore.getState().announce(`Error: ${msg.title}. ${msg.message}`, 'assertive');
       } catch {
         /* announcer store not available yet */
       }
@@ -94,21 +85,18 @@ export class ErrorBoundary extends React.Component<
 
     const code = extractErrorCode(error);
     const timestamp = new Date().toISOString();
-    const browser =
-      typeof navigator !== "undefined" ? navigator.userAgent : "unknown";
+    const browser = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
 
     const debugInfo = [
       `Error Code: ${code}`,
       `Timestamp: ${timestamp}`,
       `Browser: ${browser}`,
-      `Error: ${process.env.NODE_ENV === "production" ? "An unexpected error occurred" : error.message}`,
-      process.env.NODE_ENV !== "production" ? `Name: ${error.name}` : "",
-      process.env.NODE_ENV !== "production" && error.stack
-        ? `Stack:\n${error.stack}`
-        : "",
+      `Error: ${process.env.NODE_ENV === 'production' ? 'An unexpected error occurred' : error.message}`,
+      process.env.NODE_ENV !== 'production' ? `Name: ${error.name}` : '',
+      process.env.NODE_ENV !== 'production' && error.stack ? `Stack:\n${error.stack}` : '',
     ]
       .filter(Boolean)
-      .join("\n");
+      .join('\n');
 
     try {
       await navigator.clipboard.writeText(debugInfo);
@@ -122,12 +110,8 @@ export class ErrorBoundary extends React.Component<
 
       // Announce to screen readers
       try {
-        const { useAnnouncerStore } = await import(
-          "@/lib/stores/announcer-store"
-        );
-        useAnnouncerStore
-          .getState()
-          .announce("Debug information copied to clipboard", "polite");
+        const { useAnnouncerStore } = await import('@/lib/stores/announcer-store');
+        useAnnouncerStore.getState().announce('Debug information copied to clipboard', 'polite');
       } catch {
         /* announcer store not available */
       }
@@ -145,7 +129,7 @@ export class ErrorBoundary extends React.Component<
     }
 
     // Custom fallback (render prop or ReactNode)
-    if (typeof fallback === "function") {
+    if (typeof fallback === 'function') {
       return fallback(error, this.handleReset);
     }
     if (fallback !== undefined) {
@@ -157,38 +141,33 @@ export class ErrorBoundary extends React.Component<
     const errorMsg = getErrorMessage(code);
 
     // In development, append the raw error message
-    const detail =
-      process.env.NODE_ENV !== "production"
-        ? error.message
-        : errorMsg.message;
+    const detail = process.env.NODE_ENV !== 'production' ? error.message : errorMsg.message;
 
     return (
       <div
         role="alert"
         aria-invalid="true"
-        className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center"
+        className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) border p-6 text-center"
       >
-        <h3 className="font-heading text-lg font-semibold text-(--text-primary)">
+        <h3 className="font-heading text-(--text-primary) text-lg font-semibold">
           {errorMsg.title}
         </h3>
-        <p className="mt-2 text-sm text-(--text-muted)">{detail}</p>
-        <p className="mt-1 text-xs text-(--text-muted)">
-          {errorMsg.action}
-        </p>
+        <p className="text-(--text-muted) mt-2 text-sm">{detail}</p>
+        <p className="text-(--text-muted) mt-1 text-xs">{errorMsg.action}</p>
         <div className="mt-4 flex items-center justify-center gap-3">
           <button
             type="button"
             onClick={this.handleReset}
-            className="rounded-xl bg-(--accent-teal) px-4 py-2 text-sm font-semibold text-bio-deep transition-all hover:shadow-[0_0_12px_var(--glow-teal)]"
+            className="bg-(--accent-teal) text-bio-deep rounded-xl px-4 py-2 text-sm font-semibold transition-all hover:shadow-[0_0_12px_var(--glow-teal)]"
           >
             Try again
           </button>
           <button
             type="button"
             onClick={this.handleCopyDebugInfo}
-            className="rounded-xl border border-(--border-subtle) bg-(--bg-surface) px-4 py-2 text-sm font-medium text-(--text-muted) transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-(--text-primary)"
+            className="border-(--border-subtle) bg-(--bg-surface) text-(--text-muted) hover:text-(--text-primary) rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:border-[rgba(6,214,160,0.3)]"
           >
-            {copied ? "Copied!" : "Copy debug info"}
+            {copied ? 'Copied!' : 'Copy debug info'}
           </button>
         </div>
       </div>

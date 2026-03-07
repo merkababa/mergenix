@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useId, useRef } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { FileDown, Lock, Shield, X } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { useFocusTrap } from "@/hooks/use-focus-trap";
-import { useModalManager } from "@/hooks/use-modal-manager";
-import { overlayVariants, modalVariants } from "@/lib/animations/modal-variants";
+import { useCallback, useEffect, useId, useRef } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { FileDown, Lock, Shield, X } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
+import { useModalManager } from '@/hooks/use-modal-manager';
+import { overlayVariants, modalVariants } from '@/lib/animations/modal-variants';
 
 // ── Props ───────────────────────────────────────────────────────────────
 
@@ -19,23 +19,18 @@ interface SaveOptionsModalProps {
   /** Callback when user chooses to download a PDF report */
   onDownloadPDF: () => void;
   /** Current user tier */
-  tier: "free" | "premium" | "pro";
+  tier: 'free' | 'premium' | 'pro';
 }
 
 // ── Constants ───────────────────────────────────────────────────────────
 
-const MODAL_ID = "save-options-modal";
+const MODAL_ID = 'save-options-modal';
 
 // ── Component ───────────────────────────────────────────────────────────
 
-export function SaveOptionsModal({
-  isOpen,
-  onClose,
-  onDownloadPDF,
-  tier,
-}: SaveOptionsModalProps) {
+export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveOptionsModalProps) {
   /** PDF export is a Pro-only feature per PRICING_TIERS in payments.ts */
-  const canExportPDF = tier === "pro";
+  const canExportPDF = tier === 'pro';
   const modalRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<Element | null>(null);
   const headingId = useId();
@@ -87,13 +82,13 @@ export function SaveOptionsModal({
     if (!isOpen) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         handleClose();
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleClose]);
 
   // Prevent body scroll when modal is open
@@ -101,7 +96,7 @@ export function SaveOptionsModal({
     if (!isOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -135,7 +130,7 @@ export function SaveOptionsModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs"
+          className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/60"
           onClick={handleBackdropClick}
           role="presentation"
         >
@@ -144,7 +139,7 @@ export function SaveOptionsModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="w-full max-w-lg mx-4"
+            className="mx-4 w-full max-w-lg"
           >
             <div
               ref={modalRef}
@@ -153,13 +148,13 @@ export function SaveOptionsModal({
               aria-labelledby={headingId}
               aria-describedby={descriptionId}
               tabIndex={-1}
-              className="relative outline-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
+              className="outline-hidden border-(--glass-border) bg-(--bg-glass) relative rounded-2xl border p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* ── Close button ────────────────────────────────────────── */}
               <button
                 type="button"
                 onClick={handleClose}
-                className="absolute right-4 top-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
+                className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(148,163,184,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" />
@@ -168,15 +163,12 @@ export function SaveOptionsModal({
               {/* ── Header ──────────────────────────────────────────────── */}
               <h2
                 id={headingId}
-                className="mb-2 text-center font-heading text-xl font-bold text-(--text-heading)"
+                className="font-heading text-(--text-heading) mb-2 text-center text-xl font-bold"
               >
                 Save Your Results
               </h2>
 
-              <p
-                id={descriptionId}
-                className="mb-6 text-center text-sm text-(--text-muted)"
-              >
+              <p id={descriptionId} className="text-(--text-muted) mb-6 text-center text-sm">
                 Choose how you want to save your analysis results.
               </p>
 
@@ -191,16 +183,13 @@ export function SaveOptionsModal({
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                      <FileDown
-                        className="h-5 w-5 text-(--accent-teal)"
-                        aria-hidden="true"
-                      />
+                      <FileDown className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-base font-semibold text-(--text-heading)">
+                      <h3 className="font-heading text-(--text-heading) text-base font-semibold">
                         Download PDF Report
                       </h3>
-                      <p className="mt-1 text-sm text-(--text-muted)">
+                      <p className="text-(--text-muted) mt-1 text-sm">
                         Generate a PDF report you can save locally or print
                       </p>
                       {canExportPDF ? (
@@ -214,16 +203,11 @@ export function SaveOptionsModal({
                         </Button>
                       ) : (
                         <div className="mt-3 flex items-center gap-2">
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            disabled
-                            aria-disabled="true"
-                          >
+                          <Button variant="secondary" size="sm" disabled aria-disabled="true">
                             <Lock className="mr-1 h-3 w-3" aria-hidden="true" />
                             Pro Only
                           </Button>
-                          <span className="text-xs text-(--text-dim)">
+                          <span className="text-(--text-dim) text-xs">
                             Upgrade to Pro to export PDF reports
                           </span>
                         </div>
@@ -236,21 +220,18 @@ export function SaveOptionsModal({
                 <GlassCard
                   variant="subtle"
                   hover="none"
-                  className="p-5 border-(--border-subtle)"
+                  className="border-(--border-subtle) p-5"
                   data-testid="option-save-encrypted"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                      <Shield
-                        className="h-5 w-5 text-(--text-muted)"
-                        aria-hidden="true"
-                      />
+                      <Shield className="text-(--text-muted) h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-base font-semibold text-(--text-dim)">
+                      <h3 className="font-heading text-(--text-dim) text-base font-semibold">
                         Save to Secure Cloud
                       </h3>
-                      <p className="mt-1 text-sm text-(--text-dim)">
+                      <p className="text-(--text-dim) mt-1 text-sm">
                         End-to-end encrypted storage — access from any device
                       </p>
                       <Button
@@ -262,7 +243,7 @@ export function SaveOptionsModal({
                       >
                         Coming Soon
                       </Button>
-                      <p className="mt-2 text-xs text-(--text-dim)">
+                      <p className="text-(--text-dim) mt-2 text-xs">
                         Encrypted cloud storage is being built. Check back soon!
                       </p>
                     </div>

@@ -33,6 +33,7 @@ You are a senior application security engineer reviewing code for the Mergenix g
 ## Output Format
 
 For each issue found:
+
 - **[BLOCK/WARN/INFO]** `file/path.ts:line` — Description. Attack vector: How an attacker exploits this. Suggested fix: Specific remediation.
 
 If security is solid: PASS — no security vulnerabilities found.

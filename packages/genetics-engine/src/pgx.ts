@@ -230,9 +230,7 @@ function isHeterozygousMatch(actual: string, expectedHom: string): boolean {
  * The reference allele is identified by having no defining variants.
  * Falls back to "*1" if not found.
  */
-function getReferenceAllele(
-  starAlleles: Record<string, PgxStarAllele>,
-): string {
+function getReferenceAllele(starAlleles: Record<string, PgxStarAllele>): string {
   for (const [name, info] of Object.entries(starAlleles)) {
     if (info.defining_variants.length === 0) {
       return name;
@@ -592,7 +590,8 @@ export function getPgxDisclaimer(): string {
   return (
     'IMPORTANT LIMITATIONS: This pharmacogenomics analysis is for educational ' +
     'purposes only and is NOT a clinical pharmacogenomic test. ' +
-    ARRAY_LIMITATION_DISCLAIMER + ' ' +
+    ARRAY_LIMITATION_DISCLAIMER +
+    ' ' +
     'Direct-to-consumer (DTC) genotyping arrays cannot detect gene deletions, ' +
     'duplications, or structural rearrangements. This is especially significant ' +
     'for CYP2D6, where gene deletions (*5, ~5-10% of Europeans) and duplications ' +

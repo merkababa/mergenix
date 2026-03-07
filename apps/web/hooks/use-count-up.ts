@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 /**
  * Hook that animates a number from 0 to `target` with an ease-out

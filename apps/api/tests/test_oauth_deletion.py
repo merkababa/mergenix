@@ -223,9 +223,7 @@ async def test_confirm_deletion_valid_token(
     assert "deleted" in data["message"].lower()
 
     # Verify user is gone from the database
-    result = await db_session.execute(
-        select(User).where(User.id == oauth_user.id)
-    )
+    result = await db_session.execute(select(User).where(User.id == oauth_user.id))
     assert result.scalar_one_or_none() is None
 
 
@@ -265,9 +263,7 @@ async def test_confirm_deletion_expired_token(
     assert data["detail"]["code"] == "INVALID_TOKEN"
 
     # Verify the user still exists in the database (expired token must NOT delete)
-    result = await db_session.execute(
-        select(User).where(User.id == oauth_user.id)
-    )
+    result = await db_session.execute(select(User).where(User.id == oauth_user.id))
     user_still_exists = result.scalar_one_or_none()
     assert user_still_exists is not None, "User should NOT be deleted when token is expired"
 
@@ -299,9 +295,7 @@ async def test_confirm_deletion_creates_audit_log(
     assert response.status_code == 200
 
     # Verify audit log (user_id will be SET NULL after deletion)
-    audit_result = await db_session.execute(
-        select(AuditLog).where(AuditLog.event_type == "account_deleted")
-    )
+    audit_result = await db_session.execute(select(AuditLog).where(AuditLog.event_type == "account_deleted"))
     audit_entry = audit_result.scalar_one_or_none()
     assert audit_entry is not None
 

@@ -223,9 +223,7 @@ export function getCoverageSummary(metrics: CoverageMetrics): {
 
   // Average coverage across all diseases (0 if no diseases)
   const diseaseCount = conditions.length;
-  const overallCoveragePct = diseaseCount > 0
-    ? totalCoveragePct / diseaseCount
-    : 0;
+  const overallCoveragePct = diseaseCount > 0 ? totalCoveragePct / diseaseCount : 0;
 
   // Round to one decimal place for display
   const roundedOverallPct = Math.round(overallCoveragePct * 10) / 10;

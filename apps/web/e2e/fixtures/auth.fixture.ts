@@ -39,7 +39,6 @@ async function createAuthenticatedContext(
   user: TestUser,
   baseURL: string,
 ): Promise<{ context: import('@playwright/test').BrowserContext; page: Page }> {
-
   // Hit the login endpoint directly
   const loginResponse = await fetch(`${API_BASE_URL}/auth/login`, {
     method: 'POST',
@@ -52,9 +51,7 @@ async function createAuthenticatedContext(
 
   if (!loginResponse.ok) {
     const errorBody = await loginResponse.text();
-    throw new Error(
-      `Failed to log in as ${user.email}: ${loginResponse.status} ${errorBody}`,
-    );
+    throw new Error(`Failed to log in as ${user.email}: ${loginResponse.status} ${errorBody}`);
   }
 
   const tokens = (await loginResponse.json()) as {
@@ -121,11 +118,7 @@ interface AuthFixtures {
 export const test = base.extend<AuthFixtures>({
   freeUserPage: async ({ browser }, use) => {
     const baseURL = test.info().project.use.baseURL ?? 'http://localhost:3000';
-    const { context, page } = await createAuthenticatedContext(
-      browser,
-      TEST_USERS.free,
-      baseURL,
-    );
+    const { context, page } = await createAuthenticatedContext(browser, TEST_USERS.free, baseURL);
     await use(page);
     await context.close();
   },
@@ -143,11 +136,7 @@ export const test = base.extend<AuthFixtures>({
 
   proUserPage: async ({ browser }, use) => {
     const baseURL = test.info().project.use.baseURL ?? 'http://localhost:3000';
-    const { context, page } = await createAuthenticatedContext(
-      browser,
-      TEST_USERS.pro,
-      baseURL,
-    );
+    const { context, page } = await createAuthenticatedContext(browser, TEST_USERS.pro, baseURL);
     await use(page);
     await context.close();
   },

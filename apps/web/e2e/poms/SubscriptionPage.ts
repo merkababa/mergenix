@@ -45,9 +45,9 @@ export class SubscriptionPage {
     this.heading = page.getByRole('heading', { name: 'Subscription', exact: true }).first();
     this.currentPlanHeading = page.getByRole('heading', { name: 'Current Plan' });
     // The tier name is in a large text span next to the "Active"/"Inactive" badge
-    this.currentTierName = page.locator('[data-testid="current-tier-name"]').or(
-      page.locator('span.font-heading.text-3xl'),
-    );
+    this.currentTierName = page
+      .locator('[data-testid="current-tier-name"]')
+      .or(page.locator('span.font-heading.text-3xl'));
     this.currentPlanBadge = page.getByText('Your Current Plan');
     this.paymentHistoryHeading = page.getByRole('heading', { name: 'Payment History' });
     this.compareAllPlansLink = page.getByRole('link', { name: /compare all plans/i });

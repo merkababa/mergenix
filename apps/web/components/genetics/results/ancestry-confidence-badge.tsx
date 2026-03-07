@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
+import { memo } from 'react';
 
 interface AncestryConfidenceBadgeProps {
   ancestry: string;
-  confidenceLevel: "high" | "medium" | "low";
+  confidenceLevel: 'high' | 'medium' | 'low';
   ancestryNote?: string;
 }
 
 const BADGE_STYLES: Record<
-  "high" | "medium" | "low",
+  'high' | 'medium' | 'low',
   { bg: string; text: string; border: string; label: string }
 > = {
   high: {
-    bg: "rgba(6, 214, 160, 0.08)",
-    text: "var(--accent-teal)",
-    border: "rgba(6, 214, 160, 0.2)",
-    label: "High Confidence",
+    bg: 'rgba(6, 214, 160, 0.08)',
+    text: 'var(--accent-teal)',
+    border: 'rgba(6, 214, 160, 0.2)',
+    label: 'High Confidence',
   },
   medium: {
-    bg: "rgba(245, 158, 11, 0.08)",
-    text: "var(--accent-amber)",
-    border: "rgba(245, 158, 11, 0.2)",
-    label: "Medium Confidence",
+    bg: 'rgba(245, 158, 11, 0.08)',
+    text: 'var(--accent-amber)',
+    border: 'rgba(245, 158, 11, 0.2)',
+    label: 'Medium Confidence',
   },
   low: {
-    bg: "rgba(244, 63, 94, 0.08)",
-    text: "var(--accent-rose)",
-    border: "rgba(244, 63, 94, 0.2)",
-    label: "Low Confidence",
+    bg: 'rgba(244, 63, 94, 0.08)',
+    text: 'var(--accent-rose)',
+    border: 'rgba(244, 63, 94, 0.2)',
+    label: 'Low Confidence',
   },
 };
 
@@ -57,17 +57,15 @@ export const AncestryConfidenceBadge = memo(function AncestryConfidenceBadge({
       >
         {style.label}
       </span>
-      {confidenceLevel === "low" && (
-        <p className="text-xs leading-relaxed text-(--text-muted)">
-          {ancestry === "Unknown"
-            ? "Most PRS studies are based on European populations. Ancestry could not be determined — accuracy may vary."
+      {confidenceLevel === 'low' && (
+        <p className="text-(--text-muted) text-xs leading-relaxed">
+          {ancestry === 'Unknown'
+            ? 'Most PRS studies are based on European populations. Ancestry could not be determined — accuracy may vary.'
             : `Most PRS studies are based on European populations. Accuracy may be reduced for ${ancestry} ancestry.`}
         </p>
       )}
-      {ancestryNote && confidenceLevel !== "low" && (
-        <p className="text-xs leading-relaxed text-(--text-muted)">
-          {ancestryNote}
-        </p>
+      {ancestryNote && confidenceLevel !== 'low' && (
+        <p className="text-(--text-muted) text-xs leading-relaxed">{ancestryNote}</p>
       )}
     </div>
   );

@@ -12,13 +12,33 @@ vi.mock('next/dynamic', () => ({
   default: (loader: () => Promise<{ default: React.ComponentType }>) => {
     // Call the loader to resolve the module shape, but render a stub
     const name = loader.toString();
-    if (name.includes('overview-tab')) return function OverviewTab() { return <div data-testid="overview-tab">OverviewTab</div>; };
-    if (name.includes('carrier-tab')) return function CarrierTab() { return <div data-testid="carrier-tab">CarrierTab</div>; };
-    if (name.includes('traits-tab')) return function TraitsTab() { return <div data-testid="traits-tab">TraitsTab</div>; };
-    if (name.includes('pgx-tab')) return function PgxTab() { return <div data-testid="pgx-tab">PgxTab</div>; };
-    if (name.includes('prs-tab')) return function PrsTab() { return <div data-testid="prs-tab">PrsTab</div>; };
-    if (name.includes('counseling-tab')) return function CounselingTab() { return <div data-testid="counseling-tab">CounselingTab</div>; };
-    return function Fallback() { return <div>Unknown</div>; };
+    if (name.includes('overview-tab'))
+      return function OverviewTab() {
+        return <div data-testid="overview-tab">OverviewTab</div>;
+      };
+    if (name.includes('carrier-tab'))
+      return function CarrierTab() {
+        return <div data-testid="carrier-tab">CarrierTab</div>;
+      };
+    if (name.includes('traits-tab'))
+      return function TraitsTab() {
+        return <div data-testid="traits-tab">TraitsTab</div>;
+      };
+    if (name.includes('pgx-tab'))
+      return function PgxTab() {
+        return <div data-testid="pgx-tab">PgxTab</div>;
+      };
+    if (name.includes('prs-tab'))
+      return function PrsTab() {
+        return <div data-testid="prs-tab">PrsTab</div>;
+      };
+    if (name.includes('counseling-tab'))
+      return function CounselingTab() {
+        return <div data-testid="counseling-tab">CounselingTab</div>;
+      };
+    return function Fallback() {
+      return <div>Unknown</div>;
+    };
   },
 }));
 
@@ -50,7 +70,13 @@ vi.mock('../../lib/pdf/use-pdf-export', () => ({
 
 // Mock CoupleUploadCard — renders two testable dropzone stubs
 vi.mock('../../components/genetics/couple-upload-card', () => ({
-  CoupleUploadCard: ({ parentAFile, parentBFile }: { parentAFile: File | null; parentBFile: File | null }) => (
+  CoupleUploadCard: ({
+    parentAFile,
+    parentBFile,
+  }: {
+    parentAFile: File | null;
+    parentBFile: File | null;
+  }) => (
     <div data-testid="couple-upload-card">
       {!parentAFile && <div data-testid="dropzone-Parent A (Mother)">Parent A (Mother)</div>}
       {!parentBFile && <div data-testid="dropzone-Parent B (Father)">Parent B (Father)</div>}
@@ -227,9 +253,7 @@ describe('AnalysisPage', () => {
 
     render(<AnalysisPage />);
 
-    expect(
-      screen.getByText(/viewing demo results with synthetic data/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/viewing demo results with synthetic data/)).toBeInTheDocument();
   });
 
   it('tab switching works (click changes activeTab in store)', () => {
@@ -287,7 +311,12 @@ describe('AnalysisPage', () => {
     // Only the "Save Results" button (opening the SaveOptionsModal) should be present
     const saveButtons = screen.getAllByRole('button', { name: /save/i });
     // "Save Results" opens the modal; there should be no "Save Analysis" dialog trigger
-    expect(saveButtons.every((btn) => btn.textContent?.includes('Save Results') || btn.textContent?.includes('New Analysis'))).toBe(true);
+    expect(
+      saveButtons.every(
+        (btn) =>
+          btn.textContent?.includes('Save Results') || btn.textContent?.includes('New Analysis'),
+      ),
+    ).toBe(true);
     // The text "Save Analysis" from SaveResultDialog should not appear
     expect(screen.queryByText('Save Analysis')).not.toBeInTheDocument();
   });

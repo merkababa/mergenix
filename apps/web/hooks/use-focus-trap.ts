@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from 'react';
 
 /**
  * Custom hook that traps keyboard focus within a container element.
@@ -32,12 +32,12 @@ export function useFocusTrap(
 
     const container = containerRef.current;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !allowEscape) {
+      if (e.key === 'Escape' && !allowEscape) {
         e.preventDefault();
         e.stopPropagation();
         return;
       }
-      if (e.key !== "Tab") return;
+      if (e.key !== 'Tab') return;
 
       const focusable = container.querySelectorAll<HTMLElement>(
         'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])',
@@ -56,14 +56,14 @@ export function useFocusTrap(
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
 
       // Restore focus to the previously focused element
       const previous = previousFocusRef.current;
-      if (previous && typeof previous.focus === "function" && document.contains(previous)) {
+      if (previous && typeof previous.focus === 'function' && document.contains(previous)) {
         previous.focus();
       }
       previousFocusRef.current = null;

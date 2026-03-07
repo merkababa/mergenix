@@ -15,10 +15,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Mock the analysis-store to avoid pulling in its heavy dependencies.
 vi.mock('@/lib/stores/analysis-store', () => ({
-  useAnalysisStore: Object.assign(
-    () => ({ reset: vi.fn() }),
-    { getState: () => ({ reset: vi.fn() }) },
-  ),
+  useAnalysisStore: Object.assign(() => ({ reset: vi.fn() }), {
+    getState: () => ({ reset: vi.fn() }),
+  }),
 }));
 
 // We will configure legalClient mock per-test below.
@@ -148,7 +147,12 @@ describe('flushPendingConsents — replay and clear on success', () => {
     // Also write to memoryFallback since safeLocalStorageGet reads from both
     memoryFallback[PENDING_CONSENTS_KEY] = JSON.stringify(queue);
 
-    const fakeRecord = { id: 'rec-1', consentType: 'gdpr_analytics', version: '1.0', createdAt: '' };
+    const fakeRecord = {
+      id: 'rec-1',
+      consentType: 'gdpr_analytics',
+      version: '1.0',
+      createdAt: '',
+    };
     mockRecordConsent.mockResolvedValue(fakeRecord);
 
     await useLegalStore.getState().flushPendingConsents();
@@ -173,7 +177,12 @@ describe('flushPendingConsents — replay and clear on success', () => {
     localStorage.setItem(PENDING_CONSENTS_KEY, JSON.stringify(queue));
     memoryFallback[PENDING_CONSENTS_KEY] = JSON.stringify(queue);
 
-    const fakeRecord = { id: 'rec-1', consentType: 'cookie_consent', version: '2.0', createdAt: '' };
+    const fakeRecord = {
+      id: 'rec-1',
+      consentType: 'cookie_consent',
+      version: '2.0',
+      createdAt: '',
+    };
 
     // First call (gdpr_analytics) still fails; second call (cookie_consent) succeeds
     mockRecordConsent

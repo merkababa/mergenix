@@ -11,10 +11,9 @@ from __future__ import annotations
 import json
 import uuid
 from datetime import UTC, datetime
-
-import pytest
 from unittest.mock import AsyncMock, patch
 
+import pytest
 from app.models.analysis import AnalysisResult
 from app.models.audit import AuditLog, Session
 from app.models.payment import Payment
@@ -158,19 +157,13 @@ async def test_delete_account_cascade_deletes_related_data(
     assert response.status_code == 200
 
     # Verify all related data is gone
-    analyses = await db_session.execute(
-        select(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
-    )
+    analyses = await db_session.execute(select(AnalysisResult).where(AnalysisResult.user_id == test_user.id))
     assert analyses.scalars().all() == []
 
-    sessions = await db_session.execute(
-        select(Session).where(Session.user_id == test_user.id)
-    )
+    sessions = await db_session.execute(select(Session).where(Session.user_id == test_user.id))
     assert sessions.scalars().all() == []
 
-    payments = await db_session.execute(
-        select(Payment).where(Payment.user_id == test_user.id)
-    )
+    payments = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
     assert payments.scalars().all() == []
 
 
@@ -236,9 +229,7 @@ async def test_delete_account_audit_log(
 
     # AuditLog has ondelete="SET NULL" for user_id, so the audit entry
     # should persist even after user deletion, but user_id will be NULL.
-    audit_result = await db_session.execute(
-        select(AuditLog).where(AuditLog.event_type == "account_deleted")
-    )
+    audit_result = await db_session.execute(select(AuditLog).where(AuditLog.event_type == "account_deleted"))
     audit_entry = audit_result.scalar_one_or_none()
     assert audit_entry is not None
 
@@ -569,9 +560,7 @@ async def test_export_data_pagination_custom_page_size(
         db_session.add(analysis)
     await db_session.commit()
 
-    response = await client.get(
-        "/gdpr/export?page=1&page_size=2", headers=auth_headers
-    )
+    response = await client.get("/gdpr/export?page=1&page_size=2", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
 
@@ -595,9 +584,7 @@ async def test_export_data_pagination_page_2(
         db_session.add(analysis)
     await db_session.commit()
 
-    response = await client.get(
-        "/gdpr/export?page=2&page_size=2", headers=auth_headers
-    )
+    response = await client.get("/gdpr/export?page=2&page_size=2", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
 
@@ -613,9 +600,7 @@ async def test_export_data_pagination_max_page_size_rejected(
     auth_headers: dict[str, str],
 ) -> None:
     """GET /gdpr/export?page_size=9999 should be rejected (max 1000)."""
-    response = await client.get(
-        "/gdpr/export?page_size=9999", headers=auth_headers
-    )
+    response = await client.get("/gdpr/export?page_size=9999", headers=auth_headers)
     assert response.status_code == 422  # FastAPI Query validation rejects > 1000
 
 
@@ -626,9 +611,7 @@ async def test_export_data_pagination_max_page_size_accepted(
     auth_headers: dict[str, str],
 ) -> None:
     """GET /gdpr/export?page_size=1000 should be accepted (exactly at max)."""
-    response = await client.get(
-        "/gdpr/export?page_size=1000", headers=auth_headers
-    )
+    response = await client.get("/gdpr/export?page_size=1000", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
     assert data["pagination"]["page_size"] == 1000
@@ -857,14 +840,10 @@ async def test_delete_account_via_auth_endpoint(
     assert response.status_code == 200
 
     # Verify related data is gone
-    analyses = await db_session.execute(
-        select(AnalysisResult).where(AnalysisResult.user_id == test_user.id)
-    )
+    analyses = await db_session.execute(select(AnalysisResult).where(AnalysisResult.user_id == test_user.id))
     assert analyses.scalars().all() == []
 
-    payments = await db_session.execute(
-        select(Payment).where(Payment.user_id == test_user.id)
-    )
+    payments = await db_session.execute(select(Payment).where(Payment.user_id == test_user.id))
     assert payments.scalars().all() == []
 
 
@@ -1222,9 +1201,7 @@ async def test_rectify_email_change_creates_email_verification_record(
     assert response.status_code == 200
 
     # Verify an EmailVerification record was created for the user
-    result = await db_session.execute(
-        select(EmailVerification).where(EmailVerification.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(EmailVerification).where(EmailVerification.user_id == test_user.id))
     verification = result.scalar_one_or_none()
     assert verification is not None
     assert verification.verified_at is None  # not yet verified

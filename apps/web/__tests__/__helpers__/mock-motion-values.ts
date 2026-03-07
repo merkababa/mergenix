@@ -8,8 +8,12 @@ export function mockMotionValue(initial: number) {
   let current = initial;
   return {
     get: () => current,
-    set: (v: number) => { current = v; },
-    get current() { return current; },
+    set: (v: number) => {
+      current = v;
+    },
+    get current() {
+      return current;
+    },
     onChange: vi.fn(),
     on: vi.fn(),
   };

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { memo } from "react";
+import { memo } from 'react';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -23,31 +23,32 @@ function getQualitativeLabel(coveragePct: number): {
 } {
   if (coveragePct >= 100) {
     return {
-      label: "Fully Tested",
-      explanation: "Residual risk is very low — novel variants not in current databases may still exist",
+      label: 'Fully Tested',
+      explanation:
+        'Residual risk is very low — novel variants not in current databases may still exist',
     };
   }
   if (coveragePct >= 95) {
     return {
-      label: "Very Low Residual Risk",
-      explanation: "Most known variants tested",
+      label: 'Very Low Residual Risk',
+      explanation: 'Most known variants tested',
     };
   }
   if (coveragePct >= 80) {
     return {
-      label: "Low Residual Risk",
-      explanation: "Good variant coverage",
+      label: 'Low Residual Risk',
+      explanation: 'Good variant coverage',
     };
   }
   if (coveragePct >= 50) {
     return {
-      label: "Moderate Residual Risk",
-      explanation: "Partial variant coverage",
+      label: 'Moderate Residual Risk',
+      explanation: 'Partial variant coverage',
     };
   }
   return {
-    label: "Significant Residual Risk",
-    explanation: "Clinical testing recommended",
+    label: 'Significant Residual Risk',
+    explanation: 'Clinical testing recommended',
   };
 }
 
@@ -73,7 +74,7 @@ export const ResidualRiskBadge = memo(function ResidualRiskBadge({
 
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-elevated) px-2.5 py-0.5 text-[11px] font-medium text-(--text-muted)"
+      className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-medium"
       role="status"
       aria-label={`${diseaseName}: ${label} — ${explanation}`}
     >

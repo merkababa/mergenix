@@ -5,7 +5,9 @@ import { mockLucideIcons, mockNextLinkFactory, mockBadgeFactory } from '../__hel
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-vi.mock('lucide-react', () => mockLucideIcons('User', 'CreditCard', 'Activity', 'LogOut', 'ChevronDown'));
+vi.mock('lucide-react', () =>
+  mockLucideIcons('User', 'CreditCard', 'Activity', 'LogOut', 'ChevronDown'),
+);
 
 vi.mock('next/link', () => mockNextLinkFactory());
 

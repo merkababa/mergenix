@@ -86,9 +86,7 @@ async def _fetch_paginated_analyses(
         Tuple of (analyses list, total_count, skipped_legacy_count).
     """
     count_result = await db.execute(
-        select(func.count())
-        .select_from(AnalysisResult)
-        .where(AnalysisResult.user_id == user_id)
+        select(func.count()).select_from(AnalysisResult).where(AnalysisResult.user_id == user_id)
     )
     total_count = count_result.scalar_one()
 
@@ -139,10 +137,7 @@ async def _fetch_audit_logs(
 ) -> list[GdprAuditLogExport]:
     """Fetch audit log entries for GDPR export."""
     audit_result = await db.execute(
-        select(AuditLog)
-        .where(AuditLog.user_id == user_id)
-        .order_by(AuditLog.created_at.desc())
-        .limit(MAX_EXPORT_ROWS)
+        select(AuditLog).where(AuditLog.user_id == user_id).order_by(AuditLog.created_at.desc()).limit(MAX_EXPORT_ROWS)
     )
     audit_rows = audit_result.scalars().all()
 
@@ -165,10 +160,7 @@ async def _fetch_payments(
 ) -> list[GdprPaymentExport]:
     """Fetch payment records for GDPR export."""
     payment_result = await db.execute(
-        select(Payment)
-        .where(Payment.user_id == user_id)
-        .order_by(Payment.created_at.desc())
-        .limit(MAX_EXPORT_ROWS)
+        select(Payment).where(Payment.user_id == user_id).order_by(Payment.created_at.desc()).limit(MAX_EXPORT_ROWS)
     )
     payment_rows = payment_result.scalars().all()
 
@@ -282,10 +274,7 @@ async def request_deletion(
     # Store the hashed token and expiry on the user record.
     # This replaces any previously requested deletion token.
     user.deletion_token_hash = hash_token(token)
-    user.deletion_token_expires = (
-        datetime.now(UTC).replace(tzinfo=None)
-        + timedelta(hours=_DELETION_TOKEN_EXPIRY_HOURS)
-    )
+    user.deletion_token_expires = datetime.now(UTC).replace(tzinfo=None) + timedelta(hours=_DELETION_TOKEN_EXPIRY_HOURS)
 
     await audit_service.log_event(
         db,
@@ -406,9 +395,7 @@ async def export_data(
     )
 
     # Gate 2 R1 Issue 7: Delegate to extracted helper functions
-    analyses, total_count, skipped_legacy = await _fetch_paginated_analyses(
-        db, user.id, page, page_size
-    )
+    analyses, total_count, skipped_legacy = await _fetch_paginated_analyses(db, user.id, page, page_size)
     audit_logs = await _fetch_audit_logs(db, user.id)
     payments = await _fetch_payments(db, user.id)
 
@@ -503,9 +490,7 @@ async def rectify_profile(
                         "code": "PASSWORD_REQUIRED",
                     },
                 )
-            if user.password_hash is None or not await verify_password(
-                body.password, user.password_hash
-            ):
+            if user.password_hash is None or not await verify_password(body.password, user.password_hash):
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail={

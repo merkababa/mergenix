@@ -11,6 +11,7 @@
 **Vision:** Become the subscription service that couples turn to when they're ready to start a family, with predictable pricing and continuous value delivery.
 
 **Target Segments:**
+
 - **Essential:** Curious couples, early relationship stage
 - **Plus:** Active family planners, pre-conception phase
 - **Pro:** Health-conscious families, fertility clinic patients, providers
@@ -19,17 +20,17 @@
 
 ## 2. Tier Structure Overview
 
-| Feature | Essential | Plus | Pro |
-|---------|-----------|------|-----|
-| **Price (Monthly)** | $9.99 | $24.99 | $49.99 |
-| **Price (Annual)** | $79.99 | $199.99 | $399.99 |
-| **Diseases** | 100 | 500 | 1,211 |
-| **Traits** | 25 | 79 | 79+ |
-| **Analyses/Month** | 5 | Unlimited | Unlimited |
-| **Partner Profiles** | 2 | 5 | Unlimited |
-| **Reports** | Basic | Detailed | Clinical-Grade |
-| **Support** | Email | Priority Email | Phone + Email |
-| **Genetic Counselor** | No | No | 1/month included |
+| Feature               | Essential | Plus           | Pro              |
+| --------------------- | --------- | -------------- | ---------------- |
+| **Price (Monthly)**   | $9.99     | $24.99         | $49.99           |
+| **Price (Annual)**    | $79.99    | $199.99        | $399.99          |
+| **Diseases**          | 100       | 500            | 1,211            |
+| **Traits**            | 25        | 79             | 79+              |
+| **Analyses/Month**    | 5         | Unlimited      | Unlimited        |
+| **Partner Profiles**  | 2         | 5              | Unlimited        |
+| **Reports**           | Basic     | Detailed       | Clinical-Grade   |
+| **Support**           | Email     | Priority Email | Phone + Email    |
+| **Genetic Counselor** | No        | No             | 1/month included |
 
 ---
 
@@ -37,7 +38,7 @@
 
 ### 3.1 Target User
 
-*"We're thinking about having kids someday and want to know if there's anything to worry about."*
+_"We're thinking about having kids someday and want to know if there's anything to worry about."_
 
 - Early-stage couples
 - Curious individuals
@@ -49,6 +50,7 @@
 Curated list of 100 most impactful conditions:
 
 **Selection Criteria:**
+
 - High severity OR high carrier frequency
 - Well-established genetic testing
 - Actionable (treatable or preventable)
@@ -56,47 +58,47 @@ Curated list of 100 most impactful conditions:
 
 **Category Distribution:**
 
-| Category | Count | Examples |
-|----------|-------|----------|
-| Metabolic | 20 | PKU, Gaucher, MCAD Deficiency |
-| Neurological | 18 | SMA, Tay-Sachs, Fragile X |
-| Hematological | 12 | Sickle Cell, Thalassemia, Hemophilia |
-| Pulmonary | 8 | Cystic Fibrosis, AAT Deficiency |
-| Cardiovascular | 10 | Long QT, HCM, Familial Hypercholesterolemia |
-| Cancer Predisposition | 10 | BRCA1/2, Lynch Syndrome, Li-Fraumeni |
-| Immunodeficiency | 8 | SCID variants, CGD |
-| Endocrine | 6 | CAH, MODY types |
-| Sensory | 5 | Usher Syndrome, RP |
-| Other | 3 | Various |
+| Category              | Count | Examples                                    |
+| --------------------- | ----- | ------------------------------------------- |
+| Metabolic             | 20    | PKU, Gaucher, MCAD Deficiency               |
+| Neurological          | 18    | SMA, Tay-Sachs, Fragile X                   |
+| Hematological         | 12    | Sickle Cell, Thalassemia, Hemophilia        |
+| Pulmonary             | 8     | Cystic Fibrosis, AAT Deficiency             |
+| Cardiovascular        | 10    | Long QT, HCM, Familial Hypercholesterolemia |
+| Cancer Predisposition | 10    | BRCA1/2, Lynch Syndrome, Li-Fraumeni        |
+| Immunodeficiency      | 8     | SCID variants, CGD                          |
+| Endocrine             | 6     | CAH, MODY types                             |
+| Sensory               | 5     | Usher Syndrome, RP                          |
+| Other                 | 3     | Various                                     |
 
 ### 3.3 Trait Selection (25 Traits)
 
-| Category | Traits |
-|----------|--------|
+| Category       | Traits                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
 | **Appearance** | Eye color, Hair color, Hair texture, Freckling, Skin pigmentation, Cleft chin, Widow's peak, Dimples |
-| **Sensory** | Bitter taste, Cilantro aversion, Asparagus smell, Earwax type |
-| **Physical** | Height tendency, Lactose tolerance, Caffeine metabolism, Alcohol flush |
-| **Other** | Photic sneeze, Attached earlobes, Thumb hyperextension, Morning person tendency |
+| **Sensory**    | Bitter taste, Cilantro aversion, Asparagus smell, Earwax type                                        |
+| **Physical**   | Height tendency, Lactose tolerance, Caffeine metabolism, Alcohol flush                               |
+| **Other**      | Photic sneeze, Attached earlobes, Thumb hyperextension, Morning person tendency                      |
 
 ### 3.4 Essential-Only Features
 
-| Feature | Description |
-|---------|-------------|
-| **Quick Match Score** | Single compatibility percentage (0-100) |
-| **Traffic Light Risk** | Red/Yellow/Green for each condition |
-| **60-Second Summary** | Ultra-fast overview of key findings |
-| **Social Share Cards** | Non-medical, shareable graphics |
-| **Basic PDF** | 3-page summary report |
+| Feature                | Description                             |
+| ---------------------- | --------------------------------------- |
+| **Quick Match Score**  | Single compatibility percentage (0-100) |
+| **Traffic Light Risk** | Red/Yellow/Green for each condition     |
+| **60-Second Summary**  | Ultra-fast overview of key findings     |
+| **Social Share Cards** | Non-medical, shareable graphics         |
+| **Basic PDF**          | 3-page summary report                   |
 
 ### 3.5 Essential Limitations
 
-| Limitation | Reason |
-|------------|--------|
-| 5 analyses/month | Encourages upgrade for power users |
-| 2 partner profiles | Basic comparison capability |
-| 30-day result retention | Creates urgency to upgrade |
-| No OMIM deep links | Keeps reports simple |
-| Email-only support | Cost management |
+| Limitation              | Reason                             |
+| ----------------------- | ---------------------------------- |
+| 5 analyses/month        | Encourages upgrade for power users |
+| 2 partner profiles      | Basic comparison capability        |
+| 30-day result retention | Creates urgency to upgrade         |
+| No OMIM deep links      | Keeps reports simple               |
+| Email-only support      | Cost management                    |
 
 ---
 
@@ -104,7 +106,7 @@ Curated list of 100 most impactful conditions:
 
 ### 4.1 Target User
 
-*"We're actively planning to have children and want comprehensive genetic information."*
+_"We're actively planning to have children and want comprehensive genetic information."_
 
 - Engaged/married couples
 - Pre-conception planning stage
@@ -115,26 +117,27 @@ Curated list of 100 most impactful conditions:
 
 All high and moderate severity conditions:
 
-| Category | Count |
-|----------|-------|
-| Metabolic | 95 |
-| Neurological | 73 |
-| Cardiovascular | 57 |
-| Cancer Predisposition | 51 |
-| Immunodeficiency | 51 |
-| Pharmacogenomics | 50 |
-| Connective Tissue | 47 |
-| Renal | 40 |
-| Sensory | 36 |
-| Endocrine | 32 |
-| Skeletal | 25 |
-| Hematological | 23 |
-| Pulmonary | 18 |
-| Other | 6 |
+| Category              | Count |
+| --------------------- | ----- |
+| Metabolic             | 95    |
+| Neurological          | 73    |
+| Cardiovascular        | 57    |
+| Cancer Predisposition | 51    |
+| Immunodeficiency      | 51    |
+| Pharmacogenomics      | 50    |
+| Connective Tissue     | 47    |
+| Renal                 | 40    |
+| Sensory               | 36    |
+| Endocrine             | 32    |
+| Skeletal              | 25    |
+| Hematological         | 23    |
+| Pulmonary             | 18    |
+| Other                 | 6     |
 
 ### 4.3 Full Trait Access (79 Traits)
 
 All trait predictions including:
+
 - Physical appearance (25)
 - Sensory abilities (12)
 - Metabolism (18)
@@ -143,16 +146,16 @@ All trait predictions including:
 
 ### 4.4 Plus-Only Features
 
-| Feature | Description |
-|---------|-------------|
-| **"What If" Scenarios** | Model multiple potential partners |
-| **Detailed Reports** | 15-page PDF with inheritance diagrams |
-| **OMIM Deep Links** | Direct links to authoritative sources |
-| **Carrier Matrix** | Side-by-side comparison table |
-| **Offspring Probability Cards** | Visual Punnett squares |
-| **Extended Family Tracking** | Note carrier status of relatives |
-| **Quarterly Newsletter** | Genetics research updates |
-| **Priority Email Support** | 24-hour response guarantee |
+| Feature                         | Description                           |
+| ------------------------------- | ------------------------------------- |
+| **"What If" Scenarios**         | Model multiple potential partners     |
+| **Detailed Reports**            | 15-page PDF with inheritance diagrams |
+| **OMIM Deep Links**             | Direct links to authoritative sources |
+| **Carrier Matrix**              | Side-by-side comparison table         |
+| **Offspring Probability Cards** | Visual Punnett squares                |
+| **Extended Family Tracking**    | Note carrier status of relatives      |
+| **Quarterly Newsletter**        | Genetics research updates             |
+| **Priority Email Support**      | 24-hour response guarantee            |
 
 ### 4.5 "What If" Scenario Feature
 
@@ -168,6 +171,7 @@ Scenario Manager
 ```
 
 Use cases:
+
 - Comparing potential partners
 - Evaluating sperm/egg donor options
 - Academic curiosity
@@ -178,7 +182,7 @@ Use cases:
 
 ### 5.1 Target User
 
-*"We need clinical-grade genetic analysis and professional guidance."*
+_"We need clinical-grade genetic analysis and professional guidance."_
 
 - Fertility clinic patients
 - Couples with known family history
@@ -188,6 +192,7 @@ Use cases:
 ### 5.2 Full Disease Access (1,211 Conditions)
 
 Complete panel including:
+
 - All 500 from Plus tier
 - Rare conditions (700+)
 - Pharmacogenomics deep dive (100)
@@ -195,18 +200,18 @@ Complete panel including:
 
 ### 5.3 Pro-Only Features
 
-| Feature | Description |
-|---------|-------------|
-| **Genetic Counselor Session** | 1x 30-min video call/month |
-| **Clinical-Grade Reports** | HIPAA-compliant, provider-ready |
-| **Multi-Gen Pedigree** | 3+ generation family tree |
-| **Pharmacogenomics Panel** | Drug response predictions |
-| **IVF/PGT Guidance** | Pre-implantation testing prep |
-| **API Access** | REST API for integrations |
-| **White-Label Reports** | Custom branding for clinics |
-| **Bulk Upload** | Process 10+ files at once |
-| **Phone Support** | Direct line, business hours |
-| **Early Access** | Beta features 60 days early |
+| Feature                       | Description                     |
+| ----------------------------- | ------------------------------- |
+| **Genetic Counselor Session** | 1x 30-min video call/month      |
+| **Clinical-Grade Reports**    | HIPAA-compliant, provider-ready |
+| **Multi-Gen Pedigree**        | 3+ generation family tree       |
+| **Pharmacogenomics Panel**    | Drug response predictions       |
+| **IVF/PGT Guidance**          | Pre-implantation testing prep   |
+| **API Access**                | REST API for integrations       |
+| **White-Label Reports**       | Custom branding for clinics     |
+| **Bulk Upload**               | Process 10+ files at once       |
+| **Phone Support**             | Direct line, business hours     |
+| **Early Access**              | Beta features 60 days early     |
 
 ### 5.4 Genetic Counselor Integration
 
@@ -234,6 +239,7 @@ Post-Session:
 ```
 
 **GC Network:**
+
 - 50+ certified genetic counselors
 - Coverage across time zones
 - Specialty matching (prenatal, pediatric, oncology)
@@ -257,6 +263,7 @@ Legend:
 ```
 
 Features:
+
 - Import genetic data for any node
 - Auto-calculate carrier probabilities
 - Identify inheritance patterns
@@ -264,24 +271,24 @@ Features:
 
 ### 5.6 Pharmacogenomics Panel
 
-| Drug Category | Genes | Clinical Relevance |
-|---------------|-------|-------------------|
+| Drug Category  | Genes           | Clinical Relevance           |
+| -------------- | --------------- | ---------------------------- |
 | Cardiovascular | CYP2C19, VKORC1 | Clopidogrel, Warfarin dosing |
-| Psychiatry | CYP2D6, CYP2C9 | Antidepressant selection |
-| Pain | CYP2D6, OPRM1 | Opioid metabolism |
-| Oncology | DPYD, TPMT | Chemotherapy toxicity |
-| Anesthesia | RYR1, CACNA1S | Malignant hyperthermia risk |
+| Psychiatry     | CYP2D6, CYP2C9  | Antidepressant selection     |
+| Pain           | CYP2D6, OPRM1   | Opioid metabolism            |
+| Oncology       | DPYD, TPMT      | Chemotherapy toxicity        |
+| Anesthesia     | RYR1, CACNA1S   | Malignant hyperthermia risk  |
 
 ### 5.7 B2B Features
 
-| Feature | Description |
-|---------|-------------|
-| **Clinic Dashboard** | Manage multiple patients |
-| **Bulk Invite** | Send patient signup links |
-| **White-Label** | Custom branding, domain |
-| **SSO Integration** | SAML/OAuth for enterprise |
-| **Audit Logs** | HIPAA compliance |
-| **SLA** | 99.9% uptime guarantee |
+| Feature              | Description               |
+| -------------------- | ------------------------- |
+| **Clinic Dashboard** | Manage multiple patients  |
+| **Bulk Invite**      | Send patient signup links |
+| **White-Label**      | Custom branding, domain   |
+| **SSO Integration**  | SAML/OAuth for enterprise |
+| **Audit Logs**       | HIPAA compliance          |
+| **SLA**              | 99.9% uptime guarantee    |
 
 ---
 
@@ -289,30 +296,30 @@ Features:
 
 ### 6.1 Pricing Matrix
 
-| Tier | Monthly | Annual | Per-Month (Annual) | Savings |
-|------|---------|--------|-------------------|---------|
-| Essential | $9.99 | $79.99 | $6.67 | 33% |
-| Plus | $24.99 | $199.99 | $16.67 | 33% |
-| Pro | $49.99 | $399.99 | $33.33 | 33% |
+| Tier      | Monthly | Annual  | Per-Month (Annual) | Savings |
+| --------- | ------- | ------- | ------------------ | ------- |
+| Essential | $9.99   | $79.99  | $6.67              | 33%     |
+| Plus      | $24.99  | $199.99 | $16.67             | 33%     |
+| Pro       | $49.99  | $399.99 | $33.33             | 33%     |
 
 ### 6.2 Promotional Offers
 
-| Promotion | Discount | Terms |
-|-----------|----------|-------|
-| **Launch Special** | 50% off Year 1 | First 1,000 users |
-| **Couples Bundle** | 25% off both | Two subscriptions |
-| **Student Discount** | 40% off | Valid .edu email |
-| **Referral Program** | 1 month free | Per successful referral |
-| **Annual Commitment** | 33% off | Pay upfront |
-| **Clinic Partnership** | Custom | 10+ Pro seats |
+| Promotion              | Discount       | Terms                   |
+| ---------------------- | -------------- | ----------------------- |
+| **Launch Special**     | 50% off Year 1 | First 1,000 users       |
+| **Couples Bundle**     | 25% off both   | Two subscriptions       |
+| **Student Discount**   | 40% off        | Valid .edu email        |
+| **Referral Program**   | 1 month free   | Per successful referral |
+| **Annual Commitment**  | 33% off        | Pay upfront             |
+| **Clinic Partnership** | Custom         | 10+ Pro seats           |
 
 ### 6.3 Free Trial Strategy
 
-| Tier | Trial Length | Credit Card Required |
-|------|--------------|---------------------|
-| Essential | 7 days | No |
-| Plus | 14 days | Yes |
-| Pro | 30 days | Yes (refundable) |
+| Tier      | Trial Length | Credit Card Required |
+| --------- | ------------ | -------------------- |
+| Essential | 7 days       | No                   |
+| Plus      | 14 days      | Yes                  |
+| Pro       | 30 days      | Yes (refundable)     |
 
 ---
 
@@ -397,6 +404,7 @@ Ongoing:
 ### 8.1 Subscription Management
 
 **Stack:**
+
 - Stripe Subscriptions
 - Stripe Customer Portal
 - Webhook handlers for lifecycle events
@@ -501,32 +509,32 @@ CREATE TABLE gc_sessions (
 
 ### 9.1 Year 1 Projections
 
-| Metric | Q1 | Q2 | Q3 | Q4 | Total |
-|--------|----|----|----|----|-------|
-| Essential Subscribers | 500 | 1,500 | 3,000 | 5,000 | - |
-| Plus Subscribers | 100 | 400 | 800 | 1,500 | - |
-| Pro Subscribers | 20 | 80 | 150 | 300 | - |
-| Monthly Revenue | $8K | $28K | $55K | $95K | - |
-| Annual Revenue | - | - | - | - | **$558K** |
+| Metric                | Q1  | Q2    | Q3    | Q4    | Total     |
+| --------------------- | --- | ----- | ----- | ----- | --------- |
+| Essential Subscribers | 500 | 1,500 | 3,000 | 5,000 | -         |
+| Plus Subscribers      | 100 | 400   | 800   | 1,500 | -         |
+| Pro Subscribers       | 20  | 80    | 150   | 300   | -         |
+| Monthly Revenue       | $8K | $28K  | $55K  | $95K  | -         |
+| Annual Revenue        | -   | -     | -     | -     | **$558K** |
 
 ### 9.2 Year 2 Projections
 
-| Metric | Target |
-|--------|--------|
-| Essential Subscribers | 20,000 |
-| Plus Subscribers | 6,000 |
-| Pro Subscribers | 1,200 |
-| Annual Revenue | **$2.4M** |
+| Metric                | Target    |
+| --------------------- | --------- |
+| Essential Subscribers | 20,000    |
+| Plus Subscribers      | 6,000     |
+| Pro Subscribers       | 1,200     |
+| Annual Revenue        | **$2.4M** |
 
 ### 9.3 Unit Economics
 
-| Metric | Essential | Plus | Pro |
-|--------|-----------|------|-----|
-| Monthly Price | $9.99 | $24.99 | $49.99 |
-| Gross Margin | 85% | 80% | 70% |
-| CAC | $15 | $40 | $100 |
-| LTV (12-mo churn) | $90 | $225 | $450 |
-| LTV:CAC | 6:1 | 5.6:1 | 4.5:1 |
+| Metric            | Essential | Plus   | Pro    |
+| ----------------- | --------- | ------ | ------ |
+| Monthly Price     | $9.99     | $24.99 | $49.99 |
+| Gross Margin      | 85%       | 80%    | 70%    |
+| CAC               | $15       | $40    | $100   |
+| LTV (12-mo churn) | $90       | $225   | $450   |
+| LTV:CAC           | 6:1       | 5.6:1  | 4.5:1  |
 
 ---
 
@@ -534,23 +542,23 @@ CREATE TABLE gc_sessions (
 
 ### 10.1 Subscription Metrics
 
-| Metric | Target |
-|--------|--------|
-| Trial-to-Paid Conversion | 25% |
-| Monthly Churn (Essential) | <8% |
-| Monthly Churn (Plus) | <5% |
-| Monthly Churn (Pro) | <3% |
-| Upgrade Rate (Ess→Plus) | 15%/year |
-| Upgrade Rate (Plus→Pro) | 10%/year |
+| Metric                    | Target   |
+| ------------------------- | -------- |
+| Trial-to-Paid Conversion  | 25%      |
+| Monthly Churn (Essential) | <8%      |
+| Monthly Churn (Plus)      | <5%      |
+| Monthly Churn (Pro)       | <3%      |
+| Upgrade Rate (Ess→Plus)   | 15%/year |
+| Upgrade Rate (Plus→Pro)   | 10%/year |
 
 ### 10.2 Engagement Metrics
 
-| Metric | Essential | Plus | Pro |
-|--------|-----------|------|-----|
-| Monthly Active Rate | 40% | 60% | 80% |
-| Analyses per User/Month | 1.5 | 3 | 5 |
-| Report Downloads/Month | 0.5 | 2 | 4 |
-| Partner Profiles Added | 1.2 | 2.5 | 4 |
+| Metric                  | Essential | Plus | Pro |
+| ----------------------- | --------- | ---- | --- |
+| Monthly Active Rate     | 40%       | 60%  | 80% |
+| Analyses per User/Month | 1.5       | 3    | 5   |
+| Report Downloads/Month  | 0.5       | 2    | 4   |
+| Partner Profiles Added  | 1.2       | 2.5  | 4   |
 
 ---
 
@@ -558,15 +566,16 @@ CREATE TABLE gc_sessions (
 
 ### 11.1 Value Proposition by Tier
 
-| Tier | vs. Promethease ($12) | vs. 23andMe ($229) | vs. Invitae ($250+) |
-|------|----------------------|--------------------|--------------------|
-| Essential | More guidance, offspring focus | Cheaper, specialized | Much cheaper, self-serve |
-| Plus | Way more features | Cheaper annually, more diseases | Cheaper, no physician needed |
-| Pro | Counselor included | Counselor included, more diseases | Comparable, more accessible |
+| Tier      | vs. Promethease ($12)          | vs. 23andMe ($229)                | vs. Invitae ($250+)          |
+| --------- | ------------------------------ | --------------------------------- | ---------------------------- |
+| Essential | More guidance, offspring focus | Cheaper, specialized              | Much cheaper, self-serve     |
+| Plus      | Way more features              | Cheaper annually, more diseases   | Cheaper, no physician needed |
+| Pro       | Counselor included             | Counselor included, more diseases | Comparable, more accessible  |
 
 ### 11.2 Differentiation
 
 **Only Mergenix offers:**
+
 1. Offspring-focused genetic analysis
 2. Partner matching and comparison
 3. "What If" scenario modeling
@@ -578,24 +587,28 @@ CREATE TABLE gc_sessions (
 ## 12. Launch Plan
 
 ### Phase 1: Essential Launch (Month 1-2)
+
 - Essential tier only
 - 7-day free trial
 - Core analysis features
 - Basic PDF reports
 
 ### Phase 2: Plus Launch (Month 3-4)
+
 - Plus tier release
 - What-If scenarios
 - Detailed reports
 - Upgrade prompts
 
 ### Phase 3: Pro Launch (Month 5-6)
+
 - Pro tier release
 - GC network integration
 - API access
 - B2B features
 
 ### Phase 4: Optimization (Month 7-12)
+
 - A/B test pricing
 - Refine upgrade triggers
 - Add annual plans
@@ -603,6 +616,6 @@ CREATE TABLE gc_sessions (
 
 ---
 
-*Document Version: 1.0*
-*Model: Tiered Subscription*
-*Last Updated: February 2026*
+_Document Version: 1.0_
+_Model: Tiered Subscription_
+_Last Updated: February 2026_

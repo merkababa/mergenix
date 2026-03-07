@@ -71,11 +71,7 @@ function buildPairs(count: number): PairData[] {
 
     pairs.push({
       index: i,
-      primaryPos: new Vector3(
-        Math.cos(angle) * HELIX_RADIUS,
-        y,
-        Math.sin(angle) * HELIX_RADIUS,
-      ),
+      primaryPos: new Vector3(Math.cos(angle) * HELIX_RADIUS, y, Math.sin(angle) * HELIX_RADIUS),
       secondaryPos: new Vector3(
         Math.cos(angle + Math.PI) * HELIX_RADIUS,
         y,
@@ -142,7 +138,9 @@ const HelixScene = React.memo(function HelixScene({
   // Ref to hold latest prop values — prevents stale closures in useFrame
   // (component is React.memo, so props captured in the initial closure may be stale)
   const configRef = useRef({ rotationSpeed, isReduced, interactive });
-  useEffect(() => { configRef.current = { rotationSpeed, isReduced, interactive }; });
+  useEffect(() => {
+    configRef.current = { rotationSpeed, isReduced, interactive };
+  });
 
   const pairs = useMemo(() => buildPairs(dotCount), [dotCount]);
 
@@ -168,7 +166,11 @@ const HelixScene = React.memo(function HelixScene({
 
   useFrame(() => {
     if (!groupRef.current) return;
-    const { rotationSpeed: speed, isReduced: reduced, interactive: isInteractive } = configRef.current;
+    const {
+      rotationSpeed: speed,
+      isReduced: reduced,
+      interactive: isInteractive,
+    } = configRef.current;
     if (!reduced) {
       // Continuous Y rotation
       groupRef.current.rotation.y += speed;
@@ -177,10 +179,8 @@ const HelixScene = React.memo(function HelixScene({
       if (isInteractive && mouseRef.current) {
         const targetX = mouseRef.current.y * 0.04;
         const targetZ = mouseRef.current.x * 0.04;
-        groupRef.current.rotation.x +=
-          (targetX - groupRef.current.rotation.x) * 0.03;
-        groupRef.current.rotation.z +=
-          (targetZ - groupRef.current.rotation.z) * 0.03;
+        groupRef.current.rotation.x += (targetX - groupRef.current.rotation.x) * 0.03;
+        groupRef.current.rotation.z += (targetZ - groupRef.current.rotation.z) * 0.03;
       }
     }
   });
@@ -238,20 +238,23 @@ export const DnaHelix3D = React.memo(function DnaHelix3D({
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!interactive || isReduced || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    // Normalize to [-1, 1]
-    mouseRef.current = {
-      x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
-      y: -((e.clientY - rect.top) / rect.height) * 2 + 1,
-    };
-  }, [interactive, isReduced]);
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!interactive || isReduced || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      // Normalize to [-1, 1]
+      mouseRef.current = {
+        x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        y: -((e.clientY - rect.top) / rect.height) * 2 + 1,
+      };
+    },
+    [interactive, isReduced],
+  );
 
   return (
     <div
       ref={containerRef}
-      className={cn('w-full h-full', className)}
+      className={cn('h-full w-full', className)}
       aria-hidden="true"
       onMouseMove={handleMouseMove}
     >

@@ -94,7 +94,7 @@ export class LiftoverTable {
   private readonly entries: Map<string, LiftoverEntry>;
 
   constructor(entries: LiftoverEntry[]) {
-    this.entries = new Map(entries.map(e => [e.rsid, e]));
+    this.entries = new Map(entries.map((e) => [e.rsid, e]));
   }
 
   /** Get the number of entries in the table. */
@@ -180,12 +180,9 @@ export class LiftoverTable {
     }
 
     // Determine source and target positions from the entry
-    const expectedSourcePosition = sourceBuild === 'GRCh37'
-      ? entry.grch37Position
-      : entry.grch38Position;
-    const targetPosition = targetBuild === 'GRCh37'
-      ? entry.grch37Position
-      : entry.grch38Position;
+    const expectedSourcePosition =
+      sourceBuild === 'GRCh37' ? entry.grch37Position : entry.grch38Position;
+    const targetPosition = targetBuild === 'GRCh37' ? entry.grch37Position : entry.grch38Position;
 
     // Verify the current position matches what we expect for the source build
     if (currentPosition !== expectedSourcePosition) {

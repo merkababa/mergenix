@@ -52,7 +52,14 @@ export type CarrierStatus = 'normal' | 'carrier' | 'affected' | 'unknown';
  * - "coverage_insufficient": Too few variants genotyped for meaningful analysis
  * - "unknown": Insufficient or invalid data for classification
  */
-export type RiskLevel = 'high_risk' | 'carrier_detected' | 'low_risk' | 'not_tested' | 'potential_risk' | 'coverage_insufficient' | 'unknown';
+export type RiskLevel =
+  | 'high_risk'
+  | 'carrier_detected'
+  | 'low_risk'
+  | 'not_tested'
+  | 'potential_risk'
+  | 'coverage_insufficient'
+  | 'unknown';
 
 /** Offspring risk percentages for autosomal inheritance patterns. */
 export interface OffspringRisk {
@@ -154,10 +161,13 @@ export interface TraitResult {
    */
   offspringProbabilities: Record<string, number>;
   /** Detailed phenotype information (from rich phenotype_map format). */
-  phenotypeDetails?: Record<string, {
-    description: string;
-    probability: string;
-  }>;
+  phenotypeDetails?: Record<
+    string,
+    {
+      description: string;
+      probability: string;
+    }
+  >;
   /** Notes about unmapped genotypes or issues. */
   note?: string;
 }
@@ -271,7 +281,13 @@ export interface PgxAnalysisResult {
  * - "elevated": 80th-95th percentile
  * - "high": > 95th percentile
  */
-export type RiskCategory = 'low' | 'below_average' | 'average' | 'above_average' | 'elevated' | 'high';
+export type RiskCategory =
+  | 'low'
+  | 'below_average'
+  | 'average'
+  | 'above_average'
+  | 'elevated'
+  | 'high';
 
 /**
  * PRS result for a single parent and condition.
@@ -686,7 +702,11 @@ export type WorkerRequest =
     }
   | { type: 'cancel' }
   | { type: 'clear_memory' }
-  | { type: 'parse_stream'; file: { name: string; handle: FileSystemFileHandle | File }; format?: FileFormat }
+  | {
+      type: 'parse_stream';
+      file: { name: string; handle: FileSystemFileHandle | File };
+      format?: FileFormat;
+    }
   | { type: 'decompress'; file: { name: string }; maxSize?: number }
   | { type: 'init'; config?: WorkerConfig };
 
@@ -717,7 +737,12 @@ export type WorkerResponse =
   | { type: 'error'; message: string; code: GeneticsErrorCode }
   | { type: 'stream_progress'; bytesRead: number; totalBytes: number; linesProcessed: number }
   | { type: 'decompress_progress'; bytesIn: number; bytesOut: number; ratio: number }
-  | { type: 'decompress_complete'; format: 'zip' | 'gzip' | 'raw'; originalSize: number; decompressedSize: number }
+  | {
+      type: 'decompress_complete';
+      format: 'zip' | 'gzip' | 'raw';
+      originalSize: number;
+      decompressedSize: number;
+    }
   | { type: 'init_complete'; config: WorkerConfig; dataVersions: Record<string, string> }
   | { type: 'memory_warning'; currentUsage: number; maxAllowed: number; message: string }
   | { type: 'memory_cleared' };

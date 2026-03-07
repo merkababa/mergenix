@@ -21,10 +21,10 @@ const mockStoreState: Record<string, any> = {
 };
 
 vi.mock('@/lib/stores/legal-store', () => ({
-  useLegalStore: Object.assign(
-    (selector: (state: any) => any) => selector(mockStoreState),
-    { getState: () => mockStoreState, setState: vi.fn() },
-  ),
+  useLegalStore: Object.assign((selector: (state: any) => any) => selector(mockStoreState), {
+    getState: () => mockStoreState,
+    setState: vi.fn(),
+  }),
 }));
 
 // ─── IntersectionObserver mock ───────────────────────────────────────────────
@@ -137,7 +137,7 @@ describe('ConsentModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /accept/i }));
 
     expect(mockSetGeneticDataConsent).toHaveBeenCalledWith(true);
-    expect(mockRecordConsent).toHaveBeenCalledWith("genetic_data_processing", expect.any(String));
+    expect(mockRecordConsent).toHaveBeenCalledWith('genetic_data_processing', expect.any(String));
     expect(onAccept).toHaveBeenCalled();
   });
 
@@ -156,7 +156,9 @@ describe('ConsentModal', () => {
     render(<ConsentModal {...defaultProps} />);
 
     // Consent text should be visible
-    expect(screen.getByText(/explicit.*consent to the processing of.*genetic data/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/explicit.*consent to the processing of.*genetic data/i),
+    ).toBeInTheDocument();
   });
 
   it('calls onDecline when Escape key is pressed', () => {

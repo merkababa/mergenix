@@ -38,27 +38,17 @@ test.describe('Password Reset — P1 Important', () => {
     await page.goto('/forgot-password');
 
     // Page should display the forgot password form
-    await expect(
-      page.getByRole('heading', { name: /forgot password/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/enter your email.*reset/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /forgot password/i })).toBeVisible();
+    await expect(page.getByText(/enter your email.*reset/i)).toBeVisible();
 
     // Fill in an email and submit
     await page.getByLabel(/email/i).fill('user@test.mergenix.com');
     await page.getByRole('button', { name: /send reset link/i }).click();
 
     // Should show the success confirmation screen
-    await expect(
-      page.getByRole('heading', { name: /check your email/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/user@test\.mergenix\.com/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/reset link/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /check your email/i })).toBeVisible();
+    await expect(page.getByText(/user@test\.mergenix\.com/i)).toBeVisible();
+    await expect(page.getByText(/reset link/i)).toBeVisible();
   });
 
   test('2. User can set a new password using a valid token', async ({ page }) => {
@@ -77,12 +67,8 @@ test.describe('Password Reset — P1 Important', () => {
     await page.goto('/reset-password?token=valid-mock-token-123');
 
     // Page should show the reset password form
-    await expect(
-      page.getByRole('heading', { name: /reset password/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/choose a new password/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /reset password/i })).toBeVisible();
+    await expect(page.getByText(/choose a new password/i)).toBeVisible();
 
     // Fill in the new password and confirmation
     await page.getByLabel(/new password/i).fill(RESET_PASSWORD);
@@ -92,17 +78,11 @@ test.describe('Password Reset — P1 Important', () => {
     await page.getByRole('button', { name: /reset password/i }).click();
 
     // Should show the success state
-    await expect(
-      page.getByRole('heading', { name: /password reset!/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/successfully reset/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /password reset!/i })).toBeVisible();
+    await expect(page.getByText(/successfully reset/i)).toBeVisible();
 
     // A "Sign In" button should be available to navigate to login
-    await expect(
-      page.getByRole('link', { name: /sign in/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();
   });
 });
 
@@ -114,17 +94,11 @@ test.describe('Password Reset — P2 Nice-to-Have', () => {
     await page.goto('/reset-password');
 
     // Should show error about missing/invalid token
-    await expect(
-      page.getByRole('heading', { name: /reset failed/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/no reset token found|please request a new/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /reset failed/i })).toBeVisible();
+    await expect(page.getByText(/no reset token found|please request a new/i)).toBeVisible();
 
     // A link to request a new reset link should be available
-    await expect(
-      page.getByRole('link', { name: /request new link/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('link', { name: /request new link/i })).toBeVisible();
   });
 
   test('4. Reset link reuse prevented after password change', async ({ page }) => {
@@ -167,9 +141,7 @@ test.describe('Password Reset — P2 Nice-to-Have', () => {
     await page.getByLabel(/confirm password/i).fill(RESET_PASSWORD_FIRST);
     await page.getByRole('button', { name: /reset password/i }).click();
 
-    await expect(
-      page.getByRole('heading', { name: /password reset!/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /password reset!/i })).toBeVisible();
 
     // Second use of the same token — navigate back and try again
     await page.goto('/reset-password?token=one-time-token-xyz');
@@ -179,12 +151,8 @@ test.describe('Password Reset — P2 Nice-to-Have', () => {
     await page.getByRole('button', { name: /reset password/i }).click();
 
     // Should show error indicating the token is consumed/expired
-    await expect(
-      page.getByRole('heading', { name: /reset failed/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/already been used|expired/i),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /reset failed/i })).toBeVisible();
+    await expect(page.getByText(/already been used|expired/i)).toBeVisible();
 
     // Verify the API was called twice
     expect(resetCallCount).toBe(2);

@@ -229,7 +229,7 @@ async def test_logout_clears_cookie(
     assert len(refresh_cookies) >= 1
     # Deletion typically sets max-age=0 or expires in the past
     cookie_str = refresh_cookies[0].lower()
-    assert 'max-age=0' in cookie_str or '="";' in cookie_str or "expires=" in cookie_str
+    assert "max-age=0" in cookie_str or '="";' in cookie_str or "expires=" in cookie_str
 
 
 # ── Token Refresh (legacy body-based test updated) ───────────────────────
@@ -634,9 +634,7 @@ async def test_revoke_current_session_fails(
 
     # Find the session ID by its token hash
     token_hash = hash_token(raw_refresh)
-    result = await db_session.execute(
-        select(Session).where(Session.refresh_token_hash == token_hash)
-    )
+    result = await db_session.execute(select(Session).where(Session.refresh_token_hash == token_hash))
     session_record = result.scalar_one()
     session_id = str(session_record.id)
 
@@ -707,9 +705,7 @@ async def test_revoke_all_sessions(
     await db_session.commit()
 
     # Verify we have 3+ sessions
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     all_before = result.scalars().all()
     assert len(all_before) >= 3
 
@@ -717,9 +713,7 @@ async def test_revoke_all_sessions(
     assert response.status_code == 200
 
     # After revocation, only the current session should remain
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     remaining = result.scalars().all()
     assert len(remaining) == 1
     # Remaining session should be the current one
@@ -796,7 +790,7 @@ async def test_delete_account_clears_cookie(
     refresh_cookies = [c for c in cookies if "refresh_token" in c]
     assert len(refresh_cookies) >= 1
     cookie_str = refresh_cookies[0].lower()
-    assert 'max-age=0' in cookie_str or '="";' in cookie_str or "expires=" in cookie_str
+    assert "max-age=0" in cookie_str or '="";' in cookie_str or "expires=" in cookie_str
 
 
 @pytest.mark.asyncio
@@ -818,9 +812,7 @@ async def test_delete_account_cascades_sessions(
     assert response.status_code == 200
 
     # Verify sessions are gone (CASCADE delete)
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user_id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user_id))
     sessions = result.scalars().all()
     assert len(sessions) == 0
 
@@ -1073,9 +1065,7 @@ async def test_login_stores_session_with_naive_datetime(
     assert response.status_code == 200
 
     # Query the session created for this user
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == test_user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == test_user.id))
     sessions = result.scalars().all()
     assert len(sessions) >= 1
 
@@ -1110,15 +1100,11 @@ async def test_register_stores_verification_with_naive_datetime(
     assert response.status_code == 201
 
     # Find the newly created user
-    result = await db_session.execute(
-        select(User).where(User.email == "naive_dt_test@example.com")
-    )
+    result = await db_session.execute(select(User).where(User.email == "naive_dt_test@example.com"))
     user = result.scalar_one()
 
     # Query EmailVerification for this user
-    result = await db_session.execute(
-        select(EmailVerification).where(EmailVerification.user_id == user.id)
-    )
+    result = await db_session.execute(select(EmailVerification).where(EmailVerification.user_id == user.id))
     verifications = result.scalars().all()
     assert len(verifications) >= 1
 
@@ -1143,9 +1129,7 @@ async def test_token_refresh_stores_session_with_naive_datetime(
     assert response.status_code == 200
 
     # The old session was rotated; query for the new one
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     sessions = result.scalars().all()
     assert len(sessions) >= 1
 
@@ -1174,9 +1158,7 @@ async def test_2fa_challenge_stores_session_with_naive_datetime(
     assert detail["code"] == "2FA_REQUIRED"
 
     # Query the challenge session created for this user
-    result = await db_session.execute(
-        select(Session).where(Session.user_id == user.id)
-    )
+    result = await db_session.execute(select(Session).where(Session.user_id == user.id))
     sessions = result.scalars().all()
     assert len(sessions) >= 1
 
@@ -1203,6 +1185,7 @@ def test_oauth_httpx_client_is_module_level() -> None:
     )
 
     import httpx
+
     assert isinstance(auth_module._oauth_http_client, httpx.AsyncClient), (
         "_oauth_http_client should be an httpx.AsyncClient instance"
     )

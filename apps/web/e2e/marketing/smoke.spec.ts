@@ -23,7 +23,9 @@ test.describe('Marketing Page Smoke Tests', () => {
     await expect(heroHeadline).toBeVisible();
 
     // Verify key marketing content is present
-    await expect(page.getByText(new RegExp(`${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`, 'i'))).toBeVisible();
+    await expect(
+      page.getByText(new RegExp(`${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`, 'i')),
+    ).toBeVisible();
     await expect(page.getByText(/\d+ Trait Predictions/i)).toBeVisible();
   });
 
@@ -39,16 +41,12 @@ test.describe('Marketing Page Smoke Tests', () => {
     await expect(heading).toBeVisible();
 
     // Verify key about page content
-    await expect(
-      page.getByText(/Mendelian Inheritance Modeling/i),
-    ).toBeVisible();
+    await expect(page.getByText(/Mendelian Inheritance Modeling/i)).toBeVisible();
     await expect(page.getByText(/Curated SNP Database/i)).toBeVisible();
   });
 
   // ── Scenario 3 (P1): Products/Pricing page with tier comparison table ──
-  test('products/pricing page loads with tier comparison table', async ({
-    page,
-  }) => {
+  test('products/pricing page loads with tier comparison table', async ({ page }) => {
     await page.goto('/products');
 
     // Verify the page loaded

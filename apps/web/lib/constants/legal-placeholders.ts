@@ -1,7 +1,7 @@
 /** Legal text constants for consent gates and disclosures — Stream L finalized. */
 
 /** Current version of the genetic data processing consent form. Bump on any material change. */
-export const GENETIC_CONSENT_VERSION = "1.0";
+export const GENETIC_CONSENT_VERSION = '1.0';
 
 export const CONSENT_TEXT_GENETIC_PROCESSING = `By clicking "I Agree", you give your explicit, freely given, informed consent to the processing of your genetic data for the purpose of generating educational offspring trait predictions, carrier risk estimates, pharmacogenomics insights, and polygenic risk scores. This consent is required under GDPR Article 9(2)(a) because genetic data is a special category of personal data.
 

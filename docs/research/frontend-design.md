@@ -40,19 +40,19 @@
 
 ### Current Issues Identified
 
-| Issue | Location | Severity |
-|-------|----------|----------|
-| No CSS media queries for mobile | theme.py | High |
-| No focus-visible styles for keyboard nav | All interactive elements | High |
-| Some text contrast may fail AA on dark backgrounds | `--text-dim: #64748b` on `#050810` | High |
-| No skip-nav link for screen readers | navbar.py | Medium |
-| Inconsistent animation durations (2s to 30s) | theme.py animations | Medium |
-| No prefers-reduced-motion support | All animations | Medium |
-| DNA dots use emoji for screen readers | navbar.py, footer.py | Medium |
-| No loading skeleton states | analysis.py | Medium |
-| Inline styles mixed with CSS classes | Multiple pages | Low |
-| No CSS containment for performance | Cards and repeating elements | Low |
-| Noise texture overlay has high z-index risk | `.stApp::before` | Low |
+| Issue                                              | Location                           | Severity |
+| -------------------------------------------------- | ---------------------------------- | -------- |
+| No CSS media queries for mobile                    | theme.py                           | High     |
+| No focus-visible styles for keyboard nav           | All interactive elements           | High     |
+| Some text contrast may fail AA on dark backgrounds | `--text-dim: #64748b` on `#050810` | High     |
+| No skip-nav link for screen readers                | navbar.py                          | Medium   |
+| Inconsistent animation durations (2s to 30s)       | theme.py animations                | Medium   |
+| No prefers-reduced-motion support                  | All animations                     | Medium   |
+| DNA dots use emoji for screen readers              | navbar.py, footer.py               | Medium   |
+| No loading skeleton states                         | analysis.py                        | Medium   |
+| Inline styles mixed with CSS classes               | Multiple pages                     | Low      |
+| No CSS containment for performance                 | Cards and repeating elements       | Low      |
+| Noise texture overlay has high z-index risk        | `.stApp::before`                   | Low      |
 
 ### Design System Inventory
 
@@ -70,19 +70,19 @@
 
 Using WCAG 2.1 AA requirements: **4.5:1** for normal text, **3:1** for large text (18px+/14px+ bold).
 
-| Element | Foreground | Background | Ratio | Pass? |
-|---------|-----------|------------|-------|-------|
-| Body text (dark) | `#cbd5e1` | `#0c1220` | ~11.2:1 | YES |
-| Muted text (dark) | `#94a3b8` | `#0c1220` | ~5.8:1 | YES |
-| Dim text (dark) | `#64748b` | `#050810` | ~3.6:1 | FAIL (normal), OK (large) |
-| Teal accent on dark | `#06d6a0` | `#050810` | ~8.1:1 | YES |
-| Rose on dark | `#f43f5e` | `#050810` | ~5.2:1 | YES |
-| Amber on dark | `#f59e0b` | `#050810` | ~6.9:1 | YES |
-| Body text (light) | `#334155` | `#ffffff` | ~9.7:1 | YES |
-| Muted text (light) | `#475569` | `#ffffff` | ~6.5:1 | YES |
-| Dim text (light) | `#94a3b8` | `#f8fafc` | ~2.5:1 | FAIL |
-| Teal accent (light) | `#059669` | `#ffffff` | ~4.6:1 | YES |
-| Rose accent (light) | `#e11d48` | `#ffffff` | ~4.7:1 | YES |
+| Element             | Foreground | Background | Ratio   | Pass?                     |
+| ------------------- | ---------- | ---------- | ------- | ------------------------- |
+| Body text (dark)    | `#cbd5e1`  | `#0c1220`  | ~11.2:1 | YES                       |
+| Muted text (dark)   | `#94a3b8`  | `#0c1220`  | ~5.8:1  | YES                       |
+| Dim text (dark)     | `#64748b`  | `#050810`  | ~3.6:1  | FAIL (normal), OK (large) |
+| Teal accent on dark | `#06d6a0`  | `#050810`  | ~8.1:1  | YES                       |
+| Rose on dark        | `#f43f5e`  | `#050810`  | ~5.2:1  | YES                       |
+| Amber on dark       | `#f59e0b`  | `#050810`  | ~6.9:1  | YES                       |
+| Body text (light)   | `#334155`  | `#ffffff`  | ~9.7:1  | YES                       |
+| Muted text (light)  | `#475569`  | `#ffffff`  | ~6.5:1  | YES                       |
+| Dim text (light)    | `#94a3b8`  | `#f8fafc`  | ~2.5:1  | FAIL                      |
+| Teal accent (light) | `#059669`  | `#ffffff`  | ~4.6:1  | YES                       |
+| Rose accent (light) | `#e11d48`  | `#ffffff`  | ~4.7:1  | YES                       |
 
 ### Critical Accessibility Fixes Needed
 
@@ -101,25 +101,27 @@ FIX: Change light mode --text-dim to #6b7280 (~4.8:1) on #f1f5f9
 ```css
 /* ADD: Focus-visible styles for all interactive elements */
 *:focus-visible {
-    outline: 2px solid var(--accent-teal);
-    outline-offset: 2px;
-    border-radius: 4px;
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* ADD: Skip navigation link */
 .skip-nav {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--accent-teal);
-    color: #050810;
-    padding: 8px 16px;
-    z-index: 9999;
-    font-family: 'Sora', sans-serif;
-    font-weight: 700;
-    transition: top 0.2s ease;
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-teal);
+  color: #050810;
+  padding: 8px 16px;
+  z-index: 9999;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  transition: top 0.2s ease;
 }
-.skip-nav:focus { top: 0; }
+.skip-nav:focus {
+  top: 0;
+}
 ```
 
 **3. Reduced Motion Support (Missing)**
@@ -127,12 +129,16 @@ FIX: Change light mode --text-dim to #6b7280 (~4.8:1) on #f1f5f9
 ```css
 /* ADD: Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    .block-container { animation: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .block-container {
+    animation: none;
+  }
 }
 ```
 
@@ -160,17 +166,20 @@ Low:      #06d6a0 + circle icon (Safe shape)
 ### Key Trends Applicable to Mergenix
 
 **1. Calm Visual Language (HIGH RELEVANCE)**
+
 - Health-tech leaders use restrained, clean interfaces that reduce anxiety
 - Avoid overwhelming users with too many animations or glowing effects on result pages
 - Mergenix's current biolumPulse animation on result cards may cause anxiety for users receiving risk information
 - **Recommendation:** Disable pulse/glow on cards displaying high-risk results. Use static, clear presentation for risk data. Reserve animations for loading states and non-critical UI.
 
 **2. Customizable Dashboards (MEDIUM RELEVANCE)**
+
 - Top SaaS platforms in 2025-2026 let users rearrange widgets and save views
 - Streamlit's column layout limits this, but we can offer view modes (compact/detailed, sort order, filter presets)
 - **Recommendation:** Add a "View: Compact | Detailed" toggle on the analysis results page and disease catalog
 
 **3. Progressive Disclosure (HIGH RELEVANCE)**
+
 - Show summary first, let users drill down for detail
 - Analysis results page already uses expanders but can improve with a tiered information architecture:
   - Level 1: Summary dashboard (metrics + high-risk count)
@@ -179,11 +188,13 @@ Low:      #06d6a0 + circle icon (Safe shape)
 - **Recommendation:** Restructure results into a clear 3-level progressive disclosure pattern
 
 **4. AI-Powered Contextual Insights (MEDIUM RELEVANCE)**
+
 - 2025-2026 trend: AI generates plain-language explanations
 - Mergenix could offer "What this means for your family" summaries above raw genetics data
 - **Recommendation:** Add interpretive text blocks above each risk category (e.g., "2 conditions where both parents carry the variant -- genetic counseling recommended")
 
 **5. Skeleton Loading States (HIGH RELEVANCE)**
+
 - During analysis (carrier screening of 2,700 diseases), show skeleton placeholders
 - Current implementation uses st.spinner and st.progress -- insufficient for complex layouts
 - **Recommendation:** Add CSS skeleton animations that mirror the final card layout during loading
@@ -194,15 +205,15 @@ Low:      #06d6a0 + circle icon (Safe shape)
 
 ### Competitor UI Comparison
 
-| Feature | 23andMe | Nebula Genomics | Color Health | Mergenix (Current) |
-|---------|---------|-----------------|-------------|-------------------|
-| Visual Style | Clean, friendly, illustration-heavy | Data-dense, library-style | Minimal, clinical | Dark/sci-fi, glassmorphism |
-| Color Palette | Purple/green/white | Blue/grey/white | Teal/white/grey | Teal/violet/cyan on dark |
-| Risk Display | Traffic light + text | Research papers list | Clear red/green indicators | Probability bars + badges |
-| Typography | Custom sans-serif | System fonts | Clean sans-serif | Sora + Lexend (excellent) |
-| Data Density | Low (simplified) | Very high (raw data) | Medium (curated) | Medium-high |
-| Trust Signals | Brand recognition | WGS depth claims | Medical partnerships | Encryption badges |
-| Weakness | Oversimplified | Overwhelming for casual users | Limited scope | Sci-fi aesthetic may reduce perceived clinical credibility |
+| Feature       | 23andMe                             | Nebula Genomics               | Color Health               | Mergenix (Current)                                         |
+| ------------- | ----------------------------------- | ----------------------------- | -------------------------- | ---------------------------------------------------------- |
+| Visual Style  | Clean, friendly, illustration-heavy | Data-dense, library-style     | Minimal, clinical          | Dark/sci-fi, glassmorphism                                 |
+| Color Palette | Purple/green/white                  | Blue/grey/white               | Teal/white/grey            | Teal/violet/cyan on dark                                   |
+| Risk Display  | Traffic light + text                | Research papers list          | Clear red/green indicators | Probability bars + badges                                  |
+| Typography    | Custom sans-serif                   | System fonts                  | Clean sans-serif           | Sora + Lexend (excellent)                                  |
+| Data Density  | Low (simplified)                    | Very high (raw data)          | Medium (curated)           | Medium-high                                                |
+| Trust Signals | Brand recognition                   | WGS depth claims              | Medical partnerships       | Encryption badges                                          |
+| Weakness      | Oversimplified                      | Overwhelming for casual users | Limited scope              | Sci-fi aesthetic may reduce perceived clinical credibility |
 
 ### What Makes Top Platforms Look Professional & Trustworthy
 
@@ -263,24 +274,39 @@ This is more intuitive for non-experts than separate probability bars.
 
 ```css
 /* Current: Color dots only */
-.confidence-high   { background: #06d6a0; }  /* 3 bars */
-.confidence-medium { background: #f59e0b; }  /* 2 bars */
-.confidence-low    { background: #ef4444; }  /* 1 bar */
+.confidence-high {
+  background: #06d6a0;
+} /* 3 bars */
+.confidence-medium {
+  background: #f59e0b;
+} /* 2 bars */
+.confidence-low {
+  background: #ef4444;
+} /* 1 bar */
 
 /* Proposed: Signal-strength bars (like Wi-Fi) */
 .confidence-indicator {
-    display: inline-flex;
-    gap: 2px;
-    align-items: flex-end;
-    height: 14px;
+  display: inline-flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 14px;
 }
 .confidence-indicator .bar {
-    width: 4px;
-    border-radius: 2px;
+  width: 4px;
+  border-radius: 2px;
 }
-.confidence-high .bar:nth-child(1) { height: 6px; background: #06d6a0; }
-.confidence-high .bar:nth-child(2) { height: 10px; background: #06d6a0; }
-.confidence-high .bar:nth-child(3) { height: 14px; background: #06d6a0; }
+.confidence-high .bar:nth-child(1) {
+  height: 6px;
+  background: #06d6a0;
+}
+.confidence-high .bar:nth-child(2) {
+  height: 10px;
+  background: #06d6a0;
+}
+.confidence-high .bar:nth-child(3) {
+  height: 14px;
+  background: #06d6a0;
+}
 ```
 
 **4. Emotional Design: Soften High-Risk Results**
@@ -399,20 +425,20 @@ CONCEPT: Mini Donut per Trait
 
 ### Current Animation Inventory
 
-| Animation | Duration | Usage | Assessment |
-|-----------|----------|-------|------------|
-| helixFloat | 2-2.5s | DNA dots everywhere | Good, but overused |
-| gradientShift | 3-6s | Gradient headers, progress bar | Good |
-| biolumPulse | 5s | Hero sections, login card | Too intense for medical results |
-| fadeSlideUp | 0.6s | Block container entrance | Good, standard |
-| shimmer | 3s | Badge backgrounds | Good, subtle |
-| borderGlow | varying | Card borders | Good for hover states |
-| countUp | 0.5s | Metric cards | Good |
-| cardReveal | 0.4s | Disease cards, pricing cards | Good |
-| glassFadeIn | 0.6s | Login card | Good |
-| noiseShift | 8s | Noise texture overlay | Performance concern |
-| pulseGlow | varies | Insight cards, current plan | Distracting on data |
-| borderRainbow | 3s | Disease card hover | Fun but non-clinical |
+| Animation     | Duration | Usage                          | Assessment                      |
+| ------------- | -------- | ------------------------------ | ------------------------------- |
+| helixFloat    | 2-2.5s   | DNA dots everywhere            | Good, but overused              |
+| gradientShift | 3-6s     | Gradient headers, progress bar | Good                            |
+| biolumPulse   | 5s       | Hero sections, login card      | Too intense for medical results |
+| fadeSlideUp   | 0.6s     | Block container entrance       | Good, standard                  |
+| shimmer       | 3s       | Badge backgrounds              | Good, subtle                    |
+| borderGlow    | varying  | Card borders                   | Good for hover states           |
+| countUp       | 0.5s     | Metric cards                   | Good                            |
+| cardReveal    | 0.4s     | Disease cards, pricing cards   | Good                            |
+| glassFadeIn   | 0.6s     | Login card                     | Good                            |
+| noiseShift    | 8s       | Noise texture overlay          | Performance concern             |
+| pulseGlow     | varies   | Insight cards, current plan    | Distracting on data             |
+| borderRainbow | 3s       | Disease card hover             | Fun but non-clinical            |
 
 ### Recommendations
 
@@ -420,21 +446,37 @@ CONCEPT: Mini Donut per Trait
 
 ```css
 @keyframes skeletonPulse {
-    0% { background-position: -200px 0; }
-    100% { background-position: calc(200px + 100%) 0; }
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
 }
 .skeleton {
-    background: linear-gradient(90deg,
-        var(--bg-elevated) 25%,
-        rgba(148,163,184,0.08) 37%,
-        var(--bg-elevated) 63%);
-    background-size: 400px 100%;
-    animation: skeletonPulse 1.4s ease infinite;
-    border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 25%,
+    rgba(148, 163, 184, 0.08) 37%,
+    var(--bg-elevated) 63%
+  );
+  background-size: 400px 100%;
+  animation: skeletonPulse 1.4s ease infinite;
+  border-radius: 12px;
 }
-.skeleton-text { height: 16px; margin-bottom: 8px; }
-.skeleton-heading { height: 24px; width: 60%; margin-bottom: 12px; }
-.skeleton-card { height: 120px; border-radius: 18px; }
+.skeleton-text {
+  height: 16px;
+  margin-bottom: 8px;
+}
+.skeleton-heading {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+.skeleton-card {
+  height: 120px;
+  border-radius: 18px;
+}
 ```
 
 **2. Staggered Card Entrance**
@@ -442,9 +484,15 @@ CONCEPT: Mini Donut per Trait
 Currently cards use cardReveal but all appear at once. Add stagger:
 
 ```css
-.disease-card:nth-child(1) { animation-delay: 0ms; }
-.disease-card:nth-child(2) { animation-delay: 50ms; }
-.disease-card:nth-child(3) { animation-delay: 100ms; }
+.disease-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+.disease-card:nth-child(2) {
+  animation-delay: 50ms;
+}
+.disease-card:nth-child(3) {
+  animation-delay: 100ms;
+}
 /* ... etc, or use JS for dynamic stagger */
 ```
 
@@ -454,11 +502,19 @@ When metric values appear, animate them counting up from 0:
 
 ```css
 @keyframes numberReveal {
-    from { opacity: 0; transform: scale(0.8) translateY(8px); filter: blur(4px); }
-    to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(8px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
 }
-div[data-testid="stMetricValue"] {
-    animation: numberReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+div[data-testid='stMetricValue'] {
+  animation: numberReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 ```
 
@@ -476,9 +532,15 @@ Instead of a single linear progress bar, show named stages so users understand w
 
 ```css
 /* When results are showing, calm the UI */
-.results-active .biolumPulse { animation: none !important; }
-.results-active .pulseGlow { animation: none !important; }
-.results-active .borderRainbow { animation: none !important; }
+.results-active .biolumPulse {
+  animation: none !important;
+}
+.results-active .pulseGlow {
+  animation: none !important;
+}
+.results-active .borderRainbow {
+  animation: none !important;
+}
 ```
 
 Medical results should feel calm, authoritative, and static. Save animations for marketing/onboarding.
@@ -488,19 +550,19 @@ Medical results should feel calm, authoritative, and static. Save animations for
 ```css
 /* Smoother card hover with slight scale */
 .disease-card:hover {
-    transform: translateY(-3px) scale(1.005);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-3px) scale(1.005);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Button press feedback */
 .stButton > button:active {
-    transform: scale(0.97);
-    transition: transform 0.1s ease;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 /* Tab switch indicator slide */
-.stTabs [aria-selected="true"] {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.stTabs [aria-selected='true'] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 ```
 
@@ -525,15 +587,15 @@ Current font sizes are inconsistent across pages. Define a strict scale:
 ```css
 /* Proposed Type Scale (1.25 ratio) */
 :root {
-    --text-xs: 0.694rem;   /* 11.1px -- footnotes, timestamps */
-    --text-sm: 0.833rem;   /* 13.3px -- meta tags, labels */
-    --text-base: 1rem;     /* 16px   -- body text */
-    --text-md: 1.125rem;   /* 18px   -- emphasized body */
-    --text-lg: 1.25rem;    /* 20px   -- section subtitles */
-    --text-xl: 1.563rem;   /* 25px   -- section titles */
-    --text-2xl: 1.953rem;  /* 31.2px -- page titles */
-    --text-3xl: 2.441rem;  /* 39px   -- hero titles */
-    --text-4xl: 3.052rem;  /* 48.8px -- home hero only */
+  --text-xs: 0.694rem; /* 11.1px -- footnotes, timestamps */
+  --text-sm: 0.833rem; /* 13.3px -- meta tags, labels */
+  --text-base: 1rem; /* 16px   -- body text */
+  --text-md: 1.125rem; /* 18px   -- emphasized body */
+  --text-lg: 1.25rem; /* 20px   -- section subtitles */
+  --text-xl: 1.563rem; /* 25px   -- section titles */
+  --text-2xl: 1.953rem; /* 31.2px -- page titles */
+  --text-3xl: 2.441rem; /* 39px   -- hero titles */
+  --text-4xl: 3.052rem; /* 48.8px -- home hero only */
 }
 ```
 
@@ -542,10 +604,21 @@ Current font sizes are inconsistent across pages. Define a strict scale:
 Healthcare apps need generous line spacing for readability:
 
 ```css
-body { line-height: 1.6; }          /* Body text */
-h1, h2, h3 { line-height: 1.2; }    /* Headings tight */
-.disease-card .desc { line-height: 1.7; }  /* Dense text: extra breathing room */
-code, pre { line-height: 1.5; }      /* Code readable */
+body {
+  line-height: 1.6;
+} /* Body text */
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+} /* Headings tight */
+.disease-card .desc {
+  line-height: 1.7;
+} /* Dense text: extra breathing room */
+code,
+pre {
+  line-height: 1.5;
+} /* Code readable */
 ```
 
 **3. Font Loading Optimization**
@@ -555,10 +628,13 @@ Current: `@import url(...)` blocks rendering.
 Proposed:
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style"
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Lexend:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Lexend:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+/>
 ```
 
 Note: In Streamlit, `@import` in CSS is the primary method. Consider subsetting: remove unused weights (Sora 300, Lexend 300/700) to reduce load time.
@@ -584,21 +660,21 @@ Genetic identifiers like `rs1801133` and genotypes like `AG` should have distinc
 
 ```css
 .rsid {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.88rem;
-    background: rgba(6, 182, 212, 0.08);
-    border: 1px solid rgba(6, 182, 212, 0.15);
-    border-radius: 6px;
-    padding: 1px 6px;
-    color: var(--accent-cyan);
-    letter-spacing: 0.02em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  border-radius: 6px;
+  padding: 1px 6px;
+  color: var(--accent-cyan);
+  letter-spacing: 0.02em;
 }
 .genotype {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--accent-teal);
-    letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--accent-teal);
+  letter-spacing: 0.05em;
 }
 ```
 
@@ -621,45 +697,88 @@ The theme has **zero media queries**. On mobile:
 ```css
 /* Tablet */
 @media (max-width: 1024px) {
-    .block-container { max-width: 95%; padding: 0.5rem; }
-    .hero-section { padding: 2.5rem 1.5rem 2rem; }
-    .hero-section h1 { font-size: 2.4rem; }
+  .block-container {
+    max-width: 95%;
+    padding: 0.5rem;
+  }
+  .hero-section {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+  .hero-section h1 {
+    font-size: 2.4rem;
+  }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-    .mergenix-navbar {
-        flex-direction: column;
-        padding: 10px 1rem;
-        gap: 6px;
-    }
-    .mergenix-navbar .nav-links {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-    .hero-section { padding: 2rem 1rem; border-radius: 16px; }
-    .hero-section h1 { font-size: 1.8rem; }
-    .hero-section p { font-size: 0.95rem; }
-    .disease-card { padding: 16px; border-radius: 14px; }
-    .pricing-card { padding: 24px 16px; border-radius: 18px; }
-    .catalog-metric { padding: 16px 12px; border-radius: 14px; }
-    .catalog-metric .metric-value { font-size: 1.5rem; }
-    .insight-card { padding: 16px; }
+  .mergenix-navbar {
+    flex-direction: column;
+    padding: 10px 1rem;
+    gap: 6px;
+  }
+  .mergenix-navbar .nav-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hero-section {
+    padding: 2rem 1rem;
+    border-radius: 16px;
+  }
+  .hero-section h1 {
+    font-size: 1.8rem;
+  }
+  .hero-section p {
+    font-size: 0.95rem;
+  }
+  .disease-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .pricing-card {
+    padding: 24px 16px;
+    border-radius: 18px;
+  }
+  .catalog-metric {
+    padding: 16px 12px;
+    border-radius: 14px;
+  }
+  .catalog-metric .metric-value {
+    font-size: 1.5rem;
+  }
+  .insight-card {
+    padding: 16px;
+  }
 }
 
 /* Small mobile */
 @media (max-width: 480px) {
-    .hero-section h1 { font-size: 1.5rem; }
-    .mergenix-navbar .brand-text { font-size: 1.2rem; }
-    .nav-link { padding: 6px 10px; font-size: 0.8rem; }
-    div[data-testid="stMetric"] { padding: 14px; }
-    div[data-testid="stMetric"] [data-testid="stMetricValue"] { font-size: 1.5rem !important; }
-    .disease-card h4 { font-size: 1rem; }
-    .meta-tag { font-size: 0.72rem; padding: 3px 8px; }
+  .hero-section h1 {
+    font-size: 1.5rem;
+  }
+  .mergenix-navbar .brand-text {
+    font-size: 1.2rem;
+  }
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  div[data-testid='stMetric'] {
+    padding: 14px;
+  }
+  div[data-testid='stMetric'] [data-testid='stMetricValue'] {
+    font-size: 1.5rem !important;
+  }
+  .disease-card h4 {
+    font-size: 1rem;
+  }
+  .meta-tag {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
 }
 ```
 
@@ -668,13 +787,13 @@ The theme has **zero media queries**. On mobile:
 ```css
 /* Force single-column on mobile for Streamlit columns */
 @media (max-width: 768px) {
-    [data-testid="stHorizontalBlock"] {
-        flex-direction: column !important;
-    }
-    [data-testid="stColumn"] {
-        width: 100% !important;
-        flex: 1 1 100% !important;
-    }
+  [data-testid='stHorizontalBlock'] {
+    flex-direction: column !important;
+  }
+  [data-testid='stColumn'] {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
 }
 ```
 
@@ -719,24 +838,24 @@ MOBILE:   [Logo]                                          [Toggle] [Hamburger]
 
 ```css
 .risk-summary-card {
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-subtle);
-    border-radius: 18px;
-    padding: 20px 24px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    transition: border-color 0.3s ease;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  transition: border-color 0.3s ease;
 }
 .risk-summary-card.high-risk {
-    border-left: 4px solid #f43f5e;
+  border-left: 4px solid #f43f5e;
 }
 .risk-summary-card.carrier {
-    border-left: 4px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
 }
 .risk-summary-card.low-risk {
-    border-left: 4px solid #06d6a0;
+  border-left: 4px solid #06d6a0;
 }
 ```
 
@@ -746,33 +865,35 @@ Current pages lack tooltips for explaining genetics terms. Add:
 
 ```css
 .tooltip-trigger {
-    position: relative;
-    cursor: help;
-    border-bottom: 1px dashed var(--text-dim);
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dashed var(--text-dim);
 }
 .tooltip-trigger::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-body);
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 4px 20px var(--shadow-ambient);
-    z-index: 100;
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-body);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  box-shadow: 0 4px 20px var(--shadow-ambient);
+  z-index: 100;
 }
 .tooltip-trigger:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-4px);
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
 }
 ```
 
@@ -784,29 +905,29 @@ For when filters return no results or data is missing:
 
 ```css
 .empty-state {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    border: 1px dashed var(--border-subtle);
-    border-radius: 20px;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 20px;
 }
 .empty-state .empty-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 }
 .empty-state .empty-title {
-    font-family: 'Sora', sans-serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-    margin-bottom: 8px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
 }
 .empty-state .empty-desc {
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 ```
 
@@ -821,45 +942,45 @@ Replace the linear progress bar with a step indicator:
 
 ```css
 .progress-steps {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1.5rem 0;
 }
 .progress-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
 }
 .progress-step .step-dot {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Sora', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
 }
 .progress-step.completed .step-dot {
-    background: linear-gradient(135deg, #06d6a0, #059669);
-    color: #050810;
-    box-shadow: 0 2px 12px rgba(6,214,160,0.3);
+  background: linear-gradient(135deg, #06d6a0, #059669);
+  color: #050810;
+  box-shadow: 0 2px 12px rgba(6, 214, 160, 0.3);
 }
 .progress-step.active .step-dot {
-    background: var(--bg-elevated);
-    border: 2px solid #06d6a0;
-    color: #06d6a0;
-    animation: biolumPulse 2s ease-in-out infinite;
+  background: var(--bg-elevated);
+  border: 2px solid #06d6a0;
+  color: #06d6a0;
+  animation: biolumPulse 2s ease-in-out infinite;
 }
 .progress-step.pending .step-dot {
-    background: var(--bg-elevated);
-    border: 2px solid var(--border-subtle);
-    color: var(--text-dim);
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-subtle);
+  color: var(--text-dim);
 }
 ```
 
@@ -869,31 +990,31 @@ For diseases with source citations, show provenance:
 
 ```css
 .source-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 8px;
-    font-family: 'Lexend', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 500;
-    border: 1px solid;
-    transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  border: 1px solid;
+  transition: all 0.2s ease;
 }
 .source-badge.omim {
-    background: rgba(6, 214, 160, 0.06);
-    border-color: rgba(6, 214, 160, 0.2);
-    color: var(--accent-teal);
+  background: rgba(6, 214, 160, 0.06);
+  border-color: rgba(6, 214, 160, 0.2);
+  color: var(--accent-teal);
 }
 .source-badge.clinvar {
-    background: rgba(6, 182, 212, 0.06);
-    border-color: rgba(6, 182, 212, 0.2);
-    color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.06);
+  border-color: rgba(6, 182, 212, 0.2);
+  color: var(--accent-cyan);
 }
 .source-badge.dbsnp {
-    background: rgba(139, 92, 246, 0.06);
-    border-color: rgba(139, 92, 246, 0.2);
-    color: var(--accent-violet);
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.2);
+  color: var(--accent-violet);
 }
 ```
 
@@ -903,20 +1024,22 @@ For diseases with source citations, show provenance:
 
 ```css
 /* Add subtle left-border gradient based on category (not just severity) */
-.disease-card[data-category="Metabolic"]::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, #06d6a0, #059669);
-    border-radius: 18px 0 0 18px;
+.disease-card[data-category='Metabolic']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #06d6a0, #059669);
+  border-radius: 18px 0 0 18px;
 }
 
 /* Better meta tag layout with icons */
 .meta-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 ```
 
@@ -925,11 +1048,14 @@ For diseases with source citations, show provenance:
 ```css
 /* Add sparkle effect to "Most Popular" badge */
 .popular-badge::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: -1px; right: -1px; bottom: -1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    animation: shimmer 2s linear infinite;
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s linear infinite;
 }
 ```
 
@@ -939,14 +1065,14 @@ For diseases with source citations, show provenance:
 
 ### Home Page (pages/home.py)
 
-| Priority | Improvement | Effort |
-|----------|------------|--------|
-| High | Add social proof section (testimonial cards or user count) | Medium |
-| High | Replace emoji icons in How-It-Works with SVG/CSS icons | Medium |
-| Medium | Add animated DNA helix illustration (pure CSS) to hero | High |
-| Medium | Add feature comparison mini-table below pricing cards | Low |
-| Low | Add logo animation on first visit | Medium |
-| Low | Add scroll-triggered section reveal animations | Medium |
+| Priority | Improvement                                                | Effort |
+| -------- | ---------------------------------------------------------- | ------ |
+| High     | Add social proof section (testimonial cards or user count) | Medium |
+| High     | Replace emoji icons in How-It-Works with SVG/CSS icons     | Medium |
+| Medium   | Add animated DNA helix illustration (pure CSS) to hero     | High   |
+| Medium   | Add feature comparison mini-table below pricing cards      | Low    |
+| Low      | Add logo animation on first visit                          | Medium |
+| Low      | Add scroll-triggered section reveal animations             | Medium |
 
 **Hero Section Improvement Concept:**
 
@@ -966,45 +1092,45 @@ Proposed:
 
 ### Analysis Page (pages/analysis.py)
 
-| Priority | Improvement | Effort |
-|----------|------------|--------|
-| High | Add skeleton loading states during analysis | Medium |
-| High | Show Punnett square visualization for high-risk diseases | High |
-| High | Add combined spectrum bar instead of separate probability bars | Medium |
-| Medium | Add "What this means" plain-language summary for risk categories | Low |
-| Medium | Replace current progress bar with multi-stage step indicator | Medium |
-| Medium | Add "Export Report" button (PDF generation) | High |
-| Low | Add animated transition between tabs | Low |
-| Low | Grouping of results by disease category | Medium |
+| Priority | Improvement                                                      | Effort |
+| -------- | ---------------------------------------------------------------- | ------ |
+| High     | Add skeleton loading states during analysis                      | Medium |
+| High     | Show Punnett square visualization for high-risk diseases         | High   |
+| High     | Add combined spectrum bar instead of separate probability bars   | Medium |
+| Medium   | Add "What this means" plain-language summary for risk categories | Low    |
+| Medium   | Replace current progress bar with multi-stage step indicator     | Medium |
+| Medium   | Add "Export Report" button (PDF generation)                      | High   |
+| Low      | Add animated transition between tabs                             | Low    |
+| Low      | Grouping of results by disease category                          | Medium |
 
 ### Disease Catalog (pages/disease_catalog.py)
 
-| Priority | Improvement | Effort |
-|----------|------------|--------|
-| High | Replace category bar chart with treemap visualization | Low |
-| Medium | Add search-as-you-type with highlight matching | Medium |
-| Medium | Add "Compare Diseases" feature (select 2-3 and compare side-by-side) | High |
-| Medium | Show data provenance badges (OMIM, ClinVar, dbSNP) on cards | Low |
-| Low | Add sticky filter bar (always visible when scrolling) | Medium |
-| Low | Add alphabet quick-jump navigation | Medium |
+| Priority | Improvement                                                          | Effort |
+| -------- | -------------------------------------------------------------------- | ------ |
+| High     | Replace category bar chart with treemap visualization                | Low    |
+| Medium   | Add search-as-you-type with highlight matching                       | Medium |
+| Medium   | Add "Compare Diseases" feature (select 2-3 and compare side-by-side) | High   |
+| Medium   | Show data provenance badges (OMIM, ClinVar, dbSNP) on cards          | Low    |
+| Low      | Add sticky filter bar (always visible when scrolling)                | Medium |
+| Low      | Add alphabet quick-jump navigation                                   | Medium |
 
 ### Auth Page (pages/auth.py)
 
-| Priority | Improvement | Effort |
-|----------|------------|--------|
-| Medium | Add progressive form validation (real-time feedback) | Medium |
-| Medium | Add captcha or rate limiting visual indicator | Medium |
-| Low | Add social proof ("X users trust Mergenix") | Low |
-| Low | Animated background for auth page (subtle DNA pattern) | Low |
+| Priority | Improvement                                            | Effort |
+| -------- | ------------------------------------------------------ | ------ |
+| Medium   | Add progressive form validation (real-time feedback)   | Medium |
+| Medium   | Add captcha or rate limiting visual indicator          | Medium |
+| Low      | Add social proof ("X users trust Mergenix")            | Low    |
+| Low      | Animated background for auth page (subtle DNA pattern) | Low    |
 
 ### Products Page (pages/products.py)
 
-| Priority | Improvement | Effort |
-|----------|------------|--------|
-| High | Add feature tooltips on hover for each pricing feature | Medium |
-| Medium | Add "Save X%" badge on Pro plan vs buying Premium + upgrades | Low |
-| Medium | Add testimonial/review section | Medium |
-| Low | Add animated checkmarks on feature comparison | Low |
+| Priority | Improvement                                                  | Effort |
+| -------- | ------------------------------------------------------------ | ------ |
+| High     | Add feature tooltips on hover for each pricing feature       | Medium |
+| Medium   | Add "Save X%" badge on Pro plan vs buying Premium + upgrades | Low    |
+| Medium   | Add testimonial/review section                               | Medium |
+| Low      | Add animated checkmarks on feature comparison                | Low    |
 
 ---
 
@@ -1012,54 +1138,54 @@ Proposed:
 
 ### Tier 1: Critical (Accessibility & Trust) -- Do First
 
-| # | Item | File(s) | Effort | Impact |
-|---|------|---------|--------|--------|
-| 1 | Fix contrast ratio failures | theme.py | Low | Very High |
-| 2 | Add prefers-reduced-motion support | theme.py | Low | High |
-| 3 | Add focus-visible styles | theme.py | Low | High |
-| 4 | Add skip-nav link | navbar.py | Low | High |
-| 5 | Add aria attributes to decorative elements | navbar.py, footer.py, components.py | Low | High |
-| 6 | Add color-blind safe icons to severity badges | components.py, theme.py | Low | Medium |
+| #   | Item                                          | File(s)                             | Effort | Impact    |
+| --- | --------------------------------------------- | ----------------------------------- | ------ | --------- |
+| 1   | Fix contrast ratio failures                   | theme.py                            | Low    | Very High |
+| 2   | Add prefers-reduced-motion support            | theme.py                            | Low    | High      |
+| 3   | Add focus-visible styles                      | theme.py                            | Low    | High      |
+| 4   | Add skip-nav link                             | navbar.py                           | Low    | High      |
+| 5   | Add aria attributes to decorative elements    | navbar.py, footer.py, components.py | Low    | High      |
+| 6   | Add color-blind safe icons to severity badges | components.py, theme.py             | Low    | Medium    |
 
 **Estimated effort: 1-2 days**
 
 ### Tier 2: High Impact Visual (Mobile + Loading) -- Do Next
 
-| # | Item | File(s) | Effort | Impact |
-|---|------|---------|--------|--------|
-| 7 | Add responsive media queries | theme.py | Medium | Very High |
-| 8 | Add skeleton loading states | theme.py, analysis.py | Medium | High |
-| 9 | Add combined probability spectrum bar | components.py, analysis.py | Medium | High |
-| 10 | Add tooltip component | theme.py, components.py | Low | Medium |
-| 11 | Calm animations on medical results | theme.py | Low | Medium |
-| 12 | Multi-stage progress indicator | theme.py, analysis.py | Medium | Medium |
+| #   | Item                                  | File(s)                    | Effort | Impact    |
+| --- | ------------------------------------- | -------------------------- | ------ | --------- |
+| 7   | Add responsive media queries          | theme.py                   | Medium | Very High |
+| 8   | Add skeleton loading states           | theme.py, analysis.py      | Medium | High      |
+| 9   | Add combined probability spectrum bar | components.py, analysis.py | Medium | High      |
+| 10  | Add tooltip component                 | theme.py, components.py    | Low    | Medium    |
+| 11  | Calm animations on medical results    | theme.py                   | Low    | Medium    |
+| 12  | Multi-stage progress indicator        | theme.py, analysis.py      | Medium | Medium    |
 
 **Estimated effort: 3-5 days**
 
 ### Tier 3: Data Visualization Upgrade
 
-| # | Item | File(s) | Effort | Impact |
-|---|------|---------|--------|--------|
-| 13 | Interactive Punnett square visualization | analysis.py, components.py | High | Very High |
-| 14 | Category treemap chart | disease_catalog.py | Low | Medium |
-| 15 | Risk radar chart summary | analysis.py | Medium | High |
-| 16 | Confidence signal-strength indicator | components.py | Low | Medium |
-| 17 | Data provenance badges | disease_catalog.py, theme.py | Low | Medium |
+| #   | Item                                     | File(s)                      | Effort | Impact    |
+| --- | ---------------------------------------- | ---------------------------- | ------ | --------- |
+| 13  | Interactive Punnett square visualization | analysis.py, components.py   | High   | Very High |
+| 14  | Category treemap chart                   | disease_catalog.py           | Low    | Medium    |
+| 15  | Risk radar chart summary                 | analysis.py                  | Medium | High      |
+| 16  | Confidence signal-strength indicator     | components.py                | Low    | Medium    |
+| 17  | Data provenance badges                   | disease_catalog.py, theme.py | Low    | Medium    |
 
 **Estimated effort: 4-6 days**
 
 ### Tier 4: Polish & Enhancement
 
-| # | Item | File(s) | Effort | Impact |
-|---|------|---------|--------|--------|
-| 18 | Type scale CSS variables | theme.py | Low | Medium |
-| 19 | rsID/genotype distinctive styling | theme.py | Low | Low |
-| 20 | Staggered card entrance animation | theme.py | Low | Low |
-| 21 | Empty state component | theme.py, components.py | Low | Low |
-| 22 | Mobile hamburger menu | navbar.py | Medium | Medium |
-| 23 | Replace emoji icons with SVG/CSS | Multiple pages | High | Medium |
-| 24 | Make light mode the default | theme.py, app.py | Low | Medium |
-| 25 | Font loading optimization | theme.py | Low | Low |
+| #   | Item                              | File(s)                 | Effort | Impact |
+| --- | --------------------------------- | ----------------------- | ------ | ------ |
+| 18  | Type scale CSS variables          | theme.py                | Low    | Medium |
+| 19  | rsID/genotype distinctive styling | theme.py                | Low    | Low    |
+| 20  | Staggered card entrance animation | theme.py                | Low    | Low    |
+| 21  | Empty state component             | theme.py, components.py | Low    | Low    |
+| 22  | Mobile hamburger menu             | navbar.py               | Medium | Medium |
+| 23  | Replace emoji icons with SVG/CSS  | Multiple pages          | High   | Medium |
+| 24  | Make light mode the default       | theme.py, app.py        | Low    | Medium |
+| 25  | Font loading optimization         | theme.py                | Low    | Low    |
 
 **Estimated effort: 4-6 days**
 

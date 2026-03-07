@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { Shield, Key, Smartphone } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { TwoFactorSetupModal } from "./two-factor-setup-modal";
-import { ChangePasswordModal } from "./change-password-modal";
+import { useState, useCallback } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { Shield, Key, Smartphone } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { TwoFactorSetupModal } from './two-factor-setup-modal';
+import { ChangePasswordModal } from './change-password-modal';
 
 export function SecuritySection() {
   const user = useAuthStore((s) => s.user);
@@ -17,7 +17,7 @@ export function SecuritySection() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [show2FASetup, setShow2FASetup] = useState(false);
   const [showDisable2FA, setShowDisable2FA] = useState(false);
-  const [disableCode, setDisableCode] = useState("");
+  const [disableCode, setDisableCode] = useState('');
   const [disableError, setDisableError] = useState<string | null>(null);
   const [isDisabling, setIsDisabling] = useState(false);
 
@@ -25,7 +25,7 @@ export function SecuritySection() {
 
   const handleDisable2FA = useCallback(async () => {
     if (disableCode.length !== 6) {
-      setDisableError("Please enter a 6-digit code");
+      setDisableError('Please enter a 6-digit code');
       return;
     }
     setIsDisabling(true);
@@ -33,9 +33,9 @@ export function SecuritySection() {
     try {
       await disable2FA(disableCode);
       setShowDisable2FA(false);
-      setDisableCode("");
+      setDisableCode('');
     } catch (err) {
-      setDisableError(err instanceof Error ? err.message : "Failed to disable 2FA");
+      setDisableError(err instanceof Error ? err.message : 'Failed to disable 2FA');
     } finally {
       setIsDisabling(false);
     }
@@ -45,47 +45,39 @@ export function SecuritySection() {
     <>
       <GlassCard variant="medium" hover="none" className="p-7">
         <div className="mb-5 flex items-center gap-3">
-          <Shield className="h-5 w-5 text-(--accent-teal)" />
-          <h2 className="font-heading text-lg font-bold text-(--text-heading)">
-            Security
-          </h2>
+          <Shield className="text-(--accent-teal) h-5 w-5" />
+          <h2 className="font-heading text-(--text-heading) text-lg font-bold">Security</h2>
         </div>
 
         <div className="space-y-4">
           {/* Password */}
-          <div className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4">
+          <div className="border-(--border-subtle) flex items-center justify-between rounded-xl border p-4">
             <div className="flex items-center gap-3">
-              <Key className="h-5 w-5 text-(--text-dim)" />
+              <Key className="text-(--text-dim) h-5 w-5" />
               <div>
-                <p className="font-heading text-sm font-medium text-(--text-heading)">
-                  Password
-                </p>
-                <p className="text-xs text-(--text-muted)">
+                <p className="font-heading text-(--text-heading) text-sm font-medium">Password</p>
+                <p className="text-(--text-muted) text-xs">
                   Keep your account secure with a strong password
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowPasswordModal(true)}
-            >
+            <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(true)}>
               Change
             </Button>
           </div>
 
           {/* 2FA */}
-          <div className="flex items-center justify-between rounded-xl border border-(--border-subtle) p-4">
+          <div className="border-(--border-subtle) flex items-center justify-between rounded-xl border p-4">
             <div className="flex items-center gap-3">
-              <Smartphone className="h-5 w-5 text-(--text-dim)" />
+              <Smartphone className="text-(--text-dim) h-5 w-5" />
               <div>
-                <p className="font-heading text-sm font-medium text-(--text-heading)">
+                <p className="font-heading text-(--text-heading) text-sm font-medium">
                   Two-Factor Authentication
                 </p>
-                <p className="text-xs text-(--text-muted)">
+                <p className="text-(--text-muted) text-xs">
                   {is2FAEnabled
-                    ? "2FA is enabled — your account has an extra layer of security"
-                    : "Add an extra layer of security to your account"}
+                    ? '2FA is enabled — your account has an extra layer of security'
+                    : 'Add an extra layer of security to your account'}
                 </p>
               </div>
             </div>
@@ -98,11 +90,7 @@ export function SecuritySection() {
                 Disable
               </Button>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShow2FASetup(true)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShow2FASetup(true)}>
                 Enable
               </Button>
             )}
@@ -113,13 +101,13 @@ export function SecuritySection() {
             {showDisable2FA && (
               <m.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+                animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
                 <div className="rounded-xl border border-[rgba(244,63,94,0.15)] bg-[rgba(244,63,94,0.03)] p-4">
-                  <p className="mb-3 text-sm text-(--text-muted)">
+                  <p className="text-(--text-muted) mb-3 text-sm">
                     Enter your authenticator code to disable 2FA:
                   </p>
                   <div className="flex gap-3">
@@ -127,7 +115,7 @@ export function SecuritySection() {
                       placeholder="000000"
                       value={disableCode}
                       onChange={(e) => {
-                        setDisableCode(e.target.value.replace(/\D/g, "").slice(0, 6));
+                        setDisableCode(e.target.value.replace(/\D/g, '').slice(0, 6));
                         setDisableError(null);
                       }}
                       error={disableError ?? undefined}
@@ -153,14 +141,8 @@ export function SecuritySection() {
       </GlassCard>
 
       {/* Modals */}
-      <ChangePasswordModal
-        isOpen={showPasswordModal}
-        onClose={() => setShowPasswordModal(false)}
-      />
-      <TwoFactorSetupModal
-        isOpen={show2FASetup}
-        onClose={() => setShow2FASetup(false)}
-      />
+      <ChangePasswordModal isOpen={showPasswordModal} onClose={() => setShowPasswordModal(false)} />
+      <TwoFactorSetupModal isOpen={show2FASetup} onClose={() => setShow2FASetup(false)} />
     </>
   );
 }

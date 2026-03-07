@@ -8,20 +8,20 @@
 
 ## Review Panel & Grades
 
-| # | Reviewer | Grade | BLOCKs | WARNs | INFOs |
-|---|----------|-------|--------|-------|-------|
-| 1 | **Architect** | B+ | 3→0* | 9 | 7 |
-| 2 | **QA Engineer** | B+ | 2 | 10 | 8 |
-| 3 | **Scientist** | A+ | 0 | 2 | 20+ |
-| 4 | **Technologist** | A- | 2→0* | 16 | 9 |
-| 5 | **Business** | A | 0 | 5 | 20+ |
-| 6 | **Designer** | A- | 0 | 13 | 14 |
-| 7 | **Security Analyst** | B+ | 1 | 6 | 10 |
-| 8 | **Code Quality** | A- | 1→0* | 5 | 3 |
-| 9 | **Legal/Privacy** | A- | 0 | 3 | 20+ |
-| 10 | **Ethics/Bioethics** | A- | 0 | 6 | 19 |
+| #   | Reviewer             | Grade | BLOCKs | WARNs | INFOs |
+| --- | -------------------- | ----- | ------ | ----- | ----- |
+| 1   | **Architect**        | B+    | 3→0\*  | 9     | 7     |
+| 2   | **QA Engineer**      | B+    | 2      | 10    | 8     |
+| 3   | **Scientist**        | A+    | 0      | 2     | 20+   |
+| 4   | **Technologist**     | A-    | 2→0\*  | 16    | 9     |
+| 5   | **Business**         | A     | 0      | 5     | 20+   |
+| 6   | **Designer**         | A-    | 0      | 13    | 14    |
+| 7   | **Security Analyst** | B+    | 1      | 6     | 10    |
+| 8   | **Code Quality**     | A-    | 1→0\*  | 5     | 3     |
+| 9   | **Legal/Privacy**    | A-    | 0      | 3     | 20+   |
+| 10  | **Ethics/Bioethics** | A-    | 0      | 6     | 19    |
 
-*\*BLOCKs marked →0 were fixed during the review cycle*
+_\*BLOCKs marked →0 were fixed during the review cycle_
 
 **Composite Grade: A-**
 
@@ -60,23 +60,23 @@
 
 All BLOCK issues have been resolved. No remaining must-fix items.
 
-*(The last blocker — `mockCreateCheckout` intercepting `/payments/create-checkout-session` instead of `/payments/checkout` — was fixed after verification against `payment-client.ts:109`.)*
+_(The last blocker — `mockCreateCheckout` intercepting `/payments/create-checkout-session` instead of `/payments/checkout` — was fixed after verification against `payment-client.ts:109`.)_
 
 ### Should-Fix (Post-Merge / Next Sprint)
 
-| Priority | File | Issue |
-|----------|------|-------|
-| WARN | Multiple | Add `data-testid` attributes to components so POM `.or()` fallbacks to CSS classes become unnecessary |
-| WARN | `security/` | Add rate-limiting / account-lockout tests (the `lockout` test user exists but is unused) |
-| WARN | `security/` | Add `javascript:alert(1)` returnUrl XSS vector test |
-| WARN | `security/` | Add OAuth state-mismatch rejection test |
-| WARN | `register.spec.ts` | Assert `terms_accepted` field explicitly in registration API payload |
-| WARN | `cookie-consent.spec.ts` | Add "Customize" button flow test and consent-withdrawal test |
-| WARN | `analysis.spec.ts` | Tier-gating tests should click locked PGx/PRS tabs to verify upgrade paywall |
-| WARN | `analysis-scientific.spec.ts` | Add mock data for moderate/informational urgency counseling triage |
-| WARN | `subscription.spec.ts` | Add empty payment history test and Pro-tier checkout test |
-| WARN | `navigation.spec.ts` | Add tablet viewport (768×1024) responsive test |
-| WARN | `axe-scan.spec.ts` | Add dark/light mode scans for login, register, products pages |
+| Priority | File                          | Issue                                                                                                 |
+| -------- | ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| WARN     | Multiple                      | Add `data-testid` attributes to components so POM `.or()` fallbacks to CSS classes become unnecessary |
+| WARN     | `security/`                   | Add rate-limiting / account-lockout tests (the `lockout` test user exists but is unused)              |
+| WARN     | `security/`                   | Add `javascript:alert(1)` returnUrl XSS vector test                                                   |
+| WARN     | `security/`                   | Add OAuth state-mismatch rejection test                                                               |
+| WARN     | `register.spec.ts`            | Assert `terms_accepted` field explicitly in registration API payload                                  |
+| WARN     | `cookie-consent.spec.ts`      | Add "Customize" button flow test and consent-withdrawal test                                          |
+| WARN     | `analysis.spec.ts`            | Tier-gating tests should click locked PGx/PRS tabs to verify upgrade paywall                          |
+| WARN     | `analysis-scientific.spec.ts` | Add mock data for moderate/informational urgency counseling triage                                    |
+| WARN     | `subscription.spec.ts`        | Add empty payment history test and Pro-tier checkout test                                             |
+| WARN     | `navigation.spec.ts`          | Add tablet viewport (768×1024) responsive test                                                        |
+| WARN     | `axe-scan.spec.ts`            | Add dark/light mode scans for login, register, products pages                                         |
 
 ---
 
@@ -107,29 +107,29 @@ All BLOCK issues have been resolved. No remaining must-fix items.
 
 ## Files Modified in Fix Rounds
 
-| File | Changes |
-|------|---------|
-| `utils/auth.utils.ts` | Fixed otplib import API |
-| `utils/mock-api.utils.ts` | Merged session handlers, added `mockTokenResponse`, removed `mockRevokeAllSessions`, fixed checkout URL |
-| `utils/index.ts` | Updated exports |
-| `fixtures/test-users.ts` | `satisfies` instead of `as const`, eager CI validation |
-| `auth/login.spec.ts` | Removed local `mockTokenResponse`, rewrote test 9 |
-| `auth/oauth.spec.ts` | Removed all local duplicates, imported from shared utils, fixed catch pattern |
-| `auth/password-reset.spec.ts` | Imported `API_BASE` from shared utils |
-| `security/auth-security.spec.ts` | Imported `mockTokenResponse`, renamed helper, removed dead code |
-| `app/account.spec.ts` | Removed duplicate route handler, fixed catch pattern, replaced hardcoded passwords |
-| `app/analysis.spec.ts` | Removed unused import, merged route handlers, imported shared constants |
-| `app/analysis-scientific.spec.ts` | Renamed misleading test titles |
-| `api/auth.api.spec.ts` | Added `E2E_LIVE_API` skip guard |
-| `api/payments.api.spec.ts` | Added `E2E_LIVE_API` skip guard |
-| `poms/SubscriptionPage.ts` | Resilient `.or()` selector |
-| `poms/NavigationComponent.ts` | Resilient `.or()` selectors for desktop nav + skip link |
-| `poms/DiseaseCatalogPage.ts` | Resilient `.or()` selector for disease detail |
-| `accessibility/focus-trap.spec.ts` | Fixed `isVisible()` timeout API usage |
-| `security/auth-security.spec.ts` | Replaced `waitForTimeout` with proper assertion |
-| `performance/worker-lifecycle.spec.ts` | Replaced `waitForTimeout` with `waitForLoadState` |
-| `marketing/navigation.spec.ts` | Replaced `waitForTimeout` with attribute assertion |
-| `legal/age-verification.spec.ts` | Replaced `waitForTimeout` with `waitForLoadState` |
-| `legal/cookie-consent.spec.ts` | Replaced `waitForTimeout` with `waitForLoadState` |
-| `performance/core-vitals.spec.ts` | Replaced 2 `waitForTimeout` with `waitForLoadState` |
-| `app/subscription.spec.ts` | Replaced `waitForTimeout` with `expect.poll()` |
+| File                                   | Changes                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `utils/auth.utils.ts`                  | Fixed otplib import API                                                                                 |
+| `utils/mock-api.utils.ts`              | Merged session handlers, added `mockTokenResponse`, removed `mockRevokeAllSessions`, fixed checkout URL |
+| `utils/index.ts`                       | Updated exports                                                                                         |
+| `fixtures/test-users.ts`               | `satisfies` instead of `as const`, eager CI validation                                                  |
+| `auth/login.spec.ts`                   | Removed local `mockTokenResponse`, rewrote test 9                                                       |
+| `auth/oauth.spec.ts`                   | Removed all local duplicates, imported from shared utils, fixed catch pattern                           |
+| `auth/password-reset.spec.ts`          | Imported `API_BASE` from shared utils                                                                   |
+| `security/auth-security.spec.ts`       | Imported `mockTokenResponse`, renamed helper, removed dead code                                         |
+| `app/account.spec.ts`                  | Removed duplicate route handler, fixed catch pattern, replaced hardcoded passwords                      |
+| `app/analysis.spec.ts`                 | Removed unused import, merged route handlers, imported shared constants                                 |
+| `app/analysis-scientific.spec.ts`      | Renamed misleading test titles                                                                          |
+| `api/auth.api.spec.ts`                 | Added `E2E_LIVE_API` skip guard                                                                         |
+| `api/payments.api.spec.ts`             | Added `E2E_LIVE_API` skip guard                                                                         |
+| `poms/SubscriptionPage.ts`             | Resilient `.or()` selector                                                                              |
+| `poms/NavigationComponent.ts`          | Resilient `.or()` selectors for desktop nav + skip link                                                 |
+| `poms/DiseaseCatalogPage.ts`           | Resilient `.or()` selector for disease detail                                                           |
+| `accessibility/focus-trap.spec.ts`     | Fixed `isVisible()` timeout API usage                                                                   |
+| `security/auth-security.spec.ts`       | Replaced `waitForTimeout` with proper assertion                                                         |
+| `performance/worker-lifecycle.spec.ts` | Replaced `waitForTimeout` with `waitForLoadState`                                                       |
+| `marketing/navigation.spec.ts`         | Replaced `waitForTimeout` with attribute assertion                                                      |
+| `legal/age-verification.spec.ts`       | Replaced `waitForTimeout` with `waitForLoadState`                                                       |
+| `legal/cookie-consent.spec.ts`         | Replaced `waitForTimeout` with `waitForLoadState`                                                       |
+| `performance/core-vitals.spec.ts`      | Replaced 2 `waitForTimeout` with `waitForLoadState`                                                     |
+| `app/subscription.spec.ts`             | Replaced `waitForTimeout` with `expect.poll()`                                                          |

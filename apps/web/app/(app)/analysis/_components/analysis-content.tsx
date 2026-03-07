@@ -1,27 +1,24 @@
-"use client";
+'use client';
 
 // PRIVACY: This file MUST remain client-side. DNA data must NEVER reach the server.
 
-import { useCallback, useState } from "react";
-import {
-  Lock,
-  AlertTriangle,
-} from "lucide-react";
-import Link from "next/link";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { GinaNotice } from "@/components/legal/gina-notice";
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { useLegalStore } from "@/lib/stores/legal-store";
-import { useGeneticsWorker } from "@/hooks/use-genetics-worker";
-import { SavedResultsList } from "@/components/analysis/saved-results-list";
-import { HighContrastToggle } from "@/components/a11y/high-contrast-toggle";
-import { usePdfExport } from "@/lib/pdf/use-pdf-export";
-import { AnalysisUploadSection } from "./analysis-upload-section";
-import { AnalysisProgressSection } from "./analysis-progress-section";
-import { AnalysisResultsSection, RESULT_TABS } from "./analysis-results-section";
-import { AnalysisModals } from "./analysis-modals";
+import { useCallback, useState } from 'react';
+import { Lock, AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { GinaNotice } from '@/components/legal/gina-notice';
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { useLegalStore } from '@/lib/stores/legal-store';
+import { useGeneticsWorker } from '@/hooks/use-genetics-worker';
+import { SavedResultsList } from '@/components/analysis/saved-results-list';
+import { HighContrastToggle } from '@/components/a11y/high-contrast-toggle';
+import { usePdfExport } from '@/lib/pdf/use-pdf-export';
+import { AnalysisUploadSection } from './analysis-upload-section';
+import { AnalysisProgressSection } from './analysis-progress-section';
+import { AnalysisResultsSection, RESULT_TABS } from './analysis-results-section';
+import { AnalysisModals } from './analysis-modals';
 
 // ─── File-select helper (module-level, not a hook) ──────────────────────────
 // Shared logic for handleFileSelectA and handleFileSelectB.
@@ -36,7 +33,7 @@ function applyFileSelect(side: 'A' | 'B', file: File | null): void {
   if (file) {
     setParent({
       name: file.name,
-      format: "23andme", // Format is detected during parsing
+      format: '23andme', // Format is detected during parsing
       size: file.size,
       snpCount: null,
     });
@@ -65,7 +62,7 @@ export function AnalysisContent() {
   const reset = useAnalysisStore((s) => s.reset);
 
   const user = useAuthStore((s) => s.user);
-  const userTier = user?.tier ?? "free";
+  const userTier = user?.tier ?? 'free';
 
   // ── Legal consent selectors ──────────────────────────────────────────
   const partnerConsentGiven = useLegalStore((s) => s.partnerConsentGiven);
@@ -81,15 +78,9 @@ export function AnalysisContent() {
 
   // ── Handlers (H2: stable useCallback references) ─────────────────────
 
-  const handleFileSelectA = useCallback(
-    (file: File | null) => applyFileSelect('A', file),
-    [],
-  );
+  const handleFileSelectA = useCallback((file: File | null) => applyFileSelect('A', file), []);
 
-  const handleFileSelectB = useCallback(
-    (file: File | null) => applyFileSelect('B', file),
-    [],
-  );
+  const handleFileSelectB = useCallback((file: File | null) => applyFileSelect('B', file), []);
 
   // ── Shared analysis start helper ───────────────────────────────────────
   // Checks all consent gates then fires startAnalysis when both files are ready.
@@ -147,10 +138,12 @@ export function AnalysisContent() {
 
   const handleViewDemo = useCallback(async () => {
     try {
-      const { DEMO_RESULTS } = await import("@/lib/data/demo-results");
+      const { DEMO_RESULTS } = await import('@/lib/data/demo-results');
       setDemoResults(DEMO_RESULTS);
     } catch {
-      useAnalysisStore.getState().setError("Failed to load demo data. Please refresh and try again.");
+      useAnalysisStore
+        .getState()
+        .setError('Failed to load demo data. Please refresh and try again.');
     }
   }, [setDemoResults]);
 
@@ -171,13 +164,13 @@ export function AnalysisContent() {
       const currentIndex = tabKeys.indexOf(activeTab);
       let nextIndex: number | null = null;
 
-      if (e.key === "ArrowRight") {
+      if (e.key === 'ArrowRight') {
         nextIndex = (currentIndex + 1) % tabKeys.length;
-      } else if (e.key === "ArrowLeft") {
+      } else if (e.key === 'ArrowLeft') {
         nextIndex = (currentIndex - 1 + tabKeys.length) % tabKeys.length;
-      } else if (e.key === "Home") {
+      } else if (e.key === 'Home') {
         nextIndex = 0;
-      } else if (e.key === "End") {
+      } else if (e.key === 'End') {
         nextIndex = tabKeys.length - 1;
       }
 
@@ -191,8 +184,8 @@ export function AnalysisContent() {
   );
 
   // ── Derived state ──────────────────────────────────────────────────────
-  const isIdle = currentStep === "idle";
-  const isComplete = currentStep === "complete";
+  const isIdle = currentStep === 'idle';
+  const isComplete = currentStep === 'complete';
   const isRunning = !isIdle && !isComplete;
   const bothFilesSelected = parentA !== null && parentB !== null;
   // Partner consent is required when both files are selected (couple analysis)
@@ -208,31 +201,31 @@ export function AnalysisContent() {
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Genetic Analysis
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-(--text-muted)">
+        <p className="text-(--text-muted) mx-auto mt-3 max-w-2xl">
           Upload both parents&apos; DNA files to predict offspring disease risk, traits, and more
         </p>
       </div>
 
       {/* ── Dynamic tier notice (Business #4) ── */}
-      {!isDemo && userTier !== "pro" && (
+      {!isDemo && userTier !== 'pro' && (
         <GlassCard
           variant="subtle"
           hover="none"
           className="mb-8 flex items-center gap-3 border-[rgba(245,158,11,0.15)] p-4"
         >
-          <Lock className="h-5 w-5 shrink-0 text-(--accent-amber)" />
+          <Lock className="text-(--accent-amber) h-5 w-5 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm text-(--text-body)">
-              {userTier === "premium" ? (
+            <p className="text-(--text-body) text-sm">
+              {userTier === 'premium' ? (
                 <>
-                  <span className="font-semibold">Premium tier</span> &mdash;{" "}
+                  <span className="font-semibold">Premium tier</span> &mdash;{' '}
                   <span className="text-(--accent-teal)">
                     Upgrade to Pro for genetic counseling referrals.
                   </span>
                 </>
               ) : (
                 <>
-                  <span className="font-semibold">Free tier:</span> All trait predictions included.{" "}
+                  <span className="font-semibold">Free tier:</span> All trait predictions included.{' '}
                   <span className="text-(--accent-teal)">
                     Upgrade to Premium for disease screening.
                   </span>
@@ -240,7 +233,7 @@ export function AnalysisContent() {
               )}
             </p>
           </div>
-          <Link href="/subscription" className={buttonVariants({ variant: "outline", size: "sm" })}>
+          <Link href="/subscription" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
             Upgrade
           </Link>
         </GlassCard>
@@ -266,12 +259,7 @@ export function AnalysisContent() {
       )}
 
       {/* ── Progress + Cancel (shown when running) ── */}
-      {isRunning && (
-        <AnalysisProgressSection
-          currentStep={currentStep}
-          onCancel={cancel}
-        />
-      )}
+      {isRunning && <AnalysisProgressSection currentStep={currentStep} onCancel={cancel} />}
 
       {/* ── Error Display ── */}
       {errorMessage && (
@@ -281,10 +269,10 @@ export function AnalysisContent() {
           hover="none"
           className="mt-8 flex items-center gap-3 border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.04)] p-4"
         >
-          <AlertTriangle className="h-5 w-5 shrink-0 text-(--accent-rose)" />
+          <AlertTriangle className="text-(--accent-rose) h-5 w-5 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-(--text-body)">Analysis Error</p>
-            <p className="mt-0.5 text-sm text-(--text-muted)">{errorMessage}</p>
+            <p className="text-(--text-body) text-sm font-medium">Analysis Error</p>
+            <p className="text-(--text-muted) mt-0.5 text-sm">{errorMessage}</p>
           </div>
           <Button variant="ghost" size="sm" onClick={handleReset}>
             Try Again

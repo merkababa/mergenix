@@ -179,10 +179,7 @@ def get_settings() -> Settings:
     """Return a cached singleton Settings instance."""
     s = Settings()
     if not s.jwt_secret:
-        logger.warning(
-            "JWT_SECRET is not set. Authentication will not work. "
-            "Set the JWT_SECRET environment variable."
-        )
+        logger.warning("JWT_SECRET is not set. Authentication will not work. Set the JWT_SECRET environment variable.")
     if s.environment != "development":
         if not s.stripe_price_premium or not s.stripe_price_pro:
             logger.warning(

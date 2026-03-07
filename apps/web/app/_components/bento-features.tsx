@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Microscope, Dna, Pill, BarChart3, ArrowRight } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from "@mergenix/genetics-data";
+import Link from 'next/link';
+import { Microscope, Dna, Pill, BarChart3, ArrowRight } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from '@mergenix/genetics-data';
 
 // ---------------------------------------------------------------------------
 // Feature data (hoisted — §3 of executor checklist)
@@ -21,10 +21,10 @@ const HERO_FEATURE = {
   icon: Microscope,
   title: `${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`,
   description:
-    "Comprehensive carrier screening across autosomal recessive, dominant, and X-linked conditions with Mendelian inheritance modeling.",
-  badge: "Carrier Risk",
-  color: "#f43f5e", // mirrors var(--accent-rose)
-  colorAlpha: "rgba(244,63,94,0.1)", // mirrors var(--accent-rose) at 10% opacity
+    'Comprehensive carrier screening across autosomal recessive, dominant, and X-linked conditions with Mendelian inheritance modeling.',
+  badge: 'Carrier Risk',
+  color: '#f43f5e', // mirrors var(--accent-rose)
+  colorAlpha: 'rgba(244,63,94,0.1)', // mirrors var(--accent-rose) at 10% opacity
 } as const;
 
 const SECONDARY_FEATURES = [
@@ -32,28 +32,27 @@ const SECONDARY_FEATURES = [
     icon: Dna,
     title: `${TRAIT_COUNT_DISPLAY} Trait Predictions`,
     description:
-      "From eye color to earwax type, predict physical traits with Punnett square visualization and confidence scoring.",
-    badge: "Traits",
-    color: "#06d6a0", // mirrors var(--accent-teal)
-    colorAlpha: "rgba(6,214,160,0.1)", // mirrors var(--accent-teal) at 10% opacity
+      'From eye color to earwax type, predict physical traits with Punnett square visualization and confidence scoring.',
+    badge: 'Traits',
+    color: '#06d6a0', // mirrors var(--accent-teal)
+    colorAlpha: 'rgba(6,214,160,0.1)', // mirrors var(--accent-teal) at 10% opacity
   },
   {
     icon: Pill,
-    title: "Pharmacogenomics",
-    description:
-      "Predict drug metabolism phenotypes for personalized medicine insights.",
-    badge: "PGx",
-    color: "#8b5cf6", // mirrors var(--accent-violet)
-    colorAlpha: "rgba(139,92,246,0.1)", // mirrors var(--accent-violet) at 10% opacity
+    title: 'Pharmacogenomics',
+    description: 'Predict drug metabolism phenotypes for personalized medicine insights.',
+    badge: 'PGx',
+    color: '#8b5cf6', // mirrors var(--accent-violet)
+    colorAlpha: 'rgba(139,92,246,0.1)', // mirrors var(--accent-violet) at 10% opacity
   },
   {
     icon: BarChart3,
-    title: "Polygenic Risk Scores",
+    title: 'Polygenic Risk Scores',
     description:
-      "Multi-variant risk scoring for complex conditions like Type 2 Diabetes, Heart Disease, and Breast Cancer.",
-    badge: "PRS",
-    color: "#06b6d4", // mirrors var(--accent-cyan)
-    colorAlpha: "rgba(6,182,212,0.1)", // mirrors var(--accent-cyan) at 10% opacity
+      'Multi-variant risk scoring for complex conditions like Type 2 Diabetes, Heart Disease, and Breast Cancer.',
+    badge: 'PRS',
+    color: '#06b6d4', // mirrors var(--accent-cyan)
+    colorAlpha: 'rgba(6,182,212,0.1)', // mirrors var(--accent-cyan) at 10% opacity
   },
 ] as const;
 
@@ -95,15 +94,12 @@ export function BentoFeatures() {
   const HeroIcon = HERO_FEATURE.icon;
 
   return (
-    <section
-      className="relative px-4 py-16 md:px-6 md:py-24"
-      aria-label="Key features"
-    >
+    <section className="relative px-4 py-16 md:px-6 md:py-24" aria-label="Key features">
       <div className="relative mx-auto max-w-6xl">
         <SectionHeading
           title="Comprehensive Genetic Intelligence"
           subtitle="Everything you need to make informed family planning decisions"
-          className="mb-12 text-fluid-heading"
+          className="text-fluid-heading mb-12"
         />
 
         {/* Bento grid: hero card takes col-span-2 on md+, 3 stacked cards on right */}
@@ -130,15 +126,15 @@ export function BentoFeatures() {
 
               {/* Title */}
               <h3
-                className="mb-3 font-heading text-2xl font-bold text-(--text-heading) md:text-3xl"
-                style={{ fontSize: "var(--font-size-fluid-heading)" }}
+                className="font-heading text-(--text-heading) mb-3 text-2xl font-bold md:text-3xl"
+                style={{ fontSize: 'var(--font-size-fluid-heading)' }}
               >
                 {HERO_FEATURE.title}
               </h3>
 
               {/* Description + chart row */}
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <p className="max-w-sm text-sm leading-relaxed text-(--text-muted) sm:text-base">
+                <p className="text-(--text-muted) max-w-sm text-sm leading-relaxed sm:text-base">
                   {HERO_FEATURE.description}
                 </p>
                 <DiseaseBarChart />
@@ -147,21 +143,20 @@ export function BentoFeatures() {
               {/* Stat + CTA */}
               <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <span className="font-heading text-3xl font-extrabold text-(--accent-rose)">
+                  <span className="font-heading text-(--accent-rose) text-3xl font-extrabold">
                     {CARRIER_PANEL_COUNT_DISPLAY}
                   </span>
-                  <span className="ml-2 text-sm text-(--text-dim)">conditions analyzed</span>
+                  <span className="text-(--text-dim) ml-2 text-sm">conditions analyzed</span>
                 </div>
                 <Link
                   href="/diseases"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-rose) transition-opacity hover:opacity-80"
+                  className="text-(--accent-rose) inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
                   aria-label="Browse the full disease catalog"
                 >
                   Browse Disease Catalog
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
-
             </GlassCard>
           </ScrollReveal>
 
@@ -170,17 +165,8 @@ export function BentoFeatures() {
             {SECONDARY_FEATURES.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <ScrollReveal
-                  key={feature.title}
-                  type="fade"
-                  direction="up"
-                  delay={0.1 + i * 0.1}
-                >
-                  <GlassCard
-                    variant="subtle"
-                    hover="lift"
-                    className="h-full p-5"
-                  >
+                <ScrollReveal key={feature.title} type="fade" direction="up" delay={0.1 + i * 0.1}>
+                  <GlassCard variant="subtle" hover="lift" className="h-full p-5">
                     {/* Gradient icon container */}
                     <div
                       className="card-icon mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
@@ -204,10 +190,10 @@ export function BentoFeatures() {
                       {feature.badge}
                     </span>
 
-                    <h3 className="mb-1.5 font-heading text-sm font-semibold text-(--text-heading)">
+                    <h3 className="font-heading text-(--text-heading) mb-1.5 text-sm font-semibold">
                       {feature.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-(--text-muted)">
+                    <p className="text-(--text-muted) text-xs leading-relaxed">
                       {feature.description}
                     </p>
                   </GlassCard>

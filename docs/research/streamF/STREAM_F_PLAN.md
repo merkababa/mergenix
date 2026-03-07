@@ -21,14 +21,14 @@
 
 ## Key Risks
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Fake "zero-knowledge" (raw save) | **HIGH** | Block F15 until encryption exists; create EncryptionService facade |
-| Mobile memory crash (200MB files + PDF) | **HIGH** | Off-main-thread file reading, dedicated PDF worker, aggressive cleanup |
-| Free tier false reassurance | **HIGH** | Persistent "only 25/2,697 tested" banner; distinguish "not tested" vs "not detected" |
-| PRS ancestry mismatch misinterpretation | **HIGH** | Suppress or badge "Low Confidence" for non-European populations |
-| Pricing mismatch in code ($12.90 vs $14.99) | **MEDIUM** | Update pricing-data.ts + payments.ts immediately |
-| Legal text dependency (L-stream) | **MEDIUM** | Create placeholder constants file, swap in final copy later |
+| Risk                                        | Severity   | Mitigation                                                                           |
+| ------------------------------------------- | ---------- | ------------------------------------------------------------------------------------ |
+| Fake "zero-knowledge" (raw save)            | **HIGH**   | Block F15 until encryption exists; create EncryptionService facade                   |
+| Mobile memory crash (200MB files + PDF)     | **HIGH**   | Off-main-thread file reading, dedicated PDF worker, aggressive cleanup               |
+| Free tier false reassurance                 | **HIGH**   | Persistent "only 25/2,697 tested" banner; distinguish "not tested" vs "not detected" |
+| PRS ancestry mismatch misinterpretation     | **HIGH**   | Suppress or badge "Low Confidence" for non-European populations                      |
+| Pricing mismatch in code ($12.90 vs $14.99) | **MEDIUM** | Update pricing-data.ts + payments.ts immediately                                     |
+| Legal text dependency (L-stream)            | **MEDIUM** | Create placeholder constants file, swap in final copy later                          |
 
 ---
 
@@ -36,16 +36,16 @@
 
 **8 tasks to Gemini (17%), 39 tasks to Claude (83%).**
 
-| Task | Gemini Tier | What Gemini Does | What Claude Does |
-|------|------------|------------------|------------------|
-| F6 | A+ | Find all instances, produce rename map | Apply renames, test |
-| F19 | A+ | Audit contrast ratios, propose semantic tokens | Implement CSS changes, verify |
-| F24 | A+ | Research keywords, draft JSON-LD + OG tags | Implement in Next.js metadata |
-| F1 | A | Prototype couple upload card design | Integrate, wire to store/worker |
-| F4 | A | Prototype Virtual Baby card design | Integrate, wire tier gating |
-| F22 | A | Prototype virtualization setup with virtua | Integrate, wire to carrier data |
-| F42 | A | Create sample demo report content | Integrate into marketing page |
-| F48 | A | Test pdf-lib PDF/UA compliance, font embedding | Review findings, decide approach |
+| Task | Gemini Tier | What Gemini Does                               | What Claude Does                 |
+| ---- | ----------- | ---------------------------------------------- | -------------------------------- |
+| F6   | A+          | Find all instances, produce rename map         | Apply renames, test              |
+| F19  | A+          | Audit contrast ratios, propose semantic tokens | Implement CSS changes, verify    |
+| F24  | A+          | Research keywords, draft JSON-LD + OG tags     | Implement in Next.js metadata    |
+| F1   | A           | Prototype couple upload card design            | Integrate, wire to store/worker  |
+| F4   | A           | Prototype Virtual Baby card design             | Integrate, wire tier gating      |
+| F22  | A           | Prototype virtualization setup with virtua     | Integrate, wire to carrier data  |
+| F42  | A           | Create sample demo report content              | Integrate into marketing page    |
+| F48  | A           | Test pdf-lib PDF/UA compliance, font embedding | Review findings, decide approach |
 
 ---
 
@@ -55,23 +55,23 @@
 
 Design tokens, infrastructure, consent modals. This sprint establishes the accessible foundation and legal gates that ALL other sprints build on.
 
-| Task | Priority | Description | Delegation |
-|------|----------|-------------|------------|
-| F19 | **CRITICAL** | Color contrast audit + semantic tokens | **Gemini** (A+) |
-| F22 | HIGH | List virtualization component (virtua/react-virtuoso) | **Gemini** (A) |
-| F48 | HIGH | PDF/UA feasibility spike (pdf-lib validation) | **Gemini** (A) |
-| F6 | HIGH | Global terminology rename (Negative→Variant Not Detected, Screening→Analysis, Diagnosis→Report) | **Gemini** (A+) |
-| F28 | **CRITICAL** | Age verification gate (18+ modal, role='dialog', focus trap) | Claude |
-| F2 | **CRITICAL** | Pre-analysis consent modal (scroll+accept, Article 9, IntersectionObserver) | Claude |
-| F27 | **CRITICAL** | Partner consent mandatory checkbox (blocks analysis) | Claude |
-| F25 | **CRITICAL** | Pre-payment chip limitation disclosure (0.02% of genome, before paywall) | Claude |
-| F44 | HIGH | Skip to Main Content link (WCAG 2.4.1) | Claude |
-| F32 | HIGH | Focus management architecture (modal focus trap, session timeout, focus restoration) | Claude |
-| F36 | HIGH | React Error Boundaries (all visualization components) | Claude |
-| F35 | HIGH | Global error announcer (aria-live region for error codes) | Claude |
-| F16 | HIGH | aria-live on analysis progress (screen reader announces stages) | Claude |
-| F20 | **CRITICAL** | Touch target sizing (>= 44x44px on mobile) | Claude |
-| F34 | MEDIUM | Reduced motion support (prefers-reduced-motion) | Claude |
+| Task | Priority     | Description                                                                                     | Delegation      |
+| ---- | ------------ | ----------------------------------------------------------------------------------------------- | --------------- |
+| F19  | **CRITICAL** | Color contrast audit + semantic tokens                                                          | **Gemini** (A+) |
+| F22  | HIGH         | List virtualization component (virtua/react-virtuoso)                                           | **Gemini** (A)  |
+| F48  | HIGH         | PDF/UA feasibility spike (pdf-lib validation)                                                   | **Gemini** (A)  |
+| F6   | HIGH         | Global terminology rename (Negative→Variant Not Detected, Screening→Analysis, Diagnosis→Report) | **Gemini** (A+) |
+| F28  | **CRITICAL** | Age verification gate (18+ modal, role='dialog', focus trap)                                    | Claude          |
+| F2   | **CRITICAL** | Pre-analysis consent modal (scroll+accept, Article 9, IntersectionObserver)                     | Claude          |
+| F27  | **CRITICAL** | Partner consent mandatory checkbox (blocks analysis)                                            | Claude          |
+| F25  | **CRITICAL** | Pre-payment chip limitation disclosure (0.02% of genome, before paywall)                        | Claude          |
+| F44  | HIGH         | Skip to Main Content link (WCAG 2.4.1)                                                          | Claude          |
+| F32  | HIGH         | Focus management architecture (modal focus trap, session timeout, focus restoration)            | Claude          |
+| F36  | HIGH         | React Error Boundaries (all visualization components)                                           | Claude          |
+| F35  | HIGH         | Global error announcer (aria-live region for error codes)                                       | Claude          |
+| F16  | HIGH         | aria-live on analysis progress (screen reader announces stages)                                 | Claude          |
+| F20  | **CRITICAL** | Touch target sizing (>= 44x44px on mobile)                                                      | Claude          |
+| F34  | MEDIUM       | Reduced motion support (prefers-reduced-motion)                                                 | Claude          |
 
 **Dependencies:** None (this is the foundation sprint)
 **Deliverables:** Semantic design tokens, virtualization component, consent gates, a11y infrastructure
@@ -83,18 +83,18 @@ Design tokens, infrastructure, consent modals. This sprint establishes the acces
 
 Couple upload, sensitive guards, business logic. Builds on Sprint 1's gates and infrastructure.
 
-| Task | Priority | Description | Delegation |
-|------|----------|-------------|------------|
-| F1 | **CRITICAL** | Couple upload flow ("Upload Mom + Upload Dad" unified card, partner consent, encrypts under uploader's key) | **Gemini** prototype → Claude integration |
-| F4 | HIGH | Virtual Baby summary card (predicted traits, "Simulation Only" disclaimer, Free=eye color only) | **Gemini** prototype → Claude integration |
-| F3 | **CRITICAL** | Sensitive content guard (3 granular reveals: Carrier, PRS, PGx; blur/reveal; AD pre-reveal warning) | Claude |
-| F11 | **CRITICAL** | Free tier = traits only (remove TOP_25_FREE_DISEASES, blur carrier as upsell, normalizing context) | Claude |
-| F12 | HIGH | Premium tier ($14.99) — individual health: carrier + PGx + PRS | Claude |
-| F13 | HIGH | Pro tier ($34.99) — couple/offspring, includes both Premium reports, full Virtual Baby | Claude |
-| F18 | MEDIUM | Mobile stack layout for couple upload (vertical Mom/Dad on mobile) | Claude |
-| F15 | HIGH | Save choice UX — "Save encrypted" vs "Download PDF" (STUB — encryption pending S6/B3) | Claude |
-| F14 | HIGH | PDF report trigger — user triggers client-side PDF, choose save or download | Claude |
-| F29 | HIGH | Delete Account & Data button (triggers backend nuclear delete) | Claude |
+| Task | Priority     | Description                                                                                                 | Delegation                                |
+| ---- | ------------ | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| F1   | **CRITICAL** | Couple upload flow ("Upload Mom + Upload Dad" unified card, partner consent, encrypts under uploader's key) | **Gemini** prototype → Claude integration |
+| F4   | HIGH         | Virtual Baby summary card (predicted traits, "Simulation Only" disclaimer, Free=eye color only)             | **Gemini** prototype → Claude integration |
+| F3   | **CRITICAL** | Sensitive content guard (3 granular reveals: Carrier, PRS, PGx; blur/reveal; AD pre-reveal warning)         | Claude                                    |
+| F11  | **CRITICAL** | Free tier = traits only (remove TOP_25_FREE_DISEASES, blur carrier as upsell, normalizing context)          | Claude                                    |
+| F12  | HIGH         | Premium tier ($14.99) — individual health: carrier + PGx + PRS                                              | Claude                                    |
+| F13  | HIGH         | Pro tier ($34.99) — couple/offspring, includes both Premium reports, full Virtual Baby                      | Claude                                    |
+| F18  | MEDIUM       | Mobile stack layout for couple upload (vertical Mom/Dad on mobile)                                          | Claude                                    |
+| F15  | HIGH         | Save choice UX — "Save encrypted" vs "Download PDF" (STUB — encryption pending S6/B3)                       | Claude                                    |
+| F14  | HIGH         | PDF report trigger — user triggers client-side PDF, choose save or download                                 | Claude                                    |
+| F29  | HIGH         | Delete Account & Data button (triggers backend nuclear delete)                                              | Claude                                    |
 
 **Dependencies:** Sprint 1 complete (gates, focus management, design tokens)
 **Deliverables:** Couple upload flow, tier gating, sensitive content guards, save/download stubs
@@ -106,21 +106,21 @@ Couple upload, sensitive guards, business logic. Builds on Sprint 1's gates and 
 
 Coverage meters, PRS context, clinical disclaimers, accessibility improvements.
 
-| Task | Priority | Description | Delegation |
-|------|----------|-------------|------------|
-| F5 | HIGH | Coverage confidence meter (per-disease: "Tested X of Y variants", role='meter', visual bar) | Claude |
-| F9 | MEDIUM | Residual risk display (post-test probability for "Not Detected" results) | Claude |
-| F10 | MEDIUM | CYP2D6 warning display (array genotyping limitations, hybrid alleles, CNV) | Claude |
-| F8 | HIGH | Ancestry confidence badge ("Low Confidence — ancestry mismatch" for non-EUR PRS) | Claude |
-| F7 | HIGH | NSGC counseling link + emotional support resources (empathetic messaging, helpline) | Claude |
-| F30 | **CRITICAL** | PRS environmental context ("genes + environment", offspring disclaimer, statistical estimates) | Claude |
-| F31 | HIGH | Clinical testing recommendation ("NOT a replacement for clinical carrier screening") | Claude |
-| F26 | HIGH | Per-page "What This Cannot Tell You" section (collapsible, untested variants, not-a-diagnosis) | Claude |
-| F33 | **CRITICAL** | Accessible data visualization (SR text equivalents, High Contrast Mode, WCAG 1.4.1 no color-only) | Claude |
-| F37 | MEDIUM | Heading hierarchy enforcement (h1→h2→h3, no skipped levels) | Claude |
-| F39 | HIGH | Virtualized list accessibility (aria-rowcount, aria-setsize, focus management) | Claude |
-| F17 | MEDIUM | Mobile card view for variant tables (tables→VariantCard on mobile) | Claude |
-| F23 | MEDIUM | Friendly error mapping (translate codes to actionable messages, aria-invalid, "Copy Debug Info") | Claude |
+| Task | Priority     | Description                                                                                       | Delegation |
+| ---- | ------------ | ------------------------------------------------------------------------------------------------- | ---------- |
+| F5   | HIGH         | Coverage confidence meter (per-disease: "Tested X of Y variants", role='meter', visual bar)       | Claude     |
+| F9   | MEDIUM       | Residual risk display (post-test probability for "Not Detected" results)                          | Claude     |
+| F10  | MEDIUM       | CYP2D6 warning display (array genotyping limitations, hybrid alleles, CNV)                        | Claude     |
+| F8   | HIGH         | Ancestry confidence badge ("Low Confidence — ancestry mismatch" for non-EUR PRS)                  | Claude     |
+| F7   | HIGH         | NSGC counseling link + emotional support resources (empathetic messaging, helpline)               | Claude     |
+| F30  | **CRITICAL** | PRS environmental context ("genes + environment", offspring disclaimer, statistical estimates)    | Claude     |
+| F31  | HIGH         | Clinical testing recommendation ("NOT a replacement for clinical carrier screening")              | Claude     |
+| F26  | HIGH         | Per-page "What This Cannot Tell You" section (collapsible, untested variants, not-a-diagnosis)    | Claude     |
+| F33  | **CRITICAL** | Accessible data visualization (SR text equivalents, High Contrast Mode, WCAG 1.4.1 no color-only) | Claude     |
+| F37  | MEDIUM       | Heading hierarchy enforcement (h1→h2→h3, no skipped levels)                                       | Claude     |
+| F39  | HIGH         | Virtualized list accessibility (aria-rowcount, aria-setsize, focus management)                    | Claude     |
+| F17  | MEDIUM       | Mobile card view for variant tables (tables→VariantCard on mobile)                                | Claude     |
+| F23  | MEDIUM       | Friendly error mapping (translate codes to actionable messages, aria-invalid, "Copy Debug Info")  | Claude     |
 
 **Dependencies:** Sprint 1 (virtualization, design tokens, error boundaries) + Sprint 2 (tier logic, sensitive guards)
 **Deliverables:** All result tab enhancements, coverage meters, PRS context, mobile responsiveness
@@ -132,17 +132,17 @@ Coverage meters, PRS context, clinical disclaimers, accessibility improvements.
 
 PDF generation, encryption stubs, GDPR, security page, SEO.
 
-| Task | Priority | Description | Delegation |
-|------|----------|-------------|------------|
-| F21 | HIGH | Client-side PDF generation (pdf-lib, dedicated Web Worker, PDF/UA, mobile memory guard, HTML print fallback) | Claude |
-| F42 | MEDIUM | Sample report for landing page (realistic demo with fake data) | **Gemini** (A) |
-| F24 | MEDIUM | SEO & Open Graph metadata (keywords, JSON-LD, couple marketing disclaimer) | **Gemini** (A+) |
-| F46 | HIGH | Security Architecture page (/security, zero-knowledge explainer, data flow diagrams) | Claude |
-| F47 | HIGH | GDPR compliance checklist (consent withdrawal UI, privacy notice, Article 6 basis) — partial, needs B12/L14 | Claude |
-| F40 | MEDIUM | Stale results banner (dataVersion mismatch, explain re-upload needed) | Claude |
-| F38 | MEDIUM | WCAG 1.4.10 Reflow (content legible at 400% zoom, 320px width) | Claude |
-| F43 | HIGH | IndexedDB hydration barrier (skeleton UI, schema version check) — STUB until S6 | Claude |
-| F45 | HIGH | Session DEK restore (cached CryptoKey, per-tab DEK, 15-min idle timeout) — STUB until B3 | Claude |
+| Task | Priority | Description                                                                                                  | Delegation      |
+| ---- | -------- | ------------------------------------------------------------------------------------------------------------ | --------------- |
+| F21  | HIGH     | Client-side PDF generation (pdf-lib, dedicated Web Worker, PDF/UA, mobile memory guard, HTML print fallback) | Claude          |
+| F42  | MEDIUM   | Sample report for landing page (realistic demo with fake data)                                               | **Gemini** (A)  |
+| F24  | MEDIUM   | SEO & Open Graph metadata (keywords, JSON-LD, couple marketing disclaimer)                                   | **Gemini** (A+) |
+| F46  | HIGH     | Security Architecture page (/security, zero-knowledge explainer, data flow diagrams)                         | Claude          |
+| F47  | HIGH     | GDPR compliance checklist (consent withdrawal UI, privacy notice, Article 6 basis) — partial, needs B12/L14  | Claude          |
+| F40  | MEDIUM   | Stale results banner (dataVersion mismatch, explain re-upload needed)                                        | Claude          |
+| F38  | MEDIUM   | WCAG 1.4.10 Reflow (content legible at 400% zoom, 320px width)                                               | Claude          |
+| F43  | HIGH     | IndexedDB hydration barrier (skeleton UI, schema version check) — STUB until S6                              | Claude          |
+| F45  | HIGH     | Session DEK restore (cached CryptoKey, per-tab DEK, 15-min idle timeout) — STUB until B3                     | Claude          |
 
 **Dependencies:** Sprint 1 (PDF spike F48 results), Sprint 2 (tier logic for PDF content), Sprint 3 (all result components for PDF rendering)
 **Deliverables:** PDF generation, security page, GDPR UI, SEO, encryption stubs
@@ -152,26 +152,26 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 
 ## Blocked Tasks (Stubbed, Completed by Later Streams)
 
-| Task | Blocked By | What Gets Stubbed | What Completes It |
-|------|-----------|-------------------|-------------------|
-| F15 | S6 (encryption), B3 (key mgmt) | UI shell + "encryption coming soon" | Stream S + Stream B |
-| F43 | S6 (encryption) | Skeleton UI + unencrypted IndexedDB | Stream S |
-| F45 | B3 (key management) | Password-always-required fallback | Stream B |
-| F47 | B12 (data rectification), L14 (DPO) | Consent withdrawal UI only | Stream B + Stream L |
-| F2 content | L3 (legal text) | Placeholder constants | Stream L |
-| F26 content | L3 (legal text) | Placeholder constants | Stream L |
-| F25 content | L10 (chip limitation text) | Placeholder constants | Stream L |
+| Task        | Blocked By                          | What Gets Stubbed                   | What Completes It   |
+| ----------- | ----------------------------------- | ----------------------------------- | ------------------- |
+| F15         | S6 (encryption), B3 (key mgmt)      | UI shell + "encryption coming soon" | Stream S + Stream B |
+| F43         | S6 (encryption)                     | Skeleton UI + unencrypted IndexedDB | Stream S            |
+| F45         | B3 (key management)                 | Password-always-required fallback   | Stream B            |
+| F47         | B12 (data rectification), L14 (DPO) | Consent withdrawal UI only          | Stream B + Stream L |
+| F2 content  | L3 (legal text)                     | Placeholder constants               | Stream L            |
+| F26 content | L3 (legal text)                     | Placeholder constants               | Stream L            |
+| F25 content | L10 (chip limitation text)          | Placeholder constants               | Stream L            |
 
 ---
 
 ## New Libraries Required
 
-| Library | Purpose | Sprint |
-|---------|---------|--------|
-| `virtua` or `react-virtuoso` | List virtualization (2,697 carrier entries) | Sprint 1 |
-| `pdf-lib` | Client-side PDF generation (pure JS, Web Worker compatible) | Sprint 4 |
-| `idb` or `dexie` | IndexedDB wrapper (encrypted local storage) | Sprint 4 |
-| `argon2-browser` (WASM) | Key derivation for zero-knowledge encryption | Sprint 4 (stub) |
+| Library                      | Purpose                                                     | Sprint          |
+| ---------------------------- | ----------------------------------------------------------- | --------------- |
+| `virtua` or `react-virtuoso` | List virtualization (2,697 carrier entries)                 | Sprint 1        |
+| `pdf-lib`                    | Client-side PDF generation (pure JS, Web Worker compatible) | Sprint 4        |
+| `idb` or `dexie`             | IndexedDB wrapper (encrypted local storage)                 | Sprint 4        |
+| `argon2-browser` (WASM)      | Key derivation for zero-knowledge encryption                | Sprint 4 (stub) |
 
 ---
 
@@ -197,6 +197,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 ## 10 Persona Summaries
 
 ### 1. Architect
+
 - PDF Worker isolation (separate from genetics worker)
 - EncryptionService facade pattern
 - CoupleContext state object in AnalysisStore
@@ -205,6 +206,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - 5-sprint grouping: Architecture → Input Flow → Results → Business Logic → Compliance
 
 ### 2. QA
+
 - Testing strategy: Vitest for logic/state, Playwright for user flows
 - Mock Worker responses for most UI tests; one real smoke test with sample file
 - Tier leakage detection (Free users accessing Pro data)
@@ -213,6 +215,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Need synthetic "Mom + Dad" compatible test data sets
 
 ### 3. Scientist
+
 - Coverage meter is the #1 scientific safety feature — must be prominent, not tooltip
 - PRS ancestry mismatch: European-derived PRS invalid for African/Asian ancestry
 - Residual risk: only display if detection rate estimate exists for user's chip
@@ -222,6 +225,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Clinical-grade (carrier) vs recreational (traits/PRS) — use different visual language
 
 ### 4. Technologist
+
 - Off-main-thread file reading (pass File to worker, not file.text() on main thread)
 - react-virtuoso for variable-height expandable cards (better than react-window)
 - Debounced filtering (300ms) for carrier search
@@ -231,6 +235,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Stable worker callbacks (useCallback or define outside render)
 
 ### 5. Business
+
 - Pricing mismatch: code has $12.90/$29.90, plan says $14.99/$34.99 — update first
 - Free tier devaluation risk: removing Top 25 diseases → lean into Virtual Baby (eye color) as viral hook
 - "Not Detected" misinterpretation risk → F9 residual risk critical
@@ -238,6 +243,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Pre-payment transparency (F25) prevents chargebacks
 
 ### 6. Designer
+
 - Focus restoration in useFocusTrap (return focus to trigger button on modal close)
 - Consent "scroll to accept" is a11y anti-pattern — use IntersectionObserver + visible status
 - Semantic color palette BEFORE building UI (avoid refactoring CSS twice)
@@ -246,6 +252,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Mobile: light mode contrast issues with neon colors (teal, rose)
 
 ### 7. Security
+
 - CRITICAL: analysis-client.ts sends raw JSON — fake zero-knowledge until encrypted
 - Client-side tier bypass accepted for offline analyzer (privacy tradeoff)
 - File upload: enforce size limits + timeout in Worker (prevent zip bombs)
@@ -255,6 +262,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Partner consent logged in local audit trail if results saved
 
 ### 8. Code Quality
+
 - Hook encapsulation: useCarrierFilter, useSensitiveReveal, useTierGate
 - CarrierTab decomposition: layout → virtualization → presentation
 - PDF Worker follows existing useGeneticsWorker pattern with typed messages
@@ -264,6 +272,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - axe-core + manual keyboard test before every merge
 
 ### 9. Legal/Privacy
+
 - GDPR Article 9: explicit consent checkbox for genetic data processing
 - "tier_locked" status distinct from "not_tested" — prevent misleading absence
 - Consent state machine in store: idle → age_verified → terms_accepted → processing
@@ -273,6 +282,7 @@ PDF generation, encryption stubs, GDPR, security page, SEO.
 - Cookie banner defaults to "Essential Only" (GDPR)
 
 ### 10. Ethics
+
 - "Layers of Disclosure": Safe Zone (traits) → Consent Gate → Contextualized Result
 - Crisis resources: any "High Risk" result → immediate "Talk to a Counselor" link
 - Visual neutrality: orange/bold for risk, NOT red/skull/flashing (prevent emotional distress)

@@ -78,12 +78,7 @@ test.describe('Rate Limit — Backend Integration (P1)', () => {
       password: 'WrongPasswordForRateLimitTest!',
     };
 
-    const responses = await sendRapidRequests(
-      request,
-      `${API_BASE}/auth/login`,
-      loginPayload,
-      5,
-    );
+    const responses = await sendRapidRequests(request, `${API_BASE}/auth/login`, loginPayload, 5);
 
     // First 5 requests are allowed (may return 401 for bad creds, but NOT 429)
     for (let i = 0; i < 5; i++) {
@@ -439,9 +434,9 @@ test.describe('Rate Limit — Frontend 429 Handling (P2)', () => {
       /stack trace/i,
       /exception/i,
       /internal server/i,
-      /slowapi/i,        // implementation detail
+      /slowapi/i, // implementation detail
       /limits\.storage/i, // implementation detail
-      /memory:\/\//,     // storage URI leak
+      /memory:\/\//, // storage URI leak
     ];
 
     for (const pattern of forbiddenPatterns) {

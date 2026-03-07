@@ -67,9 +67,9 @@ baseTest.describe('Analysis — P0 Critical', () => {
     await demoButton.click();
 
     // Wait for the results dashboard to appear (demo results are loaded synchronously from import)
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Verify the tablist is present with all 6 tabs
     const tablist = page.getByRole('tablist', { name: /analysis results/i });
@@ -80,9 +80,10 @@ baseTest.describe('Analysis — P0 Critical', () => {
     }
 
     // Verify the Overview tab is selected by default
-    await expect(
-      tablist.getByRole('tab', { name: 'Overview' }),
-    ).toHaveAttribute('aria-selected', 'true');
+    await expect(tablist.getByRole('tab', { name: 'Overview' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
   });
 
   baseTest('2. Demo banner is visible indicating synthetic data', async ({ page }) => {
@@ -92,19 +93,15 @@ baseTest.describe('Analysis — P0 Critical', () => {
     await page.getByRole('button', { name: /try demo analysis/i }).click();
 
     // Wait for results to render
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // The demo banner should be visible with synthetic data warning
-    await expect(
-      page.getByText(/viewing demo results with synthetic data/i),
-    ).toBeVisible();
+    await expect(page.getByText(/viewing demo results with synthetic data/i)).toBeVisible();
 
     // The "Upload Your Files" CTA in the demo banner should be visible
-    await expect(
-      page.getByRole('button', { name: /upload your files/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /upload your files/i })).toBeVisible();
   });
 
   baseTest('3. User can upload two valid DNA files', async ({ page }) => {
@@ -139,9 +136,7 @@ baseTest.describe('Analysis — P0 Critical', () => {
     });
 
     // After both files are uploaded, the "Start Analysis" button should appear
-    await expect(
-      page.getByRole('button', { name: /start analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /start analysis/i })).toBeVisible();
   });
 
   baseTest('4. Analysis starts and progress stepper updates correctly', async ({ page }) => {
@@ -182,9 +177,7 @@ baseTest.describe('Analysis — P0 Critical', () => {
     await expect(progressbar.getByText('Parse')).toBeVisible();
 
     // The cancel button should be available during analysis
-    await expect(
-      page.getByRole('button', { name: /cancel analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /cancel analysis/i })).toBeVisible();
   });
 
   baseTest('5. Analysis completes and results dashboard displays', async ({ page }) => {
@@ -196,9 +189,9 @@ baseTest.describe('Analysis — P0 Critical', () => {
     await page.getByRole('button', { name: /try demo analysis/i }).click();
 
     // Wait for results dashboard
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Verify the Overview tab shows stat cards
     // Demo results have: 13 carrier conditions, 7 high risk, 3 carrier matches, 10 traits
@@ -208,9 +201,7 @@ baseTest.describe('Analysis — P0 Critical', () => {
     await expect(page.getByText('Traits Predicted')).toBeVisible();
 
     // Verify "New Analysis" button is present for resetting
-    await expect(
-      page.getByRole('button', { name: /new analysis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /new analysis/i })).toBeVisible();
   });
 
   baseTest('6. User can navigate between all result tabs', async ({ page }) => {
@@ -218,9 +209,9 @@ baseTest.describe('Analysis — P0 Critical', () => {
 
     // Load demo results
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     const tablist = page.getByRole('tablist', { name: /analysis results/i });
 
@@ -249,9 +240,9 @@ baseTest.describe('Analysis — P0 Critical', () => {
     // The free tier notice banner should be visible for unauthenticated users
     // (who default to "free" tier)
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Demo results use "pro" tier in metadata, so upgrade prompts won't appear.
     // However, the dynamic tier notice in the page header IS based on auth store
@@ -266,16 +257,16 @@ baseTest.describe('Analysis — P0 Critical', () => {
 
     // Load demo results
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // The tier notice for free users should mention all traits and upgrade for disease screening
     // "Free tier: All trait predictions included. Upgrade to Premium for disease screening."
     await expect(
-      page.getByText(/all trait predictions/i).or(
-        page.getByText(/upgrade to premium for disease/i),
-      ),
+      page
+        .getByText(/all trait predictions/i)
+        .or(page.getByText(/upgrade to premium for disease/i)),
     ).toBeVisible();
   });
 });
@@ -283,9 +274,7 @@ baseTest.describe('Analysis — P0 Critical', () => {
 // ── P1: Important Analysis Tests ────────────────────────────────────────
 
 baseTest.describe('Analysis — P1 Important', () => {
-  baseTest('9. Premium user sees expanded results but Pro features locked', async ({
-    page,
-  }) => {
+  baseTest('9. Premium user sees expanded results but Pro features locked', async ({ page }) => {
     // Mock auth to simulate premium user
     await mockAuthMe(page, {
       tier: 'premium',
@@ -299,9 +288,7 @@ baseTest.describe('Analysis — P1 Important', () => {
 
     // Premium tier notice should mention upgrade to Pro
     await expect(
-      page.getByText(/premium tier/i).or(
-        page.getByText(/upgrade to pro/i),
-      ),
+      page.getByText(/premium tier/i).or(page.getByText(/upgrade to pro/i)),
     ).toBeVisible();
   });
 
@@ -329,9 +316,9 @@ baseTest.describe('Analysis — P1 Important', () => {
     await page.goto('/analysis');
 
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Click the PGx tab
     const tablist = page.getByRole('tablist', { name: /analysis results/i });
@@ -341,44 +328,49 @@ baseTest.describe('Analysis — P1 Important', () => {
 
     // Scope the upgrade assertion to the PGx tab panel (not the whole page)
     const pgxPanelId = await pgxTab.getAttribute('aria-controls');
-    const pgxPanel = pgxPanelId ? page.locator(`#${pgxPanelId}`) : page.locator('[role="tabpanel"]');
+    const pgxPanel = pgxPanelId
+      ? page.locator(`#${pgxPanelId}`)
+      : page.locator('[role="tabpanel"]');
     await expect(pgxPanel).toBeVisible();
 
     // For free-tier users, the PGx tab panel should show an upgrade/locked
     // prompt, OR the page-level tier notice should indicate PGx is not available.
     await expect(
-      pgxPanel.getByText(/upgrade|unlock|premium|pro/i).first()
+      pgxPanel
+        .getByText(/upgrade|unlock|premium|pro/i)
+        .first()
         .or(page.getByText(/free tier/i)),
     ).toBeVisible();
   });
 
-  baseTest('11. User can select ancestral population for ethnicity-adjusted calculations', async ({
-    page,
-  }) => {
-    await page.goto('/analysis');
+  baseTest(
+    '11. User can select ancestral population for ethnicity-adjusted calculations',
+    async ({ page }) => {
+      await page.goto('/analysis');
 
-    // Create minimal DNA files and upload both
-    const dnaFileContent = [
-      '# rsid\tchromosome\tposition\tgenotype',
-      'rs12913832\t15\t28365618\tAG',
-    ].join('\n');
+      // Create minimal DNA files and upload both
+      const dnaFileContent = [
+        '# rsid\tchromosome\tposition\tgenotype',
+        'rs12913832\t15\t28365618\tAG',
+      ].join('\n');
 
-    const fileInputs = page.locator('input[type="file"]');
-    await fileInputs.nth(0).setInputFiles({
-      name: 'parentA.txt',
-      mimeType: 'text/plain',
-      buffer: Buffer.from(dnaFileContent),
-    });
-    await fileInputs.nth(1).setInputFiles({
-      name: 'parentB.txt',
-      mimeType: 'text/plain',
-      buffer: Buffer.from(dnaFileContent),
-    });
+      const fileInputs = page.locator('input[type="file"]');
+      await fileInputs.nth(0).setInputFiles({
+        name: 'parentA.txt',
+        mimeType: 'text/plain',
+        buffer: Buffer.from(dnaFileContent),
+      });
+      await fileInputs.nth(1).setInputFiles({
+        name: 'parentB.txt',
+        mimeType: 'text/plain',
+        buffer: Buffer.from(dnaFileContent),
+      });
 
-    // The population selector should appear after both files are selected
-    const populationSelector = page.getByLabel(/select ancestral population/i);
-    await expect(populationSelector).toBeVisible();
-  });
+      // The population selector should appear after both files are selected
+      const populationSelector = page.getByLabel(/select ancestral population/i);
+      await expect(populationSelector).toBeVisible();
+    },
+  );
 
   baseTest('12. Analysis can be cancelled mid-process', async ({ page }) => {
     baseTest.slow();
@@ -430,9 +422,9 @@ baseTest.describe('Analysis — P1 Important', () => {
 
     // Load demo results
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Look for the "Save" button / dialog trigger in the action bar
     const saveButton = page.getByRole('button', { name: /save/i }).first();
@@ -455,9 +447,7 @@ baseTest.describe('Analysis — P1 Important', () => {
     // An error message should appear indicating the file is invalid
     // The FileDropzone component should show a validation error
     // (the exact error depends on the component validation, but should be user-friendly)
-    const errorIndicator = page
-      .getByText(/invalid|unsupported|unrecognized|error/i)
-      .first();
+    const errorIndicator = page.getByText(/invalid|unsupported|unrecognized|error/i).first();
     await expect(errorIndicator).toBeVisible({ timeout: 5000 });
   });
 
@@ -466,23 +456,19 @@ baseTest.describe('Analysis — P1 Important', () => {
 
     // Load demo results
     await page.getByRole('button', { name: /try demo analysis/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // The medical disclaimer should be visible (role="note" with aria-label="Medical disclaimer")
     const disclaimer = page.locator('[role="note"][aria-label="Medical disclaimer"]');
     await expect(disclaimer.first()).toBeVisible();
 
     // Verify disclaimer content mentions educational purposes
-    await expect(
-      page.getByText(/educational purposes only/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/educational purposes only/i).first()).toBeVisible();
 
     // Verify it mentions consulting a genetic counselor
-    await expect(
-      page.getByText(/genetic counselor/i).first(),
-    ).toBeVisible();
+    await expect(page.getByText(/genetic counselor/i).first()).toBeVisible();
   });
 });
 
@@ -501,9 +487,7 @@ baseTest.describe('Analysis — P2 Nice-to-Have', () => {
     });
 
     // Should show an error or warning about the empty file
-    const errorOrWarning = page
-      .getByText(/empty|no data|invalid|cannot|error/i)
-      .first();
+    const errorOrWarning = page.getByText(/empty|no data|invalid|cannot|error/i).first();
     await expect(errorOrWarning).toBeVisible({ timeout: 5000 });
   });
 
@@ -524,9 +508,9 @@ baseTest.describe('Analysis — P2 Nice-to-Have', () => {
     await expect(heading).toBeVisible();
 
     // Wait for results to load
-    await expect(
-      page.getByRole('heading', { name: /analysis results/i, level: 2 }),
-    ).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /analysis results/i, level: 2 })).toBeVisible({
+      timeout: 15000,
+    });
 
     // After results load, verify we can still interact with the tab navigation
     const tablist = page.getByRole('tablist', { name: /analysis results/i });

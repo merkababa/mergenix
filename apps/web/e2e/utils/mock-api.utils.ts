@@ -31,10 +31,7 @@ export interface AuthMeOverrides {
 /**
  * Mock the auth/me endpoint to return an authenticated user.
  */
-export async function mockAuthMe(
-  page: Page,
-  overrides?: Partial<AuthMeOverrides>,
-): Promise<void> {
+export async function mockAuthMe(page: Page, overrides?: Partial<AuthMeOverrides>): Promise<void> {
   await page.route(`${API_BASE}/auth/me`, async (route) => {
     await route.fulfill({
       status: 200,
@@ -80,10 +77,7 @@ export async function mockLogout(page: Page): Promise<void> {
  * Mock the sessions endpoint with test data.
  * Handles both GET (list sessions) and DELETE (revoke all sessions).
  */
-export async function mockSessions(
-  page: Page,
-  sessions?: unknown[],
-): Promise<void> {
+export async function mockSessions(page: Page, sessions?: unknown[]): Promise<void> {
   await page.route(`${API_BASE}/auth/sessions`, async (route) => {
     const method = route.request().method();
     if (method === 'GET') {
@@ -171,10 +165,7 @@ export async function mockUpdateProfile(page: Page): Promise<void> {
 /**
  * Mock the change password endpoint.
  */
-export async function mockChangePassword(
-  page: Page,
-  shouldSucceed = true,
-): Promise<void> {
+export async function mockChangePassword(page: Page, shouldSucceed = true): Promise<void> {
   await page.route(`${API_BASE}/auth/password`, async (route) => {
     if (shouldSucceed) {
       await route.fulfill({
@@ -206,7 +197,8 @@ export async function mock2FASetup(page: Page): Promise<void> {
       contentType: 'application/json',
       body: JSON.stringify({
         secret: 'JBSWY3DPEHPK3PXP',
-        qr_code_url: 'otpauth://totp/Mergenix:test@test.com?secret=JBSWY3DPEHPK3PXP&issuer=Mergenix',
+        qr_code_url:
+          'otpauth://totp/Mergenix:test@test.com?secret=JBSWY3DPEHPK3PXP&issuer=Mergenix',
         backup_codes: [
           'ABCD-1234',
           'EFGH-5678',
@@ -276,10 +268,7 @@ export async function mockDataExport(page: Page): Promise<void> {
 /**
  * Mock the delete account endpoint.
  */
-export async function mockDeleteAccount(
-  page: Page,
-  shouldSucceed = true,
-): Promise<void> {
+export async function mockDeleteAccount(page: Page, shouldSucceed = true): Promise<void> {
   await page.route(`${API_BASE}/auth/account`, async (route) => {
     if (route.request().method() === 'DELETE') {
       if (shouldSucceed) {
@@ -308,17 +297,12 @@ export async function mockDeleteAccount(
 /**
  * Mock the payment history endpoint.
  */
-export async function mockPaymentHistory(
-  page: Page,
-  payments?: unknown[],
-): Promise<void> {
+export async function mockPaymentHistory(page: Page, payments?: unknown[]): Promise<void> {
   await page.route(`${API_BASE}/payments/history`, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(
-        payments ?? [],
-      ),
+      body: JSON.stringify(payments ?? []),
     });
   });
 }
@@ -351,10 +335,7 @@ export async function mockSubscriptionStatus(
  * Mock the Stripe checkout session creation endpoint.
  * Returns a fake checkout URL that we can intercept.
  */
-export async function mockCreateCheckout(
-  page: Page,
-  tier = 'premium',
-): Promise<void> {
+export async function mockCreateCheckout(page: Page, tier = 'premium'): Promise<void> {
   await page.route(`${API_BASE}/payments/checkout`, async (route) => {
     await route.fulfill({
       status: 200,
@@ -372,11 +353,13 @@ export async function mockCreateCheckout(
 /**
  * Build a mock token response matching the backend shape.
  */
-export function mockTokenResponse(overrides?: Partial<{
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-}>) {
+export function mockTokenResponse(
+  overrides?: Partial<{
+    access_token: string;
+    refresh_token: string;
+    expires_in: number;
+  }>,
+) {
   return {
     access_token: overrides?.access_token ?? 'mock-access-token-xyz',
     refresh_token: overrides?.refresh_token ?? 'mock-refresh-token-xyz',

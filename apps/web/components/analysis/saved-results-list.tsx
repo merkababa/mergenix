@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { memo, useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { m, AnimatePresence } from "motion/react";
-import { Archive, Trash2, Download, Clock, FileText, Crown } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { useAnalysisStore } from "@/lib/stores/analysis-store";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import type { AnalysisListItem } from "@/lib/api/analysis-client";
+import { memo, useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { m, AnimatePresence } from 'motion/react';
+import { Archive, Trash2, Download, Clock, FileText, Crown } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { useAnalysisStore } from '@/lib/stores/analysis-store';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import type { AnalysisListItem } from '@/lib/api/analysis-client';
 
 // ── Helpers (hoisted) ──────────────────────────────────────────────────────
 
@@ -17,15 +17,15 @@ function formatRelativeTime(dateStr: string): string {
   const diffMs = now - then;
   const diffSec = Math.floor(diffMs / 1000);
 
-  if (diffSec < 60) return "Just now";
+  if (diffSec < 60) return 'Just now';
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
+  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? '' : 's'} ago`;
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
+  if (diffDay < 30) return `${diffDay} day${diffDay === 1 ? '' : 's'} ago`;
   const diffMonth = Math.floor(diffDay / 30);
-  return `${diffMonth} month${diffMonth === 1 ? "" : "s"} ago`;
+  return `${diffMonth} month${diffMonth === 1 ? '' : 's'} ago`;
 }
 
 const SKELETON_IDS = [1, 2, 3] as const;
@@ -80,18 +80,18 @@ const SavedResultItem = memo(function SavedResultItem({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
-      className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
+      className="border-(--border-subtle) bg-(--bg-elevated) rounded-xl border p-4"
     >
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-          <FileText className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
+          <FileText className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate font-heading text-sm font-semibold text-(--text-heading)">
+          <p className="font-heading text-(--text-heading) truncate text-sm font-semibold">
             {result.label}
           </p>
-          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-(--text-muted)">
+          <div className="text-(--text-muted) mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
             <span>
               {result.parent1Filename} + {result.parent2Filename}
             </span>
@@ -105,9 +105,7 @@ const SavedResultItem = memo(function SavedResultItem({
         <div className="flex shrink-0 items-center gap-1.5">
           {isConfirming ? (
             <>
-              <span className="text-xs text-(--accent-rose)">
-                Delete?
-              </span>
+              <span className="text-(--accent-rose) text-xs">Delete?</span>
               <Button
                 variant="destructive"
                 size="sm"
@@ -142,7 +140,7 @@ const SavedResultItem = memo(function SavedResultItem({
                   <Download className="h-3.5 w-3.5" />
                   Load
                 </Button>
-                <span className="text-xs text-(--text-muted)">Coming Soon</span>
+                <span className="text-(--text-muted) text-xs">Coming Soon</span>
               </div>
               <Button
                 ref={deleteButtonRef}
@@ -179,7 +177,7 @@ export function SavedResultsList() {
   const deleteSavedResult = useAnalysisStore((s) => s.deleteSavedResult);
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const userTier = useAuthStore((s) => s.user?.tier ?? "free");
+  const userTier = useAuthStore((s) => s.user?.tier ?? 'free');
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -192,26 +190,31 @@ export function SavedResultsList() {
         await loadSavedResults();
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load saved analyses");
+          setError(err instanceof Error ? err.message : 'Failed to load saved analyses');
         }
       } finally {
         if (!cancelled) setIsLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated, loadSavedResults]);
 
-  const handleLoad = useCallback(async (id: string) => {
-    setLoadingId(id);
-    setError(null);
-    try {
-      await loadSavedResult(id);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load analysis");
-    } finally {
-      setLoadingId(null);
-    }
-  }, [loadSavedResult]);
+  const handleLoad = useCallback(
+    async (id: string) => {
+      setLoadingId(id);
+      setError(null);
+      try {
+        await loadSavedResult(id);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load analysis');
+      } finally {
+        setLoadingId(null);
+      }
+    },
+    [loadSavedResult],
+  );
 
   const handleDeleteClick = useCallback((id: string) => {
     setConfirmDeleteId(id);
@@ -221,23 +224,27 @@ export function SavedResultsList() {
     setConfirmDeleteId(null);
   }, []);
 
-  const handleDeleteConfirm = useCallback(async (id: string) => {
-    setConfirmDeleteId(null);
-    setDeletingId(id);
-    setError(null);
-    try {
-      await deleteSavedResult(id);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete analysis");
-    } finally {
-      setDeletingId(null);
-    }
-  }, [deleteSavedResult]);
+  const handleDeleteConfirm = useCallback(
+    async (id: string) => {
+      setConfirmDeleteId(null);
+      setDeletingId(id);
+      setError(null);
+      try {
+        await deleteSavedResult(id);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete analysis');
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [deleteSavedResult],
+  );
 
   const sortedResults = useMemo(
-    () => [...savedResults].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    ),
+    () =>
+      [...savedResults].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
     [savedResults],
   );
 
@@ -246,26 +253,26 @@ export function SavedResultsList() {
   return (
     <GlassCard variant="subtle" hover="none" className="p-6">
       <div className="mb-4 flex items-center gap-3">
-        <Archive className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
-        <h2 className="font-heading text-lg font-bold text-(--text-heading)">
-          My Saved Analyses
-        </h2>
+        <Archive className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+        <h2 className="font-heading text-(--text-heading) text-lg font-bold">My Saved Analyses</h2>
       </div>
 
       {/* Loading skeleton */}
       {isLoading && (
         <div className="space-y-3" aria-busy="true">
-          <span className="sr-only" role="status">Loading saved analyses...</span>
+          <span className="sr-only" role="status">
+            Loading saved analyses...
+          </span>
           {SKELETON_IDS.map((i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
+              className="border-(--border-subtle) bg-(--bg-elevated) animate-pulse rounded-xl border p-4"
             >
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-(--border-subtle)" />
+                <div className="bg-(--border-subtle) h-9 w-9 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-3.5 w-32 rounded-sm bg-(--border-subtle)" />
-                  <div className="h-3 w-48 rounded-sm bg-(--border-subtle)" />
+                  <div className="bg-(--border-subtle) h-3.5 w-32 rounded-sm" />
+                  <div className="bg-(--border-subtle) h-3 w-48 rounded-sm" />
                 </div>
               </div>
             </div>
@@ -281,7 +288,7 @@ export function SavedResultsList() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
+            className="text-(--accent-rose) mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
             role="alert"
           >
             {error}
@@ -312,26 +319,26 @@ export function SavedResultsList() {
 
       {/* Empty state */}
       {!isLoading && !error && sortedResults.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-6 py-10 text-center">
+        <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col items-center justify-center rounded-xl border px-6 py-10 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <Archive className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
+            <Archive className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
           </div>
-          <p className="font-heading text-sm font-semibold text-(--text-heading)">
+          <p className="font-heading text-(--text-heading) text-sm font-semibold">
             No saved analyses yet
           </p>
-          <p className="mt-1.5 max-w-xs text-xs text-(--text-muted)">
+          <p className="text-(--text-muted) mt-1.5 max-w-xs text-xs">
             Run an analysis and save the results to access them later.
           </p>
         </div>
       )}
 
       {/* Upgrade CTA for free users */}
-      {!isLoading && userTier === "free" && sortedResults.length > 0 && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-(--text-muted)">
-          <Crown className="h-3.5 w-3.5 text-(--accent-amber)" aria-hidden="true" />
+      {!isLoading && userTier === 'free' && sortedResults.length > 0 && (
+        <div className="text-(--text-muted) mt-4 flex items-center gap-2 text-xs">
+          <Crown className="text-(--accent-amber) h-3.5 w-3.5" aria-hidden="true" />
           <span>
-            Free tier allows 1 saved analysis.{" "}
-            <a href="/subscription" className="font-medium text-(--accent-teal) hover:underline">
+            Free tier allows 1 saved analysis.{' '}
+            <a href="/subscription" className="text-(--accent-teal) font-medium hover:underline">
               Upgrade for more
             </a>
           </span>

@@ -8,9 +8,9 @@
  * is responsible for catching and surfacing errors to the UI.
  */
 
-import { get, post, del } from "./client";
-import type { Tier } from "@mergenix/shared-types";
-import { parseTier } from "@/lib/utils/parse-tier";
+import { get, post, del } from './client';
+import type { Tier } from '@mergenix/shared-types';
+import { parseTier } from '@/lib/utils/parse-tier';
 
 // ── API Response Types (snake_case from backend) ────────────────────────
 
@@ -80,9 +80,7 @@ export interface AnalysisDetailResponse {
 
 // ── Transformers ────────────────────────────────────────────────────────
 
-function toSaveAnalysisResponse(
-  raw: RawSaveAnalysisResponse,
-): SaveAnalysisResponse {
+function toSaveAnalysisResponse(raw: RawSaveAnalysisResponse): SaveAnalysisResponse {
   return {
     id: raw.id,
     label: raw.label,
@@ -102,9 +100,7 @@ function toAnalysisListItem(raw: RawAnalysisListItem): AnalysisListItem {
   };
 }
 
-function toAnalysisDetailResponse(
-  raw: RawAnalysisDetailResponse,
-): AnalysisDetailResponse {
+function toAnalysisDetailResponse(raw: RawAnalysisDetailResponse): AnalysisDetailResponse {
   return {
     id: raw.id,
     label: raw.label,
@@ -135,7 +131,7 @@ export async function saveResult(
   summary: Record<string, unknown>,
   consentGiven: boolean,
 ): Promise<SaveAnalysisResponse> {
-  const raw = await post<RawSaveAnalysisResponse>("/analysis/results", {
+  const raw = await post<RawSaveAnalysisResponse>('/analysis/results', {
     label,
     parent1_filename: parent1Filename,
     parent2_filename: parent2Filename,
@@ -156,7 +152,7 @@ export async function saveResult(
  * Ordered by most recently created first.
  */
 export async function listResults(): Promise<AnalysisListItem[]> {
-  const raw = await get<RawAnalysisListItem[]>("/analysis/results");
+  const raw = await get<RawAnalysisListItem[]>('/analysis/results');
   return raw.map(toAnalysisListItem);
 }
 
@@ -167,9 +163,7 @@ export async function listResults(): Promise<AnalysisListItem[]> {
  *         or belongs to another user.
  */
 export async function getResult(id: string): Promise<AnalysisDetailResponse> {
-  const raw = await get<RawAnalysisDetailResponse>(
-    `/analysis/results/${encodeURIComponent(id)}`,
-  );
+  const raw = await get<RawAnalysisDetailResponse>(`/analysis/results/${encodeURIComponent(id)}`);
   return toAnalysisDetailResponse(raw);
 }
 
@@ -182,7 +176,5 @@ export async function getResult(id: string): Promise<AnalysisDetailResponse> {
  *         or belongs to another user.
  */
 export async function deleteResult(id: string): Promise<void> {
-  await del<RawMessageResponse>(
-    `/analysis/results/${encodeURIComponent(id)}`,
-  );
+  await del<RawMessageResponse>(`/analysis/results/${encodeURIComponent(id)}`);
 }

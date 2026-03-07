@@ -55,7 +55,9 @@ describe('PrivacyPage', () => {
     render(<PrivacyContent />);
 
     expect(screen.getByRole('heading', { name: /Data Controller/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Categories of Personal Data/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /Categories of Personal Data/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Your Rights/i })).toBeInTheDocument();
   });
 
@@ -127,7 +129,9 @@ describe('PrivacyPage', () => {
       render(<PrivacyContent />);
 
       // SectionHeading renders an h2 — verify section headings are present
-      expect(screen.getByRole('heading', { level: 2, name: /Data Controller/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 2, name: /Data Controller/i }),
+      ).toBeInTheDocument();
     });
 
     it('uses SectionHeading for Your Rights section', () => {
@@ -158,9 +162,7 @@ describe('PrivacyPage', () => {
       const { container } = render(<PrivacyContent />);
 
       const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      const levels = Array.from(headings).map((h) =>
-        parseInt(h.tagName.replace('H', ''), 10),
-      );
+      const levels = Array.from(headings).map((h) => parseInt(h.tagName.replace('H', ''), 10));
 
       expect(levels).toContain(1);
       expect(levels).toContain(2);

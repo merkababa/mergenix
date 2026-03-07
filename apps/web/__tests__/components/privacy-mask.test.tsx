@@ -4,106 +4,148 @@
  * These attributes are a defense-in-depth measure that prevents session replay
  * tools (if ever added) from capturing genetic health data.
  */
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render } from "@testing-library/react";
-import { useAnalysisStore } from "../../lib/stores/analysis-store";
-import type { FullAnalysisResult } from "@mergenix/shared-types";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render } from '@testing-library/react';
+import { useAnalysisStore } from '../../lib/stores/analysis-store';
+import type { FullAnalysisResult } from '@mergenix/shared-types';
 
-import { mockLucideIcons, mockNextLinkFactory, mockButtonFactory, mockInputFactory, mockBadgeFactory, mockNextNavigationFactory, mockAuthStoreFactory, mockLegalStoreFactory } from '../__helpers__';
+import {
+  mockLucideIcons,
+  mockNextLinkFactory,
+  mockButtonFactory,
+  mockInputFactory,
+  mockBadgeFactory,
+  mockNextNavigationFactory,
+  mockAuthStoreFactory,
+  mockLegalStoreFactory,
+} from '../__helpers__';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 // Mock SensitiveContentGuard to render children directly
-vi.mock("@/components/ui/sensitive-content-guard", () => ({
-  SensitiveContentGuard: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+vi.mock('@/components/ui/sensitive-content-guard', () => ({
+  SensitiveContentGuard: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // ─── Additional mocks for AnalysisPage ──────────────────────────────────────
 
-vi.mock("@/lib/stores/legal-store", () => mockLegalStoreFactory({
-  partnerConsentGiven: false,
-  geneticDataConsentGiven: false,
-  chipLimitationAcknowledged: false,
-}));
+vi.mock('@/lib/stores/legal-store', () =>
+  mockLegalStoreFactory({
+    partnerConsentGiven: false,
+    geneticDataConsentGiven: false,
+    chipLimitationAcknowledged: false,
+  }),
+);
 
-vi.mock("@/hooks/use-genetics-worker", () => ({
+vi.mock('@/hooks/use-genetics-worker', () => ({
   useGeneticsWorker: () => ({ startAnalysis: vi.fn(), cancel: vi.fn() }),
 }));
 
-vi.mock("next/dynamic", () => ({
+vi.mock('next/dynamic', () => ({
   __esModule: true,
   default: () => () => <div>Dynamic Component</div>,
 }));
 
-vi.mock("next/link", () => mockNextLinkFactory());
+vi.mock('next/link', () => mockNextLinkFactory());
 
-vi.mock("@/components/genetics/couple-upload-card", () => ({
+vi.mock('@/components/genetics/couple-upload-card', () => ({
   CoupleUploadCard: () => <div data-privacy-mask="true">CoupleUploadCard</div>,
 }));
 
-vi.mock("@/components/genetics/analysis-progress", () => ({
+vi.mock('@/components/genetics/analysis-progress', () => ({
   AnalysisProgress: () => <div>Analysis Progress</div>,
 }));
 
-vi.mock("@/components/genetics/population-selector", () => ({
+vi.mock('@/components/genetics/population-selector', () => ({
   PopulationSelector: () => <div>Population Selector</div>,
 }));
 
-vi.mock("@/components/legal/consent-modal", () => ({
+vi.mock('@/components/legal/consent-modal', () => ({
   ConsentModal: () => null,
 }));
 
-vi.mock("@/components/legal/chip-disclosure-modal", () => ({
+vi.mock('@/components/legal/chip-disclosure-modal', () => ({
   ChipDisclosureModal: () => null,
 }));
 
-vi.mock("@/components/analysis/save-result-dialog", () => ({
+vi.mock('@/components/analysis/save-result-dialog', () => ({
   SaveResultDialog: () => null,
 }));
 
-vi.mock("@/components/analysis/saved-results-list", () => ({
+vi.mock('@/components/analysis/saved-results-list', () => ({
   SavedResultsList: () => null,
 }));
 
-vi.mock("@/components/save/save-options-modal", () => ({
+vi.mock('@/components/save/save-options-modal', () => ({
   SaveOptionsModal: () => null,
 }));
 
-vi.mock("@/components/error-boundary", () => ({
+vi.mock('@/components/error-boundary', () => ({
   ErrorBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-vi.mock("@/components/a11y/high-contrast-toggle", () => ({
+vi.mock('@/components/a11y/high-contrast-toggle', () => ({
   HighContrastToggle: () => null,
 }));
 
-vi.mock("@/components/genetics/results/pdf-export-button", () => ({
+vi.mock('@/components/genetics/results/pdf-export-button', () => ({
   PdfExportButton: () => null,
 }));
 
-vi.mock("@/components/genetics/results/stale-results-banner", () => ({
+vi.mock('@/components/genetics/results/stale-results-banner', () => ({
   StaleResultsBanner: () => null,
 }));
 
 // Mock useAuthStore
-vi.mock("@/lib/stores/auth-store", () => mockAuthStoreFactory({
-  user: { id: 'user-1', name: 'Test User', email: 'test@example.com', tier: 'pro', is_verified: true, has_2fa: false, created_at: '2025-01-01T00:00:00Z' },
-}));
+vi.mock('@/lib/stores/auth-store', () =>
+  mockAuthStoreFactory({
+    user: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+      tier: 'pro',
+      is_verified: true,
+      has_2fa: false,
+      created_at: '2025-01-01T00:00:00Z',
+    },
+  }),
+);
 
 // Mock next/navigation
-vi.mock("next/navigation", () => mockNextNavigationFactory());
+vi.mock('next/navigation', () => mockNextNavigationFactory());
 
 // Mock lucide-react icons — explicit mocks to avoid Proxy hangs
-vi.mock("lucide-react", () => mockLucideIcons(
-  'Upload', 'File', 'X', 'ArrowRight', 'Search', 'ChevronDown', 'ChevronUp', 'ChevronRight', 'Lock',
-  'Pill', 'AlertTriangle', 'AlertCircle', 'Sparkles', 'Heart', 'HeartPulse', 'ExternalLink', 'Phone',
-  'MessageSquare', 'BarChart3', 'Microscope', 'Dna', 'Info', 'Loader2', 'ShieldCheck',
-));
+vi.mock('lucide-react', () =>
+  mockLucideIcons(
+    'Upload',
+    'File',
+    'X',
+    'ArrowRight',
+    'Search',
+    'ChevronDown',
+    'ChevronUp',
+    'ChevronRight',
+    'Lock',
+    'Pill',
+    'AlertTriangle',
+    'AlertCircle',
+    'Sparkles',
+    'Heart',
+    'HeartPulse',
+    'ExternalLink',
+    'Phone',
+    'MessageSquare',
+    'BarChart3',
+    'Microscope',
+    'Dna',
+    'Info',
+    'Loader2',
+    'ShieldCheck',
+  ),
+);
 
 // Mock GlassCard to pass through all props (including data-privacy-mask)
-vi.mock("@/components/ui/glass-card", () => ({
+vi.mock('@/components/ui/glass-card', () => ({
   GlassCard: ({
     children,
     className,
@@ -119,75 +161,71 @@ vi.mock("@/components/ui/glass-card", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/button", () => mockButtonFactory());
+vi.mock('@/components/ui/button', () => mockButtonFactory());
 
 // Mock PartnerConsentCheckbox
-vi.mock("@/components/legal/partner-consent-checkbox", () => ({
-  PartnerConsentCheckbox: () => (
-    <div data-testid="partner-consent">PartnerConsentCheckbox</div>
-  ),
+vi.mock('@/components/legal/partner-consent-checkbox', () => ({
+  PartnerConsentCheckbox: () => <div data-testid="partner-consent">PartnerConsentCheckbox</div>,
 }));
 
 // Mock shared sub-components
-vi.mock("@/components/genetics/results/limitations-section", () => ({
+vi.mock('@/components/genetics/results/limitations-section', () => ({
   LimitationsSection: () => <div data-testid="limitations">Limitations</div>,
 }));
 
-vi.mock("@/components/genetics/results/clinical-testing-banner", () => ({
-  ClinicalTestingBanner: () => (
-    <div data-testid="clinical-banner">Clinical Banner</div>
-  ),
+vi.mock('@/components/genetics/results/clinical-testing-banner', () => ({
+  ClinicalTestingBanner: () => <div data-testid="clinical-banner">Clinical Banner</div>,
 }));
 
-vi.mock("@/components/genetics/results/coverage-meter", () => ({
+vi.mock('@/components/genetics/results/coverage-meter', () => ({
   CoverageMeter: () => <div data-testid="coverage-meter">Coverage</div>,
 }));
 
-vi.mock("@/components/genetics/results/residual-risk-badge", () => ({
+vi.mock('@/components/genetics/results/residual-risk-badge', () => ({
   ResidualRiskBadge: () => <div data-testid="residual-risk">Residual</div>,
 }));
 
-vi.mock("@/components/genetics/results/cyp2d6-warning", () => ({
+vi.mock('@/components/genetics/results/cyp2d6-warning', () => ({
   CYP2D6Warning: () => <div data-testid="cyp2d6-warning">CYP2D6</div>,
 }));
 
-vi.mock("@/components/genetics/results/ancestry-confidence-badge", () => ({
+vi.mock('@/components/genetics/results/ancestry-confidence-badge', () => ({
   AncestryConfidenceBadge: () => <div data-testid="ancestry-badge">Ancestry</div>,
 }));
 
-vi.mock("@/components/genetics/results/prs-context-disclaimer", () => ({
+vi.mock('@/components/genetics/results/prs-context-disclaimer', () => ({
   PrsContextDisclaimer: () => <div data-testid="prs-context">PRS Context</div>,
 }));
 
-vi.mock("@/components/genetics/punnett-square", () => ({
+vi.mock('@/components/genetics/punnett-square', () => ({
   PunnettSquare: () => <div data-testid="punnett">Punnett</div>,
 }));
 
-vi.mock("@/components/genetics/tier-upgrade-prompt", () => ({
+vi.mock('@/components/genetics/tier-upgrade-prompt', () => ({
   TierUpgradePrompt: () => <div data-testid="upgrade">Upgrade</div>,
 }));
 
-vi.mock("@/components/genetics/medical-disclaimer", () => ({
+vi.mock('@/components/genetics/medical-disclaimer', () => ({
   MedicalDisclaimer: () => <div data-testid="disclaimer">Disclaimer</div>,
 }));
 
-vi.mock("@/components/genetics/prs-gauge", () => ({
+vi.mock('@/components/genetics/prs-gauge', () => ({
   PrsGauge: () => <div data-testid="prs-gauge">PRS Gauge</div>,
 }));
 
-vi.mock("@/components/genetics/results/virtual-baby-card", () => ({
+vi.mock('@/components/genetics/results/virtual-baby-card', () => ({
   VirtualBabyCard: () => <div data-testid="virtual-baby">Virtual Baby</div>,
 }));
 
-vi.mock("@/components/ui/badge", () => mockBadgeFactory());
+vi.mock('@/components/ui/badge', () => mockBadgeFactory());
 
-vi.mock("@/components/ui/input", () => mockInputFactory());
+vi.mock('@/components/ui/input', () => mockInputFactory());
 
-vi.mock("@/components/ui/select-filter", () => ({
+vi.mock('@/components/ui/select-filter', () => ({
   SelectFilter: () => <select data-testid="select-filter" />,
 }));
 
-vi.mock("react-virtuoso", () => ({
+vi.mock('react-virtuoso', () => ({
   Virtuoso: ({
     data,
     itemContent,
@@ -203,13 +241,13 @@ vi.mock("react-virtuoso", () => ({
   ),
 }));
 
-vi.mock("@/lib/constants/disclaimers", () => ({
-  PRS_ANCESTRY_WARNING: "PRS ancestry warning text.",
+vi.mock('@/lib/constants/disclaimers', () => ({
+  PRS_ANCESTRY_WARNING: 'PRS ancestry warning text.',
 }));
 
-vi.mock("@mergenix/genetics-data", () => ({
+vi.mock('@mergenix/genetics-data', () => ({
   CARRIER_PANEL_COUNT: 423,
-  CARRIER_PANEL_COUNT_DISPLAY: "423",
+  CARRIER_PANEL_COUNT_DISPLAY: '423',
   TRAIT_CATEGORIES: [
     'Physical Appearance',
     'Behavioral/Personality',
@@ -228,19 +266,19 @@ vi.mock("@mergenix/genetics-data", () => ({
     'Longevity/Aging/Immunity',
   ],
   TRAIT_COUNT: 476,
-  TRAIT_COUNT_DISPLAY: "476",
+  TRAIT_COUNT_DISPLAY: '476',
 }));
 
 // ─── Component imports (after mocks) ────────────────────────────────────────
 
-import { CoupleUploadCard } from "../../components/genetics/couple-upload-card";
-import { CarrierTab } from "../../components/genetics/results/carrier-tab";
-import { TraitsTab } from "../../components/genetics/results/traits-tab";
-import { PgxTab } from "../../components/genetics/results/pgx-tab";
-import { PrsTab } from "../../components/genetics/results/prs-tab";
-import { CounselingTab } from "../../components/genetics/results/counseling-tab";
-import { OverviewTab } from "../../components/genetics/results/overview-tab";
-import AnalysisPage from "../../app/(app)/analysis/page";
+import { CoupleUploadCard } from '../../components/genetics/couple-upload-card';
+import { CarrierTab } from '../../components/genetics/results/carrier-tab';
+import { TraitsTab } from '../../components/genetics/results/traits-tab';
+import { PgxTab } from '../../components/genetics/results/pgx-tab';
+import { PrsTab } from '../../components/genetics/results/prs-tab';
+import { CounselingTab } from '../../components/genetics/results/counseling-tab';
+import { OverviewTab } from '../../components/genetics/results/overview-tab';
+import AnalysisPage from '../../app/(app)/analysis/page';
 
 // ─── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -250,58 +288,56 @@ import AnalysisPage from "../../app/(app)/analysis/page";
  * Centralises the `as unknown as FullAnalysisResult` cast in one place so
  * individual tests stay clean. Pass partial overrides to customise.
  */
-function createMockAnalysisResult(
-  overrides?: Partial<FullAnalysisResult>,
-): FullAnalysisResult {
+function createMockAnalysisResult(overrides?: Partial<FullAnalysisResult>): FullAnalysisResult {
   return {
     carrier: [
       {
-        condition: "Cystic Fibrosis",
-        gene: "CFTR",
-        severity: "high",
-        description: "",
-        parentAStatus: "carrier",
-        parentBStatus: "carrier",
+        condition: 'Cystic Fibrosis',
+        gene: 'CFTR',
+        severity: 'high',
+        description: '',
+        parentAStatus: 'carrier',
+        parentBStatus: 'carrier',
         offspringRisk: { affected: 25, carrier: 50, normal: 25 },
-        riskLevel: "high_risk",
-        rsid: "rs1",
-        inheritance: "autosomal_recessive",
+        riskLevel: 'high_risk',
+        rsid: 'rs1',
+        inheritance: 'autosomal_recessive',
       },
     ],
     traits: [
       {
-        trait: "Eye Color",
-        gene: "OCA2",
-        rsid: "rs12",
-        chromosome: "15",
-        description: "",
-        confidence: "high",
-        inheritance: "codominant",
-        status: "success",
-        parentAGenotype: "AG",
-        parentBGenotype: "AG",
+        trait: 'Eye Color',
+        gene: 'OCA2',
+        rsid: 'rs12',
+        chromosome: '15',
+        description: '',
+        confidence: 'high',
+        inheritance: 'codominant',
+        status: 'success',
+        parentAGenotype: 'AG',
+        parentBGenotype: 'AG',
         offspringProbabilities: { Blue: 25, Brown: 75 },
       },
     ],
     pgx: {
       genesAnalyzed: 1,
-      tier: "pro",
+      tier: 'pro',
       isLimited: false,
       upgradeMessage: null,
-      disclaimer: "PGx disclaimer",
+      disclaimer: 'PGx disclaimer',
       results: {
         CYP2D6: {
-          gene: "CYP2D6",
-          description: "Metabolizes drugs.",
-          chromosome: "22",
+          gene: 'CYP2D6',
+          description: 'Metabolizes drugs.',
+          chromosome: '22',
           parentA: {
-            diplotype: "*1/*1",
-            metabolizerStatus: { status: "normal_metabolizer", activityScore: 2.0 },
+            diplotype: '*1/*1',
+            metabolizerStatus: { status: 'normal_metabolizer', activityScore: 2.0 },
             drugRecommendations: [],
           },
           parentB: {
-            diplotype: "*1/*2",
-            metabolizerStatus: { status: "normal_metabolizer", activityScore: 2.0 },
+            diplotype: '*1/*2',
+            metabolizerStatus: { status: 'normal_metabolizer', activityScore: 2.0 },
             drugRecommendations: [],
           },
           offspringPredictions: [],
@@ -311,55 +347,55 @@ function createMockAnalysisResult(
     prs: {
       conditionsAvailable: 1,
       conditionsTotal: 10,
-      tier: "pro",
+      tier: 'pro',
       isLimited: false,
       upgradeMessage: null,
-      disclaimer: "PRS disclaimer",
+      disclaimer: 'PRS disclaimer',
       conditions: {
-        "Type 2 Diabetes": {
-          name: "Type 2 Diabetes",
+        'Type 2 Diabetes': {
+          name: 'Type 2 Diabetes',
           snpsUsed: 100,
           snpsMissing: 5,
-          ancestryNote: "european",
-          parentA: { rawScore: 0.5, percentile: 50, riskCategory: "average" },
-          parentB: { rawScore: 0.6, percentile: 55, riskCategory: "average" },
+          ancestryNote: 'european',
+          parentA: { rawScore: 0.5, percentile: 50, riskCategory: 'average' },
+          parentB: { rawScore: 0.6, percentile: 55, riskCategory: 'average' },
           offspring: {
             expectedPercentile: 52,
             rangeLow: 40,
             rangeHigh: 65,
-            riskCategory: "average",
+            riskCategory: 'average',
           },
         },
       },
     },
     counseling: {
       recommend: true,
-      urgency: "moderate",
-      reasons: ["Both parents are carriers for Cystic Fibrosis."],
+      urgency: 'moderate',
+      reasons: ['Both parents are carriers for Cystic Fibrosis.'],
       keyFindings: [
         {
-          condition: "Cystic Fibrosis",
-          gene: "CFTR",
-          riskLevel: "high_risk",
-          inheritance: "autosomal_recessive",
-          parentAStatus: "carrier",
-          parentBStatus: "carrier",
+          condition: 'Cystic Fibrosis',
+          gene: 'CFTR',
+          riskLevel: 'high_risk',
+          inheritance: 'autosomal_recessive',
+          parentAStatus: 'carrier',
+          parentBStatus: 'carrier',
         },
       ],
-      recommendedSpecialties: ["carrier_screening"],
+      recommendedSpecialties: ['carrier_screening'],
       referralLetter: null,
-      nsgcUrl: "https://findageneticcounselor.com",
+      nsgcUrl: 'https://findageneticcounselor.com',
       upgradeMessage: null,
     },
     metadata: {
-      engineVersion: "1.0.0",
+      engineVersion: '1.0.0',
       analysisTimestamp: new Date().toISOString(),
-      tier: "pro",
-      parent1Format: "23andme",
-      parent2Format: "23andme",
+      tier: 'pro',
+      parent1Format: '23andme',
+      parent2Format: '23andme',
       parent1SnpCount: 600000,
       parent2SnpCount: 600000,
-      dataVersion: "1.0.0",
+      dataVersion: '1.0.0',
     },
     ...overrides,
   } as unknown as FullAnalysisResult;
@@ -373,22 +409,22 @@ function setStore(overrides?: Partial<FullAnalysisResult>) {
   const results = overrides ? createMockAnalysisResult(overrides) : mockResults;
   useAnalysisStore.setState({
     fullResults: results,
-    currentStep: "complete",
+    currentStep: 'complete',
     isDemo: false,
-    parentA: { name: "parent-a.txt", format: "23andme", size: 1000, snpCount: 600000 },
-    parentB: { name: "parent-b.txt", format: "23andme", size: 1000, snpCount: 600000 },
+    parentA: { name: 'parent-a.txt', format: '23andme', size: 1000, snpCount: 600000 },
+    parentB: { name: 'parent-b.txt', format: '23andme', size: 1000, snpCount: 600000 },
     highRiskCount: 1,
   });
 }
 
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
-describe("data-privacy-mask attribute", () => {
+describe('data-privacy-mask attribute', () => {
   beforeEach(() => {
     useAnalysisStore.getState().reset();
   });
 
-  it("CoupleUploadCard has data-privacy-mask on its outermost container", () => {
+  it('CoupleUploadCard has data-privacy-mask on its outermost container', () => {
     const { container } = render(
       <CoupleUploadCard
         parentAFile={null}
@@ -401,49 +437,49 @@ describe("data-privacy-mask attribute", () => {
     expect(masked).not.toBeNull();
   });
 
-  it("CarrierTab has data-privacy-mask on its results container", () => {
+  it('CarrierTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<CarrierTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("TraitsTab has data-privacy-mask on its results container", () => {
+  it('TraitsTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<TraitsTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("PgxTab has data-privacy-mask on its results container", () => {
+  it('PgxTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<PgxTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("PrsTab has data-privacy-mask on its results container", () => {
+  it('PrsTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<PrsTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("CounselingTab has data-privacy-mask on its results container", () => {
+  it('CounselingTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<CounselingTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("OverviewTab has data-privacy-mask on its results container", () => {
+  it('OverviewTab has data-privacy-mask on its results container', () => {
     setStore();
     const { container } = render(<OverviewTab />);
     const masked = container.querySelector('[data-privacy-mask="true"]');
     expect(masked).not.toBeNull();
   });
 
-  it("AnalysisPage has data-privacy-mask on its outer section", () => {
+  it('AnalysisPage has data-privacy-mask on its outer section', () => {
     const { container } = render(<AnalysisPage />);
     const section = container.querySelector('section[data-privacy-mask="true"]');
     expect(section).not.toBeNull();

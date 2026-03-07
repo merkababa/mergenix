@@ -38,9 +38,7 @@ import type { PrsWeightsData } from '../src/types';
  * Creates one condition ("test_condition") with 3 SNPs and known
  * population mean/std so z-score math is predictable.
  */
-function makePrsWeights(
-  overrides: Partial<PrsWeightsData> = {},
-): PrsWeightsData {
+function makePrsWeights(overrides: Partial<PrsWeightsData> = {}): PrsWeightsData {
   return {
     metadata: {
       source: 'test',
@@ -59,9 +57,27 @@ function makePrsWeights(
         ancestry_note: 'European-derived',
         reference: 'Test reference',
         snps: [
-          { rsid: 'rs1', effect_allele: 'G', effect_weight: 0.3, chromosome: '1', gene_region: 'GENE1' },
-          { rsid: 'rs2', effect_allele: 'A', effect_weight: 0.2, chromosome: '2', gene_region: 'GENE2' },
-          { rsid: 'rs3', effect_allele: 'T', effect_weight: 0.1, chromosome: '3', gene_region: 'GENE3' },
+          {
+            rsid: 'rs1',
+            effect_allele: 'G',
+            effect_weight: 0.3,
+            chromosome: '1',
+            gene_region: 'GENE1',
+          },
+          {
+            rsid: 'rs2',
+            effect_allele: 'A',
+            effect_weight: 0.2,
+            chromosome: '2',
+            gene_region: 'GENE2',
+          },
+          {
+            rsid: 'rs3',
+            effect_allele: 'T',
+            effect_weight: 0.1,
+            chromosome: '3',
+            gene_region: 'GENE3',
+          },
         ],
       },
       type_2_diabetes: {
@@ -73,8 +89,20 @@ function makePrsWeights(
         ancestry_note: 'Multi-ancestry',
         reference: 'Test reference 2',
         snps: [
-          { rsid: 'rs4', effect_allele: 'C', effect_weight: 0.25, chromosome: '4', gene_region: 'GENE4' },
-          { rsid: 'rs5', effect_allele: 'G', effect_weight: 0.15, chromosome: '5', gene_region: 'GENE5' },
+          {
+            rsid: 'rs4',
+            effect_allele: 'C',
+            effect_weight: 0.25,
+            chromosome: '4',
+            gene_region: 'GENE4',
+          },
+          {
+            rsid: 'rs5',
+            effect_allele: 'G',
+            effect_weight: 0.15,
+            chromosome: '5',
+            gene_region: 'GENE5',
+          },
         ],
       },
       breast_cancer: {
@@ -86,7 +114,13 @@ function makePrsWeights(
         ancestry_note: 'European-derived',
         reference: 'Test reference 3',
         snps: [
-          { rsid: 'rs6', effect_allele: 'A', effect_weight: 0.35, chromosome: '6', gene_region: 'GENE6' },
+          {
+            rsid: 'rs6',
+            effect_allele: 'A',
+            effect_weight: 0.35,
+            chromosome: '6',
+            gene_region: 'GENE6',
+          },
         ],
       },
       prostate_cancer: {
@@ -98,7 +132,13 @@ function makePrsWeights(
         ancestry_note: 'European-derived',
         reference: 'Test reference 4',
         snps: [
-          { rsid: 'rs7', effect_allele: 'T', effect_weight: 0.2, chromosome: '7', gene_region: 'GENE7' },
+          {
+            rsid: 'rs7',
+            effect_allele: 'T',
+            effect_weight: 0.2,
+            chromosome: '7',
+            gene_region: 'GENE7',
+          },
         ],
       },
     },
@@ -111,9 +151,7 @@ function makePrsWeights(
  * ancestry_transferability set to mirror the real prs-weights.json values.
  * AFR → hide (harmful), EUR → standard (validated), EAS → caution (poor).
  */
-function makePrsWeightsWithSchizophrenia(
-  overrides: Partial<PrsWeightsData> = {},
-): PrsWeightsData {
+function makePrsWeightsWithSchizophrenia(overrides: Partial<PrsWeightsData> = {}): PrsWeightsData {
   const base = makePrsWeights();
   return {
     ...base,
@@ -128,14 +166,28 @@ function makePrsWeightsWithSchizophrenia(
         ancestry_note: 'Derived primarily from European-ancestry GWAS.',
         reference: 'Ripke et al. 2014',
         ancestry_transferability: {
-          EUR: { transferability: 'validated', ui_recommendation: 'standard', note: 'Original GWAS population' },
-          AFR: { transferability: 'harmful', ui_recommendation: 'hide', note: 'HARMFUL — artificial score inflation due to LD differences; DO NOT display' },
+          EUR: {
+            transferability: 'validated',
+            ui_recommendation: 'standard',
+            note: 'Original GWAS population',
+          },
+          AFR: {
+            transferability: 'harmful',
+            ui_recommendation: 'hide',
+            note: 'HARMFUL — artificial score inflation due to LD differences; DO NOT display',
+          },
           EAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
           SAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
           AMR: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
         },
         snps: [
-          { rsid: 'rs9001', effect_allele: 'T', effect_weight: 0.15, chromosome: '1', gene_region: 'MIR137' },
+          {
+            rsid: 'rs9001',
+            effect_allele: 'T',
+            effect_weight: 0.15,
+            chromosome: '1',
+            gene_region: 'MIR137',
+          },
         ],
       },
     },
@@ -307,11 +359,7 @@ describe('calculateRawPrs', () => {
     const weights = makePrsWeights();
     // rs1: genotype AG -> dosage 1 for effect allele G -> 0.3 * 1 = 0.3
     // Only 1 SNP found, average = 0.3/1 = 0.3
-    const result = calculateRawPrs(
-      { rs1: 'AG' },
-      'coronary_artery_disease',
-      weights,
-    );
+    const result = calculateRawPrs({ rs1: 'AG' }, 'coronary_artery_disease', weights);
     expect(result.rawScore).toBeCloseTo(0.3, 5);
     expect(result.snpsFound).toBe(1);
   });
@@ -320,20 +368,16 @@ describe('calculateRawPrs', () => {
     const weights = makePrsWeights();
     // rs1: genotype AA -> dosage 0 for effect allele G -> 0.3 * 0 = 0
     // Average = 0/1 = 0
-    const result = calculateRawPrs(
-      { rs1: 'AA' },
-      'coronary_artery_disease',
-      weights,
-    );
+    const result = calculateRawPrs({ rs1: 'AA' }, 'coronary_artery_disease', weights);
     expect(result.rawScore).toBe(0);
     expect(result.snpsFound).toBe(1);
   });
 
   it('should throw for unknown condition', () => {
     const weights = makePrsWeights();
-    expect(() =>
-      calculateRawPrs({}, 'nonexistent_condition', weights),
-    ).toThrow('not found in PRS weights');
+    expect(() => calculateRawPrs({}, 'nonexistent_condition', weights)).toThrow(
+      'not found in PRS weights',
+    );
   });
 
   it('should compute per-allele average when some SNPs are missing', () => {
@@ -341,11 +385,7 @@ describe('calculateRawPrs', () => {
     // Only provide rs1, skip rs2 and rs3
     // rs1: GG -> dosage 2, weight 0.3 -> 0.6
     // Average = 0.6 / 1 = 0.6
-    const result = calculateRawPrs(
-      { rs1: 'GG' },
-      'coronary_artery_disease',
-      weights,
-    );
+    const result = calculateRawPrs({ rs1: 'GG' }, 'coronary_artery_disease', weights);
     expect(result.rawScore).toBeCloseTo(0.6, 5);
     expect(result.snpsFound).toBe(1);
   });
@@ -355,11 +395,7 @@ describe('calculateRawPrs', () => {
     // The source code uses toUpperCase() on genotype
     // rs1: effect allele "G", genotype "gg" -> should still count 2
     // Average = (0.3 * 2) / 1 = 0.6
-    const result = calculateRawPrs(
-      { rs1: 'gg' },
-      'coronary_artery_disease',
-      weights,
-    );
+    const result = calculateRawPrs({ rs1: 'gg' }, 'coronary_artery_disease', weights);
     expect(result.rawScore).toBeCloseTo(0.6, 5);
     expect(result.snpsFound).toBe(1);
   });
@@ -376,11 +412,7 @@ describe('calculateRawPrs', () => {
 
     // With only 2 SNPs (missing rs3):
     // rs1: 0.3*2=0.6, rs2: 0.2*2=0.4 => sum=1.0, avg=0.5
-    const twoSnps = calculateRawPrs(
-      { rs1: 'GG', rs2: 'AA' },
-      'coronary_artery_disease',
-      weights,
-    );
+    const twoSnps = calculateRawPrs({ rs1: 'GG', rs2: 'AA' }, 'coronary_artery_disease', weights);
 
     // Both should be non-zero and reasonable (not diluted to near-zero)
     expect(allSnps.rawScore).toBeGreaterThan(0);
@@ -456,9 +488,9 @@ describe('normalizePrs', () => {
 
   it('should throw for unknown condition', () => {
     const weights = makePrsWeights();
-    expect(() =>
-      normalizePrs(0, 'nonexistent_condition', weights, 0, 0),
-    ).toThrow('not found in PRS weights');
+    expect(() => normalizePrs(0, 'nonexistent_condition', weights, 0, 0)).toThrow(
+      'not found in PRS weights',
+    );
   });
 
   it('should round values to expected precision', () => {
@@ -723,8 +755,11 @@ describe('analyzePrs', () => {
     const weights = makePrsWeights();
     // Provide genotypes for all conditions to ensure they are found
     const snps = {
-      rs1: 'GG', rs2: 'AA', rs3: 'TT',
-      rs4: 'CC', rs5: 'GG',
+      rs1: 'GG',
+      rs2: 'AA',
+      rs3: 'TT',
+      rs4: 'CC',
+      rs5: 'GG',
       rs6: 'AA',
       rs7: 'TT',
     };
@@ -738,16 +773,17 @@ describe('analyzePrs', () => {
   it('should analyze more conditions for pro tier than premium', () => {
     const weights = makePrsWeights();
     const snps = {
-      rs1: 'GG', rs2: 'AA', rs3: 'TT',
-      rs4: 'CC', rs5: 'GG',
+      rs1: 'GG',
+      rs2: 'AA',
+      rs3: 'TT',
+      rs4: 'CC',
+      rs5: 'GG',
       rs6: 'AA',
       rs7: 'TT',
     };
     const premiumResult = analyzePrs(snps, snps, weights, 'premium');
     const proResult = analyzePrs(snps, snps, weights, 'pro');
-    expect(proResult.conditionsAvailable).toBeGreaterThanOrEqual(
-      premiumResult.conditionsAvailable,
-    );
+    expect(proResult.conditionsAvailable).toBeGreaterThanOrEqual(premiumResult.conditionsAvailable);
   });
 
   it('should include parent A and parent B results for each condition', () => {
@@ -989,14 +1025,28 @@ describe('analyzePrs — ancestry-based hide/caution enforcement', () => {
           ancestry_note: 'Derived primarily from European-ancestry GWAS.',
           reference: 'Schumacher et al. 2018',
           ancestry_transferability: {
-            EUR: { transferability: 'validated', ui_recommendation: 'standard', note: 'Original GWAS population' },
-            AFR: { transferability: 'poor', ui_recommendation: 'warning', note: '8q24 risk variants have elevated frequency; use with extreme caution' },
+            EUR: {
+              transferability: 'validated',
+              ui_recommendation: 'standard',
+              note: 'Original GWAS population',
+            },
+            AFR: {
+              transferability: 'poor',
+              ui_recommendation: 'warning',
+              note: '8q24 risk variants have elevated frequency; use with extreme caution',
+            },
             EAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
             SAS: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
             AMR: { transferability: 'poor', ui_recommendation: 'caution', note: 'Limited data' },
           },
           snps: [
-            { rsid: 'rs9002', effect_allele: 'A', effect_weight: 0.12, chromosome: '8', gene_region: '8q24' },
+            {
+              rsid: 'rs9002',
+              effect_allele: 'A',
+              effect_weight: 0.12,
+              chromosome: '8',
+              gene_region: '8q24',
+            },
           ],
         },
       },

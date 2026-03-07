@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import type { Variants } from "motion/react";
-import { AnimatePresence, m } from "motion/react";
-import { Mail, AlertCircle } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DnaDots } from "@/components/auth/dna-dots";
-import { OAuthButton } from "@/components/auth/oauth-button";
-import { TrustSignals } from "@/components/auth/trust-signals";
-import { useAuthStore } from "@/lib/stores/auth-store";
-import { fadeUp } from "@/lib/animation-variants";
-import { PasswordInput } from "@/components/auth/password-input";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import type { Variants } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
+import { Mail, AlertCircle } from 'lucide-react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DnaDots } from '@/components/auth/dna-dots';
+import { OAuthButton } from '@/components/auth/oauth-button';
+import { TrustSignals } from '@/components/auth/trust-signals';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { fadeUp } from '@/lib/animation-variants';
+import { PasswordInput } from '@/components/auth/password-input';
 
 // ── Animation variants ──────────────────────────────────────────────────
 
@@ -23,14 +23,14 @@ const errorBannerVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    height: "auto",
-    transition: { duration: 0.25, ease: "easeOut" as const },
+    height: 'auto',
+    transition: { duration: 0.25, ease: 'easeOut' as const },
   },
   exit: {
     opacity: 0,
     y: -8,
     height: 0,
-    transition: { duration: 0.2, ease: "easeIn" as const },
+    transition: { duration: 0.2, ease: 'easeIn' as const },
   },
 };
 
@@ -39,11 +39,11 @@ const errorBannerVariants: Variants = {
 export function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const rawReturnUrl = searchParams.get("returnUrl");
+  const rawReturnUrl = searchParams.get('returnUrl');
   const returnUrl =
-    rawReturnUrl && rawReturnUrl.startsWith("/") && !rawReturnUrl.startsWith("//")
+    rawReturnUrl && rawReturnUrl.startsWith('/') && !rawReturnUrl.startsWith('//')
       ? rawReturnUrl
-      : "/analysis";
+      : '/analysis';
 
   // Auth store — individual selectors (#17)
   const login = useAuthStore((s) => s.login);
@@ -55,10 +55,10 @@ export function LoginContent() {
   const clearError = useAuthStore((s) => s.clearError);
 
   // Form state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [twoFACode, setTwoFACode] = useState("");
+  const [twoFACode, setTwoFACode] = useState('');
 
   // Field-level validation
   const [emailTouched, setEmailTouched] = useState(false);
@@ -84,7 +84,7 @@ export function LoginContent() {
   // Field validation
   const emailError =
     emailTouched && email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-      ? "Please enter a valid email address"
+      ? 'Please enter a valid email address'
       : undefined;
 
   // No client-side password validation on login — the backend rejects invalid credentials
@@ -103,7 +103,7 @@ export function LoginContent() {
           await login2FA(twoFACode);
           router.push(returnUrl);
         } catch {
-          setTwoFACode("");
+          setTwoFACode('');
         }
         return;
       }
@@ -142,8 +142,8 @@ export function LoginContent() {
     try {
       const { authorizationUrl, state } = await getGoogleOAuthUrl();
       // Validate URL before redirect — must be a real Google OAuth endpoint
-      if (!authorizationUrl.startsWith("https://accounts.google.com/")) {
-        useAuthStore.setState({ error: "Invalid OAuth provider URL. Please try again." });
+      if (!authorizationUrl.startsWith('https://accounts.google.com/')) {
+        useAuthStore.setState({ error: 'Invalid OAuth provider URL. Please try again.' });
         return;
       }
       sessionStorage.setItem('oauth_state', state);
@@ -154,40 +154,33 @@ export function LoginContent() {
   }, [getGoogleOAuthUrl, clearError]);
 
   // Auto-submit 2FA when 6 digits are entered
-  const handleTwoFAChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-      setTwoFACode(value);
-      if (value.length === 6) {
-        setTimeout(() => {
-          const form = e.target.closest("form");
-          form?.requestSubmit();
-        }, 0);
-      }
-    },
-    [],
-  );
+  const handleTwoFAChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setTwoFACode(value);
+    if (value.length === 6) {
+      setTimeout(() => {
+        const form = e.target.closest('form');
+        form?.requestSubmit();
+      }, 0);
+    }
+  }, []);
 
   return (
     <>
       {/* Login Card */}
       <m.div variants={fadeUp} initial="hidden" animate="visible">
-        <GlassCard
-          variant="strong"
-          hover="none"
-          className="glow-pulse p-8 md:p-10"
-        >
+        <GlassCard variant="strong" hover="none" className="glow-pulse p-8 md:p-10">
           {/* DNA dots — reusable component (#1) */}
           <DnaDots />
 
           {/* Title */}
-          <h1 className="gradient-text mb-1 text-center font-heading text-3xl font-extrabold">
+          <h1 className="gradient-text font-heading mb-1 text-center text-3xl font-extrabold">
             Welcome Back
           </h1>
-          <p className="mb-8 text-center font-body text-sm text-(--text-muted)">
+          <p className="font-body text-(--text-muted) mb-8 text-center text-sm">
             {requires2FA
-              ? "Enter the code from your authenticator app"
-              : "Sign in to access your genetic analysis"}
+              ? 'Enter the code from your authenticator app'
+              : 'Sign in to access your genetic analysis'}
           </p>
 
           {/* Error banner */}
@@ -203,8 +196,8 @@ export function LoginContent() {
                 role="alert"
                 aria-live="polite"
               >
-                <AlertCircle className="h-4 w-4 shrink-0 text-(--accent-rose)" />
-                <p className="text-sm text-(--accent-rose)">{error}</p>
+                <AlertCircle className="text-(--accent-rose) h-4 w-4 shrink-0" />
+                <p className="text-(--accent-rose) text-sm">{error}</p>
               </m.div>
             )}
           </AnimatePresence>
@@ -226,17 +219,15 @@ export function LoginContent() {
                 />
 
                 {/* Google data scope note (#13) */}
-                <p className="mt-2 text-center text-xs text-(--text-dim)">
+                <p className="text-(--text-dim) mt-2 text-center text-xs">
                   Google provides only your name and email. We never access your Google data.
                 </p>
 
                 {/* Divider */}
                 <div className="my-6 flex items-center gap-3">
-                  <div className="h-px flex-1 bg-(--border-subtle)" />
-                  <span className="font-body text-xs text-(--text-dim)">
-                    or sign in with email
-                  </span>
-                  <div className="h-px flex-1 bg-(--border-subtle)" />
+                  <div className="bg-(--border-subtle) h-px flex-1" />
+                  <span className="font-body text-(--text-dim) text-xs">or sign in with email</span>
+                  <div className="bg-(--border-subtle) h-px flex-1" />
                 </div>
 
                 {/* Form */}
@@ -272,19 +263,19 @@ export function LoginContent() {
                   />
 
                   <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-(--text-muted)">
+                    <label className="text-(--text-muted) flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated)"
-                        style={{ accentColor: "var(--accent-teal)" }}
+                        className="border-(--border-subtle) bg-(--bg-elevated) h-4 w-4 rounded-sm"
+                        style={{ accentColor: 'var(--accent-teal)' }}
                       />
                       Remember me
                     </label>
                     <Link
                       href="/forgot-password"
-                      className="text-xs text-(--accent-teal) transition-colors hover:text-(--accent-cyan)"
+                      className="text-(--accent-teal) hover:text-(--accent-cyan) text-xs transition-colors"
                     >
                       Forgot password?
                     </Link>
@@ -298,7 +289,7 @@ export function LoginContent() {
                     isLoading={isLoading}
                     disabled={isLoading}
                   >
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
               </m.div>
@@ -329,7 +320,7 @@ export function LoginContent() {
                     aria-label="Enter 6-digit verification code"
                   />
 
-                  <p className="text-center text-xs text-(--text-dim)">
+                  <p className="text-(--text-dim) text-center text-xs">
                     Enter the 6-digit code from your authenticator app.
                     <br />
                     It will auto-submit when complete.
@@ -343,7 +334,7 @@ export function LoginContent() {
                     isLoading={isLoading}
                     disabled={isLoading || twoFACode.length !== 6}
                   >
-                    {isLoading ? "Verifying..." : "Verify & Sign In"}
+                    {isLoading ? 'Verifying...' : 'Verify & Sign In'}
                   </Button>
 
                   <button
@@ -355,13 +346,13 @@ export function LoginContent() {
                         challengeToken: null,
                         error: null,
                       });
-                      setTwoFACode("");
-                      setEmail("");
-                      setPassword("");
+                      setTwoFACode('');
+                      setEmail('');
+                      setPassword('');
                       setEmailTouched(false);
                       setPasswordTouched(false);
                     }}
-                    className="w-full text-center text-xs text-(--text-dim) transition-colors hover:text-(--text-muted)"
+                    className="text-(--text-dim) hover:text-(--text-muted) w-full text-center text-xs transition-colors"
                   >
                     Use a different account
                   </button>
@@ -371,11 +362,11 @@ export function LoginContent() {
           </AnimatePresence>
 
           {/* Register link */}
-          <p className="mt-6 text-center text-sm text-(--text-muted)">
-            Don&apos;t have an account?{" "}
+          <p className="text-(--text-muted) mt-6 text-center text-sm">
+            Don&apos;t have an account?{' '}
             <Link
               href="/register"
-              className="font-semibold text-(--accent-teal) transition-colors hover:text-(--accent-cyan)"
+              className="text-(--accent-teal) hover:text-(--accent-cyan) font-semibold transition-colors"
             >
               Create one free
             </Link>
@@ -384,17 +375,12 @@ export function LoginContent() {
       </m.div>
 
       {/* Trust footer — reusable component (#3, #5, #12) */}
-      <m.div
-        variants={fadeUp}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.15 }}
-      >
+      <m.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.15 }}>
         <TrustSignals
           lines={[
-            "Your DNA never leaves your device",
-            "Encrypted in transit. HIPAA-conscious design.",
-            "Free tier — no credit card required.",
+            'Your DNA never leaves your device',
+            'Encrypted in transit. HIPAA-conscious design.',
+            'Free tier — no credit card required.',
           ]}
         />
       </m.div>

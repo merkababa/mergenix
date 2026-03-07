@@ -51,7 +51,10 @@ describe('SecurityPage', () => {
     render(<SecurityContent />);
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /Your Genetic Data Never Leaves Your Browser/i })
+      screen.getByRole('heading', {
+        level: 1,
+        name: /Your Genetic Data Never Leaves Your Browser/i,
+      }),
     ).toBeInTheDocument();
   });
 
@@ -59,16 +62,14 @@ describe('SecurityPage', () => {
     render(<SecurityContent />);
 
     expect(
-      screen.getByRole('heading', { name: /Zero-Knowledge Architecture/i })
+      screen.getByRole('heading', { name: /Zero-Knowledge Architecture/i }),
     ).toBeInTheDocument();
   });
 
   it('renders How Your Data Flows section heading', () => {
     render(<SecurityContent />);
 
-    expect(
-      screen.getByRole('heading', { name: /How Your Data Flows/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /How Your Data Flows/i })).toBeInTheDocument();
   });
 
   it('renders data flow step content', () => {
@@ -203,9 +204,7 @@ describe('SecurityPage', () => {
       const { container } = render(<SecurityContent />);
 
       const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      const levels = Array.from(headings).map((h) =>
-        parseInt(h.tagName.replace('H', ''), 10),
-      );
+      const levels = Array.from(headings).map((h) => parseInt(h.tagName.replace('H', ''), 10));
 
       expect(levels).toContain(1);
       expect(levels).toContain(2);
@@ -245,17 +244,13 @@ describe('SecurityPage', () => {
       expect(faqButton).toBeInTheDocument();
 
       // Answer should not be visible before clicking
-      expect(
-        screen.queryByText(/processing happens in your browser/i),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText(/processing happens in your browser/i)).not.toBeInTheDocument();
 
       // Click to expand
       fireEvent.click(faqButton);
 
       // Answer should now be visible
-      expect(
-        screen.getByText(/processing happens in your browser/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/processing happens in your browser/i)).toBeInTheDocument();
     });
 
     it("all external links have rel='noopener noreferrer'", () => {

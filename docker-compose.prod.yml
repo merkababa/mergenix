@@ -23,7 +23,7 @@ services:
     restart: always
     environment:
       ENVIRONMENT: production
-      COOKIE_SECURE: "true"
+      COOKIE_SECURE: 'true'
       # No fallback defaults — fail loudly if not set
       TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY}
       DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
@@ -35,13 +35,13 @@ services:
   redis:
     image: redis:7-alpine
     restart: always
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    command: ['redis-server', '--requirepass', '${REDIS_PASSWORD}']
     expose:
-      - "6379"
+      - '6379'
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
       interval: 10s
       timeout: 5s
       retries: 3

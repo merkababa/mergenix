@@ -554,8 +554,10 @@ export function determineRiskLevel(
   // (50% offspring affected), not merely "carrier_detected"
   if (inheritance === 'autosomal_dominant') {
     if (
-      parentAStatus === 'carrier' || parentAStatus === 'affected' ||
-      parentBStatus === 'carrier' || parentBStatus === 'affected'
+      parentAStatus === 'carrier' ||
+      parentAStatus === 'affected' ||
+      parentBStatus === 'carrier' ||
+      parentBStatus === 'affected'
     ) {
       return 'high_risk';
     }
@@ -773,7 +775,8 @@ export function detectCompoundHet(
       isCompoundHet: false,
       variants: [],
       label: 'Not Compound Het',
-      explanation: `Only ${hetVariants.length} heterozygous variant(s) found in ${gene}. ` +
+      explanation:
+        `Only ${hetVariants.length} heterozygous variant(s) found in ${gene}. ` +
         'Compound heterozygosity requires at least 2 different heterozygous pathogenic variants in the same gene.',
     };
   }
@@ -811,10 +814,7 @@ export function detectCompoundHet(
  * @param tier - Pricing tier
  * @returns Filtered panel entries
  */
-function filterPanelByTier(
-  panel: CarrierPanelEntry[],
-  tier: Tier,
-): CarrierPanelEntry[] {
+function filterPanelByTier(panel: CarrierPanelEntry[], tier: Tier): CarrierPanelEntry[] {
   const gating: TierGating | undefined = TIER_GATING[tier];
   if (!gating) {
     return panel;
@@ -890,8 +890,7 @@ export function analyzeCarrierRisk(
   tier?: Tier,
 ): ExtendedCarrierResult[] {
   // Filter panel by tier if specified
-  const filteredPanel: CarrierPanelEntry[] =
-    tier != null ? filterPanelByTier(panel, tier) : panel;
+  const filteredPanel: CarrierPanelEntry[] = tier != null ? filterPanelByTier(panel, tier) : panel;
 
   // Pre-compute gene-level analysis for both parents (E4)
   const geneGroups = groupVariantsByGene(filteredPanel);
@@ -935,10 +934,16 @@ export function analyzeCarrierRisk(
 
     // Determine extended carrier status (E6: not_tested distinction)
     const parentAExtendedStatus = determineExtendedCarrierStatus(
-      rsid, parentASnps, pathogenicAllele, referenceAllele,
+      rsid,
+      parentASnps,
+      pathogenicAllele,
+      referenceAllele,
     );
     const parentBExtendedStatus = determineExtendedCarrierStatus(
-      rsid, parentBSnps, pathogenicAllele, referenceAllele,
+      rsid,
+      parentBSnps,
+      pathogenicAllele,
+      referenceAllele,
     );
 
     // Testing status (E6)
@@ -960,12 +965,7 @@ export function analyzeCarrierRisk(
     }
 
     // Determine overall risk level (inheritance-aware)
-    const riskLevel = determineRiskLevel(
-      parentAStatus,
-      parentBStatus,
-      offspringRisk,
-      inheritance,
-    );
+    const riskLevel = determineRiskLevel(parentAStatus, parentBStatus, offspringRisk, inheritance);
 
     // Get gene-level analysis (E4, includes compound het from E5)
     const geneAnalysisParentA = geneAnalysisCacheA.get(disease.gene) ?? null;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 /**
  * Returns `true` if the user prefers reduced motion via their OS/browser setting.
@@ -20,16 +20,16 @@ export function useReducedMotion(): boolean {
   const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReduced(mediaQuery.matches);
 
     const handleChange = (event: MediaQueryListEvent) => {
       setPrefersReduced(event.matches);
     };
 
-    mediaQuery.addEventListener("change", handleChange);
+    mediaQuery.addEventListener('change', handleChange);
     return () => {
-      mediaQuery.removeEventListener("change", handleChange);
+      mediaQuery.removeEventListener('change', handleChange);
     };
   }, []);
 

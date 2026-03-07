@@ -19,12 +19,9 @@ interface HelixFallbackProps {
  * Shown while the Three.js canvas loads or when JS is unavailable.
  * Purely decorative — hidden from assistive technologies.
  */
-export function HelixFallback({
-  dotCount = DEFAULT_DOT_COUNT,
-  className,
-}: HelixFallbackProps) {
+export function HelixFallback({ dotCount = DEFAULT_DOT_COUNT, className }: HelixFallbackProps) {
   return (
-    <div className={cn('relative w-full h-full', className)} aria-hidden="true">
+    <div className={cn('relative h-full w-full', className)} aria-hidden="true">
       {Array.from({ length: dotCount }, (_, i) => {
         const isEven = i % 2 === 0;
         const delay = `${i * 0.4}s`;

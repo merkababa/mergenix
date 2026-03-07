@@ -123,9 +123,9 @@ describe('usePaymentStore', () => {
     it('should set error and isCheckoutLoading false on failure', async () => {
       mockCreateCheckout.mockRejectedValue(new Error('Checkout failed'));
 
-      await expect(
-        usePaymentStore.getState().createCheckout('premium'),
-      ).rejects.toThrow('Checkout failed');
+      await expect(usePaymentStore.getState().createCheckout('premium')).rejects.toThrow(
+        'Checkout failed',
+      );
 
       const state = usePaymentStore.getState();
       expect(state.error).toBe('Checkout failed');
@@ -175,9 +175,9 @@ describe('usePaymentStore', () => {
     it('should set error on failure', async () => {
       mockGetPaymentHistory.mockRejectedValue(new Error('Network error'));
 
-      await expect(
-        usePaymentStore.getState().fetchPaymentHistory(),
-      ).rejects.toThrow('Network error');
+      await expect(usePaymentStore.getState().fetchPaymentHistory()).rejects.toThrow(
+        'Network error',
+      );
 
       const state = usePaymentStore.getState();
       expect(state.error).toBe('Network error');
@@ -228,9 +228,9 @@ describe('usePaymentStore', () => {
     it('should set error on failure', async () => {
       mockGetSubscriptionStatus.mockRejectedValue(new Error('Unauthorized'));
 
-      await expect(
-        usePaymentStore.getState().fetchSubscriptionStatus(),
-      ).rejects.toThrow('Unauthorized');
+      await expect(usePaymentStore.getState().fetchSubscriptionStatus()).rejects.toThrow(
+        'Unauthorized',
+      );
 
       const state = usePaymentStore.getState();
       expect(state.error).toBe('Unauthorized');

@@ -37,14 +37,14 @@ The factory will live at `packages/genetics-engine/src/test-utils/genome-factory
 
 The factory must generate files compatible with:
 
-| Module | File | What it consumes |
-|--------|------|------------------|
-| Parser | `parser.ts` | Raw file content (string) |
-| Carrier | `carrier.ts` | `GenotypeMap` (rsid -> genotype) |
-| Traits | `traits.ts` | `GenotypeMap` |
-| PGx | `pgx.ts` | `GenotypeMap` |
-| PRS | `prs.ts` | `GenotypeMap` |
-| Ethnicity | `ethnicity.ts` | `GenotypeMap` + population |
+| Module    | File           | What it consumes                 |
+| --------- | -------------- | -------------------------------- |
+| Parser    | `parser.ts`    | Raw file content (string)        |
+| Carrier   | `carrier.ts`   | `GenotypeMap` (rsid -> genotype) |
+| Traits    | `traits.ts`    | `GenotypeMap`                    |
+| PGx       | `pgx.ts`       | `GenotypeMap`                    |
+| PRS       | `prs.ts`       | `GenotypeMap`                    |
+| Ethnicity | `ethnicity.ts` | `GenotypeMap` + population       |
 
 The factory generates raw file content (string). Tests that need a `GenotypeMap` directly can use a separate helper `buildGenotypeMap()` that bypasses file generation.
 
@@ -55,6 +55,7 @@ The factory generates raw file content (string). Tests that need a `GenotypeMap`
 ### 2.1 23andMe Format
 
 The Mergenix parser detects 23andMe files by:
+
 1. Comment lines containing "23andme" (case-insensitive)
 2. Comment lines containing "rsid" + "chromosome" or "position"
 3. Heuristic: 4-column tab-separated data with `rs`/`i` prefixed IDs and short genotype strings
@@ -99,6 +100,7 @@ rs4475691	1	846808	CT
 ```
 
 Key differences from later versions:
+
 - Reference assembly: **Build 36 (hg18)**
 - Approximately **576,000** SNPs (v3 chip)
 - Date format: full `Date.toString()` style
@@ -134,6 +136,7 @@ rs4475691	1	846808	CT
 ```
 
 Key differences from v3:
+
 - Reference assembly: **Build 37 (GRCh37/hg19)**
 - Approximately **602,000** SNPs (v4 chip)
 - Added disclaimer paragraph about research/educational use
@@ -170,6 +173,7 @@ rs6681049	1	800007	CC
 ```
 
 Key differences from v4:
+
 - Reference assembly: **Build 37 (GRCh37/hg19)** (same as v4)
 - Approximately **640,000** SNPs (v5 chip, different SNP selection)
 - Genotyping array changed (Illumina GSA vs OmniExpress)
@@ -178,6 +182,7 @@ Key differences from v4:
 - Header is nearly identical to v4
 
 **Parser-relevant differences between versions:** NONE. The Mergenix parser treats all three identically. The differences matter only for:
+
 - Position coordinates (v3 uses hg18, v4/v5 use hg19 positions)
 - SNP coverage (different chip arrays)
 - The factory should vary the header comment to test version detection resilience
@@ -185,6 +190,7 @@ Key differences from v4:
 ### 2.2 AncestryDNA Format
 
 Detected by:
+
 1. Comment lines containing "ancestrydna" (case-insensitive)
 2. 5-column tab-separated header with "allele1" and "allele2"
 
@@ -225,6 +231,7 @@ rs7537756	1	854250	A	G
 ```
 
 Key characteristics:
+
 - Uses numeric chromosomes for sex chromosomes: `23` = X, `24` = Y, `25` = MT/PAR
 - Approximately **700,000** SNPs
 - Header mentions "V1.0"
@@ -254,6 +261,7 @@ rs7537756	1	854250	A	G
 ```
 
 Key differences from v1:
+
 - Header mentions "V2.0"
 - Approximately **668,000** SNPs (different chip)
 - Uses string chromosome labels (`X`, `Y`, `MT`) instead of numeric `23`/`24`/`25`
@@ -263,6 +271,7 @@ Key differences from v1:
 ### 2.3 MyHeritage/FTDNA Format
 
 Detected by:
+
 1. CSV header row with `RSID`, `CHROMOSOME`, `POSITION`, `RESULT`
 2. Heuristic: 4-column comma-separated data with `rs`/`i`/`VG` prefixed IDs
 
@@ -316,6 +325,7 @@ The parser uses `parseCsvLine()` which handles both quoted and unquoted fields p
 ### 2.4 VCF Format
 
 Detected by:
+
 1. `##fileformat=VCF` meta-information line
 2. `##` comments with `#CHROM` header line
 
@@ -328,6 +338,7 @@ Detected by:
 **Genotype encoding:** GT field in FORMAT/SAMPLE columns. Alleles encoded as integer indices (`0` = REF, `1` = first ALT, `2` = second ALT). Separator: `/` (unphased) or `|` (phased).
 
 **Parser behavior:**
+
 - Only extracts variants with `rs` prefixed IDs (skips `.` and other IDs)
 - Only extracts SNPs (single-base REF and all single-base ALT alleles)
 - Skips indels (multi-base REF or ALT)
@@ -387,6 +398,7 @@ Detected by:
 ```
 
 **Parser-relevant differences between 4.1 and 4.2:** NONE for the Mergenix parser. The parser does not inspect `##fileformat` version numbers beyond detecting the `VCF` prefix. Both produce the same `GenotypeMap`. Differences are:
+
 - VCF 4.2 adds `AD` (Allelic Depths) in FORMAT
 - VCF 4.2 adds `AN` (Total Alleles) in INFO
 - VCF 4.2 supports `*` as a symbolic ALT allele for upstream deletions (parser skips these since `*` is not single-char nucleotide)
@@ -397,18 +409,18 @@ Detected by:
 
 ### 3.1 Core Parameters
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `format` | `FileFormat \| '23andme-v3' \| '23andme-v4' \| '23andme-v5' \| 'ancestrydna-v1' \| 'ancestrydna-v2' \| 'vcf-4.1' \| 'vcf-4.2'` | `'23andme'` | Target output format. Plain `'23andme'` defaults to v5 header. |
-| `variantCount` | `number` | `1000` | Total number of variant lines to generate (excluding headers/comments). For golden files use exact panel coverage; for stress tests go up to 700,000+. |
-| `seed` | `number` | `42` | PRNG seed for deterministic reproducibility. Same seed + same params = identical output. |
-| `includeNoCallRate` | `number` | `0.02` | Fraction of variants to mark as no-call (`--` or `0` or `./.`). Range: 0.0 to 1.0. |
+| Parameter           | Type                                                                                                                           | Default     | Description                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `format`            | `FileFormat \| '23andme-v3' \| '23andme-v4' \| '23andme-v5' \| 'ancestrydna-v1' \| 'ancestrydna-v2' \| 'vcf-4.1' \| 'vcf-4.2'` | `'23andme'` | Target output format. Plain `'23andme'` defaults to v5 header.                                                                                         |
+| `variantCount`      | `number`                                                                                                                       | `1000`      | Total number of variant lines to generate (excluding headers/comments). For golden files use exact panel coverage; for stress tests go up to 700,000+. |
+| `seed`              | `number`                                                                                                                       | `42`        | PRNG seed for deterministic reproducibility. Same seed + same params = identical output.                                                               |
+| `includeNoCallRate` | `number`                                                                                                                       | `0.02`      | Fraction of variants to mark as no-call (`--` or `0` or `./.`). Range: 0.0 to 1.0.                                                                     |
 
 ### 3.2 Mutation Injection
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `mutations` | `MutationInjection[]` | `[]` | Array of specific genotypes to force at specific rsIDs. These override any randomly generated genotype. |
+| Parameter   | Type                  | Default | Description                                                                                             |
+| ----------- | --------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
+| `mutations` | `MutationInjection[]` | `[]`    | Array of specific genotypes to force at specific rsIDs. These override any randomly generated genotype. |
 
 ```typescript
 interface MutationInjection {
@@ -425,18 +437,18 @@ interface MutationInjection {
 
 ### 3.3 Carrier Scenario Presets
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `carrierScenarios` | `CarrierScenario[]` | `[]` | High-level carrier scenarios to inject. Each resolves to one or more `MutationInjection` entries internally. |
+| Parameter          | Type                | Default | Description                                                                                                  |
+| ------------------ | ------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| `carrierScenarios` | `CarrierScenario[]` | `[]`    | High-level carrier scenarios to inject. Each resolves to one or more `MutationInjection` entries internally. |
 
 ```typescript
 type CarrierScenarioType =
-  | 'heterozygous_carrier'   // One pathogenic + one reference allele
-  | 'affected_homozygous'    // Two pathogenic alleles (AR)
-  | 'compound_het'           // Two different pathogenic alleles at same gene (requires 2 rsIDs)
+  | 'heterozygous_carrier' // One pathogenic + one reference allele
+  | 'affected_homozygous' // Two pathogenic alleles (AR)
+  | 'compound_het' // Two different pathogenic alleles at same gene (requires 2 rsIDs)
   | 'x_linked_carrier_female' // Female: one pathogenic on X (heterozygous)
   | 'x_linked_hemizygous_male' // Male: single pathogenic allele on X
-  | 'not_tested';            // rsID absent from file (simulates chip gap)
+  | 'not_tested'; // rsID absent from file (simulates chip gap)
 
 interface CarrierScenario {
   /** Which scenario to apply */
@@ -453,19 +465,19 @@ interface CarrierScenario {
 
 **Resolution rules for each scenario:**
 
-| Scenario | Genotype set at rsID | Notes |
-|----------|---------------------|-------|
-| `heterozygous_carrier` | `ref + pathogenic` (e.g., `CT`) | Standard het carrier |
-| `affected_homozygous` | `pathogenic + pathogenic` (e.g., `TT`) | Homozygous affected |
-| `compound_het` | rsID[0]: `ref + pathogenic`, rsID[1]: `ref + pathogenic` | Both must be in the same gene |
-| `x_linked_carrier_female` | `ref + pathogenic` | Chromosome must be X |
-| `x_linked_hemizygous_male` | Single `pathogenic` allele | For 23andMe/MyHeritage: single char. For AncestryDNA: `pathogenic` + `0`. For VCF: haploid GT `1`. |
-| `not_tested` | rsID omitted from output entirely | Simulates SNP not on chip |
+| Scenario                   | Genotype set at rsID                                     | Notes                                                                                              |
+| -------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `heterozygous_carrier`     | `ref + pathogenic` (e.g., `CT`)                          | Standard het carrier                                                                               |
+| `affected_homozygous`      | `pathogenic + pathogenic` (e.g., `TT`)                   | Homozygous affected                                                                                |
+| `compound_het`             | rsID[0]: `ref + pathogenic`, rsID[1]: `ref + pathogenic` | Both must be in the same gene                                                                      |
+| `x_linked_carrier_female`  | `ref + pathogenic`                                       | Chromosome must be X                                                                               |
+| `x_linked_hemizygous_male` | Single `pathogenic` allele                               | For 23andMe/MyHeritage: single char. For AncestryDNA: `pathogenic` + `0`. For VCF: haploid GT `1`. |
+| `not_tested`               | rsID omitted from output entirely                        | Simulates SNP not on chip                                                                          |
 
 ### 3.4 Population / Ancestry
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| Parameter    | Type         | Default    | Description                                                                                                  |
+| ------------ | ------------ | ---------- | ------------------------------------------------------------------------------------------------------------ |
 | `population` | `Population` | `'Global'` | Population for allele frequency-weighted random genotype generation. Uses `ethnicity-frequencies.json` data. |
 
 ```typescript
@@ -485,18 +497,18 @@ When a population is specified, non-injected carrier panel SNPs should use popul
 
 ### 3.5 Sex Specification
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `sex` | `'male' \| 'female'` | `'female'` | Biological sex. Affects X/Y chromosome genotype encoding. Males get hemizygous (single allele) X chromosome calls and Y chromosome calls. Females get diploid X calls and no Y calls. |
+| Parameter | Type                 | Default    | Description                                                                                                                                                                           |
+| --------- | -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sex`     | `'male' \| 'female'` | `'female'` | Biological sex. Affects X/Y chromosome genotype encoding. Males get hemizygous (single allele) X chromosome calls and Y chromosome calls. Females get diploid X calls and no Y calls. |
 
 ### 3.6 Output Modifiers
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `lineEnding` | `'\n' \| '\r\n' \| '\r'` | `'\n'` | Line ending character(s). |
-| `includeBOM` | `boolean` | `false` | Prepend UTF-8 BOM (`\uFEFF`) to output. |
-| `quoteStyle` | `'none' \| 'all' \| 'mixed'` | `'none'` | For MyHeritage format only: quote all fields, no fields, or randomly quote some. |
-| `corruptionMode` | `CorruptionMode \| null` | `null` | Apply a specific corruption for edge case testing. See Section 4. |
+| Parameter        | Type                         | Default  | Description                                                                      |
+| ---------------- | ---------------------------- | -------- | -------------------------------------------------------------------------------- |
+| `lineEnding`     | `'\n' \| '\r\n' \| '\r'`     | `'\n'`   | Line ending character(s).                                                        |
+| `includeBOM`     | `boolean`                    | `false`  | Prepend UTF-8 BOM (`\uFEFF`) to output.                                          |
+| `quoteStyle`     | `'none' \| 'all' \| 'mixed'` | `'none'` | For MyHeritage format only: quote all fields, no fields, or randomly quote some. |
+| `corruptionMode` | `CorruptionMode \| null`     | `null`   | Apply a specific corruption for edge case testing. See Section 4.                |
 
 ---
 
@@ -508,26 +520,26 @@ The factory must support generating files with specific defects for negative/rob
 
 ```typescript
 type CorruptionMode =
-  | 'bom'                    // UTF-8 BOM at file start
-  | 'mixed_line_endings'     // Mix of \r\n, \n, \r within one file
-  | 'duplicate_rsids'        // Same rsID appears 2+ times with different genotypes
-  | 'mid_file_comments'      // Comment lines (#) interspersed in data section
-  | 'very_long_lines'        // Some data lines are 10,000+ characters
-  | 'unicode_header'         // Unicode characters in header/comment lines
-  | 'empty_genotypes'        // Genotype fields that are empty string (not --)
-  | 'multi_allelic'          // VCF-only: sites with 3+ ALT alleles
-  | 'indels'                 // VCF-only: insertion/deletion variants
-  | 'malformed_quality'      // VCF-only: non-numeric QUAL field, or "."
-  | 'truncated'              // File ends mid-line (no trailing newline, incomplete last field)
-  | 'zero_valid_variants'    // File has headers but every data line is malformed/no-call
-  | 'very_large'             // 700,000+ variant lines (streaming parser stress test)
-  | 'extra_columns'          // Data lines have more columns than expected
-  | 'missing_columns'        // Some data lines have fewer columns than expected
-  | 'blank_lines'            // Random blank lines scattered throughout
-  | 'windows_crlf'           // All lines use \r\n
-  | 'tab_in_csv'             // MyHeritage: tab characters within CSV fields
-  | 'missing_header'         // File starts directly with data, no header/comments
-  | 'phased_genotypes';      // VCF: all GT use | separator instead of /
+  | 'bom' // UTF-8 BOM at file start
+  | 'mixed_line_endings' // Mix of \r\n, \n, \r within one file
+  | 'duplicate_rsids' // Same rsID appears 2+ times with different genotypes
+  | 'mid_file_comments' // Comment lines (#) interspersed in data section
+  | 'very_long_lines' // Some data lines are 10,000+ characters
+  | 'unicode_header' // Unicode characters in header/comment lines
+  | 'empty_genotypes' // Genotype fields that are empty string (not --)
+  | 'multi_allelic' // VCF-only: sites with 3+ ALT alleles
+  | 'indels' // VCF-only: insertion/deletion variants
+  | 'malformed_quality' // VCF-only: non-numeric QUAL field, or "."
+  | 'truncated' // File ends mid-line (no trailing newline, incomplete last field)
+  | 'zero_valid_variants' // File has headers but every data line is malformed/no-call
+  | 'very_large' // 700,000+ variant lines (streaming parser stress test)
+  | 'extra_columns' // Data lines have more columns than expected
+  | 'missing_columns' // Some data lines have fewer columns than expected
+  | 'blank_lines' // Random blank lines scattered throughout
+  | 'windows_crlf' // All lines use \r\n
+  | 'tab_in_csv' // MyHeritage: tab characters within CSV fields
+  | 'missing_header' // File starts directly with data, no header/comments
+  | 'phased_genotypes'; // VCF: all GT use | separator instead of /
 ```
 
 ### 4.2 Edge Case File Specifications
@@ -628,6 +640,7 @@ Five hand-curated test genomes with exact, documented genotypes at every clinica
 **Purpose:** Baseline genome with no pathogenic variants. All carrier panel SNPs are homozygous reference. All trait SNPs present common phenotypes.
 
 **Characteristics:**
+
 - **Sex:** Female
 - **Population:** European (Non-Finnish)
 - **Format:** 23andMe v5
@@ -635,32 +648,32 @@ Five hand-curated test genomes with exact, documented genotypes at every clinica
 
 **Genotypes at key loci:**
 
-| rsID | Gene | Condition | Genotype | Status |
-|------|------|-----------|----------|--------|
-| rs75030207 | CFTR | CF (F508del) | CC | Normal |
-| rs113993960 | CFTR | CF (G542X) | GG | Normal |
-| rs334 | HBB | Sickle Cell | AA | Normal |
-| rs76173977 | HEXA | Tay-Sachs | CC | Normal |
-| rs5030858 | PAH | PKU | CC | Normal |
-| rs1050828 | G6PD | G6PD Deficiency | CC | Normal |
-| rs137852378 | F8 | Hemophilia A | GG | Normal (female diploid) |
-| rs72554350 | DMD | Duchenne MD | GG | Normal (female diploid) |
+| rsID        | Gene | Condition       | Genotype | Status                  |
+| ----------- | ---- | --------------- | -------- | ----------------------- |
+| rs75030207  | CFTR | CF (F508del)    | CC       | Normal                  |
+| rs113993960 | CFTR | CF (G542X)      | GG       | Normal                  |
+| rs334       | HBB  | Sickle Cell     | AA       | Normal                  |
+| rs76173977  | HEXA | Tay-Sachs       | CC       | Normal                  |
+| rs5030858   | PAH  | PKU             | CC       | Normal                  |
+| rs1050828   | G6PD | G6PD Deficiency | CC       | Normal                  |
+| rs137852378 | F8   | Hemophilia A    | GG       | Normal (female diploid) |
+| rs72554350  | DMD  | Duchenne MD     | GG       | Normal (female diploid) |
 
 **Trait genotypes:**
 
-| rsID | Trait | Genotype | Expected Phenotype |
-|------|-------|----------|--------------------|
-| rs12913832 | Eye Color | GG | Brown Eyes |
-| rs1800407 | Eye Color (modifier) | CC | Darker Eye Color |
-| rs1805007 | Red Hair (MC1R) | CC | Non-Red Hair |
+| rsID       | Trait                | Genotype | Expected Phenotype |
+| ---------- | -------------------- | -------- | ------------------ |
+| rs12913832 | Eye Color            | GG       | Brown Eyes         |
+| rs1800407  | Eye Color (modifier) | CC       | Darker Eye Color   |
+| rs1805007  | Red Hair (MC1R)      | CC       | Non-Red Hair       |
 
 **PGx genotypes (all wild-type / *1/*1):**
 
-| rsID | Gene | Genotype | Star Allele |
-|------|------|----------|-------------|
-| rs3892097 | CYP2D6 | GG | Not *4 |
-| rs1065852 | CYP2D6 | CC | Not *10 |
-| rs16947 | CYP2D6 | GG | Not *2 |
+| rsID      | Gene   | Genotype | Star Allele |
+| --------- | ------ | -------- | ----------- |
+| rs3892097 | CYP2D6 | GG       | Not \*4     |
+| rs1065852 | CYP2D6 | CC       | Not \*10    |
+| rs16947   | CYP2D6 | GG       | Not \*2     |
 
 **All other carrier panel rsIDs:** Homozygous reference (ref_allele + ref_allele)
 **All PRS SNPs:** Homozygous for the non-effect allele (lowest risk)
@@ -670,6 +683,7 @@ Five hand-curated test genomes with exact, documented genotypes at every clinica
 **Purpose:** Heterozygous carrier for CFTR delta-F508. Everything else is normal.
 
 **Characteristics:**
+
 - **Sex:** Female
 - **Population:** European (Non-Finnish)
 - **Format:** AncestryDNA v2
@@ -677,10 +691,10 @@ Five hand-curated test genomes with exact, documented genotypes at every clinica
 
 **Key genotype differences from Golden 1:**
 
-| rsID | Gene | Condition | Genotype | Status |
-|------|------|-----------|----------|--------|
-| rs75030207 | CFTR | CF (F508del) | CT | **Carrier** (heterozygous) |
-| rs113993960 | CFTR | CF (G542X) | GG | Normal |
+| rsID        | Gene | Condition    | Genotype | Status                     |
+| ----------- | ---- | ------------ | -------- | -------------------------- |
+| rs75030207  | CFTR | CF (F508del) | CT       | **Carrier** (heterozygous) |
+| rs113993960 | CFTR | CF (G542X)   | GG       | Normal                     |
 
 All other loci: identical to Golden 1 (homozygous reference at all carrier panel entries, standard trait phenotypes).
 
@@ -691,6 +705,7 @@ All other loci: identical to Golden 1 (homozygous reference at all carrier panel
 **Purpose:** Heterozygous carrier for 3 different autosomal recessive diseases. Tests that the analysis correctly identifies multiple independent carrier statuses.
 
 **Characteristics:**
+
 - **Sex:** Male
 - **Population:** Ashkenazi Jewish
 - **Format:** MyHeritage (unquoted)
@@ -698,13 +713,13 @@ All other loci: identical to Golden 1 (homozygous reference at all carrier panel
 
 **Key genotypes:**
 
-| rsID | Gene | Condition | Genotype | Status |
-|------|------|-----------|----------|--------|
-| rs75030207 | CFTR | CF (F508del) | CT | **Carrier** |
-| rs76173977 | HEXA | Tay-Sachs | CT | **Carrier** |
-| rs334 | HBB | Sickle Cell | AT | **Carrier** |
-| rs113993960 | CFTR | CF (G542X) | GG | Normal |
-| rs5030858 | PAH | PKU | CC | Normal |
+| rsID        | Gene | Condition    | Genotype | Status      |
+| ----------- | ---- | ------------ | -------- | ----------- |
+| rs75030207  | CFTR | CF (F508del) | CT       | **Carrier** |
+| rs76173977  | HEXA | Tay-Sachs    | CT       | **Carrier** |
+| rs334       | HBB  | Sickle Cell  | AT       | **Carrier** |
+| rs113993960 | CFTR | CF (G542X)   | GG       | Normal      |
+| rs5030858   | PAH  | PKU          | CC       | Normal      |
 
 All other carrier panel rsIDs: homozygous reference.
 
@@ -715,6 +730,7 @@ All other carrier panel rsIDs: homozygous reference.
 **Purpose:** Homozygous pathogenic for at least one autosomal recessive disease (simulates an affected individual). Also carrier for a second disease.
 
 **Characteristics:**
+
 - **Sex:** Female
 - **Population:** Global
 - **Format:** VCF 4.2
@@ -722,16 +738,17 @@ All other carrier panel rsIDs: homozygous reference.
 
 **Key genotypes:**
 
-| rsID | Gene | Condition | Genotype | VCF GT | Status |
-|------|------|-----------|----------|--------|--------|
-| rs334 | HBB | Sickle Cell | TT | 1/1 | **Affected** (homozygous pathogenic) |
-| rs75030207 | CFTR | CF (F508del) | CT | 0/1 | **Carrier** |
-| rs76173977 | HEXA | Tay-Sachs | CC | 0/0 | Normal |
-| rs5030858 | PAH | PKU | CC | 0/0 | Normal |
+| rsID       | Gene | Condition    | Genotype | VCF GT | Status                               |
+| ---------- | ---- | ------------ | -------- | ------ | ------------------------------------ |
+| rs334      | HBB  | Sickle Cell  | TT       | 1/1    | **Affected** (homozygous pathogenic) |
+| rs75030207 | CFTR | CF (F508del) | CT       | 0/1    | **Carrier**                          |
+| rs76173977 | HEXA | Tay-Sachs    | CC       | 0/0    | Normal                               |
+| rs5030858  | PAH  | PKU          | CC       | 0/0    | Normal                               |
 
 All other carrier panel rsIDs: homozygous reference.
 
 **VCF specifics for rs334:**
+
 ```
 11	5248232	rs334	A	T	200	PASS	DP=50;AF=1.0;AN=2	GT:DP:GQ:AD	1/1:50:99:0,50
 ```
@@ -741,6 +758,7 @@ All other carrier panel rsIDs: homozygous reference.
 **Purpose:** Male hemizygous for an X-linked recessive variant. Tests the X-linked inheritance path including hemizygous detection and sex-stratified offspring risk calculation.
 
 **Characteristics:**
+
 - **Sex:** Male
 - **Population:** African/African American
 - **Format:** 23andMe v5
@@ -748,18 +766,20 @@ All other carrier panel rsIDs: homozygous reference.
 
 **Key genotypes:**
 
-| rsID | Gene | Condition | Genotype | Status |
-|------|------|-----------|----------|--------|
-| rs1050828 | G6PD | G6PD Deficiency | T | **Hemizygous affected** (single allele, X chromosome) |
-| rs137852378 | F8 | Hemophilia A | G | Normal hemizygous |
-| rs72554350 | DMD | Duchenne MD | G | Normal hemizygous |
-| rs75030207 | CFTR | CF (F508del) | CC | Normal |
-| rs334 | HBB | Sickle Cell | AA | Normal |
+| rsID        | Gene | Condition       | Genotype | Status                                                |
+| ----------- | ---- | --------------- | -------- | ----------------------------------------------------- |
+| rs1050828   | G6PD | G6PD Deficiency | T        | **Hemizygous affected** (single allele, X chromosome) |
+| rs137852378 | F8   | Hemophilia A    | G        | Normal hemizygous                                     |
+| rs72554350  | DMD  | Duchenne MD     | G        | Normal hemizygous                                     |
+| rs75030207  | CFTR | CF (F508del)    | CC       | Normal                                                |
+| rs334       | HBB  | Sickle Cell     | AA       | Normal                                                |
 
 **23andMe encoding for hemizygous X:**
+
 ```
 rs1050828	X	153764217	T
 ```
+
 (Single character genotype, not `TT`)
 
 **Note on parser behavior:** The parser accepts any genotype length (1-4 chars). The carrier analysis module (`determineCarrierStatus`) returns `'unknown'` for single-character genotypes. This is a known limitation -- the factory must generate this case to test future hemizygous-aware carrier analysis.
@@ -774,15 +794,16 @@ Each couple scenario consists of two genome files (Parent A + Parent B) designed
 
 **Purpose:** Classic autosomal recessive risk -- both parents carry the same CFTR mutation. Expected offspring risk: 25% affected, 50% carrier, 25% normal.
 
-| | Parent A | Parent B |
-|---|---------|---------|
-| **Golden base** | Golden 2 (CF Carrier) | New genome |
-| **Sex** | Female | Male |
-| **Format** | AncestryDNA v2 | 23andMe v5 |
-| **rs75030207 (CFTR)** | CT (carrier) | CT (carrier) |
-| **All other carrier SNPs** | Homozygous reference | Homozygous reference |
+|                            | Parent A              | Parent B             |
+| -------------------------- | --------------------- | -------------------- |
+| **Golden base**            | Golden 2 (CF Carrier) | New genome           |
+| **Sex**                    | Female                | Male                 |
+| **Format**                 | AncestryDNA v2        | 23andMe v5           |
+| **rs75030207 (CFTR)**      | CT (carrier)          | CT (carrier)         |
+| **All other carrier SNPs** | Homozygous reference  | Homozygous reference |
 
 **Expected `calculateOffspringRiskAR('carrier', 'carrier')` output:**
+
 ```json
 {
   "affected": 25,
@@ -797,15 +818,16 @@ Each couple scenario consists of two genome files (Parent A + Parent B) designed
 
 **Purpose:** One parent is a CF carrier, the other is clear. Expected offspring risk: 0% affected, 50% carrier, 50% normal.
 
-| | Parent A | Parent B |
-|---|---------|---------|
-| **Golden base** | Golden 2 (CF Carrier) | Golden 1 (Healthy) |
-| **Sex** | Female | Male |
-| **Format** | AncestryDNA v2 | 23andMe v5 |
-| **rs75030207 (CFTR)** | CT (carrier) | CC (normal) |
-| **All other carrier SNPs** | Homozygous reference | Homozygous reference |
+|                            | Parent A              | Parent B             |
+| -------------------------- | --------------------- | -------------------- |
+| **Golden base**            | Golden 2 (CF Carrier) | Golden 1 (Healthy)   |
+| **Sex**                    | Female                | Male                 |
+| **Format**                 | AncestryDNA v2        | 23andMe v5           |
+| **rs75030207 (CFTR)**      | CT (carrier)          | CC (normal)          |
+| **All other carrier SNPs** | Homozygous reference  | Homozygous reference |
 
 **Expected `calculateOffspringRiskAR('carrier', 'normal')` output:**
+
 ```json
 {
   "affected": 0,
@@ -820,22 +842,22 @@ Each couple scenario consists of two genome files (Parent A + Parent B) designed
 
 **Purpose:** Each parent carries a different autosomal recessive disease. No shared pathogenic loci. Risks are independent.
 
-| | Parent A | Parent B |
-|---|---------|---------|
-| **Sex** | Female | Male |
-| **Format** | MyHeritage (quoted) | VCF 4.1 |
-| **rs75030207 (CFTR CF)** | CT (carrier) | CC (normal) |
-| **rs334 (HBB Sickle Cell)** | AA (normal) | AT (carrier) |
-| **rs76173977 (HEXA Tay-Sachs)** | CT (carrier) | CC (normal) |
-| **All other carrier SNPs** | Homozygous reference | Homozygous reference |
+|                                 | Parent A             | Parent B             |
+| ------------------------------- | -------------------- | -------------------- |
+| **Sex**                         | Female               | Male                 |
+| **Format**                      | MyHeritage (quoted)  | VCF 4.1              |
+| **rs75030207 (CFTR CF)**        | CT (carrier)         | CC (normal)          |
+| **rs334 (HBB Sickle Cell)**     | AA (normal)          | AT (carrier)         |
+| **rs76173977 (HEXA Tay-Sachs)** | CT (carrier)         | CC (normal)          |
+| **All other carrier SNPs**      | Homozygous reference | Homozygous reference |
 
 **Expected results per disease:**
 
-| Disease | Parent A | Parent B | Offspring Risk | Risk Level |
-|---------|---------|---------|----------------|------------|
-| CF (F508del) | carrier | normal | 0% affected, 50% carrier, 50% normal | carrier_detected |
-| Sickle Cell | normal | carrier | 0% affected, 50% carrier, 50% normal | carrier_detected |
-| Tay-Sachs | carrier | normal | 0% affected, 50% carrier, 50% normal | carrier_detected |
+| Disease      | Parent A | Parent B | Offspring Risk                       | Risk Level       |
+| ------------ | -------- | -------- | ------------------------------------ | ---------------- |
+| CF (F508del) | carrier  | normal   | 0% affected, 50% carrier, 50% normal | carrier_detected |
+| Sickle Cell  | normal   | carrier  | 0% affected, 50% carrier, 50% normal | carrier_detected |
+| Tay-Sachs    | carrier  | normal   | 0% affected, 50% carrier, 50% normal | carrier_detected |
 
 **Key test assertion:** No disease should be `'high_risk'` because the parents never share the same carrier status.
 
@@ -843,12 +865,12 @@ Each couple scenario consists of two genome files (Parent A + Parent B) designed
 
 The factory should also support generating couples for:
 
-| Scenario | Parent A | Parent B | Key Test |
-|----------|---------|---------|----------|
-| **X-linked carrier x normal male** | Female X-linked carrier (G6PD: CT) | Male hemizygous normal (G6PD: C) | 50% of sons affected, 50% of daughters carriers |
-| **Both affected** | Homozygous pathogenic (rs334: TT) | Homozygous pathogenic (rs334: TT) | 100% affected offspring |
-| **Carrier x affected** | Carrier (rs334: AT) | Affected (rs334: TT) | 50% affected, 50% carrier |
-| **Cross-format parsing** | 23andMe v3 | VCF 4.2 | Verify genotype maps merge correctly across formats |
+| Scenario                           | Parent A                           | Parent B                          | Key Test                                            |
+| ---------------------------------- | ---------------------------------- | --------------------------------- | --------------------------------------------------- |
+| **X-linked carrier x normal male** | Female X-linked carrier (G6PD: CT) | Male hemizygous normal (G6PD: C)  | 50% of sons affected, 50% of daughters carriers     |
+| **Both affected**                  | Homozygous pathogenic (rs334: TT)  | Homozygous pathogenic (rs334: TT) | 100% affected offspring                             |
+| **Carrier x affected**             | Carrier (rs334: AT)                | Affected (rs334: TT)              | 50% affected, 50% carrier                           |
+| **Cross-format parsing**           | 23andMe v3                         | VCF 4.2                           | Verify genotype maps merge correctly across formats |
 
 ---
 
@@ -868,15 +890,15 @@ import type { FileFormat } from '../types';
  * Plain format strings (e.g., '23andme') use the latest version.
  */
 type DetailedFormat =
-  | '23andme'        // defaults to v5
+  | '23andme' // defaults to v5
   | '23andme-v3'
   | '23andme-v4'
   | '23andme-v5'
-  | 'ancestrydna'    // defaults to v2
+  | 'ancestrydna' // defaults to v2
   | 'ancestrydna-v1'
   | 'ancestrydna-v2'
   | 'myheritage'
-  | 'vcf'            // defaults to 4.2
+  | 'vcf' // defaults to 4.2
   | 'vcf-4.1'
   | 'vcf-4.2';
 
@@ -1080,9 +1102,12 @@ function generateSyntheticGenome(options?: GenomeFactoryOptions): GeneratedGenom
  * @param options - Same options as generateSyntheticGenome, minus format-specific fields.
  * @returns Plain genotype map (rsid -> genotype).
  */
-function buildGenotypeMap(options?: Omit<GenomeFactoryOptions,
-  'format' | 'lineEnding' | 'includeBOM' | 'quoteStyle' | 'corruptionMode' | 'vcfSampleName'
->): Record<string, string>;
+function buildGenotypeMap(
+  options?: Omit<
+    GenomeFactoryOptions,
+    'format' | 'lineEnding' | 'includeBOM' | 'quoteStyle' | 'corruptionMode' | 'vcfSampleName'
+  >,
+): Record<string, string>;
 
 // ─── Golden File Generators ───────────────────────────────────────────────
 
@@ -1145,10 +1170,7 @@ function generateCoupleGenomes(id: CoupleScenarioId): CoupleGenomes;
  * @param baseFormat - Format to corrupt. Default: '23andme'.
  * @returns Generated genome (expectedGenotypes reflects what SHOULD parse, not what's in the file).
  */
-function generateEdgeCaseFile(
-  mode: CorruptionMode,
-  baseFormat?: DetailedFormat,
-): GeneratedGenome;
+function generateEdgeCaseFile(mode: CorruptionMode, baseFormat?: DetailedFormat): GeneratedGenome;
 ```
 
 ### 7.2 Module Exports
@@ -1194,9 +1216,7 @@ expect(parsed['rs4477212']).toBe(expectedGenotypes['rs4477212']);
 // Example 2: CF carrier in AncestryDNA format
 const genome = generateSyntheticGenome({
   format: 'ancestrydna-v2',
-  carrierScenarios: [
-    { type: 'heterozygous_carrier', rsids: ['rs75030207'] },
-  ],
+  carrierScenarios: [{ type: 'heterozygous_carrier', rsids: ['rs75030207'] }],
 });
 const [genotypes] = parseGeneticFile(genome.content);
 expect(genotypes['rs75030207']).toBe('CT'); // C=ref, T=pathogenic
@@ -1218,15 +1238,13 @@ expect(parentBGeno['rs75030207']).toMatch(/^[CT]{2}$/);
 
 // Example 5: Edge case testing
 const bomFile = generateEdgeCaseFile('bom', '23andme');
-expect(bomFile.content.charCodeAt(0)).toBe(0xFEFF);
+expect(bomFile.content.charCodeAt(0)).toBe(0xfeff);
 
 // Example 6: Male X-linked hemizygous
 const xLinked = generateSyntheticGenome({
   format: '23andme-v5',
   sex: 'male',
-  carrierScenarios: [
-    { type: 'x_linked_hemizygous_male', rsids: ['rs1050828'] },
-  ],
+  carrierScenarios: [{ type: 'x_linked_hemizygous_male', rsids: ['rs1050828'] }],
 });
 const [xGenotypes] = parseGeneticFile(xLinked.content);
 expect(xGenotypes['rs1050828']).toBe('T'); // hemizygous pathogenic
@@ -1257,26 +1275,26 @@ The factory needs a mapping of rsID -> (chromosome, position) for file generatio
 
 **Required hard-coded position table (minimum -- for golden files and couple scenarios):**
 
-| rsID | Chromosome | Position (GRCh37) | Source |
-|------|-----------|-------------------|--------|
-| rs75030207 | 7 | 117199644 | CFTR (carrier panel) |
-| rs113993960 | 7 | 117199533 | CFTR (carrier panel) |
-| rs334 | 11 | 5248232 | HBB (carrier panel) |
-| rs76173977 | 15 | 72638892 | HEXA (carrier panel) |
-| rs5030858 | 12 | 103234204 | PAH (carrier panel) |
-| rs1050828 | X | 153764217 | G6PD (carrier panel, X-linked) |
-| rs137852378 | X | 154064063 | F8 (carrier panel, X-linked) |
-| rs72554350 | X | 31792285 | DMD (carrier panel, X-linked) |
-| rs121913326 | X | 38265350 | OTC (carrier panel, X-linked) |
-| rs12913832 | 15 | 28365618 | HERC2 (trait SNP) |
-| rs1800407 | 15 | 28230318 | OCA2 (trait SNP) |
-| rs1805007 | 16 | 89986117 | MC1R (trait SNP) |
-| rs3892097 | 22 | 42524947 | CYP2D6 (PGx) |
-| rs1065852 | 22 | 42526694 | CYP2D6 (PGx) |
-| rs16947 | 22 | 42523610 | CYP2D6 (PGx) |
-| rs4477212 | 1 | 82154 | Common test SNP |
-| rs3094315 | 1 | 752566 | Common test SNP |
-| rs3131972 | 1 | 752721 | Common test SNP |
+| rsID        | Chromosome | Position (GRCh37) | Source                         |
+| ----------- | ---------- | ----------------- | ------------------------------ |
+| rs75030207  | 7          | 117199644         | CFTR (carrier panel)           |
+| rs113993960 | 7          | 117199533         | CFTR (carrier panel)           |
+| rs334       | 11         | 5248232           | HBB (carrier panel)            |
+| rs76173977  | 15         | 72638892          | HEXA (carrier panel)           |
+| rs5030858   | 12         | 103234204         | PAH (carrier panel)            |
+| rs1050828   | X          | 153764217         | G6PD (carrier panel, X-linked) |
+| rs137852378 | X          | 154064063         | F8 (carrier panel, X-linked)   |
+| rs72554350  | X          | 31792285          | DMD (carrier panel, X-linked)  |
+| rs121913326 | X          | 38265350          | OTC (carrier panel, X-linked)  |
+| rs12913832  | 15         | 28365618          | HERC2 (trait SNP)              |
+| rs1800407   | 15         | 28230318          | OCA2 (trait SNP)               |
+| rs1805007   | 16         | 89986117          | MC1R (trait SNP)               |
+| rs3892097   | 22         | 42524947          | CYP2D6 (PGx)                   |
+| rs1065852   | 22         | 42526694          | CYP2D6 (PGx)                   |
+| rs16947     | 22         | 42523610          | CYP2D6 (PGx)                   |
+| rs4477212   | 1          | 82154             | Common test SNP                |
+| rs3094315   | 1          | 752566            | Common test SNP                |
+| rs3131972   | 1          | 752721            | Common test SNP                |
 
 For filler SNPs, the factory should generate monotonically increasing positions per chromosome to mimic realistic genomic ordering. Use a simple formula: `basePosition + (index * 5000)` with base positions per chromosome.
 
@@ -1285,6 +1303,7 @@ For filler SNPs, the factory should generate monotonically increasing positions 
 For non-injected variants, the factory assigns genotypes using Hardy-Weinberg equilibrium:
 
 Given minor allele frequency `p`:
+
 - P(homozygous reference) = `(1-p)^2`
 - P(heterozygous) = `2 * p * (1-p)`
 - P(homozygous alternate) = `p^2`
@@ -1292,6 +1311,7 @@ Given minor allele frequency `p`:
 The PRNG (seeded) generates a uniform random number [0,1) and assigns genotype based on these thresholds.
 
 For carrier panel SNPs with ethnicity frequency data:
+
 - Use the population-specific frequency from `ethnicity-frequencies.json`
 - E.g., for `rs334` (Sickle Cell) in `'African/African American'`: frequency = 0.083
 
@@ -1321,6 +1341,7 @@ packages/genetics-engine/src/test-utils/
 ### 9.2 No External Dependencies
 
 The factory must have ZERO external dependencies. It uses only:
+
 - TypeScript standard library
 - Data from `@mergenix/genetics-data` (imported as JSON)
 - Internal PRNG
@@ -1348,6 +1369,7 @@ The factory needs its own test suite (`tests/genome-factory.test.ts`) verifying:
 ### 9.5 Relationship to Existing Tests
 
 The factory should be adopted incrementally:
+
 1. **Phase 1:** Replace inline test fixtures in `parser.test.ts` with factory-generated files
 2. **Phase 2:** Use golden files for `carrier.test.ts`, `traits.test.ts`, `pgx.test.ts`, `prs.test.ts`
 3. **Phase 3:** Use couple scenarios for integration tests (end-to-end analysis pipeline)
@@ -1357,12 +1379,12 @@ The factory should be adopted incrementally:
 
 The following parser issues will be discovered when running edge case tests. They are documented here so the implementer and the parser maintainer are aligned:
 
-| Gap | Edge Case | Current Behavior | Recommended Fix |
-|-----|-----------|------------------|-----------------|
-| **BOM handling** | `bom` corruption mode on MyHeritage | BOM character prefixes first CSV field, causing header detection failure | Strip `\uFEFF` from first line in `parseGeneticFile()` or `detectFormat()` |
-| **Bare CR line endings** | `mixed_line_endings` with `\r` only | Lines separated by bare `\r` are concatenated (not split by `indexOf('\n')`) | Add `\r`-only splitting to `iterateLines()` |
-| **Hemizygous X-linked** | Golden 5, X-linked male scenarios | `determineCarrierStatus()` returns `'unknown'` for single-char genotypes | Add hemizygous detection: single allele matching pathogenic = affected |
-| **VG prefix in VCF** | MyHeritage proprietary IDs | VCF parser only accepts `rs` prefix | Not applicable -- VG IDs are MyHeritage-only, not present in VCF files |
+| Gap                      | Edge Case                           | Current Behavior                                                             | Recommended Fix                                                            |
+| ------------------------ | ----------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **BOM handling**         | `bom` corruption mode on MyHeritage | BOM character prefixes first CSV field, causing header detection failure     | Strip `\uFEFF` from first line in `parseGeneticFile()` or `detectFormat()` |
+| **Bare CR line endings** | `mixed_line_endings` with `\r` only | Lines separated by bare `\r` are concatenated (not split by `indexOf('\n')`) | Add `\r`-only splitting to `iterateLines()`                                |
+| **Hemizygous X-linked**  | Golden 5, X-linked male scenarios   | `determineCarrierStatus()` returns `'unknown'` for single-char genotypes     | Add hemizygous detection: single allele matching pathogenic = affected     |
+| **VG prefix in VCF**     | MyHeritage proprietary IDs          | VCF parser only accepts `rs` prefix                                          | Not applicable -- VG IDs are MyHeritage-only, not present in VCF files     |
 
 ---
 
@@ -1491,28 +1513,28 @@ rs72554350	X	31792285	G
 
 All carrier panel entries referenced in the golden files, extracted verbatim from `carrier-panel.json`:
 
-| rsID | Gene | Condition | Inheritance | Pathogenic | Reference | Category |
-|------|------|-----------|-------------|------------|-----------|----------|
-| rs75030207 | CFTR | Cystic Fibrosis (F508del) | autosomal_recessive | T | C | Pulmonary |
-| rs113993960 | CFTR | Cystic Fibrosis (G542X) | autosomal_recessive | A | G | Pulmonary |
-| rs334 | HBB | Sickle Cell Disease | autosomal_recessive | T | A | Hematological |
-| rs76173977 | HEXA | Tay-Sachs Disease | autosomal_recessive | T | C | Metabolic |
-| rs5030858 | PAH | Phenylketonuria | autosomal_recessive | T | C | Metabolic |
-| rs1050828 | G6PD | Glucose-6-Phosphate Dehydrogenase Deficiency | X-linked | T | C | Hematological |
-| rs137852378 | F8 | Hemophilia A (Factor VIII) | X-linked | A | G | Hematological |
-| rs72554350 | DMD | Duchenne Muscular Dystrophy | X-linked | T | G | Neurological |
-| rs121913326 | OTC | Ornithine Transcarbamylase Deficiency | X-linked | A | G | Metabolic |
+| rsID        | Gene | Condition                                    | Inheritance         | Pathogenic | Reference | Category      |
+| ----------- | ---- | -------------------------------------------- | ------------------- | ---------- | --------- | ------------- |
+| rs75030207  | CFTR | Cystic Fibrosis (F508del)                    | autosomal_recessive | T          | C         | Pulmonary     |
+| rs113993960 | CFTR | Cystic Fibrosis (G542X)                      | autosomal_recessive | A          | G         | Pulmonary     |
+| rs334       | HBB  | Sickle Cell Disease                          | autosomal_recessive | T          | A         | Hematological |
+| rs76173977  | HEXA | Tay-Sachs Disease                            | autosomal_recessive | T          | C         | Metabolic     |
+| rs5030858   | PAH  | Phenylketonuria                              | autosomal_recessive | T          | C         | Metabolic     |
+| rs1050828   | G6PD | Glucose-6-Phosphate Dehydrogenase Deficiency | X-linked            | T          | C         | Hematological |
+| rs137852378 | F8   | Hemophilia A (Factor VIII)                   | X-linked            | A          | G         | Hematological |
+| rs72554350  | DMD  | Duchenne Muscular Dystrophy                  | X-linked            | T          | G         | Neurological  |
+| rs121913326 | OTC  | Ornithine Transcarbamylase Deficiency        | X-linked            | A          | G         | Metabolic     |
 
 ---
 
 ## Appendix C: Trait SNP Reference Data for Golden Files
 
-| rsID | Trait | Gene | Chromosome | Ref | Alt | Golden 1 Genotype | Expected Phenotype |
-|------|-------|------|-----------|-----|-----|-------------------|-------------------|
-| rs12913832 | Eye Color | HERC2/OCA2 | 15 | G | A | GG | Brown Eyes |
-| rs1800407 | Eye Color (modifier) | OCA2 | 15 | C | T | CC | Darker Eye Color |
-| rs12896399 | Eye Color (modifier) | SLC24A4 | 14 | G | T | GG | Darker Eyes |
-| rs1805007 | Red Hair | MC1R | 16 | C | T | CC | Non-Red Hair |
+| rsID       | Trait                | Gene       | Chromosome | Ref | Alt | Golden 1 Genotype | Expected Phenotype |
+| ---------- | -------------------- | ---------- | ---------- | --- | --- | ----------------- | ------------------ |
+| rs12913832 | Eye Color            | HERC2/OCA2 | 15         | G   | A   | GG                | Brown Eyes         |
+| rs1800407  | Eye Color (modifier) | OCA2       | 15         | C   | T   | CC                | Darker Eye Color   |
+| rs12896399 | Eye Color (modifier) | SLC24A4    | 14         | G   | T   | GG                | Darker Eyes        |
+| rs1805007  | Red Hair             | MC1R       | 16         | C   | T   | CC                | Non-Red Hair       |
 
 ---
 

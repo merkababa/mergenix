@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  validatePassword,
-  getPasswordStrength,
-  PASSWORD_REQUIREMENTS,
-} from '@/lib/password-utils';
+import { validatePassword, getPasswordStrength, PASSWORD_REQUIREMENTS } from '@/lib/password-utils';
 
 describe('password-utils', () => {
   // ── validatePassword ──────────────────────────────────────────────────

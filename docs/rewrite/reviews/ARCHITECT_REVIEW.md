@@ -6,18 +6,18 @@ This is an impressive Phase 0 scaffolding that demonstrates strong architectural
 
 ## Dimension Grades
 
-| Dimension | Grade | Notes |
-|-----------|-------|-------|
-| Monorepo Structure | A- | Clean boundaries, correct dependency graph; missing workspace deps in web package.json |
-| Frontend Architecture | B+ | Good App Router usage, proper server/client split; pricing data inconsistency with shared-types |
-| Backend Architecture | A | Excellent layered design (router->schema->service->model); application factory; dependency injection |
-| Type System | A | Comprehensive shared types with excellent JSDoc; minor issues with `as unknown as` casts |
-| Security Design | A | JWT with refresh rotation, bcrypt, TOTP 2FA, timing-safe comparisons, token hashing, audit logging |
-| Database Schema | A- | Good normalization, proper indexes, UUID PKs; missing composite index on sessions |
-| API Design | A | RESTful, consistent error format, proper HTTP codes, rate limiting on sensitive endpoints |
-| Code Quality | A | Clean, consistent patterns, well-documented, proper abstractions, DRY |
-| Scalability | B+ | Connection pooling configured; rate limiter uses in-memory store (not production-ready) |
-| Privacy Architecture | A+ | Genetic data is truly client-side only; no accidental server leaks; Web Worker architecture |
+| Dimension             | Grade | Notes                                                                                                |
+| --------------------- | ----- | ---------------------------------------------------------------------------------------------------- |
+| Monorepo Structure    | A-    | Clean boundaries, correct dependency graph; missing workspace deps in web package.json               |
+| Frontend Architecture | B+    | Good App Router usage, proper server/client split; pricing data inconsistency with shared-types      |
+| Backend Architecture  | A     | Excellent layered design (router->schema->service->model); application factory; dependency injection |
+| Type System           | A     | Comprehensive shared types with excellent JSDoc; minor issues with `as unknown as` casts             |
+| Security Design       | A     | JWT with refresh rotation, bcrypt, TOTP 2FA, timing-safe comparisons, token hashing, audit logging   |
+| Database Schema       | A-    | Good normalization, proper indexes, UUID PKs; missing composite index on sessions                    |
+| API Design            | A     | RESTful, consistent error format, proper HTTP codes, rate limiting on sensitive endpoints            |
+| Code Quality          | A     | Clean, consistent patterns, well-documented, proper abstractions, DRY                                |
+| Scalability           | B+    | Connection pooling configured; rate limiter uses in-memory store (not production-ready)              |
+| Privacy Architecture  | A+    | Genetic data is truly client-side only; no accidental server leaks; Web Worker architecture          |
 
 ## Critical Issues (must fix before merge)
 
@@ -33,6 +33,7 @@ transpilePackages: ["@mergenix/shared", "@mergenix/genetics"],
 ```
 
 But `apps/web/package.json` has zero `@mergenix/*` dependencies. Must add:
+
 ```json
 "dependencies": {
   "@mergenix/shared-types": "workspace:*",
@@ -46,6 +47,7 @@ Additionally, the `transpilePackages` names (`@mergenix/shared`, `@mergenix/gene
 ### 2. Pricing data inconsistency between frontend and shared-types
 
 **Files:**
+
 - `C:/Users/t2tec/Tortit/apps/web/app/page.tsx` -- Premium: $29, Pro: $79, Free diseases: 50, Free traits: 5
 - `C:/Users/t2tec/Tortit/packages/shared-types/src/payments.ts` -- Premium: $12.90, Pro: $29.90, Free diseases: 25, Free traits: 10
 
@@ -97,6 +99,7 @@ In-memory rate limiting is lost on every restart and does not work across multip
 **File:** `C:/Users/t2tec/Tortit/packages/genetics-data/index.ts`
 
 Seven JSON imports use `as unknown as T` double-cast pattern:
+
 ```typescript
 export const carrierPanel: CarrierPanelEntry[] = carrierPanelRaw as unknown as CarrierPanelEntry[];
 ```
@@ -162,7 +165,9 @@ Only the root `package.json` specifies Node/pnpm engine requirements. Adding `"e
 ## What's Excellent
 
 ### Privacy-first architecture (A+)
+
 The most impressive aspect of this scaffolding is the uncompromising commitment to client-side genetic analysis. The architecture enforces this at every level:
+
 - The genetics-engine package is designed for Web Workers, not API calls
 - The `WorkerRequest`/`WorkerResponse` message types define the worker protocol
 - No API endpoint accepts or returns genetic data
@@ -170,10 +175,13 @@ The most impressive aspect of this scaffolding is the uncompromising commitment 
 - The API handles only auth, payments, and ClinVar sync -- never touches genetic data
 
 ### Type system depth
+
 The shared-types package is remarkably thorough with 534 lines of genetics types that precisely mirror the Python data structures. Every field has JSDoc documentation, every type union is exhaustive, and the types create a contract that will catch integration bugs at compile time during the TypeScript port.
 
 ### Backend security posture
+
 The auth system demonstrates production-grade security awareness:
+
 - Timing-safe password comparison (`verify_password` dummy hash on user-not-found)
 - Token hashing before storage (SHA-256 for verification/reset tokens)
 - Refresh token rotation with session tracking
@@ -183,12 +191,15 @@ The auth system demonstrates production-grade security awareness:
 - Anti-enumeration patterns (generic error for duplicate email, constant response for password reset)
 
 ### Clean backend layering
+
 The separation of concerns is excellent: routers handle HTTP concerns, schemas validate input/output, services contain business logic, models define persistence. The `DbSession` type alias and `CurrentUser` annotated dependency make route signatures clean and self-documenting.
 
 ### CI/CD pipeline
+
 The GitHub Actions workflow is comprehensive: parallel frontend (lint, typecheck, test, build) and backend (lint, typecheck, test) jobs with proper caching, coverage reporting, and E2E tests gated on push to rewrite/main. The job dependencies are correctly modeled (build depends on lint + typecheck).
 
 ### Monorepo structure
+
 The Turborepo + pnpm workspace setup is clean. Build task dependencies (`^build`) ensure packages are built in the correct order. The workspace structure cleanly separates apps from packages, and the package naming convention (`@mergenix/*`) is consistent.
 
 ## Verdict: NEEDS CHANGES
@@ -203,15 +214,15 @@ The scaffolding is strong and demonstrates excellent architectural judgment. How
 Fixing these 4 issues would bring this to merge-ready status. The warnings (items 5-11) should be tracked as Phase 1 follow-ups.
 
 | Issue # | Severity | Fix Effort | Blocking? |
-|---------|----------|------------|-----------|
-| 1 | CRITICAL | 5 min | Yes |
-| 2 | CRITICAL | 15 min | Yes |
-| 3 | CRITICAL | 30 min | Yes |
-| 4 | CRITICAL | 45 min | Yes |
-| 5 | HIGH | 10 min | No |
-| 6 | MEDIUM | 30 min | No |
-| 7 | HIGH | 30 min | No |
-| 8 | MEDIUM | 15 min | No |
-| 9 | MEDIUM | 5 min | No |
-| 10 | LOW | 5 min | No |
-| 11 | LOW | 10 min | No |
+| ------- | -------- | ---------- | --------- |
+| 1       | CRITICAL | 5 min      | Yes       |
+| 2       | CRITICAL | 15 min     | Yes       |
+| 3       | CRITICAL | 30 min     | Yes       |
+| 4       | CRITICAL | 45 min     | Yes       |
+| 5       | HIGH     | 10 min     | No        |
+| 6       | MEDIUM   | 30 min     | No        |
+| 7       | HIGH     | 30 min     | No        |
+| 8       | MEDIUM   | 15 min     | No        |
+| 9       | MEDIUM   | 5 min      | No        |
+| 10      | LOW      | 5 min      | No        |
+| 11      | LOW      | 10 min     | No        |

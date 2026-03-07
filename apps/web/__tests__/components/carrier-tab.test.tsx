@@ -12,16 +12,32 @@ vi.mock('@/components/ui/sensitive-content-guard', () => ({
 }));
 
 // Mock useAuthStore so the component gets a valid user tier
-vi.mock('@/lib/stores/auth-store', () => mockAuthStoreFactory({
-  user: { id: 'user-1', name: 'Test User', email: 'test@example.com', tier: 'pro', is_verified: true, has_2fa: false, created_at: '2025-01-01T00:00:00Z' },
-}));
+vi.mock('@/lib/stores/auth-store', () =>
+  mockAuthStoreFactory({
+    user: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+      tier: 'pro',
+      is_verified: true,
+      has_2fa: false,
+      created_at: '2025-01-01T00:00:00Z',
+    },
+  }),
+);
 
 // Mock next/navigation for SPA navigation (useRouter)
 vi.mock('next/navigation', () => mockNextNavigationFactory());
 
 // Mock react-virtuoso — render children directly (no virtualisation in tests)
 vi.mock('react-virtuoso', () => ({
-  Virtuoso: ({ data, itemContent }: { data: unknown[]; itemContent: (index: number, item: unknown) => React.ReactNode }) => (
+  Virtuoso: ({
+    data,
+    itemContent,
+  }: {
+    data: unknown[];
+    itemContent: (index: number, item: unknown) => React.ReactNode;
+  }) => (
     <div data-testid="virtuoso-list">
       {data.map((item, index) => (
         <div key={index}>{itemContent(index, item)}</div>
@@ -165,7 +181,7 @@ const resultsWithNotDetected: FullAnalysisResult = {
     ...resultsWithCoverage.coverageMetrics,
     perDisease: {
       ...resultsWithCoverage.coverageMetrics.perDisease,
-      'PKU': {
+      PKU: {
         variantsTested: 4,
         variantsTotal: 6,
         coveragePct: 66.7,
@@ -526,9 +542,7 @@ describe('CarrierTab', () => {
 
     // PKU has low_risk + normal/normal parents + 66.7% coverage → shows "Moderate Residual Risk"
     const statusBadges = screen.getAllByRole('status');
-    const residualBadge = statusBadges.find((el) =>
-      el.textContent?.includes('Residual Risk'),
-    );
+    const residualBadge = statusBadges.find((el) => el.textContent?.includes('Residual Risk'));
     expect(residualBadge).toBeDefined();
     expect(residualBadge?.textContent).toContain('Moderate Residual Risk');
   });
@@ -538,9 +552,7 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
-    expect(
-      screen.getByText('What Carrier Analysis Cannot Tell You'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('What Carrier Analysis Cannot Tell You')).toBeInTheDocument();
   });
 
   it('hides LimitationsSection when no results shown', () => {
@@ -548,9 +560,7 @@ describe('CarrierTab', () => {
 
     render(<CarrierTab />);
 
-    expect(
-      screen.queryByText('What Carrier Analysis Cannot Tell You'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('What Carrier Analysis Cannot Tell You')).not.toBeInTheDocument();
   });
 
   it('each result card has aria-posinset and aria-setsize', () => {

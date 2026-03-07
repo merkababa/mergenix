@@ -24,7 +24,11 @@ function flushRAF(time: number) {
  */
 function Counter({ target, duration }: { target: number; duration: number }) {
   const { count, ref } = useCountUp(target, duration);
-  return <span ref={ref} data-testid="count">{count}</span>;
+  return (
+    <span ref={ref} data-testid="count">
+      {count}
+    </span>
+  );
 }
 
 /** Read the current count from the rendered DOM. */
@@ -79,10 +83,14 @@ describe('useCountUp', () => {
     });
 
     // First rAF: sets startTime = 0
-    act(() => { flushRAF(0); });
+    act(() => {
+      flushRAF(0);
+    });
 
     // Final rAF: progress = 1.0
-    act(() => { flushRAF(2000); });
+    act(() => {
+      flushRAF(2000);
+    });
 
     expect(readCount(container)).toBe(CARRIER_PANEL_COUNT);
   });
@@ -90,15 +98,21 @@ describe('useCountUp', () => {
   it('never produces a negative count (regression: clock drift fix)', async () => {
     const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2200} />);
 
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     // First frame: startTime captured from rAF timestamp
-    act(() => { flushRAF(0); });
+    act(() => {
+      flushRAF(0);
+    });
     expect(readCount(container)).toBeGreaterThanOrEqual(0);
 
     // Several early frames
     for (let t = 16; t <= 160; t += 16) {
-      act(() => { flushRAF(t); });
+      act(() => {
+        flushRAF(t);
+      });
       expect(readCount(container)).toBeGreaterThanOrEqual(0);
     }
   });
@@ -106,25 +120,37 @@ describe('useCountUp', () => {
   it('never produces a negative count for small targets (regression)', async () => {
     const { container } = render(<Counter target={79} duration={1800} />);
 
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
-    act(() => { flushRAF(0); });
+    act(() => {
+      flushRAF(0);
+    });
     expect(readCount(container)).toBeGreaterThanOrEqual(0);
 
-    act(() => { flushRAF(16); });
+    act(() => {
+      flushRAF(16);
+    });
     expect(readCount(container)).toBeGreaterThanOrEqual(0);
   });
 
   it('count increases monotonically during animation', async () => {
     const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2000} />);
 
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     let prev = 0;
-    act(() => { flushRAF(0); }); // startTime = 0
+    act(() => {
+      flushRAF(0);
+    }); // startTime = 0
 
     for (let t = 100; t <= 2000; t += 100) {
-      act(() => { flushRAF(t); });
+      act(() => {
+        flushRAF(t);
+      });
       const current = readCount(container);
       expect(current).toBeGreaterThanOrEqual(prev);
       prev = current;
@@ -138,15 +164,21 @@ describe('useCountUp', () => {
     // not from performance.now(). This avoids cross-clock negative elapsed.
     const { container } = render(<Counter target={CARRIER_PANEL_COUNT} duration={2200} />);
 
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     // First rAF fires with arbitrary timestamp 5000
-    act(() => { flushRAF(5000); });
+    act(() => {
+      flushRAF(5000);
+    });
     // elapsed = 5000 - 5000 = 0 → count = 0
     expect(readCount(container)).toBe(0);
 
     // Second frame at 5100 (100ms later)
-    act(() => { flushRAF(5100); });
+    act(() => {
+      flushRAF(5100);
+    });
     // elapsed = 100, progress = 100/2200 ≈ 0.045 → count > 0
     expect(readCount(container)).toBeGreaterThan(0);
     expect(readCount(container)).toBeLessThan(CARRIER_PANEL_COUNT);

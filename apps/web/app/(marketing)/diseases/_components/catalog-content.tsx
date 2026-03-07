@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useCallback, useEffect, useRef, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useState, useMemo, useCallback, useEffect, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import {
   Search,
   Filter,
@@ -12,16 +12,16 @@ import {
   ChevronRight,
   ChevronLeft,
   RotateCcw,
-} from "lucide-react";
-import { m, useInView } from "motion/react";
-import { GlassCard } from "@/components/ui/glass-card";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { PageHeader } from "@/components/layout/page-header";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SelectFilter } from "@/components/ui/select-filter";
+} from 'lucide-react';
+import { m, useInView } from 'motion/react';
+import { GlassCard } from '@/components/ui/glass-card';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { SectionHeading } from '@/components/marketing/section-heading';
+import { PageHeader } from '@/components/layout/page-header';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { SelectFilter } from '@/components/ui/select-filter';
 import {
   DISEASES,
   getAllCategories,
@@ -29,8 +29,8 @@ import {
   getDiseaseStats,
   inheritanceVariant,
   type DiseaseEntry,
-} from "@/lib/disease-data";
-import { createStaggerContainer } from "@/lib/animation-variants";
+} from '@/lib/disease-data';
+import { createStaggerContainer } from '@/lib/animation-variants';
 
 /* -- Constants -- */
 const ITEMS_PER_PAGE = 12;
@@ -47,7 +47,7 @@ const catalogCardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: "easeOut" as const },
+    transition: { duration: 0.4, ease: 'easeOut' as const },
   },
 };
 
@@ -58,28 +58,22 @@ const filterPanelVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" as const },
+    transition: { duration: 0.5, ease: 'easeOut' as const },
   },
 };
 
 /* -- Animated counter component -- */
-function AnimatedCounter({
-  value,
-  suffix = "",
-}: {
-  value: string;
-  suffix?: string;
-}) {
+function AnimatedCounter({ value, suffix = '' }: { value: string; suffix?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const rafIdRef = useRef<number>(0);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [displayValue, setDisplayValue] = useState("0");
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const [displayValue, setDisplayValue] = useState('0');
 
   useEffect(() => {
     if (!isInView) return;
 
     // Parse the numeric part from the value string (e.g. "1,234" -> 1234)
-    const numericString = value.replace(/[^0-9]/g, "");
+    const numericString = value.replace(/[^0-9]/g, '');
     const target = parseInt(numericString, 10);
 
     if (isNaN(target) || target === 0) {
@@ -114,7 +108,7 @@ function AnimatedCounter({
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="font-heading text-2xl font-extrabold text-(--accent-teal)">
+    <div ref={ref} className="font-heading text-(--accent-teal) text-2xl font-extrabold">
       {displayValue}
       {suffix}
     </div>
@@ -122,28 +116,28 @@ function AnimatedCounter({
 }
 
 /* -- Helper functions -- */
-function severityVariant(s: string): "high" | "moderate" | "low" {
-  if (s === "high") return "high";
-  if (s === "moderate") return "moderate";
-  return "low";
+function severityVariant(s: string): 'high' | 'moderate' | 'low' {
+  if (s === 'high') return 'high';
+  if (s === 'moderate') return 'moderate';
+  return 'low';
 }
 
 /* -- Build filter options -- */
 const categoryOptions = [
-  { value: "All", label: "All Categories" },
+  { value: 'All', label: 'All Categories' },
   ...getAllCategories().map((c) => ({ value: c, label: c })),
 ];
 
 const inheritanceOptions = [
-  { value: "All", label: "All Inheritance" },
+  { value: 'All', label: 'All Inheritance' },
   ...getAllInheritanceModels().map((m) => ({ value: m, label: m })),
 ];
 
 const severityOptions = [
-  { value: "All", label: "All Severity" },
-  { value: "high", label: "High" },
-  { value: "moderate", label: "Moderate" },
-  { value: "low", label: "Low" },
+  { value: 'All', label: 'All Severity' },
+  { value: 'high', label: 'High' },
+  { value: 'moderate', label: 'Moderate' },
+  { value: 'low', label: 'Low' },
 ];
 
 /* -- Inner component (needs Suspense boundary for useSearchParams) -- */
@@ -152,14 +146,12 @@ function DiseaseCatalogInner() {
   const searchParams = useSearchParams();
 
   /* -- State from URL params -- */
-  const [search, setSearch] = useState(searchParams.get("q") ?? "");
-  const [category, setCategory] = useState(searchParams.get("category") ?? "All");
-  const [inheritance, setInheritance] = useState(
-    searchParams.get("inheritance") ?? "All",
-  );
-  const [severity, setSeverity] = useState(searchParams.get("severity") ?? "All");
+  const [search, setSearch] = useState(searchParams.get('q') ?? '');
+  const [category, setCategory] = useState(searchParams.get('category') ?? 'All');
+  const [inheritance, setInheritance] = useState(searchParams.get('inheritance') ?? 'All');
+  const [severity, setSeverity] = useState(searchParams.get('severity') ?? 'All');
   const [page, setPage] = useState(() => {
-    const p = parseInt(searchParams.get("page") ?? "1", 10);
+    const p = parseInt(searchParams.get('page') ?? '1', 10);
     return isNaN(p) || p < 1 ? 1 : p;
   });
 
@@ -168,18 +160,14 @@ function DiseaseCatalogInner() {
     (updates: Record<string, string>) => {
       const params = new URLSearchParams(searchParams.toString());
       for (const [key, val] of Object.entries(updates)) {
-        if (
-          val === "" ||
-          val === "All" ||
-          (key === "page" && val === "1")
-        ) {
+        if (val === '' || val === 'All' || (key === 'page' && val === '1')) {
           params.delete(key);
         } else {
           params.set(key, val);
         }
       }
       const qs = params.toString();
-      router.replace(qs ? `?${qs}` : "/diseases", { scroll: false });
+      router.replace(qs ? `?${qs}` : '/diseases', { scroll: false });
     },
     [router, searchParams],
   );
@@ -188,7 +176,7 @@ function DiseaseCatalogInner() {
     (value: string) => {
       setSearch(value);
       setPage(1);
-      updateUrl({ q: value, page: "1" });
+      updateUrl({ q: value, page: '1' });
     },
     [updateUrl],
   );
@@ -197,7 +185,7 @@ function DiseaseCatalogInner() {
     (value: string) => {
       setCategory(value);
       setPage(1);
-      updateUrl({ category: value, page: "1" });
+      updateUrl({ category: value, page: '1' });
     },
     [updateUrl],
   );
@@ -206,7 +194,7 @@ function DiseaseCatalogInner() {
     (value: string) => {
       setInheritance(value);
       setPage(1);
-      updateUrl({ inheritance: value, page: "1" });
+      updateUrl({ inheritance: value, page: '1' });
     },
     [updateUrl],
   );
@@ -215,7 +203,7 @@ function DiseaseCatalogInner() {
     (value: string) => {
       setSeverity(value);
       setPage(1);
-      updateUrl({ severity: value, page: "1" });
+      updateUrl({ severity: value, page: '1' });
     },
     [updateUrl],
   );
@@ -229,18 +217,15 @@ function DiseaseCatalogInner() {
   );
 
   const hasActiveFilters =
-    search !== "" ||
-    category !== "All" ||
-    inheritance !== "All" ||
-    severity !== "All";
+    search !== '' || category !== 'All' || inheritance !== 'All' || severity !== 'All';
 
   const resetFilters = useCallback(() => {
-    setSearch("");
-    setCategory("All");
-    setInheritance("All");
-    setSeverity("All");
+    setSearch('');
+    setCategory('All');
+    setInheritance('All');
+    setSeverity('All');
     setPage(1);
-    router.replace("/diseases", { scroll: false });
+    router.replace('/diseases', { scroll: false });
   }, [router]);
 
   /* -- Filtering & pagination -- */
@@ -252,28 +237,24 @@ function DiseaseCatalogInner() {
         d.name.toLowerCase().includes(searchLower) ||
         d.description.toLowerCase().includes(searchLower) ||
         d.category.toLowerCase().includes(searchLower);
-      const matchesCategory = category === "All" || d.category === category;
-      const matchesInheritance =
-        inheritance === "All" || d.inheritance === inheritance;
-      const matchesSeverity = severity === "All" || d.severity === severity;
+      const matchesCategory = category === 'All' || d.category === category;
+      const matchesInheritance = inheritance === 'All' || d.inheritance === inheritance;
+      const matchesSeverity = severity === 'All' || d.severity === severity;
       return matchesSearch && matchesCategory && matchesInheritance && matchesSeverity;
     });
   }, [search, category, inheritance, severity]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const safePage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (safePage - 1) * ITEMS_PER_PAGE,
-    safePage * ITEMS_PER_PAGE,
-  );
+  const paginated = filtered.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
 
   /* -- Stats -- */
   const stats = getDiseaseStats();
   const statItems = [
-    { icon: Microscope, value: stats.totalDiseases.toLocaleString(), label: "Diseases" },
-    { icon: Dna, value: stats.totalSnps.toLocaleString() + "+", label: "SNPs Tracked" },
-    { icon: Activity, value: String(stats.inheritanceModels), label: "Inheritance Models" },
-    { icon: Filter, value: String(stats.categoryCount), label: "Categories" },
+    { icon: Microscope, value: stats.totalDiseases.toLocaleString(), label: 'Diseases' },
+    { icon: Dna, value: stats.totalSnps.toLocaleString() + '+', label: 'SNPs Tracked' },
+    { icon: Activity, value: String(stats.inheritanceModels), label: 'Inheritance Models' },
+    { icon: Filter, value: String(stats.categoryCount), label: 'Categories' },
   ];
 
   return (
@@ -282,16 +263,15 @@ function DiseaseCatalogInner() {
       <PageHeader
         title="Disease Catalog"
         subtitle={`Browse our comprehensive database of ${stats.totalDiseases.toLocaleString()} genetic conditions across ${stats.categoryCount} clinical categories`}
-        breadcrumbs={[{ label: "Disease Catalog", href: "/diseases" }]}
+        breadcrumbs={[{ label: 'Disease Catalog', href: '/diseases' }]}
         className="mb-8"
       />
-
 
       {/* -- Stats -- */}
       <m.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-30px" }}
+        viewport={{ once: true, margin: '-30px' }}
         variants={containerVariants}
         className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4"
       >
@@ -303,9 +283,9 @@ function DiseaseCatalogInner() {
               rainbow
               className="relative overflow-hidden p-5 text-center"
             >
-              <Icon className="mx-auto mb-2 h-5 w-5 text-(--accent-cyan)" aria-hidden="true" />
+              <Icon className="text-(--accent-cyan) mx-auto mb-2 h-5 w-5" aria-hidden="true" />
               <AnimatedCounter value={value} />
-              <div className="font-heading text-xs font-medium uppercase tracking-widest text-(--accent-cyan)">
+              <div className="font-heading text-(--accent-cyan) text-xs font-medium uppercase tracking-widest">
                 {label}
               </div>
             </GlassCard>
@@ -314,11 +294,7 @@ function DiseaseCatalogInner() {
       </m.div>
 
       {/* -- Search & Filters -- */}
-      <m.div
-        initial="hidden"
-        animate="visible"
-        variants={filterPanelVariants}
-      >
+      <m.div initial="hidden" animate="visible" variants={filterPanelVariants}>
         <GlassCard variant="subtle" hover="none" className="mb-8 p-5">
           <div className="flex flex-col gap-4 lg:flex-row">
             <div className="flex-1">
@@ -380,217 +356,217 @@ function DiseaseCatalogInner() {
       </m.div>
 
       <ScrollReveal>
-      {/* -- Section heading for a11y: bridges h1 → h3 in disease cards -- */}
-      <SectionHeading
-        title="Browse Conditions"
-        className="sr-only"
-        id="disease-results-heading"
-      />
+        {/* -- Section heading for a11y: bridges h1 → h3 in disease cards -- */}
+        <SectionHeading
+          title="Browse Conditions"
+          className="sr-only"
+          id="disease-results-heading"
+        />
 
-      {/* -- Results count -- */}
-      <p className="mb-4 text-center text-sm text-(--text-muted)" role="status" aria-live="polite">
-        Showing {paginated.length} of {filtered.length} diseases
-        {search && (
-          <>
-            {" "}
-            matching &ldquo;{search}&rdquo;
-          </>
-        )}
-      </p>
-
-      {/* -- Disease Grid or Empty State -- */}
-      {paginated.length > 0 ? (
-        <m.div
-          key={`${category}-${inheritance}-${severity}-${search}-${safePage}`}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-30px" }}
-          variants={containerVariants}
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+        {/* -- Results count -- */}
+        <p
+          className="text-(--text-muted) mb-4 text-center text-sm"
+          role="status"
+          aria-live="polite"
         >
-          {paginated.map((disease: DiseaseEntry) => (
-            <m.div key={disease.slug} variants={catalogCardVariants}>
-              <Link
-                href={`/diseases/${disease.slug}`}
-                className="group block h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal) rounded-glass"
-              >
-                <GlassCard
-                  variant="medium"
-                  hover="glow"
-                  className="relative h-full overflow-hidden p-6 transition-all duration-300 group-hover:border-[rgba(6,214,160,0.25)]"
+          Showing {paginated.length} of {filtered.length} diseases
+          {search && <> matching &ldquo;{search}&rdquo;</>}
+        </p>
+
+        {/* -- Disease Grid or Empty State -- */}
+        {paginated.length > 0 ? (
+          <m.div
+            key={`${category}-${inheritance}-${severity}-${search}-${safePage}`}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-30px' }}
+            variants={containerVariants}
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {paginated.map((disease: DiseaseEntry) => (
+              <m.div key={disease.slug} variants={catalogCardVariants}>
+                <Link
+                  href={`/diseases/${disease.slug}`}
+                  className="focus-visible:outline-(--accent-teal) rounded-glass group block h-full focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
-                  {/* Severity side bar */}
-                  {/* Gradient hex values are design-system severity colors:
+                  <GlassCard
+                    variant="medium"
+                    hover="glow"
+                    className="relative h-full overflow-hidden p-6 transition-all duration-300 group-hover:border-[rgba(6,214,160,0.25)]"
+                  >
+                    {/* Severity side bar */}
+                    {/* Gradient hex values are design-system severity colors:
                       high     → --accent-rose  (#f43f5e → #e11d48)
                       moderate → --accent-amber (#f59e0b → #d97706)
                       low      → --accent-teal  (#06d6a0 → #059669)
                       CSS variables cannot be interpolated inside a gradient string
                       because each gradient stop needs a resolved color, not a
                       theme-dependent variable that may differ between the two stops. */}
-                  <div
-                    className="absolute bottom-0 right-0 top-0 w-[3px] rounded-r-glass"
-                    aria-hidden="true"
-                    style={{
-                      background:
-                        disease.severity === "high"
-                          ? "linear-gradient(180deg, #f43f5e, #e11d48)"
-                          : disease.severity === "moderate"
-                            ? "linear-gradient(180deg, #f59e0b, #d97706)"
-                            : "linear-gradient(180deg, #06d6a0, #059669)",
-                    }}
-                  />
+                    <div
+                      className="rounded-r-glass absolute bottom-0 right-0 top-0 w-[3px]"
+                      aria-hidden="true"
+                      style={{
+                        background:
+                          disease.severity === 'high'
+                            ? 'linear-gradient(180deg, #f43f5e, #e11d48)'
+                            : disease.severity === 'moderate'
+                              ? 'linear-gradient(180deg, #f59e0b, #d97706)'
+                              : 'linear-gradient(180deg, #06d6a0, #059669)',
+                      }}
+                    />
 
-                  <div className="mb-2 flex items-start justify-between gap-2">
-                    <h3 className="font-heading text-base font-bold text-(--text-heading) transition-colors group-hover:text-(--accent-teal)">
-                      {disease.name}
-                    </h3>
-                    <Badge variant={severityVariant(disease.severity)}>
-                      {disease.severity.toUpperCase()}
-                    </Badge>
-                  </div>
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h3 className="font-heading text-(--text-heading) group-hover:text-(--accent-teal) text-base font-bold transition-colors">
+                        {disease.name}
+                      </h3>
+                      <Badge variant={severityVariant(disease.severity)}>
+                        {disease.severity.toUpperCase()}
+                      </Badge>
+                    </div>
 
-                  <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-(--text-muted)">
-                    {disease.description}
-                  </p>
+                    <p className="text-(--text-muted) mb-4 line-clamp-2 text-sm leading-relaxed">
+                      {disease.description}
+                    </p>
 
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    <Badge variant={inheritanceVariant(disease.inheritance)}>
-                      {disease.inheritance}
-                    </Badge>
-                    <Badge variant="default">{disease.category}</Badge>
-                    <Badge
-                      variant={
-                        `confidence-${disease.confidence}` as
-                          | "confidence-high"
-                          | "confidence-medium"
-                          | "confidence-low"
-                      }
-                    >
-                      {disease.confidence} confidence
-                    </Badge>
-                  </div>
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      <Badge variant={inheritanceVariant(disease.inheritance)}>
+                        {disease.inheritance}
+                      </Badge>
+                      <Badge variant="default">{disease.category}</Badge>
+                      <Badge
+                        variant={
+                          `confidence-${disease.confidence}` as
+                            | 'confidence-high'
+                            | 'confidence-medium'
+                            | 'confidence-low'
+                        }
+                      >
+                        {disease.confidence} confidence
+                      </Badge>
+                    </div>
 
-                  {/* SNP count + view link */}
-                  <div className="flex items-center justify-between border-t border-(--border-subtle) pt-3">
-                    <span className="font-mono text-xs text-(--text-muted)">
-                      {disease.snpCount} SNP{disease.snpCount !== 1 ? "s" : ""} tracked
-                    </span>
-                    <span className="flex items-center gap-1 text-xs font-medium text-(--accent-teal) opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
-                      View details
-                      <ChevronRight className="h-3 w-3" aria-hidden="true" />
-                    </span>
-                  </div>
-                </GlassCard>
-              </Link>
-            </m.div>
-          ))}
-        </m.div>
-      ) : (
-        /* -- Empty State -- */
-        <m.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="py-16 text-center"
-        >
-          <Dna className="mx-auto mb-4 h-12 w-12 text-(--text-muted) opacity-50" aria-hidden="true" />
-          <h3 className="font-heading text-lg font-semibold text-(--text-heading)">
-            No diseases found
-          </h3>
-          <p className="mt-2 text-sm text-(--text-muted)">
-            Try adjusting your search or filters to find what you&apos;re looking for
-          </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetFilters}
-            className="mt-4"
+                    {/* SNP count + view link */}
+                    <div className="border-(--border-subtle) flex items-center justify-between border-t pt-3">
+                      <span className="text-(--text-muted) font-mono text-xs">
+                        {disease.snpCount} SNP{disease.snpCount !== 1 ? 's' : ''} tracked
+                      </span>
+                      <span className="text-(--accent-teal) flex items-center gap-1 text-xs font-medium opacity-0 transition-opacity duration-200 group-focus-within:opacity-100 group-hover:opacity-100">
+                        View details
+                        <ChevronRight className="h-3 w-3" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </GlassCard>
+                </Link>
+              </m.div>
+            ))}
+          </m.div>
+        ) : (
+          /* -- Empty State -- */
+          <m.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="py-16 text-center"
           >
-            <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
-            Reset All Filters
-          </Button>
-        </m.div>
-      )}
+            <Dna
+              className="text-(--text-muted) mx-auto mb-4 h-12 w-12 opacity-50"
+              aria-hidden="true"
+            />
+            <h3 className="font-heading text-(--text-heading) text-lg font-semibold">
+              No diseases found
+            </h3>
+            <p className="text-(--text-muted) mt-2 text-sm">
+              Try adjusting your search or filters to find what you&apos;re looking for
+            </p>
+            <Button variant="outline" size="sm" onClick={resetFilters} className="mt-4">
+              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+              Reset All Filters
+            </Button>
+          </m.div>
+        )}
 
-      {/* -- Pagination -- */}
-      {totalPages > 1 && (
-        <nav aria-label="Disease catalog pagination" className="mt-8 flex items-center justify-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handlePageChange(Math.max(1, safePage - 1))}
-            disabled={safePage === 1}
-            aria-label="Go to previous page"
+        {/* -- Pagination -- */}
+        {totalPages > 1 && (
+          <nav
+            aria-label="Disease catalog pagination"
+            className="mt-8 flex items-center justify-center gap-3"
           >
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-            Previous
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handlePageChange(Math.max(1, safePage - 1))}
+              disabled={safePage === 1}
+              aria-label="Go to previous page"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              Previous
+            </Button>
 
-          {/* Page number pills */}
-          <div className="flex items-center gap-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter((p) => {
-                // Show first, last, current, and adjacent pages
-                if (p === 1 || p === totalPages) return true;
-                if (Math.abs(p - safePage) <= 1) return true;
-                return false;
-              })
-              .reduce<(number | "ellipsis")[]>((acc, p, idx, arr) => {
-                if (idx > 0) {
-                  const prev = arr[idx - 1];
-                  if (typeof prev === "number" && p - prev > 1) {
-                    acc.push("ellipsis");
+            {/* Page number pills */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((p) => {
+                  // Show first, last, current, and adjacent pages
+                  if (p === 1 || p === totalPages) return true;
+                  if (Math.abs(p - safePage) <= 1) return true;
+                  return false;
+                })
+                .reduce<(number | 'ellipsis')[]>((acc, p, idx, arr) => {
+                  if (idx > 0) {
+                    const prev = arr[idx - 1];
+                    if (typeof prev === 'number' && p - prev > 1) {
+                      acc.push('ellipsis');
+                    }
                   }
-                }
-                acc.push(p);
-                return acc;
-              }, [])
-              .map((item, idx) =>
-                item === "ellipsis" ? (
-                  <span
-                    key={`ellipsis-${idx}`}
-                    className="px-1 text-sm text-(--text-muted)"
-                    aria-hidden="true"
-                  >
-                    ...
-                  </span>
-                ) : (
-                  <button
-                    key={item}
-                    onClick={() => handlePageChange(item)}
-                    aria-label={`Go to page ${item}`}
-                    aria-current={item === safePage ? "page" : undefined}
-                    className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-all duration-200 ${
-                      item === safePage
-                        ? "bg-[rgba(6,214,160,0.15)] text-(--accent-teal) border border-[rgba(6,214,160,0.3)]"
-                        : "text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ),
-              )}
-          </div>
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((item, idx) =>
+                  item === 'ellipsis' ? (
+                    <span
+                      key={`ellipsis-${idx}`}
+                      className="text-(--text-muted) px-1 text-sm"
+                      aria-hidden="true"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={item}
+                      onClick={() => handlePageChange(item)}
+                      aria-label={`Go to page ${item}`}
+                      aria-current={item === safePage ? 'page' : undefined}
+                      className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-all duration-200 ${
+                        item === safePage
+                          ? 'text-(--accent-teal) border border-[rgba(6,214,160,0.3)] bg-[rgba(6,214,160,0.15)]'
+                          : 'text-(--text-muted) hover:text-(--accent-teal) hover:bg-[rgba(6,214,160,0.06)]'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ),
+                )}
+            </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handlePageChange(Math.min(totalPages, safePage + 1))}
-            disabled={safePage === totalPages}
-            aria-label="Go to next page"
-          >
-            Next
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          </Button>
-        </nav>
-      )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handlePageChange(Math.min(totalPages, safePage + 1))}
+              disabled={safePage === totalPages}
+              aria-label="Go to next page"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          </nav>
+        )}
 
-      {/* -- Footer Note -- */}
-      <p className="mt-8 text-center text-xs text-(--text-muted)">
-        Showing a curated selection of {DISEASES.length} representative conditions from
-        our full database of {stats.totalDiseases.toLocaleString()} genetic diseases.
-        Each condition is sourced from ClinVar, OMIM, and peer-reviewed literature.
-      </p>
+        {/* -- Footer Note -- */}
+        <p className="text-(--text-muted) mt-8 text-center text-xs">
+          Showing a curated selection of {DISEASES.length} representative conditions from our full
+          database of {stats.totalDiseases.toLocaleString()} genetic diseases. Each condition is
+          sourced from ClinVar, OMIM, and peer-reviewed literature.
+        </p>
       </ScrollReveal>
     </>
   );
@@ -602,8 +578,8 @@ export function CatalogContent() {
     <Suspense
       fallback={
         <div className="py-16 text-center">
-          <Dna className="mx-auto mb-4 h-8 w-8 animate-pulse text-(--accent-teal)" />
-          <p className="text-sm text-(--text-muted)">Loading disease catalog...</p>
+          <Dna className="text-(--accent-teal) mx-auto mb-4 h-8 w-8 animate-pulse" />
+          <p className="text-(--text-muted) text-sm">Loading disease catalog...</p>
         </div>
       }
     >

@@ -2,12 +2,12 @@
 
 ## Infrastructure Regions
 
-| Component | Region | Configuration |
-|-----------|--------|---------------|
-| Frontend (Vercel) | `fra1` (Frankfurt, Germany) | Configured in `apps/web/vercel.json` |
-| Backend (Railway) | `eu-west` | Must be set manually in Railway dashboard → Service → Settings → Region |
-| Database (PostgreSQL) | EU region | Must be configured in Railway (PostgreSQL plugin region) or Supabase EU tier |
-| CDN (Vercel Edge Network) | Global | Acceptable for static/public assets — no personal data served via CDN |
+| Component                 | Region                      | Configuration                                                                |
+| ------------------------- | --------------------------- | ---------------------------------------------------------------------------- |
+| Frontend (Vercel)         | `fra1` (Frankfurt, Germany) | Configured in `apps/web/vercel.json`                                         |
+| Backend (Railway)         | `eu-west`                   | Must be set manually in Railway dashboard → Service → Settings → Region      |
+| Database (PostgreSQL)     | EU region                   | Must be configured in Railway (PostgreSQL plugin region) or Supabase EU tier |
+| CDN (Vercel Edge Network) | Global                      | Acceptable for static/public assets — no personal data served via CDN        |
 
 ## Rationale
 

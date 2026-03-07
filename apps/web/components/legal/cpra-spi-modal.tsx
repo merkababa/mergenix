@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useId, useRef } from "react";
-import { X, Shield } from "lucide-react";
-import { CPRA_SPI_NOTICE } from "@/lib/constants/legal-placeholders";
-import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { useCallback, useEffect, useId, useRef } from 'react';
+import { X, Shield } from 'lucide-react';
+import { CPRA_SPI_NOTICE } from '@/lib/constants/legal-placeholders';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -57,7 +57,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose();
       }
     },
@@ -67,7 +67,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
   return (
     /* Backdrop */
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [backdrop-filter:blur(4px)] [-webkit-backdrop-filter:blur(4px)]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [-webkit-backdrop-filter:blur(4px)] [backdrop-filter:blur(4px)]"
       onClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
       role="presentation"
@@ -80,24 +80,18 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
         aria-describedby={descId}
         aria-modal="true"
         tabIndex={-1}
-        className="relative mx-auto max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) shadow-2xl [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))] focus-visible:outline-hidden"
+        className="border-(--glass-border) bg-(--bg-glass) focus-visible:outline-hidden relative mx-auto max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl border shadow-2xl [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
       >
         {/* Header */}
-        <div className="flex items-start gap-3 border-b border-(--border-subtle) p-5">
+        <div className="border-(--border-subtle) flex items-start gap-3 border-b p-5">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-            <Shield
-              className="h-5 w-5 text-(--accent-teal)"
-              aria-hidden="true"
-            />
+            <Shield className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
           </div>
-          <div className="flex-1 min-w-0">
-            <h2
-              id={titleId}
-              className="font-heading text-base font-semibold text-(--text-heading)"
-            >
+          <div className="min-w-0 flex-1">
+            <h2 id={titleId} className="font-heading text-(--text-heading) text-base font-semibold">
               Limit the Use of My Sensitive Personal Information
             </h2>
-            <p className="mt-0.5 text-xs text-(--text-muted)">
+            <p className="text-(--text-muted) mt-0.5 text-xs">
               California Privacy Rights Act (CPRA)
             </p>
           </div>
@@ -105,40 +99,37 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
             type="button"
             onClick={onClose}
             aria-label="Close SPI notice"
-            className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary) focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1"
+            className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-[rgba(6,214,160,0.06)] focus-visible:ring-2 focus-visible:ring-offset-1"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
         {/* Body — scrollable */}
-        <div
-          id={descId}
-          className="overflow-y-auto p-5 max-h-[calc(90vh-5rem)]"
-        >
-          <div className="space-y-3 text-sm leading-relaxed text-(--text-body)">
-            {CPRA_SPI_NOTICE.split("\n\n").map((paragraph, idx) => {
+        <div id={descId} className="max-h-[calc(90vh-5rem)] overflow-y-auto p-5">
+          <div className="text-(--text-body) space-y-3 text-sm leading-relaxed">
+            {CPRA_SPI_NOTICE.split('\n\n').map((paragraph, idx) => {
               // Render the first paragraph (title) as a heading
               if (idx === 0) {
                 return null; // title is in the header
               }
               // Bullet-point paragraphs
-              if (paragraph.startsWith("•")) {
-                const lines = paragraph.split("\n");
+              if (paragraph.startsWith('•')) {
+                const lines = paragraph.split('\n');
                 return (
                   <ul key={idx} className="space-y-1 pl-1">
                     {lines.map((line, lineIdx) => (
                       <li
                         key={lineIdx}
-                        className="flex items-start gap-2 text-sm text-(--text-body)"
+                        className="text-(--text-body) flex items-start gap-2 text-sm"
                       >
-                        {line.startsWith("•") ? (
+                        {line.startsWith('•') ? (
                           <>
                             <span
-                              className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent-teal)"
+                              className="bg-(--accent-teal) mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full"
                               aria-hidden="true"
                             />
-                            <span>{line.replace(/^•\s*/, "")}</span>
+                            <span>{line.replace(/^•\s*/, '')}</span>
                           </>
                         ) : (
                           <span className="pl-3.5">{line}</span>
@@ -149,7 +140,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
                 );
               }
               return (
-                <p key={idx} className="text-sm leading-relaxed text-(--text-body)">
+                <p key={idx} className="text-(--text-body) text-sm leading-relaxed">
                   {paragraph}
                 </p>
               );
