@@ -21,7 +21,7 @@ const NAV_LINKS = [
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export function Navbar() {
+export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
   const pathname = usePathname();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -128,7 +128,10 @@ export function Navbar() {
         }}
       >
         <nav
-          className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6"
+          className={cn(
+            'mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6',
+            !isBypassed && 'pointer-events-none select-none blur-[6px]',
+          )}
           aria-label="Main navigation"
         >
           {/* Logo */}

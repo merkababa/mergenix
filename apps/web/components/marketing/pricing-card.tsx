@@ -180,24 +180,14 @@ export function PricingCard({
     <m.div
       {...motionProps}
       data-popular={popular ? 'true' : undefined}
-      className={cn('relative flex', popular && 'lg:z-10 lg:scale-[1.03]', className)}
+      className={cn('relative flex', className)}
     >
-      {/* Popular badge — positioned above the card */}
-      {popular && (
-        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
-          <Badge variant="premium" className="card-badge whitespace-nowrap px-4 py-1">
-            <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
-            Most Popular
-          </Badge>
-        </div>
-      )}
-
       <GlassCard
         variant="medium"
         hover="lift"
         className={cn(
           'flex w-full flex-col p-8',
-          popular && ['border-accent-violet border-2', 'shadow-lg'],
+          popular && ['border-accent-teal border-2', 'shadow-lg'],
           cardClass,
         )}
       >
@@ -207,8 +197,16 @@ export function PricingCard({
           aria-hidden="true"
         />
 
-        {/* Tier name */}
-        <h3 className="font-heading text-(--text-heading) mb-2 text-lg font-bold">{tier}</h3>
+        {/* Tier name + popular badge */}
+        <div className="mb-2 flex items-center gap-3">
+          <h3 className="font-heading text-(--text-heading) text-lg font-bold">{tier}</h3>
+          {popular && (
+            <Badge variant="pro" className="card-badge whitespace-nowrap px-3 py-0.5">
+              <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
+              Most Popular
+            </Badge>
+          )}
+        </div>
 
         {/* Price */}
         <div className="mb-1 flex items-baseline gap-1">

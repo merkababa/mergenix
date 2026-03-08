@@ -9,10 +9,9 @@ import { SectionHeading } from '@/components/marketing/section-heading';
 // Constants (hoisted — §3 of executor checklist)
 // ---------------------------------------------------------------------------
 
-/** Shared inline style for the three mock dashboard panels (§8 — no repeated literals). */
+/** Shared inline style for the two mock dashboard panels (§8 — no repeated literals). */
 const PANEL_STYLE = {
-  /* Intentionally dark: mock browser window always shows dark dashboard preview */
-  background: 'rgba(12,18,32,0.6)',
+  background: 'var(--bg-surface)',
   border: '1px solid var(--border-subtle)',
 } as const;
 
@@ -60,7 +59,7 @@ export function ProductDemo() {
           <div
             className="relative mx-auto max-w-3xl"
             style={{
-              filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.5))',
+              filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.12))',
             }}
           >
             {/* Perspective wrapper — desktop only; flat on mobile */}
@@ -76,9 +75,8 @@ export function ProductDemo() {
                 {/* Browser chrome bar */}
                 <div
                   className="flex items-center gap-2 px-4 py-3"
-                  /* Intentionally dark: mock browser window always shows dark dashboard preview */
                   style={{
-                    background: 'rgba(12,18,32,0.9)',
+                    background: 'var(--bg-elevated)',
                     borderBottom: '1px solid var(--border-subtle)',
                   }}
                   aria-hidden="true"
@@ -188,7 +186,7 @@ export function ProductDemo() {
                         <div
                           key={trait.label}
                           className="mb-2 flex items-center justify-between rounded-lg px-3 py-2"
-                          style={{ background: 'rgba(148,163,184,0.04)' }}
+                          style={{ background: 'var(--bg-elevated)' }}
                         >
                           {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
                           <span className="text-(--text-muted) text-xs">{trait.label}</span>
@@ -206,7 +204,7 @@ export function ProductDemo() {
             {/* Floating status overlay card — slides in from right on scroll */}
             <m.div
               style={{ x: overlayX, opacity: overlayOpacity }}
-              className="absolute -right-4 bottom-12 hidden sm:block"
+              className="absolute -bottom-4 right-8 hidden sm:block"
               aria-hidden="true"
             >
               <div

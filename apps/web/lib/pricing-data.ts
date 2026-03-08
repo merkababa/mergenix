@@ -83,10 +83,8 @@ export const MARKETING_TIERS: MarketingTier[] = [
     cta: 'Get Premium',
     ctaVariant: 'violet',
     ctaHref: '/register',
-    popular: true,
     barGradient: 'bg-linear-to-r from-accent-violet to-[#a78bfa]',
-    cardClass:
-      'border-[rgba(139,92,246,0.4)] shadow-[0_4px_30px_var(--shadow-ambient),0_0_50px_var(--glow-violet)]',
+    cardClass: '',
   },
   {
     name: 'Pro',
@@ -115,7 +113,9 @@ export const MARKETING_TIERS: MarketingTier[] = [
     cta: 'Get Pro',
     ctaVariant: 'primary',
     ctaHref: '/register',
+    popular: true,
     barGradient: 'bg-linear-to-r from-accent-teal to-accent-cyan',
-    cardClass: '',
+    cardClass:
+      'border-[rgba(6,214,160,0.4)] shadow-[0_4px_30px_var(--shadow-ambient),0_0_50px_var(--glow-teal)]',
   },
 ];

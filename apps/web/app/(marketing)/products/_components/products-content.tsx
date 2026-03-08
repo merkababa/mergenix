@@ -132,21 +132,21 @@ export function ProductsContent() {
                   </th>
                   <th
                     scope="col"
-                    data-highlighted="true"
-                    className="font-heading text-(--accent-violet) relative px-6 py-4 text-center text-sm font-semibold"
+                    className="font-heading text-(--accent-violet) px-6 py-4 text-center text-sm font-semibold"
                   >
-                    <span className="relative z-10">Premium</span>
-                    {/* Subtle highlight column background via pseudo via wrapper div */}
-                    <span
-                      className="pointer-events-none absolute inset-0 bg-[rgba(139,92,246,0.06)]"
-                      aria-hidden="true"
-                    />
+                    Premium
                   </th>
                   <th
                     scope="col"
-                    className="font-heading text-(--accent-teal) px-6 py-4 text-center text-sm font-semibold"
+                    data-highlighted="true"
+                    className="font-heading text-(--accent-teal) relative px-6 py-4 text-center text-sm font-semibold"
                   >
-                    Pro
+                    <span className="relative z-10">Pro</span>
+                    {/* Subtle highlight column background */}
+                    <span
+                      className="pointer-events-none absolute inset-0 bg-[rgba(6,214,160,0.06)]"
+                      aria-hidden="true"
+                    />
                   </th>
                 </tr>
               </thead>

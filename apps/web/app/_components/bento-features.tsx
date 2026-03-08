@@ -17,6 +17,28 @@ import { CARRIER_PANEL_COUNT_DISPLAY, TRAIT_COUNT_DISPLAY } from '@mergenix/gene
 // (border: `1px solid ${color}30`, background: colorAlpha) where CSS variables
 // cannot be interpolated inside template literals — a limitation of inline styles.
 // If a CSS-var-only approach becomes feasible (e.g. via @property), migrate then.
+/** Screening category breakdown — fills the hero card with visual depth. */
+const SCREENING_CATEGORIES = [
+  {
+    label: 'Autosomal Recessive',
+    color: '#06b6d4', // mirrors var(--accent-cyan)
+    bg: 'rgba(6,182,212,0.08)',
+    pct: '68',
+  },
+  {
+    label: 'X-Linked',
+    color: '#f59e0b', // mirrors var(--accent-amber)
+    bg: 'rgba(245,158,11,0.08)',
+    pct: '12',
+  },
+  {
+    label: 'Autosomal Dominant',
+    color: '#8b5cf6', // mirrors var(--accent-violet)
+    bg: 'rgba(139,92,246,0.08)',
+    pct: '20',
+  },
+] as const;
+
 const HERO_FEATURE = {
   icon: Microscope,
   title: `${CARRIER_PANEL_COUNT_DISPLAY} Disease Screening`,
@@ -138,6 +160,39 @@ export function BentoFeatures() {
                   {HERO_FEATURE.description}
                 </p>
                 <DiseaseBarChart />
+              </div>
+
+              {/* Screening categories breakdown */}
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                {SCREENING_CATEGORIES.map((cat) => (
+                  <div
+                    key={cat.label}
+                    className="rounded-xl p-3"
+                    style={{ background: cat.bg, border: `1px solid ${cat.color}20` }}
+                  >
+                    <span
+                      className="text-xs font-semibold"
+                      style={{ color: cat.color }}
+                    >
+                      {cat.label}
+                    </span>
+                    <div
+                      className="mt-2 h-1.5 w-full overflow-hidden rounded-full"
+                      style={{ background: `${cat.color}15` }}
+                    >
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${cat.pct}%`, background: cat.color }}
+                      />
+                    </div>
+                    <span
+                      className="mt-1.5 block text-xs font-medium"
+                      style={{ color: `${cat.color}cc` }}
+                    >
+                      {cat.pct}% of panel
+                    </span>
+                  </div>
+                ))}
               </div>
 
               {/* Stat + CTA */}

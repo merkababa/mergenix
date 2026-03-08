@@ -295,10 +295,8 @@ export function ScrollTimeline() {
                     <div
                       className="mx-auto flex h-28 w-28 items-center justify-center rounded-2xl"
                       style={{
-                        background:
-                          'rgba(12,18,32,0.5)' /* --bg-surface (#0c1220) at 50% opacity */,
+                        background: 'var(--bg-elevated)',
                         border: '1px solid var(--border-subtle)',
-                        backdropFilter: 'blur(8px)',
                       }}
                     >
                       <Illustration />

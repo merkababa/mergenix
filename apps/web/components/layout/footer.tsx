@@ -84,7 +84,7 @@ function FooterColumn({
   );
 }
 
-export function Footer() {
+export function Footer({ isBypassed = false }: { isBypassed?: boolean }) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showCpraSpiModal, setShowCpraSpiModal] = useState(false);
 
@@ -102,7 +102,8 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-(--border-subtle) relative mt-auto border-t">
+    <footer className="border-(--border-subtle) relative mt-auto border-t bg-[var(--bg-surface)]/80 backdrop-blur-md">
+      <div className={!isBypassed ? 'pointer-events-none select-none blur-[6px]' : ''}>
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         {/* Main grid */}
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
@@ -269,6 +270,7 @@ export function Footer() {
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {/* CPRA SPI Modal — portal would be ideal but inline is sufficient for now */}

@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { ThemeProvider } from 'next-themes';
 import { sora, lexend, jetbrainsMono } from '@/lib/fonts';
 import { Navbar } from '@/components/layout/navbar';
@@ -11,7 +12,9 @@ import './globals.css';
 
 export const metadata = DEFAULT_METADATA;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const hasBypass = cookieStore.has('site-bypass');
   return (
     <html
       lang="en"
@@ -24,7 +27,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_SCHEMA) }}
         />
       </head>
-      <body className="bg-(--app-gradient) font-body min-h-screen antialiased">
+      <body className="bg-(--app-gradient) font-body min-h-screen antialiased" data-bypassed={hasBypass ? 'true' : undefined}>
+        {/* Ambient glow orbs — fixed background layer for frosted-glass blur effects */}
+        <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,214,160,0.08)_0%,transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,92,246,0.06)_0%,transparent_50%)]" />
+        </div>
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="light"
@@ -38,11 +46,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Skip to main content
                 </a>
                 <ErrorAnnouncer />
-                <Navbar />
+                <Navbar isBypassed={hasBypass} />
                 <main id="main-content" className="flex-1">
                   {children}
                 </main>
-                <Footer />
+                <Footer isBypassed={hasBypass} />
               </div>
               <CookieConsentBanner />
             </MotionProvider>

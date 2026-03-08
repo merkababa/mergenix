@@ -88,12 +88,12 @@ describe('ProductsContent', () => {
       expect(screen.getByRole('heading', { name: /^Pro$/i })).toBeInTheDocument();
     });
 
-    it('renders the "Most Popular" badge on the Premium card', () => {
+    it('renders the "Most Popular" badge on the Pro card', () => {
       render(<ProductsContent />);
       expect(screen.getByText(/Most Popular/i)).toBeInTheDocument();
     });
 
-    it('applies featured/popular styling to the Premium card container', () => {
+    it('applies featured/popular styling to the Pro card container', () => {
       render(<ProductsContent />);
       // The popular card wrapper should have the data-popular attribute
       const popularCard = document.querySelector('[data-popular="true"]');
@@ -135,9 +135,9 @@ describe('ProductsContent', () => {
 
     it('renders the "Most Popular" highlighted column header', () => {
       render(<ProductsContent />);
-      // Premium column header should be visually distinct (has data-highlighted or specific class)
-      const premiumHeader = document.querySelector('[data-highlighted="true"]');
-      expect(premiumHeader).toBeInTheDocument();
+      // Pro column header should be visually distinct (has data-highlighted or specific class)
+      const proHeader = document.querySelector('[data-highlighted="true"]');
+      expect(proHeader).toBeInTheDocument();
     });
 
     it('renders key feature rows', () => {
