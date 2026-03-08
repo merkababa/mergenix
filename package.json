@@ -21,14 +21,14 @@
     "audit": "pnpm audit:npm && pnpm audit:pip"
   },
   "devDependencies": {
-    "turbo": "^2.8.12",
-    "prettier": "^3.4.0",
-    "prettier-plugin-tailwindcss": "^0.6.9",
-    "eslint": "^9.18.0",
-    "typescript-eslint": "^8.56.1",
-    "@eslint/js": "^9.18.0",
+    "@eslint/js": "^9.39.4",
     "@next/eslint-plugin-next": "^15.1.0",
-    "next": "15.5.12"
+    "eslint": "^9.39.4",
+    "next": "15.5.12",
+    "prettier": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "turbo": "^2.8.12",
+    "typescript-eslint": "^8.56.1"
   },
   "engines": {
     "node": ">=20.0.0",
