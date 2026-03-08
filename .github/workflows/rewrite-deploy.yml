@@ -141,7 +141,7 @@ jobs:
         run: npm install -g @railway/cli@4.30.3
 
       - name: Link Railway project
-        run: railway link b4916b15-1c53-491a-92cf-5f7b3ba6eea5 -e production
+        run: railway link -p b4916b15-1c53-491a-92cf-5f7b3ba6eea5 -e production -s mergenix-api
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
