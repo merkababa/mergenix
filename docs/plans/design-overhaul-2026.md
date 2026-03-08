@@ -1,9 +1,10 @@
 # Design Overhaul Plan — "Make It Pop" for 2026
 
 **Created:** 2026-03-02
+**Completed:** 2026-03-03 (Sprints D1-D4 merged as PRs #117-#120)
 **Goal:** Elevate Mergenix from B-grade to A+ — feel like a $50M biotech startup
-**Current Grade:** B (solid engineering, dated visual design)
-**Target Grade:** A+ (Linear meets 23andMe)
+**Result:** A+ achieved. 3D DNA helix, bento grid, scroll animations, data viz, View Transitions.
+**Remaining:** D4.5 custom SVG logo mark only
 
 ---
 
@@ -273,10 +274,18 @@ D4 depends on D1 only
 
 ---
 
-## Decision Points (Need User Input)
+## Decision Points (ALL DECIDED — 2026-03-03)
 
-1. **Hero helix approach:** Three.js 3D (premium, ~150KB) vs CSS 3D (lightweight, 0KB) vs Lottie (middle, ~50KB)?
-2. **Social proof:** Use real/placeholder data? Testimonials need content.
-3. **Team section:** Real photos/bios or skip for now?
-4. **Tier recommender quiz on products page:** Build now or defer?
-5. **View Transitions:** Experimental API — ship it or wait for broader support?
+1. **Hero helix approach:** ✅ DECIDED — Three.js 3D (React Three Fiber, dynamic import, ~150KB). Implemented in PR #118.
+2. **Social proof:** ✅ DECIDED — Placeholder testimonials (replace with real post-launch). Implemented in PR #118.
+3. **Team section:** ✅ DECIDED — Skip for now. Science diagrams added to About page in PR #120.
+4. **Tier recommender quiz:** ✅ DECIDED — Built in D4 (PR #120).
+5. **View Transitions:** ✅ DECIDED — Implemented in PR #120 (D4.9).
+
+## Remaining — D4.5 Custom SVG Logo Mark
+
+- Replace stock Lucide `Dna` icon in `navbar.tsx` with custom SVG logo mark
+- DNA helix stylized as "M" letterform or abstract helix with teal/cyan brand colors
+- Must work at 28px (h-7 w-7) and scale cleanly
+- Support light/dark themes via currentColor
+- Branch: `feature/d4.5-custom-svg-logo`

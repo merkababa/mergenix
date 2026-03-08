@@ -1,7 +1,7 @@
 # Mergenix — Project Status
 
-**Last Updated:** 2026-03-02
-**Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, 11/11 streams complete, launch readiness + tech debt resolved, alpha launch pending)
+**Last Updated:** 2026-03-08
+**Version:** 3.0.0-alpha (V3 Rewrite — Feature-complete, design overhaul complete (D1-D4), alpha launch pending)
 **Branch:** main
 
 ---
@@ -29,7 +29,7 @@ Mergenix is a genetic offspring analysis platform that compares two parents' DNA
 - **Genetics Engine:** TypeScript (runs in Web Workers, ~5,500 LOC)
 - **Monorepo:** pnpm workspaces + Turborepo
 - **Shared Types:** `@mergenix/shared-types` package
-- **Testing:** Vitest (1,614 web + 1,439 engine) + pytest (672 backend) = 3,725+ total
+- **Testing:** Vitest (3,090 web+engine, 104 suites) + pytest (683 backend) = 3,773+ total
 - **Linting:** ESLint + ruff
 - **CI/CD:** GitHub Actions
 
@@ -308,10 +308,50 @@ FullAnalysisResult → postMessage → Zustand store
 
 ---
 
-## Project History (Recent PRs)
+## Design Overhaul (Sprints D1-D4 — COMPLETE)
+
+Completed 2026-03-03. Elevated Mergenix from B-grade to A+ visual design.
+
+| Sprint | PR   | Description                                                                              | Status     |
+| ------ | ---- | ---------------------------------------------------------------------------------------- | ---------- |
+| D1     | #117 | Foundation — fluid typography, scroll animations, GlassCard variants, color narrative     | **Merged** |
+| D2     | #118 | Homepage — 3D DNA helix (Three.js/R3F), bento grid, scroll timeline, social proof        | **Merged** |
+| D3     | #119 | Sample Report — trait bars, PRS gauges, risk cards, Punnett square, sticky sidebar        | **Merged** |
+| D4     | #120 | Secondary Pages — pricing card, comparison table, about page, View Transitions, mobile   | **Merged** |
+
+**Post-overhaul polish:** PRs #121-#128 (tech debt, design review BLOCKs/WARNs, motion v12, zod removal, test mock dedup)
+
+### Recent Work (2026-03-04 → 2026-03-08)
+
+| PR   | Title                                                         | Status     |
+| ---- | ------------------------------------------------------------- | ---------- |
+| #167 | Light theme polish — visual artifacts, bento card, Most Popular → Pro | **Merged** |
+| #166 | Hero redesign — centered layout with 3D DNA helix background  | **Merged** |
+| #165 | Security deps — resolve all 4 deferred CVEs                   | **Merged** |
+| #151 | CI failures fix — all 8 jobs green                            | **Merged** |
+| #150 | Test mock dedup — shared helpers, -560 lines                  | **Merged** |
+| #149 | TW4 cascade layer fix + landing redesign                      | **Merged** |
+| #148 | Batch dependency updates round 2                              | **Merged** |
+| #147 | Tailwind CSS 3.4 → 4.2 migration                             | **Merged** |
+| #146 | Batch safe dependency updates                                 | **Merged** |
+
+---
+
+## Project History (Earlier PRs)
 
 | PR   | Title                                                                                                | Status     |
 | ---- | ---------------------------------------------------------------------------------------------------- | ---------- |
+| #128 | Tech debt round 2 — test mock dedup, typed props, coverage                                           | **Merged** |
+| #127 | Remove unused zod dependency                                                                         | **Merged** |
+| #126 | Migrate framer-motion v11 → motion v12                                                               | **Merged** |
+| #125 | Resolve 3 INFO tech debt items                                                                       | **Merged** |
+| #124 | Deduplicate test mocks into shared __helpers__/ module                                               | **Merged** |
+| #123 | Resolve 25 design review WARNs — a11y, touch targets, tokens                                        | **Merged** |
+| #122 | Resolve 4 design review BLOCKs (a11y + contrast)                                                    | **Merged** |
+| #121 | Tech debt cleanup — mock dedup, marketing tests & polish, type fixes                                 | **Merged** |
+| #116 | Website audit — SEO, metadata, env config, saveResult field                                          | **Merged** |
+| #115 | Decompose analysis-content.tsx into 4 sub-components                                                 | **Merged** |
+| #114 | Launch readiness — 15 pre-alpha items across 3 sprints                                               | **Merged** |
 | #113 | Full-App Review Fixes: 16 findings across 10 domains (TOTP encryption, CSRF, motion→m, PRS ancestry) | **Merged** |
 | #112 | PMID 15888295 Audit: 5 parasitology citations fixed                                                  | **Merged** |
 | #111 | Trait Expansion Tier 4: 476 traits (64 new, completing catalog)                                      | **Merged** |
