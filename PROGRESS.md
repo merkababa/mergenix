@@ -19,15 +19,19 @@
 **D4.5 Logo:** PR #168 — **CLOSED**. User didn't like the design. Deferred.
 **12 Dependabot PRs:** All closed (stale branches). Replaced by batch PR #169.
 
+### Repo Migration (DONE — 2026-03-08)
+
+Migrated from `maayango285/Tortit` to `merkababa/mergenix`. All code, history, secrets, Vercel, and Railway now on new repo.
+
 ### Deployment Status (IN PROGRESS — 2026-03-08)
 
-First deploy attempt. Backend (Railway) deployed successfully. Frontend (Vercel) and DB migrations have issues:
+Pre-existing deploy issues (carried over from old repo):
 
 1. **Vercel build fails:** `Error: spawn sh ENOENT` — Vercel build command can't find `sh`. Likely needs `apps/web/vercel.json` build command adjustment or Vercel project framework settings.
-2. **Alembic migrations fail:** `ModuleNotFoundError: No module named 'app'` — CI runs `alembic upgrade head` from repo root, needs to be scoped to `apps/api/` with correct PYTHONPATH.
-3. **API health check fails:** Railway deployed but API not responding. May need env vars configured in Railway dashboard (DATABASE_URL, JWT_SECRET, etc.).
+2. **Alembic migrations fail:** Multiple head revisions — needs migration merge.
+3. **API health check fails:** Railway crashes on startup due to Alembic error above.
 
-**GitHub Secrets:** All 9 configured (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, RAILWAY_TOKEN, DATABASE_URL, DATA_ENCRYPTION_KEY, JWT_SECRET, RESEND_API_KEY, SITE_BYPASS_SECRET).
+**GitHub Secrets:** All 11 configured on `merkababa/mergenix` (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, RAILWAY_TOKEN, DATABASE_URL, DATA_ENCRYPTION_KEY, JWT_SECRET, RESEND_API_KEY, SITE_BYPASS_SECRET, API_URL, FRONTEND_URL).
 
 **Next steps:** Fix the 3 deploy blockers above, then verify frontend + backend are live.
 
