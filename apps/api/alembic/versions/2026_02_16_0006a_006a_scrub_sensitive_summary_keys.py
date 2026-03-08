@@ -1,7 +1,7 @@
 """scrub health-sensitive keys from summary_json (DI-13)
 
-Revision ID: 006
-Revises: 005
+Revision ID: 006a
+Revises: 006
 Create Date: 2026-02-16
 
 Removes ``high_risk_count`` and ``health_risk_count`` from all existing
@@ -22,8 +22,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "006"
-down_revision: str = "005"
+revision: str = "006a"
+down_revision: str = "006"
 branch_labels: tuple[str, ...] | None = None
 depends_on: str | None = None
 
