@@ -5,8 +5,17 @@ This file is executed by ``alembic`` commands (upgrade, downgrade,
 revision, etc.).  It imports all ORM models so that autogenerate
 can detect schema changes.
 """
+# ruff: noqa: E402 — sys.path setup must precede app imports
 
 from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+# Ensure the api directory is on sys.path so 'app' module can be imported
+_api_dir = str(Path(__file__).resolve().parent.parent)
+if _api_dir not in sys.path:
+    sys.path.insert(0, _api_dir)
 
 import asyncio
 from logging.config import fileConfig

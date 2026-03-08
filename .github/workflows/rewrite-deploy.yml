@@ -177,6 +177,7 @@ jobs:
         working-directory: apps/api
         run: alembic upgrade head
         env:
+          PYTHONPATH: ${{ github.workspace }}/apps/api
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   # ─────────────────────────────────────────────

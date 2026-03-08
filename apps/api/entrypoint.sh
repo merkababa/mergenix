@@ -44,7 +44,7 @@ fi
 
 # ── Run database migrations ────────────────────────────────────────────────
 echo "[entrypoint] Running Alembic migrations..."
-if ! alembic upgrade head; then
+if ! PYTHONPATH=/app alembic upgrade head; then
     echo "[entrypoint] ERROR: Alembic migration failed. Exiting."
     exit 1
 fi
