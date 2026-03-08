@@ -22,17 +22,17 @@ const COLOR_SECONDARY = new Color('#94A3B8');
 /** Rung color: light slate — subtle connectors */
 const COLOR_RUNG = new Color('#CBD5E1');
 
-/** Sphere geometry args: [radius, widthSegments, heightSegments] — reduced for subtlety */
-const SPHERE_ARGS: [number, number, number] = [0.1, 8, 8];
+/** Sphere geometry args: [radius, widthSegments, heightSegments] — larger for background visibility */
+const SPHERE_ARGS: [number, number, number] = [0.18, 16, 16];
 
 /** Rung cylinder args: [radiusTop, radiusBottom, height, radialSegments] */
 const CYLINDER_ARGS: [number, number, number, number] = [0.04, 0.04, 1, 6];
 
 /** Helix radius (distance from central axis to nucleotide) */
-const HELIX_RADIUS = 1.2;
+const HELIX_RADIUS = 2.0;
 
 /** Vertical spacing between nucleotide pairs */
-const PAIR_SPACING = 0.55;
+const PAIR_SPACING = 0.5;
 
 /** Full helix twist angle per pair (in radians) */
 const TWIST_PER_PAIR = (2 * Math.PI) / 10;
@@ -42,7 +42,7 @@ const TWIST_PER_PAIR = (2 * Math.PI) / 10;
 export interface DnaHelix3DProps {
   /** Optional Tailwind / CSS class for sizing the container */
   className?: string;
-  /** Number of nucleotide pairs per strand. Default: 10 */
+  /** Number of nucleotide pairs per strand. Default: 20 */
   dotCount?: number;
   /** Y-axis rotation speed in radians per frame. Default: 0.001 */
   rotationSpeed?: number;
@@ -220,7 +220,7 @@ const HelixScene = React.memo(function HelixScene({
  */
 export const DnaHelix3D = React.memo(function DnaHelix3D({
   className,
-  dotCount = 10,
+  dotCount = 20,
   rotationSpeed = 0.001,
   interactive = true,
 }: DnaHelix3DProps) {
@@ -261,7 +261,7 @@ export const DnaHelix3D = React.memo(function DnaHelix3D({
       <Canvas
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true }}
-        camera={{ position: [0, 0, 6], fov: 50 }}
+        camera={{ position: [0, 0, 10], fov: 50 }}
         frameloop={isReduced ? 'demand' : 'always'}
       >
         <HelixScene

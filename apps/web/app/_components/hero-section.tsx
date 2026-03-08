@@ -42,8 +42,9 @@ function formatNumber(n: number): string {
 // ---------------------------------------------------------------------------
 
 /**
- * Homepage hero: professional medical SaaS layout — headline text on left with
- * small DNA helix accent on right (desktop). Stacked on mobile.
+ * Homepage hero: centered layout with immersive 3D DNA helix background.
+ * Everything is centered — headline, subtitle, stats, CTAs, and trust badges.
+ * The 3D helix fills the background with glow orbs for atmosphere.
  */
 export function HeroSection() {
   return (
@@ -51,110 +52,118 @@ export function HeroSection() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: 'easeOut' as const }}
-      className="relative overflow-hidden px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-20"
+      className="relative flex min-h-[90vh] items-center justify-center overflow-hidden"
       aria-label="Hero"
     >
-      <div className="relative mx-auto max-w-6xl">
-        {/* Hero row: headline left, helix accent right */}
-        <div className="relative z-10 flex flex-col items-center gap-8 text-center md:flex-row md:items-center md:text-left">
-          {/* Text content block */}
-          <div className="flex flex-1 flex-col items-center md:items-start">
-            {/* Headline */}
-            <m.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
-              className="text-(--text-heading) font-heading max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl xl:text-7xl"
-            >
-              Explore Your Genetic Possibilities
-            </m.h1>
+      {/* Background layer: 3D Helix + glow orbs */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.35]"
+        style={{ filter: 'blur(2px)' }}
+        aria-hidden="true"
+      >
+        {/* Teal glow orb — top-left area */}
+        <div
+          className="absolute -left-32 -top-32 h-[600px] w-[600px] bg-[radial-gradient(circle,rgba(6,214,160,0.15)_0%,transparent_70%)]"
+        />
+        {/* Violet glow orb — bottom-right area */}
+        <div
+          className="absolute -bottom-24 -right-24 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(139,92,246,0.10)_0%,transparent_70%)]"
+        />
+        {/* 3D DNA Helix — fills entire background */}
+        <DnaHelix3DDynamic className="h-full w-full" />
+      </div>
 
-            <m.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' as const }}
-              className="text-(--text-muted) mt-6 max-w-xl text-center text-lg md:text-left md:text-xl"
-            >
-              Compare two parents&apos; DNA to predict offspring disease risk, traits, and drug
-              responses.{' '}
-              <span className="text-(--accent-teal) font-medium">
-                Your DNA never leaves your device.
-              </span>
-            </m.p>
+      {/* Content layer: centered text */}
+      <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
+        {/* Headline */}
+        <m.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
+          className="text-(--text-heading) font-heading mx-auto max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl xl:text-7xl"
+        >
+          Explore Your Genetic Possibilities
+        </m.h1>
 
-            {/* Animated stats */}
-            <m.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' as const }}
-              className="mt-6 flex items-center justify-center gap-8"
-              role="group"
-              aria-label="Key statistics"
-            >
-              <div className="text-center">
-                <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
-                  {formatNumber(CARRIER_PANEL_COUNT)}
-                </span>
-                <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
-                  Diseases Screened
-                </p>
-              </div>
-              <div className="bg-(--border-subtle) h-10 w-px" aria-hidden="true" />
-              <div className="text-center">
-                <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
-                  {formatNumber(TRAIT_COUNT)}
-                </span>
-                <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
-                  Traits Predicted
-                </p>
-              </div>
-            </m.div>
+        <m.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' as const }}
+          className="text-(--text-muted) mx-auto mt-6 max-w-2xl text-lg md:text-xl"
+        >
+          Compare two parents&apos; DNA to predict offspring disease risk, traits, and drug
+          responses.{' '}
+          <span className="text-(--accent-teal) font-medium">
+            Your DNA never leaves your device.
+          </span>
+        </m.p>
 
-            {/* CTA buttons */}
-            <m.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' as const }}
-              className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
-            >
-              <Link
-                href="/analysis"
-                className={cn(buttonVariants({ variant: 'primary', size: 'xl' }))}
-              >
-                Start Free Analysis
-                <ChevronRight className="h-5 w-5" aria-hidden="true" />
-              </Link>
-              <Link
-                href="/diseases"
-                className={cn(buttonVariants({ variant: 'secondary', size: 'xl' }))}
-              >
-                Browse {CARRIER_PANEL_COUNT_DISPLAY} Diseases
-              </Link>
-            </m.div>
-
-            {/* Trust badges */}
-            <m.ul
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.75, ease: 'easeOut' as const }}
-              className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start"
-              role="list"
-              aria-label="Trust indicators"
-            >
-              {TRUST_BADGES.map(({ icon: Icon, label }) => (
-                <li key={label} className={TRUST_BADGE_CLASS}>
-                  <Icon className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
-                  <span className="text-(--text-muted) text-xs">{label}</span>
-                </li>
-              ))}
-            </m.ul>
+        {/* Animated stats */}
+        <m.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' as const }}
+          className="mt-6 flex items-center justify-center gap-8"
+          role="group"
+          aria-label="Key statistics"
+        >
+          <div className="text-center">
+            <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
+              {formatNumber(CARRIER_PANEL_COUNT)}
+            </span>
+            <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
+              Diseases Screened
+            </p>
           </div>
-
-          {/* DNA Helix — side accent on desktop, hidden on mobile */}
-          <div className="hidden h-[120px] w-[120px] shrink-0 md:block" aria-hidden="true">
-            <DnaHelix3DDynamic className="h-full w-full" />
+          <div className="bg-(--border-subtle) h-10 w-px" aria-hidden="true" />
+          <div className="text-center">
+            <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
+              {formatNumber(TRAIT_COUNT)}
+            </span>
+            <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
+              Traits Predicted
+            </p>
           </div>
-        </div>
+        </m.div>
+
+        {/* CTA buttons */}
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' as const }}
+          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+        >
+          <Link
+            href="/analysis"
+            className={cn(buttonVariants({ variant: 'primary', size: 'xl' }))}
+          >
+            Start Free Analysis
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/diseases"
+            className={cn(buttonVariants({ variant: 'secondary', size: 'xl' }))}
+          >
+            Browse {CARRIER_PANEL_COUNT_DISPLAY} Diseases
+          </Link>
+        </m.div>
+
+        {/* Trust badges */}
+        <m.ul
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.75, ease: 'easeOut' as const }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-3"
+          role="list"
+          aria-label="Trust indicators"
+        >
+          {TRUST_BADGES.map(({ icon: Icon, label }) => (
+            <li key={label} className={TRUST_BADGE_CLASS}>
+              <Icon className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
+              <span className="text-(--text-muted) text-xs">{label}</span>
+            </li>
+          ))}
+        </m.ul>
       </div>
     </m.section>
   );
