@@ -12,9 +12,33 @@
 **Post-overhaul polish:** PRs #121-#128 merged — tech debt cleanup, design review fixes (4 BLOCKs + 25 WARNs), test mock dedup, framer-motion→motion v12, zod removal.
 **Hero Redesign:** PR #166 — **MERGED** (2026-03-08). Centered layout with 3D DNA helix background.
 **Light Theme Polish:** PR #167 — **MERGED** (2026-03-08). Visual artifact fixes, bento card enhancement, Most Popular moved to Pro.
-**Security Deps:** PR #165 — **MERGED** (2026-03-08). All 4 deferred CVEs resolved (python-jose→PyJWT, cryptography 46, starlette 0.46.2).
-**CI Green:** PR #151 — **MERGED**. All 8 CI jobs passing.
-**Remaining:** D4.5 custom SVG logo mark (in progress), then alpha launch infrastructure.
+**Security Deps:** PR #165 — **MERGED** (2026-03-08). All 4 deferred CVEs resolved.
+**Batch Deps R3:** PR #169 — **MERGED** (2026-03-08). 6 safe dep updates (motion, react-virtuoso, @types/pdfmake, @eslint/js, eslint, prettier-plugin-tailwindcss).
+**CI Fixes:** PR #170 — **MERGED** (2026-03-08). Prettier formatting (113 files) + coming-soon test fixes (ResizeObserver mock). All 8 CI jobs green.
+**Deploy Pipeline Fixes:** PRs #171-#174 — **MERGED** (2026-03-08). Vercel CLI token flag, Playwright path, E2E non-blocking, manual dispatch force-deploy.
+**D4.5 Logo:** PR #168 — **CLOSED**. User didn't like the design. Deferred.
+**12 Dependabot PRs:** All closed (stale branches). Replaced by batch PR #169.
+
+### Deployment Status (IN PROGRESS — 2026-03-08)
+
+First deploy attempt. Backend (Railway) deployed successfully. Frontend (Vercel) and DB migrations have issues:
+
+1. **Vercel build fails:** `Error: spawn sh ENOENT` — Vercel build command can't find `sh`. Likely needs `apps/web/vercel.json` build command adjustment or Vercel project framework settings.
+2. **Alembic migrations fail:** `ModuleNotFoundError: No module named 'app'` — CI runs `alembic upgrade head` from repo root, needs to be scoped to `apps/api/` with correct PYTHONPATH.
+3. **API health check fails:** Railway deployed but API not responding. May need env vars configured in Railway dashboard (DATABASE_URL, JWT_SECRET, etc.).
+
+**GitHub Secrets:** All 9 configured (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID, RAILWAY_TOKEN, DATABASE_URL, DATA_ENCRYPTION_KEY, JWT_SECRET, RESEND_API_KEY, SITE_BYPASS_SECRET).
+
+**Next steps:** Fix the 3 deploy blockers above, then verify frontend + backend are live.
+
+### Remaining Work
+
+- [ ] Fix Vercel build (`spawn sh ENOENT`)
+- [ ] Fix Alembic migration path in deploy workflow
+- [ ] Verify Railway API health (env vars, DATABASE_URL)
+- [ ] D4.5 custom SVG logo (deferred — user wants different design)
+- [ ] Major dep upgrades (eslint 10, vitest 4, stripe 14, uvicorn 0.41) — deferred, low priority
+- [ ] Alpha launch checklist (DNS, legal sign-offs, go-live)
 
 ## Current Sprint
 
@@ -80,6 +104,10 @@
 | Batch dependency updates (round 2)                                 | Claude     | **Merged**          | chore/deps-batch-2                         | PR #148 — Batch dependency updates round 2 (March 2026).                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Hero redesign — centered layout                                    | Claude     | **Merged**          | feature/coming-soon-helix-redesign         | PR #166 — Centered layout with 3D DNA helix background.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Light theme polish                                                 | Claude     | **Merged**          | fix/light-theme-polish                     | PR #167 — Visual artifact fixes, bento card enhancement, Most Popular → Pro tier.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| D4.5 Custom SVG logo                                               | Claude     | **Closed**          | feature/d4.5-custom-svg-logo               | PR #168 — Custom SVG logo mark. User didn't like the design. Deferred.                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Batch dependency updates R3                                        | Claude     | **Merged**          | chore/deps-batch-march-r3                  | PR #169 — 6 safe dep updates (motion, react-virtuoso, @types/pdfmake, @eslint/js, eslint, prettier-plugin-tailwindcss).                                                                                                                                                                                                                                                                                                                                                                                                        |
+| CI fixes (Prettier + tests)                                        | Claude     | **Merged**          | fix/ci-prettier-tests                      | PR #170 — Prettier 113 files + coming-soon ResizeObserver mock. All 8 CI jobs green.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Deploy workflow fixes                                              | Claude     | **Merged**          | fix/deploy-workflow                        | PRs #171-#174 — Vercel token, Playwright path, E2E non-blocking, manual dispatch force-deploy.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ---
 
