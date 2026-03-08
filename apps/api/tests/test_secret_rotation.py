@@ -16,6 +16,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
+import jwt
 import pytest
 from app.config import Settings
 from app.services.auth_service import (
@@ -24,7 +25,7 @@ from app.services.auth_service import (
     decode_token,
     get_jwt_secrets,
 )
-from jose import jwt
+from jwt.exceptions import InvalidTokenError as JWTError
 
 # ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -183,7 +184,6 @@ class TestUnknownKeyRejection:
     def test_token_with_unknown_kid_is_rejected(self) -> None:
         """A token whose kid matches neither current nor previous should
         raise JWTError."""
-        from jose import JWTError
 
         unknown_secret = "completely-unknown-secret"
         user_id = uuid.uuid4()
@@ -214,7 +214,6 @@ class TestUnknownKeyRejection:
     def test_token_with_wrong_signature_is_rejected(self) -> None:
         """A token signed with an incorrect secret (even if kid matches)
         should be rejected."""
-        from jose import JWTError
 
         user_id = uuid.uuid4()
         now = datetime.now(UTC)
@@ -245,7 +244,6 @@ class TestUnknownKeyRejection:
     def test_token_with_no_previous_configured_and_unknown_kid_is_rejected(self) -> None:
         """When no previous key is configured, a token with an unknown kid
         should be rejected."""
-        from jose import JWTError
 
         user_id = uuid.uuid4()
         now = datetime.now(UTC)
@@ -409,7 +407,6 @@ class TestBackwardCompatibility:
     def test_legacy_token_without_kid_rejected_if_no_secret_matches(self) -> None:
         """If a legacy token (no kid) fails with both current and previous
         secrets, it should be rejected."""
-        from jose import JWTError
 
         user_id = uuid.uuid4()
         now = datetime.now(UTC)
@@ -493,7 +490,6 @@ class TestExpiredJWTRejection:
 
     def test_expired_token_raises_jwt_error(self) -> None:
         """A token with exp in the past should raise JWTError on decode."""
-        from jose import JWTError
 
         secret = "current-secret-key-for-testing"
         user_id = uuid.uuid4()

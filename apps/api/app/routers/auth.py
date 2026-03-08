@@ -18,7 +18,7 @@ from urllib.parse import urlencode
 
 import httpx as _httpx
 from fastapi import APIRouter, HTTPException, Request, Response, status
-from jose import JWTError
+from jwt.exceptions import InvalidTokenError as JWTError
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
