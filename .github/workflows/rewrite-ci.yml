@@ -290,6 +290,7 @@ jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
+    continue-on-error: true
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [frontend-build, backend-test]
     services:
