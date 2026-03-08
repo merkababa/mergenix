@@ -125,7 +125,7 @@ export function OverviewTab() {
               {stat.icon && <stat.icon className="h-4 w-4" aria-hidden="true" />}
               {stat.value}
             </p>
-            <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-widest">
+            <p className="mt-1 text-xs font-medium tracking-widest text-(--text-muted) uppercase">
               {stat.label}
             </p>
           </GlassCard>
@@ -144,31 +144,31 @@ export function OverviewTab() {
 
       {/* Metadata */}
       <GlassCard variant="subtle" hover="none" className="p-4">
-        <div className="text-(--text-muted) grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-(--text-muted) sm:grid-cols-3">
           <div>
-            <span className="text-(--text-body) font-semibold">Engine: </span>
+            <span className="font-semibold text-(--text-body)">Engine: </span>
             {metadata.engineVersion}
           </div>
           <div>
-            <span className="text-(--text-body) font-semibold">Analyzed: </span>
+            <span className="font-semibold text-(--text-body)">Analyzed: </span>
             {new Date(metadata.analysisTimestamp).toLocaleString()}
           </div>
           <div>
-            <span className="text-(--text-body) font-semibold">Tier: </span>
+            <span className="font-semibold text-(--text-body)">Tier: </span>
             <span className="capitalize">{metadata.tier}</span>
           </div>
           <div>
-            <span className="text-(--text-body) font-semibold">Parent A: </span>
+            <span className="font-semibold text-(--text-body)">Parent A: </span>
             {metadata.parent1Format.toUpperCase()} ({metadata.parent1SnpCount.toLocaleString()}{' '}
             SNPs)
           </div>
           <div>
-            <span className="text-(--text-body) font-semibold">Parent B: </span>
+            <span className="font-semibold text-(--text-body)">Parent B: </span>
             {metadata.parent2Format.toUpperCase()} ({metadata.parent2SnpCount.toLocaleString()}{' '}
             SNPs)
           </div>
           <div>
-            <span className="text-(--text-body) font-semibold">PRS Conditions: </span>
+            <span className="font-semibold text-(--text-body)">PRS Conditions: </span>
             {prs.conditionsAvailable}/{prs.conditionsTotal}
           </div>
         </div>

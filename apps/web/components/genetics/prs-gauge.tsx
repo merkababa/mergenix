@@ -160,13 +160,13 @@ export const PrsGauge = memo(function PrsGauge({
           </m.g>
 
           {/* Scale labels */}
-          <text x="16" y="115" className="fill-(--text-dim) font-body text-[9px]">
+          <text x="16" y="115" className="font-body fill-(--text-dim) text-[9px]">
             Low
           </text>
-          <text x="85" y="22" className="fill-(--text-dim) font-body text-[9px]">
+          <text x="85" y="22" className="font-body fill-(--text-dim) text-[9px]">
             Avg
           </text>
-          <text x="170" y="115" className="fill-(--text-dim) font-body text-[9px]">
+          <text x="170" y="115" className="font-body fill-(--text-dim) text-[9px]">
             High
           </text>
         </svg>
@@ -182,13 +182,13 @@ export const PrsGauge = memo(function PrsGauge({
             <span className="font-heading text-2xl font-extrabold" style={{ color }}>
               {Math.round(clamped)}
             </span>
-            <span className="text-(--text-dim) ml-0.5 text-xs">th</span>
+            <span className="ml-0.5 text-xs text-(--text-dim)">th</span>
           </m.div>
         </div>
       </div>
 
       {/* Condition label */}
-      <p className="font-heading text-(--text-heading) mt-2 text-sm font-semibold">{condition}</p>
+      <p className="font-heading mt-2 text-sm font-semibold text-(--text-heading)">{condition}</p>
       {/* Risk level with text label and high-contrast pattern marker */}
       <p className={cn('text-xs font-medium', patternClass)} style={{ color }}>
         {label} Risk

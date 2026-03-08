@@ -34,7 +34,7 @@ export function TierUpgradePrompt({
       </div>
 
       <div className="flex-1">
-        <p className="text-(--text-body) text-sm">{message}</p>
+        <p className="text-sm text-(--text-body)">{message}</p>
       </div>
 
       <Link

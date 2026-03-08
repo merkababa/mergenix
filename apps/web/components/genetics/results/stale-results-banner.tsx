@@ -41,9 +41,9 @@ export function StaleResultsBanner({ dataVersion }: StaleResultsBannerProps) {
       role="alert"
       className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4"
     >
-      <AlertTriangle className="text-(--accent-amber) mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+      <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-amber)" aria-hidden="true" />
       <div className="flex-1">
-        <p className="text-(--text-body) text-sm font-medium leading-relaxed">
+        <p className="text-sm leading-relaxed font-medium text-(--text-body)">
           Results may not reflect the latest genetic data.{' '}
           {dataVersion ? (
             <>
@@ -62,7 +62,7 @@ export function StaleResultsBanner({ dataVersion }: StaleResultsBannerProps) {
       <button
         type="button"
         onClick={() => setDismissed(true)}
-        className="text-(--text-muted) hover:text-(--accent-amber) flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg p-1 transition-colors hover:bg-[rgba(245,158,11,0.1)]"
+        className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg p-1 text-(--text-muted) transition-colors hover:bg-[rgba(245,158,11,0.1)] hover:text-(--accent-amber)"
         aria-label="Dismiss stale results warning"
       >
         <X className="h-4 w-4" aria-hidden="true" />

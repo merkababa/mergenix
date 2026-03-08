@@ -46,7 +46,7 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
       {/* Strength bar */}
       <div className="space-y-1.5">
         <div
-          className="bg-(--bg-elevated) h-1.5 w-full overflow-hidden rounded-full"
+          className="h-1.5 w-full overflow-hidden rounded-full bg-(--bg-elevated)"
           role="meter"
           aria-valuenow={STRENGTH_VALUES[strength.level]}
           aria-valuemin={0}
@@ -78,9 +78,9 @@ export function PasswordStrengthDisplay({ password }: PasswordStrengthDisplayPro
               role="listitem"
             >
               {met ? (
-                <Check className="text-(--accent-teal) h-3.5 w-3.5" aria-hidden="true" />
+                <Check className="h-3.5 w-3.5 text-(--accent-teal)" aria-hidden="true" />
               ) : (
-                <X className="text-(--text-dim) h-3.5 w-3.5" aria-hidden="true" />
+                <X className="h-3.5 w-3.5 text-(--text-dim)" aria-hidden="true" />
               )}
               <span className={met ? 'text-(--accent-teal)' : 'text-(--text-dim)'}>{req.text}</span>
             </m.div>

@@ -193,15 +193,15 @@ export function PricingCard({
       >
         {/* Gradient top bar */}
         <div
-          className={cn('rounded-t-glass absolute left-0 right-0 top-0 h-[2px]', barGradient)}
+          className={cn('rounded-t-glass absolute top-0 right-0 left-0 h-[2px]', barGradient)}
           aria-hidden="true"
         />
 
         {/* Tier name + popular badge */}
         <div className="mb-2 flex items-center gap-3">
-          <h3 className="font-heading text-(--text-heading) text-lg font-bold">{tier}</h3>
+          <h3 className="font-heading text-lg font-bold text-(--text-heading)">{tier}</h3>
           {popular && (
-            <Badge variant="pro" className="card-badge whitespace-nowrap px-3 py-0.5">
+            <Badge variant="pro" className="card-badge px-3 py-0.5 whitespace-nowrap">
               <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
               Most Popular
             </Badge>
@@ -210,17 +210,17 @@ export function PricingCard({
 
         {/* Price */}
         <div className="mb-1 flex items-baseline gap-1">
-          <span className="font-heading text-(--text-heading) text-4xl font-extrabold">
+          <span className="font-heading text-4xl font-extrabold text-(--text-heading)">
             {price}
           </span>
-          <span className="text-(--text-muted) text-sm">{priceNote}</span>
+          <span className="text-sm text-(--text-muted)">{priceNote}</span>
         </div>
 
         {/* Description */}
-        <p className="text-(--text-body) mb-6 text-sm">{description}</p>
+        <p className="mb-6 text-sm text-(--text-body)">{description}</p>
 
         {/* Divider */}
-        <hr className="border-(--border-subtle) mb-6" />
+        <hr className="mb-6 border-(--border-subtle)" />
 
         {/* Feature list — stagger triggered by parent card variant propagation */}
         <m.ul
@@ -232,7 +232,7 @@ export function PricingCard({
             <m.li
               key={feature}
               variants={FEATURE_ITEM_VARIANTS}
-              className="text-(--text-body) flex items-start gap-2.5 text-sm"
+              className="flex items-start gap-2.5 text-sm text-(--text-body)"
             >
               {getFeatureIcon(feature)}
               <span>{feature}</span>

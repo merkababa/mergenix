@@ -45,25 +45,25 @@ export const LimitationsSection = memo(function LimitationsSection({
   return (
     <details
       data-testid={context ? `limitations-${context}` : 'limitations-section'}
-      className="border-(--border-subtle) bg-(--bg-elevated) group rounded-xl border"
+      className="group rounded-xl border border-(--border-subtle) bg-(--bg-elevated)"
     >
-      <summary className="text-(--text-heading) hover:text-(--accent-teal) flex min-h-[44px] cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold transition-colors">
+      <summary className="flex min-h-[44px] cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold text-(--text-heading) transition-colors hover:text-(--accent-teal)">
         {heading}
         <span
-          className="text-(--text-muted) ml-2 transition-transform group-open:rotate-180"
+          className="ml-2 text-(--text-muted) transition-transform group-open:rotate-180"
           aria-hidden="true"
         >
           &#9662;
         </span>
       </summary>
-      <div className="border-(--border-subtle) border-t px-4 py-3">
+      <div className="border-t border-(--border-subtle) px-4 py-3">
         <ul className="space-y-2">
           {items.map((item, index) => (
             <li
               key={index}
-              className="text-(--text-muted) flex items-start gap-2 text-xs leading-relaxed"
+              className="flex items-start gap-2 text-xs leading-relaxed text-(--text-muted)"
             >
-              <span className="text-(--accent-amber) mt-0.5 shrink-0" aria-hidden="true">
+              <span className="mt-0.5 shrink-0 text-(--accent-amber)" aria-hidden="true">
                 &bull;
               </span>
               {item}

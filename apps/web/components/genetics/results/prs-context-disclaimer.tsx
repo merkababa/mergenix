@@ -31,9 +31,9 @@ export const PrsContextDisclaimer = memo(function PrsContextDisclaimer({
         aria-hidden="true"
       />
       <div className="space-y-1.5">
-        <p className="text-(--text-body) text-xs leading-relaxed">{PRS_CONTEXT_DISCLAIMER}</p>
+        <p className="text-xs leading-relaxed text-(--text-body)">{PRS_CONTEXT_DISCLAIMER}</p>
         {isOffspring && (
-          <p className="text-(--text-muted) text-xs leading-relaxed">{PRS_OFFSPRING_DISCLAIMER}</p>
+          <p className="text-xs leading-relaxed text-(--text-muted)">{PRS_OFFSPRING_DISCLAIMER}</p>
         )}
       </div>
     </div>

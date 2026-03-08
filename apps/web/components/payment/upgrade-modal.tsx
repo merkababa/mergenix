@@ -208,7 +208,7 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
 
   return (
     <div
-      className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs"
       onClick={handleBackdropClick}
       role="presentation"
     >
@@ -219,7 +219,7 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
         aria-labelledby={headingId}
         aria-describedby={descriptionId}
         tabIndex={-1}
-        className="outline-hidden relative mx-4 w-full max-w-md"
+        className="relative mx-4 w-full max-w-md outline-hidden"
       >
         <GlassCard variant="strong" hover="none" className="p-6">
           {/* ── Close button ────────────────────────────────────────── */}
@@ -227,7 +227,7 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
             type="button"
             onClick={handleClose}
             disabled={isCheckoutLoading}
-            className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(148,163,184,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            className="absolute top-4 right-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal) disabled:pointer-events-none disabled:opacity-50"
             aria-label="Close modal"
           >
             <X className="h-4 w-4" />
@@ -235,38 +235,38 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
 
           {/* ── Header ──────────────────────────────────────────────── */}
           <div className="mb-6 flex items-center gap-3">
-            <div className="bg-linear-to-br flex h-10 w-10 items-center justify-center rounded-xl from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
-              <Sparkles className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-[rgba(139,92,246,0.2)] to-[rgba(6,214,160,0.2)]">
+              <Sparkles className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
             </div>
-            <h2 id={headingId} className="font-heading text-(--text-primary) text-xl font-bold">
+            <h2 id={headingId} className="font-heading text-xl font-bold text-(--text-primary)">
               Upgrade to {targetPlan.name}
             </h2>
           </div>
 
           {/* ── Description (for aria-describedby) ──────────────────── */}
-          <p id={descriptionId} className="text-(--text-muted) mb-5 text-sm">
+          <p id={descriptionId} className="mb-5 text-sm text-(--text-muted)">
             Unlock more features with a one-time upgrade to {targetPlan.name}.
           </p>
 
           {/* ── Plan comparison ──────────────────────────────────────── */}
-          <div className="border-(--glass-border) mb-5 flex items-center justify-center gap-4 rounded-2xl border bg-[rgba(148,163,184,0.04)] px-5 py-4">
+          <div className="mb-5 flex items-center justify-center gap-4 rounded-2xl border border-(--glass-border) bg-[rgba(148,163,184,0.04)] px-5 py-4">
             {/* Current plan */}
             <div className="flex flex-col items-center gap-1.5">
               <Badge variant={currentTier === 'free' ? 'free' : currentTier}>
                 {currentPlan.name}
               </Badge>
-              <span className="text-(--text-muted) text-xs">
+              <span className="text-xs text-(--text-muted)">
                 {currentPlan.price === 0 ? 'Free' : formatPrice(currentPlan.price)}
               </span>
             </div>
 
             {/* Arrow */}
-            <ArrowRight className="text-(--accent-teal) h-5 w-5 shrink-0" aria-hidden="true" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-(--accent-teal)" aria-hidden="true" />
 
             {/* Target plan */}
             <div className="flex flex-col items-center gap-1.5">
               <Badge variant={targetTier}>{targetPlan.name}</Badge>
-              <span className="text-(--text-primary) text-xs font-semibold">
+              <span className="text-xs font-semibold text-(--text-primary)">
                 {formatPrice(targetPlan.price)}
               </span>
             </div>
@@ -275,21 +275,21 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
           {/* ── New features list ────────────────────────────────────── */}
           {displayFeatures.length > 0 && (
             <div className="mb-5">
-              <h3 className="text-(--text-muted) mb-2.5 text-xs font-semibold uppercase tracking-wider">
+              <h3 className="mb-2.5 text-xs font-semibold tracking-wider text-(--text-muted) uppercase">
                 What you get
               </h3>
               <ul className="space-y-2">
                 {displayFeatures.map((feature) => (
-                  <li key={feature} className="text-(--text-body) flex items-start gap-2 text-sm">
+                  <li key={feature} className="flex items-start gap-2 text-sm text-(--text-body)">
                     <Check
-                      className="text-(--accent-teal) mt-0.5 h-4 w-4 shrink-0"
+                      className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-teal)"
                       aria-hidden="true"
                     />
                     <span>{feature}</span>
                   </li>
                 ))}
                 {hiddenFeaturesCount > 0 && (
-                  <li className="text-(--text-muted) pl-6 text-xs">
+                  <li className="pl-6 text-xs text-(--text-muted)">
                     +{hiddenFeaturesCount} more feature
                     {hiddenFeaturesCount !== 1 ? 's' : ''}
                   </li>
@@ -299,18 +299,18 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
           )}
 
           {/* ── Price display ────────────────────────────────────────── */}
-          <div className="border-(--glass-border) mb-5 rounded-xl border bg-[rgba(6,214,160,0.04)] px-4 py-3">
+          <div className="mb-5 rounded-xl border border-(--glass-border) bg-[rgba(6,214,160,0.04)] px-4 py-3">
             {isPayingDifference ? (
               <div className="flex items-baseline justify-between">
-                <span className="text-(--text-body) text-sm">Pay the difference</span>
-                <span className="font-heading text-(--accent-teal) text-lg font-bold">
+                <span className="text-sm text-(--text-body)">Pay the difference</span>
+                <span className="font-heading text-lg font-bold text-(--accent-teal)">
                   {formatPrice(upgradePrice)}
                 </span>
               </div>
             ) : (
               <div className="flex items-baseline justify-between">
-                <span className="text-(--text-body) text-sm">One-time payment</span>
-                <span className="font-heading text-(--accent-teal) text-lg font-bold">
+                <span className="text-sm text-(--text-body)">One-time payment</span>
+                <span className="font-heading text-lg font-bold text-(--accent-teal)">
                   {formatPrice(targetPlan.price)}
                 </span>
               </div>
@@ -358,7 +358,7 @@ export function UpgradeModal({ isOpen, onClose, targetTier, currentTier }: Upgra
           </div>
 
           {/* ── Disclaimer ───────────────────────────────────────────── */}
-          <p className="text-(--text-muted) mt-4 flex items-center justify-center gap-1.5 text-center text-xs">
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-(--text-muted)">
             <Shield className="h-3.5 w-3.5" aria-hidden="true" />
             You&apos;ll be redirected to Stripe&apos;s secure checkout
           </p>

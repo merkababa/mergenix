@@ -248,7 +248,7 @@ export function SaveResultDialog() {
   // Not authenticated — prompt to sign in
   if (!isAuthenticated) {
     return (
-      <div className="text-(--text-muted) flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-sm text-(--text-muted)">
         <Save className="h-4 w-4" aria-hidden="true" />
         <span>Sign in to save your analysis</span>
       </div>
@@ -264,14 +264,14 @@ export function SaveResultDialog() {
           Save Analysis
         </Button>
         {tierLimitText && (
-          <span className="text-(--text-muted) text-xs" aria-live="polite">
+          <span className="text-xs text-(--text-muted)" aria-live="polite">
             {tierLimitText}
           </span>
         )}
         {isAtLimit && userTier !== 'pro' && upgradeCTAText && (
           <a
             href="/subscription"
-            className="text-(--accent-teal) inline-flex items-center gap-1 text-xs font-medium hover:underline"
+            className="inline-flex items-center gap-1 text-xs font-medium text-(--accent-teal) hover:underline"
           >
             <Crown className="h-3 w-3" aria-hidden="true" />
             {upgradeCTAText}
@@ -283,7 +283,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {showConsent && (
           <div
-            className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
             onClick={handleConsentBackdropClick}
             role="presentation"
           >
@@ -304,24 +304,24 @@ export function SaveResultDialog() {
               >
                 <GlassCard variant="medium" hover="none" className="p-6">
                   <div className="mb-4 flex items-center gap-3">
-                    <AlertTriangle className="text-(--accent-amber) h-5 w-5" aria-hidden="true" />
+                    <AlertTriangle className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
                     <h2
                       id="consent-dialog-title"
-                      className="font-heading text-(--text-heading) text-lg font-bold"
+                      className="font-heading text-lg font-bold text-(--text-heading)"
                     >
                       Save Analysis
                     </h2>
                   </div>
 
-                  <p className="text-(--text-body) text-sm">
+                  <p className="text-sm text-(--text-body)">
                     Your analysis results will be encrypted and stored on our servers. Your raw
                     genetic files are never uploaded — only the processed results.
                   </p>
-                  <p className="text-(--text-muted) mt-2 text-sm">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     You can delete your saved analyses at any time from your account. See our{' '}
                     <Link
                       href="/legal#privacy"
-                      className="text-(--accent-teal) font-medium underline hover:no-underline"
+                      className="font-medium text-(--accent-teal) underline hover:no-underline"
                     >
                       Privacy Policy
                     </Link>{' '}
@@ -347,7 +347,7 @@ export function SaveResultDialog() {
       <AnimatePresence>
         {isOpen && (
           <div
-            className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
             onClick={handleSaveBackdropClick}
             role="presentation"
           >
@@ -370,14 +370,14 @@ export function SaveResultDialog() {
                   <div className="mb-4 flex items-center justify-between">
                     <h2
                       id="save-dialog-title"
-                      className="font-heading text-(--text-heading) text-lg font-bold"
+                      className="font-heading text-lg font-bold text-(--text-heading)"
                     >
                       Save Analysis
                     </h2>
                     <button
                       type="button"
                       onClick={handleClose}
-                      className="text-(--text-muted) hover:text-(--text-primary) rounded-lg p-1 transition-colors hover:bg-[rgba(6,214,160,0.06)]"
+                      className="rounded-lg p-1 text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary)"
                       aria-label="Close save dialog"
                     >
                       <X className="h-5 w-5" />
@@ -394,7 +394,7 @@ export function SaveResultDialog() {
                   />
 
                   {tierLimitText && (
-                    <p className="text-(--text-muted) mt-2 text-xs">{tierLimitText}</p>
+                    <p className="mt-2 text-xs text-(--text-muted)">{tierLimitText}</p>
                   )}
 
                   {/* Save error */}
@@ -405,7 +405,7 @@ export function SaveResultDialog() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="text-(--accent-rose) mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+                        className="mt-3 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                         role="alert"
                       >
                         {saveError}

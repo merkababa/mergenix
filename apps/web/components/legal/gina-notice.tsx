@@ -76,11 +76,11 @@ export function GinaNotice() {
     <div
       role="region"
       aria-labelledby={headerId}
-      className="mb-4 rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] [-webkit-backdrop-filter:blur(8px)] [backdrop-filter:blur(8px)]"
+      className="mb-4 rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.04)] [backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]"
     >
       {/* ── Collapsed header row ── */}
       <div className="flex items-center gap-3 px-4 py-3">
-        <ShieldCheck className="text-(--accent-teal) h-4 w-4 shrink-0" aria-hidden="true" />
+        <ShieldCheck className="h-4 w-4 shrink-0 text-(--accent-teal)" aria-hidden="true" />
 
         <h3 className="m-0 flex-1 text-sm font-medium" id={headerId}>
           <button
@@ -88,10 +88,10 @@ export function GinaNotice() {
             onClick={handleToggle}
             aria-expanded={expanded}
             aria-controls={panelId}
-            className="text-(--text-body) hover:text-(--text-heading) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) rounded-xs inline-flex min-h-[44px] w-full items-center gap-2 text-left transition-colors focus-visible:ring-2 focus-visible:ring-offset-1"
+            className="inline-flex min-h-[44px] w-full items-center gap-2 rounded-xs text-left text-(--text-body) transition-colors hover:text-(--text-heading) focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 focus-visible:outline-hidden"
           >
             <span>
-              <span className="text-(--text-heading) font-semibold">Important:</span> Know your
+              <span className="font-semibold text-(--text-heading)">Important:</span> Know your
               genetic privacy rights (GINA)
             </span>
             <m.span
@@ -100,7 +100,7 @@ export function GinaNotice() {
               className="shrink-0"
               aria-hidden="true"
             >
-              <ChevronDown className="text-(--text-muted) h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-(--text-muted)" />
             </m.span>
           </button>
         </h3>
@@ -109,7 +109,7 @@ export function GinaNotice() {
           type="button"
           onClick={handleDismiss}
           aria-label="Dismiss GINA notice"
-          className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md p-1 transition-colors hover:bg-[rgba(6,214,160,0.08)] focus-visible:ring-2 focus-visible:ring-offset-1"
+          className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md p-1 text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.08)] hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 focus-visible:outline-hidden"
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -126,11 +126,11 @@ export function GinaNotice() {
             exit="exit"
             className="overflow-hidden"
           >
-            <div className="border-t border-[rgba(6,214,160,0.15)] px-4 pb-4 pt-3">
-              <p className="text-(--text-body) text-sm leading-relaxed">{GINA_BODY_TEXT}</p>
+            <div className="border-t border-[rgba(6,214,160,0.15)] px-4 pt-3 pb-4">
+              <p className="text-sm leading-relaxed text-(--text-body)">{GINA_BODY_TEXT}</p>
               <Link
                 href="/legal#gina"
-                className="text-(--accent-teal) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) rounded-xs mt-3 inline-flex items-center gap-1 text-sm font-medium underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-offset-1"
+                className="mt-3 inline-flex items-center gap-1 rounded-xs text-sm font-medium text-(--accent-teal) underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 focus-visible:outline-hidden"
               >
                 Read the full GINA notice
                 <span aria-hidden="true"> →</span>

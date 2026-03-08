@@ -197,13 +197,13 @@ export function CarrierTab() {
 
         {/* Header and Toggle */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="font-heading text-(--text-heading) text-xl font-bold">
+          <h3 className="font-heading text-xl font-bold text-(--text-heading)">
             {isResearchMode ? 'Raw Genotype Browser' : 'Carrier Screening Results'}
           </h3>
           <div
             role="radiogroup"
             aria-label="View mode"
-            className="border-(--border-subtle) bg-(--bg-elevated) flex items-center gap-3 rounded-lg border p-2"
+            className="flex items-center gap-3 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) p-2"
             onKeyDown={(e) => {
               if (['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(e.key)) {
                 e.preventDefault();
@@ -216,7 +216,7 @@ export function CarrierTab() {
               }
             }}
           >
-            <span className="text-(--text-muted) text-xs font-medium">Mode:</span>
+            <span className="text-xs font-medium text-(--text-muted)">Mode:</span>
             <button
               type="button"
               role="radio"
@@ -225,7 +225,7 @@ export function CarrierTab() {
               tabIndex={isResearchMode ? 0 : -1}
               className={`flex min-h-[44px] items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
                 isResearchMode
-                  ? 'bg-(--accent-teal) shadow-xs text-white'
+                  ? 'bg-(--accent-teal) text-white shadow-xs'
                   : 'text-(--text-body) hover:bg-(--bg-subtle)'
               }`}
             >
@@ -239,7 +239,7 @@ export function CarrierTab() {
               tabIndex={!isResearchMode ? 0 : -1}
               className={`flex min-h-[44px] items-center rounded px-3 py-1 text-xs font-semibold transition-colors ${
                 !isResearchMode
-                  ? 'bg-(--accent-teal) shadow-xs text-white'
+                  ? 'bg-(--accent-teal) text-white shadow-xs'
                   : 'text-(--text-body) hover:bg-(--bg-subtle)'
               }`}
             >
@@ -298,9 +298,9 @@ export function CarrierTab() {
         </div>
 
         {/* Count display */}
-        <p className="text-(--text-muted) text-sm">
-          Showing <span className="text-(--text-body) font-semibold">{filteredResults.length}</span>{' '}
-          of <span className="text-(--text-body) font-semibold">{totalCount}</span> results
+        <p className="text-sm text-(--text-muted)">
+          Showing <span className="font-semibold text-(--text-body)">{filteredResults.length}</span>{' '}
+          of <span className="font-semibold text-(--text-body)">{totalCount}</span> results
         </p>
 
         {/* Tier upgrade prompt for premium users upselling to pro */}
@@ -314,7 +314,7 @@ export function CarrierTab() {
         {/* Result cards */}
         {filteredResults.length === 0 ? (
           <GlassCard variant="subtle" hover="none" className="p-8 text-center">
-            <p className="text-(--text-muted) text-sm">No results match your filters.</p>
+            <p className="text-sm text-(--text-muted)">No results match your filters.</p>
           </GlassCard>
         ) : useVirtualization ? (
           <Virtuoso

@@ -41,7 +41,7 @@ export function SectionHeading({ title, subtitle, gradient, className, id }: Sec
         {title}
       </h2>
       {subtitle && (
-        <p className="text-(--text-body) mt-4 text-base leading-relaxed sm:text-lg">{subtitle}</p>
+        <p className="mt-4 text-base leading-relaxed text-(--text-body) sm:text-lg">{subtitle}</p>
       )}
     </div>
   );

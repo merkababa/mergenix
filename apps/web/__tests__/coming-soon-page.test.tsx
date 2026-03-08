@@ -16,6 +16,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 
+// ── Mock Three.js / R3F components that don't work in jsdom ───────────────────
+//
+// DnaHelix3DDynamic uses @react-three/fiber Canvas which requires ResizeObserver
+// and WebGL — neither available in jsdom.  Replace with a simple placeholder.
+vi.mock('@/components/marketing/dna-helix-3d-dynamic', () => ({
+  DnaHelix3DDynamic: (props: { className?: string }) => (
+    <div data-testid="dna-helix-mock" className={props.className} />
+  ),
+}));
+
 // ── Mock window.location ──────────────────────────────────────────────────────
 //
 // jsdom's window.location is not always freely writable.  We replace it with a

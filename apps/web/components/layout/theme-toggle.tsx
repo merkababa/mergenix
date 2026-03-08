@@ -16,7 +16,7 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="border-(--border-subtle) bg-(--bg-elevated) relative h-8 min-h-[44px] w-14 rounded-full border"
+        className="relative h-8 min-h-[44px] w-14 rounded-full border border-(--border-subtle) bg-(--bg-elevated)"
         aria-label="Toggle theme"
       />
     );
@@ -27,18 +27,18 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="border-(--border-subtle) bg-(--bg-elevated) group relative flex h-8 min-h-[44px] w-14 items-center rounded-full border p-1 transition-all hover:border-[rgba(6,214,160,0.3)] hover:shadow-[0_0_12px_var(--glow-teal)]"
+      className="group relative flex h-8 min-h-[44px] w-14 items-center rounded-full border border-(--border-subtle) bg-(--bg-elevated) p-1 transition-all hover:border-[rgba(6,214,160,0.3)] hover:shadow-[0_0_12px_var(--glow-teal)]"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       role="switch"
       aria-checked={isDark}
     >
       {/* Track icons */}
       <Moon
-        className="text-(--text-dim) absolute left-1.5 top-1/2 h-3 w-3 -translate-y-1/2"
+        className="absolute top-1/2 left-1.5 h-3 w-3 -translate-y-1/2 text-(--text-dim)"
         aria-hidden="true"
       />
       <Sun
-        className="text-(--text-dim) absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2"
+        className="absolute top-1/2 right-1.5 h-3 w-3 -translate-y-1/2 text-(--text-dim)"
         aria-hidden="true"
       />
 

@@ -82,7 +82,7 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
 
   return (
     <div className={cn('w-full', className)}>
-      <label className="font-heading text-(--text-primary) mb-2 block text-sm font-semibold">
+      <label className="font-heading mb-2 block text-sm font-semibold text-(--text-primary)">
         {label}
       </label>
 
@@ -103,8 +103,8 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
         aria-roledescription="File upload dropzone"
         className={cn(
           'rounded-glass group relative cursor-pointer overflow-hidden border-2 border-dashed p-8 text-center transition-all duration-300',
-          'bg-(--bg-glass) [-webkit-backdrop-filter:blur(12px)] [backdrop-filter:blur(12px)]',
-          'focus-visible:border-(--accent-teal) focus-visible:outline-hidden focus-visible:border-solid focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.25)]',
+          'bg-(--bg-glass) [backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]',
+          'focus-visible:border-solid focus-visible:border-(--accent-teal) focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.25)] focus-visible:outline-hidden',
           selectedFile
             ? 'border-[rgba(6,214,160,0.3)] shadow-[0_0_20px_rgba(6,214,160,0.1)]'
             : 'border-[rgba(6,214,160,0.18)]',
@@ -134,13 +134,13 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
               className="flex flex-col items-center gap-3"
             >
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
-                <FileCheck className="text-(--accent-teal) h-7 w-7" />
+                <FileCheck className="h-7 w-7 text-(--accent-teal)" />
               </div>
               <div>
-                <p className="font-heading text-(--text-heading) text-base font-semibold">
+                <p className="font-heading text-base font-semibold text-(--text-heading)">
                   {selectedFile.name}
                 </p>
-                <p className="text-(--accent-teal) mt-0.5 text-sm">
+                <p className="mt-0.5 text-sm text-(--accent-teal)">
                   Detected: {selectedFile.format}
                 </p>
               </div>
@@ -155,7 +155,7 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
             >
               {/* DNA helix animation */}
               <div className="relative flex items-center justify-center">
-                <div className="bg-(--glow-teal) absolute h-20 w-20 rounded-full opacity-40 blur-xl group-hover:opacity-60" />
+                <div className="absolute h-20 w-20 rounded-full bg-(--glow-teal) opacity-40 blur-xl group-hover:opacity-60" />
                 <div className="relative flex gap-1.5">
                   {[0, 0.2, 0.4, 0.6, 0.8].map((delay, i) => (
                     <m.div
@@ -188,11 +188,11 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
               </div>
 
               <div>
-                <p className="font-heading text-(--text-heading) text-base font-semibold">
+                <p className="font-heading text-base font-semibold text-(--text-heading)">
                   {isDragOver ? 'Release to upload' : 'Drop your genetic file here'}
                 </p>
-                <p className="text-(--text-muted) mt-1 text-sm">
-                  or <span className="text-(--accent-teal) font-medium">click to browse</span>
+                <p className="mt-1 text-sm text-(--text-muted)">
+                  or <span className="font-medium text-(--accent-teal)">click to browse</span>
                 </p>
               </div>
 
@@ -201,7 +201,7 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
                 {SUPPORTED_FORMATS.map((fmt) => (
                   <span
                     key={fmt.name}
-                    className="border-(--glass-border) text-(--text-muted) backdrop-blur-xs rounded-lg border bg-[rgba(148,163,184,0.06)] px-2.5 py-1 text-xs"
+                    className="rounded-lg border border-(--glass-border) bg-[rgba(148,163,184,0.06)] px-2.5 py-1 text-xs text-(--text-muted) backdrop-blur-xs"
                   >
                     {fmt.name}
                   </span>
@@ -213,8 +213,8 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
 
         {/* Privacy badge */}
         <div className="mt-5 inline-flex items-center gap-1.5 rounded-lg border border-[rgba(6,214,160,0.12)] bg-[rgba(6,214,160,0.05)] px-3 py-1.5">
-          <Shield className="text-(--accent-teal) h-3.5 w-3.5" />
-          <span className="text-(--text-muted) text-xs">Files never leave your device</span>
+          <Shield className="h-3.5 w-3.5 text-(--accent-teal)" />
+          <span className="text-xs text-(--text-muted)">Files never leave your device</span>
         </div>
       </div>
 
@@ -225,7 +225,7 @@ export function FileDropzone({ label, onFileSelect, selectedFile, className }: F
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            className="text-(--accent-rose) mt-2 flex items-center gap-2 text-sm"
+            className="mt-2 flex items-center gap-2 text-sm text-(--accent-rose)"
             role="alert"
           >
             <AlertCircle className="h-4 w-4 shrink-0" />

@@ -28,9 +28,9 @@ export function PageHeader({ title, subtitle, breadcrumbs, className }: PageHead
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Breadcrumb"
-          className="font-body text-(--text-muted) mb-4 flex items-center justify-center gap-1 text-sm"
+          className="font-body mb-4 flex items-center justify-center gap-1 text-sm text-(--text-muted)"
         >
-          <Link href="/" className="hover:text-(--accent-teal) transition-colors">
+          <Link href="/" className="transition-colors hover:text-(--accent-teal)">
             Home
           </Link>
           {breadcrumbs.map((crumb, i) => (
@@ -41,7 +41,7 @@ export function PageHeader({ title, subtitle, breadcrumbs, className }: PageHead
                   {crumb.label}
                 </span>
               ) : (
-                <Link href={crumb.href} className="hover:text-(--accent-teal) transition-colors">
+                <Link href={crumb.href} className="transition-colors hover:text-(--accent-teal)">
                   {crumb.label}
                 </Link>
               )}
@@ -55,7 +55,7 @@ export function PageHeader({ title, subtitle, breadcrumbs, className }: PageHead
       </h1>
 
       {subtitle && (
-        <p className="font-body text-(--text-muted) mx-auto mt-3 max-w-2xl text-base md:text-lg">
+        <p className="font-body mx-auto mt-3 max-w-2xl text-base text-(--text-muted) md:text-lg">
           {subtitle}
         </p>
       )}

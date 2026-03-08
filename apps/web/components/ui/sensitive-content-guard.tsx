@@ -121,16 +121,16 @@ export function SensitiveContentGuard({
           aria-hidden="true"
         >
           <div className="space-y-3">
-            <div className="bg-(--text-muted) h-4 w-3/4 rounded-sm opacity-20" />
-            <div className="bg-(--text-muted) h-4 w-1/2 rounded-sm opacity-20" />
-            <div className="bg-(--text-muted) h-4 w-5/6 rounded-sm opacity-20" />
-            <div className="bg-(--text-muted) h-4 w-2/3 rounded-sm opacity-20" />
+            <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
+            <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
           </div>
         </div>
 
         {/* Upgrade overlay */}
         <div className="rounded-glass absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[rgba(5,8,16,0.7)] p-6 text-center">
-          <p className="text-(--text-body) text-sm font-medium">
+          <p className="text-sm font-medium text-(--text-body)">
             {CATEGORY_LABELS[category]} results require {TIER_DISPLAY_NAMES[requiredTier]}
           </p>
           <Button
@@ -161,10 +161,10 @@ export function SensitiveContentGuard({
               aria-hidden="true"
             >
               <div className="space-y-3">
-                <div className="bg-(--text-muted) h-4 w-3/4 rounded-sm opacity-20" />
-                <div className="bg-(--text-muted) h-4 w-1/2 rounded-sm opacity-20" />
-                <div className="bg-(--text-muted) h-4 w-5/6 rounded-sm opacity-20" />
-                <div className="bg-(--text-muted) h-4 w-2/3 rounded-sm opacity-20" />
+                <div className="h-4 w-3/4 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-1/2 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-5/6 rounded-sm bg-(--text-muted) opacity-20" />
+                <div className="h-4 w-2/3 rounded-sm bg-(--text-muted) opacity-20" />
               </div>
             </div>
 
@@ -222,14 +222,14 @@ export function SensitiveContentGuard({
             >
               <h2
                 id={`ad-warning-title-${uniqueId}`}
-                className="font-heading text-(--text-primary) mb-3 text-lg font-semibold"
+                className="font-heading mb-3 text-lg font-semibold text-(--text-primary)"
               >
                 Important: Autosomal Dominant Condition
               </h2>
 
               <p
                 id={`ad-warning-desc-${uniqueId}`}
-                className="text-(--text-body) mb-6 text-sm leading-relaxed"
+                className="mb-6 text-sm leading-relaxed text-(--text-body)"
               >
                 This result relates to an autosomal dominant condition. It has direct medical
                 implications for you. We recommend reviewing with a genetic counselor before

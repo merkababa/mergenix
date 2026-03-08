@@ -74,7 +74,7 @@ export const ResidualRiskBadge = memo(function ResidualRiskBadge({
 
   return (
     <span
-      className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-medium"
+      className="inline-flex items-center gap-1 rounded-full border border-(--border-subtle) bg-(--bg-elevated) px-2.5 py-0.5 text-[11px] font-medium text-(--text-muted)"
       role="status"
       aria-label={`${diseaseName}: ${label} — ${explanation}`}
     >

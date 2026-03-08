@@ -134,13 +134,13 @@ export function SecurityContent() {
           <GlassCard variant="medium" hover="none" className="mt-8 p-8">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                <Shield className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
+                <Shield className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-heading text-(--text-heading) mb-2 text-lg font-semibold">
+                <h3 className="font-heading mb-2 text-lg font-semibold text-(--text-heading)">
                   Client-Side Only Processing
                 </h3>
-                <p className="text-(--text-muted) text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed text-(--text-muted)">
                   Your genetic data is parsed and analyzed entirely within a dedicated background
                   thread in your browser. This means your DNA data never touches our servers, is
                   never transmitted over the network, and is never accessible to our team.
@@ -167,16 +167,16 @@ export function SecurityContent() {
             return (
               <ScrollReveal key={step.title}>
                 <GlassCard variant="medium" hover="glow" className="h-full p-7">
-                  <div className="text-(--accent-teal) mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] text-sm font-bold">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)] text-sm font-bold text-(--accent-teal)">
                     {index + 1}
                   </div>
                   <div className="mb-2 flex items-center gap-2">
-                    <Icon className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
-                    <h3 className="font-heading text-(--text-heading) text-base font-semibold">
+                    <Icon className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+                    <h3 className="font-heading text-base font-semibold text-(--text-heading)">
                       {step.title}
                     </h3>
                   </div>
-                  <p className="text-(--text-muted) text-sm leading-relaxed">{step.description}</p>
+                  <p className="text-sm leading-relaxed text-(--text-muted)">{step.description}</p>
                 </GlassCard>
               </ScrollReveal>
             );
@@ -199,13 +199,13 @@ export function SecurityContent() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                  <KeyRound className="text-(--accent-violet) h-6 w-6" aria-hidden="true" />
+                  <KeyRound className="h-6 w-6 text-(--accent-violet)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
+                  <h3 className="font-heading mb-2 text-base font-semibold text-(--text-heading)">
                     AES-256-GCM — Planned
                   </h3>
-                  <p className="text-(--text-muted) text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     We plan to protect saved analysis results using AES-256-GCM client-side
                     encryption — the same standard used by governments and financial institutions
                     worldwide. This feature is not yet active and is planned for a future release.
@@ -214,13 +214,13 @@ export function SecurityContent() {
               </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,182,212,0.1)]">
-                  <Lock className="text-(--accent-cyan) h-6 w-6" aria-hidden="true" />
+                  <Lock className="h-6 w-6 text-(--accent-cyan)" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
+                  <h3 className="font-heading mb-2 text-base font-semibold text-(--text-heading)">
                     Argon2id Key Derivation — Planned
                   </h3>
-                  <p className="text-(--text-muted) text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed text-(--text-muted)">
                     When client-side encryption launches, cryptographic keys will be derived from
                     your password using Argon2id, a memory-hard key derivation function that resists
                     brute-force and side-channel attacks. Your password will never be stored.
@@ -250,9 +250,9 @@ export function SecurityContent() {
                 <GlassCard variant="subtle" hover="glow" className="p-5">
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
+                      <Icon className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
                     </div>
-                    <p className="text-(--text-heading) text-sm font-medium">{promise.text}</p>
+                    <p className="text-sm font-medium text-(--text-heading)">{promise.text}</p>
                   </div>
                 </GlassCard>
               </ScrollReveal>
@@ -282,11 +282,11 @@ export function SecurityContent() {
                   aria-expanded={expandedFaq === index}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="font-heading text-(--text-heading) pr-4 text-sm font-semibold">
+                  <span className="font-heading pr-4 text-sm font-semibold text-(--text-heading)">
                     {item.question}
                   </span>
                   <ChevronDown
-                    className={`text-(--text-muted) h-4 w-4 shrink-0 transition-transform ${
+                    className={`h-4 w-4 shrink-0 text-(--text-muted) transition-transform ${
                       expandedFaq === index ? 'rotate-180' : ''
                     }`}
                     aria-hidden="true"
@@ -295,9 +295,9 @@ export function SecurityContent() {
                 {expandedFaq === index && (
                   <div
                     id={`faq-answer-${index}`}
-                    className="border-(--border-subtle) border-t px-6 py-4"
+                    className="border-t border-(--border-subtle) px-6 py-4"
                   >
-                    <p className="text-(--text-muted) text-sm leading-relaxed">{item.answer}</p>
+                    <p className="text-sm leading-relaxed text-(--text-muted)">{item.answer}</p>
                   </div>
                 )}
               </GlassCard>
@@ -307,7 +307,7 @@ export function SecurityContent() {
       </section>
 
       {/* ── Compliance Badges ─────────────────────────────────────────── */}
-      <section className="mb-16 mt-16" aria-labelledby="compliance-heading">
+      <section className="mt-16 mb-16" aria-labelledby="compliance-heading">
         <ScrollReveal>
           <SectionHeading
             id="compliance-heading"
@@ -321,12 +321,12 @@ export function SecurityContent() {
             <ScrollReveal key={badge.label}>
               <GlassCard variant="medium" hover="glow" className="px-6 py-4 text-center">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
-                  <span className="font-heading text-(--text-heading) text-sm font-bold">
+                  <ShieldCheck className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+                  <span className="font-heading text-sm font-bold text-(--text-heading)">
                     {badge.label}
                   </span>
                 </div>
-                <p className="text-(--text-muted) mt-1 text-xs">{badge.description}</p>
+                <p className="mt-1 text-xs text-(--text-muted)">{badge.description}</p>
               </GlassCard>
             </ScrollReveal>
           ))}

@@ -331,8 +331,8 @@ Remove `content: [...]` from config. V4 auto-detects via `.gitignore`.
 For the monorepo, add explicit sources if needed:
 
 ```css
-@source "../../packages/shared-types";
-@source "../../packages/genetics-engine";
+@source '../../packages/shared-types';
+@source '../../packages/genetics-engine';
 ```
 
 #### 3H. Custom Layers → v4 Patterns

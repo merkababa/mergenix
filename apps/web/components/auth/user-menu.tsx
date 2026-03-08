@@ -68,16 +68,16 @@ export function UserMenu() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="focus-visible:outline-(--accent-teal) flex items-center gap-2 rounded-xl px-1.5 py-1 transition-colors hover:bg-[rgba(6,214,160,0.06)] focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="flex items-center gap-2 rounded-xl px-1.5 py-1 transition-colors hover:bg-[rgba(6,214,160,0.06)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label="User menu"
       >
-        <div className="bg-linear-to-br from-(--accent-teal) to-(--accent-cyan) flex h-8 w-8 items-center justify-center rounded-full">
-          <span className="font-heading text-(--bg-deep) text-xs font-bold">{initials}</span>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-(--accent-teal) to-(--accent-cyan)">
+          <span className="font-heading text-xs font-bold text-(--bg-deep)">{initials}</span>
         </div>
         <ChevronDown
-          className={`text-(--text-muted) h-3.5 w-3.5 transition-transform duration-200 ${
+          className={`h-3.5 w-3.5 text-(--text-muted) transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
           aria-hidden="true"
@@ -94,7 +94,7 @@ export function UserMenu() {
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
             transition={{ duration: 0.15, ease: 'easeOut' as const }}
             role="menu"
-            className="border-(--glass-border) bg-(--bg-glass) before:bg-linear-to-r before:from-(--accent-teal) before:to-(--accent-cyan) absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border shadow-[0_12px_40px_var(--shadow-elevated)] before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:opacity-60"
+            className="absolute top-full right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) shadow-[0_12px_40px_var(--shadow-elevated)] before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-linear-to-r before:from-(--accent-teal) before:to-(--accent-cyan) before:opacity-60"
             style={{
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
@@ -129,11 +129,11 @@ export function UserMenu() {
             }}
           >
             {/* User info header */}
-            <div className="border-(--border-subtle) border-b px-4 py-3">
-              <p className="font-heading text-(--text-heading) text-sm font-semibold">
+            <div className="border-b border-(--border-subtle) px-4 py-3">
+              <p className="font-heading text-sm font-semibold text-(--text-heading)">
                 {user?.name ?? 'User'}
               </p>
-              <p className="text-(--text-muted) mt-0.5 text-xs">{user?.email ?? ''}</p>
+              <p className="mt-0.5 text-xs text-(--text-muted)">{user?.email ?? ''}</p>
               {user?.tier && (
                 <Badge variant={getTierVariant(user.tier)} className="mt-2">
                   {user.tier.charAt(0).toUpperCase() + user.tier.slice(1)}
@@ -157,7 +157,7 @@ export function UserMenu() {
                       : undefined
                   }
                   onClick={() => setIsOpen(false)}
-                  className="text-(--text-muted) hover:text-(--accent-teal) flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-[rgba(6,214,160,0.06)]"
+                  className="flex items-center gap-3 px-4 py-2.5 text-sm text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                 >
                   <link.icon className="h-4 w-4" aria-hidden="true" />
                   {link.label}
@@ -166,12 +166,12 @@ export function UserMenu() {
             </div>
 
             {/* Sign out */}
-            <div className="border-(--border-subtle) border-t py-1.5">
+            <div className="border-t border-(--border-subtle) py-1.5">
               <button
                 role="menuitem"
                 tabIndex={-1}
                 onClick={handleLogout}
-                className="text-(--text-muted) hover:text-(--accent-rose) flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-[rgba(244,63,94,0.06)]"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-(--text-muted) transition-colors hover:bg-[rgba(244,63,94,0.06)] hover:text-(--accent-rose)"
               >
                 <LogOut className="h-4 w-4" aria-hidden="true" />
                 Sign Out

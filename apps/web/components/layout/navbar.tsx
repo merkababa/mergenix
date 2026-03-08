@@ -119,7 +119,7 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
         className={cn(
           'sticky top-0 z-50 transition-all duration-300',
           isScrolled
-            ? 'border-(--border-subtle) bg-(--navbar-bg) border-b shadow-[0_4px_30px_var(--shadow-ambient)]'
+            ? 'border-b border-(--border-subtle) bg-(--navbar-bg) shadow-[0_4px_30px_var(--shadow-ambient)]'
             : 'bg-transparent',
         )}
         style={{
@@ -130,7 +130,7 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
         <nav
           className={cn(
             'mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6',
-            !isBypassed && 'pointer-events-none select-none blur-[6px]',
+            !isBypassed && 'pointer-events-none blur-[6px] select-none',
           )}
           aria-label="Main navigation"
         >
@@ -140,8 +140,8 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
             className="flex items-center gap-2.5 no-underline"
             aria-label="Mergenix home"
           >
-            <Dna className="text-(--accent-teal) h-7 w-7" aria-hidden="true" />
-            <span className="font-heading text-(--text-heading) text-xl font-extrabold tracking-[-0.03em] md:text-2xl">
+            <Dna className="h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
+            <span className="font-heading text-xl font-extrabold tracking-[-0.03em] text-(--text-heading) md:text-2xl">
               Mergenix
             </span>
           </Link>
@@ -159,15 +159,15 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
                   className={cn(
                     'font-heading relative rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200',
                     isActive
-                      ? 'text-(--accent-teal) bg-[rgba(6,214,160,0.1)] ring-1 ring-[rgba(6,214,160,0.2)]'
-                      : 'text-(--text-muted) hover:text-(--accent-teal) hover:bg-[rgba(6,214,160,0.06)]',
+                      ? 'bg-[rgba(6,214,160,0.1)] text-(--accent-teal) ring-1 ring-[rgba(6,214,160,0.2)]'
+                      : 'text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)',
                   )}
                 >
                   {link.label}
                   {isActive && (
                     <m.div
                       layoutId="nav-indicator"
-                      className="bg-linear-to-r from-accent-teal to-accent-cyan absolute bottom-0 left-2 right-2 h-0.5 rounded-full"
+                      className="from-accent-teal to-accent-cyan absolute right-2 bottom-0 left-2 h-0.5 rounded-full bg-linear-to-r"
                       transition={{ type: 'spring' as const, stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -188,13 +188,13 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
                 <>
                   <Link
                     href="/login"
-                    className="font-heading text-(--accent-teal) rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 text-sm font-semibold transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
+                    className="font-heading rounded-xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] px-4 py-2 text-sm font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/register"
-                    className="bg-linear-to-r from-accent-teal to-day-accent-teal font-heading text-bio-deep rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                    className="from-accent-teal to-day-accent-teal font-heading text-bio-deep rounded-xl bg-linear-to-r px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
                     Get Started
                   </Link>
@@ -205,7 +205,7 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
             {/* Mobile hamburger */}
             <button
               ref={hamburgerRef}
-              className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) hover:text-(--accent-teal) flex h-9 min-h-[44px] w-9 min-w-[44px] items-center justify-center rounded-xl border transition-colors md:hidden"
+              className="flex h-9 min-h-[44px] w-9 min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-colors hover:text-(--accent-teal) md:hidden"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileOpen}
@@ -234,25 +234,25 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation menu"
-            className="z-60 bg-(--bg-deep) fixed inset-0 flex flex-col md:hidden"
+            className="fixed inset-0 z-60 flex flex-col bg-(--bg-deep) md:hidden"
           >
             {/* Overlay header row: brand + close button */}
-            <div className="border-(--border-subtle) flex items-center justify-between border-b px-4 py-3">
+            <div className="flex items-center justify-between border-b border-(--border-subtle) px-4 py-3">
               <Link
                 href="/"
                 onClick={closeMobileMenu}
                 className="flex items-center gap-2 no-underline"
                 aria-label="Mergenix home"
               >
-                <Dna className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
-                <span className="font-heading text-(--text-heading) text-xl font-extrabold tracking-[-0.03em]">
+                <Dna className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
+                <span className="font-heading text-xl font-extrabold tracking-[-0.03em] text-(--text-heading)">
                   Mergenix
                 </span>
               </Link>
               <button
                 type="button"
                 onClick={closeMobileMenu}
-                className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) hover:text-(--accent-teal) focus-visible:outline-(--accent-teal) flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) transition-colors hover:text-(--accent-teal) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close navigation menu"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -276,8 +276,8 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
                     className={cn(
                       'font-heading block w-full max-w-xs rounded-2xl px-6 py-3 text-center text-lg font-semibold transition-all',
                       isActive
-                        ? 'text-(--accent-teal) bg-[rgba(6,214,160,0.1)] ring-1 ring-[rgba(6,214,160,0.2)]'
-                        : 'text-(--text-muted) hover:text-(--accent-teal) hover:bg-[rgba(6,214,160,0.06)]',
+                        ? 'bg-[rgba(6,214,160,0.1)] text-(--accent-teal) ring-1 ring-[rgba(6,214,160,0.2)]'
+                        : 'text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)',
                     )}
                   >
                     {link.label}
@@ -285,21 +285,21 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
                 );
               })}
 
-              <hr className="border-(--border-subtle) my-3 w-full max-w-xs" />
+              <hr className="my-3 w-full max-w-xs border-(--border-subtle)" />
 
               {isAuthenticated ? (
                 <div className="flex w-full max-w-xs flex-col gap-2">
                   <Link
                     href="/account"
                     onClick={closeMobileMenu}
-                    className="font-heading text-(--text-muted) hover:text-(--accent-teal) block w-full rounded-2xl px-6 py-3 text-center text-lg font-semibold transition-all hover:bg-[rgba(6,214,160,0.06)]"
+                    className="font-heading block w-full rounded-2xl px-6 py-3 text-center text-lg font-semibold text-(--text-muted) transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                   >
                     Account Settings
                   </Link>
                   <Link
                     href="/subscription"
                     onClick={closeMobileMenu}
-                    className="font-heading text-(--text-muted) hover:text-(--accent-teal) block w-full rounded-2xl px-6 py-3 text-center text-lg font-semibold transition-all hover:bg-[rgba(6,214,160,0.06)]"
+                    className="font-heading block w-full rounded-2xl px-6 py-3 text-center text-lg font-semibold text-(--text-muted) transition-all hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)"
                   >
                     My Plan
                   </Link>
@@ -309,14 +309,14 @@ export function Navbar({ isBypassed = false }: { isBypassed?: boolean }) {
                   <Link
                     href="/login"
                     onClick={closeMobileMenu}
-                    className="font-heading text-(--accent-teal) w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center text-base font-semibold transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
+                    className="font-heading w-full rounded-2xl border border-[rgba(6,214,160,0.2)] bg-[rgba(6,214,160,0.08)] py-3 text-center text-base font-semibold text-(--accent-teal) transition-all hover:border-[rgba(6,214,160,0.4)] hover:bg-[rgba(6,214,160,0.15)] hover:shadow-sm"
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/register"
                     onClick={closeMobileMenu}
-                    className="bg-linear-to-r from-accent-teal to-day-accent-teal font-heading text-bio-deep w-full rounded-2xl py-3 text-center text-base font-semibold shadow-sm transition-all hover:shadow-md"
+                    className="from-accent-teal to-day-accent-teal font-heading text-bio-deep w-full rounded-2xl bg-linear-to-r py-3 text-center text-base font-semibold shadow-sm transition-all hover:shadow-md"
                   >
                     Get Started
                   </Link>

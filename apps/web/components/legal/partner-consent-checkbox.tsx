@@ -66,20 +66,20 @@ export function PartnerConsentCheckbox({ filesChanged }: PartnerConsentCheckboxP
   }, []);
 
   return (
-    <div className="border-(--accent-amber,#f59e0b) rounded-xl border-2 bg-[rgba(245,158,11,0.05)] p-4">
+    <div className="rounded-xl border-2 border-(--accent-amber,#f59e0b) bg-[rgba(245,158,11,0.05)] p-4">
       <div className="flex items-start gap-3">
         <input
           type="checkbox"
           id="partner-consent-checkbox"
           checked={partnerConsentGiven}
           onChange={handleChange}
-          className="border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal) mt-1 h-4 w-4 shrink-0 rounded-sm"
+          className="mt-1 h-4 w-4 shrink-0 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
           aria-describedby="partner-consent-explanation"
         />
         <div className="flex-1">
           <label
             htmlFor="partner-consent-checkbox"
-            className="text-(--text-body) cursor-pointer text-sm font-medium"
+            className="cursor-pointer text-sm font-medium text-(--text-body)"
           >
             {PARTNER_CONSENT_LABEL}
           </label>
@@ -88,7 +88,7 @@ export function PartnerConsentCheckbox({ filesChanged }: PartnerConsentCheckboxP
           <div className="relative mt-2 inline-block">
             <button
               type="button"
-              className="text-(--text-muted) hover:text-(--text-primary) inline-flex items-center gap-1 text-xs transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-(--text-muted) transition-colors hover:text-(--text-primary)"
               onMouseEnter={handleInfoMouseEnter}
               onMouseLeave={handleInfoMouseLeave}
               onClick={handleInfoClick}
@@ -102,7 +102,7 @@ export function PartnerConsentCheckbox({ filesChanged }: PartnerConsentCheckboxP
               <div
                 role="tooltip"
                 id="partner-consent-explanation"
-                className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) absolute left-0 top-full z-10 mt-1 w-72 rounded-lg border p-3 text-xs shadow-lg"
+                className="absolute top-full left-0 z-10 mt-1 w-72 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) p-3 text-xs text-(--text-body) shadow-lg"
               >
                 {EXPLANATION_TEXT}
               </div>

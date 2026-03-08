@@ -95,7 +95,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
             rainbow
             className="relative overflow-hidden p-5 text-center"
           >
-            <div className="text-(--accent-cyan) text-xs font-medium uppercase tracking-wider">
+            <div className="text-xs font-medium tracking-wider text-(--accent-cyan) uppercase">
               Severity
             </div>
             <div className="mt-2">
@@ -111,7 +111,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
             rainbow
             className="relative overflow-hidden p-5 text-center"
           >
-            <div className="text-(--accent-cyan) text-xs font-medium uppercase tracking-wider">
+            <div className="text-xs font-medium tracking-wider text-(--accent-cyan) uppercase">
               Inheritance
             </div>
             <div className="mt-2">
@@ -127,7 +127,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
             rainbow
             className="relative overflow-hidden p-5 text-center"
           >
-            <div className="text-(--accent-cyan) text-xs font-medium uppercase tracking-wider">
+            <div className="text-xs font-medium tracking-wider text-(--accent-cyan) uppercase">
               Confidence
             </div>
             <div className="mt-2">
@@ -141,19 +141,19 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
       <ScrollReveal delay={0.1}>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <GlassCard variant="subtle" hover="none" className="p-6">
-            <h3 className="font-heading text-(--text-heading) mb-1 text-sm font-semibold">
+            <h3 className="font-heading mb-1 text-sm font-semibold text-(--text-heading)">
               Carrier Frequency
             </h3>
-            <p className="font-heading text-(--accent-teal) text-xl font-bold">
+            <p className="font-heading text-xl font-bold text-(--accent-teal)">
               {disease.carrierFrequency}
             </p>
           </GlassCard>
 
           <GlassCard variant="subtle" hover="none" className="p-6">
-            <h3 className="font-heading text-(--text-heading) mb-1 text-sm font-semibold">
+            <h3 className="font-heading mb-1 text-sm font-semibold text-(--text-heading)">
               Affected Frequency
             </h3>
-            <p className="font-heading text-(--accent-rose) text-xl font-bold">
+            <p className="font-heading text-xl font-bold text-(--accent-rose)">
               {disease.affectedFrequency}
             </p>
           </GlassCard>
@@ -164,7 +164,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
       {disease.snps.length > 0 && (
         <ScrollReveal delay={0.15}>
           <div className="mt-8">
-            <h2 className="font-heading text-(--text-heading) mb-4 text-xl font-bold">
+            <h2 className="font-heading mb-4 text-xl font-bold text-(--text-heading)">
               Related SNPs
             </h2>
             <GlassCard variant="medium" hover="none" className="overflow-hidden p-0">
@@ -172,28 +172,28 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
                 <table className="w-full" role="table">
                   <caption className="sr-only">SNP variants associated with {disease.name}</caption>
                   <thead>
-                    <tr className="border-(--border-subtle) border-b">
+                    <tr className="border-b border-(--border-subtle)">
                       <th
                         scope="col"
-                        className="font-heading text-(--text-muted) px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                        className="font-heading px-5 py-3 text-left text-xs font-semibold tracking-wider text-(--text-muted) uppercase"
                       >
                         rsID
                       </th>
                       <th
                         scope="col"
-                        className="font-heading text-(--text-muted) px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                        className="font-heading px-5 py-3 text-left text-xs font-semibold tracking-wider text-(--text-muted) uppercase"
                       >
                         Gene
                       </th>
                       <th
                         scope="col"
-                        className="font-heading text-(--text-muted) px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                        className="font-heading px-5 py-3 text-left text-xs font-semibold tracking-wider text-(--text-muted) uppercase"
                       >
                         Allele Change
                       </th>
                       <th
                         scope="col"
-                        className="font-heading text-(--text-muted) px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                        className="font-heading px-5 py-3 text-left text-xs font-semibold tracking-wider text-(--text-muted) uppercase"
                       >
                         Source
                       </th>
@@ -203,18 +203,18 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
                     {disease.snps.map((snp) => (
                       <tr
                         key={snp.rsid}
-                        className="border-(--border-subtle) border-b transition-colors hover:bg-[rgba(6,214,160,0.02)]"
+                        className="border-b border-(--border-subtle) transition-colors hover:bg-[rgba(6,214,160,0.02)]"
                       >
-                        <td className="text-(--accent-teal) px-5 py-3 font-mono text-sm">
+                        <td className="px-5 py-3 font-mono text-sm text-(--accent-teal)">
                           {snp.rsid}
                         </td>
-                        <td className="font-heading text-(--text-body) px-5 py-3 text-sm font-medium">
+                        <td className="font-heading px-5 py-3 text-sm font-medium text-(--text-body)">
                           {snp.gene}
                         </td>
-                        <td className="text-(--text-body) px-5 py-3 font-mono text-sm">
+                        <td className="px-5 py-3 font-mono text-sm text-(--text-body)">
                           {snp.allele}
                         </td>
-                        <td className="text-(--text-muted) px-5 py-3 text-sm">{snp.source}</td>
+                        <td className="px-5 py-3 text-sm text-(--text-muted)">{snp.source}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -229,11 +229,11 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
       {disease.notes && (
         <ScrollReveal delay={0.1}>
           <div className="mt-8">
-            <h2 className="font-heading text-(--text-heading) mb-4 text-xl font-bold">
+            <h2 className="font-heading mb-4 text-xl font-bold text-(--text-heading)">
               Clinical Notes
             </h2>
             <GlassCard variant="subtle" hover="none" className="p-6">
-              <p className="text-(--text-body) text-sm leading-relaxed">{disease.notes}</p>
+              <p className="text-sm leading-relaxed text-(--text-body)">{disease.notes}</p>
             </GlassCard>
           </div>
         </ScrollReveal>
@@ -243,10 +243,10 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
       {relatedDiseases.length > 0 && (
         <ScrollReveal delay={0.1}>
           <div className="mt-8">
-            <h2 className="font-heading text-(--text-heading) mb-4 text-xl font-bold">
+            <h2 className="font-heading mb-4 text-xl font-bold text-(--text-heading)">
               Related Conditions
             </h2>
-            <p className="text-(--text-muted) mb-4 text-sm">
+            <p className="mb-4 text-sm text-(--text-muted)">
               Other {disease.category.toLowerCase()} conditions in our database
             </p>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -254,17 +254,17 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
                 <Link
                   key={related.slug}
                   href={`/diseases/${related.slug}`}
-                  className="focus-visible:outline-(--accent-teal) rounded-glass group block focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="rounded-glass group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 >
                   <GlassCard
                     variant="subtle"
                     hover="glow"
                     className="h-full p-5 transition-all duration-300 group-hover:border-[rgba(6,214,160,0.25)]"
                   >
-                    <h3 className="font-heading text-(--text-heading) group-hover:text-(--accent-teal) mb-2 text-sm font-bold transition-colors">
+                    <h3 className="font-heading mb-2 text-sm font-bold text-(--text-heading) transition-colors group-hover:text-(--accent-teal)">
                       {related.name}
                     </h3>
-                    <p className="text-(--text-muted) mb-3 line-clamp-2 text-xs leading-relaxed">
+                    <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-(--text-muted)">
                       {related.description}
                     </p>
                     <div className="flex items-center gap-2">
@@ -279,7 +279,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
                       >
                         {related.severity.toUpperCase()}
                       </Badge>
-                      <span className="text-(--accent-teal) flex items-center gap-1 text-xs font-medium opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      <span className="flex items-center gap-1 text-xs font-medium text-(--accent-teal) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                         View
                         <ArrowRight className="h-3 w-3" aria-hidden="true" />
                       </span>
@@ -300,12 +300,12 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
           className="mt-8 flex items-start gap-3 border-[rgba(245,158,11,0.2)] p-5"
         >
           <AlertTriangle
-            className="text-(--accent-amber) mt-0.5 h-5 w-5 shrink-0"
+            className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-amber)"
             aria-hidden="true"
           />
           <div>
-            <p className="text-(--accent-amber) text-xs font-semibold">Medical Disclaimer</p>
-            <p className="text-(--text-muted) mt-1 text-xs leading-relaxed">
+            <p className="text-xs font-semibold text-(--accent-amber)">Medical Disclaimer</p>
+            <p className="mt-1 text-xs leading-relaxed text-(--text-muted)">
               This information is for educational purposes only and is not medical advice. Always
               consult a healthcare professional or genetic counselor for medical decisions. Genetic
               risk is complex and depends on many factors beyond individual variants.
@@ -316,7 +316,7 @@ export default async function DiseasePage({ params }: DiseasePageProps) {
 
       {/* ── Sources ── */}
       <ScrollReveal delay={0.05}>
-        <div className="text-(--text-dim) mt-6 flex flex-wrap items-center gap-2 text-xs">
+        <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-(--text-dim)">
           <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
           <span className="font-medium">Sources:</span>
           {disease.sources.map((source) => (

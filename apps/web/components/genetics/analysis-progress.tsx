@@ -103,8 +103,8 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
   return (
     <div
       className={cn(
-        'rounded-glass border-(--border-subtle) bg-(--bg-glass) border p-6',
-        '[-webkit-backdrop-filter:blur(12px)] [backdrop-filter:blur(12px)]',
+        'rounded-glass border border-(--border-subtle) bg-(--bg-glass) p-6',
+        '[backdrop-filter:blur(12px)] [-webkit-backdrop-filter:blur(12px)]',
         className,
       )}
       role="progressbar"
@@ -147,8 +147,8 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                   className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300',
                     isCompleted &&
-                      'border-accent-teal bg-linear-to-br from-accent-teal to-day-accent-teal text-bio-deep',
-                    isActive && 'border-(--accent-teal) text-(--accent-teal) bg-transparent',
+                      'border-accent-teal from-accent-teal to-day-accent-teal text-bio-deep bg-linear-to-br',
+                    isActive && 'border-(--accent-teal) bg-transparent text-(--accent-teal)',
                     isPending && 'border-(--border-subtle) bg-(--bg-elevated) text-(--text-dim)',
                   )}
                   animate={
@@ -173,8 +173,8 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
                 <span
                   className={cn(
                     'font-heading mt-1.5 text-center text-xs font-medium',
-                    isCompleted && 'text-(--accent-teal) font-semibold',
-                    isActive && 'text-(--accent-teal) font-bold',
+                    isCompleted && 'font-semibold text-(--accent-teal)',
+                    isActive && 'font-bold text-(--accent-teal)',
                     isPending && 'text-(--text-dim)',
                   )}
                 >
@@ -184,9 +184,9 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
 
               {/* Connector line */}
               {i < STEPS.length - 1 && (
-                <div className="bg-(--border-subtle) mx-1 mb-5 h-0.5 flex-1 rounded-full">
+                <div className="mx-1 mb-5 h-0.5 flex-1 rounded-full bg-(--border-subtle)">
                   <m.div
-                    className="bg-linear-to-r from-accent-teal to-accent-cyan h-full rounded-full"
+                    className="from-accent-teal to-accent-cyan h-full rounded-full bg-linear-to-r"
                     initial={{ width: '0%' }}
                     animate={{
                       width: isCompleted ? '100%' : isActive ? '50%' : '0%',
@@ -205,7 +205,7 @@ export function AnalysisProgress({ currentStep, className }: AnalysisProgressPro
         key={currentStep}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-body text-(--text-muted) mt-4 text-center text-sm"
+        className="font-body mt-4 text-center text-sm text-(--text-muted)"
       >
         {activeDescription}
       </m.p>

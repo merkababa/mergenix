@@ -54,12 +54,12 @@ export function ForgotPasswordContent() {
                 {/* Icon */}
                 <div className="mb-6 text-center">
                   <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                    <Mail className="text-(--accent-teal) h-7 w-7" />
+                    <Mail className="h-7 w-7 text-(--accent-teal)" />
                   </div>
                   <h1 className="gradient-text font-heading text-2xl font-extrabold">
                     Forgot Password
                   </h1>
-                  <p className="text-(--text-muted) mt-2 text-sm">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     Enter your email address and we&apos;ll send you a link to reset your password.
                   </p>
                 </div>
@@ -72,7 +72,7 @@ export function ForgotPasswordContent() {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="text-(--accent-rose) mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+                      className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                       role="alert"
                     >
                       {error}
@@ -108,7 +108,7 @@ export function ForgotPasswordContent() {
                 <div className="mt-6 text-center">
                   <Link
                     href="/login"
-                    className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
+                    className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
                     Back to Login
@@ -126,17 +126,17 @@ export function ForgotPasswordContent() {
               >
                 {/* Success icon */}
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                  <CheckCircle className="text-(--accent-teal) h-7 w-7" aria-hidden="true" />
+                  <CheckCircle className="h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
                 </div>
                 <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Check Your Email
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">
+                <p className="mt-3 text-sm text-(--text-muted)">
                   If an account exists with{' '}
-                  <span className="text-(--text-primary) font-medium">{email}</span>, we&apos;ve
+                  <span className="font-medium text-(--text-primary)">{email}</span>, we&apos;ve
                   sent a password reset link.
                 </p>
-                <p className="text-(--text-dim) mt-2 text-xs">
+                <p className="mt-2 text-xs text-(--text-dim)">
                   Didn&apos;t get the email? Check your spam folder or try again in a few minutes.
                 </p>
 
@@ -155,7 +155,7 @@ export function ForgotPasswordContent() {
                   {/* Touch target padding (#16) */}
                   <Link
                     href="/login"
-                    className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
+                    className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
                     Back to Login

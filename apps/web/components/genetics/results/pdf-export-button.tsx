@@ -28,7 +28,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
     return (
       <div className="flex items-center gap-3 rounded-xl border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] px-4 py-3">
         <Lock className="text-accent-violet h-4 w-4 shrink-0" aria-hidden="true" />
-        <p className="text-(--text-body) flex-1 text-sm">
+        <p className="flex-1 text-sm text-(--text-body)">
           PDF export is available on the Pro plan.
         </p>
         <Link
@@ -45,7 +45,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
   if (error) {
     return (
       <div className="flex items-center gap-3">
-        <div className="text-(--accent-rose) flex items-center gap-2 text-sm" role="alert">
+        <div className="flex items-center gap-2 text-sm text-(--accent-rose)" role="alert">
           <AlertCircle className="h-4 w-4" aria-hidden="true" />
           <span>{error}</span>
         </div>
@@ -55,7 +55,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
             reset();
             generatePdf(result);
           }}
-          className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) hover:bg-(--bg-surface) inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-3 py-1.5 text-sm font-medium text-(--text-body) transition-colors hover:bg-(--bg-surface)"
           aria-label="Retry PDF generation"
         >
           <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -71,7 +71,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
       <a
         href={blobUrl}
         download="mergenix-report.pdf"
-        className="bg-linear-to-r from-accent-teal to-day-accent-teal text-bio-deep inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-[0_2px_8px_rgba(6,214,160,0.25)] transition-all hover:shadow-[0_4px_16px_rgba(6,214,160,0.35)]"
+        className="from-accent-teal to-day-accent-teal text-bio-deep inline-flex items-center gap-2 rounded-lg bg-linear-to-r px-4 py-2 text-sm font-semibold shadow-[0_2px_8px_rgba(6,214,160,0.25)] transition-all hover:shadow-[0_4px_16px_rgba(6,214,160,0.35)]"
         aria-label="Download PDF report"
       >
         <FileDown className="h-4 w-4" aria-hidden="true" />
@@ -89,7 +89,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
           disabled
           aria-busy="true"
           aria-label="Generating PDF report"
-          className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium opacity-70"
+          className="inline-flex items-center gap-2 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-4 py-2 text-sm font-medium text-(--text-muted) opacity-70"
         >
           <FileDown className="h-4 w-4 animate-pulse" aria-hidden="true" />
           Generating...
@@ -101,14 +101,14 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={100}
-            className="bg-(--bg-surface) h-2 w-24 overflow-hidden rounded-full"
+            className="h-2 w-24 overflow-hidden rounded-full bg-(--bg-surface)"
           >
             <div
-              className="bg-linear-to-r from-accent-teal to-day-accent-teal h-full rounded-full transition-all duration-300"
+              className="from-accent-teal to-day-accent-teal h-full rounded-full bg-linear-to-r transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <span className="text-(--text-muted) text-xs" aria-live="polite">
+          <span className="text-xs text-(--text-muted)" aria-live="polite">
             {progress}%
           </span>
         </div>
@@ -122,7 +122,7 @@ export function PdfExportButton({ result }: PdfExportButtonProps) {
       type="button"
       onClick={() => generatePdf(result)}
       aria-label="Download PDF report"
-      className="border-(--border-subtle) bg-(--bg-elevated) text-(--text-body) hover:bg-(--bg-surface) hover:text-(--accent-teal) inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+      className="inline-flex items-center gap-2 rounded-lg border border-(--border-subtle) bg-(--bg-elevated) px-4 py-2 text-sm font-medium text-(--text-body) transition-colors hover:bg-(--bg-surface) hover:text-(--accent-teal)"
     >
       <FileDown className="h-4 w-4" aria-hidden="true" />
       Download PDF

@@ -17,7 +17,7 @@ export function CancelContent() {
             Payment Cancelled
           </h1>
 
-          <p className="text-(--text-muted) mt-3">
+          <p className="mt-3 text-(--text-muted)">
             Your payment was not completed. No charges were made.
           </p>
         </div>

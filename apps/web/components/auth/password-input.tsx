@@ -45,7 +45,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="font-heading text-(--text-primary) mb-1.5 block text-sm font-medium"
+            className="font-heading mb-1.5 block text-sm font-medium text-(--text-primary)"
           >
             {label}
           </label>
@@ -58,10 +58,10 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             value={value}
             onChange={handleChange}
             className={cn(
-              'bg-(--bg-elevated) font-body text-(--text-primary) placeholder:text-(--text-dim) w-full rounded-xl border px-4 py-2.5 pr-11 text-sm',
+              'font-body w-full rounded-xl border bg-(--bg-elevated) px-4 py-2.5 pr-11 text-sm text-(--text-primary) placeholder:text-(--text-dim)',
               'border-(--border-subtle)',
               'transition-all duration-200',
-              'focus:outline-hidden focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)]',
+              'focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-hidden',
               error &&
                 'border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]',
               className,
@@ -77,14 +77,14 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="text-(--text-dim) hover:text-(--text-primary) focus-visible:outline-(--accent-teal) absolute right-0 top-1/2 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="absolute top-1/2 right-0 flex min-h-[44px] min-w-[44px] -translate-y-1/2 items-center justify-center text-(--text-dim) transition-colors hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         {error && (
-          <p id={`${inputId}-error`} className="text-(--accent-rose) mt-1 text-xs" role="alert">
+          <p id={`${inputId}-error`} className="mt-1 text-xs text-(--accent-rose)" role="alert">
             {error}
           </p>
         )}

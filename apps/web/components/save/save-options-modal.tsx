@@ -130,7 +130,7 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs"
           onClick={handleBackdropClick}
           role="presentation"
         >
@@ -148,13 +148,13 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
               aria-labelledby={headingId}
               aria-describedby={descriptionId}
               tabIndex={-1}
-              className="outline-hidden border-(--glass-border) bg-(--bg-glass) relative rounded-2xl border p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
+              className="relative rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] outline-hidden [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* ── Close button ────────────────────────────────────────── */}
               <button
                 type="button"
                 onClick={handleClose}
-                className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(148,163,184,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="absolute top-4 right-4 rounded-lg p-1.5 text-(--text-muted) transition-colors hover:bg-[rgba(148,163,184,0.1)] hover:text-(--text-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" />
@@ -163,12 +163,12 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
               {/* ── Header ──────────────────────────────────────────────── */}
               <h2
                 id={headingId}
-                className="font-heading text-(--text-heading) mb-2 text-center text-xl font-bold"
+                className="font-heading mb-2 text-center text-xl font-bold text-(--text-heading)"
               >
                 Save Your Results
               </h2>
 
-              <p id={descriptionId} className="text-(--text-muted) mb-6 text-center text-sm">
+              <p id={descriptionId} className="mb-6 text-center text-sm text-(--text-muted)">
                 Choose how you want to save your analysis results.
               </p>
 
@@ -183,13 +183,13 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                      <FileDown className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+                      <FileDown className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-(--text-heading) text-base font-semibold">
+                      <h3 className="font-heading text-base font-semibold text-(--text-heading)">
                         Download PDF Report
                       </h3>
-                      <p className="text-(--text-muted) mt-1 text-sm">
+                      <p className="mt-1 text-sm text-(--text-muted)">
                         Generate a PDF report you can save locally or print
                       </p>
                       {canExportPDF ? (
@@ -207,7 +207,7 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
                             <Lock className="mr-1 h-3 w-3" aria-hidden="true" />
                             Pro Only
                           </Button>
-                          <span className="text-(--text-dim) text-xs">
+                          <span className="text-xs text-(--text-dim)">
                             Upgrade to Pro to export PDF reports
                           </span>
                         </div>
@@ -225,13 +225,13 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(139,92,246,0.1)]">
-                      <Shield className="text-(--text-muted) h-5 w-5" aria-hidden="true" />
+                      <Shield className="h-5 w-5 text-(--text-muted)" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading text-(--text-dim) text-base font-semibold">
+                      <h3 className="font-heading text-base font-semibold text-(--text-dim)">
                         Save to Secure Cloud
                       </h3>
-                      <p className="text-(--text-dim) mt-1 text-sm">
+                      <p className="mt-1 text-sm text-(--text-dim)">
                         End-to-end encrypted storage — access from any device
                       </p>
                       <Button
@@ -243,7 +243,7 @@ export function SaveOptionsModal({ isOpen, onClose, onDownloadPDF, tier }: SaveO
                       >
                         Coming Soon
                       </Button>
-                      <p className="text-(--text-dim) mt-2 text-xs">
+                      <p className="mt-2 text-xs text-(--text-dim)">
                         Encrypted cloud storage is being built. Check back soon!
                       </p>
                     </div>

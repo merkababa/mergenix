@@ -113,8 +113,8 @@ export function SessionsSection() {
   return (
     <GlassCard variant="medium" hover="none" className="p-7">
       <div className="mb-5 flex items-center gap-3">
-        <Monitor className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
-        <h2 className="font-heading text-(--text-heading) text-lg font-bold">Active Sessions</h2>
+        <Monitor className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+        <h2 className="font-heading text-lg font-bold text-(--text-heading)">Active Sessions</h2>
       </div>
 
       {/* Loading skeleton */}
@@ -126,13 +126,13 @@ export function SessionsSection() {
           {SKELETON_IDS.map((i) => (
             <div
               key={i}
-              className="border-(--border-subtle) bg-(--bg-elevated) animate-pulse rounded-xl border p-4"
+              className="animate-pulse rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
             >
               <div className="flex items-center gap-3">
-                <div className="bg-(--border-subtle) h-9 w-9 rounded-full" />
+                <div className="h-9 w-9 rounded-full bg-(--border-subtle)" />
                 <div className="flex-1 space-y-2">
-                  <div className="bg-(--border-subtle) h-3.5 w-32 rounded-sm" />
-                  <div className="bg-(--border-subtle) h-3 w-48 rounded-sm" />
+                  <div className="h-3.5 w-32 rounded-sm bg-(--border-subtle)" />
+                  <div className="h-3 w-48 rounded-sm bg-(--border-subtle)" />
                 </div>
               </div>
             </div>
@@ -148,7 +148,7 @@ export function SessionsSection() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="text-(--accent-rose) mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
             role="alert"
           >
             {error}
@@ -168,7 +168,7 @@ export function SessionsSection() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                className="border-(--border-subtle) bg-(--bg-elevated) rounded-xl border p-4"
+                className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
@@ -177,7 +177,7 @@ export function SessionsSection() {
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="font-heading text-(--text-heading) truncate text-sm font-semibold">
+                      <p className="font-heading truncate text-sm font-semibold text-(--text-heading)">
                         {session.device}
                       </p>
                       {session.isCurrent && (
@@ -186,7 +186,7 @@ export function SessionsSection() {
                         </Badge>
                       )}
                     </div>
-                    <div className="text-(--text-muted) mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
+                    <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-(--text-muted)">
                       <span className="inline-flex items-center gap-1">
                         <Globe className="h-3 w-3" aria-hidden="true" />
                         {session.ip}
@@ -203,7 +203,7 @@ export function SessionsSection() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-(--text-muted) hover:text-(--accent-rose) shrink-0"
+                      className="shrink-0 text-(--text-muted) hover:text-(--accent-rose)"
                       onClick={() => handleRevoke(session.id)}
                       isLoading={revokingId === session.id}
                       disabled={revokingId !== null}
@@ -239,14 +239,14 @@ export function SessionsSection() {
 
       {/* Empty state */}
       {!isLoading && !error && sessions.length === 0 && (
-        <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col items-center justify-center rounded-xl border px-6 py-10 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-6 py-10 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <Clock className="text-(--accent-teal) h-6 w-6" />
+            <Clock className="h-6 w-6 text-(--accent-teal)" />
           </div>
-          <p className="font-heading text-(--text-heading) text-sm font-semibold">
+          <p className="font-heading text-sm font-semibold text-(--text-heading)">
             No other sessions found
           </p>
-          <p className="text-(--text-muted) mt-1.5 max-w-xs text-xs">
+          <p className="mt-1.5 max-w-xs text-xs text-(--text-muted)">
             You are only signed in on this device.
           </p>
         </div>

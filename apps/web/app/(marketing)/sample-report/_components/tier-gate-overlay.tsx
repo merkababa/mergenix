@@ -30,7 +30,7 @@ export function TierGateOverlay({ lockedCount }: TierGateOverlayProps) {
       </p>
 
       {/* Blurred preview cards — hidden from assistive technology */}
-      <div aria-hidden="true" className="blur-xs pointer-events-none select-none space-y-3">
+      <div aria-hidden="true" className="pointer-events-none space-y-3 blur-xs select-none">
         {Array.from({ length: Math.min(lockedCount, 3) }, (_, i) => i).map((i) => (
           <div
             key={i}
@@ -38,24 +38,24 @@ export function TierGateOverlay({ lockedCount }: TierGateOverlayProps) {
           >
             <div className="flex items-center justify-between">
               <div className="space-y-1.5">
-                <div className="bg-(--border-subtle) h-3 w-36 rounded-sm" />
-                <div className="bg-(--border-subtle) h-2.5 w-24 rounded-sm" />
+                <div className="h-3 w-36 rounded-sm bg-(--border-subtle)" />
+                <div className="h-2.5 w-24 rounded-sm bg-(--border-subtle)" />
               </div>
-              <div className="bg-(--border-subtle) h-3 w-20 rounded-sm" />
+              <div className="h-3 w-20 rounded-sm bg-(--border-subtle)" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Overlay: lock icon + upgrade CTA */}
-      <div className="rounded-glass backdrop-blur-xs absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[rgba(5,8,16,0.75)]">
-        <div className="border-(--border-subtle) bg-(--bg-glass) flex h-10 w-10 items-center justify-center rounded-full border">
-          <Lock className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+      <div className="rounded-glass absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[rgba(5,8,16,0.75)] backdrop-blur-xs">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-glass)">
+          <Lock className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
         </div>
-        <p aria-hidden="true" className="text-(--text-heading) text-center text-sm font-semibold">
+        <p aria-hidden="true" className="text-center text-sm font-semibold text-(--text-heading)">
           Upgrade to Premium to unlock 500+ diseases
         </p>
-        <p aria-hidden="true" className="text-(--text-muted) text-center text-xs">
+        <p aria-hidden="true" className="text-center text-xs text-(--text-muted)">
           {lockedCount} more conditions locked
         </p>
         <Link href="/products" className={buttonVariants({ variant: 'primary', size: 'sm' })}>

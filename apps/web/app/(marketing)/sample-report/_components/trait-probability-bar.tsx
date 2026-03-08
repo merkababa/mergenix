@@ -47,7 +47,7 @@ export function TraitProbabilityBar({
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <div className="text-(--text-muted) w-20 truncate text-xs">{phenotype}</div>
+      <div className="w-20 truncate text-xs text-(--text-muted)">{phenotype}</div>
       <div
         role="meter"
         aria-valuenow={clamped}
@@ -55,7 +55,7 @@ export function TraitProbabilityBar({
         aria-valuemax={100}
         aria-label={`${phenotype}: ${clamped}%`}
         aria-valuetext={`${phenotype}: ${clamped}% probability`}
-        className="bg-(--bg-glass) h-2 flex-1 rounded-full"
+        className="h-2 flex-1 rounded-full bg-(--bg-glass)"
       >
         <div
           className={cn('h-2 rounded-full transition-[width] duration-700 ease-out', barColor)}

@@ -81,12 +81,12 @@ export function ResetPasswordContent() {
                 {/* Header */}
                 <div className="mb-6 text-center">
                   <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                    <Lock className="text-(--accent-teal) h-7 w-7" />
+                    <Lock className="h-7 w-7 text-(--accent-teal)" />
                   </div>
                   <h1 className="gradient-text font-heading text-2xl font-extrabold">
                     Reset Password
                   </h1>
-                  <p className="text-(--text-muted) mt-2 text-sm">
+                  <p className="mt-2 text-sm text-(--text-muted)">
                     Choose a new password for your account.
                   </p>
                 </div>
@@ -138,7 +138,7 @@ export function ResetPasswordContent() {
                 <div className="mt-6 text-center">
                   <Link
                     href="/login"
-                    className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
+                    className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
                     Back to Login
@@ -157,12 +157,12 @@ export function ResetPasswordContent() {
                 className="text-center"
               >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                  <CheckCircle className="text-(--accent-teal) h-7 w-7" aria-hidden="true" />
+                  <CheckCircle className="h-7 w-7 text-(--accent-teal)" aria-hidden="true" />
                 </div>
                 <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Password Reset!
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">
+                <p className="mt-3 text-sm text-(--text-muted)">
                   Your password has been successfully reset. You can now sign in with your new
                   password.
                 </p>
@@ -191,12 +191,12 @@ export function ResetPasswordContent() {
                 className="text-center"
               >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]">
-                  <XCircle className="text-(--accent-rose) h-7 w-7" aria-hidden="true" />
+                  <XCircle className="h-7 w-7 text-(--accent-rose)" aria-hidden="true" />
                 </div>
-                <h1 className="font-heading text-(--text-primary) text-2xl font-extrabold">
+                <h1 className="font-heading text-2xl font-extrabold text-(--text-primary)">
                   Reset Failed
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">{errorMessage}</p>
+                <p className="mt-3 text-sm text-(--text-muted)">{errorMessage}</p>
                 <div className="mt-6 space-y-3">
                   <Link
                     href="/forgot-password"
@@ -211,7 +211,7 @@ export function ResetPasswordContent() {
                   {/* Touch target padding (#16) */}
                   <Link
                     href="/login"
-                    className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
+                    className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
                     Back to Login

@@ -110,7 +110,7 @@ export function PrsTab() {
         className="mb-4 flex items-start gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
       >
         <AlertTriangle className="text-accent-amber mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-        <p className="text-(--text-body) text-xs leading-relaxed">{PRS_ANCESTRY_WARNING}</p>
+        <p className="text-xs leading-relaxed text-(--text-body)">{PRS_ANCESTRY_WARNING}</p>
       </GlassCard>
 
       <SensitiveContentGuard
@@ -125,7 +125,7 @@ export function PrsTab() {
           {/* Clinical testing banner */}
           <ClinicalTestingBanner />
 
-          <h3 className="font-heading text-(--text-heading) text-lg font-bold">
+          <h3 className="font-heading text-lg font-bold text-(--text-heading)">
             Polygenic Risk Scores
           </h3>
 
@@ -144,7 +144,7 @@ export function PrsTab() {
           {/* No conditions available */}
           {conditions.length === 0 && (
             <GlassCard variant="subtle" hover="none" className="p-8 text-center">
-              <p className="text-(--text-muted) text-sm">No polygenic risk score data available.</p>
+              <p className="text-sm text-(--text-muted)">No polygenic risk score data available.</p>
             </GlassCard>
           )}
 
@@ -166,7 +166,7 @@ export function PrsTab() {
                 className="text-accent-amber mt-0.5 h-5 w-5 shrink-0"
                 aria-hidden="true"
               />
-              <p className="text-(--text-body) text-xs leading-relaxed">
+              <p className="text-xs leading-relaxed text-(--text-body)">
                 Some conditions were excluded because PRS models have not been validated for your
                 inferred ancestry group. This prevents displaying potentially misleading scores.
               </p>
@@ -176,7 +176,7 @@ export function PrsTab() {
           {/* PRS disclaimer */}
           {prs.disclaimer && (
             <GlassCard variant="subtle" hover="none" className="p-4">
-              <p className="text-(--text-muted) text-xs leading-relaxed">{prs.disclaimer}</p>
+              <p className="text-xs leading-relaxed text-(--text-muted)">{prs.disclaimer}</p>
             </GlassCard>
           )}
 
@@ -210,10 +210,10 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
 
       {/* Offspring expected range */}
       <div className="mt-4 rounded-[10px] bg-[rgba(6,182,212,0.06)] px-3 py-2 text-center">
-        <p className="text-(--text-muted) text-xs font-medium uppercase tracking-widest">
+        <p className="text-xs font-medium tracking-widest text-(--text-muted) uppercase">
           Expected Range
         </p>
-        <p className="font-heading text-(--text-heading) mt-0.5 text-sm font-bold">
+        <p className="font-heading mt-0.5 text-sm font-bold text-(--text-heading)">
           {Math.round(offspring.rangeLow)}
           <span className="text-(--text-muted)">th</span>
           {' \u2013 '}
@@ -226,14 +226,14 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
       {/* Parent details */}
       <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
         <div className="space-y-1">
-          <p className="text-(--text-body) font-semibold">Parent A</p>
+          <p className="font-semibold text-(--text-body)">Parent A</p>
           <p className="text-(--text-muted)">{Math.round(parentA.percentile)}th percentile</p>
           <Badge variant={riskBadgeVariant(parentA.riskCategory)}>
             {RISK_CATEGORY_LABELS[parentA.riskCategory] ?? parentA.riskCategory}
           </Badge>
         </div>
         <div className="space-y-1">
-          <p className="text-(--text-body) font-semibold">Parent B</p>
+          <p className="font-semibold text-(--text-body)">Parent B</p>
           <p className="text-(--text-muted)">{Math.round(parentB.percentile)}th percentile</p>
           <Badge variant={riskBadgeVariant(parentB.riskCategory)}>
             {RISK_CATEGORY_LABELS[parentB.riskCategory] ?? parentB.riskCategory}
@@ -257,7 +257,7 @@ const PrsConditionCard = memo(function PrsConditionCard({ condition }: PrsCondit
             className="text-accent-amber mt-0.5 h-3.5 w-3.5 shrink-0"
             aria-hidden="true"
           />
-          <p className="text-(--text-body) text-xs leading-snug">{cautionNote}</p>
+          <p className="text-xs leading-snug text-(--text-body)">{cautionNote}</p>
         </div>
       )}
     </GlassCard>

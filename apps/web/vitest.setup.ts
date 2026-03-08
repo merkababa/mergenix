@@ -34,6 +34,19 @@ globalThis.URL = class extends URL {
   }
 } as typeof URL;
 
+// Global ResizeObserver mock — jsdom doesn't implement this API
+// Required by react-use-measure (used by @react-three/fiber Canvas)
+class MockResizeObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  configurable: true,
+  value: MockResizeObserver,
+});
+
 // Global IntersectionObserver mock — jsdom doesn't implement this API
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root: Element | null = null;

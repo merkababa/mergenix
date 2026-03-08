@@ -148,7 +148,7 @@ export function BentoFeatures() {
 
               {/* Title */}
               <h3
-                className="font-heading text-(--text-heading) mb-3 text-2xl font-bold md:text-3xl"
+                className="font-heading mb-3 text-2xl font-bold text-(--text-heading) md:text-3xl"
                 style={{ fontSize: 'var(--font-size-fluid-heading)' }}
               >
                 {HERO_FEATURE.title}
@@ -156,7 +156,7 @@ export function BentoFeatures() {
 
               {/* Description + chart row */}
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <p className="text-(--text-muted) max-w-sm text-sm leading-relaxed sm:text-base">
+                <p className="max-w-sm text-sm leading-relaxed text-(--text-muted) sm:text-base">
                   {HERO_FEATURE.description}
                 </p>
                 <DiseaseBarChart />
@@ -170,10 +170,7 @@ export function BentoFeatures() {
                     className="rounded-xl p-3"
                     style={{ background: cat.bg, border: `1px solid ${cat.color}20` }}
                   >
-                    <span
-                      className="text-xs font-semibold"
-                      style={{ color: cat.color }}
-                    >
+                    <span className="text-xs font-semibold" style={{ color: cat.color }}>
                       {cat.label}
                     </span>
                     <div
@@ -198,14 +195,14 @@ export function BentoFeatures() {
               {/* Stat + CTA */}
               <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <span className="font-heading text-(--accent-rose) text-3xl font-extrabold">
+                  <span className="font-heading text-3xl font-extrabold text-(--accent-rose)">
                     {CARRIER_PANEL_COUNT_DISPLAY}
                   </span>
-                  <span className="text-(--text-dim) ml-2 text-sm">conditions analyzed</span>
+                  <span className="ml-2 text-sm text-(--text-dim)">conditions analyzed</span>
                 </div>
                 <Link
                   href="/diseases"
-                  className="text-(--accent-rose) inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-rose) transition-opacity hover:opacity-80"
                   aria-label="Browse the full disease catalog"
                 >
                   Browse Disease Catalog
@@ -236,7 +233,7 @@ export function BentoFeatures() {
 
                     {/* Badge */}
                     <span
-                      className="card-badge mb-2 inline-block rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wider"
+                      className="card-badge mb-2 inline-block rounded-full px-2 py-0.5 text-xs font-semibold tracking-wider uppercase"
                       style={{
                         background: `${feature.color}18`,
                         color: feature.color,
@@ -245,10 +242,10 @@ export function BentoFeatures() {
                       {feature.badge}
                     </span>
 
-                    <h3 className="font-heading text-(--text-heading) mb-1.5 text-sm font-semibold">
+                    <h3 className="font-heading mb-1.5 text-sm font-semibold text-(--text-heading)">
                       {feature.title}
                     </h3>
-                    <p className="text-(--text-muted) text-xs leading-relaxed">
+                    <p className="text-xs leading-relaxed text-(--text-muted)">
                       {feature.description}
                     </p>
                   </GlassCard>

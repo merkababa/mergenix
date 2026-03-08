@@ -147,25 +147,25 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       <div
         role="alert"
         aria-invalid="true"
-        className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) border p-6 text-center"
+        className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center"
       >
-        <h3 className="font-heading text-(--text-primary) text-lg font-semibold">
+        <h3 className="font-heading text-lg font-semibold text-(--text-primary)">
           {errorMsg.title}
         </h3>
-        <p className="text-(--text-muted) mt-2 text-sm">{detail}</p>
-        <p className="text-(--text-muted) mt-1 text-xs">{errorMsg.action}</p>
+        <p className="mt-2 text-sm text-(--text-muted)">{detail}</p>
+        <p className="mt-1 text-xs text-(--text-muted)">{errorMsg.action}</p>
         <div className="mt-4 flex items-center justify-center gap-3">
           <button
             type="button"
             onClick={this.handleReset}
-            className="bg-(--accent-teal) text-bio-deep rounded-xl px-4 py-2 text-sm font-semibold transition-all hover:shadow-[0_0_12px_var(--glow-teal)]"
+            className="text-bio-deep rounded-xl bg-(--accent-teal) px-4 py-2 text-sm font-semibold transition-all hover:shadow-[0_0_12px_var(--glow-teal)]"
           >
             Try again
           </button>
           <button
             type="button"
             onClick={this.handleCopyDebugInfo}
-            className="border-(--border-subtle) bg-(--bg-surface) text-(--text-muted) hover:text-(--text-primary) rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:border-[rgba(6,214,160,0.3)]"
+            className="rounded-xl border border-(--border-subtle) bg-(--bg-surface) px-4 py-2 text-sm font-medium text-(--text-muted) transition-all hover:border-[rgba(6,214,160,0.3)] hover:text-(--text-primary)"
           >
             {copied ? 'Copied!' : 'Copy debug info'}
           </button>

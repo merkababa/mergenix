@@ -80,18 +80,18 @@ export function PunnettSquare({
       role="table"
       aria-label="Punnett square showing offspring genotype probabilities"
     >
-      <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col gap-0.5 overflow-hidden rounded-xl border">
+      <div className="flex flex-col gap-0.5 overflow-hidden rounded-xl border border-(--border-subtle) bg-(--bg-elevated)">
         {/* Header row: corner + column headers */}
         <div role="row" className="flex gap-0.5">
           <div className="w-1/3 bg-transparent" role="cell" />
           <div
-            className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
+            className="font-heading flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 text-sm font-bold text-(--text-heading)"
             role="columnheader"
           >
             {b1}
           </div>
           <div
-            className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
+            className="font-heading flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 text-sm font-bold text-(--text-heading)"
             role="columnheader"
           >
             {b2}
@@ -105,7 +105,7 @@ export function PunnettSquare({
         ].map(({ header, rowCells, key }) => (
           <div key={key} role="row" className="flex gap-0.5">
             <div
-              className="bg-(--bg-glass) font-heading text-(--text-heading) flex w-1/3 items-center justify-center px-3 py-2 text-sm font-bold"
+              className="font-heading flex w-1/3 items-center justify-center bg-(--bg-glass) px-3 py-2 text-sm font-bold text-(--text-heading)"
               role="rowheader"
             >
               {header}
@@ -120,7 +120,7 @@ export function PunnettSquare({
                 role="cell"
               >
                 <div className="font-mono text-base font-bold">{cell.genotype}</div>
-                <div className="text-(--text-muted) mt-0.5 text-xs">
+                <div className="mt-0.5 text-xs text-(--text-muted)">
                   {probabilities.get(cell.genotype)}%
                 </div>
                 <div className="mt-0.5 text-xs opacity-80">{cell.label}</div>

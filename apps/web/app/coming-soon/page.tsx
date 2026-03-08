@@ -57,7 +57,7 @@ export default function ComingSoonPage() {
   return (
     <>
       <main
-        className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16${isSuccess ? ' page-fade-out' : ''}`}
+        className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16${isSuccess ? 'page-fade-out' : ''}`}
         aria-label="Coming soon page"
       >
         {/* Background layer: 3D Helix + glow orbs */}
@@ -67,9 +67,9 @@ export default function ComingSoonPage() {
           aria-hidden="true"
         >
           {/* Teal glow orb — top-left area */}
-          <div className="absolute -left-32 -top-32 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(6,214,160,0.12)_0%,transparent_70%)]" />
+          <div className="absolute -top-32 -left-32 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(6,214,160,0.12)_0%,transparent_70%)]" />
           {/* Violet glow orb — bottom-right area */}
-          <div className="absolute -bottom-24 -right-24 h-[400px] w-[400px] bg-[radial-gradient(circle,rgba(139,92,246,0.08)_0%,transparent_70%)]" />
+          <div className="absolute -right-24 -bottom-24 h-[400px] w-[400px] bg-[radial-gradient(circle,rgba(139,92,246,0.08)_0%,transparent_70%)]" />
           {/* 3D DNA Helix — fills entire background */}
           <DnaHelix3DDynamic className="h-full w-full" />
         </div>
@@ -99,7 +99,7 @@ export default function ComingSoonPage() {
           {/* Tagline — delay 0.3s */}
           <div className="fade-slide-up mb-8 text-center" style={{ animationDelay: '0.3s' }}>
             <p
-              className="text-lg text-slate-600 dark:text-white/50 sm:text-xl"
+              className="text-lg text-slate-600 sm:text-xl dark:text-white/50"
               style={{ fontFamily: 'var(--font-lexend), sans-serif' }}
             >
               Explore Your Genetic Potential
@@ -108,7 +108,7 @@ export default function ComingSoonPage() {
 
           {/* Glassmorphism card with form — delay 0.5s */}
           <div className="fade-slide-up w-full" style={{ animationDelay: '0.5s' }}>
-            <div className="rounded-2xl border border-slate-200 bg-slate-100 p-6 backdrop-blur-md dark:border-white/10 dark:bg-white/5 sm:p-8">
+            <div className="rounded-2xl border border-slate-200 bg-slate-100 p-6 backdrop-blur-md sm:p-8 dark:border-white/10 dark:bg-white/5">
               <p className="mb-4 text-center text-sm text-slate-700 dark:text-white/40">
                 Have an access code? Enter it below to get early access.
               </p>
@@ -116,11 +116,11 @@ export default function ComingSoonPage() {
               <form onSubmit={handleSubmit} noValidate>
                 {/* Input container */}
                 <div
-                  className={`flex items-center rounded-xl border border-slate-300 bg-slate-50 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]${shake ? ' shake' : ''}`}
+                  className={`flex items-center rounded-xl border border-slate-300 bg-slate-50 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]${shake ? 'shake' : ''}`}
                   onAnimationEnd={handleShakeEnd}
                 >
                   {/* Lock icon */}
-                  <span className="flex shrink-0 items-center pl-4 pr-2" aria-hidden="true">
+                  <span className="flex shrink-0 items-center pr-2 pl-4" aria-hidden="true">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -143,7 +143,7 @@ export default function ComingSoonPage() {
                     onChange={handlePasswordChange}
                     placeholder="Enter access code..."
                     autoComplete="current-password"
-                    className="outline-hidden min-w-0 flex-1 bg-transparent py-3.5 text-sm text-slate-900 placeholder:text-slate-400 dark:text-white dark:placeholder:text-white/30"
+                    className="min-w-0 flex-1 bg-transparent py-3.5 text-sm text-slate-900 outline-hidden placeholder:text-slate-400 dark:text-white dark:placeholder:text-white/30"
                     aria-label="Access code for team members"
                     aria-describedby={error ? 'password-error password-hint' : 'password-hint'}
                     aria-invalid={!!error}
@@ -213,7 +213,10 @@ export default function ComingSoonPage() {
                 )}
 
                 {/* Helper text */}
-                <p id="password-hint" className="mt-2 text-center text-xs text-slate-500 dark:text-white/50">
+                <p
+                  id="password-hint"
+                  className="mt-2 text-center text-xs text-slate-500 dark:text-white/50"
+                >
                   Team members only
                 </p>
               </form>
@@ -241,13 +244,18 @@ export default function ComingSoonPage() {
         </div>
 
         {/* Footer */}
-        <footer className="absolute bottom-0 left-0 right-0 pb-6">
+        <footer className="absolute right-0 bottom-0 left-0 pb-6">
           <div className="flex items-center justify-center gap-4 text-center">
-            <p className="text-xs text-slate-500 dark:text-white/50">&copy; {new Date().getFullYear()} Mergenix</p>
+            <p className="text-xs text-slate-500 dark:text-white/50">
+              &copy; {new Date().getFullYear()} Mergenix
+            </p>
             <span className="text-xs text-slate-500 dark:text-white/50" aria-hidden="true">
               |
             </span>
-            <a href="/privacy" className="text-xs text-slate-500 underline hover:text-slate-700 dark:text-white/50 dark:hover:text-white/75">
+            <a
+              href="/privacy"
+              className="text-xs text-slate-500 underline hover:text-slate-700 dark:text-white/50 dark:hover:text-white/75"
+            >
               Privacy Policy
             </a>
           </div>

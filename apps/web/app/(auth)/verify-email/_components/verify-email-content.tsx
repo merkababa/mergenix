@@ -91,10 +91,10 @@ export function VerifyEmailContent() {
               >
                 {/* DNA helix loading — reusable component (#1), removed Loader2 (#10) */}
                 <DnaDots />
-                <h1 className="font-heading text-(--text-primary) text-xl font-bold">
+                <h1 className="font-heading text-xl font-bold text-(--text-primary)">
                   Verifying your email...
                 </h1>
-                <p className="text-(--text-muted) mt-2 text-sm">This will only take a moment.</p>
+                <p className="mt-2 text-sm text-(--text-muted)">This will only take a moment.</p>
               </m.div>
             )}
 
@@ -118,12 +118,12 @@ export function VerifyEmailContent() {
                   }}
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]"
                 >
-                  <CheckCircle className="text-(--accent-teal) h-9 w-9" />
+                  <CheckCircle className="h-9 w-9 text-(--accent-teal)" />
                 </m.div>
                 <h1 className="gradient-text font-heading text-2xl font-extrabold">
                   Email Verified!
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">
+                <p className="mt-3 text-sm text-(--text-muted)">
                   Your email address has been confirmed. You can now sign in to your account.
                 </p>
                 <div className="mt-6">
@@ -162,16 +162,16 @@ export function VerifyEmailContent() {
                   }}
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]"
                 >
-                  <XCircle className="text-(--accent-rose) h-9 w-9" />
+                  <XCircle className="h-9 w-9 text-(--accent-rose)" />
                 </m.div>
-                <h1 className="font-heading text-(--text-primary) text-2xl font-extrabold">
+                <h1 className="font-heading text-2xl font-extrabold text-(--text-primary)">
                   Verification Failed
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">{errorMessage}</p>
+                <p className="mt-3 text-sm text-(--text-muted)">{errorMessage}</p>
 
                 {/* Resend verification — email input instead of /register link (#8) */}
                 <div className="mt-6 space-y-3 text-left">
-                  <p className="text-(--text-dim) text-center text-xs">
+                  <p className="text-center text-xs text-(--text-dim)">
                     Enter your email to resend the verification link:
                   </p>
                   <Input
@@ -183,7 +183,7 @@ export function VerifyEmailContent() {
                     value={resendEmail}
                     onChange={(e) => setResendEmail(e.target.value)}
                   />
-                  {resendError && <p className="text-(--accent-rose) text-xs">{resendError}</p>}
+                  {resendError && <p className="text-xs text-(--accent-rose)">{resendError}</p>}
                   <Button
                     variant="primary"
                     size="lg"
@@ -202,7 +202,7 @@ export function VerifyEmailContent() {
                   <div className="text-center">
                     <Link
                       href="/login"
-                      className="text-(--text-muted) hover:text-(--accent-teal) inline-flex items-center gap-1 py-2 text-sm transition-colors"
+                      className="inline-flex items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                     >
                       <ArrowLeft className="h-3.5 w-3.5" />
                       Back to Login

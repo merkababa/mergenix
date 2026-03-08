@@ -52,8 +52,8 @@ export const RESULT_TABS: {
 
 function TabErrorFallback({ label }: { label: string }) {
   return (
-    <div className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) border p-6 text-center">
-      <p className="text-(--text-muted) text-sm">Failed to load {label}.</p>
+    <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center">
+      <p className="text-sm text-(--text-muted)">Failed to load {label}.</p>
     </div>
   );
 }
@@ -133,12 +133,12 @@ export function AnalysisResultsSection({
           hover="none"
           className="flex items-center gap-3 border-[rgba(245,158,11,0.2)] bg-[rgba(245,158,11,0.04)] p-4"
         >
-          <AlertTriangle className="text-(--accent-amber) h-5 w-5 shrink-0" />
+          <AlertTriangle className="h-5 w-5 shrink-0 text-(--accent-amber)" />
           <div className="flex-1">
-            <p className="text-(--text-body) text-sm">
+            <p className="text-sm text-(--text-body)">
               You&apos;re viewing demo results with synthetic data.
             </p>
-            <p className="text-(--accent-teal) mt-1 text-sm font-medium">
+            <p className="mt-1 text-sm font-medium text-(--accent-teal)">
               Ready to analyze your own DNA?
             </p>
           </div>
@@ -187,10 +187,10 @@ export function AnalysisResultsSection({
                   aria-controls={`tabpanel-${tab.key}`}
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => onTabChange(tab.key)}
-                  className={`font-heading flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+                  className={`font-heading flex min-h-[44px] items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-medium whitespace-nowrap transition-all ${
                     isActive
-                      ? 'bg-linear-to-r from-accent-teal to-day-accent-teal text-bio-deep font-bold shadow-[0_2px_12px_rgba(6,214,160,0.3)]'
-                      : 'text-(--text-muted) hover:text-(--accent-teal) hover:bg-[rgba(6,214,160,0.06)]'
+                      ? 'from-accent-teal to-day-accent-teal text-bio-deep bg-linear-to-r font-bold shadow-[0_2px_12px_rgba(6,214,160,0.3)]'
+                      : 'text-(--text-muted) hover:bg-[rgba(6,214,160,0.06)] hover:text-(--accent-teal)'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -200,7 +200,7 @@ export function AnalysisResultsSection({
             })}
           </div>
           <div
-            className="bg-linear-to-l from-(--bg-glass) pointer-events-none absolute bottom-0 right-0 top-0 w-8 to-transparent"
+            className="pointer-events-none absolute top-0 right-0 bottom-0 w-8 bg-linear-to-l from-(--bg-glass) to-transparent"
             aria-hidden="true"
           />
         </div>

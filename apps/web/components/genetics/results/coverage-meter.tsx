@@ -74,7 +74,7 @@ export const CoverageMeter = memo(function CoverageMeter({
       style={{ background: bgColor, borderRadius: '8px', padding: '8px 10px' }}
     >
       <div className="flex items-center justify-between text-xs">
-        <span className="text-(--text-body) font-medium">
+        <span className="font-medium text-(--text-body)">
           Tested {variantsTested} of {variantsTotal} variants
         </span>
         <span className="font-mono font-semibold" style={{ color: barColor }}>
@@ -88,7 +88,7 @@ export const CoverageMeter = memo(function CoverageMeter({
         aria-valuemax={100}
         aria-valuetext={`Tested ${variantsTested} of ${variantsTotal} variants (${roundedPct}%)`}
         aria-label={`${diseaseName} variant coverage`}
-        className="bg-(--border-subtle) h-1.5 w-full rounded-full"
+        className="h-1.5 w-full rounded-full bg-(--border-subtle)"
       >
         <div
           className="h-1.5 rounded-full transition-all duration-300"

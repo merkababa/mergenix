@@ -49,7 +49,7 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
       aria-label={`${trait.name}: Likely ${trait.prediction}, approximately ${pct} percent probability`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="font-heading text-(--text-heading) text-sm font-semibold">
+        <p className="font-heading text-sm font-semibold text-(--text-heading)">
           {trait.icon && (
             <span className="mr-1.5" aria-hidden="true">
               {trait.icon}
@@ -59,7 +59,7 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
         </p>
       </div>
 
-      <p className="text-(--text-body) mt-1 text-xs">
+      <p className="mt-1 text-xs text-(--text-body)">
         Likely {trait.prediction} (~{pct}% likely)
       </p>
 
@@ -71,9 +71,9 @@ function TraitCard({ trait }: { trait: TraitPrediction }) {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label={`${trait.name} probability: ${pct} percent`}
-          className="bg-(--bg-glass) h-2 w-full rounded-full"
+          className="h-2 w-full rounded-full bg-(--bg-glass)"
         >
-          <div className="bg-(--accent-teal) h-2 rounded-full" style={{ width: `${pct}%` }} />
+          <div className="h-2 rounded-full bg-(--accent-teal)" style={{ width: `${pct}%` }} />
         </div>
       </div>
     </GlassCard>
@@ -89,15 +89,15 @@ function LockedTraitCard({ traitName, onUpgrade }: { traitName: string; onUpgrad
       aria-label={`${traitName}: Locked. Upgrade to Pro to view.`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="font-heading text-(--text-dim) text-sm font-semibold">{traitName}</p>
-        <Lock className="text-(--text-dim) h-4 w-4 shrink-0" aria-hidden="true" />
+        <p className="font-heading text-sm font-semibold text-(--text-dim)">{traitName}</p>
+        <Lock className="h-4 w-4 shrink-0 text-(--text-dim)" aria-hidden="true" />
       </div>
 
       {/* Blurred placeholder for locked value */}
-      <div className="bg-(--bg-glass) blur-xs mt-1 h-4 w-24 rounded-sm" aria-hidden="true" />
+      <div className="mt-1 h-4 w-24 rounded-sm bg-(--bg-glass) blur-xs" aria-hidden="true" />
 
       {/* Blurred probability bar placeholder */}
-      <div className="bg-(--bg-glass) blur-xs mt-2 h-2 w-full rounded-full" aria-hidden="true" />
+      <div className="mt-2 h-2 w-full rounded-full bg-(--bg-glass) blur-xs" aria-hidden="true" />
 
       {onUpgrade && (
         <Button size="sm" variant="outline" className="mt-3 w-full text-xs" onClick={onUpgrade}>
@@ -129,8 +129,8 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
     <GlassCard variant="medium" hover="none" className="p-6">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Sparkles className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
-        <h3 className="font-heading text-(--text-heading) text-lg font-bold">
+        <Sparkles className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+        <h3 className="font-heading text-lg font-bold text-(--text-heading)">
           Virtual Baby — Genetic Possibilities
         </h3>
       </div>
@@ -139,7 +139,7 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
       <section aria-label="Important disclaimer" className="mt-4">
         <div className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4">
           <AlertTriangle className="text-accent-amber mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-          <p className="text-(--text-body) text-xs font-medium leading-relaxed">
+          <p className="text-xs leading-relaxed font-medium text-(--text-body)">
             {VIRTUAL_BABY_DISCLAIMER}
           </p>
         </div>
@@ -162,7 +162,7 @@ export function VirtualBabyCard({ traits, tier, onUpgrade }: VirtualBabyCardProp
       {tier !== 'pro' && (
         <div className="mt-5 flex items-center gap-4 rounded-xl border border-[rgba(139,92,246,0.2)] bg-[rgba(139,92,246,0.04)] p-4">
           <Lock className="text-accent-violet h-5 w-5 shrink-0" aria-hidden="true" />
-          <p className="text-(--text-body) flex-1 text-sm">
+          <p className="flex-1 text-sm text-(--text-body)">
             {`Showing 1 of ${traits.length} trait predictions. Upgrade to Pro for full access.`}
           </p>
           {onUpgrade && (

@@ -72,10 +72,10 @@ export function CallbackContent() {
                 {/* DNA dots — reusable component (#1), removed Loader2 (#10) */}
                 <span className="sr-only">Completing sign in, please wait.</span>
                 <DnaDots />
-                <h1 className="font-heading text-(--text-primary) text-xl font-bold">
+                <h1 className="font-heading text-xl font-bold text-(--text-primary)">
                   Completing sign in...
                 </h1>
-                <p className="text-(--text-muted) mt-2 text-sm">
+                <p className="mt-2 text-sm text-(--text-muted)">
                   Please wait while we verify your account.
                 </p>
               </m.div>
@@ -102,12 +102,12 @@ export function CallbackContent() {
                   }}
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(244,63,94,0.1)]"
                 >
-                  <XCircle className="text-(--accent-rose) h-9 w-9" />
+                  <XCircle className="h-9 w-9 text-(--accent-rose)" />
                 </m.div>
-                <h1 className="font-heading text-(--text-primary) text-2xl font-extrabold">
+                <h1 className="font-heading text-2xl font-extrabold text-(--text-primary)">
                   Sign In Failed
                 </h1>
-                <p className="text-(--text-muted) mt-3 text-sm">{errorMessage}</p>
+                <p className="mt-3 text-sm text-(--text-muted)">{errorMessage}</p>
                 <div className="mt-6 space-y-3">
                   <Link
                     href="/login"
@@ -123,7 +123,7 @@ export function CallbackContent() {
                   <div>
                     <Link
                       href="/"
-                      className="text-(--text-muted) hover:text-(--accent-teal) inline-flex min-h-[44px] min-w-[44px] items-center gap-1 py-2 text-sm transition-colors"
+                      className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1 py-2 text-sm text-(--text-muted) transition-colors hover:text-(--accent-teal)"
                     >
                       <ArrowLeft className="h-3.5 w-3.5" />
                       Back to Home

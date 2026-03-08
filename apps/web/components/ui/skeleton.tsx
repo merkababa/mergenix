@@ -14,7 +14,7 @@ export function Skeleton({ className, variant = 'text', ...props }: SkeletonProp
           'h-4 w-full rounded-lg': variant === 'text',
           'h-10 w-10 rounded-full': variant === 'circular',
           'h-32 w-full rounded-2xl': variant === 'rectangular',
-          'rounded-glass border-(--border-subtle) h-48 w-full border': variant === 'card',
+          'rounded-glass h-48 w-full border border-(--border-subtle)': variant === 'card',
         },
         className,
       )}
@@ -27,7 +27,7 @@ export function Skeleton({ className, variant = 'text', ...props }: SkeletonProp
 /** Multi-line skeleton card matching the disease card layout */
 export function SkeletonCard() {
   return (
-    <div className="rounded-glass border-(--border-subtle) bg-(--bg-glass) overflow-hidden border p-5">
+    <div className="rounded-glass overflow-hidden border border-(--border-subtle) bg-(--bg-glass) p-5">
       <Skeleton className="mb-3 h-5 w-3/5" />
       <Skeleton className="mb-2 h-3 w-full" />
       <Skeleton className="mb-4 h-3 w-2/5" />

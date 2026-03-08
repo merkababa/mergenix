@@ -67,7 +67,7 @@ export const FAQ_ITEMS: FaqItem[] = [
         processing error, contact{' '}
         <a
           href="mailto:support@mergenix.com"
-          className="text-(--accent-teal) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) rounded-xs underline hover:underline focus-visible:ring-2 focus-visible:ring-offset-1"
+          className="rounded-xs text-(--accent-teal) underline hover:underline focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 focus-visible:outline-hidden"
         >
           support@mergenix.com
         </a>{' '}

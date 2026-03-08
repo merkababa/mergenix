@@ -62,13 +62,9 @@ export function HeroSection() {
         aria-hidden="true"
       >
         {/* Teal glow orb — top-left area */}
-        <div
-          className="absolute -left-32 -top-32 h-[600px] w-[600px] bg-[radial-gradient(circle,rgba(6,214,160,0.15)_0%,transparent_70%)]"
-        />
+        <div className="absolute -top-32 -left-32 h-[600px] w-[600px] bg-[radial-gradient(circle,rgba(6,214,160,0.15)_0%,transparent_70%)]" />
         {/* Violet glow orb — bottom-right area */}
-        <div
-          className="absolute -bottom-24 -right-24 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(139,92,246,0.10)_0%,transparent_70%)]"
-        />
+        <div className="absolute -right-24 -bottom-24 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(139,92,246,0.10)_0%,transparent_70%)]" />
         {/* 3D DNA Helix — fills entire background */}
         <DnaHelix3DDynamic className="h-full w-full" />
       </div>
@@ -80,7 +76,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
-          className="text-(--text-heading) font-heading mx-auto max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl xl:text-7xl"
+          className="font-heading mx-auto max-w-3xl text-4xl leading-tight font-extrabold text-(--text-heading) md:text-5xl lg:text-6xl xl:text-7xl"
         >
           Explore Your Genetic Possibilities
         </m.h1>
@@ -89,11 +85,11 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' as const }}
-          className="text-(--text-muted) mx-auto mt-6 max-w-2xl text-lg md:text-xl"
+          className="mx-auto mt-6 max-w-2xl text-lg text-(--text-muted) md:text-xl"
         >
           Compare two parents&apos; DNA to predict offspring disease risk, traits, and drug
           responses.{' '}
-          <span className="text-(--accent-teal) font-medium">
+          <span className="font-medium text-(--accent-teal)">
             Your DNA never leaves your device.
           </span>
         </m.p>
@@ -108,19 +104,19 @@ export function HeroSection() {
           aria-label="Key statistics"
         >
           <div className="text-center">
-            <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
+            <span className="font-heading text-3xl font-extrabold text-(--accent-teal) md:text-4xl">
               {formatNumber(CARRIER_PANEL_COUNT)}
             </span>
-            <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
+            <p className="mt-1 text-xs font-medium tracking-wider text-(--text-muted) uppercase">
               Diseases Screened
             </p>
           </div>
-          <div className="bg-(--border-subtle) h-10 w-px" aria-hidden="true" />
+          <div className="h-10 w-px bg-(--border-subtle)" aria-hidden="true" />
           <div className="text-center">
-            <span className="font-heading text-(--accent-teal) text-3xl font-extrabold md:text-4xl">
+            <span className="font-heading text-3xl font-extrabold text-(--accent-teal) md:text-4xl">
               {formatNumber(TRAIT_COUNT)}
             </span>
-            <p className="text-(--text-muted) mt-1 text-xs font-medium uppercase tracking-wider">
+            <p className="mt-1 text-xs font-medium tracking-wider text-(--text-muted) uppercase">
               Traits Predicted
             </p>
           </div>
@@ -133,10 +129,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' as const }}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <Link
-            href="/analysis"
-            className={cn(buttonVariants({ variant: 'primary', size: 'xl' }))}
-          >
+          <Link href="/analysis" className={cn(buttonVariants({ variant: 'primary', size: 'xl' }))}>
             Start Free Analysis
             <ChevronRight className="h-5 w-5" aria-hidden="true" />
           </Link>
@@ -159,8 +152,8 @@ export function HeroSection() {
         >
           {TRUST_BADGES.map(({ icon: Icon, label }) => (
             <li key={label} className={TRUST_BADGE_CLASS}>
-              <Icon className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
-              <span className="text-(--text-muted) text-xs">{label}</span>
+              <Icon className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
+              <span className="text-xs text-(--text-muted)">{label}</span>
             </li>
           ))}
         </m.ul>

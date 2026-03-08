@@ -36,7 +36,7 @@ export const CYP2D6Warning = memo(function CYP2D6Warning({
         style={{ color: 'var(--accent-amber)' }}
         aria-hidden="true"
       />
-      <p className="text-(--text-body) text-[11px] leading-relaxed">
+      <p className="text-[11px] leading-relaxed text-(--text-body)">
         <span className="font-semibold">{gene}:</span> {message}
       </p>
     </div>

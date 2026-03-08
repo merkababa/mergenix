@@ -42,8 +42,8 @@ export const ClinicalTestingBanner = memo(function ClinicalTestingBanner({
       role="alert"
       className="flex items-start gap-3 rounded-xl border border-[rgba(245,158,11,0.25)] bg-[rgba(245,158,11,0.06)] p-4"
     >
-      <AlertTriangle className="text-(--accent-amber) mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-      <p className="text-(--text-body) text-xs font-medium leading-relaxed">{message}</p>
+      <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-amber)" aria-hidden="true" />
+      <p className="text-xs leading-relaxed font-medium text-(--text-body)">{message}</p>
     </div>
   );
 });

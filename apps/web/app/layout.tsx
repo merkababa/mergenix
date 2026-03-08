@@ -27,7 +27,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_SCHEMA) }}
         />
       </head>
-      <body className="bg-(--app-gradient) font-body min-h-screen antialiased" data-bypassed={hasBypass ? 'true' : undefined}>
+      <body
+        className="font-body min-h-screen bg-(--app-gradient) antialiased"
+        data-bypassed={hasBypass ? 'true' : undefined}
+      >
         {/* Ambient glow orbs — fixed background layer for frosted-glass blur effects */}
         <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,214,160,0.08)_0%,transparent_50%)]" />
@@ -41,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           <AuthProvider>
             <MotionProvider>
-              <div className="z-1 relative flex min-h-screen flex-col">
+              <div className="relative z-1 flex min-h-screen flex-col">
                 <a href="#main-content" className="skip-to-main">
                   Skip to main content
                 </a>

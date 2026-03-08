@@ -190,7 +190,7 @@ function CountUpStat({ countTarget, suffix, label, colors }: CountUpStatProps) {
     >
       {/* Gradient top bar */}
       <div
-        className={`bg-linear-to-r absolute left-0 right-0 top-0 h-[3px] ${colors.bar}`}
+        className={`absolute top-0 right-0 left-0 h-[3px] bg-linear-to-r ${colors.bar}`}
         aria-hidden="true"
       />
       <span
@@ -202,7 +202,7 @@ function CountUpStat({ countTarget, suffix, label, colors }: CountUpStatProps) {
         {count.toLocaleString('en-US')}
         {suffix}
       </span>
-      <div className="text-(--text-muted) mt-2 text-sm font-medium">{label}</div>
+      <div className="mt-2 text-sm font-medium text-(--text-muted)">{label}</div>
     </GlassCard>
   );
 }
@@ -237,11 +237,11 @@ export function AboutContent() {
 
           <h2
             id="mission-heading"
-            className="font-heading text-(--text-heading) text-3xl font-extrabold md:text-4xl lg:text-5xl"
+            className="font-heading text-3xl font-extrabold text-(--text-heading) md:text-4xl lg:text-5xl"
           >
             Our Mission
           </h2>
-          <p className="text-(--text-body) mx-auto mt-8 max-w-2xl text-lg leading-relaxed md:text-xl">
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-(--text-body) md:text-xl">
             Every family deserves access to genetic insights that were once available only through
             expensive clinical testing. Mergenix makes comprehensive carrier screening, trait
             prediction, and pharmacogenomic analysis accessible to anyone with a consumer DNA test
@@ -278,10 +278,10 @@ export function AboutContent() {
                 <div className="mx-auto mb-4">
                   <StepCircle step={item.step} size="lg" />
                 </div>
-                <h3 className="font-heading text-(--text-heading) mb-2 text-lg font-semibold">
+                <h3 className="font-heading mb-2 text-lg font-semibold text-(--text-heading)">
                   {item.title}
                 </h3>
-                <p className="text-(--text-muted) text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-sm leading-relaxed text-(--text-muted)">{item.desc}</p>
               </GlassCard>
             </m.div>
           ))}
@@ -333,10 +333,10 @@ export function AboutContent() {
                       <Icon className={`h-6 w-6 ${iconColor}`} aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
+                      <h3 className="font-heading mb-2 text-base font-semibold text-(--text-heading)">
                         {item.title}
                       </h3>
-                      <p className="text-(--text-muted) text-sm leading-relaxed">
+                      <p className="text-sm leading-relaxed text-(--text-muted)">
                         {item.description}
                       </p>
                     </div>
@@ -387,10 +387,10 @@ export function AboutContent() {
                       <Icon className={`h-6 w-6 ${iconColor}`} aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
+                      <h3 className="font-heading mb-2 text-base font-semibold text-(--text-heading)">
                         {item.title}
                       </h3>
-                      <p className="text-(--text-muted) text-sm leading-relaxed">
+                      <p className="text-sm leading-relaxed text-(--text-muted)">
                         {item.description}
                       </p>
                     </div>
@@ -446,7 +446,7 @@ export function AboutContent() {
                   </div>
                 </div>
                 {/* Role label */}
-                <span className="text-(--text-body) text-sm font-medium">{member.role}</span>
+                <span className="text-sm font-medium text-(--text-body)">{member.role}</span>
               </div>
             ))}
           </div>
@@ -507,7 +507,7 @@ export function AboutContent() {
           >
             Ready to Explore Your Genetics?
           </h2>
-          <p className="text-(--text-muted) mx-auto mt-3 max-w-lg">
+          <p className="mx-auto mt-3 max-w-lg text-(--text-muted)">
             Start with a free account. Begin your analysis in minutes.
           </p>
           <div className="mt-6">

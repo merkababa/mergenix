@@ -17,21 +17,21 @@ function AccountSkeleton() {
   return (
     <>
       <div className="mb-8 text-center">
-        <div className="bg-(--bg-elevated) mx-auto h-9 w-56 animate-pulse rounded-xl" />
-        <div className="bg-(--bg-elevated) mx-auto mt-3 h-5 w-80 animate-pulse rounded-lg" />
+        <div className="mx-auto h-9 w-56 animate-pulse rounded-xl bg-(--bg-elevated)" />
+        <div className="mx-auto mt-3 h-5 w-80 animate-pulse rounded-lg bg-(--bg-elevated)" />
       </div>
       <div className="mx-auto max-w-2xl space-y-6">
         {[1, 2, 3, 4].map((i) => (
           <GlassCard key={i} variant="medium" hover="none" className="p-7">
             <div className="mb-5 flex items-center gap-3">
-              <div className="bg-(--bg-elevated) h-5 w-5 animate-pulse rounded-sm" />
-              <div className="bg-(--bg-elevated) h-5 w-24 animate-pulse rounded-lg" />
+              <div className="h-5 w-5 animate-pulse rounded-sm bg-(--bg-elevated)" />
+              <div className="h-5 w-24 animate-pulse rounded-lg bg-(--bg-elevated)" />
             </div>
             <div className="space-y-3">
-              <div className="bg-(--bg-elevated) h-16 w-full animate-pulse rounded-xl" />
-              <div className="bg-(--bg-elevated) h-10 w-full animate-pulse rounded-xl" />
+              <div className="h-16 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
+              <div className="h-10 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
               {i <= 2 && (
-                <div className="bg-(--bg-elevated) h-10 w-full animate-pulse rounded-xl" />
+                <div className="h-10 w-full animate-pulse rounded-xl bg-(--bg-elevated)" />
               )}
             </div>
           </GlassCard>
@@ -76,7 +76,7 @@ export function AccountContent() {
         <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl">
           Account Settings
         </h1>
-        <p className="text-(--text-muted) mx-auto mt-3 max-w-xl">
+        <p className="mx-auto mt-3 max-w-xl text-(--text-muted)">
           Manage your profile, security, and session settings
         </p>
       </div>

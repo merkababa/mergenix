@@ -312,28 +312,28 @@ FullAnalysisResult → postMessage → Zustand store
 
 Completed 2026-03-03. Elevated Mergenix from B-grade to A+ visual design.
 
-| Sprint | PR   | Description                                                                              | Status     |
-| ------ | ---- | ---------------------------------------------------------------------------------------- | ---------- |
-| D1     | #117 | Foundation — fluid typography, scroll animations, GlassCard variants, color narrative     | **Merged** |
-| D2     | #118 | Homepage — 3D DNA helix (Three.js/R3F), bento grid, scroll timeline, social proof        | **Merged** |
-| D3     | #119 | Sample Report — trait bars, PRS gauges, risk cards, Punnett square, sticky sidebar        | **Merged** |
-| D4     | #120 | Secondary Pages — pricing card, comparison table, about page, View Transitions, mobile   | **Merged** |
+| Sprint | PR   | Description                                                                            | Status     |
+| ------ | ---- | -------------------------------------------------------------------------------------- | ---------- |
+| D1     | #117 | Foundation — fluid typography, scroll animations, GlassCard variants, color narrative  | **Merged** |
+| D2     | #118 | Homepage — 3D DNA helix (Three.js/R3F), bento grid, scroll timeline, social proof      | **Merged** |
+| D3     | #119 | Sample Report — trait bars, PRS gauges, risk cards, Punnett square, sticky sidebar     | **Merged** |
+| D4     | #120 | Secondary Pages — pricing card, comparison table, about page, View Transitions, mobile | **Merged** |
 
 **Post-overhaul polish:** PRs #121-#128 (tech debt, design review BLOCKs/WARNs, motion v12, zod removal, test mock dedup)
 
 ### Recent Work (2026-03-04 → 2026-03-08)
 
-| PR   | Title                                                         | Status     |
-| ---- | ------------------------------------------------------------- | ---------- |
+| PR   | Title                                                                 | Status     |
+| ---- | --------------------------------------------------------------------- | ---------- |
 | #167 | Light theme polish — visual artifacts, bento card, Most Popular → Pro | **Merged** |
-| #166 | Hero redesign — centered layout with 3D DNA helix background  | **Merged** |
-| #165 | Security deps — resolve all 4 deferred CVEs                   | **Merged** |
-| #151 | CI failures fix — all 8 jobs green                            | **Merged** |
-| #150 | Test mock dedup — shared helpers, -560 lines                  | **Merged** |
-| #149 | TW4 cascade layer fix + landing redesign                      | **Merged** |
-| #148 | Batch dependency updates round 2                              | **Merged** |
-| #147 | Tailwind CSS 3.4 → 4.2 migration                             | **Merged** |
-| #146 | Batch safe dependency updates                                 | **Merged** |
+| #166 | Hero redesign — centered layout with 3D DNA helix background          | **Merged** |
+| #165 | Security deps — resolve all 4 deferred CVEs                           | **Merged** |
+| #151 | CI failures fix — all 8 jobs green                                    | **Merged** |
+| #150 | Test mock dedup — shared helpers, -560 lines                          | **Merged** |
+| #149 | TW4 cascade layer fix + landing redesign                              | **Merged** |
+| #148 | Batch dependency updates round 2                                      | **Merged** |
+| #147 | Tailwind CSS 3.4 → 4.2 migration                                      | **Merged** |
+| #146 | Batch safe dependency updates                                         | **Merged** |
 
 ---
 
@@ -345,9 +345,9 @@ Completed 2026-03-03. Elevated Mergenix from B-grade to A+ visual design.
 | #127 | Remove unused zod dependency                                                                         | **Merged** |
 | #126 | Migrate framer-motion v11 → motion v12                                                               | **Merged** |
 | #125 | Resolve 3 INFO tech debt items                                                                       | **Merged** |
-| #124 | Deduplicate test mocks into shared __helpers__/ module                                               | **Merged** |
-| #123 | Resolve 25 design review WARNs — a11y, touch targets, tokens                                        | **Merged** |
-| #122 | Resolve 4 design review BLOCKs (a11y + contrast)                                                    | **Merged** |
+| #124 | Deduplicate test mocks into shared **helpers**/ module                                               | **Merged** |
+| #123 | Resolve 25 design review WARNs — a11y, touch targets, tokens                                         | **Merged** |
+| #122 | Resolve 4 design review BLOCKs (a11y + contrast)                                                     | **Merged** |
 | #121 | Tech debt cleanup — mock dedup, marketing tests & polish, type fixes                                 | **Merged** |
 | #116 | Website audit — SEO, metadata, env config, saveResult field                                          | **Merged** |
 | #115 | Decompose analysis-content.tsx into 4 sub-components                                                 | **Merged** |

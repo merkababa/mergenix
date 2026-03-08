@@ -43,22 +43,22 @@ export function ProfileSection() {
   return (
     <GlassCard variant="medium" hover="none" className="p-7">
       <div className="mb-5 flex items-center gap-3">
-        <User className="text-(--accent-teal) h-5 w-5" />
-        <h2 className="font-heading text-(--text-heading) text-lg font-bold">Profile</h2>
+        <User className="h-5 w-5 text-(--accent-teal)" />
+        <h2 className="font-heading text-lg font-bold text-(--text-heading)">Profile</h2>
       </div>
 
       <div className="space-y-4">
         {/* User card */}
-        <div className="bg-(--bg-elevated) flex items-center justify-between rounded-xl p-4">
+        <div className="flex items-center justify-between rounded-xl bg-(--bg-elevated) p-4">
           <div className="flex items-center gap-3">
-            <div className="bg-linear-to-br from-(--accent-teal) to-(--accent-cyan) flex h-12 w-12 items-center justify-center rounded-full">
-              <span className="font-heading text-(--bg-deep) text-lg font-bold">{initials}</span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-teal) to-(--accent-cyan)">
+              <span className="font-heading text-lg font-bold text-(--bg-deep)">{initials}</span>
             </div>
             <div>
-              <p className="font-heading text-(--text-heading) text-sm font-semibold">
+              <p className="font-heading text-sm font-semibold text-(--text-heading)">
                 {user?.name ?? 'User'}
               </p>
-              <p className="text-(--text-muted) text-xs">{user?.email ?? ''}</p>
+              <p className="text-xs text-(--text-muted)">{user?.email ?? ''}</p>
             </div>
           </div>
           {user?.tier && (
@@ -88,7 +88,7 @@ export function ProfileSection() {
             disabled
             className="opacity-60"
           />
-          <p className="text-(--text-dim) mt-1.5 text-xs">
+          <p className="mt-1.5 text-xs text-(--text-dim)">
             Contact support to change your email address.
           </p>
         </div>
@@ -110,7 +110,7 @@ export function ProfileSection() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -8 }}
                 transition={{ duration: 0.2 }}
-                className="text-(--accent-teal) text-xs font-medium"
+                className="text-xs font-medium text-(--accent-teal)"
               >
                 Changes saved!
               </m.span>

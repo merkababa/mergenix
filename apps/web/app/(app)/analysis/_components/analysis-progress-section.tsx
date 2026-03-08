@@ -20,7 +20,7 @@ export function AnalysisProgressSection({ currentStep, onCancel }: AnalysisProgr
     <div className="mt-8 space-y-4">
       <ErrorBoundary
         fallback={
-          <div className="rounded-glass border-(--border-subtle) bg-(--bg-elevated) text-(--text-muted) border p-6 text-center text-sm">
+          <div className="rounded-glass border border-(--border-subtle) bg-(--bg-elevated) p-6 text-center text-sm text-(--text-muted)">
             Failed to load analysis progress.
           </div>
         }

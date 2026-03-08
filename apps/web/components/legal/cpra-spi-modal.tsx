@@ -67,7 +67,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
   return (
     /* Backdrop */
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [-webkit-backdrop-filter:blur(4px)] [backdrop-filter:blur(4px)]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [backdrop-filter:blur(4px)] [-webkit-backdrop-filter:blur(4px)]"
       onClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
       role="presentation"
@@ -80,18 +80,18 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
         aria-describedby={descId}
         aria-modal="true"
         tabIndex={-1}
-        className="border-(--glass-border) bg-(--bg-glass) focus-visible:outline-hidden relative mx-auto max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl border shadow-2xl [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
+        className="relative mx-auto max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl border border-(--glass-border) bg-(--bg-glass) shadow-2xl [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))] focus-visible:outline-hidden"
       >
         {/* Header */}
-        <div className="border-(--border-subtle) flex items-start gap-3 border-b p-5">
+        <div className="flex items-start gap-3 border-b border-(--border-subtle) p-5">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-            <Shield className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+            <Shield className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 id={titleId} className="font-heading text-(--text-heading) text-base font-semibold">
+            <h2 id={titleId} className="font-heading text-base font-semibold text-(--text-heading)">
               Limit the Use of My Sensitive Personal Information
             </h2>
-            <p className="text-(--text-muted) mt-0.5 text-xs">
+            <p className="mt-0.5 text-xs text-(--text-muted)">
               California Privacy Rights Act (CPRA)
             </p>
           </div>
@@ -99,7 +99,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
             type="button"
             onClick={onClose}
             aria-label="Close SPI notice"
-            className="text-(--text-muted) hover:text-(--text-primary) focus-visible:outline-hidden focus-visible:ring-(--accent-teal) flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-[rgba(6,214,160,0.06)] focus-visible:ring-2 focus-visible:ring-offset-1"
+            className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg text-(--text-muted) transition-colors hover:bg-[rgba(6,214,160,0.06)] hover:text-(--text-primary) focus-visible:ring-2 focus-visible:ring-(--accent-teal) focus-visible:ring-offset-1 focus-visible:outline-hidden"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -107,7 +107,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
 
         {/* Body — scrollable */}
         <div id={descId} className="max-h-[calc(90vh-5rem)] overflow-y-auto p-5">
-          <div className="text-(--text-body) space-y-3 text-sm leading-relaxed">
+          <div className="space-y-3 text-sm leading-relaxed text-(--text-body)">
             {CPRA_SPI_NOTICE.split('\n\n').map((paragraph, idx) => {
               // Render the first paragraph (title) as a heading
               if (idx === 0) {
@@ -121,12 +121,12 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
                     {lines.map((line, lineIdx) => (
                       <li
                         key={lineIdx}
-                        className="text-(--text-body) flex items-start gap-2 text-sm"
+                        className="flex items-start gap-2 text-sm text-(--text-body)"
                       >
                         {line.startsWith('•') ? (
                           <>
                             <span
-                              className="bg-(--accent-teal) mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                              className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent-teal)"
                               aria-hidden="true"
                             />
                             <span>{line.replace(/^•\s*/, '')}</span>
@@ -140,7 +140,7 @@ export function CpraSpiModal({ onClose }: CpraSpiModalProps) {
                 );
               }
               return (
-                <p key={idx} className="text-(--text-body) text-sm leading-relaxed">
+                <p key={idx} className="text-sm leading-relaxed text-(--text-body)">
                   {paragraph}
                 </p>
               );

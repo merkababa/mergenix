@@ -82,13 +82,13 @@ function PaymentSuccessContent() {
         <GlassCard variant="medium" hover="none" className="p-8">
           <div role="status" aria-live="polite">
             <Loader2
-              className="text-(--accent-teal) mx-auto h-16 w-16 animate-spin"
+              className="mx-auto h-16 w-16 animate-spin text-(--accent-teal)"
               aria-hidden="true"
             />
             <h1 className="gradient-text font-heading mt-6 text-3xl font-extrabold">
               Verifying your purchase...
             </h1>
-            <p className="text-(--text-muted) mt-3">Please wait while we confirm your payment.</p>
+            <p className="mt-3 text-(--text-muted)">Please wait while we confirm your payment.</p>
           </div>
         </GlassCard>
       </div>
@@ -105,7 +105,7 @@ function PaymentSuccessContent() {
             Payment Successful!
           </h1>
 
-          <p className="text-(--text-muted) mt-3">
+          <p className="mt-3 text-(--text-muted)">
             Your account has been upgraded
             {user?.tier && user.tier !== 'free'
               ? ` to ${user.tier.charAt(0).toUpperCase() + user.tier.slice(1)}`
@@ -113,10 +113,10 @@ function PaymentSuccessContent() {
             . Thank you for your purchase!
           </p>
 
-          {sessionId && <p className="text-(--text-dim) mt-2 text-xs">Session: {sessionId}</p>}
+          {sessionId && <p className="mt-2 text-xs text-(--text-dim)">Session: {sessionId}</p>}
         </div>
 
-        <p className="text-(--text-muted) mt-6 text-sm">
+        <p className="mt-6 text-sm text-(--text-muted)">
           Redirecting in {countdown} second{countdown !== 1 ? 's' : ''}...
         </p>
 
@@ -150,9 +150,9 @@ export function SuccessContent() {
         <div className="mx-auto max-w-lg text-center">
           <GlassCard variant="medium" hover="none" className="p-8">
             <div className="animate-pulse">
-              <div className="bg-(--bg-elevated) mx-auto h-16 w-16 rounded-full" />
-              <div className="bg-(--bg-elevated) mx-auto mt-6 h-8 w-48 rounded-sm" />
-              <div className="bg-(--bg-elevated) mx-auto mt-3 h-4 w-64 rounded-sm" />
+              <div className="mx-auto h-16 w-16 rounded-full bg-(--bg-elevated)" />
+              <div className="mx-auto mt-6 h-8 w-48 rounded-sm bg-(--bg-elevated)" />
+              <div className="mx-auto mt-3 h-4 w-64 rounded-sm bg-(--bg-elevated)" />
             </div>
           </GlassCard>
         </div>

@@ -80,18 +80,18 @@ const SavedResultItem = memo(function SavedResultItem({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
-      className="border-(--border-subtle) bg-(--bg-elevated) rounded-xl border p-4"
+      className="rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
     >
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-          <FileText className="text-(--accent-teal) h-4 w-4" aria-hidden="true" />
+          <FileText className="h-4 w-4 text-(--accent-teal)" aria-hidden="true" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="font-heading text-(--text-heading) truncate text-sm font-semibold">
+          <p className="font-heading truncate text-sm font-semibold text-(--text-heading)">
             {result.label}
           </p>
-          <div className="text-(--text-muted) mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-(--text-muted)">
             <span>
               {result.parent1Filename} + {result.parent2Filename}
             </span>
@@ -105,7 +105,7 @@ const SavedResultItem = memo(function SavedResultItem({
         <div className="flex shrink-0 items-center gap-1.5">
           {isConfirming ? (
             <>
-              <span className="text-(--accent-rose) text-xs">Delete?</span>
+              <span className="text-xs text-(--accent-rose)">Delete?</span>
               <Button
                 variant="destructive"
                 size="sm"
@@ -140,7 +140,7 @@ const SavedResultItem = memo(function SavedResultItem({
                   <Download className="h-3.5 w-3.5" />
                   Load
                 </Button>
-                <span className="text-(--text-muted) text-xs">Coming Soon</span>
+                <span className="text-xs text-(--text-muted)">Coming Soon</span>
               </div>
               <Button
                 ref={deleteButtonRef}
@@ -253,8 +253,8 @@ export function SavedResultsList() {
   return (
     <GlassCard variant="subtle" hover="none" className="p-6">
       <div className="mb-4 flex items-center gap-3">
-        <Archive className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
-        <h2 className="font-heading text-(--text-heading) text-lg font-bold">My Saved Analyses</h2>
+        <Archive className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
+        <h2 className="font-heading text-lg font-bold text-(--text-heading)">My Saved Analyses</h2>
       </div>
 
       {/* Loading skeleton */}
@@ -266,13 +266,13 @@ export function SavedResultsList() {
           {SKELETON_IDS.map((i) => (
             <div
               key={i}
-              className="border-(--border-subtle) bg-(--bg-elevated) animate-pulse rounded-xl border p-4"
+              className="animate-pulse rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4"
             >
               <div className="flex items-center gap-3">
-                <div className="bg-(--border-subtle) h-9 w-9 rounded-full" />
+                <div className="h-9 w-9 rounded-full bg-(--border-subtle)" />
                 <div className="flex-1 space-y-2">
-                  <div className="bg-(--border-subtle) h-3.5 w-32 rounded-sm" />
-                  <div className="bg-(--border-subtle) h-3 w-48 rounded-sm" />
+                  <div className="h-3.5 w-32 rounded-sm bg-(--border-subtle)" />
+                  <div className="h-3 w-48 rounded-sm bg-(--border-subtle)" />
                 </div>
               </div>
             </div>
@@ -288,7 +288,7 @@ export function SavedResultsList() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="text-(--accent-rose) mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+            className="mb-4 rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
             role="alert"
           >
             {error}
@@ -319,14 +319,14 @@ export function SavedResultsList() {
 
       {/* Empty state */}
       {!isLoading && !error && sortedResults.length === 0 && (
-        <div className="border-(--border-subtle) bg-(--bg-elevated) flex flex-col items-center justify-center rounded-xl border px-6 py-10 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-(--border-subtle) bg-(--bg-elevated) px-6 py-10 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.1)]">
-            <Archive className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
+            <Archive className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
           </div>
-          <p className="font-heading text-(--text-heading) text-sm font-semibold">
+          <p className="font-heading text-sm font-semibold text-(--text-heading)">
             No saved analyses yet
           </p>
-          <p className="text-(--text-muted) mt-1.5 max-w-xs text-xs">
+          <p className="mt-1.5 max-w-xs text-xs text-(--text-muted)">
             Run an analysis and save the results to access them later.
           </p>
         </div>
@@ -334,11 +334,11 @@ export function SavedResultsList() {
 
       {/* Upgrade CTA for free users */}
       {!isLoading && userTier === 'free' && sortedResults.length > 0 && (
-        <div className="text-(--text-muted) mt-4 flex items-center gap-2 text-xs">
-          <Crown className="text-(--accent-amber) h-3.5 w-3.5" aria-hidden="true" />
+        <div className="mt-4 flex items-center gap-2 text-xs text-(--text-muted)">
+          <Crown className="h-3.5 w-3.5 text-(--accent-amber)" aria-hidden="true" />
           <span>
             Free tier allows 1 saved analysis.{' '}
-            <a href="/subscription" className="text-(--accent-teal) font-medium hover:underline">
+            <a href="/subscription" className="font-medium text-(--accent-teal) hover:underline">
               Upgrade for more
             </a>
           </span>

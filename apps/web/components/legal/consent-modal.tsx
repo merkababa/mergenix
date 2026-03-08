@@ -153,7 +153,7 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="z-60 fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-md"
         >
           <m.div
             variants={modalVariants}
@@ -169,23 +169,23 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
               aria-labelledby="consent-modal-title"
               aria-describedby="consent-modal-description"
               tabIndex={-1}
-              className="outline-hidden border-(--glass-border) bg-(--bg-glass) rounded-2xl border p-8 shadow-[0_8px_40px_var(--shadow-elevated)] [-webkit-backdrop-filter:blur(var(--glass-blur))] [backdrop-filter:blur(var(--glass-blur))]"
+              className="rounded-2xl border border-(--glass-border) bg-(--bg-glass) p-8 shadow-[0_8px_40px_var(--shadow-elevated)] outline-hidden [backdrop-filter:blur(var(--glass-blur))] [-webkit-backdrop-filter:blur(var(--glass-blur))]"
             >
               {/* Icon */}
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[rgba(6,214,160,0.1)]">
-                <FileSearch className="text-(--accent-teal) h-8 w-8" aria-hidden="true" />
+                <FileSearch className="h-8 w-8 text-(--accent-teal)" aria-hidden="true" />
               </div>
 
               <h2
                 id="consent-modal-title"
-                className="font-heading text-(--text-heading) mb-2 text-center text-xl font-bold"
+                className="font-heading mb-2 text-center text-xl font-bold text-(--text-heading)"
               >
                 Consent for Genetic Data Processing
               </h2>
 
               <p
                 id="consent-modal-description"
-                className="text-(--text-muted) mb-4 text-center text-sm"
+                className="mb-4 text-center text-sm text-(--text-muted)"
               >
                 Please read the following consent information carefully before proceeding with
                 genetic analysis.
@@ -196,9 +196,9 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                 <div
                   ref={scrollContainerRef}
                   tabIndex={0}
-                  className="border-(--border-subtle) bg-(--bg-elevated) focus-visible:outline-(--accent-teal) max-h-60 overflow-y-auto rounded-xl border p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="max-h-60 overflow-y-auto rounded-xl border border-(--border-subtle) bg-(--bg-elevated) p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 >
-                  <div className="text-(--text-body) whitespace-pre-line text-sm">
+                  <div className="text-sm whitespace-pre-line text-(--text-body)">
                     {CONSENT_TEXT_GENETIC_PROCESSING}
                   </div>
                   {/* Sentinel div — IntersectionObserver target */}
@@ -206,7 +206,7 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                 </div>
                 {!hasScrolledToBottom && (
                   <div
-                    className="bg-linear-to-t from-(--bg-elevated) pointer-events-none absolute bottom-0 left-0 right-0 h-12 rounded-b-xl to-transparent"
+                    className="pointer-events-none absolute right-0 bottom-0 left-0 h-12 rounded-b-xl bg-linear-to-t from-(--bg-elevated) to-transparent"
                     aria-hidden="true"
                   />
                 )}
@@ -217,7 +217,7 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                 className={`mb-6 flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
                   hasScrolledToBottom
                     ? 'border-(--border-subtle) bg-(--bg-elevated) hover:border-[rgba(6,214,160,0.2)]'
-                    : 'border-(--border-subtle) bg-(--bg-elevated) cursor-not-allowed opacity-50'
+                    : 'cursor-not-allowed border-(--border-subtle) bg-(--bg-elevated) opacity-50'
                 }`}
               >
                 <input
@@ -225,10 +225,10 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                   disabled={!hasScrolledToBottom}
-                  className="border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal) mt-0.5 h-4 w-4 rounded-sm"
+                  className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) bg-(--bg-elevated) accent-(--accent-teal)"
                   aria-label="I have read and agree to the genetic data processing terms"
                 />
-                <span className="text-(--text-body) text-sm">
+                <span className="text-sm text-(--text-body)">
                   I have read and agree to the genetic data processing terms
                 </span>
               </label>
@@ -249,7 +249,7 @@ export function ConsentModal({ isOpen, onAccept, onDecline }: ConsentModalProps)
                 </Button>
               </div>
 
-              <p className="text-(--text-dim) mt-3 text-center text-xs">
+              <p className="mt-3 text-center text-xs text-(--text-dim)">
                 Your consent is required under GDPR Article 9 for processing special category
                 (genetic) data.
               </p>

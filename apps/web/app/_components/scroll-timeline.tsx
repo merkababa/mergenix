@@ -237,14 +237,14 @@ export function ScrollTimeline() {
         <div className="relative">
           {/* Vertical connecting line — desktop only */}
           <div
-            className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 md:block"
+            className="pointer-events-none absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 md:block"
             aria-hidden="true"
           >
             {/* Track line (faded) */}
-            <div className="bg-(--border-subtle) absolute inset-0" />
+            <div className="absolute inset-0 bg-(--border-subtle)" />
             {/* Animated fill line */}
             <m.div
-              className="bg-(--accent-teal) absolute inset-x-0 top-0 origin-top"
+              className="absolute inset-x-0 top-0 origin-top bg-(--accent-teal)"
               style={{ scaleY: lineScaleY, height: '100%' }}
             />
           </div>
@@ -267,13 +267,13 @@ export function ScrollTimeline() {
                     <ScrollReveal type="clip" direction={isEven ? 'right' : 'left'} delay={0.1}>
                       <div className={`${isEven ? 'md:ml-auto' : ''} max-w-xs`}>
                         <h3
-                          className="font-heading text-(--text-heading) mb-3 font-bold"
+                          className="font-heading mb-3 font-bold text-(--text-heading)"
                           style={{ fontSize: 'var(--font-size-fluid-body)' }}
                         >
                           <span className="sr-only">Step {step.number}: </span>
                           {step.title}
                         </h3>
-                        <p className="text-(--text-muted) text-sm leading-relaxed">
+                        <p className="text-sm leading-relaxed text-(--text-muted)">
                           {step.description}
                         </p>
                       </div>

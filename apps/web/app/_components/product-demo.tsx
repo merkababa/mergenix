@@ -63,9 +63,9 @@ export function ProductDemo() {
             }}
           >
             {/* Perspective wrapper — desktop only; flat on mobile */}
-            <div className="md:perspective-distant rounded-2xl">
+            <div className="rounded-2xl md:perspective-distant">
               <div
-                className="md:transform-[rotateY(-5deg)] md:transform-3d overflow-hidden rounded-2xl"
+                className="overflow-hidden rounded-2xl md:transform-[rotateY(-5deg)] md:transform-3d"
                 style={{
                   border: '1px solid var(--glass-border)',
                   background: 'var(--bg-glass)',
@@ -82,9 +82,9 @@ export function ProductDemo() {
                   aria-hidden="true"
                 >
                   {/* Window control dots */}
-                  <span className="bg-(--accent-rose) h-3 w-3 rounded-full opacity-70" />
-                  <span className="bg-(--accent-amber) h-3 w-3 rounded-full opacity-70" />
-                  <span className="bg-(--accent-teal) h-3 w-3 rounded-full opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-rose) opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-amber) opacity-70" />
+                  <span className="h-3 w-3 rounded-full bg-(--accent-teal) opacity-70" />
                   {/* URL bar */}
                   <div
                     className="mx-auto flex h-6 w-48 items-center justify-center rounded-full px-3"
@@ -94,7 +94,7 @@ export function ProductDemo() {
                     }}
                   >
                     {/* text-xs = 12px minimum (§4 — no text smaller than 12px) */}
-                    <span className="text-(--text-dim) text-xs">mergenix.app/analysis</span>
+                    <span className="text-xs text-(--text-dim)">mergenix.app/analysis</span>
                   </div>
                 </div>
 
@@ -110,7 +110,7 @@ export function ProductDemo() {
                   </span>
                   {/* "Sample Data" badge — makes clear these are fictional values (§3 of fix list) */}
                   <span
-                    className="absolute right-3 top-3 z-10 rounded-full px-2.5 py-1 text-xs font-semibold"
+                    className="absolute top-3 right-3 z-10 rounded-full px-2.5 py-1 text-xs font-semibold"
                     style={{
                       background: 'rgba(148,163,184,0.12)',
                       border: '1px solid rgba(148,163,184,0.2)',
@@ -125,16 +125,16 @@ export function ProductDemo() {
                   <div className="mb-5 flex items-center justify-between">
                     <div>
                       <div
-                        className="bg-(--bg-elevated) h-4 w-36 rounded-full"
+                        className="h-4 w-36 rounded-full bg-(--bg-elevated)"
                         aria-hidden="true"
                       />
                       <div
-                        className="bg-(--border-subtle) mt-2 h-3 w-24 rounded-full"
+                        className="mt-2 h-3 w-24 rounded-full bg-(--border-subtle)"
                         aria-hidden="true"
                       />
                     </div>
                     <div
-                      className="text-(--accent-teal) rounded-lg px-3 py-1.5 text-xs font-semibold"
+                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-(--accent-teal)"
                       style={{
                         background: 'rgba(6,214,160,0.12)',
                         border: '1px solid rgba(6,214,160,0.2)',
@@ -148,7 +148,7 @@ export function ProductDemo() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {/* Carrier risk panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="text-(--text-dim) mb-3 text-xs font-semibold uppercase tracking-wider">
+                      <p className="mb-3 text-xs font-semibold tracking-wider text-(--text-dim) uppercase">
                         Est. Carrier Risk
                       </p>
                       {/* Mock bars — values are sample data only, not real patient results */}
@@ -156,12 +156,12 @@ export function ProductDemo() {
                         <div key={item.label} className="mb-2">
                           <div className="mb-1 flex justify-between">
                             {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                            <span className="text-(--text-muted) text-xs">{item.label}</span>
+                            <span className="text-xs text-(--text-muted)">{item.label}</span>
                             <span className="text-xs font-medium" style={{ color: item.color }}>
                               {item.pct}%
                             </span>
                           </div>
-                          <div className="bg-(--border-subtle) h-1.5 w-full overflow-hidden rounded-full">
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-(--border-subtle)">
                             <div
                               className="h-full rounded-full"
                               style={{ width: `${item.pct}%`, background: item.color }}
@@ -178,7 +178,7 @@ export function ProductDemo() {
 
                     {/* Traits panel */}
                     <div className="rounded-xl p-4" style={PANEL_STYLE}>
-                      <p className="text-(--text-dim) mb-3 text-xs font-semibold uppercase tracking-wider">
+                      <p className="mb-3 text-xs font-semibold tracking-wider text-(--text-dim) uppercase">
                         Trait Predictions
                       </p>
                       {/* Mock trait items — values are sample data only, not real patient results */}
@@ -189,7 +189,7 @@ export function ProductDemo() {
                           style={{ background: 'var(--bg-elevated)' }}
                         >
                           {/* text-xs = 12px minimum (§4 — no sub-12px text) */}
-                          <span className="text-(--text-muted) text-xs">{trait.label}</span>
+                          <span className="text-xs text-(--text-muted)">{trait.label}</span>
                           <span className="text-xs font-semibold" style={{ color: trait.color }}>
                             {trait.value}
                           </span>
@@ -204,7 +204,7 @@ export function ProductDemo() {
             {/* Floating status overlay card — slides in from right on scroll */}
             <m.div
               style={{ x: overlayX, opacity: overlayOpacity }}
-              className="absolute -bottom-4 right-8 hidden sm:block"
+              className="absolute right-8 -bottom-4 hidden sm:block"
               aria-hidden="true"
             >
               <div

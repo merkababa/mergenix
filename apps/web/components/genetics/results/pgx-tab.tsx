@@ -84,8 +84,8 @@ export function PgxTab() {
 
         {/* Header */}
         <div className="flex items-center gap-2">
-          <Pill className="text-(--accent-teal) h-5 w-5" />
-          <h3 className="font-heading text-(--text-heading) text-xl font-bold">Pharmacogenomics</h3>
+          <Pill className="h-5 w-5 text-(--accent-teal)" />
+          <h3 className="font-heading text-xl font-bold text-(--text-heading)">Pharmacogenomics</h3>
         </div>
 
         {/* CYP2D6 array limitation warning */}
@@ -112,14 +112,14 @@ export function PgxTab() {
         {/* Empty state */}
         {geneResults.length === 0 && (
           <GlassCard variant="subtle" hover="none" className="p-8 text-center">
-            <p className="text-(--text-muted) text-sm">No pharmacogenomic results available.</p>
+            <p className="text-sm text-(--text-muted)">No pharmacogenomic results available.</p>
           </GlassCard>
         )}
 
         {/* DTC disclaimer */}
         {pgx.disclaimer && (
           <GlassCard variant="subtle" hover="none" className="p-4">
-            <p className="text-(--text-muted) text-xs leading-relaxed">{pgx.disclaimer}</p>
+            <p className="text-xs leading-relaxed text-(--text-muted)">{pgx.disclaimer}</p>
           </GlassCard>
         )}
 
@@ -148,7 +148,7 @@ function DrugRecommendationTable({ parentLabel, recommendations }: DrugRecommend
   if (recommendations.length === 0) return null;
   return (
     <div className="space-y-2">
-      <p className="text-(--text-heading) text-xs font-semibold uppercase tracking-wider">
+      <p className="text-xs font-semibold tracking-wider text-(--text-heading) uppercase">
         {parentLabel} Drug Recommendations
       </p>
       <div
@@ -159,16 +159,16 @@ function DrugRecommendationTable({ parentLabel, recommendations }: DrugRecommend
       >
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-(--border-subtle) text-(--text-muted) border-b">
-              <th className="pb-1.5 pr-3 font-medium">Drug</th>
-              <th className="pb-1.5 pr-3 font-medium">Recommendation</th>
-              <th className="pb-1.5 pr-3 font-medium">Strength</th>
+            <tr className="border-b border-(--border-subtle) text-(--text-muted)">
+              <th className="pr-3 pb-1.5 font-medium">Drug</th>
+              <th className="pr-3 pb-1.5 font-medium">Recommendation</th>
+              <th className="pr-3 pb-1.5 font-medium">Strength</th>
               <th className="pb-1.5 font-medium">Category</th>
             </tr>
           </thead>
           <tbody className="text-(--text-body)">
             {recommendations.map((rec) => (
-              <tr key={rec.drug} className="border-(--border-subtle) border-b last:border-0">
+              <tr key={rec.drug} className="border-b border-(--border-subtle) last:border-0">
                 <td className="py-1.5 pr-3 font-medium">{rec.drug}</td>
                 <td className="py-1.5 pr-3">{rec.recommendation}</td>
                 <td className="py-1.5 pr-3">
@@ -210,17 +210,17 @@ const GeneCard = memo(function GeneCard({
               <AlertTriangle className="text-accent-amber h-4 w-4" aria-hidden="true" />
             )}
           </h4>
-          <p className="text-(--text-muted) mt-0.5 text-xs">{gene.description}</p>
+          <p className="mt-0.5 text-xs text-(--text-muted)">{gene.description}</p>
         </div>
       </div>
 
       {/* Parent A */}
       <div className="space-y-1">
-        <p className="text-(--text-heading) text-xs font-semibold uppercase tracking-wider">
+        <p className="text-xs font-semibold tracking-wider text-(--text-heading) uppercase">
           Parent A
         </p>
-        <div className="text-(--text-body) flex flex-wrap items-center gap-2 text-sm">
-          <code className="bg-(--bg-elevated) rounded-sm px-1.5 py-0.5 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-(--text-body)">
+          <code className="rounded-sm bg-(--bg-elevated) px-1.5 py-0.5 font-mono text-xs">
             {gene.parentA.diplotype}
           </code>
           <Badge variant={METABOLIZER_BADGE_MAP[gene.parentA.metabolizerStatus.status]}>
@@ -231,11 +231,11 @@ const GeneCard = memo(function GeneCard({
 
       {/* Parent B */}
       <div className="space-y-1">
-        <p className="text-(--text-heading) text-xs font-semibold uppercase tracking-wider">
+        <p className="text-xs font-semibold tracking-wider text-(--text-heading) uppercase">
           Parent B
         </p>
-        <div className="text-(--text-body) flex flex-wrap items-center gap-2 text-sm">
-          <code className="bg-(--bg-elevated) rounded-sm px-1.5 py-0.5 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-(--text-body)">
+          <code className="rounded-sm bg-(--bg-elevated) px-1.5 py-0.5 font-mono text-xs">
             {gene.parentB.diplotype}
           </code>
           <Badge variant={METABOLIZER_BADGE_MAP[gene.parentB.metabolizerStatus.status]}>
@@ -259,16 +259,16 @@ const GeneCard = memo(function GeneCard({
       {/* Offspring predictions (Pro tier only — couple/offspring data is gated) */}
       {canShowOffspring && gene.offspringPredictions.length > 0 && (
         <div className="space-y-2">
-          <p className="text-(--text-heading) text-xs font-semibold uppercase tracking-wider">
+          <p className="text-xs font-semibold tracking-wider text-(--text-heading) uppercase">
             Offspring Predictions
           </p>
           <div className="space-y-1.5">
             {gene.offspringPredictions.map((pred) => (
               <div
                 key={pred.diplotype}
-                className="bg-(--bg-elevated) flex flex-wrap items-center gap-2 rounded-lg px-3 py-2 text-xs"
+                className="flex flex-wrap items-center gap-2 rounded-lg bg-(--bg-elevated) px-3 py-2 text-xs"
               >
-                <code className="text-(--text-heading) font-mono font-semibold">
+                <code className="font-mono font-semibold text-(--text-heading)">
                   {pred.diplotype}
                 </code>
                 <span className="text-(--text-muted)">{pred.probability.toFixed(0)}%</span>

@@ -54,12 +54,12 @@ export function DangerZone() {
           aria-expanded={isExpanded}
           aria-controls="danger-zone-content"
         >
-          <Trash2 className="text-(--accent-rose) h-5 w-5" />
-          <h2 className="font-heading text-(--accent-rose) flex-1 text-lg font-bold">
+          <Trash2 className="h-5 w-5 text-(--accent-rose)" />
+          <h2 className="font-heading flex-1 text-lg font-bold text-(--accent-rose)">
             Danger Zone
           </h2>
           <m.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronDown className="text-(--text-muted) h-5 w-5" />
+            <ChevronDown className="h-5 w-5 text-(--text-muted)" />
           </m.div>
         </button>
 
@@ -75,7 +75,7 @@ export function DangerZone() {
               className="overflow-hidden"
             >
               <div className="space-y-4 pt-5">
-                <p className="text-(--text-muted) text-sm">
+                <p className="text-sm text-(--text-muted)">
                   Permanently delete your account and all associated data. This action cannot be
                   undone.
                 </p>
@@ -84,9 +84,9 @@ export function DangerZone() {
                   id="danger-zone-warning"
                   className="flex items-start gap-2.5 rounded-xl border border-[rgba(245,158,11,0.15)] bg-[rgba(245,158,11,0.04)] p-3.5"
                 >
-                  <AlertTriangle className="text-(--accent-amber) mt-0.5 h-4 w-4 shrink-0" />
-                  <div className="text-(--text-muted) text-xs">
-                    <p className="text-(--text-heading) font-semibold">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-(--accent-amber)" />
+                  <div className="text-xs text-(--text-muted)">
+                    <p className="font-semibold text-(--text-heading)">
                       This will permanently delete:
                     </p>
                     <ul className="mt-1 list-inside list-disc space-y-0.5">
@@ -115,10 +115,10 @@ export function DangerZone() {
                     type="checkbox"
                     checked={confirmed}
                     onChange={(e) => setConfirmed(e.target.checked)}
-                    className="border-(--border-subtle) accent-(--accent-rose) mt-0.5 h-4 w-4 rounded-sm"
+                    className="mt-0.5 h-4 w-4 rounded-sm border-(--border-subtle) accent-(--accent-rose)"
                     aria-describedby="danger-zone-warning"
                   />
-                  <span className="text-(--text-muted) text-sm">
+                  <span className="text-sm text-(--text-muted)">
                     I understand this action is permanent and irreversible
                   </span>
                 </label>
@@ -131,7 +131,7 @@ export function DangerZone() {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="text-(--accent-rose) rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+                      className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                       role="alert"
                     >
                       {error}
@@ -155,10 +155,10 @@ export function DangerZone() {
           )}
         </AnimatePresence>
 
-        <p className="text-(--text-dim) mt-4 text-xs">
+        <p className="mt-4 text-xs text-(--text-dim)">
           <Link
             href="/legal#privacy"
-            className="text-(--text-muted) hover:text-(--accent-teal) transition-colors hover:underline"
+            className="text-(--text-muted) transition-colors hover:text-(--accent-teal) hover:underline"
           >
             Learn more about our data practices
           </Link>

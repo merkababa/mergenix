@@ -78,12 +78,12 @@ export function HomeContent() {
                 <m.div key={feature.title} variants={staggerItem}>
                   <GlassCard variant="medium" hover="lift" className="h-full p-6">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(6,214,160,0.1)]">
-                      <Icon className="text-(--accent-teal) h-6 w-6" aria-hidden="true" />
+                      <Icon className="h-6 w-6 text-(--accent-teal)" aria-hidden="true" />
                     </div>
-                    <h3 className="font-heading text-(--text-heading) mb-2 text-base font-semibold">
+                    <h3 className="font-heading mb-2 text-base font-semibold text-(--text-heading)">
                       {feature.title}
                     </h3>
-                    <p className="text-(--text-muted) text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed text-(--text-muted)">
                       {feature.description}
                     </p>
                   </GlassCard>
@@ -186,10 +186,10 @@ export function HomeContent() {
             {/* DNA helix animation */}
             <HelixAnimation dotCount={3} className="relative mx-auto mb-6 h-6 w-24" />
 
-            <h2 className="text-(--text-heading) font-heading relative text-3xl font-extrabold md:text-4xl">
+            <h2 className="font-heading relative text-3xl font-extrabold text-(--text-heading) md:text-4xl">
               Ready to Know?
             </h2>
-            <p className="text-(--text-muted) relative mx-auto mt-4 max-w-lg">
+            <p className="relative mx-auto mt-4 max-w-lg text-(--text-muted)">
               Create a free account and start your genetic analysis today. Your DNA stays on your
               device — always.
             </p>

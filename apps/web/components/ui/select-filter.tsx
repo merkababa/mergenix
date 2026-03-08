@@ -33,10 +33,10 @@ const SelectFilter = forwardRef<HTMLSelectElement, SelectFilterProps>(
           onChange={(e) => onChange(e.target.value)}
           aria-label={ariaLabel}
           className={cn(
-            'bg-(--bg-elevated) font-body text-(--text-primary) w-full appearance-none rounded-xl border px-4 py-2.5 pr-10 text-sm',
+            'font-body w-full appearance-none rounded-xl border bg-(--bg-elevated) px-4 py-2.5 pr-10 text-sm text-(--text-primary)',
             'border-(--border-subtle)',
             'transition-all duration-200',
-            'focus-visible:outline-hidden focus:outline-hidden focus-visible:border-[rgba(6,214,160,0.4)] focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.1)]',
+            'focus:outline-hidden focus-visible:border-[rgba(6,214,160,0.4)] focus-visible:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus-visible:outline-hidden',
             'cursor-pointer',
             /* Style the default/placeholder option as muted */
             !value && 'text-(--text-dim)',
@@ -57,7 +57,7 @@ const SelectFilter = forwardRef<HTMLSelectElement, SelectFilterProps>(
 
         {/* Custom chevron icon */}
         <div
-          className="text-(--text-dim) pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
+          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-(--text-dim)"
           aria-hidden="true"
         >
           <ChevronDown className="h-4 w-4" />

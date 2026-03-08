@@ -136,7 +136,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
         >
           {/* Backdrop */}
           <div
-            className="backdrop-blur-xs absolute inset-0 bg-[rgba(0,0,0,0.6)]"
+            className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-xs"
             onClick={onClose}
           />
 
@@ -153,16 +153,16 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="text-(--text-dim) hover:text-(--accent-rose) focus-visible:outline-(--accent-teal) absolute right-4 top-4 rounded-lg p-1.5 transition-colors hover:bg-[rgba(244,63,94,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="absolute top-4 right-4 rounded-lg p-1.5 text-(--text-dim) transition-colors hover:bg-[rgba(244,63,94,0.1)] hover:text-(--accent-rose) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-teal)"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              <h2 className="font-heading text-(--text-heading) mb-1 text-lg font-bold">
+              <h2 className="font-heading mb-1 text-lg font-bold text-(--text-heading)">
                 Change Password
               </h2>
-              <p className="text-(--text-muted) mb-5 text-sm">
+              <p className="mb-5 text-sm text-(--text-muted)">
                 Enter your current password and choose a new one.
               </p>
 
@@ -174,7 +174,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                 >
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(6,214,160,0.15)]">
                     <svg
-                      className="text-(--accent-teal) h-6 w-6"
+                      className="h-6 w-6 text-(--accent-teal)"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -183,7 +183,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                       <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="font-heading text-(--accent-teal) text-sm font-semibold">
+                  <p className="font-heading text-sm font-semibold text-(--accent-teal)">
                     Password changed successfully
                   </p>
                 </m.div>
@@ -209,7 +209,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                   {/* Password strength meter */}
                   {newPassword && (
                     <div>
-                      <div className="bg-(--border-subtle) h-1.5 overflow-hidden rounded-full">
+                      <div className="h-1.5 overflow-hidden rounded-full bg-(--border-subtle)">
                         <m.div
                           className="h-full rounded-full"
                           initial={{ width: 0 }}
@@ -267,7 +267,7 @@ export function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProp
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="text-(--accent-rose) rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm"
+                        className="rounded-xl border border-[rgba(244,63,94,0.2)] bg-[rgba(244,63,94,0.08)] px-4 py-3 text-sm text-(--accent-rose)"
                         role="alert"
                       >
                         {error}

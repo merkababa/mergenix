@@ -121,7 +121,7 @@ export function SampleReportContent() {
           <h1 className="gradient-text font-heading text-3xl font-extrabold md:text-4xl lg:text-5xl">
             Sample Report
           </h1>
-          <p className="font-body text-(--text-muted) mx-auto mt-3 max-w-2xl text-base md:text-lg">
+          <p className="font-body mx-auto mt-3 max-w-2xl text-base text-(--text-muted) md:text-lg">
             {`Fictional analysis for ${SAMPLE_COUPLE.parentA} & ${SAMPLE_COUPLE.parentB}`}
           </p>
         </m.div>
@@ -133,10 +133,10 @@ export function SampleReportContent() {
             className="mb-10 flex items-start gap-3 rounded-xl border border-[rgba(6,182,212,0.2)] bg-[rgba(6,182,212,0.06)] p-4"
           >
             <AlertTriangle
-              className="text-(--accent-cyan) mt-0.5 h-5 w-5 shrink-0"
+              className="mt-0.5 h-5 w-5 shrink-0 text-(--accent-cyan)"
               aria-hidden="true"
             />
-            <p className="text-(--text-body) text-xs font-medium leading-relaxed">
+            <p className="text-xs leading-relaxed font-medium text-(--text-body)">
               This is a sample report with fictional data for demonstration purposes only. No real
               genetic information is represented. Do not use this for any medical decisions.
             </p>
@@ -153,9 +153,9 @@ export function SampleReportContent() {
           <m.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2
               id="carrier-heading"
-              className="font-heading text-(--text-heading) mb-6 flex items-center gap-2 text-xl font-bold"
+              className="font-heading mb-6 flex items-center gap-2 text-xl font-bold text-(--text-heading)"
             >
-              <Dna className="text-(--accent-teal) h-5 w-5" aria-hidden="true" />
+              <Dna className="h-5 w-5 text-(--accent-teal)" aria-hidden="true" />
               Carrier Screening Results
             </h2>
           </m.div>
@@ -178,10 +178,10 @@ export function SampleReportContent() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-(--text-heading) text-sm font-semibold">
+                      <h3 className="text-sm font-semibold text-(--text-heading)">
                         {result.condition}
                       </h3>
-                      <p className="text-(--text-muted) mt-0.5 text-xs">
+                      <p className="mt-0.5 text-xs text-(--text-muted)">
                         {result.gene} &middot; {result.inheritance.replace(/_/g, ' ')}
                       </p>
                     </div>
@@ -193,7 +193,7 @@ export function SampleReportContent() {
                   {/* D3.4: Punnett square for the first both-carrier condition */}
                   {bothCarrierCondition && result.rsid === bothCarrierCondition.rsid && (
                     <details className="mt-4">
-                      <summary className="text-(--accent-teal) cursor-pointer text-xs font-medium hover:opacity-80">
+                      <summary className="cursor-pointer text-xs font-medium text-(--accent-teal) hover:opacity-80">
                         Show offspring probability grid
                       </summary>
                       <div className="mt-3">
@@ -202,7 +202,7 @@ export function SampleReportContent() {
                           parentBAlleles={['A', 'a']}
                           riskType="carrier"
                         />
-                        <p className="text-(--text-dim) mt-2 text-center text-xs">
+                        <p className="mt-2 text-center text-xs text-(--text-dim)">
                           Autosomal recessive — both parents are carriers (Aa × Aa)
                         </p>
                       </div>
@@ -227,9 +227,9 @@ export function SampleReportContent() {
           <m.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2
               id="traits-heading"
-              className="font-heading text-(--text-heading) mb-6 flex items-center gap-2 text-xl font-bold"
+              className="font-heading mb-6 flex items-center gap-2 text-xl font-bold text-(--text-heading)"
             >
-              <FlaskConical className="text-(--accent-violet) h-5 w-5" aria-hidden="true" />
+              <FlaskConical className="h-5 w-5 text-(--accent-violet)" aria-hidden="true" />
               Trait Predictions
             </h2>
           </m.div>
@@ -246,8 +246,8 @@ export function SampleReportContent() {
               .map((trait) => (
                 <m.div key={trait.rsid} variants={fadeUp}>
                   <GlassCard variant="subtle" hover="glow" className="h-full p-5">
-                    <h3 className="text-(--text-heading) text-sm font-semibold">{trait.trait}</h3>
-                    <p className="text-(--text-muted) mt-1 text-xs">
+                    <h3 className="text-sm font-semibold text-(--text-heading)">{trait.trait}</h3>
+                    <p className="mt-1 text-xs text-(--text-muted)">
                       {trait.gene} &middot; {trait.confidence} confidence
                     </p>
                     {/* D3.1: TraitProbabilityBar replaces plain <span> percentage */}
@@ -274,9 +274,9 @@ export function SampleReportContent() {
           <m.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2
               id="pgx-heading"
-              className="font-heading text-(--text-heading) mb-6 flex items-center gap-2 text-xl font-bold"
+              className="font-heading mb-6 flex items-center gap-2 text-xl font-bold text-(--text-heading)"
             >
-              <Pill className="text-(--accent-cyan) h-5 w-5" aria-hidden="true" />
+              <Pill className="h-5 w-5 text-(--accent-cyan)" aria-hidden="true" />
               Pharmacogenomics (PGx)
             </h2>
           </m.div>
@@ -291,24 +291,24 @@ export function SampleReportContent() {
             {Object.values(data.pgx.results).map((gene) => (
               <m.div key={gene.gene} variants={fadeUp}>
                 <GlassCard variant="subtle" hover="glow" className="h-full p-5">
-                  <h3 className="text-(--text-heading) text-sm font-semibold">{gene.gene}</h3>
-                  <p className="text-(--text-muted) mt-1 text-xs">Chr {gene.chromosome}</p>
+                  <h3 className="text-sm font-semibold text-(--text-heading)">{gene.gene}</h3>
+                  <p className="mt-1 text-xs text-(--text-muted)">Chr {gene.chromosome}</p>
                   <div className="mt-3 space-y-2">
                     <div className="text-xs">
                       <span className="text-(--text-muted)">{SAMPLE_COUPLE.parentA}: </span>
-                      <span className="text-(--accent-cyan) font-mono font-semibold">
+                      <span className="font-mono font-semibold text-(--accent-cyan)">
                         {gene.parentA.diplotype}
                       </span>
-                      <span className="text-(--text-dim) ml-1">
+                      <span className="ml-1 text-(--text-dim)">
                         ({gene.parentA.metabolizerStatus.status.replace(/_/g, ' ')})
                       </span>
                     </div>
                     <div className="text-xs">
                       <span className="text-(--text-muted)">{SAMPLE_COUPLE.parentB}: </span>
-                      <span className="text-(--accent-cyan) font-mono font-semibold">
+                      <span className="font-mono font-semibold text-(--accent-cyan)">
                         {gene.parentB.diplotype}
                       </span>
-                      <span className="text-(--text-dim) ml-1">
+                      <span className="ml-1 text-(--text-dim)">
                         ({gene.parentB.metabolizerStatus.status.replace(/_/g, ' ')})
                       </span>
                     </div>
@@ -324,12 +324,12 @@ export function SampleReportContent() {
           <m.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2
               id="prs-heading"
-              className="font-heading text-(--text-heading) mb-4 flex items-center gap-2 text-xl font-bold"
+              className="font-heading mb-4 flex items-center gap-2 text-xl font-bold text-(--text-heading)"
             >
-              <Activity className="text-(--accent-amber) h-5 w-5" aria-hidden="true" />
+              <Activity className="h-5 w-5 text-(--accent-amber)" aria-hidden="true" />
               Polygenic Risk Scores (PRS)
             </h2>
-            <p className="text-(--text-muted) mb-6 text-xs italic">
+            <p className="mb-6 text-xs text-(--text-muted) italic">
               Note: Most GWAS studies underlying these scores have disproportionately studied
               European-ancestry populations. PRS accuracy may be lower for individuals of
               non-European ancestry. Interpret these scores with caution and discuss with a genetic
@@ -355,16 +355,16 @@ export function SampleReportContent() {
                   />
 
                   {/* Supplementary text info below the gauge */}
-                  <div className="border-(--border-subtle) mt-3 space-y-1 border-t pt-3">
+                  <div className="mt-3 space-y-1 border-t border-(--border-subtle) pt-3">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-(--text-muted)">Range</span>
-                      <span className="text-(--text-body) font-mono">
+                      <span className="font-mono text-(--text-body)">
                         {condition.offspring.rangeLow}th &ndash; {condition.offspring.rangeHigh}th
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-(--text-muted)">Risk Interpretation</span>
-                      <span className="text-(--text-body) font-semibold">
+                      <span className="font-semibold text-(--text-body)">
                         {RISK_CATEGORY_LABELS[condition.parentA.riskCategory] ??
                           condition.parentA.riskCategory}{' '}
                         /{' '}
@@ -373,7 +373,7 @@ export function SampleReportContent() {
                       </span>
                     </div>
                     {condition.ancestryNote && (
-                      <p className="text-(--text-muted) text-xs italic">{condition.ancestryNote}</p>
+                      <p className="text-xs text-(--text-muted) italic">{condition.ancestryNote}</p>
                     )}
                   </div>
                 </GlassCard>
@@ -392,9 +392,9 @@ export function SampleReportContent() {
           <m.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2
               id="counseling-heading"
-              className="font-heading text-(--text-heading) mb-6 flex items-center gap-2 text-xl font-bold"
+              className="font-heading mb-6 flex items-center gap-2 text-xl font-bold text-(--text-heading)"
             >
-              <Stethoscope className="text-(--accent-rose) h-5 w-5" aria-hidden="true" />
+              <Stethoscope className="h-5 w-5 text-(--accent-rose)" aria-hidden="true" />
               Genetic Counseling Recommendation
             </h2>
           </m.div>
@@ -402,7 +402,7 @@ export function SampleReportContent() {
           <m.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <GlassCard variant="subtle" hover="none" className="p-5">
               <div className="mb-4 flex items-center gap-3">
-                <span className="text-(--text-heading) text-sm font-semibold">Urgency:</span>
+                <span className="text-sm font-semibold text-(--text-heading)">Urgency:</span>
                 <span
                   className={`text-sm font-bold uppercase ${urgencyColor(data.counseling.urgency)}`}
                 >
@@ -410,20 +410,20 @@ export function SampleReportContent() {
                 </span>
               </div>
 
-              <p className="text-(--text-body) mb-4 text-sm">{data.counseling.summaryText}</p>
+              <p className="mb-4 text-sm text-(--text-body)">{data.counseling.summaryText}</p>
 
               <div className="space-y-2">
-                <h3 className="text-(--text-heading) text-sm font-semibold">Key Findings</h3>
+                <h3 className="text-sm font-semibold text-(--text-heading)">Key Findings</h3>
                 {data.counseling.keyFindings?.map((finding) => (
                   <div
                     key={finding.condition}
-                    className="border-(--border-subtle) flex items-center justify-between rounded-lg border p-3"
+                    className="flex items-center justify-between rounded-lg border border-(--border-subtle) p-3"
                   >
                     <div>
-                      <span className="text-(--text-heading) text-sm font-medium">
+                      <span className="text-sm font-medium text-(--text-heading)">
                         {finding.condition}
                       </span>
-                      <span className="text-(--text-muted) ml-2 text-xs">{finding.gene}</span>
+                      <span className="ml-2 text-xs text-(--text-muted)">{finding.gene}</span>
                     </div>
                     <span className={`text-xs font-bold uppercase ${riskColor(finding.riskLevel)}`}>
                       {RISK_LABELS[finding.riskLevel] ?? finding.riskLevel}
@@ -433,7 +433,7 @@ export function SampleReportContent() {
               </div>
             </GlassCard>
 
-            <p className="text-(--text-muted) mt-3 text-xs">
+            <p className="mt-3 text-xs text-(--text-muted)">
               If you have concerns about genetic conditions, speak with a certified genetic
               counselor.{' '}
               <a
@@ -441,7 +441,7 @@ export function SampleReportContent() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Find a Genetic Counselor (opens in new tab)"
-                className="hover:text-(--accent-teal) underline"
+                className="underline hover:text-(--accent-teal)"
               >
                 Find a counselor (NSGC)
               </a>
@@ -450,15 +450,15 @@ export function SampleReportContent() {
         </section>
 
         {/* ── Call to Action ──────────────────────────────────────────── */}
-        <section className="mb-16 mt-16 text-center" aria-labelledby="cta-heading">
+        <section className="mt-16 mb-16 text-center" aria-labelledby="cta-heading">
           <GlassCard variant="medium" hover="glow" className="p-10">
             <h2
               id="cta-heading"
-              className="font-heading text-(--text-heading) mb-3 text-2xl font-bold"
+              className="font-heading mb-3 text-2xl font-bold text-(--text-heading)"
             >
               Ready to Analyze Your Own DNA?
             </h2>
-            <p className="text-(--text-muted) mb-6 text-sm">
+            <p className="mb-6 text-sm text-(--text-muted)">
               Upload your raw DNA files from 23andMe, AncestryDNA, MyHeritage, or VCF and get your
               personalized genetic analysis.
             </p>

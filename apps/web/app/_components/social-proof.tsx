@@ -52,7 +52,7 @@ function StarRating() {
   return (
     <div className="flex gap-0.5" role="img" aria-label="5 out of 5 stars">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className="text-(--accent-amber) text-sm" aria-hidden="true">
+        <span key={i} className="text-sm text-(--accent-amber)" aria-hidden="true">
           ★
         </span>
       ))}
@@ -82,21 +82,21 @@ export function SocialProof() {
                   the final value — that is sufficient. */}
               <span
                 ref={ref}
-                className="font-heading text-(--accent-teal) font-extrabold"
+                className="font-heading font-extrabold text-(--accent-teal)"
                 style={{ fontSize: 'var(--font-size-fluid-stats)' }}
                 aria-label={`${DISEASE_DB_COUNT.toLocaleString('en-US')} diseases in database`}
               >
                 {count.toLocaleString('en-US')}
               </span>
               <span
-                className="font-heading text-(--accent-teal) font-extrabold"
+                className="font-heading font-extrabold text-(--accent-teal)"
                 style={{ fontSize: 'var(--font-size-fluid-stats)' }}
                 aria-hidden="true"
               >
                 +
               </span>
             </div>
-            <p className="text-(--text-dim) text-sm font-medium uppercase tracking-widest">
+            <p className="text-sm font-medium tracking-widest text-(--text-dim) uppercase">
               Diseases in Database
             </p>
           </div>
@@ -117,7 +117,7 @@ export function SocialProof() {
                 <StarRating />
 
                 {/* Quote */}
-                <blockquote className="text-(--text-body) mt-4 text-sm leading-relaxed">
+                <blockquote className="mt-4 text-sm leading-relaxed text-(--text-body)">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
 
@@ -136,8 +136,8 @@ export function SocialProof() {
                     {t.initials}
                   </div>
                   <div>
-                    <p className="text-(--text-heading) text-sm font-semibold">{t.name}</p>
-                    <p className="text-(--text-dim) text-xs">{t.role}</p>
+                    <p className="text-sm font-semibold text-(--text-heading)">{t.name}</p>
+                    <p className="text-xs text-(--text-dim)">{t.role}</p>
                   </div>
                 </div>
               </GlassCard>

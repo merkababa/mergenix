@@ -18,14 +18,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="font-heading text-(--text-primary) mb-1.5 block text-sm font-medium"
+            className="font-heading mb-1.5 block text-sm font-medium text-(--text-primary)"
           >
             {label}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="text-(--text-dim) pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-(--text-dim)">
               {icon}
             </div>
           )}
@@ -34,10 +34,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             type={type}
             className={cn(
-              'bg-(--bg-elevated) font-body text-(--text-primary) placeholder:text-(--text-dim) w-full rounded-xl border px-4 py-2.5 text-sm',
+              'font-body w-full rounded-xl border bg-(--bg-elevated) px-4 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-dim)',
               'border-(--border-subtle)',
               'transition-all duration-200',
-              'focus:outline-hidden focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)]',
+              'focus:border-[rgba(6,214,160,0.4)] focus:shadow-[0_0_0_3px_rgba(6,214,160,0.1)] focus:outline-hidden',
               error &&
                 'border-[rgba(244,63,94,0.4)] focus:border-[rgba(244,63,94,0.5)] focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]',
               icon && 'pl-10',
@@ -49,7 +49,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {error && (
-          <p id={`${inputId}-error`} className="text-(--accent-rose) mt-1 text-xs" role="alert">
+          <p id={`${inputId}-error`} className="mt-1 text-xs text-(--accent-rose)" role="alert">
             {error}
           </p>
         )}
