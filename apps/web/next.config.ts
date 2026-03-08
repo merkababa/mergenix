@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 import { getSecurityHeaders } from './config/security';
 
+// Trigger initial Vercel deployment
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
