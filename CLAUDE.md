@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Mergenix is a genetic offspring analysis platform (repo name: Tortit). V3 rewrite is the active codebase.
+Mergenix is a genetic offspring analysis platform (repo name: mergenix). V3 rewrite is the active codebase.
 
 - **Frontend:** Next.js 15 + React 19 + Tailwind CSS + Zustand (`apps/web/`)
 - **Backend:** FastAPI + SQLAlchemy + Alembic (`apps/api/`)
