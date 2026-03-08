@@ -109,17 +109,17 @@ jobs:
         run: pnpm add -g vercel@50.22.1
 
       - name: Pull Vercel environment
-        run: vercel pull --yes --environment=${{ needs.preflight.outputs.deploy-env == 'production' && 'production' || 'preview' }}
+        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN }} --environment=${{ needs.preflight.outputs.deploy-env == 'production' && 'production' || 'preview' }}
         working-directory: apps/web
 
       - name: Build for Vercel
-        run: vercel build ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }}
         working-directory: apps/web
 
       - name: Deploy to Vercel
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }})
+          URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} ${{ needs.preflight.outputs.deploy-env == 'production' && '--prod' || '' }})
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Deployed to: $URL"
         working-directory: apps/web
