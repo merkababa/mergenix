@@ -32,8 +32,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Copy application source
 COPY . .
 
-# Make entrypoint executable
-RUN chmod +x /app/entrypoint.sh
+# Fix line endings (Windows CRLF → Unix LF) and make executable
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 # Ensure proper ownership
 RUN chown -R mergenix:mergenix /app
