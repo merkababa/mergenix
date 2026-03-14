@@ -10,7 +10,9 @@ claude-opus-4-6
 
 ## Tools
 
-Read, Grep, Glob, Bash
+- read_file
+- search_code
+- list_files
 
 ## Domain Context
 

@@ -10,7 +10,12 @@ claude-opus-4-6
 
 ## Tools
 
-Read, Edit, Write, Bash, Glob, Grep
+- read_file
+- edit_file
+- create_file
+- run_terminal_cmd
+- search_code
+- list_files
 
 ## Context
 
