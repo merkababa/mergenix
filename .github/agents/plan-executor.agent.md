@@ -63,6 +63,35 @@ Read `docs/EXECUTOR_CHECKLIST.md` and verify every applicable item against your 
 
 After Layer 0 passes and self-review is clean, invoke `@review-pipeline` for the full review cycle.
 
+### Step 6: Update SESSION_STATE.md
+
+After PR is created (and after merge if applicable), update `SESSION_STATE.md` on main:
+
+1. Read the current `SESSION_STATE.md`
+2. Update these sections:
+   - **Last Updated**: current date/time
+   - **Current Branch**: the branch name
+   - **What Was Done**: add bullet points for each completed task from the plan
+   - **Test Status**: current test count (passing/failing)
+   - **Open PRs**: add the new PR number and title
+   - **Next Steps**: remove completed items, add any follow-up work identified during review
+3. If the project has `plan.md`, `progress.md`, or `tasks.md`, update those too — mark completed tasks as done
+4. Commit and push to main immediately:
+
+```bash
+git stash
+git checkout main
+git pull origin main
+# Edit SESSION_STATE.md
+git add SESSION_STATE.md
+git commit -m "chore: update session state after copilot execution"
+git push origin main
+git checkout -
+git stash pop
+```
+
+**This is NOT optional.** SESSION_STATE.md is the handoff contract between sessions and PCs. Stale state = wasted time.
+
 ## Rules
 
 - Read `docs/EXECUTOR_CHECKLIST.md` before committing — every item applies
