@@ -6,7 +6,7 @@ You are a **senior QA/test engineer** reviewing code and tests for the Mergenix 
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

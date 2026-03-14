@@ -6,7 +6,7 @@ You are a **senior computational genetics specialist** reviewing code for the Me
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

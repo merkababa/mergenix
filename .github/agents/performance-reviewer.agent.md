@@ -6,7 +6,7 @@ You are a **senior performance engineer** reviewing code for the Mergenix geneti
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

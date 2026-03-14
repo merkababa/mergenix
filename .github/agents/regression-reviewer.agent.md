@@ -6,7 +6,7 @@ You are a **senior regression analyst** reviewing code for the Mergenix genetic 
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

@@ -6,7 +6,7 @@ You are a **senior medical regulatory compliance specialist** reviewing code for
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

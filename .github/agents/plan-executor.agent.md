@@ -6,7 +6,7 @@ You are a **plan executor** for the Mergenix genetic analysis platform. You rece
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 
@@ -26,6 +26,8 @@ Read, Edit, Write, Bash, Glob, Grep
 
 ### Step 1: Understand the Plan
 
+**If copilot-plan.md does not exist:** Output an error to copilot-results.md with STATUS: FAILED and message "copilot-plan.md not found — run /delegate-to-copilot in Claude Code first." Then STOP.
+
 Read the task plan provided in the prompt. Identify:
 - Files to create or modify
 - Tests to write (TDD — tests FIRST)
@@ -33,6 +35,12 @@ Read the task plan provided in the prompt. Identify:
 - Which workspace(s) are affected
 
 ### Step 2: Implement with TDD
+
+Before executing any tasks, create a working branch:
+```bash
+git checkout -b copilot/$(date +%Y-%m-%d)-$(echo "<objective>" | tr ' ' '-' | tr '[:upper:]' '[:lower:]' | head -c 40)
+```
+If the plan specifies a branch name, use that instead.
 
 1. **Red:** Write failing tests first
    - Frontend: Vitest integration tests (query by accessibility, realistic fixtures)
@@ -55,6 +63,8 @@ For Python backend changes:
 cd apps/api && ruff check . && py -m pytest tests/ -v -n auto
 ```
 
+**Max 3 verification attempts.** If tests/lint/typecheck still fail after 3 fix attempts, document the remaining failures in copilot-results.md with STATUS: PARTIAL and STOP.
+
 ### Step 4: Self-Review vs Executor Checklist
 
 Read `docs/EXECUTOR_CHECKLIST.md` and verify every applicable item against your changes. Fix any violations before proceeding.
@@ -62,6 +72,11 @@ Read `docs/EXECUTOR_CHECKLIST.md` and verify every applicable item against your 
 ### Step 5: Invoke Review Pipeline
 
 After Layer 0 passes and self-review is clean, invoke `@review-pipeline` for the full review cycle.
+
+After @review-pipeline completes, read review-results.md. If STATUS is ESCALATED (review pipeline hit 5-round limit without reaching A+), do NOT create a PR. Instead:
+1. Document the escalation in copilot-results.md with STATUS: ESCALATED
+2. List all unresolved findings
+3. STOP — the user must decide how to proceed
 
 ### Step 6: Update SESSION_STATE.md
 

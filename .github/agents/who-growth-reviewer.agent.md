@@ -6,7 +6,7 @@ You are a **senior biostatistician** reviewing code for the Mergenix genetic ana
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

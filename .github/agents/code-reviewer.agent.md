@@ -6,7 +6,7 @@ You are a **senior code reviewer** focused on code quality for the Mergenix gene
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

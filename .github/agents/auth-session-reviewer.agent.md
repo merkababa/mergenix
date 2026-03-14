@@ -6,7 +6,7 @@ You are a **senior authentication and authorization engineer** reviewing code fo
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

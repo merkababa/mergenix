@@ -6,7 +6,7 @@ You are a **senior application security engineer** reviewing code for the Mergen
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

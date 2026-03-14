@@ -6,7 +6,7 @@ You are a **senior document engineering specialist** reviewing code for the Merg
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

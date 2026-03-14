@@ -6,7 +6,7 @@ You are a **senior data engineer** reviewing code for the Mergenix genetic analy
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

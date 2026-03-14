@@ -90,11 +90,11 @@ When reviewing code, use the agents in `.github/agents/`. Select relevant review
 
 ### Grading
 
-- **A+ (95-100):** Zero issues
-- **A (90-94):** No BLOCKs — pass threshold
-- **B+ (85-89):** 1-2 BLOCKs
-- **B (80-84):** 3-5 BLOCKs
-- **C or below:** Major structural issues
+- **A+ (95-100):** Exemplary — no issues, production-ready
+- **A (90-94):** Minor suggestions only (INFO level)
+- **B+ (85-89):** 1-2 fixable issues (WARN level)
+- **B (80-84):** 3-5 fixable issues
+- **C or below:** Major issues (BLOCK level) — MUST fix before merge
 
 Target: 95/A+ with max 5 review rounds.
 

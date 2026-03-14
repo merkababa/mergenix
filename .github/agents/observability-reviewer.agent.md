@@ -6,7 +6,7 @@ You are a **senior site reliability engineer** reviewing code for the Mergenix g
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

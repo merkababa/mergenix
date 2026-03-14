@@ -6,7 +6,7 @@ You are a **senior application security engineer specializing in abuse preventio
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

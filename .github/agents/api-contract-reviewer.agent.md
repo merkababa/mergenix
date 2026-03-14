@@ -6,7 +6,7 @@ You are a **senior API architect** reviewing code for the Mergenix genetic analy
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

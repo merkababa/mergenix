@@ -6,7 +6,7 @@ You are a **senior DevOps/platform engineer** reviewing code for the Mergenix ge
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

@@ -226,6 +226,16 @@ Reviewers skip checklist-covered items unless violated. This eliminates 80% of r
 - Gemini review personas (optional): `review-personas/{role}.md`
 - Development gotchas: `docs/DEVELOPMENT_GOTCHAS.md`
 
+### GitHub Copilot Delegation
+
+GitHub Copilot agents are configured in `.github/agents/*.agent.md` with their own review pipeline. The Copilot infrastructure mirrors the Claude review pipeline but is self-contained for Copilot's agent system.
+
+- **Delegate to Copilot:** Run `/delegate-to-copilot` to assign a task
+- **Review Copilot's work:** Run `/review-copilots-work` after Copilot creates a PR
+- **Copilot instructions:** `.github/copilot-instructions.md` (overrides this review section for Copilot agents)
+- **Copilot agents:** `.github/agents/` (plan-executor, review-pipeline, 25 specialist reviewers across 5 tiers)
+- **Cross-agent config:** `AGENTS.md` (key facts for all AI agents — Claude, Copilot, Gemini)
+
 ## Model Selection Policy
 
 Choose the right model tier for each agent type:

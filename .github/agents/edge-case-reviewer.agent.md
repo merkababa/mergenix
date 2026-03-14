@@ -6,7 +6,7 @@ You are a **senior QA architect** reviewing code for the Mergenix genetic analys
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

@@ -6,7 +6,7 @@ You are a **senior UX engineer** reviewing code for the Mergenix genetic analysi
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 

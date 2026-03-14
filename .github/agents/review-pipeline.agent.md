@@ -6,7 +6,7 @@ You are the **review pipeline orchestrator** for the Mergenix genetic analysis p
 
 ## Model
 
-claude-opus-4.6
+claude-opus-4-6
 
 ## Tools
 
@@ -117,11 +117,13 @@ Round 1: All selected reviewers in parallel → collect ALL findings (deduplicat
     Fix EVERYTHING (BLOCK + WARN + INFO) in ONE batch
     Re-run Layer 0
          ↓
-Round 2: Re-review ONLY reviewers that had BLOCKs in R1
-         If no new BLOCKs → done
-         If new BLOCKs → fix → Round 3
+Round 2: Re-review with ALL 25 reviewers every round (not just those with BLOCKs —
+         a fix for one reviewer's finding could introduce issues in another reviewer's domain)
+         If ALL reviewers grade >= 95/A+ → DONE
+         If any < 95/A+ → fix findings, iterate
          ↓
-Round 3-5: Continue fixing BLOCKs only. Hard stop at Round 5.
+Round N: Continue until ALL 25 reviewers grade >= 95/A+ (max 5 rounds)
+If Round 5 and still not at A+ → STOP, escalate to user
 ```
 
 ### Output: review-results.md

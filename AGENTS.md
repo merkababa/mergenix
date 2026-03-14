@@ -57,6 +57,6 @@ Every agent writing code must read and follow `docs/EXECUTOR_CHECKLIST.md` befor
 
 - **Claude Code agents:** `.claude/agents/*-reviewer.md` (11 specialist reviewers)
 - **Claude Code commands:** `.claude/commands/review-pipeline.md`, `delegate-to-copilot.md`, `review-copilots-work.md`
-- **GitHub Copilot agents:** `.github/agents/*.agent.md` (8 agents: plan-executor, review-pipeline, 6 reviewers)
+- **GitHub Copilot agents:** `.github/agents/*.agent.md` (27 agents: plan-executor, review-pipeline, 25 reviewers across 5 tiers)
 - **Copilot instructions:** `.github/copilot-instructions.md`
 - **Gemini review personas:** `review-personas/*.md` (optional pre-check)
