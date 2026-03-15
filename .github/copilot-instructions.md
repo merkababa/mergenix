@@ -47,7 +47,9 @@ cd apps/api && ruff check . && py -m pytest tests/ -v -n auto
 
 ## Review Pipeline
 
-When reviewing code, use the agents in `.github/agents/`. Select relevant reviewers per PR — Tier 1 always runs, Tiers 2-5 based on what changed.
+This pipeline uses **25 reviewers across 5 tiers**.
+
+**ALL 25 reviewers run every round.** Fixes in one area can introduce issues in other areas. No shortcuts.
 
 ### Orchestration
 1. **plan-executor.agent.md** — Executes task plans end-to-end with TDD

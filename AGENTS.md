@@ -53,6 +53,18 @@ Every agent writing code must read and follow `docs/EXECUTOR_CHECKLIST.md` befor
 - Conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
 - Squash merge, delete branch after merge
 
+## Model Policy
+**ALL agents use `claude-opus-4-6`. No exceptions.**
+
+## Reviewer Tiers
+| Tier | Count | Reviewers |
+|------|-------|-----------|
+| Tier 1 — Core Quality | 6 | architect, code, security, ux, testing, performance |
+| Tier 2 — Deep Specialization | 6 | auth-session, data-integrity, error-handling, i18n-rtl, api-contract, state-management |
+| Tier 3 — Infrastructure | 4 | offline-network, observability, dependency, ci-cd |
+| Tier 4 — Adversarial | 4 | edge-case, race-condition, regression, user-abuse |
+| Tier 5 — Domain (Tortit) | 5 | genetics-accuracy, who-growth, web-worker, medical-compliance, report-generation |
+
 ## Agent Infrastructure
 
 - **Claude Code agents:** `.claude/agents/*-reviewer.md` (11 specialist reviewers)
