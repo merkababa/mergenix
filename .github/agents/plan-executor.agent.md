@@ -83,6 +83,14 @@ After @review-pipeline completes, read review-results.md. If STATUS is ESCALATED
 2. List all unresolved findings
 3. STOP — the user must decide how to proceed
 
+### 5b. Add Copilot as PR Reviewer
+
+After creating the PR:
+```bash
+gh pr edit --add-reviewer @copilot
+```
+This runs GitHub's official multi-agent code review — a free 26th reviewer with cross-verification and severity ranking.
+
 ### Step 6: Update SESSION_STATE.md
 
 After PR is created (and after merge if applicable), update `SESSION_STATE.md` on main:
