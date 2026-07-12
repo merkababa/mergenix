@@ -6,6 +6,31 @@
 
 ---
 
+## 2026-07-12 — Backend deploy diagnosis (Railway auth blocker)
+
+**Status: the backend has NEVER deployed successfully. Frontend is live on Vercel behind the coming-soon gate (`mergenix.com` → 200). `api.mergenix.com` is NXDOMAIN.**
+
+Confirmed via a fresh `V3 Deploy` run today (run `29186038156`): the `deploy-backend` job fails in ~11s at the **Link Railway project** step with:
+`Unauthorized. Please check that your RAILWAY_API_TOKEN is valid and has access to the resource you're trying to use.`
+All 8 deploy attempts (7 in Mar 2026 + this one) died at the same step. No Railway service ever came up, so the `api.mergenix.com` CNAME was never created.
+
+**Root cause (verified):**
+
+1. The `RAILWAY_TOKEN` secret is not a valid **account-scoped ("No workspace")** Railway API token. `railway link` + `RAILWAY_API_TOKEN` only accepts account-scoped tokens; project/workspace tokens are rejected as "Unauthorized" (documented 2026 Railway CLI behavior).
+2. Railway retired its free tier (one-time $5 trial credit, 30-day expiry). The project (`b4916b15-1c53-491a-92cf-5f7b3ba6eea5`) has been idle ~4 months and is almost certainly suspended — needs the **Hobby plan ($5/mo)**.
+
+**Blocked on USER (credential/billing) actions:** (a) Railway — reactivate project on Hobby, mint an account-scoped token, set runtime env vars (incl. `TOTP_ENCRYPTION_KEY` as a real Fernet key — the app crashes on 2FA otherwise; the old `.env.example` `token_hex` guidance is wrong), generate/attach `api.mergenix.com`; (b) GitHub — update the `RAILWAY_TOKEN` secret; (c) Cloudflare — add `api` CNAME + TXT (DNS-only / grey cloud); (d) Vercel — confirm `NEXT_PUBLIC_API_URL=https://api.mergenix.com`.
+
+**Autonomous follow-ups done this session:**
+
+- PR to harden `rewrite-deploy.yml`: add a `railway whoami` fail-fast with an actionable message, and make the backend `-e` env flag truthful instead of hardcoded `production` (so `environment=staging` stops silently hitting prod).
+- Verified the Alembic chain is **single-headed** (001→014) — the old "multiple head revisions" blocker note is stale/resolved (PR renumbered the duplicate 006).
+- Noted a secondary issue: the CI frontend health-check returns 404 even though `mergenix.com` itself serves 200 — investigate after the backend is live (likely the coming-soon redirect or `FRONTEND_URL` target).
+
+**Next action:** once the user completes the Railway/GitHub/Cloudflare/Vercel steps, re-run `gh workflow run rewrite-deploy.yml -f environment=production` and verify `curl https://api.mergenix.com/health` → 200.
+
+---
+
 ## Current Status
 
 **Design Overhaul COMPLETE (D1-D4).** PRs #117-#120 merged (2026-03-03). Foundation, homepage 3D helix, sample report data viz, secondary pages & polish.
