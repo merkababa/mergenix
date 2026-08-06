@@ -6,7 +6,7 @@ uvicorn[standard]==0.32.1
 sqlalchemy[asyncio]==2.0.48
 asyncpg==0.30.0
 alembic==1.18.4
-PyJWT==2.11.0
+PyJWT==2.12.1
 cryptography==46.0.5
 passlib[bcrypt]==1.7.4
 bcrypt==4.1.3
